@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="工具和接口">
+      <UniqueIdentifier>{5d83d92a-8d92-43e1-8472-67fa0c13b40e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="公共定义">
+      <UniqueIdentifier>{60087727-50df-440f-9c24-758290d55ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="日志与性能检测">
+      <UniqueIdentifier>{22c2ad16-929a-49c1-8258-6d35cb7b4f7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="数据库模块">
+      <UniqueIdentifier>{99ba9e75-e08a-40a5-94c1-e40b6f1bb238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="网络模块">
+      <UniqueIdentifier>{4a1ddff6-203d-4d0e-8524-10b2b91ad614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="系统配置">
+      <UniqueIdentifier>{ab5a5360-8b4a-42ee-8a37-dd812e8f0451}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="线程锁">
+      <UniqueIdentifier>{dec416ad-6fc1-42cb-afc3-0992c0222a28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="消息队列">
+      <UniqueIdentifier>{b25cc506-0cd5-4831-9e3f-6509e32b43ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="异常处理">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SDK\include\common\commonuse.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\GameLogManage.h">
+      <Filter>日志与性能检测</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\log.h">
+      <Filter>日志与性能检测</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\MysqlHelper.h">
+      <Filter>数据库模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\GServerConnect.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\TcpConnect.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\configManage.h">
+      <Filter>系统配置</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\DataLine.h">
+      <Filter>消息队列</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\DataBase.h">
+      <Filter>数据库模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\Lock.h">
+      <Filter>线程锁</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\Exception.h">
+      <Filter>异常处理</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\Interface.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\Function.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\TCPSocket.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>公共定义</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>公共定义</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>日志与性能检测</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogManage.cpp">
+      <Filter>日志与性能检测</Filter>
+    </ClCompile>
+    <ClCompile Include="MysqlHelper.cpp">
+      <Filter>数据库模块</Filter>
+    </ClCompile>
+    <ClCompile Include="GServerConnect.cpp">
+      <Filter>网络模块</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpConnect.cpp">
+      <Filter>网络模块</Filter>
+    </ClCompile>
+    <ClCompile Include="configManage.cpp">
+      <Filter>系统配置</Filter>
+    </ClCompile>
+    <ClCompile Include="DataLine.cpp">
+      <Filter>消息队列</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase.cpp">
+      <Filter>数据库模块</Filter>
+    </ClCompile>
+    <ClCompile Include="Lock.cpp">
+      <Filter>线程锁</Filter>
+    </ClCompile>
+    <ClCompile Include="Exception.cpp">
+      <Filter>异常处理</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPSocket.cpp">
+      <Filter>网络模块</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
