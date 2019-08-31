@@ -1,13 +1,11 @@
 #pragma once
 
 /********************************************************************************************/
-
 ///服务接口定义
-
 /********************************************************************************************/
 
 class CTCPSocket;					///<SOCKET 类
-class CDataBaseManage;			///<数据库模块类
+class CDataBaseManage;				///<数据库模块类
 struct NetMessageHead;				///<网络数据包头
 struct ManageInfoStruct;			///<初始化信息结构
 struct KernelInfoStruct;			///<内核信息结构
