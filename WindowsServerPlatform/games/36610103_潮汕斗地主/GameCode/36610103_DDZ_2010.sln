@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{717C3AF7-904E-4A54-855A-98C4EB683FFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|Win32 = Release|Win32
+		运营版|Win32 = 运营版|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{717C3AF7-904E-4A54-855A-98C4EB683FFA}.Release|Win32.ActiveCfg = Release|Win32
+		{717C3AF7-904E-4A54-855A-98C4EB683FFA}.Release|Win32.Build.0 = Release|Win32
+		{717C3AF7-904E-4A54-855A-98C4EB683FFA}.运营版|Win32.ActiveCfg = 运营版|Win32
+		{717C3AF7-904E-4A54-855A-98C4EB683FFA}.运营版|Win32.Build.0 = 运营版|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

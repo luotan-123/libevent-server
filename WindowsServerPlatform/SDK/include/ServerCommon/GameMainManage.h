@@ -316,10 +316,6 @@ private:
 	//获取信息函数 （必须重载）
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData)
 	{
-		//设置版本信息
-		pKernelData->bMaxVer = GAME_MAX_VER;
-		pKernelData->bLessVer = GAME_LESS_VER;
-
 		//设置使用网络
 		pKernelData->bStartTCPSocket = TRUE;
 

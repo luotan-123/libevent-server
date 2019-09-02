@@ -9,7 +9,8 @@
 
 #pragma comment(lib, "hiredis.lib")
 
-#define MAX_REDIS_CMD_WORD_COUNT			256		// redis命令单词数量
+// redis命令单词数量，实际上redis可以存储2^32-1个key-value
+#define MAX_REDIS_CMD_WORD_COUNT	512		
 
 //redis hash表扩展字段模式（定时扫描是根据对应的字段做相应的操作）
 enum RedisExtendMode

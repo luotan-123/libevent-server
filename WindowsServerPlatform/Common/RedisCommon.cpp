@@ -49,7 +49,7 @@ int CRedisCommon::GetUserIDByAccount(const char * account)
 	int userID = 0;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		userID = atol(pReply->str);
+		userID = atoi(pReply->str);
 	}
 	freeReplyObject(pReply);
 
@@ -87,7 +87,7 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 
 		if (!strcmp(field, "userID"))
 		{
-			userData.userID = atol(value);
+			userData.userID = atoi(value);
 		}
 		else if (!strcmp(field, "account"))
 		{

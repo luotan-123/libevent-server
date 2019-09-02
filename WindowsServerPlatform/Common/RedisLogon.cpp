@@ -206,7 +206,7 @@ int CRedisLogon::GetRelevanceTrdUid(std::string triID)
 	int userID = 0;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		userID = atol(pReply->str);
+		userID = atoi(pReply->str);
 	}
 
 	freeReplyObject(pReply);
@@ -227,7 +227,7 @@ int CRedisLogon::GetVisitorID(std::string triID)
 	int userID = 0;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		userID = atol(pReply->str);
+		userID = atoi(pReply->str);
 	}
 
 	freeReplyObject(pReply);
@@ -1088,7 +1088,7 @@ int CRedisLogon::GetUserIDByPhone(const char* phone)
 	int userID = 0;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		userID = atol(pReply->str);
+		userID = atoi(pReply->str);
 	}
 	freeReplyObject(pReply);
 
@@ -1132,7 +1132,7 @@ int CRedisLogon::GetUserIDByXianLiao(const char* xianliao)
 	int userID = 0;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		userID = atol(pReply->str);
+		userID = atoi(pReply->str);
 	}
 	freeReplyObject(pReply);
 

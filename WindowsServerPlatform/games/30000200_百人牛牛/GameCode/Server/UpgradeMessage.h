@@ -22,7 +22,8 @@ namespace brnnProto
 	//游戏内部开发版本号
 #define DEV_HIGH_VERSION				2				                        // 内部开发高版本号(每修正一次LOW_VERSIONG+1)
 #define DEV_LOW_VERSION					1				                        // 内部开发低版本号
-
+#define GAME_MAX_VER					1										//现在最高版本
+#define GAME_LESS_VER					1										//现在最低版本
 
 
 	enum ShangZhuangResult

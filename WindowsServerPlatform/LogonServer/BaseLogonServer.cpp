@@ -240,10 +240,10 @@ bool CBaseLogonServer::Start()
 	bool ret = false;
 
 	//启动窗口模块
-	ret = AFCKernelStart();
+	ret = CreateWindowsForTimer();
 	if (!ret)
 	{
-		ERROR_LOG("AFCKernelStart failed");
+		ERROR_LOG("CreateWindowsForTimer failed");
 		return false;
 	}
 
@@ -438,8 +438,8 @@ bool CBaseLogonServer::KillTimer(UINT uTimerID)
 	return false;
 }
 
-//内核初始化函数
-bool CBaseLogonServer::AFCKernelStart()
+//创建窗口为了生成定时器
+bool CBaseLogonServer::CreateWindowsForTimer()
 {
 	if ((m_hWindow != NULL) && (::IsWindow(m_hWindow) == TRUE))
 	{

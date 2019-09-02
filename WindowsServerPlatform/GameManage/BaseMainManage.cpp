@@ -217,11 +217,11 @@ bool CBaseMainManage::Start()
 
 	WaitForSingleObject(StartEvent, INFINITE);
 
-	//启动组件
-	bool ret = AFCKernelStart();
+	//创建窗口为了生成定时器
+	bool ret = CreateWindowsForTimer();
 	if (!ret)
 	{
-		throw new CException(TEXT("CBaseMainManage::AFCKernelStart 组件启动失败"), 0x41F);
+		throw new CException(TEXT("CBaseMainManage::CreateWindowsForTimer 组件启动失败"), 0x41F);
 	}
 
 	ret = m_SQLDataManage.Start();
@@ -405,8 +405,8 @@ bool CBaseMainManage::KillTimer(UINT uTimerID)
 	return false;
 }
 
-//内核初始化函数
-bool CBaseMainManage::AFCKernelStart()
+//创建窗口为了生成定时器
+bool CBaseMainManage::CreateWindowsForTimer()
 {
 	if ((m_hWindow != NULL) && (::IsWindow(m_hWindow) == TRUE)) return false;
 	//建立事件
@@ -423,13 +423,13 @@ bool CBaseMainManage::AFCKernelStart()
 	m_hWindowThread = (HANDLE)::_beginthreadex(NULL, 0, WindowMsgThread, &ThreadData, 0, &uThreadID);
 	if (m_hWindowThread == NULL)
 	{
-		throw new CException(TEXT("CBaseMainManage::AFCKernelStart WindowMsgThread 线程建立失败"), 0x421);
+		throw new CException(TEXT("CBaseMainManage::CreateWindowsForTimer WindowMsgThread 线程建立失败"), 0x421);
 	}
 
 	::WaitForSingleObject(ThreadData.hEvent, INFINITE);
 	if (ThreadData.bSuccess == FALSE)
 	{
-		throw new CException(TEXT("CBaseMainManage::AFCKernelStart WindowMsgThread 线程建立失败"), 0x422);
+		throw new CException(TEXT("CBaseMainManage::CreateWindowsForTimer WindowMsgThread 线程建立失败"), 0x422);
 	}
 
 	return true;

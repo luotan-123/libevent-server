@@ -86,8 +86,8 @@ private:
 	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize) = 0;
 	//定时器消息
 	virtual bool OnTimerMessage(UINT uTimerID) = 0;
-	//内核启动函数
-	bool AFCKernelStart();
+	//创建窗口为了生成定时器
+	bool CreateWindowsForTimer();
 	//定时器通知消息
 	bool WindowTimerMessage(UINT uTimerID);
 	//队列数据处理线程

@@ -86,8 +86,8 @@ public:
 
 	//内部函数（主线程调用）
 private:
-	//内核启动函数
-	bool AFCKernelStart();
+	//创建窗口为了生成定时器
+	bool CreateWindowsForTimer();
 	//定时器通知消息
 	bool WindowTimerMessage(UINT uTimerID);
 	//队列数据处理线程
