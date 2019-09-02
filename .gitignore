@@ -34,3 +34,7 @@
 /WindowsServerPlatform/Obj/Release/Win32
 *.rdb
 *.log
+*.iobj
+*.ipdb
+*.pdb
+*.exp
