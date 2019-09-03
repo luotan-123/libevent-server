@@ -32,3 +32,8 @@
 *.ipdb
 *.pdb
 *.exp
+*.suo
+*.db
+*.opendb
+*.tlog
+/WindowsServerPlatform/Run/Release/Win32/Server.lib
