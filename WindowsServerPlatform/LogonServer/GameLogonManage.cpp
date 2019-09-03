@@ -17,7 +17,9 @@
 #include "Function.h"
 #pragma comment(lib,"json_vc71_libmt.lib")
 
-#define FRIENDSGROUP_CRATE_ROOM_MODE
+// 预编译选项
+#define FRIENDSGROUP_CRATE_ROOM_MODE	// 俱乐部创建房间，房主消耗钻石
+#define HAOTIAN							// 皓天游戏，没有定义就是皓玩游戏
 
 //////////////////////////////////////////////////////////////////////
 CGameLogonManage::CGameLogonManage() : CBaseLogonServer()
@@ -659,12 +661,14 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		newUserData.userID = m_pRedis->GetRelevanceTrdUid(pMessage->szPswd);
 		if (newUserData.userID > 0) //更新第三方信息
 		{
+#ifdef HAOTIAN
 			std::unordered_map<std::string, std::string> umap;
 			umap["headURL"] = newUserData.headURL;
 			umap["sex"] = CUtil::Tostring(newUserData.sex >= 2 ? 0 : newUserData.sex);
 			umap["name"] = newUserData.name;
 			umap["accountInfo"] = newUserData.accountInfo;
 			m_pRedis->hmset(TBL_USER, newUserData.userID, umap);
+#endif // HAOTIAN
 		}
 	}
 
