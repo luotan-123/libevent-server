@@ -29,9 +29,9 @@ public:
 	ServerDllInfoStruct						m_DllInfo;					//DLL信息
 	CTCPSocketManage						m_TCPSocket;				//网络模块
 	CDataBaseManage							m_SQLDataManage;			//数据库模块
-	CRedisLogon*							m_pRedis;					//redis
-	CRedisPHP*								m_pRedisPHP;				//连接php的redis server
-	CTcpConnect*							m_pTcpConnect;				//与中心服务器的连接
+	CRedisLogon* m_pRedis;					//redis
+	CRedisPHP* m_pRedisPHP;				//连接php的redis server
+	CTcpConnect* m_pTcpConnect;				//与中心服务器的连接
 
 public:
 	CBaseLogonServer();
@@ -44,7 +44,7 @@ public:
 
 	//服务接口函数 （主线程调用）
 public:
-	virtual bool Init(ManageInfoStruct * pInitData, IDataBaseHandleService * pDataHandleService);
+	virtual bool Init(ManageInfoStruct* pInitData, IDataBaseHandleService* pDataHandleService);
 	virtual bool UnInit();
 	virtual bool Start();
 	virtual bool Stop();
@@ -52,9 +52,9 @@ public:
 	//服务接口函数 （主线程调用）
 private:
 	//获取信息函数 （必须重载）
-	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData) = 0;
+	virtual bool PreInitParameter(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData) = 0;
 	//数据管理模块初始化
-	virtual bool OnInit(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData) { return true; };
+	virtual bool OnInit(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData) { return true; };
 	//数据管理模块卸载
 	virtual bool OnUnInit() { return true; }
 	//数据管理模块启动
@@ -65,11 +65,11 @@ private:
 	//服务扩展接口函数 （本处理线程调用）
 private:
 	//SOCKET 数据读取 （必须重载）
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID) = 0;
+	virtual bool OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID) = 0;
 	//SOCKET 关闭 （必须重载）
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime) = 0;
 	//异步线程处理结果 （必须重载）
-	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize) = 0;
+	virtual bool OnAsynThreadResult(AsynThreadResultLine* pResultData, void* pData, UINT uSize) = 0;
 	//定时器消息 （必须重载）
 	virtual bool OnTimerMessage(UINT uTimerID) = 0;
 
@@ -78,9 +78,9 @@ public:
 	//网络关闭处理 
 	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime);
 	//网络消息处理 
-	virtual bool OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, DWORD dwHandleID);
+	virtual bool OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex, DWORD dwHandleID);
 	//异步线程结果处理
-	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
+	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
 
 	virtual CDataLine* GetDataLine() { return &m_DataLine; }
 
@@ -101,5 +101,5 @@ private:
 private:
 
 	//处理中心服消息
-	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID) = 0;
+	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID) = 0;
 };
