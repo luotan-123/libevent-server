@@ -79,6 +79,12 @@
     <ClInclude Include="..\SDK\include\ServerCommon\TCPSocket.h">
       <Filter>网络模块</Filter>
     </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\KernelDefine.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\InternalMessageDefine.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

@@ -151,7 +151,7 @@ void InitMinDump()
 // 处理命令
 void _HandleCommand(const std::string& command)
 {
-	std::cout << "命令:" << command << std::endl;
+	std::cout << "命令:[" << command << "]" << std::endl;
 }
 
 int main()
@@ -232,8 +232,8 @@ int main()
 
 	while (true)
 	{
-		std::cout << "$";
-		std::cin >> command;
+		std::cout << "$ ";
+		std::getline(std::cin, command);
 		if (command == "exit" || command == "quit")
 		{
 			break;

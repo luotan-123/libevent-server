@@ -192,6 +192,8 @@
     <ClInclude Include="..\SDK\include\ServerCommon\Exception.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\Function.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\Interface.h" />
+    <ClInclude Include="..\SDK\include\ServerCommon\InternalMessageDefine.h" />
+    <ClInclude Include="..\SDK\include\ServerCommon\KernelDefine.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\TCPSocket.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\configManage.h" />

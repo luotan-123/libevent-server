@@ -23,8 +23,6 @@
 *.la
 
 # Executables
-*.exe
-*.out
 *.app
 /WindowsServerPlatform/.vs/WindowsServerPlatform/v16
 /WindowsServerPlatform/Obj/Release/Win32

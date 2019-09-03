@@ -30,7 +30,7 @@ public:
 	CTCPSocketManage						m_TCPSocket;				//网络模块
 	CDataBaseManage							m_SQLDataManage;			//数据库模块
 	CRedisLogon* m_pRedis;					//redis
-	CRedisPHP* m_pRedisPHP;				//连接php的redis server
+	CRedisPHP* m_pRedisPHP;					//连接php的redis server
 	CTcpConnect* m_pTcpConnect;				//与中心服务器的连接
 
 public:

@@ -81,7 +81,7 @@ enum ThreadType
 	THREAD_TYPE_RECV = 5,	// 接收线程
 };
 
-// log level
+// 日志等级
 enum LogLevel
 {
 	LOG_LEVEL_DEBUG = 0,					//debug
