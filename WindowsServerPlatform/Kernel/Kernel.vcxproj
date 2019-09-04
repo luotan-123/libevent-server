@@ -187,7 +187,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\SDK\include\common\basemessage.h" />
     <ClInclude Include="..\SDK\include\common\commonuse.h" />
+    <ClInclude Include="..\SDK\include\common\comstruct.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\DataBase.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\Exception.h" />
     <ClInclude Include="..\SDK\include\ServerCommon\Function.h" />

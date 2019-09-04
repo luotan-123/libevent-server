@@ -85,6 +85,12 @@
     <ClInclude Include="..\SDK\include\ServerCommon\InternalMessageDefine.h">
       <Filter>公共定义</Filter>
     </ClInclude>
+    <ClInclude Include="..\SDK\include\common\basemessage.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\include\common\comstruct.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
