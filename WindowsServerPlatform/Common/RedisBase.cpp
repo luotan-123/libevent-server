@@ -644,7 +644,7 @@ void CRedisBase::TestRedis(const char * name)
 		m_sleepTime = 10;
 	}
 
-	DEBUG_LOG("%s 写数据 %d", name, lockCount);
+	INFO_LOG("%s 写数据 %d", name, lockCount);
 }
 
 // 获取某个键值索引

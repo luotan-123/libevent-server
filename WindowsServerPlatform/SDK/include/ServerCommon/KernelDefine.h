@@ -84,11 +84,11 @@ enum ThreadType
 // 日志等级
 enum LogLevel
 {
-	LOG_LEVEL_DEBUG = 0,					//debug
-	LOG_LEVEL_INFO,							//info
+	LOG_LEVEL_INFO = 0,						//info
 	LOG_LEVEL_WARNNING,						//warnning
 	LOG_LEVEL_ERROR,						//error
-	LOG_LEVEL_FATA_ERROR,					//fata_error
+	LOG_LEVEL_INFO_CONSOLE,					//info Console
+	LOG_LEVEL_ERROR_CONSOLE,				//error Console
 	LOG_LEVEL_END,
 };
 

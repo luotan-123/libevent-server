@@ -18,10 +18,10 @@
 #include <windows.h>
 #include <DbgHelp.h> 
 
-#define VER_MAIN 1
+#define VER_MAIN 2
 #define VER_MIDDLE 0
 #define VER_RESVERSE 0
-#define VER_BUILDTIME "2018"
+#define VER_BUILDTIME "2019"
 
 #pragma warning(disable:4251)
 

@@ -156,8 +156,6 @@ void _HandleCommand(const std::string& command)
 
 int main()
 {
-	std::cout << "logonserver Begin...\n";
-
 	InitMinDump();
 
 	// 初始化随机数种子
@@ -175,9 +173,9 @@ int main()
 	// 关联大厅主线程的log文件
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 
-	INFO_LOG("================================================================================");
-	INFO_LOG("======================logonserver begin========================================");
-	INFO_LOG("================================================================================");
+	CON_INFO_LOG("================================================================================");
+	CON_INFO_LOG("======================logonserver begin========================================");
+	CON_INFO_LOG("================================================================================");
 
 	bool ret = false;
 
@@ -219,12 +217,7 @@ int main()
 	std::cout << szBuf << std::endl;
 
 	// 标题（显示版本信息）
-	printf("v%d.%d.%d %s  ", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME);
-
-	// 输出时间
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-	printf("[%04d/%02d/%02d-%02d:%02d:%02d]\n", time.wYear, time.wMinute, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	printf("v%d.%d.%d %s\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME);
 
 	std::cout << "输入 [exit] 退出\n";
 
@@ -243,16 +236,15 @@ int main()
 
 	g_LogonServerModule.StoptService();
 
-	INFO_LOG("========================================================================");
-	INFO_LOG("==========================Logonserver end================================");
-	INFO_LOG("========================================================================");
+	CON_INFO_LOG("========================================================================");
+	CON_INFO_LOG("==========================Logonserver end================================");
+	CON_INFO_LOG("========================================================================");
 
 	GameLogManage()->Release();
 	ConfigManage()->Release();
 
 	_CrtDumpMemoryLeaks();
 
-	std::cout << "Logonserver end\n";
 	system("pause");
 
 	return 0;

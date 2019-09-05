@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <process.h>
+#include <iostream>
 #include <time.h>
 #include <WinSock2.h>
 #include <windows.h>

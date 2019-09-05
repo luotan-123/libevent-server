@@ -159,8 +159,6 @@ void _HandleCommand(const std::string& command)
 
 int main()
 {
-	std::cout << "Gameserver Begin...\n";
-
 	InitMinDump();
 
 	// 初始化随机数种子
@@ -178,9 +176,9 @@ int main()
 	// 关联大厅主线程的log文件
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 
-	INFO_LOG("================================================================================");
-	INFO_LOG("======================Gameserver begin========================================");
-	INFO_LOG("================================================================================");
+	CON_INFO_LOG("================================================================================");
+	CON_INFO_LOG("======================Gameserver begin========================================");
+	CON_INFO_LOG("================================================================================");
 
 	bool ret = false;
 
@@ -196,19 +194,14 @@ int main()
 
 	// 启动游戏房间
 	int iStartCount = g_LoaderServerModule.StartAllRoom();
-	std::cout << "启动房间数量：" << iStartCount << endl;
+	CON_INFO_LOG("启动房间数量：%d", iStartCount);
 	if (iStartCount == 0)
 	{
 		std::cout << "没有找到任何游戏房间，请检查 roombaseinfo.serviceName名字是否正确，或者动态库名字配置错误\n";
 	}
 
 	// 标题（显示版本信息）
-	printf("v%d.%d.%d %s  ", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME);
-
-	// 输出时间
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-	printf("[%04d/%02d/%02d-%02d:%02d:%02d]\n", time.wYear, time.wMinute, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	printf("v%d.%d.%d %s\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME);
 
 	// 输出可用命令
 	std::cout << "1.输入 [exit] 退出 \n2.输入 [update] 更新所有房间配置 \n";
@@ -228,16 +221,15 @@ int main()
 
 	g_LoaderServerModule.StopAllRoom();
 
-	INFO_LOG("========================================================================");
-	INFO_LOG("==========================Gameserver end================================");
-	INFO_LOG("========================================================================");
+	CON_INFO_LOG("========================================================================");
+	CON_INFO_LOG("==========================Gameserver end================================");
+	CON_INFO_LOG("========================================================================");
 
 	GameLogManage()->Release();
 	ConfigManage()->Release();
 
 	_CrtDumpMemoryLeaks();
 
-	std::cout << "Gameserver end\n";
 	system("pause");
 
 	return 0;

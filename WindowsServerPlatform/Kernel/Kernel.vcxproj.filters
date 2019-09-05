@@ -29,6 +29,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="定时器">
+      <UniqueIdentifier>{dcb95e45-6cf4-4fa1-9842-b9eccb5cf0df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDK\include\common\commonuse.h">
@@ -91,6 +94,9 @@
     <ClInclude Include="..\SDK\include\common\comstruct.h">
       <Filter>公共定义</Filter>
     </ClInclude>
+    <ClInclude Include="..\SDK\include\ServerCommon\ServerTimer.h">
+      <Filter>定时器</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -131,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="TCPSocket.cpp">
       <Filter>网络模块</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerTimer.cpp">
+      <Filter>定时器</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

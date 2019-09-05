@@ -235,7 +235,7 @@ bool CConfigManage::LoadCommonConfig()
 
 	const char* pKey = "COMMON";
 
-	m_commonConfig.logLevel = file.GetKeyVal(pKey, "logLevel", LOG_LEVEL_DEBUG);
+	m_commonConfig.logLevel = file.GetKeyVal(pKey, "logLevel", LOG_LEVEL_INFO);
 	m_commonConfig.IOCPWorkThreadNumber = file.GetKeyVal(pKey, "IOCPWorkThreadNumber", 4);
 
 	return true;

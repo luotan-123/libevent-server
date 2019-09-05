@@ -72,7 +72,7 @@ int CLoaderServerModule::StartAllRoom()
 
 		iStartCount++;
 		m_allRoomInfoMap[roomID] = info;
-		printf("启动成功：roomID=%d gameID=%d name=%s roomType=%d roomsort=%d deskCount=%d minPoint=%d maxPoint=%d basePoint=%d roomlevel=%d\n"
+		CON_INFO_LOG("启动成功：roomID=%d gameID=%d name=%s roomType=%d roomsort=%d deskCount=%d minPoint=%d maxPoint=%d basePoint=%d roomlevel=%d\n"
 			, roomID, roomBaseInfo.gameID, roomBaseInfo.name, roomBaseInfo.type, roomBaseInfo.sort, roomBaseInfo.deskCount, roomBaseInfo.minPoint,
 			roomBaseInfo.maxPoint, roomBaseInfo.basePoint, roomBaseInfo.level);
 	}

@@ -50,7 +50,17 @@ void CLog::Write(const char* pLogfile, int level, const char * pFile, int line, 
 	vsprintf(buf + strlen(buf), pBuf, args);
 	va_end(args);
 
-	sprintf(buf + strlen(buf), " %s %s %d\n", pFuncName, pFile, line);
+	// 输出到控制台
+	if (level == LOG_LEVEL_INFO_CONSOLE)
+	{
+		std::cout << buf << std::endl;
+	}
+	else if (level == LOG_LEVEL_ERROR_CONSOLE)
+	{
+		std::cout << buf << "{func=" << pFuncName << " line=" << line << "}\n";
+	}
+
+	sprintf(buf + strlen(buf), "{%s %s %d}\n", pFile, pFuncName, line);
 
 	std::string strFile = pLogfile;
 	FILE* fp = GameLogManage()->GetLogFileFp(std::move(strFile));
