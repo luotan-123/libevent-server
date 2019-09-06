@@ -100,12 +100,19 @@ unsigned __stdcall CServerTimer::ThreadCheckTimer(LPVOID pThreadData)
 	struct timeval tv;
 	tv.tv_sec = 2;
 	tv.tv_usec = SERVER_TIME_ONCE * 1000;
-
+	unsigned long long tick = 0;
+	
 	while (pThis->m_bRun)
 	{
+		if (tick != 0)
+		{
+			std::cout << GetTickCount64() - tick << std::endl;
+		}
+		tick = GetTickCount64();
+		
 		Sleep(SERVER_TIME_ONCE);
 		pThis->m_llTimeslice++;
-		
+
 		// lock
 		CSignedLockObject lock(pThis->m_pLock, false);
 		lock.Lock();
@@ -117,7 +124,6 @@ unsigned __stdcall CServerTimer::ThreadCheckTimer(LPVOID pThreadData)
 				WindowTimerLine WindowTimer;
 				WindowTimer.uTimerID = iter->first;
 				pThis->m_pDataLine->AddData(&WindowTimer.LineHead, sizeof(WindowTimer), HD_TIMER_MESSAGE);
-				printf("%lld\n", pThis->m_llTimeslice);
 			}
 		}
 
