@@ -37,3 +37,9 @@
 *.opendb
 *.tlog
 /WindowsServerPlatform/Run/Release/Win32/Server.lib
+b6672c31c95382be
+/linuxserverplatform/.vs
+/linuxserverplatform/ServerKernel/readme
+/linuxserverplatform/ServerKernel/~
+/linuxserverplatform/ServerKernel/bin
+/linuxserverplatform/ServerKernel/obj
