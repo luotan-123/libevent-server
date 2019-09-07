@@ -37,3 +37,4 @@
 *.opendb
 *.tlog
 /WindowsServerPlatform/Run/Release/Win32/Server.lib
+/WindowsServerPlatform/Run/Release/Win32
