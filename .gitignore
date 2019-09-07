@@ -43,3 +43,9 @@ b6672c31c95382be
 /linuxserverplatform/ServerKernel/~
 /linuxserverplatform/ServerKernel/bin
 /linuxserverplatform/ServerKernel/obj
+/WindowsServerPlatform/Run/Release/Win32/CenterServer.exe
+/WindowsServerPlatform/Run/Release/Win32/Common.dll
+/WindowsServerPlatform/Run/Release/Win32/GameManage.dll
+/WindowsServerPlatform/Run/Release/Win32/Kernel.dll
+/WindowsServerPlatform/Run/Release/Win32/LoaderServer.exe
+/WindowsServerPlatform/Run/Release/Win32/LogonServer.exe
