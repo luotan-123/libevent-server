@@ -49,3 +49,6 @@ b6672c31c95382be
 /WindowsServerPlatform/Run/Release/Win32/Kernel.dll
 /WindowsServerPlatform/Run/Release/Win32/LoaderServer.exe
 /WindowsServerPlatform/Run/Release/Win32/LogonServer.exe
+/linuxserverplatform/kernel/obj/x64/Debug
+/linuxserverplatform/test/obj/x64/Debug
+/linuxserverplatform/test/readme

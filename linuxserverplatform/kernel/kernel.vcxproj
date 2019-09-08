@@ -34,10 +34,17 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\CommonHead.h" />
+    <ClInclude Include="..\src\Lock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Lock.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{abea8f7e-9c71-4512-98b9-80da0cc9fad8}</ProjectGuid>
+    <ProjectGuid>{45ec4106-f381-4b1d-873f-56ba99946c58}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>ServerKernel</RootNamespace>
+    <RootNamespace>kernel</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -91,34 +98,29 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(Platform)/$(Configuration)/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
