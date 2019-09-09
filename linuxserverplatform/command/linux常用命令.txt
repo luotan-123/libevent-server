@@ -1,0 +1,18 @@
+mysql相关：
+1、修改密码强度
+set global validate_password_policy=0;
+set global validate_password_length=1;
+2、关闭自动更新
+yum -y remove mysql57-community-release-el7-10.noarch
+3、设置权限
+grant all privileges on *.* to 'root'@'192.168.19.%' identified by 'root' with grant option;
+flush privileges;
+4、重启mysql
+systemctl restart mysqld.service
+5、设置不区分大小写
+vi /etc/my.cnf
+lower_case_table_names=1
+
+操作系统相关：
+1、关闭防火墙
+service iptables stop

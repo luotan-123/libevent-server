@@ -1,8 +1,9 @@
 #include <cstdio>
-#include "../src/CommonHead.h"
+#include "CommonHead.h"
 
 int main()
 {
+	printf("+++++++++++++++==\n");
 	int    socket_fd, connect_fd;
 	struct sockaddr_in     servaddr;
 	char    buff[4096];
