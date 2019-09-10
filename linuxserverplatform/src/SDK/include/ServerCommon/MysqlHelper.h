@@ -1,22 +1,15 @@
 #pragma once
-
 #include <map>
 #include <vector>
 #include <string>
 #include "mysql.h"
-
-#ifdef _DEBUG
-#pragma comment(lib, "libmysqld.lib")
-#else // !_DEBUG
-#pragma comment(lib, "libmysql.lib")
-#endif // _DEBUG
 
 using namespace std;
 
 /*********************
 *@brief 数据库异常类
 **********************/
-struct KERNEL_CLASS MysqlHelper_Exception //: public TC_Exception
+struct MysqlHelper_Exception //: public TC_Exception
 {
 	MysqlHelper_Exception(const string &sBuffer) :errorInfo(sBuffer) {}; //: TC_Exception(sBuffer){};
 	~MysqlHelper_Exception() throw() {};
@@ -77,7 +70,7 @@ struct DBConf
 * CMysqlHelper::DB_INT表示组装sql语句时，不加””和转义；
 * CMysqlHelper::DB_STR表示组装sql语句时，加””并转义；
 **************************************************************/
-class KERNEL_CLASS CMysqlHelper
+class CMysqlHelper
 {
 public:
 	/**
@@ -177,7 +170,7 @@ public:
 	/**
 	* @brief 查询出来的mysql数据
 	*/
-	class KERNEL_CLASS MysqlData
+	class MysqlData
 	{
 	public:
 		/**

@@ -4,40 +4,48 @@
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <RemoteDebuggerCommand>/home/luotan/linuxserverplatform/bin/test.out</RemoteDebuggerCommand>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/</RemoteDebuggerWorkingDirectory>
+    <PreLaunchCommand>export LD_LIBRARY_PATH=./</PreLaunchCommand>
   </PropertyGroup>
 </Project>

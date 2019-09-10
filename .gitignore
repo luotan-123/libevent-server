@@ -39,10 +39,6 @@
 /WindowsServerPlatform/Run/Release/Win32/Server.lib
 b6672c31c95382be
 /linuxserverplatform/.vs
-/linuxserverplatform/ServerKernel/readme
-/linuxserverplatform/ServerKernel/~
-/linuxserverplatform/ServerKernel/bin
-/linuxserverplatform/ServerKernel/obj
 /WindowsServerPlatform/Run/Release/Win32/CenterServer.exe
 /WindowsServerPlatform/Run/Release/Win32/Common.dll
 /WindowsServerPlatform/Run/Release/Win32/GameManage.dll
@@ -52,3 +48,10 @@ b6672c31c95382be
 /linuxserverplatform/kernel/obj/x64/Debug
 /linuxserverplatform/test/obj/x64/Debug
 /linuxserverplatform/test/readme
+/linuxserverplatform/test/bin
+/linuxserverplatform/test/obj
+/linuxserverplatform/test/~
+/linuxserverplatform/Kernel/obj
+/linuxserverplatform/Kernel/readme
+/linuxserverplatform/Kernel/~
+/linuxserverplatform/Kernel/bin

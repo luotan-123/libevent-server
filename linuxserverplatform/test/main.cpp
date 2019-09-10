@@ -1,9 +1,20 @@
 #include <cstdio>
 #include "CommonHead.h"
+#include "Lock.h"
 
 int main()
 {
 	printf("+++++++++++++++==\n");
+	CSignedLock lock;
+	CSignedLockObject testLock(&lock, false);
+
+	testLock.Lock();
+	testLock.Lock();
+	printf("+++++++++++++++==\n");
+
+	testLock.UnLock();
+	testLock.UnLock();
+
 	int    socket_fd, connect_fd;
 	struct sockaddr_in     servaddr;
 	char    buff[4096];

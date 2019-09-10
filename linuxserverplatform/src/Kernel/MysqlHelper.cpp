@@ -1,7 +1,6 @@
 //mysqlhelper.cpp
-#include "pch.h"
-#include "mysqlHelper.h"
-
+#include "CommonHead.h"
+#include "MysqlHelper.h"
 #include <string.h>
 #include <sstream>
 

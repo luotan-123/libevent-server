@@ -1,0 +1,6 @@
+1、设置动态库加载命令，启动server之前先执行命令
+export LD_LIBRARY_PATH=./
+或者也可以这样
+vim /etc/ld.so.conf 
+文件中加入一行  /home/luotan/linuxserverplatform/bin
+执行 root权限运行 ldconfig
