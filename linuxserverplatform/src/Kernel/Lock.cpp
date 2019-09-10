@@ -41,3 +41,21 @@ void CSignedLockObject::UnLock()
 		m_pLockObject->UnLock();
 	}
 }
+
+// 初始化属性
+CSignedLock::CSignedLock()
+{
+	pthread_mutexattr_init(&m_attr);
+
+	// 设置互斥锁属性
+	pthread_mutexattr_settype(&m_attr, PTHREAD_MUTEX_RECURSIVE_NP);
+
+	pthread_mutex_init(&m_csLock, &m_attr);
+}
+
+CSignedLock::~CSignedLock() 
+{ 
+	pthread_mutex_destroy(&m_csLock); 
+
+	pthread_mutexattr_destroy(&m_attr);
+}

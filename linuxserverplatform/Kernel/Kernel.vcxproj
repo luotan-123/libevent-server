@@ -115,11 +115,16 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Kernel\Exception.cpp" />
     <ClCompile Include="..\src\Kernel\Lock.cpp" />
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Exception.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Function.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Interface.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\KernelDefine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h" />
   </ItemGroup>
@@ -130,7 +135,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
@@ -139,7 +148,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
@@ -148,7 +161,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
@@ -157,7 +174,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -166,7 +187,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -175,7 +200,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
@@ -184,7 +213,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
@@ -193,7 +226,11 @@
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

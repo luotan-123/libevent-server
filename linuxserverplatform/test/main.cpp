@@ -4,7 +4,7 @@
 
 int main()
 {
-	printf("+++++++++++++++==\n");
+	printf("+++++++++++++++==\n"); 
 	CSignedLock lock;
 	CSignedLockObject testLock(&lock, false);
 

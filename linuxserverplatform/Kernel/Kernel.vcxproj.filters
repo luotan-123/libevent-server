@@ -13,6 +13,12 @@
     <Filter Include="数据库模块">
       <UniqueIdentifier>{02524b96-defb-42ff-b7c1-c6399c8aca79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="异常处理">
+      <UniqueIdentifier>{6922e629-bed9-4584-be21-d2bd776a4ef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="工具和接口">
+      <UniqueIdentifier>{8be84f89-d0dd-4af3-8b73-ed3a19e534d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h">
@@ -24,6 +30,18 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h">
       <Filter>数据库模块</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Exception.h">
+      <Filter>异常处理</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\KernelDefine.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Function.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Interface.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -31,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp">
       <Filter>数据库模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\Exception.cpp">
+      <Filter>异常处理</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

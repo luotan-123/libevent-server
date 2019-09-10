@@ -492,7 +492,7 @@ int CMysqlHelper::getMaxValue(const string& sTableName, const string& sFieldName
 	}
 	else
 	{
-		n = atol(data[0]["f"].c_str());
+		n = atoi(data[0]["f"].c_str());
 	}
 
 	return n;

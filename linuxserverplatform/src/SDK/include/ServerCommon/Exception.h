@@ -35,7 +35,7 @@
 ///***********************************************************************************************///
 
 //异常类
-class KERNEL_CLASS CException
+class CException
 {
 protected:
 	UINT					m_uErrorCode;					///错误码
@@ -56,37 +56,4 @@ public:
 	virtual bool Delete();
 	//设置是否显示错误
 	static bool ShowErrorMessage(bool bShowError);
-};
-
-class KERNEL_CLASS CWin32Exception
-{
-public:
-	CWin32Exception(unsigned int n, PEXCEPTION_POINTERS pException)
-		: m_nSE(n), m_pException(pException) {}
-
-	// 获得结构化异常信息。
-	PEXCEPTION_POINTERS ExceptionInformation();
-
-	// 获得结构化异常代码。
-	DWORD ExceptionCode();
-
-	// 转化异常函数
-	static void TransWin32Exception(unsigned int u, EXCEPTION_POINTERS* pExp);
-
-	// CRT异常
-	static void TerminateHandler();
-
-	// 设置异常函数
-	static void SetWin32ExceptionFunc();
-
-	// 根据异常代码获取描述
-	static const char * GetDescByCode(unsigned int uCode);
-
-	//输出崩溃日志
-	static void OutputWin32Exception(const char * str, ...);
-private:
-	// 结构化异常代码
-	unsigned int m_nSE;
-	// 结构化异常信息
-	PEXCEPTION_POINTERS m_pException;
 };
