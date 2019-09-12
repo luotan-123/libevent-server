@@ -1,6 +1,8 @@
-#include "pch.h"
+#include "CommonHead.h"
 #include "log.h"
 #include "configManage.h"
+#include "log.h"
+#include <stdarg.h>
 
 CLog::CLog()
 {
@@ -11,7 +13,7 @@ CLog::~CLog()
 
 }
 
-void CLog::Write(const char* pLogfile, int level, const char * pFile, int line, const char * pFuncName, const char * pBuf, ...)
+void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, const char* pFuncName, const char* pBuf, ...)
 {
 	if (!pLogfile || !pFile || !pFuncName || !pBuf)
 	{
@@ -78,7 +80,7 @@ void CLog::Write(const char* pLogfile, int level, const char * pFile, int line, 
 	fflush(fp);
 }
 
-void CLog::Write(const char * pLogFile, const char * pFuncName, const char * pFormat, ...)
+void CLog::Write(const char* pLogFile, const char* pFuncName, const char* pFormat, ...)
 {
 	if (!pLogFile || !pFuncName || !pFormat)
 	{
@@ -125,7 +127,7 @@ void CLog::Write(const char * pLogFile, const char * pFuncName, const char * pFo
 	fflush(fp);
 }
 
-void CLog::Write(const char * pLogFile, const char * buf)
+void CLog::Write(const char* pLogFile, const char* buf)
 {
 	if (!pLogFile || !buf)
 	{
@@ -180,17 +182,11 @@ CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int micr
 
 	m_microSecs = microSecs;
 
-	LARGE_INTEGER largeInteger;
-
-	if (sysFrequency == 0)
-	{
-		QueryPerformanceFrequency(&largeInteger);
-		sysFrequency = largeInteger.QuadPart;
-	}
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
 
 	// 记录开始时间
-	QueryPerformanceCounter(&largeInteger);
-	m_beginTime = largeInteger.QuadPart;
+	m_beginTime = tv.tv_sec * 1000000 + tv.tv_usec;
 
 	// 选择log文件
 	if (plogFile)
@@ -224,18 +220,16 @@ CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int micr
 
 CAutoLogCost::~CAutoLogCost()
 {
-	LARGE_INTEGER largeInteger;
-	QueryPerformanceCounter(&largeInteger);
-	m_endTime = largeInteger.QuadPart;
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
 
-	if (sysFrequency > 0)
+	// 记录结束时间
+	long long endTime = tv.tv_sec * 1000000 + tv.tv_usec;
+	long long costTime = endTime - m_beginTime;
+
+	if (costTime >= m_microSecs)
 	{
-		m_costTime = (m_endTime - m_beginTime) * 1000 * 1000 / sysFrequency;
-
-		if (m_costTime >= m_microSecs)
-		{
-			sprintf(m_buf + strlen(m_buf), "costTime:【%I64dus】\n", m_costTime);
-			CLog::Write(m_logFile, m_buf);
-		}
+		sprintf(m_buf + strlen(m_buf), "costTime:【%I64dus】\n", costTime);
+		CLog::Write(m_logFile, m_buf);
 	}
 }

@@ -8,26 +8,23 @@
 const std::array<const char*, LOG_LEVEL_END> levelNames = { "【INFO】", "【WARNNING】", "【ERROR】", "【INFO】","【ERROR】", };
 
 //// 日志类
-class KERNEL_CLASS CLog
+class CLog
 {
 public:
 	CLog();
 	~CLog();
 
 public:
-	static void Write(const char* pLogFile, int level, const char *pFile, int line, const char* pFuncName, const char *pFormat, ...);
+	static void Write(const char* pLogFile, int level, const char* pFile, int line, const char* pFuncName, const char* pFormat, ...);
 
-	static void Write(const char* pLogFile, const char*pFuncName, const char* pFormat, ...);
+	static void Write(const char* pLogFile, const char* pFuncName, const char* pFormat, ...);
 
 	// 把buf中的内容写入logFile
 	static void Write(const char* pLogFile, const char* buf);
 };
 
-// sys时钟频率
-static long long sysFrequency = 0;
-
 // 检测函数运行
-class KERNEL_CLASS CAutoLog
+class CAutoLog
 {
 public:
 	CAutoLog(const char* pLogFile, const char* pFileName, const char* pFuncName, int line);
@@ -41,7 +38,7 @@ private:
 };
 
 // 统计函数耗时
-class KERNEL_CLASS CAutoLogCost
+class CAutoLogCost
 {
 public:
 	CAutoLogCost(const char* pLogFile, const char* pFuncName, int microSecs, const char* format, ...);
@@ -50,12 +47,9 @@ public:
 private:
 	int m_microSecs;
 	long long m_beginTime;
-	long long m_endTime;
-	long long m_costTime;
 
 	char m_logFile[MAX_FILE_NAME_SIZE];
 	char m_funcName[MAX_FUNC_NAME_SIZE];
-
 	char m_buf[MAX_LOG_BUF_SIZE];
 };
 

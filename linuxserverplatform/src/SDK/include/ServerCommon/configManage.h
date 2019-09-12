@@ -480,7 +480,7 @@ struct ServerConfigInfo
 
 class CMysqlHelper;
 // 配置管理, 管理数据中或者是通用配置文件的配置
-class KERNEL_CLASS CConfigManage
+class CConfigManage
 {
 private:
 	CConfigManage();
@@ -510,12 +510,6 @@ public:
 	bool LoadOtherConfig();
 	// 设置服务器类型
 	void SetServiceType(int type);
-	// 获取网络ip
-	static bool GetInternetIP(char* ip, int size);
-	// 获取mac地址
-	static int GetMacByNetBIOS(char* mac, int size);
-	// 请求验证
-	static bool RequestAuth();
 	// 解析json数据
 	static std::string ParseJsonValue(const std::string& src, const char* key);
 private:

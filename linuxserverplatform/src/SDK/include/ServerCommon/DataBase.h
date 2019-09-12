@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ComStruct.h"
-#include "InterFace.h"
+#include "comstruct.h"
+#include "Interface.h"
 #include "Lock.h"
 #include "DataLine.h"
 #include "Exception.h"

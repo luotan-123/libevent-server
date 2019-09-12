@@ -1,7 +1,6 @@
-#include "pch.h"
+#include "CommonHead.h"
 #include "GameLogManage.h"
 #include "configManage.h"
-#include "KernelDefine.h"
 
 CGameLogManage::CGameLogManage()
 {
@@ -372,7 +371,7 @@ std::string CGameLogManage::GetCostLog(int threadID)
 	return str;
 }
 
-bool CGameLogManage::AddLogFileFp(std::string strFile, FILE * fp)
+bool CGameLogManage::AddLogFileFp(std::string strFile, FILE* fp)
 {
 	if (strFile == "" || !fp)
 	{
@@ -389,7 +388,7 @@ bool CGameLogManage::AddLogFileFp(std::string strFile, FILE * fp)
 	return true;
 }
 
-FILE * CGameLogManage::GetLogFileFp(std::string&& strFile)
+FILE* CGameLogManage::GetLogFileFp(std::string&& strFile)
 {
 	if (strFile == "")
 	{

@@ -41,31 +41,28 @@ struct ListItemData
 };
 
 //数据队列类
-class KERNEL_CLASS CDataLine
+class CDataLine
 {
 private:
 	std::list <ListItemData*> m_DataList;
-
-	HANDLE				m_hCompletionPort;		//完成端口
 	CSignedLock		m_csLock;				//同步锁
 
+	//HANDLE			m_hCompletionPort
 public:
 	CDataLine();
 	virtual ~CDataLine();
 
 public:
 	//获取锁
-	CSignedLock * GetLock() { return &m_csLock; }
+	CSignedLock* GetLock() { return &m_csLock; }
 	//清理所有数据
 	bool CleanLineData();
-	//设置完成端口
-	void SetCompletionHandle(HANDLE hCompletionPort) { m_hCompletionPort = hCompletionPort; }
 	//加入消息队列
-	virtual UINT AddData(DataLineHead * pDataInfo, UINT uAddSize, UINT uDataKind, void * pAppendData = NULL, UINT uAppendAddSize = 0);
+	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData = NULL, UINT uAppendAddSize = 0);
 	//提取消息数据
-	virtual UINT GetData(DataLineHead * pDataBuffer, UINT uBufferSize);
+	virtual UINT GetData(DataLineHead* pDataBuffer, UINT uBufferSize);
 
 public:
-	INT_PTR GetDataCount();
+	size_t GetDataCount();
 };
 

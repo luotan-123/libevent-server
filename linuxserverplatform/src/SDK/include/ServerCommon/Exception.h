@@ -40,7 +40,7 @@ class CException
 protected:
 	UINT					m_uErrorCode;					///错误码
 	bool					m_bAutoDelete;					///是否自动删除
-	TCHAR					m_szMessage[255];				///错误信息
+	char					m_szMessage[255];				///错误信息
 	static bool				m_bShowError;					///是否显示错误
 
 public:
@@ -51,7 +51,7 @@ public:
 	//获取错误代码
 	virtual UINT GetErrorCode() const;
 	//获取错误信息
-	virtual TCHAR const * GetErrorMessage(TCHAR * szBuffer, int iBufLength) const;
+	virtual char const * GetErrorMessage(char * szBuffer, int iBufLength) const;
 	//删除函数
 	virtual bool Delete();
 	//设置是否显示错误

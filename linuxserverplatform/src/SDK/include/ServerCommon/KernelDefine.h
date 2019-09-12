@@ -93,3 +93,18 @@ enum LogLevel
 };
 
 //////////////////////////////////////////////////////////////////////////
+
+//时间参数
+typedef struct _SYSTEMTIME {
+	int wYear;
+	int wMonth;
+	int wDayOfWeek;
+	int wDay;
+	int wHour;
+	int wMinute;
+	int wSecond;
+	int wMilliseconds;
+	long lMicroseconds;
+} SYSTEMTIME, * PSYSTEMTIME, * LPSYSTEMTIME;
+
+//////////////////////////////////////////////////////////////////////////

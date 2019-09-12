@@ -1,9 +1,7 @@
 #pragma once
 
-#include "pch.h"
+#include "CommonHead.h"
 #include "DataLine.h"
-#include "Function.h"
-#include "KernelDefine.h"
 #include "log.h"
 
 CDataLine::CDataLine()
@@ -12,7 +10,7 @@ CDataLine::CDataLine()
 
 CDataLine::~CDataLine()
 {
-	ListItemData *pListItem = NULL;
+	ListItemData* pListItem = NULL;
 	while (m_DataList.size() > 0)
 	{
 		pListItem = m_DataList.front();
@@ -37,12 +35,12 @@ Parameter		:
 [IN]		pAppendAddSize	:附加数据大小，可以为0，此时实体数据为空
 Return			:指压入队列的大小
 */
-UINT CDataLine::AddData(DataLineHead * pDataInfo, UINT uAddSize, UINT uDataKind, void * pAppendData, UINT uAppendAddSize)
+UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData, UINT uAppendAddSize)
 {
-	if (!m_hCompletionPort)
+	/*if (!m_hCompletionPort)
 	{
 		return 0;
-	}
+	}*/
 
 	if (!pDataInfo)
 	{
@@ -51,7 +49,7 @@ UINT CDataLine::AddData(DataLineHead * pDataInfo, UINT uAddSize, UINT uDataKind,
 
 	CSignedLockObject LockObject(&m_csLock, true);
 
-	ListItemData *pListItem = new ListItemData;			//创建一个队列项
+	ListItemData* pListItem = new ListItemData;			//创建一个队列项
 
 	pListItem->pData = NULL;							//先设为0，以保证后续不出错
 	pListItem->stDataHead.uSize = uAddSize;				//数据大小
@@ -62,7 +60,7 @@ UINT CDataLine::AddData(DataLineHead * pDataInfo, UINT uAddSize, UINT uDataKind,
 	}
 
 	pListItem->pData = new BYTE[pListItem->stDataHead.uSize + 1];	//申请数据项内存
-	ZeroMemory(pListItem->pData, pListItem->stDataHead.uSize + 1);	//清空内存
+	memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//清空内存
 
 	pDataInfo->uDataKind = uDataKind;
 	pDataInfo->uSize = pListItem->stDataHead.uSize;
@@ -75,11 +73,11 @@ UINT CDataLine::AddData(DataLineHead * pDataInfo, UINT uAddSize, UINT uDataKind,
 
 	m_DataList.push_back(pListItem);								//加到队列尾部
 
-	BOOL ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//通知完成端口
-	if (ret == FALSE)
-	{
-		//ERROR_LOG("CDataLine::AddData PostQueuedCompletionStatus failed err=%d", GetLastError());
-	}
+	//BOOL ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//通知完成端口
+	//if (ret == FALSE)
+	//{
+	//	//ERROR_LOG("CDataLine::AddData PostQueuedCompletionStatus failed err=%d", GetLastError());
+	//}
 
 	return pListItem->stDataHead.uSize;		//返回大小
 }
@@ -96,7 +94,7 @@ Parameter		:
 [IN]		uBufferSize	:缓存大小，缺省为 LD_MAX_PART = 3096
 Return			:取出数据的实际大小
 */
-UINT CDataLine::GetData(DataLineHead * pDataBuffer, UINT uBufferSize)
+UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 {
 	CSignedLockObject LockObject(&m_csLock, true);
 
@@ -108,7 +106,7 @@ UINT CDataLine::GetData(DataLineHead * pDataBuffer, UINT uBufferSize)
 	}
 
 	//取数据
-	ListItemData *pListItem = m_DataList.front();
+	ListItemData* pListItem = m_DataList.front();
 	m_DataList.pop_front();
 
 	UINT uDataSize = pListItem->stDataHead.uSize;
@@ -136,7 +134,7 @@ bool CDataLine::CleanLineData()
 {
 	CSignedLockObject LockObject(&m_csLock, true);
 
-	ListItemData *pListItem = NULL;
+	ListItemData* pListItem = NULL;
 
 	while (m_DataList.size() > 0)
 	{
@@ -150,7 +148,7 @@ bool CDataLine::CleanLineData()
 }
 
 // 获取队列数据数量
-INT_PTR CDataLine::GetDataCount(void)
+size_t CDataLine::GetDataCount(void)
 {
 	CSignedLockObject LockObject(&m_csLock, true);
 	return m_DataList.size();

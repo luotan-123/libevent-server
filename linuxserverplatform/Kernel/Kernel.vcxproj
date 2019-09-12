@@ -115,121 +115,135 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Kernel\configManage.cpp" />
+    <ClCompile Include="..\src\Kernel\DataLine.cpp" />
     <ClCompile Include="..\src\Kernel\Exception.cpp" />
+    <ClCompile Include="..\src\Kernel\Function.cpp" />
+    <ClCompile Include="..\src\Kernel\GameLogManage.cpp" />
+    <ClCompile Include="..\src\Kernel\INIFile.cpp" />
     <ClCompile Include="..\src\Kernel\Lock.cpp" />
+    <ClCompile Include="..\src\Kernel\log.cpp" />
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\basemessage.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\comstruct.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\configManage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\DataLine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Exception.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Function.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\GameLogManage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\INIFile.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Interface.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\InternalMessageDefine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\KernelDefine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Lock.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\log.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/common;../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

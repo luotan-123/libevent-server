@@ -19,6 +19,18 @@
     <Filter Include="工具和接口">
       <UniqueIdentifier>{8be84f89-d0dd-4af3-8b73-ed3a19e534d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="系统配置">
+      <UniqueIdentifier>{74595cc4-1a19-4464-bc70-c403bf6f3151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="日志与性能检测">
+      <UniqueIdentifier>{cbfbbfcc-510b-4407-ba75-fe13aebfd76e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="网络模块">
+      <UniqueIdentifier>{a52a0dc5-87c6-40e9-928c-d64e9ba7c303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="定时器">
+      <UniqueIdentifier>{b3bcdb84-4325-4762-a546-2b57eec872b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h">
@@ -42,6 +54,30 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\Interface.h">
       <Filter>工具和接口</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\basemessage.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\comstruct.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\InternalMessageDefine.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\INIFile.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\GameLogManage.h">
+      <Filter>日志与性能检测</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\log.h">
+      <Filter>日志与性能检测</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\configManage.h">
+      <Filter>系统配置</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\DataLine.h">
+      <Filter>消息队列</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -52,6 +88,24 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\Exception.cpp">
       <Filter>异常处理</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\INIFile.cpp">
+      <Filter>工具和接口</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\GameLogManage.cpp">
+      <Filter>日志与性能检测</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\log.cpp">
+      <Filter>日志与性能检测</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\Function.cpp">
+      <Filter>工具和接口</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\configManage.cpp">
+      <Filter>系统配置</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\DataLine.cpp">
+      <Filter>消息队列</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -56,7 +56,7 @@ bool CException::Delete()
 }
 
 //获取错误信息
-TCHAR const * CException::GetErrorMessage(TCHAR * szBuffer, int iBufLength) const
+char const * CException::GetErrorMessage(char * szBuffer, int iBufLength) const
 {
 	if (this != NULL)
 	{
@@ -65,7 +65,7 @@ TCHAR const * CException::GetErrorMessage(TCHAR * szBuffer, int iBufLength) cons
 		{
 			int iCopyLength = min(iBufLength - 1, strlen(m_szMessage));
 			szBuffer[iCopyLength] = 0;
-			memcpy(szBuffer, m_szMessage, iCopyLength * sizeof(TCHAR));
+			memcpy(szBuffer, m_szMessage, iCopyLength * sizeof(char));
 		}
 		return m_szMessage;
 	}

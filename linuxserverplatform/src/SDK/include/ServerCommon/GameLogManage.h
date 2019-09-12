@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include "Function.h"
 
 struct ThreadLogFiles
 {
@@ -16,7 +17,7 @@ struct ThreadLogFiles
 };
 
 // ”Œœ∑logπ‹¿Ì
-class KERNEL_CLASS CGameLogManage
+class CGameLogManage
 {
 private:
 	CGameLogManage();

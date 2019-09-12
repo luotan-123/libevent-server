@@ -1,5 +1,7 @@
 #pragma once
 
+#include "KernelDefine.h"
+
 //计算数组维数
 #define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
 
@@ -15,3 +17,9 @@
 //判断大小函数
 #define min(x,y) ((x)>(y)?(y):(x))
 #define max(x,y) ((x)>(y)?(x):(y))
+
+//获取系统时间
+extern void GetLocalTime(SYSTEMTIME* sysTime);
+
+//获取线程pid
+extern int GetCurrentThreadId();

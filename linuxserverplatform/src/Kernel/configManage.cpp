@@ -1,24 +1,11 @@
-#include "pch.h"
-#include "ConfigManage.h"
-#include "commonuse.h"
+#include "CommonHead.h"
+#include "configManage.h"
+#include "INIFile.h"
 #include "Exception.h"
-#include <string.h>
-#include <WS2tcpip.h>
-#include "../curl/curl.h"
+#include "curl.h"
 #include "KernelDefine.h"
 #include "log.h"
 #include "MysqlHelper.h"
-#include <urlmon.h>
-#include <Nb30.h>
-
-#pragma comment(lib,"netapi32.lib") 
-#pragma comment(lib, "urlmon.lib")
-
-#ifdef _DEBUG
-#pragma comment(lib, "libcurld.lib")
-#else // !_DEBUG
-#pragma comment(lib, "libcurl.lib")
-#endif // _DEBUG
 
 CConfigManage::CConfigManage()
 {
@@ -157,7 +144,7 @@ bool CConfigManage::LoadDBConfig()
 	string path = CINIFile::GetAppPath();
 	CINIFile file(path + "config.ini");
 
-	string key = TEXT("DB");
+	string key = "DB";
 	string ret;
 
 	ret = file.GetKeyVal(key, "ip", "127.0.0.1");
@@ -189,7 +176,7 @@ bool CConfigManage::LoadRedisConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -213,7 +200,7 @@ bool CConfigManage::LoadLoaderServerConfig()
 	string path = CINIFile::GetAppPath();
 	CINIFile file(path + "config.ini");
 
-	string key = TEXT("LOADERSERVER");
+	string key = "LOADERSERVER";
 	string ret;
 
 	ret = file.GetKeyVal(key, "serviceName", "hm");
@@ -263,7 +250,7 @@ bool CConfigManage::LoadTableFiledConfig()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+			ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 			return false;
 		}
 
@@ -303,7 +290,7 @@ bool CConfigManage::LoadTableFiledConfig()
 			if (type == FIELD_VALUE_TYPE_NONE)
 			{
 				// 存在不支持的数据类型
-				ERROR_LOG("have unsupported type szType=%s", szType);
+				ERROR_LOG("have unsupported type szType=%s", szType.c_str());
 				return false;
 			}
 
@@ -406,7 +393,7 @@ bool CConfigManage::LoadOtherConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -437,7 +424,7 @@ bool CConfigManage::ConnectToDatabase()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -456,7 +443,7 @@ bool CConfigManage::LoadGameBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -492,7 +479,7 @@ bool CConfigManage::LoadBuyGameDeskConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -534,7 +521,7 @@ bool CConfigManage::LoadRoomBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -735,7 +722,7 @@ bool CConfigManage::LoadTablesPrimaryKey()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+			ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 			return false;
 		}
 
@@ -760,7 +747,7 @@ const RedisConfig& CConfigManage::GetRedisConfig(int redisTypeID)
 	return m_redisConfigMap[redisTypeID];
 }
 
-const CommonConfig & CConfigManage::GetCommonConfig()
+const CommonConfig& CConfigManage::GetCommonConfig()
 {
 	return m_commonConfig;
 }
@@ -770,7 +757,7 @@ const FtpConfig& CConfigManage::GetFtpConfig()
 	return m_ftpConfig;
 }
 
-int CConfigManage::GetFieldType(const char * tableName, const char * filedName)
+int CConfigManage::GetFieldType(const char* tableName, const char* filedName)
 {
 	if (!tableName || !filedName)
 	{
@@ -803,7 +790,7 @@ int CConfigManage::GetFieldType(const char * tableName, const char * filedName)
 	return FIELD_VALUE_TYPE_NONE;
 }
 
-const char * CConfigManage::GetDllFileName(int gameID)
+const char* CConfigManage::GetDllFileName(int gameID)
 {
 	if (gameID <= 0)
 	{
@@ -835,7 +822,7 @@ RoomBaseInfo* CConfigManage::GetRoomBaseInfo(int roomID)
 	return NULL;
 }
 
-bool CConfigManage::GetPrivateRoomIDByGameID(int gameID, std::vector<int> & roomID)
+bool CConfigManage::GetPrivateRoomIDByGameID(int gameID, std::vector<int>& roomID)
 {
 	auto iter = m_roomBaseInfoMap.begin();
 	for (; iter != m_roomBaseInfoMap.end(); iter++)
@@ -866,7 +853,7 @@ GameBaseInfo* CConfigManage::GetGameBaseInfo(int gameID)
 	return NULL;
 }
 
-BuyGameDeskInfo* CConfigManage::GetBuyGameDeskInfo(const BuyGameDeskInfoKey &buyKey)
+BuyGameDeskInfo* CConfigManage::GetBuyGameDeskInfo(const BuyGameDeskInfoKey& buyKey)
 {
 	auto iter = m_buyGameDeskInfoMap.find(buyKey);
 	if (iter != m_buyGameDeskInfoMap.end())
@@ -897,7 +884,7 @@ const FriendsGroupConfig& CConfigManage::GetFriendsGroupConfig()
 	return m_friendsGroupConfig;
 }
 
-bool CConfigManage::GetRobotPositionInfo(int robotID, RobotPositionInfo & info)
+bool CConfigManage::GetRobotPositionInfo(int robotID, RobotPositionInfo& info)
 {
 	if (m_robotPositionInfoVec.size() <= 0)
 	{
@@ -911,7 +898,7 @@ bool CConfigManage::GetRobotPositionInfo(int robotID, RobotPositionInfo & info)
 	return true;
 }
 
-const std::vector<FieldDescriptor> & CConfigManage::GetTableFiledDescVec(const std::string& tableName)
+const std::vector<FieldDescriptor>& CConfigManage::GetTableFiledDescVec(const std::string& tableName)
 {
 	static std::vector<FieldDescriptor> vec;
 
@@ -933,214 +920,6 @@ const char* CConfigManage::GetTablePriamryKey(const std::string& tableName)
 	}
 
 	return iter->second.c_str();
-}
-
-bool CConfigManage::GetInternetIP(char* ip, int size)
-{
-	if (!ip || size <= 0)
-	{
-		return false;
-	}
-
-	const char* fileName = "c:\\i.ini";
-	char buf[2048] = { 0 };    //把网页中读出的数据放在此处
-
-	URLDownloadToFile(0, "https://www.baidu.com/s?wd=IP&rsv_spt=1&rsv_iqid=0xf8f2cb3c005d576b&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_enter=1&oq=ip&inputT=2157&rsv_t=7cecl2BUHQihZNXK9WXnnhO2cQ%2B5S1ENi6lWNwyrcFLcFPYrri3vPYpQUTGtMoeDi%2B5s&rsv_pq=8399d6ff0003ade5&rsv_sug3=6&rsv_sug1=3&rsv_sug7=100&rsv_sug2=0&rsv_sug4=2157", fileName, 0, NULL);
-	FILE *fp = fopen(fileName, "r");
-	if (!fp)
-	{
-		return 0;
-	}
-
-	const char* tag = "fk=";
-
-	while (!feof(fp))
-	{
-		memset(buf, 0, sizeof(buf));
-		fgets(buf, sizeof(buf) - 1, fp);
-
-		char *c = strstr(buf, tag);
-		if (c)
-		{
-			char* begin = c + strlen(tag) + 1;
-			if (*begin != 'I')
-			{
-				// 截取出ip地址
-				for (int i = 0; i < size; i++)
-				{
-					ip[i] = *begin++;
-					if (*begin == '\"')
-					{
-						break;
-					}
-				}
-				break;
-			}
-		}
-	}
-
-
-	fclose(fp);
-	remove(fileName);
-
-	return true;
-}
-
-// 获取mac地址
-int CConfigManage::GetMacByNetBIOS(char* mac, int size)
-{
-	if (!mac || size <= 0)
-	{
-		return 1000;
-	}
-
-	NCB ncb;
-	typedef struct _ASTAT_
-	{
-		ADAPTER_STATUS   adapt;
-		NAME_BUFFER   NameBuff[30];
-	}ASTAT, *PASTAT;
-
-	ASTAT Adapter;
-
-	typedef struct _LANA_ENUM
-	{
-		UCHAR   length;
-		UCHAR   lana[MAX_LANA];
-	}LANA_ENUM;
-
-	LANA_ENUM lana_enum;
-	UCHAR uRetCode;
-	memset(&ncb, 0, sizeof(ncb));
-	memset(&lana_enum, 0, sizeof(lana_enum));
-	ncb.ncb_command = NCBENUM;
-	ncb.ncb_buffer = (unsigned char *)&lana_enum;
-	ncb.ncb_length = sizeof(LANA_ENUM);
-	uRetCode = Netbios(&ncb);
-
-	if (uRetCode != NRC_GOODRET)
-		return uRetCode;
-
-	for (int lana = 0; lana < lana_enum.length; lana++)
-	{
-		ncb.ncb_command = NCBRESET;
-		ncb.ncb_lana_num = lana_enum.lana[lana];
-		uRetCode = Netbios(&ncb);
-		if (uRetCode == NRC_GOODRET)
-			break;
-	}
-
-	if (uRetCode != NRC_GOODRET)
-		return uRetCode;
-
-	memset(&ncb, 0, sizeof(ncb));
-	ncb.ncb_command = NCBASTAT;
-	ncb.ncb_lana_num = lana_enum.lana[0];
-	strcpy_s((char*)ncb.ncb_callname, NCBNAMSZ, "*");
-	ncb.ncb_buffer = (unsigned char *)&Adapter;
-	ncb.ncb_length = sizeof(Adapter);
-	uRetCode = Netbios(&ncb);
-
-	if (uRetCode != NRC_GOODRET)
-		return uRetCode;
-
-	sprintf_s(mac, size, "%02X-%02X-%02X-%02X-%02X-%02X",
-		Adapter.adapt.adapter_address[0],
-		Adapter.adapt.adapter_address[1],
-		Adapter.adapt.adapter_address[2],
-		Adapter.adapt.adapter_address[3],
-		Adapter.adapt.adapter_address[4],
-		Adapter.adapt.adapter_address[5]);
-
-	return 0;
-}
-
-bool CConfigManage::RequestAuth()
-{
-	AUTOCOST("RequestAuth");
-
-	char myMachineCode[] = "2019-2-23-11-40-55-235"; //每个内核库唯一编码
-	char myIP[64] = "";
-
-	if (!GetInternetIP(myIP, sizeof(myIP)))
-	{
-		// 没有远端IP
-		return true;
-	}
-
-	//if (GetMacByNetBIOS(myIP, sizeof(myIP)))
-	//{
-	//	//获取物理地址失败
-	//	return true;
-	//}
-
-	// 认证服务器信息
-	const char* hostName = "api.21poker.cn";
-	int port = 80;
-
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
-
-	// 使用原生阻塞socket即可
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == INVALID_SOCKET)
-	{
-		return true;
-	}
-
-	HOSTENT* pHostent = gethostbyname(hostName);
-	if (!pHostent)
-	{
-		return true;
-	}
-
-	sockaddr_in svrAddr;
-	svrAddr.sin_family = AF_INET;
-	svrAddr.sin_port = htons(port);
-	memcpy(&svrAddr.sin_addr.s_addr, pHostent->h_addr_list[0], pHostent->h_length);
-
-	int ret = connect(sock, (sockaddr*)&svrAddr, sizeof(sockaddr_in));
-	if (ret != 0)
-	{
-		// 对端可能没有启动
-		return true;
-	}
-
-	// 组装消息体
-	char msgBody[128] = "";
-	sprintf(msgBody, "ip=%s", myIP);
-
-	const char* route = "/apps/checkIp";
-
-	char sendBuf[1024] = "";
-	sprintf(sendBuf,
-		"POST %s HTTP/1.0\r\n"
-		"Host: %s\r\n"
-		"Content-type: application/x-www-form-urlencoded\r\n"
-		"Content-length: %d\r\n\r\n"
-		"%s", route, hostName, strlen(msgBody), msgBody);
-
-	int sendBytes = send(sock, sendBuf, strlen(sendBuf), 0);
-	if (sendBytes != strlen(sendBuf))
-	{
-		return true;
-	}
-
-	char recvBuf[1024] = "";
-
-	int recvBytes = recv(sock, recvBuf, sizeof(recvBuf), 0);
-	if (recvBytes <= 0)
-	{
-		// 对端关闭或者其他（默认认证通过）
-		return true;
-	}
-
-	if (strstr(recvBuf, "\"status\":false") != NULL)
-	{
-		return false;
-	}
-
-	return true;
 }
 
 std::string CConfigManage::ParseJsonValue(const std::string& src, const char* key)
@@ -1180,7 +959,7 @@ std::string CConfigManage::ParseJsonValue(const std::string& src, const char* ke
 	return value;
 }
 
-void CConfigManage::GetOtherConfigKeyValue(std::string &strKey, std::string &strValue)
+void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& strValue)
 {
 	//// 补助相关
 	if (strKey == "supportTimesEveryDay")
@@ -1247,7 +1026,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string &strKey, std::string &str
 	//// 转赠相关
 	else if (strKey == "sendGiftMyLimitMoney")
 	{
-		m_sendGiftConfig.myLimitMoney = _atoi64(strValue.c_str());
+		m_sendGiftConfig.myLimitMoney = atoll(strValue.c_str());
 	}
 	else if (strKey == "sendGiftMyLimitJewels")
 	{
@@ -1255,7 +1034,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string &strKey, std::string &str
 	}
 	else if (strKey == "sendGiftMinMoney")
 	{
-		m_sendGiftConfig.sendMinMoney = _atoi64(strValue.c_str());
+		m_sendGiftConfig.sendMinMoney = atoll(strValue.c_str());
 	}
 	else if (strKey == "sendGiftMinJewels")
 	{
@@ -1269,7 +1048,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string &strKey, std::string &str
 	//// 银行相关
 	else if (strKey == "bankMinSaveMoney")
 	{
-		m_bankConfig.minSaveMoney = _atoi64(strValue.c_str());
+		m_bankConfig.minSaveMoney = atoll(strValue.c_str());
 	}
 	else if (strKey == "bankSaveMoneyMuti")
 	{
@@ -1277,7 +1056,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string &strKey, std::string &str
 	}
 	else if (strKey == "bankMinTakeMoney")
 	{
-		m_bankConfig.minTakeMoney = _atoi64(strValue.c_str());
+		m_bankConfig.minTakeMoney = atoll(strValue.c_str());
 	}
 	else if (strKey == "bankTakeMoneyMuti")
 	{
@@ -1285,7 +1064,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string &strKey, std::string &str
 	}
 	else if (strKey == "bankMinTransfer")
 	{
-		m_bankConfig.minTransferMoney = _atoi64(strValue.c_str());
+		m_bankConfig.minTransferMoney = atoll(strValue.c_str());
 	}
 	else if (strKey == "bankTransferMuti")
 	{
@@ -1374,7 +1153,7 @@ bool CConfigManage::LoadLogonServerConfig()
 	string path = CINIFile::GetAppPath();
 	CINIFile file(path + "config.ini");
 
-	string key = TEXT("LOGONSERVER");
+	string key = "LOGONSERVER";
 
 	m_logonServerConfig.logonID = file.GetKeyVal(key, "logonID", 1);
 
@@ -1386,7 +1165,7 @@ bool CConfigManage::LoadCenterServerConfig()
 	string path = CINIFile::GetAppPath();
 	CINIFile file(path + "config.ini");
 
-	string key = TEXT("CENTERSERVER");
+	string key = "CENTERSERVER";
 	string ret;
 
 	ret = file.GetKeyVal(key, "ip", "127.0.0.1");
@@ -1398,12 +1177,12 @@ bool CConfigManage::LoadCenterServerConfig()
 	return true;
 }
 
-const LogonServerConfig & CConfigManage::GetLogonServerConfig()
+const LogonServerConfig& CConfigManage::GetLogonServerConfig()
 {
 	return m_logonServerConfig;
 }
 
-const CenterServerConfig & CConfigManage::GetCenterServerConfig()
+const CenterServerConfig& CConfigManage::GetCenterServerConfig()
 {
 	return m_centerServerConfig;
 }
@@ -1421,7 +1200,7 @@ bool CConfigManage::LoadLogonBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -1480,7 +1259,7 @@ LogonBaseInfo* CConfigManage::GetLogonBaseInfo(int logonID)
 }
 
 // 获取购买roomID信息
-void CConfigManage::GetBuyRoomInfo(int gameID, int roomType, std::vector<int> &roomIDVec)
+void CConfigManage::GetBuyRoomInfo(int gameID, int roomType, std::vector<int>& roomIDVec)
 {
 	roomIDVec.clear();
 
@@ -1492,7 +1271,7 @@ void CConfigManage::GetBuyRoomInfo(int gameID, int roomType, std::vector<int> &r
 }
 
 // 获得分表的表名
-bool CConfigManage::GetTableNameByDate(const char * name, char * dateName, size_t size)
+bool CConfigManage::GetTableNameByDate(const char* name, char* dateName, size_t size)
 {
 	if (name == NULL || dateName == NULL || size <= 1)
 	{
@@ -1501,7 +1280,7 @@ bool CConfigManage::GetTableNameByDate(const char * name, char * dateName, size_
 
 	if (!m_otherConfig.byIsDistributedTable)
 	{
-		sprintf_s(dateName, size, "%s", name);
+		sprintf(dateName, "%s", name);
 
 		return true;
 	}
@@ -1509,12 +1288,12 @@ bool CConfigManage::GetTableNameByDate(const char * name, char * dateName, size_
 	SYSTEMTIME sys;
 	GetLocalTime(&sys);
 
-	sprintf_s(dateName, size, "%s_%d%02d", name, sys.wYear, sys.wMonth);
+	sprintf(dateName, "%s_%d%02d", name, sys.wYear, sys.wMonth);
 
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, int &iValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, int& iValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
@@ -1526,7 +1305,7 @@ bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * sz
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, UINT &uValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, UINT& uValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
@@ -1538,7 +1317,7 @@ bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * sz
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, long &lValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, long& lValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
@@ -1550,19 +1329,19 @@ bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * sz
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, long long &llValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, long long& llValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
 		return false;
 	}
 
-	llValue = _atoi64(data[szFieldName].c_str());
+	llValue = atoll(data[szFieldName].c_str());
 
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, double &dValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, double& dValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
@@ -1574,7 +1353,7 @@ bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * sz
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, bool &bValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, bool& bValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
@@ -1586,7 +1365,7 @@ bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * sz
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, BYTE &dValue)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, BYTE& dValue)
 {
 	if (!szFieldName || data.size() <= 0)
 	{
@@ -1598,7 +1377,7 @@ bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * sz
 	return true;
 }
 
-bool CConfigManage::sqlGetValue(std::map<string, string> & data, const char * szFieldName, char szBuffer[], UINT uSize)
+bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, char szBuffer[], UINT uSize)
 {
 	if (!szFieldName || !szBuffer || data.size() <= 0 || uSize <= 1)
 	{
