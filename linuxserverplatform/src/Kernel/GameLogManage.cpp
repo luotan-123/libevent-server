@@ -37,7 +37,7 @@ void CGameLogManage::Release()
 	m_filesFpMap.clear();
 }
 
-void CGameLogManage::AddCenterLogFile(int threadID, int threadType)
+void CGameLogManage::AddCenterLogFile(pthread_t threadID, int threadType)
 {
 	if (threadID <= 0)
 	{
@@ -90,7 +90,7 @@ void CGameLogManage::AddCenterLogFile(int threadID, int threadType)
 	m_centerLogFilesMap.insert(std::make_pair(threadID, logs));
 }
 
-void CGameLogManage::AddLogonLogFile(int threadID, int threadType)
+void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
 {
 	if (threadID <= 0)
 	{
@@ -143,7 +143,7 @@ void CGameLogManage::AddLogonLogFile(int threadID, int threadType)
 	m_logonLogFilesMap.insert(std::make_pair(threadID, logs));
 }
 
-void CGameLogManage::AddLoaderLogFile(int threadID, int threadType, int roomID)
+void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int roomID)
 {
 	if (threadID <= 0)
 	{
@@ -239,7 +239,7 @@ void CGameLogManage::AddLoaderLogFile(int threadID, int threadType, int roomID)
 	m_loaderLogFilesMap.insert(std::make_pair(threadID, logs));
 }
 
-void CGameLogManage::AddLogFile(int threadID, int threadType, int roomID/* = 0*/)
+void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/* = 0*/)
 {
 	int serviceType = ConfigManage()->m_serviceType;
 	if (serviceType <= SERVICE_TYPE_BEGIN || serviceType >= SERVICE_TYPE_END)
@@ -261,7 +261,7 @@ void CGameLogManage::AddLogFile(int threadID, int threadType, int roomID/* = 0*/
 	}
 }
 
-std::string CGameLogManage::GetErrorLog(int threadID)
+std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 {
 	int serviceType = ConfigManage()->m_serviceType;
 	if (serviceType <= SERVICE_TYPE_BEGIN || serviceType >= SERVICE_TYPE_END)
@@ -316,7 +316,7 @@ std::string CGameLogManage::GetErrorLog(int threadID)
 	return str;
 }
 
-std::string CGameLogManage::GetCostLog(int threadID)
+std::string CGameLogManage::GetCostLog(pthread_t threadID)
 {
 	int serviceType = ConfigManage()->m_serviceType;
 	if (serviceType <= SERVICE_TYPE_BEGIN || serviceType >= SERVICE_TYPE_END)

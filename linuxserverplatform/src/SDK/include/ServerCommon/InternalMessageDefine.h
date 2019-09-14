@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DataBase.h"
+#include "Interface.h"
 #include "basemessage.h"
 #include "KernelDefine.h"
 
@@ -24,11 +24,11 @@ struct SocketCloseLine
 struct SocketReadLine
 {
 	DataLineHead						LineHead;					//队列头
-	NetMessageHead						NetMessageHead;				//数据包头
+	NetMessageHead						netMessageHead;				//数据包头
 	UINT								uHandleSize;				//数据包处理大小
 	UINT								uIndex;						//SOCKET 索引
 	ULONG								uAccessIP;					//SOCKET IP
-	DWORD								dwHandleID;					//SOCKET 处理 ID
+	UINT								dwHandleID;					//SOCKET 处理 ID
 };
 
 //定时器消息结构定义
@@ -36,6 +36,15 @@ struct WindowTimerLine
 {
 	DataLineHead						LineHead;					//队列头
 	UINT								uTimerID;					//定时器 ID
+};
+
+//数据库数据包头结构
+struct DataBaseLineHead
+{
+	DataLineHead					dataLineHead;							///队列头
+	UINT							uHandleKind;							///处理类型
+	UINT							uIndex;									///对象索引
+	UINT							dwHandleID;								///对象标识
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -99,16 +108,6 @@ struct MSG_S_ConnectSuccess
 //////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-struct InternalCheckDBConnection
-{
-	DataBaseLineHead	head;
-
-	InternalCheckDBConnection()
-	{
-		memset(this, 0, sizeof(InternalCheckDBConnection));
-	}
-};
-
 struct InternalSqlStatement
 {
 	DataBaseLineHead	head;
@@ -119,14 +118,5 @@ struct InternalSqlStatement
 		memset(this, 0, sizeof(InternalSqlStatement));
 	}
 };
-typedef struct _RegisterInfoToWeb_
-{
-	DataBaseLineHead	head;
-	int  userID;
-	char url[256];
-	_RegisterInfoToWeb_()
-	{
-		memset(this, 0, sizeof(_RegisterInfoToWeb_));
-	}
-}RegisterInfoToWeb;
+
 ///////////////////////////////////////////////////////////////////////////////

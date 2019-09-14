@@ -11,7 +11,7 @@ using namespace std;
 **********************/
 struct MysqlHelper_Exception //: public TC_Exception
 {
-	MysqlHelper_Exception(const string &sBuffer) :errorInfo(sBuffer) {}; //: TC_Exception(sBuffer){};
+	MysqlHelper_Exception(const string& sBuffer) :errorInfo(sBuffer) {}; //: TC_Exception(sBuffer){};
 	~MysqlHelper_Exception() throw() {};
 
 	string errorInfo;
@@ -44,7 +44,7 @@ struct DBConf
 	* dbname:数据库名称
 	* dbport:端口
 	**********************************/
-	void loadFromMap(const map<string, string> &mpParam)
+	void loadFromMap(const map<string, string>& mpParam)
 	{
 		map<string, string> mpTmp = mpParam;
 
@@ -88,7 +88,7 @@ public:
 	* @param iUnixSocket socket
 	* @param iFlag 客户端标识
 	*/
-	CMysqlHelper(const string& sHost, const string& sUser = "", const string& sPasswd = "", const string& sDatabase = "", const string &sCharSet = "", int port = 0, int iFlag = 0);
+	CMysqlHelper(const string& sHost, const string& sUser = "", const string& sPasswd = "", const string& sDatabase = "", const string& sCharSet = "", int port = 0, int iFlag = 0);
 
 	/**
 	* @brief 构造函数.
@@ -113,7 +113,7 @@ public:
 	* @param iFlag 客户端标识
 	* @return 无
 	*/
-	void init(const string& sHost, const string& sUser = "", const string& sPasswd = "", const string& sDatabase = "", const string &sCharSet = "", int port = 3306, int iFlag = 0);
+	void init(const string& sHost, const string& sUser = "", const string& sPasswd = "", const string& sDatabase = "", const string& sCharSet = "", int port = 3306, int iFlag = 0);
 
 	/**
 	* @brief 初始化.
@@ -140,14 +140,14 @@ public:
 	* @brief 获取数据库变量.
 	* @return 数据库变量
 	*/
-	string getVariables(const string &sName);
+	string getVariables(const string& sName);
 
 	/**
 	* @brief 直接获取数据库指针.
 	*
 	* @return MYSQL* 数据库指针
 	*/
-	MYSQL *getMysql();
+	MYSQL* getMysql();
 
 	/**
 	* @brief 字符转义.
@@ -193,7 +193,7 @@ public:
 		* @param i 要获取第几条记录
 		* @return MysqlRecord类型的数据，可以根据字段获取相关信息，
 		*/
-		map<string, string> & operator[](size_t i);
+		map<string, string>& operator[](size_t i);
 
 	protected:
 		vector<map<string, string> > _data;
@@ -206,7 +206,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return MysqlData类型的数据，可以根据字段获取相关信息
 	*/
-	bool queryRecord(const string& sSql, MysqlData &data, bool bSetGBK = false);
+	bool queryRecord(const string& sSql, MysqlData& data, bool bSetGBK = false);
 
 	/**
 	* @brief 执行sql语句
@@ -215,7 +215,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return 成功返回true，失败返回false
 	*/
-	void sqlExec(const char * sql, bool bSetGBK = false);
+	void sqlExec(const char* sql, bool bSetGBK = false);
 
 	/**
 	* @brief 定义字段类型，
@@ -242,7 +242,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return size_t 影响的行数
 	*/
-	size_t updateRecord(const string &sTableName, const map<string, pair<FT, string> > &mpColumns, const string &sCondition);
+	size_t updateRecord(const string& sTableName, const map<string, pair<FT, string> >& mpColumns, const string& sCondition);
 
 	/**
 	* @brief 插入记录.
@@ -252,7 +252,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return size_t 影响的行数
 	*/
-	size_t insertRecord(const string &sTableName, const map<string, pair<FT, string> > &mpColumns);
+	size_t insertRecord(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
 	* @brief 替换记录.
@@ -262,7 +262,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return size_t 影响的行数
 	*/
-	size_t replaceRecord(const string &sTableName, const map<string, pair<FT, string> > &mpColumns);
+	size_t replaceRecord(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
 	* @brief 删除记录.
@@ -272,7 +272,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return size_t 影响的行数
 	*/
-	size_t deleteRecord(const string &sTableName, const string &sCondition = "");
+	size_t deleteRecord(const string& sTableName, const string& sCondition = "");
 
 	/**
 	* @brief 获取Table查询结果的数目.
@@ -282,7 +282,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return size_t 查询的记录数目
 	*/
-	size_t getRecordCount(const string& sTableName, const string &sCondition = "");
+	size_t getRecordCount(const string& sTableName, const string& sCondition = "");
 
 	/**
 	* @brief 获取Sql返回结果集的个数.
@@ -291,7 +291,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return 查询的记录数目
 	*/
-	size_t getSqlCount(const string &sCondition = "");
+	size_t getSqlCount(const string& sCondition = "");
 
 	/**
 	* @brief 获取字段最大值.
@@ -302,7 +302,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return 查询的记录数目
 	*/
-	int getMaxValue(const string& sTableName, const string& sFieldName, const string &sCondition = "");
+	int getMaxValue(const string& sTableName, const string& sFieldName, const string& sCondition = "");
 
 	/**
 	* @brief 获取auto_increment最后插入得ID.
@@ -318,7 +318,7 @@ public:
 	* @param mpColumns 列名/值对
 	* @return string insert-SQL语句
 	*/
-	string buildInsertSQL(const string &sTableName, const map<string, pair<FT, string> > &mpColumns);
+	string buildInsertSQL(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
 	* @brief 构造Replace-SQL语句.
@@ -327,7 +327,7 @@ public:
 	* @param mpColumns 列名/值对
 	* @return string insert-SQL语句
 	*/
-	string buildReplaceSQL(const string &sTableName, const map<string, pair<FT, string> > &mpColumns);
+	string buildReplaceSQL(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
 	* @brief 构造Update-SQL语句.
@@ -337,7 +337,7 @@ public:
 	* @param sCondition where子语句
 	* @return string Update-SQL语句
 	*/
-	string buildUpdateSQL(const string &sTableName, const map<string, pair<FT, string> > &mpColumns, const string &sCondition);
+	string buildUpdateSQL(const string& sTableName, const map<string, pair<FT, string> >& mpColumns, const string& sCondition);
 
 	/**
 	* @brief 获取最后执行的SQL语句.
@@ -355,13 +355,13 @@ protected:
 	/**
 	* @brief copy contructor，只申明,不定义,保证不被使用
 	*/
-	CMysqlHelper(const CMysqlHelper &tcMysql);
+	CMysqlHelper(const CMysqlHelper& tcMysql);
 
 	/**
 	*
 	* @brief 只申明,不定义,保证不被使用
 	*/
-	CMysqlHelper &operator=(const CMysqlHelper &tcMysql);
+	CMysqlHelper& operator=(const CMysqlHelper& tcMysql);
 
 
 private:
@@ -369,7 +369,7 @@ private:
 	/**
 	* 数据库指针
 	*/
-	MYSQL *_pstMql;
+	MYSQL* _pstMql;
 
 	/**
 	* 数据库配置

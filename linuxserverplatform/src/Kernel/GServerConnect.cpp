@@ -1,9 +1,14 @@
-#include "pch.h"
-#include "GServerConnect.h"
-#include "InternalMessageDefine.h"
+#include "CommonHead.h"
+#include "basemessage.h"
+#include "Lock.h"
 #include "log.h"
 #include "configManage.h"
-#include "Function.h"
+#include "DataLine.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include "GServerConnect.h"
+#include "InternalMessageDefine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // CGServerClient
@@ -46,7 +51,7 @@ bool CGServerClient::Connect()
 		return false;
 	}
 
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET)
 	{
 		return false;
@@ -60,21 +65,20 @@ bool CGServerClient::Connect()
 
 	int ret = 0;
 	int optval = 0;
-	int optLen = sizeof(int);
 
 	optval = GSERVER_SOCKET_RECV_BUF;
 	ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char*)& optval, sizeof(optval));
-	if (ret == SOCKET_ERROR)
+	if (ret == -1)
 	{
-		ERROR_LOG("setsockopt SO_RCVBUF ERROR");
+		CON_ERROR_LOG("setsockopt SO_RCVBUF ERROR errno=%d", errno);
 		return false;
 	}
 
 	optval = GSERVER_SOCKET_SEND_BUF;
 	ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char*)& optval, sizeof(optval));
-	if (ret == SOCKET_ERROR)
+	if (ret == -1)
 	{
-		ERROR_LOG("setsockopt SO_SNDBUF ERROR");
+		ERROR_LOG("setsockopt SO_SNDBUF ERROR errno=%d", errno);
 		return false;
 	}
 
@@ -158,7 +162,7 @@ bool CGServerClient::OnRead()
 			msg.uIndex = m_index;
 			msg.dwHandleID = 0;
 			msg.uAccessIP = 0;
-			msg.NetMessageHead = *pHead;
+			msg.netMessageHead = *pHead;
 
 			unsigned int addBytes = m_pDataLine->AddData(&msg.LineHead, sizeof(SocketReadLine), HD_SOCKET_READ, pData, realSize);
 
@@ -168,7 +172,8 @@ bool CGServerClient::OnRead()
 			}
 		}
 
-		MoveMemory(m_recvBuf, m_recvBuf + messageSize, m_remainRecvBytes - messageSize);
+		// 有内存重叠的时候，不能用memcpy 只能用memmove
+		memmove(m_recvBuf, m_recvBuf + messageSize, m_remainRecvBytes - messageSize);
 		m_remainRecvBytes -= messageSize;
 	}
 
@@ -226,7 +231,7 @@ bool CGServerClient::OnClose()
 {
 	//CSignedLockObject lock(&m_lock, true);
 
-	closesocket(m_socket);
+	close(m_socket);
 
 	Clear();
 
@@ -279,7 +284,7 @@ bool CGServerClient::ReConnect()
 		return false;
 	}
 
-	closesocket(m_socket);
+	close(m_socket);
 
 	Clear();
 
@@ -299,8 +304,7 @@ CGServerConnect::CGServerConnect()
 	m_roomID = 0;
 	m_running = false;
 	m_socketVec.clear();
-	m_hEventThread = NULL;
-	m_hThreadCheckConnect = NULL;
+	m_hThreadCheckConnect = 0;
 }
 
 CGServerConnect::~CGServerConnect()
@@ -328,8 +332,8 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	m_pDataLine = pDataLine;
 	m_roomID = roomID;
 
-	//建立事件
-	m_hEventThread = ::CreateEvent(NULL, TRUE, false, NULL);
+	////建立事件
+	//m_hEventThread = ::CreateEvent(NULL, TRUE, false, NULL);
 
 	// 分配内存
 	m_socketVec.clear();
@@ -351,46 +355,43 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	int recvThreadNumber = ConfigManage()->m_loaderServerConfig.recvThreadNumber;
 	if (recvThreadNumber < 1)
 	{
-		//获取系统信息
-		SYSTEM_INFO sysInfo;
-		GetSystemInfo(&sysInfo);
-
-		recvThreadNumber = sysInfo.dwNumberOfProcessors * 2;
+		recvThreadNumber = 4;
 	}
 	recvThreadNumber = min(recvThreadNumber, (int)m_socketVec.size());
 
 	// 建立检测连接线程
-	unsigned int connectThreadID = 0;
-	m_hThreadCheckConnect = (HANDLE)_beginthreadex(NULL, 0, ThreadCheckConnect, this, 0, &connectThreadID);
-	if (!m_hThreadCheckConnect)
+	pthread_t connectThreadID = 0;
+	int err = pthread_create(&connectThreadID, NULL, ThreadCheckConnect, (void*)this);
+	if (err != 0)
 	{
-		ERROR_LOG("begin ThreadCheckConnect failed");
+		CON_ERROR_LOG("ThreadCheckConnect failed: %s\n", strerror(err));
 		return false;
 	}
 
+	m_hThreadCheckConnect = connectThreadID;
 	GameLogManage()->AddLogFile(connectThreadID, THREAD_TYPE_ACCEPT, roomID);
 
-	::WaitForSingleObject(m_hEventThread, INFINITE);
-	::ResetEvent(m_hEventThread);
+	/*::WaitForSingleObject(m_hEventThread, INFINITE);
+	::ResetEvent(m_hEventThread);*/
 
 	// 建立收发数据线程
 	m_threadIDToIndexMap.clear();
 	for (int i = 0; i < recvThreadNumber; i++)
 	{
-		unsigned int threadID = 0;
-		HANDLE hThreadHandle = (HANDLE)_beginthreadex(NULL, 0, ThreadRSSocket, this, 0, &threadID);
-		if (!hThreadHandle)
+		pthread_t threadID = 0;
+		pthread_create(&threadID, NULL, ThreadRSSocket, (void*)this);
+		if (err != 0)
 		{
-			ERROR_LOG("begin ThreadRSSocket failed");
+			CON_ERROR_LOG("ThreadRSSocket failed: %s\n", strerror(err));
 			return false;
 		}
 
 		m_threadIDToIndexMap.insert(std::make_pair(threadID, i));
 		GameLogManage()->AddLogFile(threadID, THREAD_TYPE_RECV, roomID);
 
-		WaitForSingleObject(m_hEventThread, INFINITE);
-		ResetEvent(m_hEventThread);
-		CloseHandle(hThreadHandle);
+		/*	WaitForSingleObject(m_hEventThread, INFINITE);
+			ResetEvent(m_hEventThread);
+			CloseHandle(hThreadHandle);*/
 	}
 
 	INFO_LOG("service CGServerConnect start end");
@@ -420,19 +421,18 @@ bool CGServerConnect::Stop()
 		}
 	}
 
-	//关闭事件
-	if (m_hEventThread)
-	{
-		CloseHandle(m_hEventThread);
-		m_hEventThread = NULL;
-	}
+	////关闭事件
+	//if (m_hEventThread)
+	//{
+	//	CloseHandle(m_hEventThread);
+	//	m_hEventThread = NULL;
+	//}
 
 	// 关闭检测连接线程句柄（强杀线程）
-	if ((m_hThreadCheckConnect != NULL) && (::WaitForSingleObject(m_hThreadCheckConnect, 50) == WAIT_TIMEOUT))
+	if (m_hThreadCheckConnect)
 	{
-		TerminateThread(m_hThreadCheckConnect, 0);
-		CloseHandle(m_hThreadCheckConnect);
-		m_hThreadCheckConnect = NULL;
+		pthread_cancel(m_hThreadCheckConnect);
+		m_hThreadCheckConnect = 0;
 	}
 
 	// 释放内存
@@ -533,20 +533,18 @@ void CGServerConnect::GetIndexByThreadID(unsigned int uThreadID, size_t& uMin, s
 	}
 }
 
-unsigned __stdcall CGServerConnect::ThreadCheckConnect(LPVOID pThreadData)
+void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 {
-	Sleep(1);
-
 	INFO_LOG("ThreadCheckConnect thread begin...");
 
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
-		return -1;
+		pthread_exit(NULL);
 	}
 
-	// 通知主线程读取线程参数完成
-	SetEvent(pThis->m_hEventThread);
+	//// 通知主线程读取线程参数完成
+	//SetEvent(pThis->m_hEventThread);
 
 	while (true)
 	{
@@ -577,33 +575,32 @@ unsigned __stdcall CGServerConnect::ThreadCheckConnect(LPVOID pThreadData)
 		}
 		catch (...)
 		{
-			ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
-			return 0;
+			CON_ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 		}
 
 		// 过一段时间执行一次
-		Sleep(6000);
+		sleep(6);
 	}
 
 	INFO_LOG("ThreadCheckConnect thread exit.");
 
-	return 0;
+	pthread_exit(NULL);
 }
 
-unsigned __stdcall CGServerConnect::ThreadRSSocket(LPVOID pThreadData)
+void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 {
 	INFO_LOG("CGServerConnect::ThreadRSSocket thread begin...");
 
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
-		return -1;
+		pthread_exit(NULL);
 	}
 
-	// 通知主线程读取线程参数完成
-	SetEvent(pThis->m_hEventThread);
+	//// 通知主线程读取线程参数完成
+	//SetEvent(pThis->m_hEventThread);
 
-	Sleep(1500);
+	sleep(2);
 
 	unsigned int threadID = GetCurrentThreadId();
 	size_t uMinIndex = 0, uMaxIndex = 0;
@@ -618,17 +615,20 @@ unsigned __stdcall CGServerConnect::ThreadRSSocket(LPVOID pThreadData)
 	INFO_LOG("监听索引 min=%d,max=%d", uMinIndex, uMaxIndex);
 
 	// 设置select超时时间
-	timeval selectTv = { 3, 0 };
+	timeval selectTv = { 0, 500000 };
 
 	// 获取socket数组
 	const std::vector<CGServerClient*>& vecSocket = pThis->GetSocketVec();
+
+	// 定义fd_set变量
+	fd_set fdRead;
 
 	while (pThis->m_running == true)
 	{
 		try
 		{
-			fd_set fdRead;
 			FD_ZERO(&fdRead);
+			int max_fd = 0;
 
 			// 将socket加入数组
 			for (size_t i = uMinIndex; i < uMaxIndex && i < vecSocket.size(); i++)
@@ -636,22 +636,28 @@ unsigned __stdcall CGServerConnect::ThreadRSSocket(LPVOID pThreadData)
 				CGServerClient* pGServerClient = vecSocket[i];
 				if (pGServerClient && pGServerClient->IsConnected())
 				{
-					FD_SET(pGServerClient->GetSocket(), &fdRead);
+					int sock_fd = pGServerClient->GetSocket();
+					FD_SET(sock_fd, &fdRead);
+
+					if (sock_fd > max_fd)
+					{
+						max_fd = sock_fd;
+					}
 				}
 			}
 
 			// 没有任何socket
-			if (fdRead.fd_count == 0)
+			if (max_fd == 0)
 			{
-				Sleep(500);
+				sleep(1);
 				continue;
 			}
 
-			int ret = select(0, &fdRead, NULL, NULL, NULL);
-			if (ret == SOCKET_ERROR)
+			int ret = select(max_fd + 1, &fdRead, NULL, NULL, NULL);
+			if (ret == -1)
 			{
 				//输出错误消息
-				ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.WSAGetLastError =%d #####", WSAGetLastError());
+				ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.errno=%d #####", errno);
 				continue;
 			}
 
@@ -684,5 +690,5 @@ unsigned __stdcall CGServerConnect::ThreadRSSocket(LPVOID pThreadData)
 
 	INFO_LOG("CGServerConnect::ThreadRSSocket thread Exit...");
 
-	return 0;
+	pthread_exit(NULL);
 }

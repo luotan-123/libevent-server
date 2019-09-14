@@ -34,7 +34,12 @@ void GetLocalTime(SYSTEMTIME* sysTime)
 }
 
 //获取线程pid
-int GetCurrentThreadId()
+pthread_t GetCurrentThreadId()
 {
-	return (int)syscall(SYS_gettid);
+	return pthread_self();
+}
+
+pthread_t GetCurrentSysThreadId()
+{
+	return syscall(SYS_gettid);
 }

@@ -1,19 +1,14 @@
 #pragma once
 
-#include <list>
 #include "Lock.h"
 
-#ifndef STRUCT_DATALINEHEAD
-#define STRUCT_DATALINEHEAD
 //数据队列信息头
 struct DataLineHead
 {
 	UINT						uSize;								//数据大小
 	UINT						uDataKind;							//数据类型
 };
-#endif //STRUCT_DATALINEHEAD
-#ifndef STRUCT_DATABASERESULTLINE
-#define STRUCT_DATABASERESULTLINE
+
 ///异步线程结果消息结构定义
 struct AsynThreadResultLine
 {
@@ -22,7 +17,6 @@ struct AsynThreadResultLine
 	UINT								uHandleKind;				///处理类型
 	UINT								uHandleID;					///对象标识
 };
-#endif //STRUCT_DATABASERESULTLINE
 
 /*
 Struct		:ListItemData

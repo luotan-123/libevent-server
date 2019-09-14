@@ -116,24 +116,29 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\configManage.cpp" />
+    <ClCompile Include="..\src\Kernel\DataBase.cpp" />
     <ClCompile Include="..\src\Kernel\DataLine.cpp" />
     <ClCompile Include="..\src\Kernel\Exception.cpp" />
     <ClCompile Include="..\src\Kernel\Function.cpp" />
     <ClCompile Include="..\src\Kernel\GameLogManage.cpp" />
+    <ClCompile Include="..\src\Kernel\GServerConnect.cpp" />
     <ClCompile Include="..\src\Kernel\INIFile.cpp" />
     <ClCompile Include="..\src\Kernel\Lock.cpp" />
     <ClCompile Include="..\src\Kernel\log.cpp" />
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp" />
+    <ClCompile Include="..\src\Kernel\TcpConnect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\basemessage.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\comstruct.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\configManage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\DataBase.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\DataLine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Exception.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Function.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\GameLogManage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\GServerConnect.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\INIFile.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Interface.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\InternalMessageDefine.h" />
@@ -141,6 +146,7 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\log.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\TcpConnect.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>

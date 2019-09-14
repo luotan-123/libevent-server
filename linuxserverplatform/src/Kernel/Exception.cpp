@@ -6,7 +6,7 @@
 //静态变量定义
 bool CException::m_bShowError = false;					//是否显示错误
 
-CException::CException(const char * szErrorMessage, unsigned int uErrorCode, bool bAutoDelete)
+CException::CException(const char* szErrorMessage, unsigned int uErrorCode, bool bAutoDelete)
 {
 	m_uErrorCode = uErrorCode;
 	m_bAutoDelete = bAutoDelete;
@@ -56,7 +56,7 @@ bool CException::Delete()
 }
 
 //获取错误信息
-char const * CException::GetErrorMessage(char * szBuffer, int iBufLength) const
+char const* CException::GetErrorMessage(char* szBuffer, int iBufLength) const
 {
 	if (this != NULL)
 	{

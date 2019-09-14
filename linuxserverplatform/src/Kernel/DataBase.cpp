@@ -1,27 +1,31 @@
-#include "pch.h"
-#include "Math.h"
-#include "DataBase.h"
+#include "CommonHead.h"
+#include "comstruct.h"
+#include "Interface.h"
+#include "Lock.h"
+#include "DataLine.h"
+#include "Exception.h"
+#include "MysqlHelper.h"
 #include "Function.h"
-#include "TCPSocket.h"
-#include "OleDBErr.h"
-#include "ConfigManage.h"
-#include "GameLogManage.h"
+#include "configManage.h"
 #include "log.h"
+#include "InternalMessageDefine.h"
+#include "DataBase.h"
+
 
 //处理线程结构定义
 struct DBThreadParam
 {
-	HANDLE						hEvent;									//退出事件
-	HANDLE						hCompletionPort;						//完成端口
-	CDataBaseManage			* pDataManage;							//数据库管理类指针
+	int					hEvent;									//退出事件
+	//HANDLE					hCompletionPort;						//完成端口
+	CDataBaseManage* pDataManage;							//数据库管理类指针
 };
 
 CDataBaseManage::CDataBaseManage()
 {
 	m_bInit = false;
 	m_bRun = false;
-	m_hThread = NULL;
-	m_hCompletePort = NULL;
+	m_hThread = 0;
+	//m_hCompletePort = NULL;
 	m_pInitInfo = NULL;
 	m_pKernelInfo = NULL;
 	m_pHandleService = NULL;
@@ -29,7 +33,7 @@ CDataBaseManage::CDataBaseManage()
 
 	m_sqlClass = 0;
 	m_nPort = 0;
-	m_bsqlInit = FALSE;
+	m_bsqlInit = false;
 
 	m_host[0] = '\0';
 	m_user[0] = '\0';
@@ -41,8 +45,8 @@ CDataBaseManage::~CDataBaseManage()
 {
 	m_bInit = false;
 	m_pInitInfo = NULL;
-	m_hThread = NULL;
-	m_hCompletePort = NULL;
+	m_hThread = 0;
+	//m_hCompletePort = NULL;
 	m_pKernelInfo = NULL;
 	m_pHandleService = NULL;
 }
@@ -61,28 +65,27 @@ bool CDataBaseManage::Start()
 	m_bRun = true;
 
 	//建立事件
-	HANDLE StartEvent = CreateEvent(FALSE, TRUE, NULL, NULL);
+	int StartEvent = 0;//CreateEvent(FALSE, TRUE, NULL, NULL);
 
-	//建立完成端口
-	m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
-	if (m_hCompletePort == NULL)
-	{
-		ERROR_LOG("CreateIoCompletionPort failed err=%d", GetLastError());
-		return false;
-	}
-
-	m_DataLine.SetCompletionHandle(m_hCompletePort);
+	////建立完成端口
+	//m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
+	//if (m_hCompletePort == NULL)
+	//{
+	//	ERROR_LOG("CreateIoCompletionPort failed err=%d", GetLastError());
+	//	return false;
+	//}
+	//m_DataLine.SetCompletionHandle(m_hCompletePort);
 
 	SQLConnectReset();
 	//SQLConnect();
 
 	//建立数据处理线程
-	unsigned dwThreadID = 0;
-	DBThreadParam ThreadStartData;
+	pthread_t threadID = 0;
 
+	DBThreadParam ThreadStartData;
 	ThreadStartData.pDataManage = this;
 	ThreadStartData.hEvent = StartEvent;
-	ThreadStartData.hCompletionPort = m_hCompletePort;
+	//ThreadStartData.hCompletionPort = m_hCompletePort;
 
 	int roomID = 0;
 	if (m_pInitInfo)
@@ -90,19 +93,22 @@ bool CDataBaseManage::Start()
 		roomID = m_pInitInfo->uRoomID;
 	}
 
-	m_hThread = (HANDLE)_beginthreadex(NULL, 0, DataServiceThread, &ThreadStartData, 0, &dwThreadID);
-	if (m_hThread == NULL)
+	int err = pthread_create(&threadID, NULL, DataServiceThread, (void*)& ThreadStartData);
+	if (err != 0)
 	{
-		ERROR_LOG("_beginthreadex DataServiceThread failed");
+		CON_ERROR_LOG("DataServiceThread failed: %s\n", strerror(err));
 		return false;
 	}
 
-	// 关联日志文件
-	GameLogManage()->AddLogFile(dwThreadID, THREAD_TYPE_ASYNC, roomID);
-	// 等待子线程读取线程参数
-	WaitForSingleObject(StartEvent, INFINITE);
+	m_hThread = threadID;
 
-	ResetEvent(StartEvent);
+	// 关联日志文件
+	GameLogManage()->AddLogFile(threadID, THREAD_TYPE_ASYNC, roomID);
+
+	//// 等待子线程读取线程参数
+	//WaitForSingleObject(StartEvent, INFINITE);
+
+	//ResetEvent(StartEvent);
 
 	INFO_LOG("DataBaseManage start end.");
 
@@ -122,24 +128,23 @@ bool CDataBaseManage::Stop()
 	m_bRun = false;
 
 
-	// 先关闭完成端口
-	if (m_hCompletePort)
-	{
-		PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
-		CloseHandle(m_hCompletePort);
-		m_hCompletePort = NULL;
-	}
+	//// 先关闭完成端口
+	//if (m_hCompletePort)
+	//{
+	//	PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
+	//	CloseHandle(m_hCompletePort);
+	//	m_hCompletePort = NULL;
+	//}
 
 	// 清理dataline
-	m_DataLine.SetCompletionHandle(NULL);
+	//m_DataLine.SetCompletionHandle(NULL);
 	m_DataLine.CleanLineData();
 
 	// 关闭数据库处理线程句柄
 	if (m_hThread)
 	{
-		WaitForSingleObject(m_hThread, INFINITE);
-		CloseHandle(m_hThread);
-		m_hThread = NULL;
+		pthread_cancel(m_hThread);
+		m_hThread = 0;
 	}
 
 	//关闭数据库连接
@@ -162,63 +167,49 @@ bool CDataBaseManage::UnInit()
 }
 
 //加入处理队列
-bool CDataBaseManage::PushLine(DataBaseLineHead * pData, UINT uSize, UINT uHandleKind, UINT uIndex, DWORD dwHandleID)
+bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT dwHandleID)
 {
 	//处理数据
 	pData->dwHandleID = dwHandleID;
 	pData->uIndex = uIndex;
 	pData->uHandleKind = uHandleKind;
-	return m_DataLine.AddData(&pData->DataLineHead, uSize, 0) != 0;
+	return m_DataLine.AddData(&pData->dataLineHead, uSize, 0) != 0;
 }
 
 //数据库处理线程
-unsigned __stdcall CDataBaseManage::DataServiceThread(LPVOID pThreadData)
+void* CDataBaseManage::DataServiceThread(void* pThreadData)
 {
-	Sleep(1);
-
 	INFO_LOG("DataServiceThread starting...");
 
 	//数据定义
-	DBThreadParam		* pData = (DBThreadParam *)pThreadData;		//线程启动数据指针
-	CDataBaseManage		* pDataManage = pData->pDataManage;				//数据库管理指针
-	CDataLine				* pDataLine = &pDataManage->m_DataLine;			//数据队列指针
-	IDataBaseHandleService	* pHandleService = pDataManage->m_pHandleService;	//数据处理接口
-	HANDLE					hCompletionPort = pData->hCompletionPort;			//完成端口
+	DBThreadParam* pData = (DBThreadParam*)pThreadData;		//线程启动数据指针
+	CDataBaseManage* pDataManage = pData->pDataManage;				//数据库管理指针
+	CDataLine* pDataLine = &pDataManage->m_DataLine;			//数据队列指针
+	IDataBaseHandleService* pHandleService = pDataManage->m_pHandleService;	//数据处理接口
+	//HANDLE					hCompletionPort = pData->hCompletionPort;			//完成端口
 
 	//线程数据读取完成
-	::SetEvent(pData->hEvent);
-
-	//重叠数据
-	void					* pIOData = NULL;									//数据
-	DWORD					dwThancferred = 0;								//接收数量
-	ULONG_PTR				dwCompleteKey = 0L;								//重叠 IO 临时数据
-	LPOVERLAPPED			OverData;										//重叠 IO 临时数据
+	//::SetEvent(pData->hEvent);
 
 	//数据缓存
-	BOOL					bSuccess = FALSE;
 	BYTE					szBuffer[LD_MAX_PART];
 
 	while (pDataManage->m_bRun == true)
 	{
 		//等待完成端口
-		bSuccess = GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED *)&OverData, INFINITE);
-		if (bSuccess == FALSE || dwThancferred == 0)
-		{
-			//_endthreadex(0);
-			continue;
-		}
+		usleep(THREAD_ONCE_DATABASE);
 
 		while (pDataLine->GetDataCount())
 		{
 			try
 			{
 				//处理完成端口数据
-				if (pDataLine->GetData((DataLineHead *)szBuffer, sizeof(szBuffer)) < sizeof(DataBaseLineHead))
+				if (pDataLine->GetData((DataLineHead*)szBuffer, sizeof(szBuffer)) < sizeof(DataBaseLineHead))
 				{
 					continue;
 				}
 
-				pHandleService->HandleDataBase((DataBaseLineHead *)szBuffer);
+				pHandleService->HandleDataBase((DataBaseLineHead*)szBuffer);
 			}
 			catch (...)
 			{
@@ -230,13 +221,13 @@ unsigned __stdcall CDataBaseManage::DataServiceThread(LPVOID pThreadData)
 
 	INFO_LOG("DataServiceThread exit.");
 
-	return 0;
+	pthread_exit(NULL);
 }
 
 //重联数据库
 bool CDataBaseManage::SQLConnectReset()
 {
-	if (m_bsqlInit == FALSE)
+	if (m_bsqlInit == false)
 	{
 		const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
 
@@ -247,8 +238,7 @@ bool CDataBaseManage::SQLConnectReset()
 		strcpy(m_name, dbConfig.dbName);
 		strcpy(m_passwd, dbConfig.passwd);
 
-		//m_szDetectTable = TEXT("");
-		m_bsqlInit = TRUE;
+		m_bsqlInit = true;
 	}
 
 	if (m_pMysqlHelper)
@@ -266,7 +256,7 @@ bool CDataBaseManage::SQLConnectReset()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -301,7 +291,7 @@ bool CDataBaseManage::CheckSQLConnect()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+			ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 			return false;
 		}
 	}
@@ -322,7 +312,7 @@ CDataBaseHandle::~CDataBaseHandle()
 {
 }
 
-bool CDataBaseHandle::SetParameter(IAsynThreadResultService * pRusultService, CDataBaseManage * pDataBaseManage, ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData)
+bool CDataBaseHandle::SetParameter(IAsynThreadResultService* pRusultService, CDataBaseManage* pDataBaseManage, ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData)
 {
 	m_pInitInfo = pInitData;
 	m_pKernelInfo = pKernelData;
@@ -333,17 +323,17 @@ bool CDataBaseHandle::SetParameter(IAsynThreadResultService * pRusultService, CD
 }
 
 //初始化函数
-bool CDataBaseManage::Init(ManageInfoStruct* pInitInfo, KernelInfoStruct * pKernelInfo, IDataBaseHandleService * pHandleService, IAsynThreadResultService * pResultService)
+bool CDataBaseManage::Init(ManageInfoStruct* pInitInfo, KernelInfoStruct* pKernelInfo, IDataBaseHandleService* pHandleService, IAsynThreadResultService* pResultService)
 {
 	if (!pInitInfo || !pKernelInfo || !pHandleService || !pResultService)
 	{
-		throw new CException(TEXT("CDataBaseManage::Init 参数错误!"), 0x407);
+		throw new CException("CDataBaseManage::Init 参数错误!", (UINT)0x407, true);
 	}
 
 	//效验参数
 	if (m_bInit == true || m_bRun == true)
 	{
-		throw new CException(TEXT("CDataBaseManage::Init 状态效验失败"), 0x408);
+		throw new CException("CDataBaseManage::Init 状态效验失败", (UINT)0x408, true);
 	}
 
 	//设置数据

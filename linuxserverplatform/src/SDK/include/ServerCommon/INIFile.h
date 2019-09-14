@@ -64,7 +64,7 @@ public:
 
 protected:
 	// 读写config文件
-	INI_RES GetKey(string secName, string keyName, string &value);
+	INI_RES GetKey(string secName, string keyName, string& value);
 	void SetKey(string secName, string keyName, string value);
 protected:
 	// 被打开的文件局柄

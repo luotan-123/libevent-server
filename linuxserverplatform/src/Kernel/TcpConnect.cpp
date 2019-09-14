@@ -1,7 +1,13 @@
-#include "pch.h"
+#include "CommonHead.h"
+#include "basemessage.h"
+#include "Lock.h"
+#include "log.h"
+#include "DataLine.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "TcpConnect.h"
 #include "InternalMessageDefine.h"
-#include "log.h"
 
 CTcpClient::CTcpClient()
 {
@@ -111,7 +117,8 @@ bool CTcpClient::OnRead()
 			m_pDataLine->AddData(&dataLineHead.lineHead, sizeof(PlatformDataLineHead), HD_PLATFORM_SOCKET_READ, pData, realSize);
 		}
 
-		MoveMemory(m_recvBuf, m_recvBuf + messageSize, m_remainRecvBytes - messageSize);
+		// 有内存重叠的时候，不能用memcpy 只能用memmove
+		memmove(m_recvBuf, m_recvBuf + messageSize, m_remainRecvBytes - messageSize);
 		m_remainRecvBytes -= messageSize;
 	}
 
@@ -169,7 +176,7 @@ bool CTcpClient::OnClose()
 {
 	CSignedLockObject lock(&m_lock, true);
 
-	closesocket(m_socket);
+	close(m_socket);
 
 	Clear();
 
@@ -213,7 +220,7 @@ bool CTcpConnect::Start(CDataLine* pDataLine, const char* ip, int port, int serv
 		return false;
 	}
 
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET)
 	{
 		return false;
@@ -249,7 +256,7 @@ bool CTcpConnect::Connect()
 	{
 		return false;
 	}
-	SOCKET sock = m_tcpClient.GetSocket();
+	int sock = m_tcpClient.GetSocket();
 	if (sock == INVALID_SOCKET)
 	{
 		return false;
@@ -322,18 +329,18 @@ bool CTcpConnect::EventLoop()
 		return false;
 	}
 
-	SOCKET sock = m_tcpClient.GetSocket();
+	int sock = m_tcpClient.GetSocket();
 
 	fd_set fdRead;
 	FD_ZERO(&fdRead);
 
 	FD_SET(sock, &fdRead);
 
-	int ret = select(0, &fdRead, NULL, NULL, NULL);
-	if (ret == SOCKET_ERROR)
+	int ret = select(sock + 1, &fdRead, NULL, NULL, NULL);
+	if (ret == -1)
 	{
 		//输出错误消息
-		ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.WSAGetLastError =%d #####", WSAGetLastError());
+		ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.errno=%d #####", errno);
 		return false;
 	}
 
@@ -355,7 +362,7 @@ bool CTcpConnect::CheckConnection()
 {
 	if (m_tcpClient.Enable() == false)
 	{
-		Sleep(5000);
+		sleep(5);
 		ReStart();
 		return Connect();
 	}
@@ -380,7 +387,7 @@ bool CTcpConnect::ReStart()
 		return false;
 	}
 
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET)
 	{
 		return false;

@@ -78,6 +78,15 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\DataLine.h">
       <Filter>消息队列</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\DataBase.h">
+      <Filter>数据库模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\TcpConnect.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\GServerConnect.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -106,6 +115,15 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\DataLine.cpp">
       <Filter>消息队列</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\DataBase.cpp">
+      <Filter>数据库模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\TcpConnect.cpp">
+      <Filter>网络模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\GServerConnect.cpp">
+      <Filter>网络模块</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

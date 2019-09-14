@@ -1,17 +1,15 @@
 #pragma once
-#include "TCPSocket.h"
-#include <vector>
-#include <map>
 
 #define GSERVER_SOCKET_SEND_BUF		(128 * 1024)		// 发送缓冲区大小
-#define GSERVER_SOCKET_RECV_BUF		(128 * 1024)		// 接收缓冲区大小
+#define GSERVER_SOCKET_RECV_BUF		(64 * 1024)			// 接收缓冲区大小
 #define MAX_RECONNECT_COUNT			5					// 最多重连次数，0：无限重连
 
 class CDataLine;
 class CGServerConnect;
+class CSignedLock;
 
 // 单个socket
-class  KERNEL_CLASS CGServerClient
+class CGServerClient
 {
 public:
 	CGServerClient();
@@ -32,7 +30,7 @@ public:
 
 	// 获取socket属性
 	bool IsConnected();
-	SOCKET GetSocket() { return m_socket; }
+	int GetSocket() { return m_socket; }
 	int GetSocketIdx() { return m_index; }
 	int GetRemainSendBufSize() { return m_remainSendBytes; }
 
@@ -43,7 +41,7 @@ public:
 	bool IsNeedReConnect();
 	bool ReConnect();
 private:
-	SOCKET m_socket;
+	int m_socket;
 	volatile bool m_isConnected;
 	volatile int m_ReConnectCount;
 
@@ -62,7 +60,7 @@ private:
 };
 
 // socket管理
-class KERNEL_CLASS CGServerConnect
+class CGServerConnect
 {
 public:
 	CGServerConnect();
@@ -85,16 +83,15 @@ public:
 	// 线程函数
 private:
 	// SOCKET 检测连接线程
-	static unsigned __stdcall ThreadCheckConnect(LPVOID pThreadData);
+	static void* ThreadCheckConnect(void* pThreadData);
 	// SOCKET 数据接收线程
-	static unsigned __stdcall ThreadRSSocket(LPVOID pThreadData);
+	static void* ThreadRSSocket(void* pThreadData);
 
 private:
 	std::vector<CGServerClient*> m_socketVec;
-	std::map<unsigned int, int> m_threadIDToIndexMap;
+	std::map<pthread_t, int> m_threadIDToIndexMap;
 	CDataLine* m_pDataLine;
 	int m_roomID;
 	volatile bool m_running;
-	HANDLE	m_hEventThread;
-	HANDLE	m_hThreadCheckConnect;
+	pthread_t	m_hThreadCheckConnect;
 };

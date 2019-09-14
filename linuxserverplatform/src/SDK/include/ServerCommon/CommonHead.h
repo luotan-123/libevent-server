@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -13,12 +14,9 @@
 #include <algorithm>
 #include <time.h>
 #include <pthread.h>
-#include <unistd.h>
 #include <sys/types.h>
-#include <sys/socket.h>
 #include <sys/time.h>
 #include <errno.h>
-#include <netinet/in.h>
 #include <limits.h>
 
 // 常用类型别名

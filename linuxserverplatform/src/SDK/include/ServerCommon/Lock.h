@@ -8,7 +8,7 @@ private:
 	CSignedLock* m_pLockObject;		//Ëø¶¨¶ÔÏó
 
 public:
-	CSignedLockObject(CSignedLock * pLockObject, bool bAutoLock);
+	CSignedLockObject(CSignedLock* pLockObject, bool bAutoLock);
 	~CSignedLockObject();
 
 public:

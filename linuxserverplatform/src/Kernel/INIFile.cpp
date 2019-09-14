@@ -191,7 +191,7 @@ INI_RES CINIFile::CloseFile()
 * ·µ»ØÖµ£º
 * ±¸  ×¢£º
 ******************************************************************************/
-INI_RES CINIFile::GetKey(string secName, string keyName, string &value)
+INI_RES CINIFile::GetKey(string secName, string keyName, string& value)
 {
 	MAINKEYMAP::iterator it = m_Map.find(secName);
 	if (it == m_Map.end())

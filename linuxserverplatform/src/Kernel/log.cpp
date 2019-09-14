@@ -34,8 +34,8 @@ void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, c
 	char buf[MAX_LOG_BUF_SIZE] = "";
 
 	// 线程ID和level
-	int threadID = GetCurrentThreadId();
-	sprintf(buf, "%d %s ", threadID, levelName);
+	pthread_t threadID = GetCurrentSysThreadId();
+	sprintf(buf, "%ld %s ", threadID, levelName);
 
 	// 时间
 	SYSTEMTIME sysTime;
@@ -90,9 +90,9 @@ void CLog::Write(const char* pLogFile, const char* pFuncName, const char* pForma
 	char buf[MAX_LOG_BUF_SIZE] = "";
 
 	// 线程ID和level
-	int threadID = GetCurrentThreadId();
+	pthread_t threadID = GetCurrentSysThreadId();
 	const char* levelName = levelNames[LOG_LEVEL_INFO];
-	sprintf(buf, "%d %s ", threadID, levelName);
+	sprintf(buf, "%ld %s ", threadID, levelName);
 
 	// 时间
 	SYSTEMTIME sysTime;

@@ -44,14 +44,14 @@ protected:
 	static bool				m_bShowError;					///是否显示错误
 
 public:
-	inline CException(const char * szErrorMessage, unsigned int uErrorCode = EX_UNKNOWN_ERROR, bool bAutoDelete = true);
+	CException(const char* szErrorMessage, unsigned int uErrorCode = EX_UNKNOWN_ERROR, bool bAutoDelete = true);
 	virtual ~CException();
 
 public:
 	//获取错误代码
 	virtual UINT GetErrorCode() const;
 	//获取错误信息
-	virtual char const * GetErrorMessage(char * szBuffer, int iBufLength) const;
+	virtual char const* GetErrorMessage(char* szBuffer, int iBufLength) const;
 	//删除函数
 	virtual bool Delete();
 	//设置是否显示错误

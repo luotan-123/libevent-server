@@ -99,16 +99,6 @@ struct MSG_S_ConnectSuccess
 //////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-struct InternalCheckDBConnection
-{
-	DataBaseLineHead	head;
-
-	InternalCheckDBConnection()
-	{
-		memset(this, 0, sizeof(InternalCheckDBConnection));
-	}
-};
-
 struct InternalSqlStatement
 {
 	DataBaseLineHead	head;
@@ -119,14 +109,5 @@ struct InternalSqlStatement
 		memset(this, 0, sizeof(InternalSqlStatement));
 	}
 };
-typedef struct _RegisterInfoToWeb_
-{
-	DataBaseLineHead	head;
-	int  userID;
-	char url[256];
-	_RegisterInfoToWeb_()
-	{
-		memset(this, 0, sizeof(_RegisterInfoToWeb_));
-	}
-}RegisterInfoToWeb;
+
 ///////////////////////////////////////////////////////////////////////////////

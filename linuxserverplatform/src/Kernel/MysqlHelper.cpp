@@ -11,7 +11,7 @@ CMysqlHelper::CMysqlHelper() :_bConnected(false)
 	_pstMql = mysql_init(NULL);
 }
 
-CMysqlHelper::CMysqlHelper(const string& sHost, const string& sUser, const string& sPasswd, const string& sDatabase, const string &sCharSet, int port, int iFlag)
+CMysqlHelper::CMysqlHelper(const string& sHost, const string& sUser, const string& sPasswd, const string& sDatabase, const string& sCharSet, int port, int iFlag)
 	: _bConnected(false)
 {
 	init(sHost, sUser, sPasswd, sDatabase, sCharSet, port, iFlag);
@@ -36,7 +36,7 @@ CMysqlHelper::~CMysqlHelper()
 	}
 }
 
-void CMysqlHelper::init(const string& sHost, const string& sUser, const string& sPasswd, const string& sDatabase, const string &sCharSet, int port, int iFlag)
+void CMysqlHelper::init(const string& sHost, const string& sUser, const string& sPasswd, const string& sDatabase, const string& sCharSet, int port, int iFlag)
 {
 	_dbConf._host = sHost;
 	_dbConf._user = sUser;
@@ -96,7 +96,7 @@ string CMysqlHelper::escapeString(const string& sFrom)
 
 	string sTo;
 	string::size_type iLen = sFrom.length() * 2 + 1;
-	char *pTo = (char *)malloc(iLen);
+	char* pTo = (char*)malloc(iLen);
 
 	memset(pTo, 0x00, iLen);
 
@@ -109,12 +109,12 @@ string CMysqlHelper::escapeString(const string& sFrom)
 	return sTo;
 }
 
-MYSQL *CMysqlHelper::getMysql(void)
+MYSQL* CMysqlHelper::getMysql(void)
 {
 	return _pstMql;
 }
 
-string CMysqlHelper::buildInsertSQL(const string &sTableName, const RECORD_DATA &mpColumns)
+string CMysqlHelper::buildInsertSQL(const string& sTableName, const RECORD_DATA& mpColumns)
 {
 	ostringstream sColumnNames;
 	ostringstream sColumnValues;
@@ -154,7 +154,7 @@ string CMysqlHelper::buildInsertSQL(const string &sTableName, const RECORD_DATA 
 	return os.str();
 }
 
-string CMysqlHelper::buildReplaceSQL(const string &sTableName, const RECORD_DATA &mpColumns)
+string CMysqlHelper::buildReplaceSQL(const string& sTableName, const RECORD_DATA& mpColumns)
 {
 	ostringstream sColumnNames;
 	ostringstream sColumnValues;
@@ -193,7 +193,7 @@ string CMysqlHelper::buildReplaceSQL(const string &sTableName, const RECORD_DATA
 	return os.str();
 }
 
-string CMysqlHelper::buildUpdateSQL(const string &sTableName, const RECORD_DATA &mpColumns, const string &sWhereFilter)
+string CMysqlHelper::buildUpdateSQL(const string& sTableName, const RECORD_DATA& mpColumns, const string& sWhereFilter)
 {
 	ostringstream sColumnNameValueSet;
 
@@ -226,7 +226,7 @@ string CMysqlHelper::buildUpdateSQL(const string &sTableName, const RECORD_DATA 
 	return os.str();
 }
 
-string CMysqlHelper::getVariables(const string &sName)
+string CMysqlHelper::getVariables(const string& sName)
 {
 	string sql = "SHOW VARIABLES LIKE '" + sName + "'";
 
@@ -278,7 +278,7 @@ void CMysqlHelper::execute(const string& sSql)
 	}
 }
 
-bool CMysqlHelper::queryRecord(const string& sSql, MysqlData &data, bool bSetGBK/* = false*/)
+bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK/* = false*/)
 {
 	/**
 	没有连上, 连接数据库
@@ -290,8 +290,8 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData &data, bool bSetGBK
 
 	if (bSetGBK)
 	{
-		MYSQL_RES * pRes;
-		int nError = mysql_query(_pstMql, "SET NAMES GBK"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
+		MYSQL_RES* pRes;
+		mysql_query(_pstMql, "SET NAMES GBK"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
 		do
 		{
 			pRes = mysql_use_result(_pstMql);
@@ -320,7 +320,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData &data, bool bSetGBK
 		throw MysqlHelper_Exception("[CMysqlHelper::execute]: mysql_query: [ " + sSql + " ] :" + string(mysql_error(_pstMql)));
 	}
 
-	MYSQL_RES *pstRes = mysql_store_result(_pstMql);
+	MYSQL_RES* pstRes = mysql_store_result(_pstMql);
 
 	if (pstRes == NULL)
 	{
@@ -328,7 +328,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData &data, bool bSetGBK
 	}
 
 	vector<string> vtFields;
-	MYSQL_FIELD *field;
+	MYSQL_FIELD* field;
 	while ((field = mysql_fetch_field(pstRes)))
 	{
 		vtFields.push_back(field->name);
@@ -340,7 +340,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData &data, bool bSetGBK
 	while ((stRow = mysql_fetch_row(pstRes)) != (MYSQL_ROW)NULL)
 	{
 		mpRow.clear();
-		unsigned long * lengths = mysql_fetch_lengths(pstRes);
+		unsigned long* lengths = mysql_fetch_lengths(pstRes);
 		for (size_t i = 0; i < vtFields.size(); i++)
 		{
 			if (stRow[i])
@@ -361,7 +361,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData &data, bool bSetGBK
 	return true;
 }
 
-void CMysqlHelper::sqlExec(const char * sql, bool bSetGBK/* = false*/)
+void CMysqlHelper::sqlExec(const char* sql, bool bSetGBK/* = false*/)
 {
 	/**
 	没有连上, 连接数据库
@@ -373,8 +373,8 @@ void CMysqlHelper::sqlExec(const char * sql, bool bSetGBK/* = false*/)
 
 	if (bSetGBK)
 	{
-		MYSQL_RES * pRes;
-		int nError = mysql_query(_pstMql, "SET NAMES GBK"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
+		MYSQL_RES* pRes;
+		mysql_query(_pstMql, "SET NAMES GBK"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
 		do
 		{
 			pRes = mysql_use_result(_pstMql);
@@ -403,7 +403,7 @@ void CMysqlHelper::sqlExec(const char * sql, bool bSetGBK/* = false*/)
 		throw MysqlHelper_Exception("[CMysqlHelper::execute]: mysql_query: [ " + string(sql) + " ] :" + string(mysql_error(_pstMql)));
 	}
 
-	MYSQL_RES * pRes = NULL;
+	MYSQL_RES* pRes = NULL;
 	do
 	{
 		pRes = mysql_use_result(_pstMql);
@@ -415,7 +415,7 @@ void CMysqlHelper::sqlExec(const char * sql, bool bSetGBK/* = false*/)
 	} while (!mysql_next_result(_pstMql));
 }
 
-size_t CMysqlHelper::updateRecord(const string &sTableName, const RECORD_DATA &mpColumns, const string &sCondition)
+size_t CMysqlHelper::updateRecord(const string& sTableName, const RECORD_DATA& mpColumns, const string& sCondition)
 {
 	string sSql = buildUpdateSQL(sTableName, mpColumns, sCondition);
 	execute(sSql);
@@ -423,7 +423,7 @@ size_t CMysqlHelper::updateRecord(const string &sTableName, const RECORD_DATA &m
 	return (size_t)mysql_affected_rows(_pstMql);
 }
 
-size_t CMysqlHelper::insertRecord(const string &sTableName, const RECORD_DATA &mpColumns)
+size_t CMysqlHelper::insertRecord(const string& sTableName, const RECORD_DATA& mpColumns)
 {
 	string sSql = buildInsertSQL(sTableName, mpColumns);
 	execute(sSql);
@@ -431,7 +431,7 @@ size_t CMysqlHelper::insertRecord(const string &sTableName, const RECORD_DATA &m
 	return (size_t)mysql_affected_rows(_pstMql);
 }
 
-size_t CMysqlHelper::replaceRecord(const string &sTableName, const RECORD_DATA &mpColumns)
+size_t CMysqlHelper::replaceRecord(const string& sTableName, const RECORD_DATA& mpColumns)
 {
 	string sSql = buildReplaceSQL(sTableName, mpColumns);
 	execute(sSql);
@@ -439,7 +439,7 @@ size_t CMysqlHelper::replaceRecord(const string &sTableName, const RECORD_DATA &
 	return (size_t)mysql_affected_rows(_pstMql);
 }
 
-size_t CMysqlHelper::deleteRecord(const string &sTableName, const string &sCondition)
+size_t CMysqlHelper::deleteRecord(const string& sTableName, const string& sCondition)
 {
 	ostringstream sSql;
 	sSql << "delete from " << sTableName << " " << sCondition;
@@ -449,7 +449,7 @@ size_t CMysqlHelper::deleteRecord(const string &sTableName, const string &sCondi
 	return (size_t)mysql_affected_rows(_pstMql);
 }
 
-size_t CMysqlHelper::getRecordCount(const string& sTableName, const string &sCondition)
+size_t CMysqlHelper::getRecordCount(const string& sTableName, const string& sCondition)
 {
 	ostringstream sSql;
 	sSql << "select count(*) as num from " << sTableName << " " << sCondition;
@@ -463,7 +463,7 @@ size_t CMysqlHelper::getRecordCount(const string& sTableName, const string &sCon
 
 }
 
-size_t CMysqlHelper::getSqlCount(const string &sCondition)
+size_t CMysqlHelper::getSqlCount(const string& sCondition)
 {
 	ostringstream sSql;
 	sSql << "select count(*) as num " << sCondition;
@@ -476,7 +476,7 @@ size_t CMysqlHelper::getSqlCount(const string &sCondition)
 	return n;
 }
 
-int CMysqlHelper::getMaxValue(const string& sTableName, const string& sFieldName, const string &sCondition)
+int CMysqlHelper::getMaxValue(const string& sTableName, const string& sFieldName, const string& sCondition)
 {
 	ostringstream sSql;
 	sSql << "select " << sFieldName << " as f from " << sTableName << " " << sCondition << " order by f desc limit 1";
@@ -520,7 +520,7 @@ size_t CMysqlHelper::MysqlData::size()
 	return _data.size();
 }
 
-map<string, string> & CMysqlHelper::MysqlData::operator[](size_t i)
+map<string, string>& CMysqlHelper::MysqlData::operator[](size_t i)
 {
 	return _data[i];
 }

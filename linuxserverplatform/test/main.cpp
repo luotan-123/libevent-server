@@ -5,9 +5,27 @@
 //#include "InternalMessageDefine.h"
 #include "KernelDefine.h"
 #include "INIFile.h"
-
+#include "configManage.h"
+#include "Function.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include "log.h"
+#include "GServerConnect.h"
+#include "DataLine.h"
 int main()
 {
+	// 设置服务器类型
+	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
+
+	// 关联大厅主线程的log文件
+	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
+
+	ConfigManage()->Init();
+
+	CGServerConnect ddd;
+	CDataLine dataline;
+	ddd.Start(&dataline, 38);
+
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	printf("second:%ld\n", tv.tv_sec);  //秒

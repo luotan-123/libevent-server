@@ -1,7 +1,7 @@
 #include "CommonHead.h"
 #include "Lock.h"
 
-CSignedLockObject::CSignedLockObject(CSignedLock * pLockObject, bool bAutoLock)
+CSignedLockObject::CSignedLockObject(CSignedLock* pLockObject, bool bAutoLock)
 {
 	m_iLockCount = 0;
 
@@ -53,9 +53,9 @@ CSignedLock::CSignedLock()
 	pthread_mutex_init(&m_csLock, &m_attr);
 }
 
-CSignedLock::~CSignedLock() 
-{ 
-	pthread_mutex_destroy(&m_csLock); 
+CSignedLock::~CSignedLock()
+{
+	pthread_mutex_destroy(&m_csLock);
 
 	pthread_mutexattr_destroy(&m_attr);
 }

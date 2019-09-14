@@ -21,5 +21,8 @@
 //获取系统时间
 extern void GetLocalTime(SYSTEMTIME* sysTime);
 
-//获取线程pid
-extern int GetCurrentThreadId();
+//获取线程pid,线程内部id  pthread库函数
+extern pthread_t GetCurrentThreadId();
+
+//获取线程pid,内核线程id
+extern pthread_t GetCurrentSysThreadId();

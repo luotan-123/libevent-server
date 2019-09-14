@@ -1,5 +1,3 @@
-#pragma once
-
 #include "CommonHead.h"
 #include "DataLine.h"
 #include "log.h"
