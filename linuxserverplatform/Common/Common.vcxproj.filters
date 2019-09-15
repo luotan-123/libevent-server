@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="工具类">
+      <UniqueIdentifier>{86502f11-e30d-4372-ab46-dfd7956b46ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="公共定义">
+      <UniqueIdentifier>{129512a9-99c3-413c-bb91-ea62b4a53114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HTTP模块">
+      <UniqueIdentifier>{aab4321d-1407-4393-b531-fa6eb2e37a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="协议模块">
+      <UniqueIdentifier>{59eaf148-c979-40e6-852e-f07878102d5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="数据流水">
+      <UniqueIdentifier>{79a7d7c6-4948-4957-85d5-d00b5f743da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Redis模块">
+      <UniqueIdentifier>{cd6b8d03-1510-498a-bc4e-5411c4bee896}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Common\MD5.cpp">
+      <Filter>工具类</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\Util.cpp">
+      <Filter>工具类</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\MyCurl.cpp">
+      <Filter>HTTP模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\BillManage.cpp">
+      <Filter>数据流水</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h">
+      <Filter>工具类</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h">
+      <Filter>工具类</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Define.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\ErrorCode.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\MyCurl.h">
+      <Filter>HTTP模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\LoaderAsyncEvent.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\NewMessageDefine.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\PlatformMessage.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h">
+      <Filter>数据流水</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

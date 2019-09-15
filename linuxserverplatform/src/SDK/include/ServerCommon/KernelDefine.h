@@ -94,6 +94,7 @@ enum LogLevel
 	LOG_LEVEL_ERROR,						//error
 	LOG_LEVEL_INFO_CONSOLE,					//info Console
 	LOG_LEVEL_ERROR_CONSOLE,				//error Console
+	LOG_LEVEL_ERROR_SYS,					//error system
 	LOG_LEVEL_END,
 };
 

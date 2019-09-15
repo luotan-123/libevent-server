@@ -15,8 +15,8 @@
 #define SAFE_DELETE(ptr) { if(ptr){	try{ delete ptr; }catch(...){ ERROR_LOG("CATCH: *** SAFE_DELETE(%s) crash! *** %s %d\n",#ptr,__FILE__, __LINE__); } ptr = 0; } }
 
 //判断大小函数
-#define min(x,y) ((x)>(y)?(y):(x))
-#define max(x,y) ((x)>(y)?(x):(y))
+#define Min_(x,y) ((x)>(y)?(y):(x))
+#define Max_(x,y) ((x)>(y)?(x):(y))
 
 //获取系统时间
 extern void GetLocalTime(SYSTEMTIME* sysTime);

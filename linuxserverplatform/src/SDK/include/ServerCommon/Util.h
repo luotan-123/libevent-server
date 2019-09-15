@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 enum TimeFormat
 {
 	TIME_YYYYMMDD = 0,		// 20170802
@@ -20,16 +17,11 @@ struct Util_KeyValueStruct_
 };
 
 // 工具类
-class KERNEL_CLASS CUtil
+class CUtil
 {
 public:
 	CUtil();
 	~CUtil();
-
-	//全局变量
-public:
-	static unsigned int g_uUtilRandIncrement;
-	static unsigned int g_uLastRandSeed;
 
 public:
 	// 检查字符串
@@ -39,8 +31,8 @@ public:
 	// 分割字符串
 	static void SplitString(std::string str, std::string pattern, std::vector<std::string> &vecSplitData);
 	static std::string &TrimString(std::string &s);
-	// 获取Guid
-	static char* GetGuid();
+	// 获取uuid
+	static void GetUuid(char* out, int len);
 	// MD5加密
 	static void MD5(std::string &str);
 	// 获取当前时间
@@ -57,8 +49,6 @@ public:
 	static bool IsContainDirtyWord(const std::string& str);
 	// 如果文件夹不存在则创建文件夹
 	static void MkdirIfNotExists(const char* dir);
-	// GB2312转化为UTF-8
-	static std::string GB2312ToUtf8(const char* src);
 	// 字符串转换
 	static std::string Tostring(BYTE value);
 	static std::string Tostring(int value);
@@ -68,8 +58,6 @@ public:
 	static std::string Tostring(double value);
 	// 替换字符串
 	static void ReplaceStr(char str[], int count, char src, char dst);
-	// UTF-8转化为GB2312
-	static std::string UtfToGbk(const char* utf8);
 	// 字符串解析函数
 	static bool GetKeyAndValue(const char * pStr, int &iKey, long long &llValue);
 	static void ArrayToString(long long * pArray, int iArrayCount, char * pStr);
@@ -77,8 +65,8 @@ public:
 	static void KYArrayToString(Util_KeyValueStruct_ * pKYArray, int iArrayCount, char * pStr);
 	static void StringToKYArray(char * pStr, Util_KeyValueStruct_ * pKYArray, int &iArrayCount);
 	// 获取一个随机数。范围0-65535
-	static int GetRandNum();
-	// 获取[A,B)随机数,min<= 随机数 < iMax。iMax小于10亿
+	static unsigned int GetRandNum();
+	// 获取[A,B)随机数,min<= 随机数 < iMax
 	static int GetRandRange(int iMin, int iMax);
 	// 转义字符串
 	static void TransString(char * pStr, int iCount, int iMaxSignCount, bool bUTF = false);
@@ -87,14 +75,8 @@ public:
 	static unsigned int APHash(const char *str);
 	static unsigned int DJBHash(const char *str);
 	static bool GetScoreFromUserInfoList(int userID, char* userInfoList, long long &llScore);
-	// 平台验证
-	static bool GetCertificateText();
 	// 校验头部
 	static bool CheckCode(UINT uReserve);
 	// 根据经纬度计算距离（单位m）
 	static double GetDistanceVer(const char * lat1, const char *  lng1, const char *  lat2, const char *  lng2);
-	// 获取系统错误，返回字符串
-	static void UtilGetLastError(char szLog[], int size);
-	// 获取系统错误，返回字符串 WSA
-	static void UtilWSAGetLastError(char szLog[], int size);
 };

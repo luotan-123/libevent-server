@@ -1,7 +1,7 @@
 #pragma once
 
 //MD5 加密类
-class KERNEL_CLASS MD5_CTX 
+class MD5_CTX 
 {
 	//变量定义
 private:

@@ -2,19 +2,13 @@
 
 #include <string>
 #include <vector>
-#include "../curl/curl.h"
-
-#ifdef _DEBUG
-#pragma comment(lib, "libcurld.lib")
-#else // !_DEBUG
-#pragma comment(lib, "libcurl.lib")
-#endif // _DEBUG
+#include "curl/curl.h"
 
 using namespace std;
 
 #define REMOTE_URL "ftp://%s:%s@%s/%d/%s.json"
 
-class KERNEL_CLASS MyCurl
+class MyCurl
 {
 public:
 	MyCurl() {}

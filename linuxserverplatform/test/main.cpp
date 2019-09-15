@@ -2,7 +2,6 @@
 #include "Lock.h"
 #include "basemessage.h"
 #include "comstruct.h"
-//#include "InternalMessageDefine.h"
 #include "KernelDefine.h"
 #include "INIFile.h"
 #include "configManage.h"
@@ -12,8 +11,22 @@
 #include "log.h"
 #include "GServerConnect.h"
 #include "DataLine.h"
+#include "Util.h"
+#include "MyCurl.h"
+
 int main()
 {
+	int fd = 10;
+	int ret;
+	ret = close(fd);
+	if (ret == -1)
+	{
+		SYS_ERROR_LOG("close fd");
+		CON_INFO_LOG("====");
+		CON_ERROR_LOG("====");
+	}
+		
+
 	// 设置服务器类型
 	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
 

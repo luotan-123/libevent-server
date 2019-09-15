@@ -357,7 +357,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	{
 		recvThreadNumber = 4;
 	}
-	recvThreadNumber = min(recvThreadNumber, (int)m_socketVec.size());
+	recvThreadNumber = Min_(recvThreadNumber, (int)m_socketVec.size());
 
 	// 建立检测连接线程
 	pthread_t connectThreadID = 0;

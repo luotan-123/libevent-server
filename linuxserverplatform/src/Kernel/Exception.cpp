@@ -63,7 +63,7 @@ char const* CException::GetErrorMessage(char* szBuffer, int iBufLength) const
 		//¿½±´´íÎóÐÅÏ¢
 		if ((szBuffer != NULL) && (iBufLength > 0))
 		{
-			int iCopyLength = min(iBufLength - 1, strlen(m_szMessage));
+			int iCopyLength = Min_(iBufLength - 1, strlen(m_szMessage));
 			szBuffer[iCopyLength] = 0;
 			memcpy(szBuffer, m_szMessage, iCopyLength * sizeof(char));
 		}

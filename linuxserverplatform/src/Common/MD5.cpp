@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "CommonHead.h"
 #include "MD5.h"
 
 #define S11		7

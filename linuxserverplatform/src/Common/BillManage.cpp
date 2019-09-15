@@ -1,9 +1,12 @@
-#include "pch.h"
-#include "BillManage.h"
+#include "CommonHead.h"
+#include "MysqlHelper.h"
 #include "Define.h"
 #include "Util.h"
 #include "log.h"
+#include <stdarg.h>
+#include "DataLine.h"
 #include "InternalMessageDefine.h"
+#include "BillManage.h"
 
 CBillManage::CBillManage()
 {

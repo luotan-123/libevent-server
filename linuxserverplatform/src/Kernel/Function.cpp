@@ -1,6 +1,7 @@
 #include "CommonHead.h"
 #include "Function.h"
 #include <sys/syscall.h>
+#include "log.h"
 
 // 获取系统时间
 void GetLocalTime(SYSTEMTIME* sysTime)

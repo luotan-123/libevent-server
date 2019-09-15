@@ -30,7 +30,7 @@ CINIFile::~CINIFile()
 
 bool CINIFile::IsFileExist(string fileName)
 {
-	return access(fileName.c_str(), 0);
+	return access(fileName.c_str(), F_OK)  != -1;
 }
 
 void CINIFile::CopyFileTo(string destFileName, string srcFileName)

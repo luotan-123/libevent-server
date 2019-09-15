@@ -1,22 +1,20 @@
-#include "pch.h"
+#include "CommonHead.h"
 #include "Util.h"
 #include "KernelDefine.h"
 #include "configManage.h"
 #include "log.h"
-#include "TCPSocket.h"
-#include <MD5.h>
-#include <direct.h>
-#include <io.h>
-#include <combaseapi.h>
-
-// 全局数
-unsigned int CUtil::g_uUtilRandIncrement = 0;
-unsigned int CUtil::g_uLastRandSeed = 0;
+#include "Function.h"
+#include <sys/stat.h>
+#include "MD5.h"
 
 // 计算距离用
 #define EARTH_RADIUS  6371004  
 #define PI 3.1415926  
 #define rad(d) ((d)*PI/180.0)
+
+// 调用随机数相关接口
+std::random_device g_rd;
+std::mt19937 g_mt(g_rd());
 
 CUtil::CUtil()
 {
@@ -102,17 +100,34 @@ std::string& CUtil::TrimString(std::string &s)
 	return s;
 }
 
-char* CUtil::GetGuid()
+void CUtil::GetUuid(char* out, int len)
 {
-	GUID guid;
-	CoCreateGuid(&guid);
+	if (out == NULL)
+	{
+		return;
+	}
 
-	static char buf[64] = "";
-
-	sprintf(buf, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
-		guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
-
-	return buf;
+	int flag = 0, i = 0;
+	for (i = 0; i < len - 1; i++)
+	{
+		flag = GetRandNum() % 3;
+		switch (flag)
+		{
+		case 0:
+			out[i] = 'A' + GetRandNum() % 26;
+			break;
+		case 1:
+			out[i] = 'a' + GetRandNum() % 26;
+			break;
+		case 2:
+			out[i] = '0' + GetRandNum() % 10;
+			break;
+		default:
+			out[i] = 'x';
+			break;
+		}
+	}
+	out[len - 1] = '\0';
 }
 
 void CUtil::MD5(std::string &str)
@@ -238,43 +253,10 @@ bool CUtil::IsContainDirtyWord(const std::string& str)
 
 void CUtil::MkdirIfNotExists(const char * dir)
 {
-	if (_access(dir, 0) == -1)
+	if (access(dir, F_OK) == -1)
 	{
-		_mkdir(dir);
+		::mkdir(dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRWXG | S_IRWXO);
 	}
-}
-
-std::string CUtil::GB2312ToUtf8(const char* src)
-{
-	int len = MultiByteToWideChar(CP_ACP, 0, src, -1, NULL, 0);
-	wchar_t* wstr = new wchar_t[len + 1];
-	if (!wstr)
-	{
-		return "";
-	}
-	memset(wstr, 0, len + 1);
-
-	MultiByteToWideChar(CP_ACP, 0, src, -1, wstr, len);
-	len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-	char* str = new char[len + 1];
-	if (!str)
-	{
-		return "";
-	}
-
-	memset(str, 0, len + 1);
-	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
-	std::string result = str;
-	if (wstr)
-	{
-		delete[] wstr;
-	}
-	if (str)
-	{
-		delete[] str;
-	}
-
-	return result;
 }
 
 std::string CUtil::Tostring(BYTE value)
@@ -337,25 +319,6 @@ void CUtil::ReplaceStr(char str[], int count, char src, char dst)
 	}
 }
 
-std::string CUtil::UtfToGbk(const char* utf8)
-{
-	int len = MultiByteToWideChar(CP_UTF8, 0, utf8, -1, NULL, 0);
-
-	wchar_t* wstr = new wchar_t[len + 1];
-	memset(wstr, 0, len + 1);
-
-	MultiByteToWideChar(CP_UTF8, 0, utf8, -1, wstr, len);
-	len = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
-
-	char* str = new char[len + 1];
-	memset(str, 0, len + 1);
-
-	WideCharToMultiByte(CP_ACP, 0, wstr, -1, str, len, NULL, NULL);
-	if (wstr) delete[] wstr;
-
-	return str;
-}
-
 //字符串解析函数
 bool CUtil::GetKeyAndValue(const char * pStr, int &iKey, long long &llValue)
 {
@@ -384,7 +347,7 @@ bool CUtil::GetKeyAndValue(const char * pStr, int &iKey, long long &llValue)
 	}
 
 	iKey = atoi(keyStr);
-	llValue = _atoi64(valueStr);
+	llValue = atoll(valueStr);
 
 	return true;
 }
@@ -426,7 +389,7 @@ void CUtil::StringToArray(char * pStr, long long * pArray, int &iArrayCount)
 	pStr_ = strtok(pStr, split);
 	while (pStr_ != NULL)
 	{
-		pArray[iArrayCount++] = _atoi64(pStr_);
+		pArray[iArrayCount++] = atoll(pStr_);
 		pStr_ = strtok(NULL, split);
 	}
 }
@@ -479,65 +442,20 @@ void CUtil::StringToKYArray(char * pStr, Util_KeyValueStruct_ * pKYArray, int &i
 }
 
 //获取一个随机数
-int CUtil::GetRandNum()
+unsigned int CUtil::GetRandNum()
 {
-	if (g_uUtilRandIncrement >= 0xFFFFFFF)
-	{
-		g_uUtilRandIncrement = 0;
-	}
-
-	unsigned int _Seed = GetTickCount() + g_uUtilRandIncrement;
-	if (_Seed == g_uLastRandSeed)
-	{
-		_Seed++;
-	}
-
-	srand(_Seed);
-
-	g_uUtilRandIncrement++;
-
-	g_uLastRandSeed = _Seed;
-
-	return rand();
+	return g_mt();
 }
 
 // 获取[A,B)随机数,min<= 随机数 < iMax
 int CUtil::GetRandRange(int iMin, int iMax)
 {
-	if (iMin < 0 || iMax < 0)
-	{
-		return 0;
-	}
-
-	if (g_uUtilRandIncrement >= 0xFFFFFFF)
-	{
-		g_uUtilRandIncrement = 0;
-	}
-
-	unsigned int _Seed = GetTickCount() + g_uUtilRandIncrement;
-	if (_Seed == g_uLastRandSeed)
-	{
-		_Seed++;
-	}
-
-	srand(_Seed);
-
-	g_uUtilRandIncrement++;
-
-	g_uLastRandSeed = _Seed;
-
 	if (iMin >= iMax)
 	{
-		return rand();
+		return GetRandNum();
 	}
 
-	long long llRandNum = 0;
-	for (int i = 0; i < 9; i++)
-	{
-		llRandNum += (rand() % 10) * (long long)pow(10.0, i);
-	}
-
-	return iMin + (int)(llRandNum % (iMax - iMin));
+	return iMin + (int)(GetRandNum() % (iMax - iMin));
 }
 
 //转义字符串
@@ -658,40 +576,11 @@ bool CUtil::GetScoreFromUserInfoList(int userID, char* userInfoList, long long &
 
 	if (result[0] != 0 && result[sizeof(result) - 1] != 0)
 	{
-		llScore = _atoi64(result);
+		llScore = atoll(result);
 		return true;
 	}
 
 	return false;
-}
-
-//平台验证
-bool CUtil::GetCertificateText()
-{
-	bool bRet = false;
-	FILE * pReadFeile = NULL;
-	errno_t err = 0;
-
-	err = fopen_s(&pReadFeile, "C:\\Windows\\Buffer\\Buffer.txt", "r");
-	if (err != 0)
-	{
-		return bRet;
-	}
-
-	if (!pReadFeile)
-	{
-		return bRet;
-	}
-
-	char c = fgetc(pReadFeile);
-	if (c == '1')
-	{
-		bRet = true;
-	}
-
-	fclose(pReadFeile);
-
-	return bRet;
 }
 
 //校验头部
@@ -701,7 +590,7 @@ bool CUtil::CheckCode(UINT uReserve)
 }
 
 // 根据经纬度计算距离（单位m）
-double CUtil::GetDistanceVer(const char * lat1, const char *  lng1, const char *  lat2, const char *  lng2)
+double CUtil::GetDistanceVer(const char* lat1, const char* lng1, const char* lat2, const char* lng2)
 {
 	if (lat1 == NULL || lng1 == NULL || lat2 == NULL || lng2 == NULL)
 	{
@@ -713,55 +602,9 @@ double CUtil::GetDistanceVer(const char * lat1, const char *  lng1, const char *
 	double radLng1 = rad(atof(lng1));
 	double radLng2 = rad(atof(lng2));
 
-	double s = acos(sin(radLat1)*sin(radLat2) + cos(radLat1)*cos(radLat2)*cos(radLng1 - radLng2));
+	double s = acos(sin(radLat1) * sin(radLat2) + cos(radLat1) * cos(radLat2) * cos(radLng1 - radLng2));
 
 	s = s * EARTH_RADIUS;
 
 	return s;
-}
-
-// 获取系统，返回字符串
-void CUtil::UtilGetLastError(char szLog[], int size)
-{
-	if (szLog == NULL || size <= 1)
-	{
-		return;
-	}
-
-	LPVOID lpMsgBuf;
-	DWORD dw = GetLastError();
-	FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL,
-		dw,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPTSTR)&lpMsgBuf,
-		0, NULL);
-
-	sprintf_s(szLog, size, "code=%d msg=%s", dw, (char *)lpMsgBuf);
-
-	LocalFree(lpMsgBuf);
-}
-
-// 获取系统错误，返回字符串 WSA
-void CUtil::UtilWSAGetLastError(char szLog[], int size)
-{
-	if (szLog == NULL || size <= 1)
-	{
-		return;
-	}
-
-	LPVOID lpMsgBuf;
-	DWORD dw = WSAGetLastError();
-	FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL,
-		dw,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPTSTR)&lpMsgBuf,
-		0, NULL);
-
-	sprintf_s(szLog, size, "code=%d msg=%s", dw, (char *)lpMsgBuf);
-
-	LocalFree(lpMsgBuf);
 }

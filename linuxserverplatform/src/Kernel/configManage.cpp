@@ -1108,15 +1108,15 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 	////ftp服务器相关
 	else if (strKey == "ftpIP")
 	{
-		memcpy(m_ftpConfig.ftpIP, strValue.c_str(), min(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpIP) - 1));
+		memcpy(m_ftpConfig.ftpIP, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpIP) - 1));
 	}
 	else if (strKey == "ftpUser")
 	{
-		memcpy(m_ftpConfig.ftpUser, strValue.c_str(), min(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpUser) - 1));
+		memcpy(m_ftpConfig.ftpUser, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpUser) - 1));
 	}
 	else if (strKey == "ftpPasswd")
 	{
-		memcpy(m_ftpConfig.ftpPasswd, strValue.c_str(), min(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpPasswd) - 1));
+		memcpy(m_ftpConfig.ftpPasswd, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpPasswd) - 1));
 	}
 
 	//// ip注册限制
@@ -1138,7 +1138,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 	//// http请求
 	else if (strKey == "http")
 	{
-		memcpy(m_otherConfig.http, strValue.c_str(), min(strlen(strValue.c_str()), sizeof(m_otherConfig.http) - 1));
+		memcpy(m_otherConfig.http, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_otherConfig.http) - 1));
 	}
 
 	//// 控制1：1平台
@@ -1384,7 +1384,7 @@ bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFi
 		return false;
 	}
 
-	memcpy(szBuffer, data[szFieldName].c_str(), min(data[szFieldName].size(), uSize - 1));
+	memcpy(szBuffer, data[szFieldName].c_str(), Min_(data[szFieldName].size(), uSize - 1));
 
 	return true;
 }

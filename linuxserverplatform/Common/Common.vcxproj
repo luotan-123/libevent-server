@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{181d531f-3ef7-4eca-aba1-fbea79dfe8d2}</ProjectGuid>
+    <ProjectGuid>{c1b0ffe3-5a13-48b0-9bc1-f80139d35b1c}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>test</RootNamespace>
+    <RootNamespace>Common</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -48,34 +48,42 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -107,16 +115,29 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\src\Common\BillManage.cpp" />
+    <ClCompile Include="..\src\Common\MD5.cpp" />
+    <ClCompile Include="..\src\Common\MyCurl.cpp" />
+    <ClCompile Include="..\src\Common\Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Define.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\ErrorCode.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\LoaderAsyncEvent.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\MyCurl.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\NewMessageDefine.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\PlatformMessage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -124,9 +145,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -134,9 +154,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -144,9 +163,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -154,9 +172,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,9 +181,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -174,9 +190,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -184,9 +199,8 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;curl;Common</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

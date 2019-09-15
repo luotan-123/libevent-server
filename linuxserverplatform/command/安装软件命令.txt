@@ -1,0 +1,5 @@
+安装UUID库
+1.ubuntu下安装uuid链接库
+sudo apt-get install uuid-dev
+2.CentOS
+yum install libuuid-devel

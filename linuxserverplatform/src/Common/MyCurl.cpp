@@ -1,9 +1,7 @@
-#include "pch.h"
-#include "MyCurl.h"
+#include "CommonHead.h"
 #include "configManage.h"
 #include "Define.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "MyCurl.h"
 
 string  MyCurl::RsaPrivateKey;
 
@@ -35,15 +33,13 @@ size_t MyCurl::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, vo
 size_t MyCurl::getcontentlengthfunc(void *ptr, size_t size, size_t nmemb, void *stream)
 {
 	int r;
-	int len = 0;
+	long len = 0;
 
 	/* _snscanf() is Win32 specific */
-	r = _snscanf((const char *)ptr, size * nmemb, "Content-Length: %ld\n", &len);
-
+	// r = _snscanf(ptr, size * nmemb, "Content-Length: %ld\n", &len);
+	r = sscanf((const char *)ptr, "Content-Length: %ld\n", &len);
 	if (r) /* Microsoft: we don't read the specs */
-	{
-		*((int*)stream) = len;
-	}
+		* ((long*)stream) = len;
 
 	return size * nmemb;
 }
@@ -146,10 +142,13 @@ int MyCurl::postUrl(const string &url, const vector<string> &vUrlHeader, const s
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		// curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L); 
 		// curl_easy_setopt(curl, CURLOPT_FORBID_REUSE, 1L);
+
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 1000L);
-		// curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::parseStreamCallback);
-		// curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&result);
+		//curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 1000L);
+
+		// CURLOPT_FOLLOWLOCATION 设置支持302重定向
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::WriteMemoryCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&chunk);
 		curl_easy_setopt(curl, CURLOPT_POST, true);
@@ -217,7 +216,10 @@ int MyCurl::postUrlHttps(const string &url, const vector<string> &vUrlHeader, co
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1);
 
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 5000L);
+		//curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 5000L);
+
+		// CURLOPT_FOLLOWLOCATION 设置支持302重定向
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::WriteMemoryCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&chunk);

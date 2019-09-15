@@ -19,7 +19,7 @@
 #define TBL_WEB_AGENT_PUMP_MONEY		"web_agent_pump_money"
 
 // ’Àµ•π‹¿Ì∆˜
-class KERNEL_CLASS CBillManage
+class CBillManage
 {
 private:
 	CBillManage();

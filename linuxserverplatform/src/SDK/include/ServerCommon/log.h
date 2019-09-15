@@ -5,7 +5,7 @@
 #include <string>
 #include <array>
 
-const std::array<const char*, LOG_LEVEL_END> levelNames = { "【INFO】", "【WARNNING】", "【ERROR】", "【INFO】","【ERROR】", };
+const std::array<const char*, LOG_LEVEL_END> levelNames = { "[INFO]", "[WARNNING]", "[ERROR]", "[INFO]","[ERROR]", "[SYS_ERR]", };
 
 //// 日志类
 class CLog
@@ -16,6 +16,8 @@ public:
 
 public:
 	static void Write(const char* pLogFile, int level, const char* pFile, int line, const char* pFuncName, const char* pFormat, ...);
+
+	static void Write(const char* pLogFile, int level, const char* pFile, int line, const char* pFuncName, const char* err, const char* pFormat, ...);
 
 	static void Write(const char* pLogFile, const char* pFuncName, const char* pFormat, ...);
 
@@ -70,6 +72,9 @@ private:
 
 // 输出常规信息 【输出到文件系统和控制台】
 #define CON_INFO_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_INFO_CONSOLE, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
+
+// 输出系统错误信息，strerror(errno)函数全局的，调用SYS_ERROR_LOG之前，不能调用其它系统函数
+#define SYS_ERROR_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR_SYS, __FILE__, __LINE__, __FUNCTION__,strerror(errno), __VA_ARGS__); }
 
 // 兼容以前的代码
 #define WAUTOLOG()		AUTOLOG()
