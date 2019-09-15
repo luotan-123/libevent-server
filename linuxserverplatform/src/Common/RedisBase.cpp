@@ -1,10 +1,13 @@
-#include "pch.h"
-#include "RedisBase.h"
+#include "CommonHead.h"
 #include "configManage.h"
 #include "log.h"
+#include "comstruct.h"
+#include "Interface.h"
+#include "DataLine.h"
+#include "DataBase.h"
 #include "BillManage.h"
 #include "Util.h"
-#include <vector>
+#include "RedisBase.h"
 
 CRedisBase::CRedisBase()
 {
@@ -108,12 +111,12 @@ bool CRedisBase::ParseKey(const char* key, char* tableName, long long& id)
 	}
 
 	tableName[iSignPosition] = 0;
-	id = _atoi64(idStr);
+	id = atoll(idStr);
 
 	return true;
 }
 
-bool CRedisBase::IsKeyExists(const char * key)
+bool CRedisBase::IsKeyExists(const char* key)
 {
 	if (!key)
 	{
@@ -123,7 +126,7 @@ bool CRedisBase::IsKeyExists(const char * key)
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 	sprintf(redisCmd, "EXISTS %s", key);
 
-	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
 
 	bool ret = false;
@@ -148,7 +151,7 @@ bool CRedisBase::IsKeyExists(const char* mainKey, int mainID, int assID)
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 	sprintf(redisCmd, "EXISTS %s|%d,%d", mainKey, mainID, assID);
 
-	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
 
 	bool ret = false;
@@ -173,7 +176,7 @@ bool CRedisBase::IsKeyExists(const char* mainKey, int mainID)
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 	sprintf(redisCmd, "EXISTS %s|%d", mainKey, mainID);
 
-	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
 
 	bool ret = false;
@@ -198,7 +201,7 @@ bool CRedisBase::IsKeyExists(const char* mainKey, const char* assKey)
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 	sprintf(redisCmd, "EXISTS %s|%s", mainKey, assKey);
 
-	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
 
 	bool ret = false;
@@ -246,7 +249,7 @@ int CRedisBase::GetKeyType(const char* key)
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 	sprintf(redisCmd, "TYPE %s", key);
 
-	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
 
 	int keyType = REDIS_KEY_TYPE_NONE;
@@ -261,7 +264,7 @@ int CRedisBase::GetKeyType(const char* key)
 	return keyType;
 }
 
-bool CRedisBase::SremMember(const char * key, const char * member)
+bool CRedisBase::SremMember(const char* key, const char* member)
 {
 	if (!key || !member)
 	{
@@ -288,7 +291,7 @@ bool CRedisBase::SremMember(const char * key, const char * member)
 }
 
 // 删除集合（有序集合）元素
-bool CRedisBase::ZremMember(const char* key, const std::vector<long long> &memberVec)
+bool CRedisBase::ZremMember(const char* key, const std::vector<long long>& memberVec)
 {
 	int size = memberVec.size();
 	if (size > 0)
@@ -316,7 +319,7 @@ bool CRedisBase::ZremMember(const char* key, const std::vector<long long> &membe
 }
 
 // 删除集合（有序集合）元素(int类型)
-bool CRedisBase::ZremMember(const char* key, const std::vector<int> &memberVec)
+bool CRedisBase::ZremMember(const char* key, const std::vector<int>& memberVec)
 {
 	int size = memberVec.size();
 	if (size > 0)
@@ -514,21 +517,21 @@ bool CRedisBase::Auth(const char* passwd)
 	return ret;
 }
 
-bool CRedisBase::hmset(const char* table, int id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode /*= REDIS_EXTEND_MODE_DEFAULT*/, const char * updateSet/* = NULL*/)
+bool CRedisBase::hmset(const char* table, int id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode /*= REDIS_EXTEND_MODE_DEFAULT*/, const char* updateSet/* = NULL*/)
 {
 	char strID[14] = "";
 	sprintf(strID, "%d", id);
 	return hmset(table, strID, fieldInfoUMap, mode, updateSet);
 }
 
-bool CRedisBase::hmset(const char* table, long long id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode /*= REDIS_EXTEND_MODE_DEFAULT*/, const char * updateSet/* = NULL*/)
+bool CRedisBase::hmset(const char* table, long long id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode /*= REDIS_EXTEND_MODE_DEFAULT*/, const char* updateSet/* = NULL*/)
 {
 	char strID[36] = "";
 	sprintf(strID, "%lld", id);
 	return hmset(table, strID, fieldInfoUMap, mode, updateSet);
 }
 
-bool CRedisBase::hmset(const char* table, const char * id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode /*= REDIS_EXTEND_MODE_DEFAULT*/, const char * updateSet/* = NULL*/)
+bool CRedisBase::hmset(const char* table, const char* id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode /*= REDIS_EXTEND_MODE_DEFAULT*/, const char* updateSet/* = NULL*/)
 {
 	if (fieldInfoUMap.size() >= MAX_REDIS_CMD_WORD_COUNT / 2)
 	{
@@ -576,7 +579,7 @@ bool CRedisBase::hmset(const char* table, const char * id, std::unordered_map<st
 		lens[i] = strlen(argv[i]);
 	}
 
-	redisReply *pReply = (redisReply*)redisCommandArgv(m_pContext, count, argv, lens);
+	redisReply* pReply = (redisReply*)redisCommandArgv(m_pContext, count, argv, lens);
 	if (!pReply)
 	{
 		ERROR_LOG("redisCommandArgv failed");
@@ -601,7 +604,7 @@ bool CRedisBase::hmset(const char* table, const char * id, std::unordered_map<st
 	return ret;
 }
 
-void CRedisBase::TestRedis(const char * name)
+void CRedisBase::TestRedis(const char* name)
 {
 	redisReply* pReply = NULL;
 	const int expireTime = 100;		// 失效时间(ms)
@@ -648,7 +651,7 @@ void CRedisBase::TestRedis(const char * name)
 }
 
 // 获取某个键值索引
-long long CRedisBase::GetKeyIndex(const char * key)
+long long CRedisBase::GetKeyIndex(const char* key)
 {
 	long long llIndex = 1;
 
@@ -664,7 +667,7 @@ long long CRedisBase::GetKeyIndex(const char * key)
 		return llIndex;
 	}
 
-	llIndex = _atoi64(pReply->str);
+	llIndex = atoll(pReply->str);
 
 	freeReplyObject(pReply);
 
@@ -672,7 +675,7 @@ long long CRedisBase::GetKeyIndex(const char * key)
 }
 
 // 设置某个键值索引
-bool CRedisBase::SetKeyIndex(const char * key, long long llIndex)
+bool CRedisBase::SetKeyIndex(const char* key, long long llIndex)
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SET %s %lld", key, llIndex);
 	if (!pReply)
@@ -686,7 +689,7 @@ bool CRedisBase::SetKeyIndex(const char * key, long long llIndex)
 }
 
 // 获取自增字符串
-long long CRedisBase::GetIncrKeyIndex(const char * key)
+long long CRedisBase::GetIncrKeyIndex(const char* key)
 {
 	if (key == NULL)
 	{
@@ -784,7 +787,7 @@ void CRedisLock::Lock()
 
 		if (m_sleepTime > 0 && m_sleepTime <= 100)
 		{
-			Sleep(m_sleepTime);
+			usleep(m_sleepTime * 1000);
 		}
 	}
 
@@ -801,7 +804,7 @@ void CRedisLock::Unlock()
 		return;
 	}
 
-	redisReply* pReply = (redisReply *)redisCommand(m_pContext, "DEL %s", m_key);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "DEL %s", m_key);
 	if (!pReply)
 	{
 		ERROR_LOG("redisCommand return NULL");

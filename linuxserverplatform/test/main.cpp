@@ -13,9 +13,16 @@
 #include "DataLine.h"
 #include "Util.h"
 #include "MyCurl.h"
+#include "Define.h"
+#include "json/json.h"
 
 int main()
 {
+	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
+
+	
+
+
 	int fd = 10;
 	int ret;
 	ret = close(fd);

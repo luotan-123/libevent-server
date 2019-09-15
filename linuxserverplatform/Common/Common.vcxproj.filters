@@ -33,6 +33,24 @@
     <ClCompile Include="..\src\Common\BillManage.cpp">
       <Filter>数据流水</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Common\RedisBase.cpp">
+      <Filter>Redis模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\RedisCenter.cpp">
+      <Filter>Redis模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\RedisCommon.cpp">
+      <Filter>Redis模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\RedisLoader.cpp">
+      <Filter>Redis模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\RedisLogon.cpp">
+      <Filter>Redis模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\RedisPHP.cpp">
+      <Filter>Redis模块</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h">
@@ -61,6 +79,27 @@
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h">
       <Filter>数据流水</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\redis\hiredis.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisBase.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisCenter.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisCommon.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLoader.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLogon.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisPHP.h">
+      <Filter>Redis模块</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

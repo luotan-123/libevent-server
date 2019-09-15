@@ -118,9 +118,16 @@
     <ClCompile Include="..\src\Common\BillManage.cpp" />
     <ClCompile Include="..\src\Common\MD5.cpp" />
     <ClCompile Include="..\src\Common\MyCurl.cpp" />
+    <ClCompile Include="..\src\Common\RedisBase.cpp" />
+    <ClCompile Include="..\src\Common\RedisCenter.cpp" />
+    <ClCompile Include="..\src\Common\RedisCommon.cpp" />
+    <ClCompile Include="..\src\Common\RedisLoader.cpp" />
+    <ClCompile Include="..\src\Common\RedisLogon.cpp" />
+    <ClCompile Include="..\src\Common\RedisPHP.cpp" />
     <ClCompile Include="..\src\Common\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\SDK\include\redis\hiredis.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Define.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\ErrorCode.h" />
@@ -129,79 +136,173 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\MyCurl.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\NewMessageDefine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\PlatformMessage.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisBase.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisCenter.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisCommon.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLoader.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLogon.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisPHP.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
+    <RemotePreBuildEvent>
+      <Command>
+      </Command>
+    </RemotePreBuildEvent>
+    <RemotePreLinkEvent>
+      <Command>cp ../src/SDK/lib/libjson.a ../bin/;cp ../src/SDK/lib/libhiredis.a ../bin/;</Command>
+    </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

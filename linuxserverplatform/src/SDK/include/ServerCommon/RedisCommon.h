@@ -3,7 +3,7 @@
 #include "RedisBase.h"
 
 // redis ¹«¹²Àà
-class KERNEL_CLASS CRedisCommon : public CRedisBase
+class CRedisCommon : public CRedisBase
 {
 public:
 	CRedisCommon();

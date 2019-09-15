@@ -3,7 +3,7 @@
 #include "RedisCommon.h"
 #include <string>
 
-class KERNEL_CLASS CRedisLoader : public CRedisCommon
+class CRedisLoader : public CRedisCommon
 {
 public:
 	CRedisLoader();

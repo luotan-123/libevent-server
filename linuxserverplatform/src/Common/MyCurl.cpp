@@ -81,13 +81,23 @@ int MyCurl::getUrl(const string &url, const vector<string> &vUrlHeader, string &
 		{
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);// 改协议头
 		}
+
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		// curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1);
+
 		curl_easy_setopt(curl, CURLOPT_FORBID_REUSE, 1L);
+
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
+		//curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
+
+		// CURLOPT_FOLLOWLOCATION 设置支持302重定向
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::parseStreamCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&result);
+
 		if (bSSLCert)
 		{
 			curl_easy_setopt(curl, CURLOPT_SSLKEYTYPE, "PEM");

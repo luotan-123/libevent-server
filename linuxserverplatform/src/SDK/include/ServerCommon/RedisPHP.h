@@ -2,7 +2,7 @@
 
 #include "RedisBase.h"
 
-class KERNEL_CLASS CRedisPHP : public CRedisBase
+class CRedisPHP : public CRedisBase
 {
 public:
 	CRedisPHP();

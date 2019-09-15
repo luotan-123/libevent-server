@@ -33,7 +33,7 @@ if(!pMessage)\
 #define GRADE_SIMPLE_EXPIRE_TIME			(7*24*60*60)	// 大结算战绩过期时间
 #define GRADE_EXPIRE_TIME					(GRADE_SIMPLE_EXPIRE_TIME + (1*24*60*60))		// 单局战绩失效时间
 
-#define SAVE_JSON_PATH						"C:/web/json/"	// 保存json的目录
+#define SAVE_JSON_PATH						"json/"	// 保存json的目录
 
 ////////////////////////////////////////////////////////////
 // 账单相关

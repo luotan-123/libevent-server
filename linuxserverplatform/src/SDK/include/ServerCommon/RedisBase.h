@@ -1,13 +1,7 @@
 #pragma once
 
 #include "hiredis.h"
-#include "configManage.h"
 #include "tableDefine.h"
-#include <string>
-#include <vector>
-#include <unordered_map>
-
-#pragma comment(lib, "hiredis.lib")
 
 // redis命令单词数量，实际上redis可以存储2^32-1个key-value
 #define MAX_REDIS_CMD_WORD_COUNT	512		
@@ -31,7 +25,7 @@ enum RedisKeyType
 
 class CDataBaseManage;
 // CRedisBase 虚基类
-class KERNEL_CLASS CRedisBase
+class CRedisBase
 {
 public:
 	CRedisBase();
@@ -69,9 +63,9 @@ public:
 	// 删除集合（无序集合）的元素
 	bool SremMember(const char* key, const char* member);
 	// 删除集合（有序集合）元素
-	bool ZremMember(const char* key, const std::vector<long long> &memberVec);
+	bool ZremMember(const char* key, const std::vector<long long>& memberVec);
 	// 删除集合（有序集合）元素(int类型)
-	bool ZremMember(const char* key, const std::vector<int> &memberVec);
+	bool ZremMember(const char* key, const std::vector<int>& memberVec);
 	// 获取有序集合的大小
 	int GetZSetSize(const char* key);
 	// 设定超时时间
@@ -79,13 +73,13 @@ public:
 	// 检查连接性
 	void CheckConnection(const RedisConfig& redisConfig);
 	// 测试redis读写性能
-	void TestRedis(const char * name);
+	void TestRedis(const char* name);
 	// 获取某个键值索引
-	long long GetKeyIndex(const char * key);
+	long long GetKeyIndex(const char* key);
 	// 设置某个键值索引
-	bool SetKeyIndex(const char * key, long long llIndex);
+	bool SetKeyIndex(const char* key, long long llIndex);
 	// 获取自增字符串
-	long long GetIncrKeyIndex(const char * key);
+	long long GetIncrKeyIndex(const char* key);
 	// 数据库
 	void SetDBManage(CDataBaseManage* pDBManage);
 protected:
@@ -99,9 +93,9 @@ protected:
 	bool Auth(const char* passwd);
 public:
 	// 设置哈希表数据
-	bool hmset(const char* table, int id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char * updateSet = NULL);
-	bool hmset(const char* table, long long id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char * updateSet = NULL);
-	bool hmset(const char* table, const char * id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char * updateSet = NULL);
+	bool hmset(const char* table, int id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
+	bool hmset(const char* table, long long id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
+	bool hmset(const char* table, const char* id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
 public:
 	int m_sleepTime;
 protected:
@@ -111,7 +105,7 @@ protected: //数据库相关
 };
 
 // redis 锁
-class KERNEL_CLASS CRedisLock
+class CRedisLock
 {
 public:
 	CRedisLock(redisContext* pContext, const char* key, int sleepTime = 0, bool bAutoLock = true);

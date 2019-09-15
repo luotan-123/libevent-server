@@ -6,7 +6,7 @@
 #include "configManage.h"
 #include "NewMessageDefine.h"
 
-class KERNEL_CLASS CRedisLogon : public CRedisCommon
+class CRedisLogon : public CRedisCommon
 {
 public:
 	CRedisLogon();

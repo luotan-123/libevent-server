@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "CommonHead.h"
 #include "RedisLogon.h"	
 #include "configManage.h"
 #include "DataBase.h"

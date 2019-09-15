@@ -3,3 +3,7 @@
 sudo apt-get install uuid-dev
 2.CentOS
 yum install libuuid-devel
+
+ftp相关
+apt install yum 安装yum命令
+yum install vsftpd -y 安装ftp

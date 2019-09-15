@@ -2,7 +2,7 @@
 
 #include "RedisCommon.h"
 
-class KERNEL_CLASS CRedisCenter : public CRedisCommon
+class CRedisCenter : public CRedisCommon
 {
 public:
 	CRedisCenter();
