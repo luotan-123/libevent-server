@@ -1,6 +1,6 @@
 #include "CommonHead.h"
 #include "Exception.h"
-#include "Function.h"
+#include "log.h"
 #include <exception>
 
 //静态变量定义
@@ -28,7 +28,7 @@ CException::CException(const char* szErrorMessage, unsigned int uErrorCode, bool
 
 	if (m_bShowError == true)
 	{
-		printf("%s\n", m_szMessage);
+		SYS_ERROR_LOG("%s", m_szMessage);
 	}
 }
 

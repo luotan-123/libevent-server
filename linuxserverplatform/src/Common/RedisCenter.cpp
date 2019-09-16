@@ -1,11 +1,5 @@
 #include "CommonHead.h"
 #include "RedisCenter.h"	
-#include "InternalMessageDefine.h"
-#include "log.h"
-#include "Util.h"
-#include "BillManage.h"
-#include <tuple>
-#include "MysqlHelper.h"
 
 CRedisCenter::CRedisCenter()
 {
@@ -148,7 +142,6 @@ int CRedisCenter::NeedLoadAllUserData()	//判断是否需要加载数据库中所有用户数据到
 
 	for (size_t i = 0; i < dataSet.size(); i++)
 	{
-		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 		UserData userData;
 
 		CConfigManage::sqlGetValue(dataSet[i], "userID", userData.userID);
@@ -204,7 +197,6 @@ bool CRedisCenter::LoadAllUserData()
 
 	for (size_t i = 0; i < dataSet.size(); i++)
 	{
-		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 		UserData userData;
 
 		CConfigManage::sqlGetValue(dataSet[i], "userID", userData.userID);
@@ -407,7 +399,6 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 
 	for (size_t i = 0; i < dataSet.size(); i++)
 	{
-		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 		RewardsPoolInfo poolData;
 
 		CConfigManage::sqlGetValue(dataSet[i], "roomID", poolData.roomID);
@@ -665,7 +656,7 @@ bool CRedisCenter::SetUserPhone(int userID, const char* phone, bool bUnBind /*= 
 	{
 		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
-		sprintf(redisCmd, "SET %s %ld", key.c_str(), userID);
+		sprintf(redisCmd, "SET %s %d", key.c_str(), userID);
 
 		redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 		REDIS_CHECKF(pReply, redisCmd);
@@ -691,7 +682,7 @@ bool CRedisCenter::SetUserXianLiao(int userID, const char* xianliao)
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
-	sprintf(redisCmd, "SET %s|%s %ld", TBL_XIANLIAO_TOUSERID, xianliao, userID);
+	sprintf(redisCmd, "SET %s|%s %d", TBL_XIANLIAO_TOUSERID, xianliao, userID);
 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -794,7 +785,6 @@ bool CRedisCenter::LoadAllUserBag()
 
 	for (size_t i = 0; i < dataSet.size(); i++)
 	{
-		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 		UserBag userbag;
 
 		CConfigManage::sqlGetValue(dataSet[i], "userID", userbag.userID);

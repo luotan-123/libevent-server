@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <array>
-#include "KernelDefine.h"
+#include "Function.h"
 
 //////////////////////////////////////////////////////////
 // 基础配置表(先尝试读取redis，redis中没有读取内存的)

@@ -9,10 +9,14 @@ grant all privileges on *.* to 'root'@'192.168.19.%' identified by 'root' with g
 flush privileges;
 4、重启mysql
 systemctl restart mysqld.service
+service mysql restart    -- ubuntu
+service mysqld restart  -- centos
 5、设置不区分大小写
-vi /etc/my.cnf
+vim /etc/my.cnf
+或者sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 lower_case_table_names=1
 
 操作系统相关：
 1、关闭防火墙
 service iptables stop
+service firewalld stop

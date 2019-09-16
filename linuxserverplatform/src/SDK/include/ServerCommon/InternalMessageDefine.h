@@ -11,6 +11,22 @@
 #define HD_TIMER_MESSAGE				4							//定时器消息处理
 #define HD_PLATFORM_SOCKET_READ			5							//中心服读取事件处理
 
+//数据队列信息头
+struct DataLineHead
+{
+	UINT						uSize;								//数据大小
+	UINT						uDataKind;							//数据类型
+};
+
+///异步线程结果消息结构定义
+struct AsynThreadResultLine
+{
+	DataLineHead						LineHead;					///队列头
+	UINT								uHandleResult;				///结果结果
+	UINT								uHandleKind;				///处理类型
+	UINT								uHandleID;					///对象标识
+};
+
 //SOCKET关闭通知结构定义
 struct SocketCloseLine
 {

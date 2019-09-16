@@ -1,5 +1,6 @@
 #include "CommonHead.h"
 #include "INIFile.h"
+#include "log.h"
 
 /******************************************************************************
 * 功  能：构造函数
@@ -49,7 +50,7 @@ string CINIFile::GetAppPath()
 	char current_absolute_path[PATH_MAX] = "";
 
 	//获取当前程序绝对路径
-	int cnt = readlink("/proc/self/exe", current_absolute_path, PATH_MAX);
+	int cnt = readlink("/proc/self/exe", current_absolute_path, (size_t)PATH_MAX);
 	if (cnt < 0 || cnt >= PATH_MAX)
 	{
 		return "/home/";
@@ -86,7 +87,7 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 
 	if (m_fp == NULL)
 	{
-		printf("open inifile %s error!\n", pathName);
+		SYS_ERROR_LOG("open inifile %s error!", pathName);
 		return INI_OPENFILE_ERROR;
 	}
 

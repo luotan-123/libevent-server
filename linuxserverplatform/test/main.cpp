@@ -15,13 +15,38 @@
 #include "MyCurl.h"
 #include "Define.h"
 #include "json/json.h"
+#include "RedisCenter.h"
 
 int main()
 {
 	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
 
-	
+	//发送邮件接口
+	MyCurl curl;
+	std::vector<std::string> vUrlHeader;
+	std::string postFields = "";
+	std::string result = "";
+	//组合生成URL
+	std::string url = "https://www.baidu.com";
 
+	curl.postUrlHttps(url, vUrlHeader, postFields, result);
+
+
+	// redis 相关
+	CRedisCenter *m_pRedis = new CRedisCenter;
+	if (!m_pRedis)
+	{
+		ERROR_LOG("create redis object failed");
+		return false;
+	}
+
+	int ret111 = m_pRedis->Init();
+	if (!ret111)
+	{
+		ERROR_LOG("连接redis失败");
+		return false;
+	}
+	delete m_pRedis;
 
 	int fd = 10;
 	int ret;

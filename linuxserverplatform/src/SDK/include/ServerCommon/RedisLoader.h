@@ -1,7 +1,6 @@
 #pragma once
 
 #include "RedisCommon.h"
-#include <string>
 
 class CRedisLoader : public CRedisCommon
 {

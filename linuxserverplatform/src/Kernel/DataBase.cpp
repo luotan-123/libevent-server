@@ -5,10 +5,8 @@
 #include "DataLine.h"
 #include "Exception.h"
 #include "MysqlHelper.h"
-#include "Function.h"
 #include "configManage.h"
 #include "log.h"
-#include "InternalMessageDefine.h"
 #include "DataBase.h"
 
 

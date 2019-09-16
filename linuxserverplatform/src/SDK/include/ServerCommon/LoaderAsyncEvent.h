@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataLine.h"
 #include "DataBase.h"
 
 // 游戏服异步事件  2001-3000

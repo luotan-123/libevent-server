@@ -1,10 +1,6 @@
 #pragma once
 
 #include "RedisCommon.h"
-#include <vector>
-#include <string>
-#include "configManage.h"
-#include "NewMessageDefine.h"
 
 class CRedisLogon : public CRedisCommon
 {

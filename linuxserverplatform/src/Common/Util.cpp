@@ -1,11 +1,11 @@
 #include "CommonHead.h"
-#include "Util.h"
 #include "KernelDefine.h"
 #include "configManage.h"
 #include "log.h"
-#include "Function.h"
 #include <sys/stat.h>
+#include <random>
 #include "MD5.h"
+#include "Util.h"
 
 // º∆À„æ‡¿Î”√
 #define EARTH_RADIUS  6371004  
@@ -275,10 +275,18 @@ std::string CUtil::Tostring(int value)
 	return std::string(buf);
 }
 
+std::string CUtil::Tostring(unsigned int value)
+{
+	char buf[128] = "";
+	sprintf(buf, "%u", value);
+
+	return std::string(buf);
+}
+
 std::string CUtil::Tostring(long value)
 {
 	char buf[128] = "";
-	sprintf(buf, "%d", value);
+	sprintf(buf, "%ld", value);
 
 	return std::string(buf);
 }
@@ -286,7 +294,7 @@ std::string CUtil::Tostring(long value)
 std::string CUtil::Tostring(size_t value)
 {
 	char buf[128] = "";
-	sprintf(buf, "%d", value);
+	sprintf(buf, "%lu", value);
 
 	return std::string(buf);
 }

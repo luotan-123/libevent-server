@@ -1,10 +1,5 @@
 #include "CommonHead.h"
 #include "RedisCommon.h"
-#include "configManage.h"
-#include "log.h"
-#include "BillManage.h"
-#include "Util.h"
-#include <vector>
 
 CRedisCommon::CRedisCommon()
 {
@@ -91,15 +86,15 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}
 		else if (!strcmp(field, "account"))
 		{
-			memcpy(userData.account, value, min(strlen(value), sizeof(userData.account) - 1));
+			memcpy(userData.account, value, Min_(strlen(value), sizeof(userData.account) - 1));
 		}
 		else if (!strcmp(field, "passwd"))
 		{
-			memcpy(userData.passwd, value, min(strlen(value), sizeof(userData.passwd)));
+			memcpy(userData.passwd, value, Min_(strlen(value), sizeof(userData.passwd)));
 		}
 		else if (!strcmp(field, "name"))
 		{
-			memcpy(userData.name, value, min(strlen(value), sizeof(userData.name)));
+			memcpy(userData.name, value, Min_(strlen(value), sizeof(userData.name)));
 		}
 		else if (!strcmp(field, "sex"))
 		{
@@ -111,19 +106,19 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}*/
 		else if (!strcmp(field, "phone"))
 		{
-			memcpy(userData.phone, value, min(strlen(value), sizeof(userData.phone)));
+			memcpy(userData.phone, value, Min_(strlen(value), sizeof(userData.phone)));
 		}
 		else if (!strcmp(field, "money"))
 		{
-			userData.money = _atoi64(value);
+			userData.money = atoll(value);
 		}
 		else if (!strcmp(field, "bankMoney"))
 		{
-			userData.bankMoney = _atoi64(value);
+			userData.bankMoney = atoll(value);
 		}
 		else if (!strcmp(field, "bankPasswd"))
 		{
-			memcpy(userData.bankPasswd, value, min(strlen(value), sizeof(userData.bankPasswd)));
+			memcpy(userData.bankPasswd, value, Min_(strlen(value), sizeof(userData.bankPasswd)));
 		}
 		else if (!strcmp(field, "jewels"))
 		{
@@ -139,19 +134,19 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}
 		else if (!strcmp(field, "logonIP"))
 		{
-			memcpy(userData.logonIP, value, min(strlen(value), sizeof(userData.logonIP)));
+			memcpy(userData.logonIP, value, Min_(strlen(value), sizeof(userData.logonIP)));
 		}
 		else if (!strcmp(field, "headURL"))
 		{
-			memcpy(userData.headURL, value, min(strlen(value), sizeof(userData.headURL)));
+			memcpy(userData.headURL, value, Min_(strlen(value), sizeof(userData.headURL)));
 		}
 		else if (!strcmp(field, "macAddr"))
 		{
-			memcpy(userData.macAddr, value, min(strlen(value), sizeof(userData.macAddr)));
+			memcpy(userData.macAddr, value, Min_(strlen(value), sizeof(userData.macAddr)));
 		}
 		else if (!strcmp(field, "token"))
 		{
-			memcpy(userData.token, value, min(strlen(value), sizeof(userData.token)));
+			memcpy(userData.token, value, Min_(strlen(value), sizeof(userData.token)));
 		}
 		else if (!strcmp(field, "isVirtual"))
 		{
@@ -179,7 +174,7 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}
 		else if (!strcmp(field, "registerIP"))
 		{
-			memcpy(userData.registerIP, value, min(strlen(value), sizeof(userData.registerIP)));
+			memcpy(userData.registerIP, value, Min_(strlen(value), sizeof(userData.registerIP)));
 		}
 		else if (!strcmp(field, "registerType"))
 		{
@@ -207,11 +202,11 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}*/
 		else if (!strcmp(field, "phonePasswd"))
 		{
-			memcpy(userData.phonePasswd, value, min(strlen(value), sizeof(userData.phonePasswd)));
+			memcpy(userData.phonePasswd, value, Min_(strlen(value), sizeof(userData.phonePasswd)));
 		}
 		else if (!strcmp(field, "accountInfo"))
 		{
-			memcpy(userData.accountInfo, value, min(strlen(value), sizeof(userData.accountInfo)));
+			memcpy(userData.accountInfo, value, Min_(strlen(value), sizeof(userData.accountInfo)));
 		}
 		else if (!strcmp(field, "totalGameWinCount"))
 		{
@@ -219,23 +214,23 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}
 		else if (!strcmp(field, "Lng"))
 		{
-			memcpy(userData.Lng, value, min(strlen(value), sizeof(userData.Lng)));
+			memcpy(userData.Lng, value, Min_(strlen(value), sizeof(userData.Lng)));
 		}
 		else if (!strcmp(field, "Lat"))
 		{
-			memcpy(userData.Lat, value, min(strlen(value), sizeof(userData.Lat)));
+			memcpy(userData.Lat, value, Min_(strlen(value), sizeof(userData.Lat)));
 		}
 		else if (!strcmp(field, "address"))
 		{
-			memcpy(userData.address, value, min(strlen(value), sizeof(userData.address)));
+			memcpy(userData.address, value, Min_(strlen(value), sizeof(userData.address)));
 		}
 		else if (!strcmp(field, "lastCalcOnlineToTime"))
 		{
-			userData.lastCalcOnlineToTime = _atoi64(value);
+			userData.lastCalcOnlineToTime = atoll(value);
 		}
 		else if (!strcmp(field, "allOnlineToTime"))
 		{
-			userData.allOnlineToTime = _atoi64(value);
+			userData.allOnlineToTime = atoll(value);
 		}
 		else if (!strcmp(field, "IsOnline"))
 		{
@@ -243,11 +238,11 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}
 		else if (!strcmp(field, "motto"))
 		{
-			memcpy(userData.motto, value, min(strlen(value), sizeof(userData.motto)));
+			memcpy(userData.motto, value, Min_(strlen(value), sizeof(userData.motto)));
 		}
 		else if (!strcmp(field, "xianliao"))
 		{
-			memcpy(userData.xianliao, value, min(strlen(value), sizeof(userData.xianliao)));
+			memcpy(userData.xianliao, value, Min_(strlen(value), sizeof(userData.xianliao)));
 		}
 		else if (!strcmp(field, "controlParam"))
 		{
@@ -259,7 +254,7 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		}
 		else if (!strcmp(field, "combineMatchID"))
 		{
-			userData.combineMatchID = _atoi64(value);
+			userData.combineMatchID = atoll(value);
 		}
 		else if (!strcmp(field, "matchStatus"))
 		{
@@ -325,15 +320,15 @@ bool CRedisCommon::GetPrivateDeskRecordInfo(int deskMixID, PrivateDeskInfo & des
 		}
 		else if (!strcmp(field, "gameRules"))
 		{
-			memcpy(deskRecordInfo.gameRules, value, min(sizeof(deskRecordInfo.gameRules), strlen(value)));
+			memcpy(deskRecordInfo.gameRules, value, Min_(sizeof(deskRecordInfo.gameRules), strlen(value)));
 		}
 		else if (!strcmp(field, "createTime"))
 		{
-			deskRecordInfo.createTime = _atoi64(value);
+			deskRecordInfo.createTime = atoll(value);
 		}
 		else if (!strcmp(field, "checkTime"))
 		{
-			deskRecordInfo.checkTime = _atoi64(value);
+			deskRecordInfo.checkTime = atoll(value);
 		}
 		else if (!strcmp(field, "masterNotPlay"))
 		{
@@ -373,7 +368,7 @@ bool CRedisCommon::GetPrivateDeskRecordInfo(int deskMixID, PrivateDeskInfo & des
 		}
 		else if (!strcmp(field, "arrUserID"))
 		{
-			memcpy(deskRecordInfo.arrUserID, value, min(sizeof(deskRecordInfo.arrUserID), strlen(value)));
+			memcpy(deskRecordInfo.arrUserID, value, Min_(sizeof(deskRecordInfo.arrUserID), strlen(value)));
 		}
 	}
 
@@ -485,7 +480,7 @@ bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= tru
 		{
 			// 账单 当前金币|此次变化|原因
 			BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,money,changeMoney,reason,roomID,friendsGroupID,rateMoney) VALUES(%d,%lld,%lld,%lld,%d,%d,%d,%lld)",
-				tableName, userID, currTime, (long long)0, _abs64(llRet), RESOURCE_CHANGE_REASON_SYSTEM_SUBSIDY, roomID, friendsGroupID, rateMoney);
+				tableName, userID, currTime, (long long)0, llabs(llRet), RESOURCE_CHANGE_REASON_SYSTEM_SUBSIDY, roomID, friendsGroupID, rateMoney);
 		}
 
 		// 业绩
@@ -517,7 +512,7 @@ long long CRedisCommon::GetUserResNums(int userID, const char * resName)
 	long long ret = 0;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		ret = _atoi64(pReply->str);
+		ret = atoll(pReply->str);
 	}
 
 	freeReplyObject(pReply);
@@ -775,31 +770,31 @@ bool CRedisCommon::GetRewardsPoolInfo(int roomID, RewardsPoolInfo& poolInfo)
 		}
 		else if (!strcmp(field, "poolMoney"))
 		{
-			poolInfo.poolMoney = _atoi64(value);
+			poolInfo.poolMoney = atoll(value);
 		}
 		else if (!strcmp(field, "gameWinMoney"))
 		{
-			poolInfo.gameWinMoney = _atoi64(value);
+			poolInfo.gameWinMoney = atoll(value);
 		}
 		else if (!strcmp(field, "percentageWinMoney"))
 		{
-			poolInfo.percentageWinMoney = _atoi64(value);
+			poolInfo.percentageWinMoney = atoll(value);
 		}
 		else if (!strcmp(field, "otherWinMoney"))
 		{
-			poolInfo.otherWinMoney = _atoi64(value);
+			poolInfo.otherWinMoney = atoll(value);
 		}
 		else if (!strcmp(field, "allGameWinMoney"))
 		{
-			poolInfo.allGameWinMoney = _atoi64(value);
+			poolInfo.allGameWinMoney = atoll(value);
 		}
 		else if (!strcmp(field, "allPercentageWinMoney"))
 		{
-			poolInfo.allPercentageWinMoney = _atoi64(value);
+			poolInfo.allPercentageWinMoney = atoll(value);
 		}
 		else if (!strcmp(field, "allOtherWinMoney"))
 		{
-			poolInfo.allOtherWinMoney = _atoi64(value);
+			poolInfo.allOtherWinMoney = atoll(value);
 		}
 		else if (!strcmp(field, "platformCtrlType"))
 		{
@@ -819,7 +814,7 @@ bool CRedisCommon::GetRewardsPoolInfo(int roomID, RewardsPoolInfo& poolInfo)
 		}
 		else if (!strcmp(field, "detailInfo"))
 		{
-			memcpy(poolInfo.detailInfo, value, min(strlen(value), sizeof(poolInfo.detailInfo)));
+			memcpy(poolInfo.detailInfo, value, Min_(strlen(value), sizeof(poolInfo.detailInfo)));
 		}
 	}
 
@@ -988,7 +983,7 @@ bool CRedisCommon::GetZSetSocreByRank(const char* key, int rank, bool order, lon
 		const char* pSocre = pReply->element[i + 1]->str;
 		if (pSocre)
 		{
-			socre = _atoi64(pSocre);
+			socre = atoll(pSocre);
 			break;
 		}
 	}
@@ -1166,7 +1161,7 @@ long long CRedisCommon::GetRoomPoolData(int roomID, const char * fieldName)
 
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		ret = _atoi64(pReply->str);
+		ret = atoll(pReply->str);
 	}
 
 	freeReplyObject(pReply);
@@ -1467,7 +1462,7 @@ bool CRedisCommon::GetOtherConfig(OtherConfig &config)
 		}
 		else if (!strcmp(field, "http"))
 		{
-			memcpy(config.http, value, min(strlen(value), sizeof(config.http)));
+			memcpy(config.http, value, Min_(strlen(value), sizeof(config.http)));
 		}
 		else if (!strcmp(field, "byIsOneToOne"))
 		{
@@ -1558,7 +1553,7 @@ bool CRedisCommon::GetRoomBaseInfo(int roomID, RoomBaseInfo &room)
 		}
 		else if (!strcmp(field, "configInfo"))
 		{
-			memcpy(room.configInfo, value, min(strlen(value), sizeof(room.configInfo) - 1));
+			memcpy(room.configInfo, value, Min_(strlen(value), sizeof(room.configInfo) - 1));
 		}
 	}
 
@@ -1901,7 +1896,7 @@ bool CRedisCommon::GetFullPeopleMatchPeople(int gameID, int matchID, int peopleC
 		MatchUserInfo user;
 
 		user.userID = atoi(id);
-		user.signUpTime = _atoi64(time);
+		user.signUpTime = atoll(time);
 
 		vecPeople.push_back(user);
 	}
@@ -1941,7 +1936,7 @@ bool CRedisCommon::GetTimeMatchPeople(int matchID, std::vector<MatchUserInfo> &v
 		MatchUserInfo user;
 
 		user.userID = atoi(id);
-		user.signUpTime = _atoi64(time);
+		user.signUpTime = atoll(time);
 
 		vecPeople.push_back(user);
 	}

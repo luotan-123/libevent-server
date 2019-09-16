@@ -36,10 +36,6 @@ if(!pMessage)\
 #define SAVE_JSON_PATH						"json/"	// 保存json的目录
 
 ////////////////////////////////////////////////////////////
-// 账单相关
-#define BILLS_DIR							"bills"
-
-////////////////////////////////////////////////////////////
 // 俱乐部相关
 #define GROUP_NOTIY_MSG_EXPIRE_TIME			(7*24*60*60)	// 俱乐部通知消息过期时间
 #define MAX_FRIENDSGROUP_DESK_LIST_COUNT	20				// 最大牌桌数量

@@ -1,9 +1,5 @@
 #include "CommonHead.h"
 #include "RedisPHP.h"	
-#include "InternalMessageDefine.h"
-#include "log.h"
-#include "Util.h"
-#include "BillManage.h"
 
 CRedisPHP::CRedisPHP()
 {
@@ -110,7 +106,7 @@ bool CRedisPHP::GetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		money = _atoi64(pReply->str);
+		money = atoll(pReply->str);
 	}
 	else
 	{
@@ -304,7 +300,7 @@ bool CRedisPHP::GetFGNotifySendTime(long long llIndex, time_t &sendTime)
 
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
-		sendTime = _atoi64(pReply->str);
+		sendTime = atoll(pReply->str);
 	}
 	else
 	{
@@ -336,7 +332,7 @@ void CRedisPHP::ClearUserFGNotifySet(int userID)
 		const char* value = pReply->element[i]->str;
 		if (!IsKeyExists(TBL_FG_NOTIFY, value))
 		{
-			expireVec.push_back(_atoi64(value));
+			expireVec.push_back(atoll(value));
 		}
 		else
 		{
@@ -507,7 +503,7 @@ bool CRedisPHP::GetUserAllEmailID(int userID, std::vector<EmailSimpleInfo> &simp
 
 		EmailSimpleInfo simpleEmail;
 
-		simpleEmail.emailID = _atoi64(id);
+		simpleEmail.emailID = atoll(id);
 		simpleEmail.sendtime = atoi(time);
 
 		simpleEmailID.push_back(simpleEmail);
@@ -539,7 +535,7 @@ bool CRedisPHP::DelUserEmailInfo(int userID, long long emailID)
 
 	//охи╬пео╒
 	char assistantKey[48] = "";
-	sprintf(assistantKey, "%ld,%lld", userID, emailID);
+	sprintf(assistantKey, "%d,%lld", userID, emailID);
 	key = MakeKey(TBL_USER_EMAIL_DETAIL, assistantKey);
 	DelKey(key.c_str());
 
@@ -730,7 +726,7 @@ bool CRedisPHP::GetMatchInfo(int matchID, MatchInfo& matchInfo)
 		}
 		else if (!strcmp(field, "startTime"))
 		{
-			matchInfo.startTime = _atoi64(value);
+			matchInfo.startTime = atoll(value);
 		}
 	}
 

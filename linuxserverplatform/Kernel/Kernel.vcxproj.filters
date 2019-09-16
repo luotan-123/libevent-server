@@ -31,6 +31,9 @@
     <Filter Include="定时器">
       <UniqueIdentifier>{b3bcdb84-4325-4762-a546-2b57eec872b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="数据加密">
+      <UniqueIdentifier>{d8f1514c-1725-4c20-99fd-c2fd8e3d782e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h">

@@ -2,6 +2,15 @@
 
 #include "hiredis.h"
 #include "tableDefine.h"
+#include "comstruct.h"
+#include "Interface.h"
+#include "DataLine.h"
+#include "MysqlHelper.h"
+#include "configManage.h"
+#include "log.h"
+#include "DataBase.h"
+#include "BillManage.h"
+#include "Util.h"
 
 // redis命令单词数量，实际上redis可以存储2^32-1个key-value
 #define MAX_REDIS_CMD_WORD_COUNT	512		

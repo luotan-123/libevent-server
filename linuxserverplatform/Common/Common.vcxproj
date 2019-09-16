@@ -150,7 +150,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -170,7 +170,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -190,7 +190,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -210,7 +210,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -230,7 +230,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -250,7 +250,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -270,7 +270,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -290,7 +290,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;Kernel;hiredis</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>

@@ -1,13 +1,5 @@
 #include "CommonHead.h"
 #include "RedisLogon.h"	
-#include "configManage.h"
-#include "DataBase.h"
-#include "InternalMessageDefine.h"
-#include "log.h"
-#include "Util.h"
-#include "BillManage.h"
-#include "MysqlHelper.h"
-#include "Util.h"
 
 CRedisLogon::CRedisLogon()
 {
@@ -526,14 +518,14 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 
 		if (!strcmp(field, "name")) //转义插入，有个性签名的补上个性签名
 		{
-			memcpy(name, value, min(strlen(value), sizeof(name)));
+			memcpy(name, value, Min_(strlen(value), sizeof(name)));
 
 			CUtil::TransString(name, sizeof(name), strlen(name));
 			fieldInfo.value = name;
 		}
 		else if (!strcmp(field, "account")) //转义插入
 		{
-			memcpy(account, value, min(strlen(value), sizeof(account)));
+			memcpy(account, value, Min_(strlen(value), sizeof(account)));
 
 			CUtil::TransString(account, sizeof(account), strlen(account));
 			fieldInfo.value = account;
@@ -560,7 +552,7 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 			}
 			else if (fieldInfo.type == FIELD_VALUE_TYPE_LONGLONG)
 			{
-				sprintf(sql + strlen(sql), "%lld, ", _atoi64(fieldInfo.value));
+				sprintf(sql + strlen(sql), "%lld, ", atoll(fieldInfo.value));
 			}
 			else if (fieldInfo.type == FIELD_VALUE_TYPE_STR)
 			{
@@ -606,7 +598,7 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 			}
 			else if (fieldInfo.type == FIELD_VALUE_TYPE_LONGLONG)
 			{
-				sprintf(sql + strlen(sql), "%lld, ", _atoi64(fieldInfo.value));
+				sprintf(sql + strlen(sql), "%lld, ", atoll(fieldInfo.value));
 			}
 			else if (fieldInfo.type == FIELD_VALUE_TYPE_STR)
 			{
@@ -795,7 +787,7 @@ void CRedisLogon::ClearUserGradeInfo(int userID)
 		const char* value = pReply->element[i]->str;
 		if (!IsKeyExists(TBL_GRADE_SIMPLE, value))
 		{
-			expireVec.push_back(_atoi64(value));
+			expireVec.push_back(atoll(value));
 		}
 		else
 		{
@@ -831,7 +823,7 @@ bool CRedisLogon::GetGradeSimpleInfo(long long id, PrivateDeskGradeSimpleInfo& s
 
 		if (!strcmp(field, "id"))
 		{
-			simpleInfo.id = _atoi64(value);
+			simpleInfo.id = atoll(value);
 		}
 		else if (!strcmp(field, "roomID"))
 		{
@@ -847,7 +839,7 @@ bool CRedisLogon::GetGradeSimpleInfo(long long id, PrivateDeskGradeSimpleInfo& s
 		}
 		else if (!strcmp(field, "gameRules"))
 		{
-			memcpy(simpleInfo.gameRules, value, min(strlen(value), sizeof(simpleInfo.gameRules)));
+			memcpy(simpleInfo.gameRules, value, Min_(strlen(value), sizeof(simpleInfo.gameRules)));
 		}
 		else if (!strcmp(field, "time"))
 		{
@@ -863,7 +855,7 @@ bool CRedisLogon::GetGradeSimpleInfo(long long id, PrivateDeskGradeSimpleInfo& s
 		}
 		else if (!strcmp(field, "userInfoList"))
 		{
-			memcpy(simpleInfo.userInfoList, value, min(strlen(value), sizeof(simpleInfo.userInfoList)));
+			memcpy(simpleInfo.userInfoList, value, Min_(strlen(value), sizeof(simpleInfo.userInfoList)));
 		}
 	}
 
@@ -895,7 +887,7 @@ bool CRedisLogon::GetGradeDetailInfo(long long id, GameGradeInfo& gameGradeInfo)
 
 		if (!strcmp(field, "id"))
 		{
-			gameGradeInfo.id = _atoi64(value);
+			gameGradeInfo.id = atoll(value);
 		}
 		else if (!strcmp(field, "inning"))
 		{
@@ -911,11 +903,11 @@ bool CRedisLogon::GetGradeDetailInfo(long long id, GameGradeInfo& gameGradeInfo)
 		}
 		else if (!strcmp(field, "userInfoList"))
 		{
-			memcpy(gameGradeInfo.userInfoList, value, min(strlen(value), sizeof(gameGradeInfo.userInfoList)));
+			memcpy(gameGradeInfo.userInfoList, value, Min_(strlen(value), sizeof(gameGradeInfo.userInfoList)));
 		}
 		else if (!strcmp(field, "gameData"))
 		{
-			memcpy(gameGradeInfo.gameData, value, min(strlen(value), sizeof(gameGradeInfo.gameData)));
+			memcpy(gameGradeInfo.gameData, value, Min_(strlen(value), sizeof(gameGradeInfo.gameData)));
 		}
 	}
 
@@ -1324,7 +1316,7 @@ bool CRedisLogon::GetTempFgDesk(const char * asskey, SaveRedisFriendsGroupDesk &
 		}
 		else if (!strcmp(field, "gameRules"))
 		{
-			memcpy(desk.gameRules, value, min(sizeof(desk.gameRules), strlen(value)));
+			memcpy(desk.gameRules, value, Min_(sizeof(desk.gameRules), strlen(value)));
 		}
 	}
 

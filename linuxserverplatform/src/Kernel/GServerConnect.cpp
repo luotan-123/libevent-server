@@ -8,7 +8,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "GServerConnect.h"
-#include "InternalMessageDefine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // CGServerClient
@@ -61,7 +60,7 @@ bool CGServerClient::Connect()
 
 	svrAddr.sin_family = AF_INET;
 	svrAddr.sin_addr.s_addr = inet_addr(m_ip);
-	svrAddr.sin_port = htons(m_port);
+	svrAddr.sin_port = htons((uint16_t)m_port);
 
 	int ret = 0;
 	int optval = 0;
@@ -70,7 +69,7 @@ bool CGServerClient::Connect()
 	ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char*)& optval, sizeof(optval));
 	if (ret == -1)
 	{
-		CON_ERROR_LOG("setsockopt SO_RCVBUF ERROR errno=%d", errno);
+		SYS_ERROR_LOG("setsockopt SO_RCVBUF ERROR");
 		return false;
 	}
 
@@ -78,7 +77,7 @@ bool CGServerClient::Connect()
 	ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char*)& optval, sizeof(optval));
 	if (ret == -1)
 	{
-		ERROR_LOG("setsockopt SO_SNDBUF ERROR errno=%d", errno);
+		SYS_ERROR_LOG("setsockopt SO_SNDBUF ERROR");
 		return false;
 	}
 
@@ -507,7 +506,7 @@ const std::vector<CGServerClient*>& CGServerConnect::GetSocketVec()
 	return m_socketVec;
 }
 
-void CGServerConnect::GetIndexByThreadID(unsigned int uThreadID, size_t& uMin, size_t& uMax)
+void CGServerConnect::GetIndexByThreadID(pthread_t uThreadID, size_t& uMin, size_t& uMax)
 {
 	// 负载均衡算法：
 
@@ -602,17 +601,17 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 
 	sleep(2);
 
-	unsigned int threadID = GetCurrentThreadId();
+	pthread_t threadID = GetCurrentThreadId();
 	size_t uMinIndex = 0, uMaxIndex = 0;
 	pThis->GetIndexByThreadID(threadID, uMinIndex, uMaxIndex);
 
 	if (uMinIndex == uMaxIndex)
 	{
-		INFO_LOG("登录服数量过少，当前线程（%d）不需要参与收发数据", threadID);
+		INFO_LOG("登录服数量过少，当前线程（%lu）不需要参与收发数据", threadID);
 		return 0;
 	}
 
-	INFO_LOG("监听索引 min=%d,max=%d", uMinIndex, uMaxIndex);
+	INFO_LOG("监听索引 min=%lu,max=%lu", uMinIndex, uMaxIndex);
 
 	// 设置select超时时间
 	timeval selectTv = { 0, 500000 };
@@ -657,7 +656,7 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 			if (ret == -1)
 			{
 				//输出错误消息
-				ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.errno=%d #####", errno);
+				SYS_ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit #####");
 				continue;
 			}
 

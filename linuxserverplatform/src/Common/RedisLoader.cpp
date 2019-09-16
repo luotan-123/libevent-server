@@ -1,11 +1,5 @@
 #include "CommonHead.h"
 #include "RedisLoader.h"
-#include "configManage.h"
-#include "basemessage.h"
-#include "log.h"
-#include "Define.h"
-#include "tableDefine.h"
-#include "Util.h"
 
 CRedisLoader::CRedisLoader()
 {
@@ -735,7 +729,7 @@ bool CRedisLoader::DelFullPeopleMatchPeople(int gameID, int matchID, const std::
 	}
 
 	char key[48] = "";
-	sprintf_s(key, 48, "%s|%d,%d", TBL_SIGN_UP_MATCH_PEOPLE, gameID, matchID);
+	sprintf(key, "%s|%d,%d", TBL_SIGN_UP_MATCH_PEOPLE, gameID, matchID);
 
 	ZremMember(key, userIDVec);
 

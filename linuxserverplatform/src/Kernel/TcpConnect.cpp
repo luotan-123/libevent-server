@@ -7,7 +7,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "TcpConnect.h"
-#include "InternalMessageDefine.h"
 
 CTcpClient::CTcpClient()
 {
@@ -266,7 +265,7 @@ bool CTcpConnect::Connect()
 
 	svrAddr.sin_family = AF_INET;
 	svrAddr.sin_addr.s_addr = inet_addr(m_ip);
-	svrAddr.sin_port = htons(m_port);
+	svrAddr.sin_port = htons((uint16_t)m_port);
 
 	int ret = connect(sock, (sockaddr*)& svrAddr, sizeof(sockaddr_in));
 	if (ret == 0)
@@ -340,7 +339,7 @@ bool CTcpConnect::EventLoop()
 	if (ret == -1)
 	{
 		//Êä³ö´íÎóÏûÏ¢
-		ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.errno=%d #####", errno);
+		SYS_ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.#####");
 		return false;
 	}
 

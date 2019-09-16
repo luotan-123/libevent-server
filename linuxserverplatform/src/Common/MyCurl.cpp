@@ -272,7 +272,7 @@ int MyCurl::uploadUrl(const char *videocode, int gameID, int timeout, int tries)
 {
 	int uploaded_len = 0;
 	CURL* curl = curl_easy_init();
-	CURLcode r = CURLE_GOT_NOTHING;
+	//CURLcode r = CURLE_GOT_NOTHING;
 
 	const FtpConfig& ftpConfig = ConfigManage()->GetFtpConfig();
 

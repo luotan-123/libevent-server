@@ -52,6 +52,7 @@ public:
 	// ×Ö·û´®×ª»»
 	static std::string Tostring(BYTE value);
 	static std::string Tostring(int value);
+	static std::string Tostring(unsigned int value);
 	static std::string Tostring(long value);
 	static std::string Tostring(size_t value);
 	static std::string Tostring(long long value);

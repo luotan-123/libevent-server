@@ -19,11 +19,11 @@
     <Filter Include="Redis模块">
       <UniqueIdentifier>{cd6b8d03-1510-498a-bc4e-5411c4bee896}</UniqueIdentifier>
     </Filter>
+    <Filter Include="加密工具">
+      <UniqueIdentifier>{9f8b593c-cdd6-437d-b468-d6e166871f1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Common\MD5.cpp">
-      <Filter>工具类</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Common\Util.cpp">
       <Filter>工具类</Filter>
     </ClCompile>
@@ -51,11 +51,11 @@
     <ClCompile Include="..\src\Common\RedisPHP.cpp">
       <Filter>Redis模块</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Common\MD5.cpp">
+      <Filter>加密工具</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h">
-      <Filter>工具类</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h">
       <Filter>工具类</Filter>
     </ClInclude>
@@ -100,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\RedisPHP.h">
       <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h">
+      <Filter>加密工具</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -626,7 +626,7 @@ bool CConfigManage::LoadRobotPositionConfig()
 
 		if (info.ip.size() >= 24 || info.address.size() >= 64 || info.latitude.size() >= 12 || info.longitude.size() >= 12 || info.name.size() >= MAX_USER_NAME_LEN || info.headUrl.size() >= 256)
 		{
-			ERROR_LOG("invalid robot element ipSize=%d, addressSize=%d latitudeSize=%d longitudeSize=%d", info.ip.size(), info.address.size(), info.latitude.size(), info.longitude.size());
+			ERROR_LOG("invalid robot element ipSize=%lu, addressSize=%lu latitudeSize=%lu longitudeSize=%lu", info.ip.size(), info.address.size(), info.latitude.size(), info.longitude.size());
 			continue;
 		}
 
@@ -673,14 +673,14 @@ bool CConfigManage::LoadDirtyWordsConfig()
 				begin = lastSpacePos + 1;
 			}
 
-			end = i;
+			end = (int)i;
 
 			if (end >= begin)
 			{
 				std::string word = std::string(pBuf + begin, end - begin);
 				m_dirtyWordsVec.push_back(word);
 			}
-			lastSpacePos = i;
+			lastSpacePos = (int)i;
 		}
 	}
 
@@ -889,10 +889,10 @@ bool CConfigManage::GetRobotPositionInfo(int robotID, RobotPositionInfo& info)
 	if (m_robotPositionInfoVec.size() <= 0)
 	{
 		// 没有配置文件
-		return true;
+		return false;
 	}
 
-	int idx = robotID % m_robotPositionInfoVec.size();
+	int idx = robotID % (int)m_robotPositionInfoVec.size();
 	info = m_robotPositionInfoVec[idx];
 
 	return true;
@@ -932,8 +932,8 @@ std::string CConfigManage::ParseJsonValue(const std::string& src, const char* ke
 	char strKey[128] = "";
 	sprintf(strKey, "\"%s\":", key);
 
-	int pos = src.find(strKey);
-	int begin = pos + strlen(strKey);
+	int pos = (int)src.find(strKey);
+	int begin = pos + (int)strlen(strKey);
 	std::string subStr = src.substr(begin);
 
 	int realBegin = -1;
@@ -945,11 +945,11 @@ std::string CConfigManage::ParseJsonValue(const std::string& src, const char* ke
 		{
 			if (realBegin == -1)
 			{
-				realBegin = i;
+				realBegin = (int)i;
 			}
 			else if (realEnd == -1)
 			{
-				realEnd = i;
+				realEnd = (int)i;
 				break;
 			}
 		}
@@ -1228,13 +1228,13 @@ bool CConfigManage::LoadLogonBaseConfig()
 
 	if (m_logonBaseInfoMap.size() > MAX_LOGON_SERVER_COUNT)
 	{
-		ERROR_LOG("配置的登陆服数量过多。【%d/%d】", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
+		ERROR_LOG("配置的登陆服数量过多。【%lu/%d】", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
 		return false;
 	}
 
 	if (m_logonBaseInfoMap.size() == 0)
 	{
-		ERROR_LOG("没有配置登陆服。【%d/%d】", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
+		ERROR_LOG("没有配置登陆服。【%lu/%d】", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
 		return false;
 	}
 

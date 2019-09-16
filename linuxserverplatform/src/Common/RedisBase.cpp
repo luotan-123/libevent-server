@@ -1,12 +1,4 @@
 #include "CommonHead.h"
-#include "configManage.h"
-#include "log.h"
-#include "comstruct.h"
-#include "Interface.h"
-#include "DataLine.h"
-#include "DataBase.h"
-#include "BillManage.h"
-#include "Util.h"
 #include "RedisBase.h"
 
 CRedisBase::CRedisBase()

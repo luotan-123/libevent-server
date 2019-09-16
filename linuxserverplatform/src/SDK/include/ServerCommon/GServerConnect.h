@@ -78,7 +78,7 @@ public:
 public:
 	int GetRoomID();
 	const std::vector<CGServerClient*>& GetSocketVec();
-	void GetIndexByThreadID(unsigned int uThreadID, size_t& uMin, size_t& uMax);
+	void GetIndexByThreadID(pthread_t uThreadID, size_t& uMin, size_t& uMax);
 
 	// Ïß³Ìº¯Êý
 private:

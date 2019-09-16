@@ -29,10 +29,6 @@ public:
 	static CBillManage* Instance();
 	void Release();
 
-	void WriteUserBill(int userID, int billType, const char* pFormat, ...);
-
-	void WriteCommonBill(int billType, const char* pFormat, ...);
-
 	void WriteBill(CDataBaseManage* m_pDBManage, const char* pFormat, ...);
 };
 

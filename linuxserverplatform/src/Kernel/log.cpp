@@ -1,7 +1,6 @@
 #include "CommonHead.h"
 #include "log.h"
 #include "configManage.h"
-#include "log.h"
 #include <stdarg.h>
 
 CLog::CLog()
@@ -35,7 +34,7 @@ void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, c
 
 	// 线程ID和level
 	pthread_t threadID = GetCurrentSysThreadId();
-	sprintf(buf, "%ld %s ", threadID, levelName);
+	sprintf(buf, "%lu %s ", threadID, levelName);
 
 	// 时间
 	SYSTEMTIME sysTime;
@@ -102,7 +101,7 @@ void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, c
 
 	// 线程ID和level
 	pthread_t threadID = GetCurrentSysThreadId();
-	sprintf(buf, "%ld %s ", threadID, levelName);
+	sprintf(buf, "%lu %s ", threadID, levelName);
 
 	// 时间
 	SYSTEMTIME sysTime;
@@ -154,7 +153,7 @@ void CLog::Write(const char* pLogFile, const char* pFuncName, const char* pForma
 	// 线程ID和level
 	pthread_t threadID = GetCurrentSysThreadId();
 	const char* levelName = levelNames[LOG_LEVEL_INFO];
-	sprintf(buf, "%ld %s ", threadID, levelName);
+	sprintf(buf, "%lu %s ", threadID, levelName);
 
 	// 时间
 	SYSTEMTIME sysTime;
