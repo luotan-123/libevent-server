@@ -28,9 +28,6 @@
     <Filter Include="网络模块">
       <UniqueIdentifier>{a52a0dc5-87c6-40e9-928c-d64e9ba7c303}</UniqueIdentifier>
     </Filter>
-    <Filter Include="定时器">
-      <UniqueIdentifier>{b3bcdb84-4325-4762-a546-2b57eec872b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="数据加密">
       <UniqueIdentifier>{d8f1514c-1725-4c20-99fd-c2fd8e3d782e}</UniqueIdentifier>
     </Filter>
@@ -90,6 +87,9 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\GServerConnect.h">
       <Filter>网络模块</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\Xor.h">
+      <Filter>数据加密</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -127,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\GServerConnect.cpp">
       <Filter>网络模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\Xor.cpp">
+      <Filter>数据加密</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

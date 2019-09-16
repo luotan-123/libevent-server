@@ -16,38 +16,33 @@
 #include "Define.h"
 #include "json/json.h"
 #include "RedisCenter.h"
+#include "Xor.h"
+#include "NewMessageDefine.h"
 
 int main()
 {
 	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
+	// 设置服务器类型
+	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
+	// 关联大厅主线程的log文件
+	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
+	ConfigManage()->Init();
+	////发送邮件接口
+	//MyCurl curl;
+	//std::vector<std::string> vUrlHeader;
+	//std::string postFields = "";
+	//std::string result = "";
+	////组合生成URL
+	//std::string url = "https://www.baidu.com";
+	//curl.postUrlHttps(url, vUrlHeader, postFields, result);
 
-	//发送邮件接口
-	MyCurl curl;
-	std::vector<std::string> vUrlHeader;
-	std::string postFields = "";
-	std::string result = "";
-	//组合生成URL
-	std::string url = "https://www.baidu.com";
 
-	curl.postUrlHttps(url, vUrlHeader, postFields, result);
-
-
-	// redis 相关
-	CRedisCenter *m_pRedis = new CRedisCenter;
-	if (!m_pRedis)
-	{
-		ERROR_LOG("create redis object failed");
-		return false;
-	}
-
-	int ret111 = m_pRedis->Init();
-	if (!ret111)
-	{
-		ERROR_LOG("连接redis失败");
-		return false;
-	}
-	delete m_pRedis;
-
+	/*LogonResponseLogon msg;
+	strcpy(msg.name, "123456");
+	msg.money = 963852741;
+	Xor::Encrypt((unsigned char *)&msg, sizeof(msg));
+	Xor::Decrypt((unsigned char*)& msg, sizeof(msg));*/
+	
 	int fd = 10;
 	int ret;
 	ret = close(fd);
@@ -57,15 +52,7 @@ int main()
 		CON_INFO_LOG("====");
 		CON_ERROR_LOG("====");
 	}
-		
-
-	// 设置服务器类型
-	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
-
-	// 关联大厅主线程的log文件
-	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
-
-	ConfigManage()->Init();
+	
 
 	CGServerConnect ddd;
 	CDataLine dataline;

@@ -1,12 +1,6 @@
 长期优化
 1、原系统long类型改成int  ，unsigned long 改成 unsigned int
 2、检查printf和sprintf函数，int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
-3、引入加密第三方工具
-4、下载libevent库，编译，并安装
-5、内存优化：内存越界和内存泄露
-6、cpu优化：优化函数执行时间（算法优化），优化cpu调度（架构优化）
-
-
-短期工作
-1、libcurl 需要 libssh2.so.1
-2、测试redis是否可用
+3、下载libevent库，编译，并安装
+4、内存优化：内存越界和内存泄露
+5、cpu优化：优化函数执行时间（算法优化），优化cpu调度（架构优化）

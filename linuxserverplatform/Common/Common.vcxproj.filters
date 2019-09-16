@@ -22,6 +22,9 @@
     <Filter Include="加密工具">
       <UniqueIdentifier>{9f8b593c-cdd6-437d-b468-d6e166871f1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="定时器">
+      <UniqueIdentifier>{14af96af-bd8e-4c8b-99ba-a59ba12515e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Common\Util.cpp">

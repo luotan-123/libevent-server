@@ -2,9 +2,7 @@
 
 #include <stdint.h>
 
-#include "Common.h"
-
-class /*COMMONLIB_API*/ Xor
+class Xor
 {
 public:
 	static uint8_t* Encrypt(uint8_t* content, int length);

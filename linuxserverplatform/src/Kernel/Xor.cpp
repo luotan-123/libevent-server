@@ -1,6 +1,7 @@
+#include "CommonHead.h"
 #include "Xor.h"
 
-static unsigned char sKey[] = "MCgame2019";
+static unsigned char sKey[] = "linuxserverplatform2019";
 
 uint8_t* Xor::Encrypt(uint8_t* content, int length)
 {
