@@ -155,16 +155,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -172,16 +174,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -189,16 +193,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -206,16 +212,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -223,16 +231,19 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -240,16 +251,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -257,16 +270,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -274,16 +289,18 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>mysqlclient;pthread;curl</LibraryDependencies>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libmysqlclient.so ../bin/;cp ../src/SDK/lib/libcurl.so ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

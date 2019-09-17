@@ -21,20 +21,20 @@
 
 int main()
 {
-	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
+	//CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
 	// 设置服务器类型
 	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
 	// 关联大厅主线程的log文件
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 	ConfigManage()->Init();
-	////发送邮件接口
-	//MyCurl curl;
-	//std::vector<std::string> vUrlHeader;
-	//std::string postFields = "";
-	//std::string result = "";
-	////组合生成URL
-	//std::string url = "https://www.baidu.com";
-	//curl.postUrlHttps(url, vUrlHeader, postFields, result);
+	//发送邮件接口
+	MyCurl curl;
+	std::vector<std::string> vUrlHeader;
+	std::string postFields = "";
+	std::string result = "";
+	//组合生成URL
+	std::string url = "https://www.baidu.com";
+	curl.postUrlHttps(url, vUrlHeader, postFields, result);
 
 
 	/*LogonResponseLogon msg;

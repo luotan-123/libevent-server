@@ -114,8 +114,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -124,8 +125,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -134,8 +136,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -144,8 +147,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -154,9 +158,11 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,8 +170,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -174,8 +181,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -184,8 +192,9 @@
       <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>../bin;./;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>
+      </SharedLibrarySearchPath>
+      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;json;curl</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
