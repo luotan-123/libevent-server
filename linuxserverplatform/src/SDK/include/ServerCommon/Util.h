@@ -65,7 +65,7 @@ public:
 	static void StringToArray(char * pStr, long long * pArray, int &iArrayCount);
 	static void KYArrayToString(Util_KeyValueStruct_ * pKYArray, int iArrayCount, char * pStr);
 	static void StringToKYArray(char * pStr, Util_KeyValueStruct_ * pKYArray, int &iArrayCount);
-	// 获取一个随机数。范围0-65535
+	// 获取一个随机数。范围0-mt19937.min() [0-UINT_MAX]
 	static unsigned int GetRandNum();
 	// 获取[A,B)随机数,min<= 随机数 < iMax
 	static int GetRandRange(int iMin, int iMax);
