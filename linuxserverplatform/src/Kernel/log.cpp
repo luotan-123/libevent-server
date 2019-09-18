@@ -79,68 +79,6 @@ void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, c
 	fflush(fp);
 }
 
-void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, const char* pFuncName, const char* err, const char* pBuf, ...)
-{
-	if (!pLogfile || !pFile || !pFuncName || !pBuf)
-	{
-		return;
-	}
-
-	if (level >= (int)levelNames.size())
-	{
-		return;
-	}
-
-	const char* levelName = levelNames[level];
-	if (!levelName)
-	{
-		return;
-	}
-
-	char buf[MAX_LOG_BUF_SIZE] = "";
-
-	// 线程ID和level
-	pthread_t threadID = GetCurrentSysThreadId();
-	sprintf(buf, "%lu %s ", threadID, levelName);
-
-	// 时间
-	SYSTEMTIME sysTime;
-	GetLocalTime(&sysTime);
-
-	int millisecs = sysTime.wSecond * 1000 + sysTime.wMilliseconds;
-
-	sprintf(buf + strlen(buf), "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
-
-	// 参数
-	va_list args;
-	va_start(args, pBuf);
-
-	vsprintf(buf + strlen(buf), pBuf, args);
-	va_end(args);
-
-	// 输出到控制台
-	std::cout << buf << " {err=[" << err << "] func=" << pFuncName << " line=" << line << "}\n";
-
-	sprintf(buf + strlen(buf), " {%s} ", err);
-
-	sprintf(buf + strlen(buf), "{%s %s %d}\n", pFile, pFuncName, line);
-
-	std::string strFile = pLogfile;
-	FILE* fp = GameLogManage()->GetLogFileFp(std::move(strFile));
-	if (!fp)
-	{
-		fp = fopen(pLogfile, "a+");
-		if (!fp)
-		{
-			return;
-		}
-		GameLogManage()->AddLogFileFp(pLogfile, fp);
-	}
-
-	fputs(buf, fp);
-	fflush(fp);
-}
-
 void CLog::Write(const char* pLogFile, const char* pFuncName, const char* pFormat, ...)
 {
 	if (!pLogFile || !pFuncName || !pFormat)
@@ -205,6 +143,68 @@ void CLog::Write(const char* pLogFile, const char* buf)
 			return;
 		}
 		GameLogManage()->AddLogFileFp(pLogFile, fp);
+	}
+
+	fputs(buf, fp);
+	fflush(fp);
+}
+
+void CLog::WriteSysErr(const char* pLogfile, int level, const char* pFile, int line, const char* pFuncName, const char* err, const char* pBuf, ...)
+{
+	if (!pLogfile || !pFile || !pFuncName || !pBuf)
+	{
+		return;
+	}
+
+	if (level >= (int)levelNames.size())
+	{
+		return;
+	}
+
+	const char* levelName = levelNames[level];
+	if (!levelName)
+	{
+		return;
+	}
+
+	char buf[MAX_LOG_BUF_SIZE] = "";
+
+	// 线程ID和level
+	pthread_t threadID = GetCurrentSysThreadId();
+	sprintf(buf, "%lu %s ", threadID, levelName);
+
+	// 时间
+	SYSTEMTIME sysTime;
+	GetLocalTime(&sysTime);
+
+	int millisecs = sysTime.wSecond * 1000 + sysTime.wMilliseconds;
+
+	sprintf(buf + strlen(buf), "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
+
+	// 参数
+	va_list args;
+	va_start(args, pBuf);
+
+	vsprintf(buf + strlen(buf), pBuf, args);
+	va_end(args);
+
+	// 输出到控制台
+	std::cout << buf << " {err=[" << err << "] func=" << pFuncName << " line=" << line << "}\n";
+
+	sprintf(buf + strlen(buf), " {%s} ", err);
+
+	sprintf(buf + strlen(buf), "{%s %s %d}\n", pFile, pFuncName, line);
+
+	std::string strFile = pLogfile;
+	FILE* fp = GameLogManage()->GetLogFileFp(std::move(strFile));
+	if (!fp)
+	{
+		fp = fopen(pLogfile, "a+");
+		if (!fp)
+		{
+			return;
+		}
+		GameLogManage()->AddLogFileFp(pLogfile, fp);
 	}
 
 	fputs(buf, fp);

@@ -28,7 +28,7 @@ CException::CException(const char* szErrorMessage, unsigned int uErrorCode, bool
 
 	if (m_bShowError == true)
 	{
-		SYS_ERROR_LOG("%s", m_szMessage);
+		CON_ERROR_LOG("%s", m_szMessage);
 	}
 }
 
