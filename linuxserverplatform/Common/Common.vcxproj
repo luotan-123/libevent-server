@@ -163,7 +163,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -185,7 +185,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -207,7 +207,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -229,7 +229,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -252,7 +252,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -274,7 +274,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -296,7 +296,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -318,7 +318,7 @@
       </Command>
     </RemotePreBuildEvent>
     <RemotePreLinkEvent>
-      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;</Command>
+      <Command>cp ../src/SDK/lib/libssh2.so.1 ../bin/;cp ../src/SDK/lib/libssl.so.10 ../bin/;cp ../src/SDK/lib/libcrypto.so.10 ../bin/;cp ../src/SDK/lib/libjson.so ../bin/;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

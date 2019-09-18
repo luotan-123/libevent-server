@@ -18,9 +18,40 @@
 #include "RedisCenter.h"
 #include "Xor.h"
 #include "NewMessageDefine.h"
+#include "test.pb.h"
+
+
+using namespace test;
 
 int main()
 {
+	GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+	Team team;
+	team.set_id(1);
+	team.set_name("Rocket");
+	Student* s1 = team.add_student(); // 添加repeated成员
+	s1->set_id(1);
+	s1->set_name("Mike");
+	s1->set_sex(BOY);
+	Student* s2 = team.add_student();
+	s2->set_id(2);
+	s2->set_name("Lily");
+	s2->set_sex(GIRL);
+
+	// encode --> bytes stream
+	string out;
+	team.SerializeToString(&out);
+
+	// decode --> team structure
+	Team t;
+	t.ParseFromArray(out.c_str(), out.size()); // or parseFromString
+	cout << t.DebugString() << endl;
+	for (int i = 0; i < t.student_size(); i++) {
+		Student s = t.student(i); // 按索引解repeated成员
+		cout << s.name() << " " << s.sex() << endl;
+	}
+
 	CUtil::MkdirIfNotExists("log/");
 
 	//CUtil::MkdirIfNotExists(SAVE_JSON_PATH);

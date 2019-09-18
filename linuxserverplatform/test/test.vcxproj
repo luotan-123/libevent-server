@@ -108,100 +108,104 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="test.pb.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="test.pb.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
