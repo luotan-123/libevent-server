@@ -5,7 +5,5 @@
 4、cpu优化：优化函数执行时间（算法优化），优化cpu调度（架构优化）
 
 
-补上库
-libssl.so.10 => not found
-libcrypto.so.10 => not found
+增加protobuf到项目中
 研究libevent
