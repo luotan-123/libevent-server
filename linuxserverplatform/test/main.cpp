@@ -53,8 +53,7 @@ int main()
 	}
 
 	CUtil::MkdirIfNotExists("log/");
-
-	//CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
+	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
 
 	// 设置服务器类型
 	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
@@ -67,7 +66,7 @@ int main()
 	std::string postFields = "";
 	std::string result = "";
 	//组合生成URL
-	std::string url = "https://www.baidu.com";
+	std::string url = "http://api.androidhive.info/volley/person_object.json";
 	curl.postUrlHttps(url, vUrlHeader, postFields, result);
 	std::cout << result << endl;
 
@@ -186,7 +185,7 @@ int main()
 
 	//close(socket_fd);
 
-	system("pause");
+	getchar();
 
     return 0;
 }
