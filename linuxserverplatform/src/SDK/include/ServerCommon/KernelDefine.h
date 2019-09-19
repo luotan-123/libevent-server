@@ -26,6 +26,7 @@ const int MAX_DB_NAME_SIZE = 48;		// 最大db_name缓冲区大小
 const int MAX_LOG_BUF_SIZE = 2048;		// log缓冲区大小
 const int MAX_FILE_NAME_SIZE = 256;		// 最大文件名长度
 const int MAX_FUNC_NAME_SIZE = 128;		// 最大函数名长度
+const int MAX_LOG_FILE_SIZE = 1024 * 1024 * 32;  //日子文件的最大的长度，超过长度会生成新的文件
 
 const int MAX_BANK_PASSWD_MIN_LEN = 6;	// 银行密码最小长度
 

@@ -1,6 +1,9 @@
 #include "CommonHead.h"
 #include "GameLogManage.h"
 #include "configManage.h"
+#include <sys/stat.h>
+
+static unsigned long long int g_filelogCount = 0;
 
 CGameLogManage::CGameLogManage()
 {
@@ -270,10 +273,11 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 	}
 
 	std::string str = "";
+	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
 
 	if (serviceType == SERVICE_TYPE_LOGON)
 	{
-		auto iter = m_logonLogFilesMap.find(threadID);
+		iter = m_logonLogFilesMap.find(threadID);
 		if (iter != m_logonLogFilesMap.end())
 		{
 			const ThreadLogFiles& logs = iter->second;
@@ -282,7 +286,7 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 	}
 	else if (serviceType == SERVICE_TYPE_LOADER)
 	{
-		auto iter = m_loaderLogFilesMap.find(threadID);
+		iter = m_loaderLogFilesMap.find(threadID);
 		if (iter != m_loaderLogFilesMap.end())
 		{
 			const ThreadLogFiles& logs = iter->second;
@@ -291,7 +295,7 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 	}
 	else if (serviceType == SERVICE_TYPE_CENTER)
 	{
-		auto iter = m_centerLogFilesMap.find(threadID);
+		iter = m_centerLogFilesMap.find(threadID);
 		if (iter != m_centerLogFilesMap.end())
 		{
 			const ThreadLogFiles& logs = iter->second;
@@ -304,14 +308,23 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 	GetLocalTime(&sysTime);
 
 	char buf[128] = "";
-	sprintf(buf, " %04d-%02d-%02d.log", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	sprintf(buf, "_%04d-%02d-%02d.log", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 
 	if (str == "")
 	{
-		str = "log/other err";
+		str = "log/other_err";
 	}
 
 	str += buf;
+
+	// 判断当前文件大小，超过重新生成文件
+	g_filelogCount++;
+	struct stat statbuf;
+	if (g_filelogCount % 5 == 2 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
+	{
+		sprintf(buf, "%02d-%02d-%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
+		iter->second.errorLog += buf;
+	}
 
 	return str;
 }
@@ -325,10 +338,11 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	}
 
 	std::string str = "";
+	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
 
 	if (serviceType == SERVICE_TYPE_LOGON)
 	{
-		auto iter = m_logonLogFilesMap.find(threadID);
+		iter = m_logonLogFilesMap.find(threadID);
 		if (iter != m_logonLogFilesMap.end())
 		{
 			const ThreadLogFiles& logs = iter->second;
@@ -337,7 +351,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	}
 	else if (serviceType == SERVICE_TYPE_LOADER)
 	{
-		auto iter = m_loaderLogFilesMap.find(threadID);
+		iter = m_loaderLogFilesMap.find(threadID);
 		if (iter != m_loaderLogFilesMap.end())
 		{
 			const ThreadLogFiles& logs = iter->second;
@@ -346,7 +360,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	}
 	else if (serviceType == SERVICE_TYPE_CENTER)
 	{
-		auto iter = m_centerLogFilesMap.find(threadID);
+		iter = m_centerLogFilesMap.find(threadID);
 		if (iter != m_centerLogFilesMap.end())
 		{
 			const ThreadLogFiles& logs = iter->second;
@@ -359,7 +373,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	GetLocalTime(&sysTime);
 
 	char buf[128] = "";
-	sprintf(buf, " %04d-%02d-%02d.log", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	sprintf(buf, "_%04d-%02d-%02d.log", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 
 	if (str == "")
 	{
@@ -367,6 +381,15 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	}
 
 	str += buf;
+
+	// 判断当前文件大小，超过重新生成文件
+	g_filelogCount++;
+	struct stat statbuf;
+	if (g_filelogCount % 5 == 2 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
+	{
+		sprintf(buf, "%02d-%02d-%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
+		iter->second.costLog += buf;
+	}
 
 	return str;
 }
