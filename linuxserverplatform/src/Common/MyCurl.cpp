@@ -1,6 +1,7 @@
 #include "CommonHead.h"
 #include "configManage.h"
 #include "Define.h"
+#include "log.h"
 #include "MyCurl.h"
 
 string  MyCurl::RsaPrivateKey;
@@ -250,6 +251,9 @@ int MyCurl::postUrlHttps(const string &url, const vector<string> &vUrlHeader, co
 				curl_slist_free_all(headers);
 			}
 			curl_easy_cleanup(curl);
+
+			CON_ERROR_LOG(" curl error %s\n", curl_easy_strerror(res));
+
 			return -1;
 		}
 		if (headers)
@@ -347,7 +351,7 @@ int MyCurl::uploadUrl(const char *videocode, int gameID, int timeout, int tries)
 		if (r == CURLE_OK)
 			return 1;
 		else {
-			fprintf(stderr, "%s\n", curl_easy_strerror(r));
+			CON_ERROR_LOG(" curl error %s\n", curl_easy_strerror(r));
 			return 0;
 		}
 	}

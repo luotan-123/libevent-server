@@ -121,7 +121,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -133,7 +133,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -145,7 +145,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -157,7 +157,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -169,7 +169,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -181,7 +181,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -193,7 +193,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -205,7 +205,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;json;protobuf</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

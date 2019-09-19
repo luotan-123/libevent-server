@@ -69,7 +69,11 @@ int main()
 	//组合生成URL
 	std::string url = "https://www.baidu.com";
 	curl.postUrlHttps(url, vUrlHeader, postFields, result);
+	std::cout << result << endl;
 
+
+	CRedisCenter* pRedis = new CRedisCenter;
+	pRedis->Init();
 
 	string strJsonContent = "{\"role_id\": 1,\"occupation\": \"paladin\",\"camp\": \"alliance\"}";
 	int nRoleDd = 0;
@@ -181,6 +185,8 @@ int main()
 	//}
 
 	//close(socket_fd);
+
+	system("pause");
 
     return 0;
 }
