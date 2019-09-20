@@ -12,4 +12,5 @@ kill -9 4394
 kill就是给某个进程id发送了一个信号。默认发送的信号是SIGTERM，而kill -9发送的信号是SIGKILL，
 即exit。exit信号不会被系统阻塞，所以kill -9能顺利杀掉进程。当然你也可以使用kill发送其他信号给进程。
 
-二、
+二、链接命令
+ln -s /usr/local/bin/protoc /usr/bin
