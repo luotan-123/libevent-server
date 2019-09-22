@@ -3,7 +3,6 @@
 #include <event2/event.h>
 #include <event2/event_struct.h>
 
-
 struct ServerTimerInfo
 {
 	unsigned int elapse;	// 定时器间隔（单位毫秒）
@@ -24,7 +23,7 @@ public:
 	~CServerTimer();
 	bool Start(CDataLine* pDataLine);
 	bool Stop();
-	bool SetTimer(unsigned int uTimerID, unsigned int uElapse); //uElapse是毫秒单位
+	bool SetTimer(unsigned int uTimerID, unsigned int uElapse); //uElapse是毫秒单位，大于100ms
 	bool KillTimer(unsigned int uTimerID);
 	bool ExistsTimer(unsigned int uTimerID);
 

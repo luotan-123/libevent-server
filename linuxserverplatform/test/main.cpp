@@ -41,18 +41,24 @@ void* TimerFun(void* p)
 		{
 			unsigned int bytes = pDataLine->GetData(pDataLineHead, sizeof(szBuffer));
 
-			struct timeval newtime, difference;
-			double elapsed;
-			evutil_gettimeofday(&newtime, NULL);
-			evutil_timersub(&newtime, &g_lasttime, &difference);
-			elapsed = difference.tv_sec +
-				(difference.tv_usec / 1.0e6);
-
 			ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
 
-			printf("timeout_cb called at %ld: %.3f seconds elapsed. timer %u \n",
-				newtime.tv_sec, elapsed, pTimerMessage->uTimerID);
-			g_lasttime = newtime;
+			if (pTimerMessage->uTimerID == 123456)
+			{
+				struct timeval newtime, difference;
+				double elapsed;
+				evutil_gettimeofday(&newtime, NULL);
+				evutil_timersub(&newtime, &g_lasttime, &difference);
+				elapsed = difference.tv_sec +
+					(difference.tv_usec / 1.0e6);
+
+
+
+				printf("timeout_cb called at %ld: %.3f seconds elapsed. timer %u \n",
+					newtime.tv_sec, elapsed, pTimerMessage->uTimerID);
+				g_lasttime = newtime;
+			}
+			
 		}
 
 	}
@@ -104,7 +110,8 @@ int main()
 	//ddd.Start(&dataline, 38);
 	CServerTimer *pTime = new CServerTimer;
 	pTime->Start(dataline);
-	pTime->SetTimer(654321, 500);
+	pTime->SetTimer(654321, 1700);
+	pTime->SetTimer(123456, 2100);
 	evutil_gettimeofday(&g_lasttime, NULL);
 	printf("currtime %ld\n", g_lasttime.tv_sec);
 	// ¿ª±ÙÏß³Ì

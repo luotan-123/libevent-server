@@ -45,7 +45,7 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 		return 0;
 	}
 
-	CSignedLockObject LockObject(&m_csLock, true);
+	CSignedLockObject LockObject(&m_csLock, false);
 
 	ListItemData* pListItem = new ListItemData;			//创建一个队列项
 
@@ -69,7 +69,12 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 		memcpy(pListItem->pData + uAddSize, pAppendData, uAppendAddSize);
 	}
 
+	// 加锁
+	LockObject.Lock();
+
 	m_DataList.push_back(pListItem);								//加到队列尾部
+
+	LockObject.UnLock();
 
 	//BOOL ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//通知完成端口
 	//if (ret == FALSE)
@@ -94,9 +99,12 @@ Return			:取出数据的实际大小
 */
 UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 {
-	CSignedLockObject LockObject(&m_csLock, true);
-
 	memset(pDataBuffer, 0, uBufferSize);
+
+	CSignedLockObject LockObject(&m_csLock, false);
+
+	LockObject.Lock();
+
 	//如果队列是空的，直接返回
 	if (m_DataList.size() <= 0)
 	{
@@ -106,6 +114,8 @@ UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 	//取数据
 	ListItemData* pListItem = m_DataList.front();
 	m_DataList.pop_front();
+
+	LockObject.UnLock();
 
 	UINT uDataSize = pListItem->stDataHead.uSize;
 
@@ -148,6 +158,7 @@ bool CDataLine::CleanLineData()
 // 获取队列数据数量
 size_t CDataLine::GetDataCount(void)
 {
-	CSignedLockObject LockObject(&m_csLock, true);
+	//CSignedLockObject LockObject(&m_csLock, true);
+
 	return m_DataList.size();
 }

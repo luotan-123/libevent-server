@@ -60,7 +60,7 @@ struct GameUserInfo
 
 // 游戏玩家管理类, 管理一个游戏中玩家的信息
 class CGameMainManage;
-class KERNEL_CLASS CGameUserManage
+class CGameUserManage
 {
 public:
 	CGameUserManage();

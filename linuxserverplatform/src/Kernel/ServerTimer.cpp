@@ -4,7 +4,8 @@
 #include "Function.h"
 #include "ServerTimer.h"
 
-// 定时器精度，单位毫秒
+
+// 定时器精度，单位毫秒。
 #define SERVER_TIME_ONCE	100
 
 // 定时器测试代码宏
