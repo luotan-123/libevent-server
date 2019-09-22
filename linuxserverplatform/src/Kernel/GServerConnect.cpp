@@ -363,7 +363,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	int err = pthread_create(&connectThreadID, NULL, ThreadCheckConnect, (void*)this);
 	if (err != 0)
 	{
-		CON_ERROR_LOG("ThreadCheckConnect failed: %s\n", strerror(err));
+		SYS_ERROR_LOG("ThreadCheckConnect failed");
 		return false;
 	}
 
@@ -381,7 +381,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 		pthread_create(&threadID, NULL, ThreadRSSocket, (void*)this);
 		if (err != 0)
 		{
-			CON_ERROR_LOG("ThreadRSSocket failed: %s\n", strerror(err));
+			SYS_ERROR_LOG("ThreadRSSocket failed");
 			return false;
 		}
 

@@ -294,7 +294,7 @@ std::string CRedisLogon::CreatePrivateDeskRecord(int userID, int roomID, BYTE ma
 			return "";
 		}
 
-		sprintf(redisCmd, "HMSET %s roomID %d deskIdx %d masterID %d passwd %s buyGameCount %d gameRules %s createTime %I64d masterNotPlay %d payType %d currDeskUserCount 0 maxDeskUserCount %d currWatchUserCount 0 maxWatchUserCount %d checkTime %I64d friendsGroupID %d friendsGroupDeskNumber %d curGameCount 0",
+		sprintf(redisCmd, "HMSET %s roomID %d deskIdx %d masterID %d passwd %s buyGameCount %d gameRules %s createTime %lld masterNotPlay %d payType %d currDeskUserCount 0 maxDeskUserCount %d currWatchUserCount 0 maxWatchUserCount %d checkTime %lld friendsGroupID %d friendsGroupDeskNumber %d curGameCount 0",
 			key.c_str(), roomID, deskIndex, userID, passwd.c_str(), buyGameCount, pGameRules[0] != '\0' ? pGameRules : REDIS_STR_DEFAULT, currTime, masterNotPlay, payType, maxDeskUserCount, maxWatchUserCount, currTime, friendsGroupID, friendsGroupDeskNumber);
 
 		// 创建一条记录

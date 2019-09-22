@@ -290,7 +290,7 @@ CAutoLogCost::~CAutoLogCost()
 
 	if (costTime >= m_microSecs)
 	{
-		sprintf(m_buf + strlen(m_buf), "costTime:¡¾%I64dus¡¿\n", costTime);
+		sprintf(m_buf + strlen(m_buf), "costTime:[%lldus]\n", costTime);
 		CLog::Write(m_logFile, m_buf);
 	}
 }

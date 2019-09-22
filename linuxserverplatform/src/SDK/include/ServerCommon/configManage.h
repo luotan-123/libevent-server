@@ -210,7 +210,8 @@ struct LoaderServerConfig
 struct CommonConfig
 {
 	int logLevel;
-	int IOCPWorkThreadNumber;
+	int WorkThreadNumber;
+	int TimerThreadNumber;
 
 	CommonConfig()
 	{

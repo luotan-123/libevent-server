@@ -55,7 +55,8 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 
 /////////////////////////////////////////////////////////
 // 线程处理时间间隔 单位微妙
-#define THREAD_ONCE_DATABASE					40000   // 40ms
+#define THREAD_ONCE_DATABASE					50000   // 数据处理线程间隔
+#define THREAD_ONCE_HANDLE_MSG					20000   // 消息处理线程间隔
 
 /////////////////////////////////枚举模块/////////////////////////////////////////
 

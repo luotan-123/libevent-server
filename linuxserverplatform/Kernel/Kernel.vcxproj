@@ -126,6 +126,7 @@
     <ClCompile Include="..\src\Kernel\Lock.cpp" />
     <ClCompile Include="..\src\Kernel\log.cpp" />
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp" />
+    <ClCompile Include="..\src\Kernel\ServerTimer.cpp" />
     <ClCompile Include="..\src\Kernel\TcpConnect.cpp" />
     <ClCompile Include="..\src\Kernel\Xor.cpp" />
   </ItemGroup>
@@ -147,6 +148,7 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\log.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\ServerTimer.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\TcpConnect.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Xor.h" />
   </ItemGroup>
@@ -158,7 +160,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -177,7 +179,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -196,7 +198,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -215,7 +217,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -234,7 +236,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -254,7 +256,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -273,7 +275,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -292,7 +294,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>

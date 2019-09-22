@@ -94,7 +94,7 @@ bool CDataBaseManage::Start()
 	int err = pthread_create(&threadID, NULL, DataServiceThread, (void*)& ThreadStartData);
 	if (err != 0)
 	{
-		CON_ERROR_LOG("DataServiceThread failed: %s\n", strerror(err));
+		SYS_ERROR_LOG("DataServiceThread failed");
 		return false;
 	}
 

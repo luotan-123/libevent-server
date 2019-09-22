@@ -1,14 +1,29 @@
-#include "pch.h"
-#include "ServerTimer.h"
+#include "CommonHead.h"
+#include "DataLine.h"
 #include "log.h"
-#include "Lock.h"
-#include "InternalMessageDefine.h"
+#include "Function.h"
+#include "ServerTimer.h"
+
+// 定时器精度，单位毫秒
+#define SERVER_TIME_ONCE	100
+
+// 定时器测试代码宏
+//#define TEST_TIMER_CODE
+
+#ifdef TEST_TIMER_CODE
+struct timeval g_lasttime;
+#endif
+
+struct TimerParam
+{
+	CServerTimer* pCServerTimer;
+	struct event_base* base;
+};
 
 CServerTimer::CServerTimer()
 {
 	m_bRun = false;
 	m_pDataLine = NULL;
-	m_llTimeslice = 0;
 	m_pLock = new CSignedLock;
 }
 
@@ -21,6 +36,8 @@ CServerTimer::~CServerTimer()
 
 bool CServerTimer::Start(CDataLine* pDataLine)
 {
+	INFO_LOG("CServerTimer thread begin...");
+
 	if (!pDataLine)
 	{
 		CON_ERROR_LOG("pDataLine == NULL");
@@ -31,18 +48,27 @@ bool CServerTimer::Start(CDataLine* pDataLine)
 	m_bRun = true;
 
 	// 开辟线程
-	unsigned int connectThreadID = 0;
-	_beginthreadex(NULL, 0, ThreadCheckTimer, this, 0, &connectThreadID);
+	pthread_t threadID = 0;
+	int err = pthread_create(&threadID, NULL, ThreadCheckTimer, (void*)this);
+	if (err != 0)
+	{
+		SYS_ERROR_LOG("ThreadCheckTimer failed");
+		return false;
+	}
 
 	return true;
 }
+
 bool CServerTimer::Stop()
 {
+	INFO_LOG("CServerTimer thread exit.");
+
 	m_bRun = false;
 	m_timerMap.clear();
-
+	
 	return true;
 }
+
 bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse)
 {
 	if (uElapse < SERVER_TIME_ONCE)
@@ -50,11 +76,12 @@ bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse)
 		uElapse = SERVER_TIME_ONCE;
 	}
 
-	CSignedLockObject lock(m_pLock, true);
-
 	ServerTimerInfo info;
-	info.elapse = uElapse / SERVER_TIME_ONCE;
-	info.startslice = m_llTimeslice + info.elapse;
+
+	info.elapse = uElapse / SERVER_TIME_ONCE * SERVER_TIME_ONCE;
+	info.starttime = GetSysMilliseconds() / SERVER_TIME_ONCE * SERVER_TIME_ONCE + uElapse;
+
+	CSignedLockObject lock(m_pLock, true);
 
 	m_timerMap[uTimerID] = info;
 
@@ -87,50 +114,79 @@ bool CServerTimer::ExistsTimer(unsigned int uTimerID)
 	return true;
 }
 
-unsigned __stdcall CServerTimer::ThreadCheckTimer(LPVOID pThreadData)
+void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 {
-	INFO_LOG("CServerTimer thread begin...");
+	struct TimerParam* param = (struct TimerParam*)arg;
 
+	// 线程终止运行
+	if (!param->pCServerTimer->m_bRun)
+	{
+		event_base_loopbreak(param->base);
+	}
+
+#ifdef TEST_TIMER_CODE
+	struct timeval newtime, difference;
+	double elapsed;
+	evutil_gettimeofday(&newtime, NULL);
+	evutil_timersub(&newtime, &g_lasttime, &difference);
+	elapsed = difference.tv_sec +
+		(difference.tv_usec / 1.0e6);
+
+	printf("timeout_cb called at %ld: %.3f seconds elapsed.\n",
+		newtime.tv_sec, elapsed);
+	g_lasttime = newtime;
+#endif
+	
+	long long currTime = GetSysMilliseconds() / SERVER_TIME_ONCE * SERVER_TIME_ONCE;
+
+	// lock
+	CSignedLockObject lock(param->pCServerTimer->m_pLock, false);
+	lock.Lock();
+
+	for (auto iter = param->pCServerTimer->m_timerMap.begin(); iter != param->pCServerTimer->m_timerMap.end(); iter++)
+	{
+		if ((currTime - iter->second.starttime) % iter->second.elapse == 0 && param->pCServerTimer->m_pDataLine)
+		{
+			ServerTimerLine WindowTimer;
+			WindowTimer.uTimerID = iter->first;
+			param->pCServerTimer->m_pDataLine->AddData(&WindowTimer.LineHead, sizeof(WindowTimer), HD_TIMER_MESSAGE);
+		}
+	}
+
+	lock.UnLock();
+}
+
+void* CServerTimer::ThreadCheckTimer(void* pThreadData)
+{
 	CServerTimer* pThis = (CServerTimer*)pThreadData;
 	if (!pThis)
 	{
-		return -1;
+		pthread_exit(NULL);
 	}
+
+	struct event timeout;
+	struct event_base* base;
+
+	/* Initialize the event library */
+	base = event_base_new();
+
+	TimerParam param;
+	param.base = base;
+	param.pCServerTimer = pThis;
+
+	/* Initialize one event */
+	event_assign(&timeout, base, -1, EV_PERSIST, CServerTimer::TimeoutCB, (void*)&param);
 
 	struct timeval tv;
-	tv.tv_sec = 2;
+	tv.tv_sec = 0;
 	tv.tv_usec = SERVER_TIME_ONCE * 1000;
-	unsigned long long tick = 0;
-	
-	while (pThis->m_bRun)
-	{
-		if (tick != 0)
-		{
-			std::cout << GetTickCount64() - tick << std::endl;
-		}
-		tick = GetTickCount64();
-		
-		Sleep(SERVER_TIME_ONCE);
-		pThis->m_llTimeslice++;
+	event_add(&timeout, &tv);
 
-		// lock
-		CSignedLockObject lock(pThis->m_pLock, false);
-		lock.Lock();
+#ifdef TEST_TIMER_CODE
+	evutil_gettimeofday(&g_lasttime, NULL);
+#endif
 
-		for (auto iter = pThis->m_timerMap.begin(); iter != pThis->m_timerMap.end(); iter++)
-		{
-			if ((pThis->m_llTimeslice - iter->second.startslice) % iter->second.elapse == 0 && pThis->m_pDataLine)
-			{
-				WindowTimerLine WindowTimer;
-				WindowTimer.uTimerID = iter->first;
-				pThis->m_pDataLine->AddData(&WindowTimer.LineHead, sizeof(WindowTimer), HD_TIMER_MESSAGE);
-			}
-		}
+	event_base_dispatch(base);
 
-		lock.UnLock();
-	}
-
-	INFO_LOG("CServerTimer thread exit.");
-
-	return 0;
+	pthread_exit(NULL);
 }

@@ -33,6 +33,15 @@ void GetLocalTime(SYSTEMTIME* sysTime)
 	sysTime->lMicroseconds = tv.tv_usec;
 }
 
+//获取时间戳（单位：毫秒）
+long long GetSysMilliseconds()
+{
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+
+	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+
 //获取线程pid
 pthread_t GetCurrentThreadId()
 {

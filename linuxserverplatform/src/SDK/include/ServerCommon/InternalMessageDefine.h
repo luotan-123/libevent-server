@@ -48,7 +48,7 @@ struct SocketReadLine
 };
 
 //定时器消息结构定义
-struct WindowTimerLine
+struct ServerTimerLine
 {
 	DataLineHead						LineHead;					//队列头
 	UINT								uTimerID;					//定时器 ID
@@ -107,7 +107,7 @@ struct MSG_S_ConnectSuccess
 	BYTE						bMaxVer;							///最新版本号码
 	BYTE						bLessVer;							///最低版本号码
 	BYTE						bReserve[2];						///保留字段
-	UINT						i64CheckCode;						///加密后的校验码，由客户端解密在包头中返回
+	UINT						iCheckCode;							///加密后的校验码，由客户端解密在包头中返回
 
 	MSG_S_ConnectSuccess()
 	{
