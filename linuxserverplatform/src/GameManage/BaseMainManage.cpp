@@ -1,23 +1,19 @@
-#include "pch.h"
-#include "BaseMainManage.h"
-#include "Function.h"
+#include "CommonHead.h"
 #include "Exception.h"
-#include "commonuse.h"
-#include "GameLogManage.h"
-#include "InternalMessageDefine.h"
+#include "INIFile.h"
 #include "log.h"
 #include "PlatformMessage.h"
-#include "ConfigManage.h"
+#include "configManage.h"
 #include "Util.h"
+#include "BaseMainManage.h"
 
-#pragma warning (disable: 4355)
 
 //窗口线程启动结构
 struct WindowThreadStartStruct
 {
 	//变量定义
 	HANDLE								hEvent;						//启动事件
-	BOOL								bSuccess;					//启动成功标志
+	bool								bSuccess;					//启动成功标志
 	CBaseMainManage						* pMainManage;				//数据管理指针
 };
 
@@ -35,11 +31,8 @@ CBaseMainManage::CBaseMainManage()
 {
 	m_bInit = false;
 	m_bRun = false;
-	m_hWindow = NULL;
-	m_hHandleThread = NULL;
-	m_hWindowThread = NULL;
-	m_hCompletePort = NULL;
-	m_connectCServerHandle = NULL;
+	m_hHandleThread = 0;
+	m_connectCServerHandle = 0;
 
 	::memset(&m_DllInfo, 0, sizeof(m_DllInfo));
 	::memset(&m_InitData, 0, sizeof(m_InitData));
@@ -80,7 +73,7 @@ bool CBaseMainManage::Init(ManageInfoStruct * pInitData, IDataBaseHandleService 
 	ret = PreInitParameter(&m_InitData, &m_KernelData);
 	if (!ret)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init PreInitParameter 参数调节错误"), 0x41A);
+		throw new CException("CBaseMainManage::Init PreInitParameter 参数调节错误", 0x41A);
 	}
 
 	m_pRedis = new CRedisLoader;
@@ -92,7 +85,7 @@ bool CBaseMainManage::Init(ManageInfoStruct * pInitData, IDataBaseHandleService 
 	ret = m_pRedis->Init();
 	if (!ret)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init redis初始化失败（可能是redis服务器未启动）"), 0x401);
+		throw new CException("CBaseMainManage::Init redis初始化失败（可能是redis服务器未启动）", 0x401);
 	}
 
 	//vip房间才需要连接php redis
@@ -107,38 +100,38 @@ bool CBaseMainManage::Init(ManageInfoStruct * pInitData, IDataBaseHandleService 
 		ret = m_pRedisPHP->Init();
 		if (!ret)
 		{
-			throw new CException(TEXT("CBaseMainManage::Init redisPHP初始化失败（可能是redis PHP服务器未启动）"), 0x402);
+			throw new CException("CBaseMainManage::Init redisPHP初始化失败（可能是redis PHP服务器未启动）", 0x402);
 		}
 	}
 
 	ret = pDataHandleService->SetParameter(this, &m_SQLDataManage, &m_InitData, &m_KernelData);
 	if (!ret)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init pDataHandleService->SetParameter失败"), 0x41C);
+		throw new CException("CBaseMainManage::Init pDataHandleService->SetParameter失败", 0x41C);
 	}
 
 	ret = m_SQLDataManage.Init(&m_InitData, &m_KernelData, pDataHandleService, this);
 	if (!ret)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init m_SQLDataManage 初始化失败"), 0x41D);
+		throw new CException("CBaseMainManage::Init m_SQLDataManage 初始化失败", 0x41D);
 	}
 
 	m_pTcpConnect = new CTcpConnect;
 	if (!m_pTcpConnect)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init new CTcpConnect failed"), 0x43A);
+		throw new CException("CBaseMainManage::Init new CTcpConnect failed", 0x43A);
 	}
 
 	m_pGServerConnect = new CGServerConnect;
 	if (!m_pGServerConnect)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init new CGServerConnect failed"), 0x43A);
+		throw new CException("CBaseMainManage::Init new CGServerConnect failed", 0x43A);
 	}
 
 	ret = OnInit(&m_InitData, &m_KernelData);
 	if (!ret)
 	{
-		throw new CException(TEXT("CBaseMainManage::Init OnInit 函数错误"), 0x41B);
+		throw new CException("CBaseMainManage::Init OnInit 函数错误", 0x41B);
 	}
 
 	m_bInit = true;
@@ -333,28 +326,6 @@ bool CBaseMainManage::Stop()
 bool CBaseMainManage::Update()
 {
 	return OnUpdate();
-}
-
-//网络关闭处理
-bool CBaseMainManage::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime)
-{
-	SocketCloseLine SocketClose;
-	SocketClose.uConnectTime = uConnectTime;
-	SocketClose.uIndex = uIndex;
-	SocketClose.uAccessIP = uAccessIP;
-	return (m_DataLine.AddData(&SocketClose.LineHead, sizeof(SocketClose), HD_SOCKET_CLOSE) != 0);
-}
-
-//网络消息处理
-bool CBaseMainManage::OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, DWORD dwHandleID)
-{
-	SocketReadLine SocketRead;
-	SocketRead.uHandleSize = uSize;
-	SocketRead.uIndex = uIndex;
-	SocketRead.dwHandleID = dwHandleID;
-	SocketRead.uAccessIP = 0;		//todo
-	SocketRead.NetMessageHead = *pNetHead;
-	return (m_DataLine.AddData(&SocketRead.LineHead, sizeof(SocketRead), HD_SOCKET_READ, pData, uSize) != 0);
 }
 
 //定时器通知消息

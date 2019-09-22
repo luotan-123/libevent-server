@@ -23,3 +23,4 @@
 typedef unsigned int UINT;
 typedef unsigned long int ULONG;
 typedef unsigned char BYTE;
+typedef unsigned long HANDLE;

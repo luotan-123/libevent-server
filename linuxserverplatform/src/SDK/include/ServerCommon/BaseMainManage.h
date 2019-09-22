@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Interface.h"
-#include "ComStruct.h"
+#include "comstruct.h"
 #include "DataLine.h"
-#include "TCPSocket.h"
 #include "DataBase.h"
 #include "RedisLoader.h"
 #include "RedisPHP.h"
@@ -11,18 +10,15 @@
 #include "GServerConnect.h"
 
 //基础数据管理类
-class KERNEL_CLASS CBaseMainManage : public IServerSocketService, public IAsynThreadResultService
+class CBaseMainManage : public IAsynThreadResultService
 {
 protected:
 	bool									m_bRun;						//运行标志
 	bool									m_bInit;					//初始化标志
-	HWND									m_hWindow;					//窗口句柄
-	HANDLE									m_hWindowThread;			//窗口线程
 	HANDLE									m_hHandleThread;			//处理线程
-	HANDLE									m_hCompletePort;			//处理完成端口
-	CDataLine								m_DataLine;					//数据队列
 	HANDLE									m_connectCServerHandle;		//与中心服交互线程句柄
-
+	CDataLine								m_DataLine;					//数据队列
+	
 public:
 	ManageInfoStruct						m_InitData;					//初始化数据
 	KernelInfoStruct						m_KernelData;				//内核数据
@@ -55,13 +51,9 @@ public:
 	bool SetTimer(UINT uTimerID, UINT uElapse);
 	//清除定时器
 	bool KillTimer(UINT uTimerID);
-	//网络关闭处理 
-	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime);
-	//网络消息处理
-	virtual bool OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, DWORD dwHandleID);
 	//异步线程结果处理
 	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
-
+	//获取队列
 	virtual CDataLine* GetDataLine() { return &m_DataLine; }
 
 	//服务接口函数
@@ -86,18 +78,10 @@ private:
 	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize) = 0;
 	//定时器消息
 	virtual bool OnTimerMessage(UINT uTimerID) = 0;
-	//创建窗口为了生成定时器
-	bool CreateWindowsForTimer();
-	//定时器通知消息
-	bool WindowTimerMessage(UINT uTimerID);
 	//队列数据处理线程
-	static unsigned __stdcall LineDataHandleThread(LPVOID pThreadData);
-	//window消息循环线程
-	static unsigned __stdcall WindowMsgThread(LPVOID pThreadData);
-	//窗口回调函数
-	static LRESULT CALLBACK WindowProcFunc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	static void* LineDataHandleThread(void* pThreadData);
 	//与中心服务器连接线程
-	static unsigned __stdcall TcpConnectThread(LPVOID pThreadData);
+	static void* TcpConnectThread(void* pThreadData);
 
 private:
 	//处理中心服消息

@@ -115,9 +115,10 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\GameManage\gameUserManage.cpp" />
+    <ClCompile Include="..\src\GameManage\BaseMainManage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\BaseMainManage.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\gameUserManage.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">

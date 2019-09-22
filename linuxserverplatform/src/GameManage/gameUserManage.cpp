@@ -1,8 +1,8 @@
-#include "pch.h"
+#include "CommonHead.h"
 #include "Function.h"
-#include "GameUserManage.h"
 #include "RedisLoader.h"
 #include "GameMainManage.h"
+#include "GameUserManage.h"
 
 CGameUserManage::CGameUserManage()
 {
