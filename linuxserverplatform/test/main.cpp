@@ -66,6 +66,15 @@ void* TimerFun(void* p)
 
 int main()
 {
+	CServerTimer* m_pServerTimer = new CServerTimer;
+	printf("%d\n", GetNewArraySize(m_pServerTimer));
+
+	CServerTimer& cccccc = m_pServerTimer[2];
+
+	int a = 0;
+	int b = 123456;
+	unsigned long c = 123454;
+	a = Min_(b, c);
 	//GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 	//Team team;
@@ -92,7 +101,6 @@ int main()
 	//	Student s = t.student(i); // 按索引解repeated成员
 	//	cout << s.name() << " " << s.sex() << endl;
 	//}
-
 
 
 	CUtil::MkdirIfNotExists("log/");

@@ -7,6 +7,7 @@
 #include "RedisLoader.h"
 #include "RedisPHP.h"
 #include "TcpConnect.h"
+#include "ServerTimer.h"
 #include "GServerConnect.h"
 
 //基础数据管理类
@@ -28,7 +29,7 @@ public:
 	CRedisPHP*								m_pRedisPHP;				//连接php的redis server
 	CTcpConnect*							m_pTcpConnect;				//与中心服务器的连接
 	CGServerConnect*						m_pGServerConnect;			//与登录服务器的连接
-
+	CServerTimer*							m_pServerTimer;				//服务器定时器
 public:
 	CBaseMainManage();
 	virtual ~CBaseMainManage();
@@ -71,7 +72,7 @@ private:
 	//数据管理刷新模块
 	virtual bool OnUpdate() { return true; }
 	//socket数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID) = 0;
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID) = 0;
 	//socket关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime) = 0;
 	//异步线程处理结果

@@ -9,10 +9,13 @@
 #define  SafeDelete(pData)	{ try { delete pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL; } 
 
 //安全删除指针
-#define  SafeDeleteArray(pData)	{ try { delete [] pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL; } 
+#define  SafeDeleteArray(pData)	{ if(pData){ try { delete [] pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL;} } 
 
 //安全删除指针
 #define SAFE_DELETE(ptr) { if(ptr){	try{ delete ptr; }catch(...){ ERROR_LOG("CATCH: *** SAFE_DELETE(%s) crash! *** %s %d\n",#ptr,__FILE__, __LINE__); } ptr = 0; } }
+
+//获取动态数组指针大小
+extern int GetNewArraySize(void* pArray);
 
 //判断大小函数
 #define Min_(x,y) ((x)>(y)?(y):(x))

@@ -2,6 +2,25 @@
 #include <sys/syscall.h>
 #include "log.h"
 
+//获取动态数组指针大小
+int GetNewArraySize(void* pArray)
+{
+	if (pArray == NULL)
+	{
+		return 0;
+	}
+
+	int* p = (int*)pArray;
+	int iSize = *(p - 2);
+
+	if (iSize < 0 || iSize > INT32_MAX)
+	{
+		return 0;
+	}
+
+	return iSize;
+}
+
 // 获取系统时间
 void GetLocalTime(SYSTEMTIME* sysTime)
 {

@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -127,7 +127,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -139,7 +139,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -151,7 +151,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -163,7 +163,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -175,7 +175,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -187,7 +187,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -199,7 +199,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/redis;../src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>

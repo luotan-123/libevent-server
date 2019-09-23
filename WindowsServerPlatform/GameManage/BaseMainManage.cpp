@@ -176,6 +176,9 @@ bool CBaseMainManage::UnInit()
 		SAFE_DELETE(m_pRedisPHP);
 	}
 
+	SAFE_DELETE(m_pTcpConnect);
+	SAFE_DELETE(m_pGServerConnect);
+
 	return true;
 }
 
@@ -325,6 +328,9 @@ bool CBaseMainManage::Stop()
 		CloseHandle(m_hHandleThread);
 		m_hHandleThread = NULL;
 	}
+
+	//清理队列数据
+	m_DataLine.CleanLineData();
 
 	return true;
 }
