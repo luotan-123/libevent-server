@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Interface.h"
-#include "comstruct.h"
-#include "DataLine.h"
 #include "DataBase.h"
 #include "RedisLoader.h"
 #include "RedisPHP.h"
@@ -49,7 +46,7 @@ public:
 	//刷新服务
 	virtual bool Update();
 	//设定定时器
-	bool SetTimer(UINT uTimerID, UINT uElapse);
+	bool SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType = SERVERTIMER_TYPE_PERISIST);
 	//清除定时器
 	bool KillTimer(UINT uTimerID);
 	//异步线程结果处理

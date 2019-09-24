@@ -1,11 +1,9 @@
-#include "pch.h"
-#include "GameDataBaseHandle.h"
-#include "LoaderAsyncEvent.h"
-#include "MyCurl.h"
+#include "CommonHead.h"
 #include "log.h"
-#include "InternalMessageDefine.h"
 #include "configManage.h"
 #include "Define.h"
+#include "MyCurl.h"
+#include "GameDataBaseHandle.h"
 
 CGameDataBaseHandle::CGameDataBaseHandle()
 {
@@ -54,9 +52,9 @@ UINT CGameDataBaseHandle::HandleDataBase(DataBaseLineHead* pSourceData)
 
 int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead * pSourceData)
 {
-	if (pSourceData->DataLineHead.uSize != sizeof(LoaderAsyncUploadVideo))
+	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncUploadVideo))
 	{
-		ERROR_LOG("size is not match realsize=%d expect=%d", pSourceData->DataLineHead.uSize, sizeof(LoaderAsyncUploadVideo));
+		ERROR_LOG("size is not match realsize=%d expect=%d", pSourceData->dataLineHead.uSize, sizeof(LoaderAsyncUploadVideo));
 		return -1;
 	}
 
@@ -107,7 +105,7 @@ int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSourceD
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ÐÐsqlÓï¾äÊ§°Ü==>>%s", excep.errorInfo);
+		ERROR_LOG("Ö´ÐÐsqlÓï¾äÊ§°Ü==>>%s", excep.errorInfo.c_str());
 		return -3;
 	}
 
@@ -117,9 +115,9 @@ int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSourceD
 // HTTPÇëÇó
 int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
 {
-	if (pSourceData->DataLineHead.uSize != sizeof(LoaderAsyncHTTP))
+	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncHTTP))
 	{
-		ERROR_LOG("size is not match realsize=%d expect=%d", pSourceData->DataLineHead.uSize, sizeof(LoaderAsyncHTTP));
+		ERROR_LOG("size is not match realsize=%d expect=%d", pSourceData->dataLineHead.uSize, sizeof(LoaderAsyncHTTP));
 		return -1;
 	}
 
@@ -167,7 +165,7 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
 	{
 		//·µ»Ø½á¹û
 		char szBuffer[LD_MAX_PART] = "";
-		memcpy(szBuffer, result.c_str(), min(result.size(), LD_MAX_PART - 1));
+		memcpy(szBuffer, result.c_str(), Min_(result.size(), LD_MAX_PART - 1));
 
 		szBuffer[LD_MAX_PART - 1] = 0;
 

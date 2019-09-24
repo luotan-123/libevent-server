@@ -17,6 +17,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameManage", "GameManage\GameManage.vcxproj", "{9903BD27-B322-4B9A-99D2-760A8659DDB0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8896E74-DF5C-4AE3-89F6-72FD57A595D9} = {E8896E74-DF5C-4AE3-89F6-72FD57A595D9}
+		{C1B0FFE3-5A13-48B0-9BC1-F80139D35B1C} = {C1B0FFE3-5A13-48B0-9BC1-F80139D35B1C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -66,11 +66,11 @@ bool CServerTimer::Stop()
 
 	m_bRun = false;
 	m_timerMap.clear();
-	
+
 	return true;
 }
 
-bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse)
+bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse, BYTE timerType /*= SERVERTIMER_TYPE_PERISIST*/)
 {
 	if (uElapse < SERVER_TIME_ONCE)
 	{
@@ -81,6 +81,7 @@ bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse)
 
 	info.elapse = uElapse / SERVER_TIME_ONCE * SERVER_TIME_ONCE;
 	info.starttime = GetSysMilliseconds() / SERVER_TIME_ONCE * SERVER_TIME_ONCE + uElapse;
+	info.timertype = timerType;
 
 	CSignedLockObject lock(m_pLock, true);
 
@@ -137,21 +138,29 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 		newtime.tv_sec, elapsed);
 	g_lasttime = newtime;
 #endif
-	
+
 	long long currTime = GetSysMilliseconds() / SERVER_TIME_ONCE * SERVER_TIME_ONCE;
 
 	// lock
 	CSignedLockObject lock(param->pCServerTimer->m_pLock, false);
 	lock.Lock();
 
-	for (auto iter = param->pCServerTimer->m_timerMap.begin(); iter != param->pCServerTimer->m_timerMap.end(); iter++)
+	for (auto iter = param->pCServerTimer->m_timerMap.begin(); iter != param->pCServerTimer->m_timerMap.end();)
 	{
 		if ((currTime - iter->second.starttime) % iter->second.elapse == 0 && param->pCServerTimer->m_pDataLine)
 		{
 			ServerTimerLine WindowTimer;
 			WindowTimer.uTimerID = iter->first;
 			param->pCServerTimer->m_pDataLine->AddData(&WindowTimer.LineHead, sizeof(WindowTimer), HD_TIMER_MESSAGE);
+
+			if (iter->second.timertype == SERVERTIMER_TYPE_SINGLE)
+			{
+				param->pCServerTimer->m_timerMap.erase(iter++);
+				continue;
+			}
 		}
+	
+		iter++;
 	}
 
 	lock.UnLock();
@@ -176,7 +185,7 @@ void* CServerTimer::ThreadCheckTimer(void* pThreadData)
 	param.pCServerTimer = pThis;
 
 	/* Initialize one event */
-	event_assign(&timeout, base, -1, EV_PERSIST, CServerTimer::TimeoutCB, (void*)&param);
+	event_assign(&timeout, base, -1, EV_PERSIST, CServerTimer::TimeoutCB, (void*)& param);
 
 	struct timeval tv;
 	tv.tv_sec = 0;

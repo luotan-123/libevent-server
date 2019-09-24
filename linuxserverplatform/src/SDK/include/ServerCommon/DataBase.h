@@ -1,5 +1,12 @@
 #pragma once
 
+#include "comstruct.h"
+#include "Interface.h"
+#include "Lock.h"
+#include "DataLine.h"
+#include "Exception.h"
+#include "MysqlHelper.h"
+
 class CDataLine;
 class CDataBaseManage;
 

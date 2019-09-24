@@ -2,10 +2,6 @@
 
 #include "hiredis.h"
 #include "tableDefine.h"
-#include "comstruct.h"
-#include "Interface.h"
-#include "DataLine.h"
-#include "MysqlHelper.h"
 #include "configManage.h"
 #include "log.h"
 #include "DataBase.h"

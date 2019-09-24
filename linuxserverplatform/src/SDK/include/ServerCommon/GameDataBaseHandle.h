@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DataBase.h"
+#include "LoaderAsyncEvent.h"
 
 //游戏数据库处理
-class KERNEL_CLASS CGameDataBaseHandle : public CDataBaseHandle
+class CGameDataBaseHandle : public CDataBaseHandle
 {
 public:
 	CGameDataBaseHandle();

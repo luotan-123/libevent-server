@@ -354,7 +354,7 @@ bool CBaseMainManage::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResu
 }
 
 //设定定时器
-bool CBaseMainManage::SetTimer(UINT uTimerID, UINT uElapse)
+bool CBaseMainManage::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = SERVERTIMER_TYPE_PERISIST*/)
 {
 	if (!m_pServerTimer)
 	{
@@ -369,7 +369,7 @@ bool CBaseMainManage::SetTimer(UINT uTimerID, UINT uElapse)
 		return false;
 	}
 
-	m_pServerTimer[uTimerID % iTimerCount].SetTimer(uTimerID, uElapse);
+	m_pServerTimer[uTimerID % iTimerCount].SetTimer(uTimerID, uElapse, timerType);
 
 	return true;
 }
@@ -402,7 +402,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//线程启动数据指针
 	CBaseMainManage* pMainManage = pData->pMainManage;						//数据管理指针
 	CDataLine* m_pDataLine = &pMainManage->m_DataLine;				//数据队列指针
-	HANDLE	hCompletionPort = pData->hCompletionPort;				//完成端口
+	//HANDLE	hCompletionPort = pData->hCompletionPort;				//完成端口
 
 	//线程数据读取完成
 	//::SetEvent(pData->hEvent);
