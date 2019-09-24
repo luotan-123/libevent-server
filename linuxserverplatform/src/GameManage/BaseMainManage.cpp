@@ -411,7 +411,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	BYTE						szBuffer[LD_MAX_PART];
 	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
 
-	while (pMainManage->m_bRun == true)
+	while (pMainManage->m_bRun)
 	{
 		////等待完成端口
 		//bSuccess = ::GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED*)& OverData, INFINITE);

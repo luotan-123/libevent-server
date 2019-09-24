@@ -66,6 +66,8 @@ void* TimerFun(void* p)
 
 int main()
 {
+	system("");
+
 	CServerTimer* m_pServerTimer = new CServerTimer;
 	printf("%d\n", GetNewArraySize(m_pServerTimer));
 

@@ -14,7 +14,7 @@
 class CBaseMainManage : public IAsynThreadResultService
 {
 protected:
-	bool									m_bRun;						//运行标志
+	volatile bool							m_bRun;						//运行标志
 	bool									m_bInit;					//初始化标志
 	HANDLE									m_hHandleThread;			//处理线程
 	HANDLE									m_connectCServerHandle;		//与中心服交互线程句柄
