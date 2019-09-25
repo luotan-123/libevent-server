@@ -67,7 +67,6 @@ void* TimerFun(void* p)
 int main()
 {
 	//system("sh start.sh");
-
 	int a = 0;
 	int b = 123456;
 	unsigned long c = 123454;

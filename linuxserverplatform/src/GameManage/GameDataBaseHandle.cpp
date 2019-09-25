@@ -50,7 +50,7 @@ UINT CGameDataBaseHandle::HandleDataBase(DataBaseLineHead* pSourceData)
 	return 0;
 }
 
-int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead * pSourceData)
+int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead* pSourceData)
 {
 	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncUploadVideo))
 	{
@@ -82,7 +82,7 @@ int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead * pSourceData)
 }
 
 // Ö´ÐÐsqlÓï¾ä
-int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSourceData)
+int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData)
 {
 	AUTOCOST("Ö´ÐÐSQLÓï¾äºÄÊ±");
 
@@ -113,7 +113,7 @@ int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSourceD
 }
 
 // HTTPÇëÇó
-int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
+int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 {
 	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncHTTP))
 	{

@@ -1,20 +1,21 @@
 #pragma once
 
-#include <map>
+#include "CommonHead.h"
+#include "RedisLoader.h"
 #include "BaseMainManage.h"
 #include "gameUserManage.h"
-#include "GameDesk.h"
 #include "GameDataBaseHandle.h"
-#include "tableDefine.h"
-#include "GameLogManage.h"
-#include "log.h"
-#include "configManage.h"
-
-#pragma comment(lib, "json_vc71_libmt.lib")
+#include "Exception.h"
+#include "NewMessageDefine.h"
+#include "ErrorCode.h"
+#include "PlatformMessage.h"
+#include "json/json.h"
+#include "LoaderAsyncEvent.h"
+#include "MD5.h"
 
 using namespace std;
 
-#define TIME_SPACE						50			//游戏 ID 间隔
+#define TIME_SPACE						100			//游戏 ID 间隔
 #define TIME_START_ID					100			//定时器开始 ID
 
 #define OFFLINE_CHANGE_AGREE_STATUS					//断线改变准备状态。注释掉断线不改变准备状态
@@ -47,7 +48,7 @@ const int CHECK_COMBINE_DESK_GAME_BENGIN_SECS = 3;	// 组桌游戏开始定时器（修改这
 class CGameDesk;
 class CBaseMainManage;
 class CGameUserManage;
-class KERNEL_CLASS CGameMainManage : public CBaseMainManage
+class CGameMainManage : public CBaseMainManage
 {
 public:
 	CGameMainManage();
@@ -70,7 +71,7 @@ private:
 private:
 	//服务扩展接口函数 （本处理线程调用）
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	//SOCKET 关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
 	//异步线程处理结果
@@ -179,7 +180,7 @@ public: //中心服发送消息
 public:
 	void SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode);
 	//发送通知消息
-	bool SendErrNotifyMessage(int userID, LPCTSTR lpszMessage, int wType);
+	bool SendErrNotifyMessage(int userID, const char* lpszMessage, int wType);
 	// 获取玩家
 	GameUserInfo* GetUser(int userID);
 	// 玩家登出
@@ -316,12 +317,12 @@ private:
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData)
 	{
 		//设置使用网络
-		pKernelData->bStartTCPSocket = TRUE;
+		pKernelData->bStartTCPSocket = true;
 
 		//设置数据库信息
-		pKernelData->bLogonDataBase = TRUE;
-		pKernelData->bNativeDataBase = TRUE;
-		pKernelData->bStartSQLDataBase = TRUE;
+		pKernelData->bLogonDataBase = true;
+		pKernelData->bNativeDataBase = true;
+		pKernelData->bStartSQLDataBase = true;
 
 		//设置游戏信息
 		pKernelData->uNameID = pInitData->uNameID;
@@ -337,9 +338,9 @@ private:
 		}
 
 		//调节表名字
-		if (lstrcmp(pInitData->szLockTable, TEXT("N/A")) == 0) pInitData->szLockTable[0] = 0;
-		if (lstrcmp(pInitData->szIPRuleTable, TEXT("N/A")) == 0) pInitData->szIPRuleTable[0] = 0;
-		if (lstrcmp(pInitData->szNameRuleTable, TEXT("N/A")) == 0) pInitData->szNameRuleTable[0] = 0;
+		if (strcmp(pInitData->szLockTable, "N/A") == 0) pInitData->szLockTable[0] = 0;
+		if (strcmp(pInitData->szIPRuleTable, "N/A") == 0) pInitData->szIPRuleTable[0] = 0;
+		if (strcmp(pInitData->szNameRuleTable, "N/A") == 0) pInitData->szNameRuleTable[0] = 0;
 
 		return true;
 	};

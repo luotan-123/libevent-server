@@ -332,7 +332,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	m_roomID = roomID;
 
 	////建立事件
-	//m_hEventThread = ::CreateEvent(NULL, TRUE, false, NULL);
+	//m_hEventThread = ::CreateEvent(NULL, true, false, NULL);
 
 	// 分配内存
 	m_socketVec.clear();

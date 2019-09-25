@@ -1,8 +1,5 @@
-#include "CommonHead.h"
-#include "Function.h"
-#include "RedisLoader.h"
 #include "GameMainManage.h"
-#include "GameUserManage.h"
+#include "gameUserManage.h"
 
 CGameUserManage::CGameUserManage()
 {

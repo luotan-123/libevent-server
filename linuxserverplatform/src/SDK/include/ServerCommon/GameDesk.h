@@ -1,14 +1,8 @@
 #pragma once
 
-#include <map>
-#include <vector>
-#include <set>
-#include "TCPSocket.h"
 #include "GameMainManage.h"
-#include "NewMessageDefine.h"
-#include "PlatformMessage.h"
 #include "gameUserManage.h"
-#include "Util.h"
+
 
 //定时器
 #define IDT_AGREE_DISMISS_DESK		1		//同意解散桌子定时器
@@ -85,7 +79,7 @@ struct WatchUserInfo
 };
 
 class CGameMainManage;
-class KERNEL_CLASS CGameDesk
+class CGameDesk
 {
 public: //构造函数和析构函数
 	explicit CGameDesk(BYTE byBeginMode);
@@ -152,15 +146,15 @@ public:
 
 	// 接口函数
 public:
-	//初始化函数
+	// 初始化函数
 	bool Init(int deskIdx, BYTE bMaxPeople, CGameMainManage * pDataManage);
 	// 初始化购买桌子数据
 	void InitBuyDeskData();
 	// 初始化解散数据
 	void InitDismissData();
-	//设置定时器
-	bool SetTimer(UINT uTimerID, int uElapse);
-	//删除定时器
+	// 设置定时器，定时器默认只执行一次，可以修改timerType来实现永久定时器
+	bool SetTimer(UINT uTimerID, int uElapse, BYTE timerType = SERVERTIMER_TYPE_SINGLE);
+	// 删除定时器
 	bool KillTimer(UINT uTimerID);
 	// 获取房间类型
 	int GetRoomType();
@@ -206,7 +200,7 @@ public:
 	//发送旁观数据
 	bool SendWatchData(void * pData, int uSize, int mainID, int assistID, int handleCode);
 	//发送通知消息
-	bool SendGameMessage(BYTE deskStation, LPCTSTR lpszMessage, int wType = SMT_EJECT);
+	bool SendGameMessage(BYTE deskStation, const char * lpszMessage, int wType = SMT_EJECT);
 	// 广播桌子信息
 	void BroadcastDeskData(void *pData, int size, unsigned int mainID, unsigned int assistID, bool sendVirtual = true, unsigned int handleCode = 0);
 	// 发送所有玩家信息
@@ -238,7 +232,7 @@ public:
 	// 发送解散信息(用于断线重连)
 	void SendDismissData();
 	// 广播消息，设定不广播特定玩家
-	void BroadcastGameMessageExcept(BYTE deskStation, LPCTSTR lpszMessage, int wType = SMT_EJECT);
+	void BroadcastGameMessageExcept(BYTE deskStation, const char * lpszMessage, int wType = SMT_EJECT);
 
 	// 结算函数
 protected:

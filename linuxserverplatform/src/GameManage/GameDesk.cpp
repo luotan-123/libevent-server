@@ -1,18 +1,4 @@
-#include "pch.h"
 #include "GameDesk.h"
-#include "commonuse.h"
-#include "MD5.h"
-#include "RedisLoader.h"
-#include "NewMessageDefine.h"
-#include "configManage.h"
-#include "ErrorCode.h"
-#include <iphlpapi.h>
-#include "MyCurl.h"
-#include "log.h"
-#include "LoaderAsyncEvent.h"
-#include "Util.h"
-#include "BillManage.h"
-#include "json/json.h"
 
 CGameDesk::CGameDesk(BYTE byBeginMode) : m_byBeginMode(byBeginMode)
 {
@@ -75,10 +61,11 @@ bool CGameDesk::Init(int deskIdx, BYTE byMaxPeople, CGameMainManage * pDataManag
 	return true;
 }
 
-bool CGameDesk::SetTimer(UINT uTimerID, int uElapse)
+bool CGameDesk::SetTimer(UINT uTimerID, int uElapse, BYTE timerType/* = SERVERTIMER_TYPE_SINGLE*/)
 {
 	if (uTimerID >= TIME_SPACE)
 	{
+		ERROR_LOG("SetTimer error uTimerID >= %d", TIME_SPACE);
 		return false;
 	}
 
@@ -88,7 +75,7 @@ bool CGameDesk::SetTimer(UINT uTimerID, int uElapse)
 	}
 
 	unsigned int realTimerID = m_deskIdx * TIME_SPACE + uTimerID + TIME_START_ID;
-	return m_pDataManage->SetTimer(realTimerID, uElapse);
+	return m_pDataManage->SetTimer(realTimerID, uElapse, timerType);
 }
 
 bool CGameDesk::KillTimer(UINT uTimerID)
@@ -676,7 +663,6 @@ bool CGameDesk::OnTimer(UINT timerID)
 
 	if (timerID == IDT_FRIEND_ROOM_GAMEBEGIN && (roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_FG_VIP))
 	{
-		KillTimer(IDT_FRIEND_ROOM_GAMEBEGIN);
 		OnTimerFriendRoomGameBegin();
 	}
 
@@ -1712,7 +1698,7 @@ bool CGameDesk::SendWatchData(void * pData, int size, int mainID, int assistID, 
 	return true;
 }
 
-bool CGameDesk::SendGameMessage(BYTE deskStation, LPCTSTR lpszMessage, int wType/* = SMT_EJECT*/)
+bool CGameDesk::SendGameMessage(BYTE deskStation, const char * lpszMessage, int wType/* = SMT_EJECT*/)
 {
 	if (!lpszMessage)
 	{
@@ -1741,7 +1727,7 @@ bool CGameDesk::SendGameMessage(BYTE deskStation, LPCTSTR lpszMessage, int wType
 }
 
 // 广播消息，设定不广播特定玩家
-void CGameDesk::BroadcastGameMessageExcept(BYTE deskStation, LPCTSTR lpszMessage, int wType/* = SMT_EJECT*/)
+void CGameDesk::BroadcastGameMessageExcept(BYTE deskStation, const char * lpszMessage, int wType/* = SMT_EJECT*/)
 {
 	if (!lpszMessage)
 	{
@@ -1787,7 +1773,7 @@ bool CGameDesk::GetVideoCode(char *pCode, int iLen)
 	SYSTEMTIME sys;
 	GetLocalTime(&sys);
 
-	sprintf_s(buf, sizeof(buf), "%04d%02d%02d%02d%02d%02d%03d",
+	sprintf(buf, "%04d%02d%02d%02d%02d%02d%03d",
 		sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds);
 
 	memcpy(pCode, buf, iLen);
@@ -3775,8 +3761,8 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 
 		//既然换名字，金币数量也换
 		//回收机器人金币数量
-		__int64 _i64PoolMoney = 0;
-		__int64 _i64MoneyChange = 0;
+		long long _i64PoolMoney = 0;
+		long long _i64MoneyChange = 0;
 
 		RoomBaseInfo roomBasekInfo;
 		RoomBaseInfo* pRoomBaseInfo = NULL;
@@ -5177,7 +5163,7 @@ bool CGameDesk::GetRoomConfigInfo(char configInfo[2048], int size)
 		return false;
 	}
 
-	memcpy(configInfo, roomBaseInfo.configInfo, min(sizeof(roomBaseInfo.configInfo), size));
+	memcpy(configInfo, roomBaseInfo.configInfo, Min_(sizeof(roomBaseInfo.configInfo), size));
 
 	return true;
 }
@@ -5546,8 +5532,8 @@ void CGameDesk::OnDeskDissmissFinishSendData()
 
 		//填充玩家id
 		msg.userID[i] = userID;
-		memcpy_s(msg.name[i], sizeof(msg.name[i]), userData.name, sizeof(userData.name));
-		memcpy_s(msg.headURL[i], sizeof(msg.headURL[i]), userData.headURL, sizeof(userData.headURL));
+		memcpy(msg.name[i], userData.name, sizeof(userData.name));
+		memcpy(msg.headURL[i], userData.headURL, sizeof(userData.headURL));
 	}
 
 	BroadcastDeskData(&msg, sizeof(msg), MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_DISMISS_USERID);
@@ -5978,7 +5964,6 @@ bool CGameDesk::MatchRoomGameBegin()
 	//记录游戏开始需要的数据
 	m_bPlayGame = true;
 	m_beginTime = time(NULL);
-	KillTimer(IDT_FRIEND_ROOM_GAMEBEGIN);
 
 	// 局数
 	m_iRunGameCount++;

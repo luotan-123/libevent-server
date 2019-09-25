@@ -1,18 +1,5 @@
-#include "pch.h"
 #include "GameMainManage.h"
-#include "Exception.h"
-#include "RedisLoader.h"
-#include "gameUserManage.h"
-#include "NewMessageDefine.h"
-#include "ErrorCode.h"
-#include "log.h"
-#include "PlatformMessage.h"
-#include "Util.h"
-#include "Function.h"
-#include <string>
-#include "BillManage.h"
-#include "json/json.h"
-#include "LoaderAsyncEvent.h"
+#include "GameDesk.h"
 
 //////////////////////////////////////////////////////////////////////
 CGameMainManage::CGameMainManage()
@@ -116,11 +103,11 @@ bool CGameMainManage::OnStart()
 
 	if (m_InitData.iRoomSort == ROOM_SORT_HUNDRED)
 	{
-		SetTimer(LOADER_TIMER_HUNDRED_GAME_START, (3 + CUtil::GetRandNum() % 5) * 1000);
+		SetTimer(LOADER_TIMER_HUNDRED_GAME_START, (3 + CUtil::GetRandNum() % 5) * 1000, SERVERTIMER_TYPE_SINGLE);
 	}
 	else if (m_InitData.iRoomSort == ROOM_SORT_SCENE)
 	{
-		SetTimer(LOADER_TIMER_SCENE_GAME_START, (3 + CUtil::GetRandNum() % 5) * 1000);
+		SetTimer(LOADER_TIMER_SCENE_GAME_START, (3 + CUtil::GetRandNum() % 5) * 1000, SERVERTIMER_TYPE_SINGLE);
 	}
 
 	if (m_InitData.bCanCombineDesk && GetRoomType() == ROOM_TYPE_GOLD)
@@ -171,7 +158,7 @@ bool CGameMainManage::OnUpdate()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (!pNetHead)
 	{
@@ -384,7 +371,7 @@ bool CGameMainManage::InitGameDesk(UINT uDeskCount, UINT uDeskType)
 	m_pDeskArray = CreateDeskObject(uDeskCount, uDeskClassSize);
 	if (m_pDeskArray == NULL || uDeskClassSize == 0)
 	{
-		throw new CException(TEXT("CGameMainManage::InitGameDesk ÄÚ´æÉêÇëÊ§°Ü"), 0x418);
+		throw new CException("CGameMainManage::InitGameDesk ÄÚ´æÉêÇëÊ§°Ü", 0x418);
 	}
 
 	//ÉêÇëÄÚ´æ
@@ -392,7 +379,7 @@ bool CGameMainManage::InitGameDesk(UINT uDeskCount, UINT uDeskType)
 	m_pDesk = new CGameDesk *[m_uDeskCount];
 	if (m_pDesk == NULL)
 	{
-		throw new CException(TEXT("CGameMainManage::InitGameDesk ÄÚ´æÉêÇëÊ§°Ü"), 0x419);
+		throw new CException("CGameMainManage::InitGameDesk ÄÚ´æÉêÇëÊ§°Ü", 0x419);
 	}
 
 	//ÉèÖÃÖ¸Õë
@@ -1705,8 +1692,8 @@ bool CGameMainManage::OnHandleRobotRequestTakeMoney(int userID, void* pData, int
 	}
 
 	//»úÆ÷ÈË´Ó½±³ØÖÐÈ¡½ð±Ò
-	__int64 _i64PoolMoney = 0;
-	_i64PoolMoney = pUser->money - (__int64)pMessage->iMoney;
+	long long _i64PoolMoney = 0;
+	_i64PoolMoney = pUser->money - (long long)pMessage->iMoney;
 	//m_pRedis->SetRoomPoolMoney(GetRoomID(), _i64PoolMoney, true);
 	m_pRedis->SetUserMoney(userID, pMessage->iMoney);
 	pUser->money = pMessage->iMoney;
@@ -2146,7 +2133,7 @@ void CGameMainManage::SendData(int userID, void * pData, int size, unsigned int 
 	m_pGServerConnect->SendData(pUser->socketIdx, pData, size, mainID, assistID, handleCode, userID);
 }
 
-bool CGameMainManage::SendErrNotifyMessage(int userID, LPCTSTR lpszMessage, int wType/* = SMT_EJECT*/)
+bool CGameMainManage::SendErrNotifyMessage(int userID, const char * lpszMessage, int wType/* = SMT_EJECT*/)
 {
 	if (!lpszMessage || userID <= 0)
 	{
@@ -2421,8 +2408,6 @@ void CGameMainManage::CheckTimeoutNotOperateUser()
 
 void CGameMainManage::OnHundredGameStart()
 {
-	KillTimer(LOADER_TIMER_HUNDRED_GAME_START);
-
 	RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(GetRoomID());
 	if (pRoomBaseInfo->sort != ROOM_SORT_HUNDRED)
 	{
@@ -2441,8 +2426,6 @@ void CGameMainManage::OnHundredGameStart()
 
 void CGameMainManage::OnSceneGameStart()
 {
-	KillTimer(LOADER_TIMER_SCENE_GAME_START);
-
 	RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(GetRoomID());
 	if (pRoomBaseInfo->sort != ROOM_SORT_SCENE)
 	{
@@ -3917,7 +3900,7 @@ void CGameMainManage::SendMatchGiftMail(int userID, int gameID, BYTE matchType, 
 	}
 
 	char bufUserID[20] = "";
-	sprintf_s(bufUserID, 20, "%d", userID);
+	sprintf(bufUserID, "%d", userID);
 
 	//×éºÏÉú³ÉURL
 	std::string url = "http://";
@@ -3930,7 +3913,7 @@ void CGameMainManage::SendMatchGiftMail(int userID, int gameID, BYTE matchType, 
 	asyncEvent.userID = userID;
 	asyncEvent.postType = HTTP_POST_TYPE_MATCH_GIFT;
 
-	strcpy_s(asyncEvent.url, sizeof(asyncEvent.url), url.c_str());
+	strcpy(asyncEvent.url, url.c_str());
 
 	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
 }
@@ -3949,12 +3932,12 @@ void CGameMainManage::SendMatchFailMail(BYTE failReason, int userID, BYTE matchT
 
 	if (userID == 0)
 	{
-		sprintf_s(bufURL, sizeof(bufURL), "http://%s/hm_ucenter/web/index.php?api=match&action=matchNotStart&matchID=%d&reason=%d",
+		sprintf(bufURL, "http://%s/hm_ucenter/web/index.php?api=match&action=matchNotStart&matchID=%d&reason=%d",
 			otherConfig.http, gameMatchID, failReason);
 	}
 	else
 	{
-		sprintf_s(bufURL, sizeof(bufURL), "http://%s/hm_ucenter/web/index.php?api=match&action=matchFail&userID=%d&matchID=%d&reason=%d",
+		sprintf(bufURL, "http://%s/hm_ucenter/web/index.php?api=match&action=matchFail&userID=%d&matchID=%d&reason=%d",
 			otherConfig.http, userID, gameMatchID, failReason);
 	}
 

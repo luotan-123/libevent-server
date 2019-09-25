@@ -57,7 +57,7 @@ bool CDataBaseManage::Start()
 	m_bRun = true;
 
 	//建立事件
-	int StartEvent = 0;//CreateEvent(FALSE, TRUE, NULL, NULL);
+	int StartEvent = 0;//CreateEvent(FALSE, true, NULL, NULL);
 
 	////建立完成端口
 	//m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);

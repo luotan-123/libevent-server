@@ -92,6 +92,11 @@ bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse, BYTE ti
 
 bool CServerTimer::KillTimer(unsigned int uTimerID)
 {
+	if (!ExistsTimer(uTimerID))
+	{
+		return false;
+	}
+
 	CSignedLockObject lock(m_pLock, true);
 
 	auto iter = m_timerMap.find(uTimerID);

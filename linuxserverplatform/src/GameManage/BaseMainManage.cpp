@@ -1,6 +1,5 @@
 #include "CommonHead.h"
 #include "Exception.h"
-#include "INIFile.h"
 #include "log.h"
 #include "PlatformMessage.h"
 #include "configManage.h"
@@ -188,13 +187,13 @@ bool CBaseMainManage::Start()
 	m_bRun = true;
 
 	////建立事件
-	//HANDLE StartEvent = CreateEvent(FALSE, TRUE, NULL, NULL);
+	//HANDLE StartEvent = CreateEvent(FALSE, true, NULL, NULL);
 
 	////建立完成端口
 	//m_hCompletePort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
 	//if (m_hCompletePort == NULL)
 	//{
-	//	throw new CException(TEXT("CBaseMainManage::Start m_hCompletePort 建立失败"), 0x41D);
+	//	throw new CException("CBaseMainManage::Start m_hCompletePort 建立失败", 0x41D);
 	//}
 	//m_DataLine.SetCompletionHandle(m_hCompletePort);
 

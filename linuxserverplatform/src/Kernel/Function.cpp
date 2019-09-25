@@ -1,6 +1,6 @@
 #include "CommonHead.h"
 #include <sys/syscall.h>
-#include "log.h"
+#include "Function.h"
 
 //获取动态数组指针大小
 int GetNewArraySize(void* pArray)
