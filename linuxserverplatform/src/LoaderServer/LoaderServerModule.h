@@ -6,21 +6,21 @@
 struct GameRoomInitStruct
 {
 	//进程模式
-	UINT				  uRunStation;					//运行状态
-	HANDLE				  hProcessHandle;				//进程句柄
+	UINT					uRunStation;					//运行状态
+	HANDLE					hProcessHandle;				//进程句柄
 
-	//DLL 模式
-	HINSTANCE			  hDllInstance;					//组件句柄
-	IModuleManageService* pIManageService;				//服务接口
+	//动态库 模式
+	void*					hDllInstance;					//组件句柄
+	IModuleManageService*	pIManageService;				//服务接口
 
 	//设置信息
-	bool				  bEnable;						//是否启用
-	UINT				  uKindID;						//类型 ID
-	UINT				  uSortID;						//排列 ID
-	UINT				  uServiceID;					//组件 ID
-	TCHAR				  szRoomNote[50];				//房间备注
-	ManageInfoStruct	  InitInfo;						//初始化信息
-	ServerDllInfoStruct	  ServiceInfo;					//组件信息
+	bool					bEnable;						//是否启用
+	UINT					uKindID;						//类型 ID
+	UINT					uSortID;						//排列 ID
+	UINT					uServiceID;					//组件 ID
+	char					szRoomNote[50];				//房间备注
+	ManageInfoStruct		InitInfo;						//初始化信息
+	ServerDllInfoStruct		ServiceInfo;					//组件信息
 
 	GameRoomInitStruct()
 	{

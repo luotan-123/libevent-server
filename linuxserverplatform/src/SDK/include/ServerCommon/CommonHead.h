@@ -24,3 +24,9 @@ typedef unsigned int UINT;
 typedef unsigned long int ULONG;
 typedef unsigned char BYTE;
 typedef unsigned long HANDLE;
+
+// ∞Ê±æ∂®“Â
+#define VER_MAIN 2
+#define VER_MIDDLE 0
+#define VER_RESVERSE 0
+#define VER_BUILDTIME "2019"

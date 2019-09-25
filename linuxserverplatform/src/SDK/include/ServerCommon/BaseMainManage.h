@@ -21,7 +21,7 @@ protected:
 public:
 	ManageInfoStruct						m_InitData;					//初始化数据
 	KernelInfoStruct						m_KernelData;				//内核数据
-	ServerDllInfoStruct						m_DllInfo;					//DLL信息
+	ServerDllInfoStruct						m_DllInfo;					//动态库信息
 	CDataBaseManage							m_SQLDataManage;			//数据库模块
 	CRedisLoader*							m_pRedis;					//redis
 	CRedisPHP*								m_pRedisPHP;				//连接php的redis server

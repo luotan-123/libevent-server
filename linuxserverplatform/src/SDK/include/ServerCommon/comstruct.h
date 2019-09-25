@@ -2,7 +2,7 @@
 
 #pragma pack(1)
 
-///游戏组件信息结构 （服务器 DLL 组件获取）
+///游戏组件信息结构 （服务器动态库组件获取）
 struct ServerDllInfoStruct
 {
 	///游戏组件信息
@@ -53,7 +53,6 @@ struct ManageInfoStruct
 	UINT						uTax;								///税收比例
 	UINT						uListenPort;						///监听端口
 	UINT						uMaxPeople;							///最大连接数目
-	int							iSocketSecretKey;					///socket加密的密钥
 	char						szCenterIP[24];						///中心服ip
 	///服务器信息
 	UINT						uRoomID;							///游戏服务器 ID 号码
@@ -70,7 +69,7 @@ struct ManageInfoStruct
 	}
 };
 
-//内核数据 （服务器 DLL 组件启动设置）
+//内核数据 （服务器 动态库 组件启动设置）
 struct KernelInfoStruct
 {
 	UINT						uNameID;							//游戏名字 ID 号码

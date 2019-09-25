@@ -1,13 +1,9 @@
-#include "main.h"
 #include "LoaderServerModule.h"
-#include "configManage.h"
-#include "log.h"
-#include "commonuse.h"
-#include "Util.h"
+#include <dlfcn.h>
 
 //dll接口函数定义
 typedef IModuleManageService* (CreateServiceInterface)(UINT uVer);
-typedef BOOL(GetServiceInfo)(ServerDllInfoStruct* pServiceInfo, UINT uVer);
+typedef bool(GetServiceInfo)(ServerDllInfoStruct* pServiceInfo, UINT uVer);
 
 CLoaderServerModule::CLoaderServerModule()
 {
@@ -140,28 +136,36 @@ bool CLoaderServerModule::LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo)
 {
 	try
 	{
+		std::string soFileName = "./";
+		soFileName += pGameRoomInfo->ServiceInfo.szDLLFileName;
+
 		//判断文件
-		struct stat FileStat;
-		int ret = ::stat(pGameRoomInfo->ServiceInfo.szDLLFileName, &FileStat);
-		if (ret != 0)
+		if (!CINIFile::IsFileExist(soFileName.c_str()))
 		{
 			std::cout << "找不到文件 " << pGameRoomInfo->ServiceInfo.szDLLFileName << endl;
 			return false;
 		}
 
 		//加载组件
-		pGameRoomInfo->hDllInstance = LoadLibrary(pGameRoomInfo->ServiceInfo.szDLLFileName);
+		pGameRoomInfo->hDllInstance = dlopen(soFileName.c_str(), RTLD_NOW);
 		if (pGameRoomInfo->hDllInstance == NULL)
 		{
-			std::cout << "加载动态库失败 " << pGameRoomInfo->ServiceInfo.szDLLFileName << endl;
+			std::cout << "加载动态库失败 " << pGameRoomInfo->ServiceInfo.szDLLFileName <<" error:"<< dlerror() << endl;
 			return false;
 		}
 
 		//获取管理接口
-		CreateServiceInterface* pCreateServiceInterface = (CreateServiceInterface*)GetProcAddress(pGameRoomInfo->hDllInstance, TEXT("CreateServiceInterface"));
+		CreateServiceInterface* pCreateServiceInterface = (CreateServiceInterface*)dlsym(pGameRoomInfo->hDllInstance, "CreateServiceInterface");
 		if (pCreateServiceInterface == NULL)
 		{
 			std::cout << "加载动态库函数失败 " << "CreateServiceInterface" << endl;
+			return false;
+		}
+
+		char* perr = dlerror();
+		if (perr)
+		{
+			printf("load symbol failed:%s\n", perr);
 			return false;
 		}
 
@@ -172,10 +176,17 @@ bool CLoaderServerModule::LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo)
 			return false;
 		}
 
-		GetServiceInfo* pGetServiceInfo = (GetServiceInfo*)GetProcAddress(pGameRoomInfo->hDllInstance, TEXT("GetServiceInfo"));
+		GetServiceInfo* pGetServiceInfo = (GetServiceInfo*)dlsym(pGameRoomInfo->hDllInstance, "GetServiceInfo");
 		if (pGetServiceInfo == NULL)
 		{
 			std::cout << "加载动态库函数失败 " << "GetServiceInfo" << endl;
+			return false;
+		}
+
+		perr = dlerror();
+		if (perr)
+		{
+			printf("load symbol failed:%s\n", perr);
 			return false;
 		}
 
@@ -211,7 +222,6 @@ void CLoaderServerModule::MakeInitData(GameRoomInitStruct* pGameRoomInfo, int ro
 
 	pGameRoomInfo->InitInfo.uRoomID = roomID;
 	pGameRoomInfo->InitInfo.uNameID = pRoomBaseInfo->gameID;
-	pGameRoomInfo->InitInfo.iSocketSecretKey = SECRET_KEY;
 	pGameRoomInfo->InitInfo.uDeskCount = pRoomBaseInfo->deskCount;
 	pGameRoomInfo->InitInfo.bPrivate = pRoomBaseInfo->type == 1 ? true : false;
 	pGameRoomInfo->ServiceInfo.uDeskPeople = pGameBaseInfo->deskPeople;
@@ -244,17 +254,17 @@ bool CLoaderServerModule::StartGameRoom(GameRoomInitStruct* pGameRoomInfo)
 		//启动组件
 		if (pGameRoomInfo->pIManageService->InitService(&pGameRoomInfo->InitInfo) == false)
 		{
-			throw TEXT("组件初始化错误");
+			throw "组件初始化错误";
 		}
 
 		if (pGameRoomInfo->pIManageService->StartService(errCode) == false)
 		{
-			throw TEXT("组件启动错误");
+			throw "组件启动错误";
 		}
 
 		return true;
 	}
-	catch (TCHAR* szError)
+	catch (char* szError)
 	{
 		std::cout << szError << std::endl;
 		ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
@@ -282,7 +292,7 @@ bool CLoaderServerModule::StartGameRoom(GameRoomInitStruct* pGameRoomInfo)
 
 	if (pGameRoomInfo->hDllInstance != NULL)
 	{
-		FreeLibrary(pGameRoomInfo->hDllInstance);
+		dlclose(pGameRoomInfo->hDllInstance);
 		pGameRoomInfo->hDllInstance = NULL;
 	}
 
@@ -307,28 +317,28 @@ bool CLoaderServerModule::StopGameRoom(GameRoomInitStruct* pGameRoomInfo)
 		//停止组件
 		if (pGameRoomInfo->pIManageService->StoptService() == false)
 		{
-			throw TEXT("组件停止错误");
+			throw "组件停止错误";
 		}
 
 		if (pGameRoomInfo->pIManageService->UnInitService() == false)
 		{
-			throw TEXT("组件卸载错误");
+			throw "组件卸载错误";
 		}
 
 		if (pGameRoomInfo->pIManageService->DeleteService() == false)
 		{
-			throw TEXT("组件清理错误");
+			throw "组件清理错误";
 		}
 
 		pGameRoomInfo->pIManageService = NULL;
 
 		//卸载组件
-		FreeLibrary(pGameRoomInfo->hDllInstance);
+		dlclose(pGameRoomInfo->hDllInstance);
 		pGameRoomInfo->hDllInstance = NULL;
 
 		return true;
 	}
-	catch (TCHAR* szError)
+	catch (char* szError)
 	{
 		std::cout << szError << std::endl;
 		ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
@@ -355,7 +365,7 @@ bool CLoaderServerModule::StopGameRoom(GameRoomInitStruct* pGameRoomInfo)
 	}
 	if (pGameRoomInfo->hDllInstance != NULL)
 	{
-		FreeLibrary(pGameRoomInfo->hDllInstance);
+		dlclose(pGameRoomInfo->hDllInstance);
 		pGameRoomInfo->hDllInstance = NULL;
 	}
 

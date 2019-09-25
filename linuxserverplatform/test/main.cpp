@@ -20,6 +20,7 @@
 #include "NewMessageDefine.h"
 #include "test.pb.h"
 #include "ServerTimer.h"
+#include "GameMainManage.h"
 
 
 using namespace test;
@@ -66,6 +67,7 @@ void* TimerFun(void* p)
 
 int main()
 {
+	getchar();
 	//system("sh start.sh");
 	int a = 0;
 	int b = 123456;

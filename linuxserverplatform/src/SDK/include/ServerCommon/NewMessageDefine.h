@@ -320,7 +320,7 @@ struct LogonRequestBuyDesk
 	int		gameID;				// 游戏ID
 	int		count;				// 购买局数
 	BYTE	needExt;			// 是否自动扩展（0:不自动扩展，满局就解散 1:是）
-	char	gameRules[256];		// 游戏规则。 json 格式，游戏DLL端和客户端自行定义 {"zhuang":"0"}
+	char	gameRules[256];		// 游戏规则。 json 格式，游戏动态库端和客户端自行定义 {"zhuang":"0"}
 	BYTE	masterNotPlay;		// 是否替他人开房(1:Yes 0:No)
 	int		friendsGroupID;     // 桌子的俱乐部ID
 	int		friendsGroupDeskNumber;	// 号码，0：vip房间(vip房间的号码由系统自动分配)，大于0：牌桌
