@@ -56,7 +56,7 @@ bool CRedisLogon::Stop()
 	return true;
 }
 
-// »ñÈ¡redis Context
+// è·å–redis Context
 redisContext* CRedisLogon::GetRedisContext()
 {
 	return m_pContext;
@@ -64,18 +64,18 @@ redisContext* CRedisLogon::GetRedisContext()
 
 int CRedisLogon::Register(const UserData& userData, BYTE registerType)
 {
-	//ĞÂÍæ¼ÒID
+	//æ–°ç©å®¶ID
 	int newUserID = GetCurMaxUserID() + 1;
 
 	std::string key = MakeKey(TBL_USER, newUserID);
 
-	// Í¬²½Êı¾İ
+	// åŒæ­¥æ•°æ®
 	CRedisLock redisLock(m_pContext, key.c_str(), 5);
 
 	if (IsKeyExists(key.c_str()))
 	{
 		SetCurMaxUserID(newUserID + 1);
-		ERROR_LOG("ÓÃ»§ÒÑ¾­´æÔÚ:%s", key.c_str());
+		ERROR_LOG("ç”¨æˆ·å·²ç»å­˜åœ¨:%s", key.c_str());
 		return -1;
 	}
 
@@ -87,19 +87,19 @@ int CRedisLogon::Register(const UserData& userData, BYTE registerType)
 		sprintf(temp, "Phone%d", newUserID);
 		strAccount = temp;
 	}
-	else if (registerType == LOGON_TEL_PHONE)  //ÊÖ»ú×¢²á
+	else if (registerType == LOGON_TEL_PHONE)  //æ‰‹æœºæ³¨å†Œ
 	{
 		sprintf(temp, "%s", userData.phone);
 		strAccount = temp;
 	}
-	else if (registerType == LOGON_VISITOR)    //ÓÎ¿Í×¢²á
+	else if (registerType == LOGON_VISITOR)    //æ¸¸å®¢æ³¨å†Œ
 	{
-		// Ìî³äÕËºÅ
+		// å¡«å……è´¦å·
 		sprintf(temp, "Visitor%d", newUserID);
 		strAccount = temp;
 
-		// Ìî³äÃû×Ö
-		sprintf(temp, "ÓÎ¿Í%d", newUserID);
+		// å¡«å……åå­—
+		sprintf(temp, "æ¸¸å®¢%d", newUserID);
 	}
 
 	std::unordered_map<std::string, std::string> umap;
@@ -158,7 +158,7 @@ int CRedisLogon::Register(const UserData& userData, BYTE registerType)
 		return -2;
 	}
 
-	//½¨Á¢±³°ü±í
+	//å»ºç«‹èƒŒåŒ…è¡¨
 	std::unordered_map<std::string, std::string> mmap;
 	mmap["userID"] = CUtil::Tostring(newUserID);
 	mmap["skillFrozen"] = CUtil::Tostring(0);
@@ -279,7 +279,7 @@ std::string CRedisLogon::CreatePrivateDeskRecord(int userID, int roomID, BYTE ma
 
 		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
-		// Í¬²½Êı¾İ
+		// åŒæ­¥æ•°æ®
 		CRedisLock redisLock(m_pContext, key.c_str(), 10);
 
 		if (IsKeyExists(key.c_str()))
@@ -287,7 +287,7 @@ std::string CRedisLogon::CreatePrivateDeskRecord(int userID, int roomID, BYTE ma
 			continue;
 		}
 
-		// Ëæ»úÉú³É6Î»µÄÃÜÂë
+		// éšæœºç”Ÿæˆ6ä½çš„å¯†ç 
 		std::string passwd = GetRandUnRepeatedDeskPasswd();
 		if (passwd == "")
 		{
@@ -297,18 +297,18 @@ std::string CRedisLogon::CreatePrivateDeskRecord(int userID, int roomID, BYTE ma
 		sprintf(redisCmd, "HMSET %s roomID %d deskIdx %d masterID %d passwd %s buyGameCount %d gameRules %s createTime %lld masterNotPlay %d payType %d currDeskUserCount 0 maxDeskUserCount %d currWatchUserCount 0 maxWatchUserCount %d checkTime %lld friendsGroupID %d friendsGroupDeskNumber %d curGameCount 0",
 			key.c_str(), roomID, deskIndex, userID, passwd.c_str(), buyGameCount, pGameRules[0] != '\0' ? pGameRules : REDIS_STR_DEFAULT, currTime, masterNotPlay, payType, maxDeskUserCount, maxWatchUserCount, currTime, friendsGroupID, friendsGroupDeskNumber);
 
-		// ´´½¨Ò»Ìõ¼ÇÂ¼
+		// åˆ›å»ºä¸€æ¡è®°å½•
 		redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 		REDIS_CHECKF(pReply, redisCmd);
 		freeReplyObject(pReply);
 
-		// ÉèÖÃË÷Òı
+		// è®¾ç½®ç´¢å¼•
 		SetMarkDeskIndex(roomID, deskIndex);
 
-		// ½âËø
+		// è§£é”
 		redisLock.Unlock();
 
-		// ¹¹½¨deskPasswdºÍdeskMixIDµÄÓ³Éä
+		// æ„å»ºdeskPasswdå’ŒdeskMixIDçš„æ˜ å°„
 		std::string deskPasswdKey = MakeKey(TBL_CACHE_DESK_PASSWD, passwd.c_str());
 		sprintf(redisCmd, "SET %s %d", deskPasswdKey.c_str(), deskMixID);
 
@@ -316,7 +316,7 @@ std::string CRedisLogon::CreatePrivateDeskRecord(int userID, int roomID, BYTE ma
 		REDIS_CHECKF(pReply, redisCmd);
 		freeReplyObject(pReply);
 
-		// ¼ÓÈëÍæ¼Ò¿ª·¿ÁĞ±í
+		// åŠ å…¥ç©å®¶å¼€æˆ¿åˆ—è¡¨
 		AddUserBuyDeskSet(userID, passwd);
 
 		return passwd;
@@ -383,7 +383,7 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 
 	for (size_t i = 0; i < pReply->elements; i++)
 	{
-		if (!updateAll && iSaveCount >= MAX_SAVE_DATA_COUNT) //Ã¿´Î×î¶à´¦ÀíÊı¾İÁ¿
+		if (!updateAll && iSaveCount >= MAX_SAVE_DATA_COUNT) //æ¯æ¬¡æœ€å¤šå¤„ç†æ•°æ®é‡
 		{
 			break;
 		}
@@ -394,7 +394,7 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 			continue;
 		}
 
-		//·Ö²¼Ê½´¦Àí
+		//åˆ†å¸ƒå¼å¤„ç†
 		if (!IsDistributedSystemCalculate(CUtil::BKDRHash(key)))
 		{
 			continue;
@@ -403,10 +403,10 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 		char tableName[64] = "";
 		int id = 0;
 
-		// ÊÇ¹şÏ£µÄkey±ØÈ»ÓĞtablenameºÍid
+		// æ˜¯å“ˆå¸Œçš„keyå¿…ç„¶æœ‰tablenameå’Œid
 		if (!ParseKey(key, tableName, id))
 		{
-			ERROR_LOG("½âÎökeyÊ§°Ü::key=%s", key);
+			ERROR_LOG("è§£ækeyå¤±è´¥::key=%s", key);
 			SremMember(CACHE_UPDATE_SET, key);
 			continue;
 		}
@@ -420,10 +420,10 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 
 		if (!SaveRedisDataToDB(key, tableName, id, extendMode))
 		{
-			ERROR_LOG("¶¨Ê±±£´æÊı¾İÊ§°Ü:key=%s", key);
+			ERROR_LOG("å®šæ—¶ä¿å­˜æ•°æ®å¤±è´¥:key=%s", key);
 		}
 
-		// ½«´¦ÀíµÄÍæ¼Ò´Ó¼¯ºÏÖĞÉ¾³ıTODO
+		// å°†å¤„ç†çš„ç©å®¶ä»é›†åˆä¸­åˆ é™¤TODO
 		SremMember(CACHE_UPDATE_SET, key);
 
 		iSaveCount++;
@@ -431,7 +431,7 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 
 	if (pReply->elements >= 1000)
 	{
-		INFO_LOG("×ÜÊı¾İ:%d£¬¹²±£´æÊı¾İ:%d", pReply->elements, iSaveCount);
+		INFO_LOG("æ€»æ•°æ®:%dï¼Œå…±ä¿å­˜æ•°æ®:%d", pReply->elements, iSaveCount);
 	}
 
 	freeReplyObject(pReply);
@@ -454,7 +454,7 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HGETALL %s", key);
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡redisÊı¾İÊ§°Ü,key=%s", key);
+		ERROR_LOG("è·å–redisæ•°æ®å¤±è´¥,key=%s", key);
 		return false;
 	}
 
@@ -485,28 +485,28 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 	}
 
 	m_vecFields.clear();
-	char account[129] = ""; // ÕËºÅ
-	char name[129] = ""; // ÌØÊâ×Ö·û×ªÒå±£´æµ½Êı¾İ¿â£¬×¢Òâ£ºÒ»ÕÅ±íÖĞ²»ÄÜÓĞÁ½¸öname
+	char account[129] = ""; // è´¦å·
+	char name[129] = ""; // ç‰¹æ®Šå­—ç¬¦è½¬ä¹‰ä¿å­˜åˆ°æ•°æ®åº“ï¼Œæ³¨æ„ï¼šä¸€å¼ è¡¨ä¸­ä¸èƒ½æœ‰ä¸¤ä¸ªname
 
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
 		const char* value = pReply->element[i + 1]->str;
 
-		// ¸ù¾İtableNameºÍfiled»ñÈ¡valueµÄÀàĞÍ
+		// æ ¹æ®tableNameå’Œfiledè·å–valueçš„ç±»å‹
 		int valueType = ConfigManage()->GetFieldType(tableName, field);
 		if (valueType <= FIELD_VALUE_TYPE_NONE || valueType >= FIELD_VALUE_TYPE_END)
 		{
-			ERROR_LOG("redisÊı¾İ×Ö¶Î´íÎó tableName=%s, field=%s, key=%s", tableName, field, key);
+			ERROR_LOG("redisæ•°æ®å­—æ®µé”™è¯¯ tableName=%s, field=%s, key=%s", tableName, field, key);
 			continue;
 		}
 
-		// ÌØÊâ×Ö¶ÎÌø¹ı
+		// ç‰¹æ®Šå­—æ®µè·³è¿‡
 		if (!strcmp(field, "extendMode"))
 		{
 			continue;
 		}
-		else if (!strcmp(field, "motto")) // UTF-8×Ö·û´®Ìø¹ı
+		else if (!strcmp(field, "motto")) // UTF-8å­—ç¬¦ä¸²è·³è¿‡
 		{
 			continue;
 		}
@@ -516,14 +516,14 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 		fieldInfo.field = field;
 		fieldInfo.type = valueType;
 
-		if (!strcmp(field, "name")) //×ªÒå²åÈë£¬ÓĞ¸öĞÔÇ©ÃûµÄ²¹ÉÏ¸öĞÔÇ©Ãû
+		if (!strcmp(field, "name")) //è½¬ä¹‰æ’å…¥ï¼Œæœ‰ä¸ªæ€§ç­¾åçš„è¡¥ä¸Šä¸ªæ€§ç­¾å
 		{
 			memcpy(name, value, Min_(strlen(value), sizeof(name)));
 
 			CUtil::TransString(name, sizeof(name), strlen(name));
 			fieldInfo.value = name;
 		}
-		else if (!strcmp(field, "account")) //×ªÒå²åÈë
+		else if (!strcmp(field, "account")) //è½¬ä¹‰æ’å…¥
 		{
 			memcpy(account, value, Min_(strlen(value), sizeof(account)));
 
@@ -560,7 +560,7 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 			}
 		}
 
-		// ×îºóµÄÄÇ¸ö¶ººÅ
+		// æœ€åçš„é‚£ä¸ªé€—å·
 		int pos = strlen(sql) - 2;
 		if (sql[pos] == ',')
 		{
@@ -615,7 +615,7 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 		sprintf(sql + strlen(sql), "%s", ") ");
 	}
 
-	// ½«sqlÓï¾äpushµ½Òì²½´¦ÀíÏß³Ì
+	// å°†sqlè¯­å¥pushåˆ°å¼‚æ­¥å¤„ç†çº¿ç¨‹
 	InternalSqlStatement msg;
 
 	memcpy(msg.sql, sql, sizeof(sql));
@@ -641,7 +641,7 @@ void CRedisLogon::ClearGradeInfo()
 		vecRoomID.push_back(roomBaseInfo.roomID);
 	}
 
-	//·Ö²¼Ê½´¦Àí
+	//åˆ†å¸ƒå¼å¤„ç†
 	for (size_t i = 0; i < vecRoomID.size(); i++)
 	{
 		if (!IsDistributedSystemCalculate(i))
@@ -655,7 +655,7 @@ void CRedisLogon::ClearGradeInfo()
 
 std::string CRedisLogon::GetRandUnRepeatedDeskPasswd()
 {
-	const int loop = 50;			// ×î´óÑ­»·´ÎÊı
+	const int loop = 50;			// æœ€å¤§å¾ªç¯æ¬¡æ•°
 
 	for (int i = 0; i < loop; i++)
 	{
@@ -675,7 +675,7 @@ std::string CRedisLogon::GetRandUnRepeatedDeskPasswd()
 
 void CRedisLogon::ClearGradeSimpleInfoByRoomID(int roomID)
 {
-	// »ñÈ¡Õ½¼¨ÇåÀí×îĞ¡id
+	// è·å–æˆ˜ç»©æ¸…ç†æœ€å°id
 	std::string clearKey = MakeKey(TBL_GRADE_SIMPLE_MIN_ID, roomID);
 	long long minClearIndex = GetKeyIndex(clearKey.c_str());
 	if (minClearIndex >= MAX_ROOM_GRADE_COUNT)
@@ -713,11 +713,11 @@ void CRedisLogon::ClearGradeSimpleInfoByRoomID(int roomID)
 
 	for (size_t i = 0; i < expireVec.size(); i++)
 	{
-		//É¾³ı´ó½áËãÕ½¼¨
+		//åˆ é™¤å¤§ç»“ç®—æˆ˜ç»©
 		std::string key = MakeKey(TBL_GRADE_SIMPLE, expireVec[i]);
 		DelKey(key.c_str());
 
-		//É¾³ı´ó½áËã¼¯ºÏ
+		//åˆ é™¤å¤§ç»“ç®—é›†åˆ
 		key = MakeKey(TBL_GRADE_SIMPLE_SET, expireVec[i]);
 		DelKey(key.c_str());
 	}
@@ -725,7 +725,7 @@ void CRedisLogon::ClearGradeSimpleInfoByRoomID(int roomID)
 
 void CRedisLogon::ClearGradeDetailInfoByRoomID(int roomID)
 {
-	// »ñÈ¡Õ½¼¨ÇåÀí×îĞ¡id
+	// è·å–æˆ˜ç»©æ¸…ç†æœ€å°id
 	std::string clearKey = MakeKey(TBL_GRADE_DETAIL_MIN_ID, roomID);
 	long long minClearIndex = GetKeyIndex(clearKey.c_str());
 	if (minClearIndex >= MAX_ROOM_GRADE_COUNT)
@@ -763,7 +763,7 @@ void CRedisLogon::ClearGradeDetailInfoByRoomID(int roomID)
 
 	for (size_t i = 0; i < expireVec.size(); i++)
 	{
-		//É¾³ıĞ¡½áËãÕ½¼¨
+		//åˆ é™¤å°ç»“ç®—æˆ˜ç»©
 		std::string key = MakeKey(TBL_GRADE_DETAIL, expireVec[i]);
 		DelKey(key.c_str());
 	}
@@ -781,7 +781,7 @@ void CRedisLogon::ClearUserGradeInfo(int userID)
 
 	std::vector<long long> expireVec;
 
-	// Èç¹ûÄ³¸ö¼ÇÂ¼²»´æÔÚÁË£¬ÄÇÃ´¾ÍÊÇ±»É¾ÁË
+	// å¦‚æœæŸä¸ªè®°å½•ä¸å­˜åœ¨äº†ï¼Œé‚£ä¹ˆå°±æ˜¯è¢«åˆ äº†
 	for (size_t i = 0; i < pReply->elements; i++)
 	{
 		const char* value = pReply->element[i]->str;
@@ -921,7 +921,7 @@ bool CRedisLogon::ClearAllUserWinCount()
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "ZRANGE %s 0 -1", TBL_RANKING_WINCOUNT);
 	if (pReply == NULL)
 	{
-		ERROR_LOG("ÇåÀíÃ¿ÖÜÊ¤¾ÖÊıÊ§°Ü");
+		ERROR_LOG("æ¸…ç†æ¯å‘¨èƒœå±€æ•°å¤±è´¥");
 		return false;
 	}
 
@@ -944,13 +944,13 @@ bool CRedisLogon::ClearAllUserWinCount()
 
 		if (!InnerHMSetCommand("", cmd))
 		{
-			ERROR_LOG("Ã¿ÖÜÇåÀíÊ¤¾ÖÊıÊ§°Ü::key=%s", key);
+			ERROR_LOG("æ¯å‘¨æ¸…ç†èƒœå±€æ•°å¤±è´¥::key=%s", key);
 		}
 	}
 
 	freeReplyObject(pReply);
 
-	// ÇåÀíÊ¤¾Ö
+	// æ¸…ç†èƒœå±€
 	DelKey(TBL_RANKING_WINCOUNT);
 
 	return true;
@@ -990,7 +990,7 @@ bool CRedisLogon::ClearOneDayWinMoney()
 			continue;
 		}
 
-		// ·Ö²¼Ê½´¦Àí
+		// åˆ†å¸ƒå¼å¤„ç†
 		if (!IsDistributedSystemCalculate(roomID))
 		{
 			continue;
@@ -1013,17 +1013,17 @@ bool CRedisLogon::ClearOneDayWinMoney()
 
 		if (!SetRoomPoolData(roomID, "gameWinMoney", -poolInfo.gameWinMoney, true))
 		{
-			ERROR_LOG("ÇåÀí½±³ØÊ§°Ü");
+			ERROR_LOG("æ¸…ç†å¥–æ± å¤±è´¥");
 		}
 
 		if (!SetRoomPoolData(roomID, "percentageWinMoney", -poolInfo.percentageWinMoney, true))
 		{
-			ERROR_LOG("ÇåÀí½±³ØÊ§°Ü");
+			ERROR_LOG("æ¸…ç†å¥–æ± å¤±è´¥");
 		}
 
 		if (!SetRoomPoolData(roomID, "otherWinMoney", -poolInfo.otherWinMoney, true))
 		{
-			ERROR_LOG("ÇåÀí½±³ØÊ§°Ü");
+			ERROR_LOG("æ¸…ç†å¥–æ± å¤±è´¥");
 		}
 
 	}
@@ -1041,7 +1041,7 @@ bool CRedisLogon::CountOneDayPoolInfo()
 	{
 		int roomID = itr->second.roomID;
 
-		// ·Ö²¼Ê½´¦Àí
+		// åˆ†å¸ƒå¼å¤„ç†
 		if (!IsDistributedSystemCalculate(roomID))
 		{
 			continue;
@@ -1058,7 +1058,7 @@ bool CRedisLogon::CountOneDayPoolInfo()
 			continue;
 		}
 
-		// Éú³ÉÃ¿ÌìµÄ½±³Ø¼ÇÂ¼
+		// ç”Ÿæˆæ¯å¤©çš„å¥–æ± è®°å½•
 		BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (time,roomID,poolMoney,gameWinMoney,percentageWinMoney,otherWinMoney) VALUES(%lld,%d,%lld,%lld,%lld,%lld)",
 			TBL_STATI_REWARDS_POOL, currTime, roomID, poolInfo.poolMoney, poolInfo.gameWinMoney, poolInfo.percentageWinMoney, poolInfo.otherWinMoney);
 	}
@@ -1066,7 +1066,7 @@ bool CRedisLogon::CountOneDayPoolInfo()
 	return true;
 }
 
-// Í¨¹ıÊÖ»úºÅ»ñÈ¡ÓÃ»§id
+// é€šè¿‡æ‰‹æœºå·è·å–ç”¨æˆ·id
 int CRedisLogon::GetUserIDByPhone(const char* phone)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
@@ -1110,7 +1110,7 @@ int  CRedisLogon::GetCurMaxUserID()
 	return ret;
 }
 
-// ÏĞÁÄµÇÂ½
+// é—²èŠç™»é™†
 int CRedisLogon::GetUserIDByXianLiao(const char* xianliao)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
@@ -1131,7 +1131,7 @@ int CRedisLogon::GetUserIDByXianLiao(const char* xianliao)
 	return userID;
 }
 
-//ÅĞ¶ÏÊÇ·ñÊÇµ±Ç°Ö÷Òª¼¯ÈºÏµÍ³
+//åˆ¤æ–­æ˜¯å¦æ˜¯å½“å‰ä¸»è¦é›†ç¾¤ç³»ç»Ÿ
 bool CRedisLogon::IsMainDistributedSystem()
 {
 	if (m_uLogonGroupIndex == m_uMainLogonGroupIndex)
@@ -1142,12 +1142,12 @@ bool CRedisLogon::IsMainDistributedSystem()
 	return false;
 }
 
-//Õâ¸öidÊÇ·ñµ±Ç°ÏµÍ³¼ÆËã
+//è¿™ä¸ªidæ˜¯å¦å½“å‰ç³»ç»Ÿè®¡ç®—
 bool CRedisLogon::IsDistributedSystemCalculate(long long calcID)
 {
 	if (m_uLogonGroupCount <= 0)
 	{
-		ERROR_LOG("########### ÖØ´ó´íÎóm_uLogonGroupCount=%d##############", m_uLogonGroupCount);
+		ERROR_LOG("########### é‡å¤§é”™è¯¯m_uLogonGroupCount=%d##############", m_uLogonGroupCount);
 		return false;
 	}
 
@@ -1159,7 +1159,7 @@ bool CRedisLogon::IsDistributedSystemCalculate(long long calcID)
 	return false;
 }
 
-// ÉèÖÃµÇÂ¼·şÈËÊı
+// è®¾ç½®ç™»å½•æœäººæ•°
 bool CRedisLogon::SetLogonServerCurrPeopleCount(int logonID, int peopleCount)
 {
 	if (logonID <= 0)
@@ -1181,7 +1181,7 @@ bool CRedisLogon::SetLogonServerCurrPeopleCount(int logonID, int peopleCount)
 int CRedisLogon::IsCanCreateFriendsGroupRoom(int userID, int friendsGroupID, BYTE userPower, int friendsGroupDeskNumber)
 {
 	BYTE managerPower = friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT ? FRIENDSGROUP_POWER_TYPE_VIPROOM : FRIENDSGROUP_POWER_TYPE_DESK;
-	// ÅĞ¶ÏÈ¨ÏŞ
+	// åˆ¤æ–­æƒé™
 	if (managerPower != (userPower & managerPower))
 	{
 		return 1;
@@ -1189,7 +1189,7 @@ int CRedisLogon::IsCanCreateFriendsGroupRoom(int userID, int friendsGroupID, BYT
 
 	if (friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT + MAX_FRIENDSGROUP_VIP_ROOM_COUNT || friendsGroupDeskNumber <= 0)
 	{
-		return 2; //ÅÆ×ÀºÅÂë´íÎó
+		return 2; //ç‰Œæ¡Œå·ç é”™è¯¯
 	}
 	else
 	{
@@ -1199,7 +1199,7 @@ int CRedisLogon::IsCanCreateFriendsGroupRoom(int userID, int friendsGroupID, BYT
 
 		if (iDeskIndex >= MAX_ROOM_HAVE_DESK_COUNT)
 		{
-			if (IsKeyExists(TBL_CACHE_DESK, iDeskIndex)) //ÅÆ×ÀÒÑ¾­´æÔÚ²»ÄÜ´´½¨
+			if (IsKeyExists(TBL_CACHE_DESK, iDeskIndex)) //ç‰Œæ¡Œå·²ç»å­˜åœ¨ä¸èƒ½åˆ›å»º
 			{
 				return 2;
 			}
@@ -1216,19 +1216,19 @@ int CRedisLogon::IsCanCreateFriendsGroupRoom(int userID, int friendsGroupID, BYT
 bool CRedisLogon::CreateFriendsGroupDeskInfo(int friendsGroupID, int friendsGroupDeskNumber, const std::string &deskPasswd,
 	int gameID, int roomType, OneFriendsGroupDeskInfo &deskInfo, bool &bHaveRedSpot)
 {
-	// ¸ù¾İÎ¨Ò»µÄÃÜÂë²éÑ¯Ë½ÓĞ×À×Ó
+	// æ ¹æ®å”¯ä¸€çš„å¯†ç æŸ¥è¯¢ç§æœ‰æ¡Œå­
 	int deskMixID = GetDeskMixIDByPasswd(deskPasswd.c_str());
 	if (deskMixID <= 0)
 	{
-		ERROR_LOG("´´½¨ÅÆ×ÀÊ§°Ü failed passwd=%s", deskPasswd.c_str());
+		ERROR_LOG("åˆ›å»ºç‰Œæ¡Œå¤±è´¥ failed passwd=%s", deskPasswd.c_str());
 		return false;
 	}
 
-	// ¸ù¾İdeskMixIDÈ¡³ö×À×ÓµÄÊı¾İ
+	// æ ¹æ®deskMixIDå–å‡ºæ¡Œå­çš„æ•°æ®
 	PrivateDeskInfo privateDeskInfo;
 	if (!GetPrivateDeskRecordInfo(deskMixID, privateDeskInfo))
 	{
-		ERROR_LOG("´´½¨ÅÆ×ÀÊ§°Ü GetPrivateDeskRecordInfo failed deskMixID %d", deskMixID);
+		ERROR_LOG("åˆ›å»ºç‰Œæ¡Œå¤±è´¥ GetPrivateDeskRecordInfo failed deskMixID %d", deskMixID);
 		return false;
 	}
 
@@ -1280,7 +1280,7 @@ bool CRedisLogon::GetTempFgDesk(const char * asskey, SaveRedisFriendsGroupDesk &
 	int elements = pReply->elements;
 	if (elements % 2 != 0 || elements == 0)
 	{
-		ERROR_LOG("»ñÈ¡¹Ø·şredisÊı¾İ³ö´í£¬¼ü:%s", asskey);
+		ERROR_LOG("è·å–å…³æœredisæ•°æ®å‡ºé”™ï¼Œé”®:%s", asskey);
 		freeReplyObject(pReply);
 		return false;
 	}
@@ -1354,10 +1354,10 @@ int CRedisLogon::GetAllTempFgDesk(std::vector<SaveRedisFriendsGroupDesk>& vecFGD
 		}
 		else
 		{
-			ERROR_LOG("»ñÈ¡¹Ø·ş±£´æÅÆ×ÀÊı¾İÊ§°Ü£¬key=%s", key);
+			ERROR_LOG("è·å–å…³æœä¿å­˜ç‰Œæ¡Œæ•°æ®å¤±è´¥ï¼Œkey=%s", key);
 		}
 
-		//É¾³ıÊı¾İ
+		//åˆ é™¤æ•°æ®
 		DelKey(key);
 	}
 

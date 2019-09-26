@@ -9,35 +9,35 @@ public:
 
 private:
 
-	BYTE   m_byLastCardList[20] ;  ///×îºóÒ»ÊÖÅÆµÄÁĞ±í
-	BYTE   m_byLastCardCount ;     ///×îºóÒ»ÊÖÅÆµÄÊıÁ¿
+	BYTE   m_byLastCardList[20] ;  ///æœ€åä¸€æ‰‹ç‰Œçš„åˆ—è¡¨
+	BYTE   m_byLastCardCount ;     ///æœ€åä¸€æ‰‹ç‰Œçš„æ•°é‡
 
-	BYTE   m_byBackCardType  ;   ///µ×ÅÆÅÆĞÍ 
+	BYTE   m_byBackCardType  ;   ///åº•ç‰Œç‰Œå‹ 
 
-	BYTE   m_byTaskType  ;       ///ĞèËæ»ú²úÉú
-	BYTE   m_bySpecifyShape ;    ///Ö¸¶¨µÄÅÆĞÍ
-	BYTE   m_bySpecifyCard ;     ///Ö¸¶¨µÄÅÆ
+	BYTE   m_byTaskType  ;       ///éœ€éšæœºäº§ç”Ÿ
+	BYTE   m_bySpecifyShape ;    ///æŒ‡å®šçš„ç‰Œå‹
+	BYTE   m_bySpecifyCard ;     ///æŒ‡å®šçš„ç‰Œ
 
 public:
-	///³õÊ¼ÈÎÎñ±äÁ¿
+	///åˆå§‹ä»»åŠ¡å˜é‡
 	void   InitGameTask(void) ; 
-	///»ñÈ¡µ×ÅÆÅÆĞÍ
+	///è·å–åº•ç‰Œç‰Œå‹
 	bool   GetBackCardType(BYTE bbackCardList[] , int  cbCardCount) ;  
-    ///µ×ÅÆÊÇ·ñÎªË³×Ó
+    ///åº•ç‰Œæ˜¯å¦ä¸ºé¡ºå­
 	bool   IsBackCardStraight(BYTE iCardList[],int iCardCount) ; 
-	// »ñÈ¡Ö¸¶¨ÅÆÃæÖµÅÆµÄÊıÁ¿
+	// è·å–æŒ‡å®šç‰Œé¢å€¼ç‰Œçš„æ•°é‡
 	int    GetCardNumCount(BYTE iCardList[], int iCardCount, BYTE bCardNum) ; 
-    ///»ñÈ¡Ëæ»úÈÎÎñ
-	void   GetRandTask(int inDex) ;  ///»ñÈ¡Ëæ»úÈÎÎñ
-	///    ÉèÖÃÈÎÎñ±äÁ¿
+    ///è·å–éšæœºä»»åŠ¡
+	void   GetRandTask(int inDex) ;  ///è·å–éšæœºä»»åŠ¡
+	///    è®¾ç½®ä»»åŠ¡å˜é‡
 	void   SetGameTask(GameTaskStruct &gameTask) ; 
-	///ÉèÖÃ×îºóÒ»ÊÖÅÆµÄÊı¾İ
+	///è®¾ç½®æœ€åä¸€æ‰‹ç‰Œçš„æ•°æ®
 	void   SetLastCardData(BYTE iCardList[], BYTE iCardCount)  ;
-	///ÅĞ¶ÏÊÇ·ñÍê³ÉÈÎÎñÁË
+	///åˆ¤æ–­æ˜¯å¦å®Œæˆä»»åŠ¡äº†
 	bool   IsFinishTask(void) ; 
-	///»ñÈ¡ÈÎÎñ±¶Êı
+	///è·å–ä»»åŠ¡å€æ•°
 	int   GetTaskMutiple(bool bFinish ) ;
-	///»ñÈ¡µ×ÅÆ±¶Êı
+	///è·å–åº•ç‰Œå€æ•°
 	int   GetBackCardMytiple(void) ; 
 
 };

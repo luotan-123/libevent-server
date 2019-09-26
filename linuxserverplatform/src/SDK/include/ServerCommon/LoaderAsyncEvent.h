@@ -2,18 +2,18 @@
 
 #include "DataBase.h"
 
-// ÓÎÏ··şÒì²½ÊÂ¼ş  2001-3000
+// æ¸¸æˆæœå¼‚æ­¥äº‹ä»¶  2001-3000
 
 //////////////////////////////////////////////////////////////////////
-#define	LOADER_ASYNC_EVENT_UPLOAD_VIDEO		2001		// ÉÏ´«Â¼Ïñ
-#define	LOADER_ASYNC_EVENT_HTTP				2002		// httpÇëÇó
+#define	LOADER_ASYNC_EVENT_UPLOAD_VIDEO		2001		// ä¸Šä¼ å½•åƒ
+#define	LOADER_ASYNC_EVENT_HTTP				2002		// httpè¯·æ±‚
 
 //////////////////////////////////////////////////////////////////////
 #pragma pack(1)
-// ÉÏ´«Â¼Ïñ
+// ä¸Šä¼ å½•åƒ
 struct LoaderAsyncUploadVideo
 {
-	DataBaseLineHead dataBaseHead;	//Êı¾İ°üÍ·
+	DataBaseLineHead dataBaseHead;	//æ•°æ®åŒ…å¤´
 	char videoCode[20];
 
 	LoaderAsyncUploadVideo()
@@ -22,10 +22,10 @@ struct LoaderAsyncUploadVideo
 	}
 };
 
-// HTTP ÇëÇó
+// HTTP è¯·æ±‚
 struct LoaderAsyncHTTP
 {
-	DataBaseLineHead dataBaseHead;	//Êı¾İ°üÍ·
+	DataBaseLineHead dataBaseHead;	//æ•°æ®åŒ…å¤´
 	char url[1024];
 	int userID;
 	BYTE postType;

@@ -18,20 +18,20 @@ CDataLine::~CDataLine()
 	}
 }
 
-//¼ÓÈëÏûÏ¢¶ÓÁĞ
+//åŠ å…¥æ¶ˆæ¯é˜Ÿåˆ—
 /*
 Function		:AddData
-Memo			:½«Êı¾İÑ¹Èëµ½¶ÓÁĞµ±ÖĞ
+Memo			:å°†æ•°æ®å‹å…¥åˆ°é˜Ÿåˆ—å½“ä¸­
 Author			:Fred Huang
 Add Data		:2008-3-4
 Modify Data		:none
 Parameter		:
-[IN]		pDataInfo	:ÒªÑ¹Èë¶ÓÁĞµÄÊı¾İÖ¸Õë
-[IN]		uAddSize	:Êı¾İ´óĞ¡
-[IN]		uDataKind	:Êı¾İÀàĞÍ
-[IN]		pAppendData	:¸½¼ÓÊı¾İ£¬¿ÉÄÜÊÇ¿ÕµÄ
-[IN]		pAppendAddSize	:¸½¼ÓÊı¾İ´óĞ¡£¬¿ÉÒÔÎª0£¬´ËÊ±ÊµÌåÊı¾İÎª¿Õ
-Return			:Ö¸Ñ¹Èë¶ÓÁĞµÄ´óĞ¡
+[IN]		pDataInfo	:è¦å‹å…¥é˜Ÿåˆ—çš„æ•°æ®æŒ‡é’ˆ
+[IN]		uAddSize	:æ•°æ®å¤§å°
+[IN]		uDataKind	:æ•°æ®ç±»å‹
+[IN]		pAppendData	:é™„åŠ æ•°æ®ï¼Œå¯èƒ½æ˜¯ç©ºçš„
+[IN]		pAppendAddSize	:é™„åŠ æ•°æ®å¤§å°ï¼Œå¯ä»¥ä¸º0ï¼Œæ­¤æ—¶å®ä½“æ•°æ®ä¸ºç©º
+Return			:æŒ‡å‹å…¥é˜Ÿåˆ—çš„å¤§å°
 */
 UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData, UINT uAppendAddSize)
 {
@@ -47,55 +47,55 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 
 	CSignedLockObject LockObject(&m_csLock, false);
 
-	ListItemData* pListItem = new ListItemData;			//´´½¨Ò»¸ö¶ÓÁĞÏî
+	ListItemData* pListItem = new ListItemData;			//åˆ›å»ºä¸€ä¸ªé˜Ÿåˆ—é¡¹
 
-	pListItem->pData = NULL;							//ÏÈÉèÎª0£¬ÒÔ±£Ö¤ºóĞø²»³ö´í
-	pListItem->stDataHead.uSize = uAddSize;				//Êı¾İ´óĞ¡
-	pListItem->stDataHead.uDataKind = uDataKind;		//Êı¾İÀàĞÍ
-	if (pAppendData)									//Èç¹ûÓĞ¸½¼ÓÊı¾İ
+	pListItem->pData = NULL;							//å…ˆè®¾ä¸º0ï¼Œä»¥ä¿è¯åç»­ä¸å‡ºé”™
+	pListItem->stDataHead.uSize = uAddSize;				//æ•°æ®å¤§å°
+	pListItem->stDataHead.uDataKind = uDataKind;		//æ•°æ®ç±»å‹
+	if (pAppendData)									//å¦‚æœæœ‰é™„åŠ æ•°æ®
 	{
 		pListItem->stDataHead.uSize += uAppendAddSize;
 	}
 
-	pListItem->pData = new BYTE[pListItem->stDataHead.uSize + 1];	//ÉêÇëÊı¾İÏîÄÚ´æ
-	memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//Çå¿ÕÄÚ´æ
+	pListItem->pData = new BYTE[pListItem->stDataHead.uSize + 1];	//ç”³è¯·æ•°æ®é¡¹å†…å­˜
+	memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//æ¸…ç©ºå†…å­˜
 
 	pDataInfo->uDataKind = uDataKind;
 	pDataInfo->uSize = pListItem->stDataHead.uSize;
 
-	memcpy(pListItem->pData, pDataInfo, uAddSize);					//¸´ÖÆÊµÌåÊı¾İ
-	if (pAppendData != NULL)										//Èç¹ûÓĞ¸½¼ÓÊı¾İ£¬¸´ÖÆÔÚÊµÌåÊı¾İºóÃæ
+	memcpy(pListItem->pData, pDataInfo, uAddSize);					//å¤åˆ¶å®ä½“æ•°æ®
+	if (pAppendData != NULL)										//å¦‚æœæœ‰é™„åŠ æ•°æ®ï¼Œå¤åˆ¶åœ¨å®ä½“æ•°æ®åé¢
 	{
 		memcpy(pListItem->pData + uAddSize, pAppendData, uAppendAddSize);
 	}
 
-	// ¼ÓËø
+	// åŠ é”
 	LockObject.Lock();
 
-	m_DataList.push_back(pListItem);								//¼Óµ½¶ÓÁĞÎ²²¿
+	m_DataList.push_back(pListItem);								//åŠ åˆ°é˜Ÿåˆ—å°¾éƒ¨
 
 	LockObject.UnLock();
 
-	//BOOL ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//Í¨ÖªÍê³É¶Ë¿Ú
+	//BOOL ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//é€šçŸ¥å®Œæˆç«¯å£
 	//if (ret == FALSE)
 	//{
 	//	//ERROR_LOG("CDataLine::AddData PostQueuedCompletionStatus failed err=%d", GetLastError());
 	//}
 
-	return pListItem->stDataHead.uSize;		//·µ»Ø´óĞ¡
+	return pListItem->stDataHead.uSize;		//è¿”å›å¤§å°
 }
 
-//ÌáÈ¡ÏûÏ¢Êı¾İ
+//æå–æ¶ˆæ¯æ•°æ®
 /*
 Function		:GetData
-Memo			:´Ó¶ÓÁĞÖĞÈ¡³öÊı¾İ
+Memo			:ä»é˜Ÿåˆ—ä¸­å–å‡ºæ•°æ®
 Author			:Fred Huang
 Add Data		:2008-3-4
 Modify Data		:none
 Parameter		:
-[OUT]		pDataBuffer	:È¡³öÊı¾İµÄ»º´æ
-[IN]		uBufferSize	:»º´æ´óĞ¡£¬È±Ê¡Îª LD_MAX_PART = 3096
-Return			:È¡³öÊı¾İµÄÊµ¼Ê´óĞ¡
+[OUT]		pDataBuffer	:å–å‡ºæ•°æ®çš„ç¼“å­˜
+[IN]		uBufferSize	:ç¼“å­˜å¤§å°ï¼Œç¼ºçœä¸º LD_MAX_PART = 3096
+Return			:å–å‡ºæ•°æ®çš„å®é™…å¤§å°
 */
 UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 {
@@ -105,13 +105,13 @@ UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 
 	LockObject.Lock();
 
-	//Èç¹û¶ÓÁĞÊÇ¿ÕµÄ£¬Ö±½Ó·µ»Ø
+	//å¦‚æœé˜Ÿåˆ—æ˜¯ç©ºçš„ï¼Œç›´æ¥è¿”å›
 	if (m_DataList.size() <= 0)
 	{
 		return 0;
 	}
 
-	//È¡Êı¾İ
+	//å–æ•°æ®
 	ListItemData* pListItem = m_DataList.front();
 	m_DataList.pop_front();
 
@@ -121,7 +121,7 @@ UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 
 	if (uDataSize <= LD_MAX_PART)
 	{
-		//Í¶µİÊı¾İ
+		//æŠ•é€’æ•°æ®
 		memcpy((void*)pDataBuffer, pListItem->pData, uDataSize);
 	}
 	else
@@ -130,14 +130,14 @@ UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 		uDataSize = 0;
 	}
 
-	//É¾³ı¶ÓÁĞÖĞµÄÊı¾İ
+	//åˆ é™¤é˜Ÿåˆ—ä¸­çš„æ•°æ®
 	delete[] pListItem->pData;
 	delete pListItem;
 
 	return uDataSize;
 }
 
-//ÇåÀíËùÓĞÊı¾İ
+//æ¸…ç†æ‰€æœ‰æ•°æ®
 bool CDataLine::CleanLineData()
 {
 	CSignedLockObject LockObject(&m_csLock, true);
@@ -155,7 +155,7 @@ bool CDataLine::CleanLineData()
 	return true;
 }
 
-// »ñÈ¡¶ÓÁĞÊı¾İÊıÁ¿
+// è·å–é˜Ÿåˆ—æ•°æ®æ•°é‡
 size_t CDataLine::GetDataCount(void)
 {
 	//CSignedLockObject LockObject(&m_csLock, true);

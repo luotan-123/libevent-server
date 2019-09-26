@@ -9,48 +9,48 @@ public:
 	virtual ~CRedisLogon();
 
 public:
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	virtual bool Init();
-	// ¹Ø±Õ
+	// å…³é—­
 	virtual bool Stop();
-	// »ñÈ¡redis Context
+	// è·å–redis Context
 	redisContext* GetRedisContext();
 public:
-	// ×¢²áÓÃ»§
+	// æ³¨å†Œç”¨æˆ·
 	int  Register(const UserData& userData, BYTE registerType);
 
-	// ¹ºÂò×À×ÓÏà¹Ø
+	// è´­ä¹°æ¡Œå­ç›¸å…³
 	int  GetDeskMixIDByPasswd(const char* passwd);
 	std::string CreatePrivateDeskRecord(int userID, int roomID, BYTE masterNotPlay, int maxDeskCount, int buyGameCount,
 		const char* pGameRules, int maxUserCount, int payType, int maxWatchUserCount, int	friendsGroupID, int friendsGroupDeskNumber);
 	int  GetMarkDeskIndex(int roomID);
 
-	//¹¤¾ßº¯Êı
+	//å·¥å…·å‡½æ•°
 	bool SetUserInfo(int userID, std::string strLine);
-	int GetRelevanceTrdUid(std::string triID);	// µÚÈı·½µÇÂ¼»ñÈ¡userID
-	int GetVisitorID(std::string triID);		// ¿ÍµÇÂ¼»ñÈ¡userID
+	int GetRelevanceTrdUid(std::string triID);	// ç¬¬ä¸‰æ–¹ç™»å½•è·å–userID
+	int GetVisitorID(std::string triID);		// å®¢ç™»å½•è·å–userID
 	bool ClearAllUserWinCount();
 	void AddUserBuyDeskSet(int userID, const std::string& passwd);
 	std::string GetRandUnRepeatedDeskPasswd();
 	bool ClearAllUserRanking(const char* ranking);
 
 
-	//½±³Ø²Ù×÷
+	//å¥–æ± æ“ä½œ
 	bool ClearOneDayWinMoney();
 	bool CountOneDayPoolInfo();
 
-	///////////////////////µÇÂ½×¢²á/////////////////////////////
-	// ÊÖ»úºÅµÇÂ¼
+	///////////////////////ç™»é™†æ³¨å†Œ/////////////////////////////
+	// æ‰‹æœºå·ç™»å½•
 	int GetUserIDByPhone(const char* phone);
-	// »ñÈ¡µ±Ç°×î´óid
+	// è·å–å½“å‰æœ€å¤§id
 	int  GetCurMaxUserID();
-	// ÏĞÁÄµÇÂ½
+	// é—²èŠç™»é™†
 	int GetUserIDByXianLiao(const char* xianliao);
 
-	// ÉèÖÃµÇÂ¼·şÈËÊı
+	// è®¾ç½®ç™»å½•æœäººæ•°
 	bool SetLogonServerCurrPeopleCount(int logonID, int peopleCount);
 
-	///////////////////////////////////Õ½¼¨Ä£¿é///////////////////////////////////////
+	///////////////////////////////////æˆ˜ç»©æ¨¡å—///////////////////////////////////////
 	bool GetGradeSimpleInfo(long long id, PrivateDeskGradeSimpleInfo& simpleInfoVec);
 	bool GetGradeDetailInfo(long long id, GameGradeInfo& gameGradeInfo);
 	void ClearGradeInfo();
@@ -58,26 +58,26 @@ public:
 	void ClearGradeSimpleInfoByRoomID(int roomID);
 	void ClearGradeDetailInfoByRoomID(int roomID);
 
-	///////////////////////////////////¾ãÀÖ²¿·¿¼äÄ£¿é///////////////////////////////////////
+	///////////////////////////////////ä¿±ä¹éƒ¨æˆ¿é—´æ¨¡å—///////////////////////////////////////
 	int IsCanCreateFriendsGroupRoom(int userID, int friendsGroupID, BYTE userPower, int friendsGroupDeskNumber);
 	bool CreateFriendsGroupDeskInfo(int friendsGroupID, int friendsGroupDeskNumber, const std::string &deskPasswd,
 		int gameID, int roomType, OneFriendsGroupDeskInfo &deskInfo, bool &bHaveRedSpot);
 	int GetFGDeskMixID(const char * asskey);
-	bool GetTempFgDesk(const char * asskey, SaveRedisFriendsGroupDesk & desk);  //»Ö¸´ÅÆ×ÀÓÃµ½
-	int GetAllTempFgDesk(std::vector<SaveRedisFriendsGroupDesk>& vecFGDesk);    //»Ö¸´ÅÆ×ÀÓÃµ½
+	bool GetTempFgDesk(const char * asskey, SaveRedisFriendsGroupDesk & desk);  //æ¢å¤ç‰Œæ¡Œç”¨åˆ°
+	int GetAllTempFgDesk(std::vector<SaveRedisFriendsGroupDesk>& vecFGDesk);    //æ¢å¤ç‰Œæ¡Œç”¨åˆ°
 public:
-	// ±£´æredisÖĞµÄÊı¾İµ½DB
+	// ä¿å­˜redisä¸­çš„æ•°æ®åˆ°DB
 	void RountineSaveRedisDataToDB(bool updateAll);
 	bool SaveRedisDataToDB(const char* key, const char* tableName, int id, int mode);
 
-	//·Ö²¼Ê½
-	bool IsMainDistributedSystem(); //ÅĞ¶ÏÊÇ·ñÊÇµ±Ç°Ö÷Òª¼¯ÈºÏµÍ³
-	bool IsDistributedSystemCalculate(long long calcID); //Õâ¸öidÊÇ·ñµ±Ç°ÏµÍ³¼ÆËã
+	//åˆ†å¸ƒå¼
+	bool IsMainDistributedSystem(); //åˆ¤æ–­æ˜¯å¦æ˜¯å½“å‰ä¸»è¦é›†ç¾¤ç³»ç»Ÿ
+	bool IsDistributedSystemCalculate(long long calcID); //è¿™ä¸ªidæ˜¯å¦å½“å‰ç³»ç»Ÿè®¡ç®—
 public:
-	//·Ö²¼Ê½´¦ÀíÏà¹Ø
-	UINT m_uLogonGroupIndex;		//µÇÂ½·ş¼¯ÈºË÷Òı
-	UINT m_uLogonGroupCount;		//µÇÂ½·ş¼¯ÈºÊıÁ¿
-	UINT m_uMainLogonGroupIndex;	//µ±Ç°Ö÷ÒªµÇÂ½·ş¼¯ÈºË÷Òı£¨Ïà±ÈÆäËü·şÎñÆ÷¼¯Èº´¦Àí¸ü¶àÊı¾İ£©
+	//åˆ†å¸ƒå¼å¤„ç†ç›¸å…³
+	UINT m_uLogonGroupIndex;		//ç™»é™†æœé›†ç¾¤ç´¢å¼•
+	UINT m_uLogonGroupCount;		//ç™»é™†æœé›†ç¾¤æ•°é‡
+	UINT m_uMainLogonGroupIndex;	//å½“å‰ä¸»è¦ç™»é™†æœé›†ç¾¤ç´¢å¼•ï¼ˆç›¸æ¯”å…¶å®ƒæœåŠ¡å™¨é›†ç¾¤å¤„ç†æ›´å¤šæ•°æ®ï¼‰
 private:
 	std::vector<FieldRealInfo> m_vecFields;
 };

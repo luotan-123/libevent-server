@@ -5,13 +5,13 @@
 
 /*
 Struct		:ListItemData
-Memo		:Á´±íÏîÊı¾İ½á¹¹
+Memo		:é“¾è¡¨é¡¹æ•°æ®ç»“æ„
 Author		:Fred Huang
 Add Data	:2008-3-4
 Modify Data	:none
 Parameter	:
-	stDataHead	:Êı¾İ°üÍ·
-	pData		:Ã¿¸öÁ´±íÏîÊı¾İµÄÖ¸Õë£¬Ê¹ÓÃÓÃnew·½Ê½ÉêÇëµÄÄÚ´æ£¬×¢Òâ£¬ÔÚ³ö¶ÓÁĞÊ±£¬ÒªÏÔÊ½µÄdelete ¸ÃÄÚ´æ
+	stDataHead	:æ•°æ®åŒ…å¤´
+	pData		:æ¯ä¸ªé“¾è¡¨é¡¹æ•°æ®çš„æŒ‡é’ˆï¼Œä½¿ç”¨ç”¨newæ–¹å¼ç”³è¯·çš„å†…å­˜ï¼Œæ³¨æ„ï¼Œåœ¨å‡ºé˜Ÿåˆ—æ—¶ï¼Œè¦æ˜¾å¼çš„delete è¯¥å†…å­˜
 */
 struct ListItemData
 {
@@ -19,12 +19,12 @@ struct ListItemData
 	BYTE* pData;
 };
 
-//Êı¾İ¶ÓÁĞÀà
+//æ•°æ®é˜Ÿåˆ—ç±»
 class CDataLine
 {
 private:
 	std::list <ListItemData*> m_DataList;
-	CSignedLock		m_csLock;				//Í¬²½Ëø
+	CSignedLock		m_csLock;				//åŒæ­¥é”
 
 	//HANDLE			m_hCompletionPort
 public:
@@ -32,13 +32,13 @@ public:
 	virtual ~CDataLine();
 
 public:
-	//»ñÈ¡Ëø
+	//è·å–é”
 	CSignedLock* GetLock() { return &m_csLock; }
-	//ÇåÀíËùÓĞÊı¾İ
+	//æ¸…ç†æ‰€æœ‰æ•°æ®
 	bool CleanLineData();
-	//¼ÓÈëÏûÏ¢¶ÓÁĞ
+	//åŠ å…¥æ¶ˆæ¯é˜Ÿåˆ—
 	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData = NULL, UINT uAppendAddSize = 0);
-	//ÌáÈ¡ÏûÏ¢Êı¾İ
+	//æå–æ¶ˆæ¯æ•°æ®
 	virtual UINT GetData(DataLineHead* pDataBuffer, UINT uBufferSize);
 
 public:

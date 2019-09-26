@@ -2,33 +2,33 @@
 
 #include "KernelDefine.h"
 
-//¼ÆËãÊı×éÎ¬Êı
+//è®¡ç®—æ•°ç»„ç»´æ•°
 #define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
 
-//°²È«É¾³ıÖ¸Õë
+//å®‰å…¨åˆ é™¤æŒ‡é’ˆ
 #define  SafeDelete(pData)	{ try { delete pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL; } 
 
-//°²È«É¾³ıÖ¸Õë
+//å®‰å…¨åˆ é™¤æŒ‡é’ˆ
 #define  SafeDeleteArray(pData)	{ if(pData){ try { delete [] pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL;} } 
 
-//°²È«É¾³ıÖ¸Õë
+//å®‰å…¨åˆ é™¤æŒ‡é’ˆ
 #define SAFE_DELETE(ptr) { if(ptr){	try{ delete ptr; }catch(...){ ERROR_LOG("CATCH: *** SAFE_DELETE(%s) crash! *** %s %d\n",#ptr,__FILE__, __LINE__); } ptr = 0; } }
 
-//»ñÈ¡¶¯Ì¬Êı×éÖ¸Õë´óĞ¡
+//è·å–åŠ¨æ€æ•°ç»„æŒ‡é’ˆå¤§å°
 extern int GetNewArraySize(void* pArray);
 
-//ÅĞ¶Ï´óĞ¡º¯Êı
+//åˆ¤æ–­å¤§å°å‡½æ•°
 #define Min_(x,y) ((x)>(y)?(y):(x))
 #define Max_(x,y) ((x)>(y)?(x):(y))
 
-//»ñÈ¡ÏµÍ³Ê±¼ä
+//è·å–ç³»ç»Ÿæ—¶é—´
 extern void GetLocalTime(SYSTEMTIME* sysTime);
 
-//»ñÈ¡Ê±¼ä´Á£¨µ¥Î»£ººÁÃë£©
+//è·å–æ—¶é—´æˆ³ï¼ˆå•ä½ï¼šæ¯«ç§’ï¼‰
 extern long long GetSysMilliseconds();
 
-//»ñÈ¡Ïß³Ìpid,Ïß³ÌÄÚ²¿id  pthread¿âº¯Êı
+//è·å–çº¿ç¨‹pid,çº¿ç¨‹å†…éƒ¨id  pthreadåº“å‡½æ•°
 extern pthread_t GetCurrentThreadId();
 
-//»ñÈ¡Ïß³Ìpid,ÄÚºËÏß³Ìid
+//è·å–çº¿ç¨‹pid,å†…æ ¸çº¿ç¨‹id
 extern pthread_t GetCurrentSysThreadId();

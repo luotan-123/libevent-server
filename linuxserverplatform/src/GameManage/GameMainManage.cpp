@@ -34,10 +34,10 @@ bool CGameMainManage::OnInit(ManageInfoStruct* pInitData, KernelInfoStruct * pKe
 		return false;
 	}
 
-	//ÓÎÏ·ID
+	//æ¸¸æˆID
 	m_uNameID = pKernelData->uNameID;
 
-	// Íæ¼Ò¹ÜÀí¶ÔÏó
+	// ç©å®¶ç®¡ç†å¯¹è±¡
 	m_pGameUserManage = new CGameUserManage;
 	if (!m_pGameUserManage)
 	{
@@ -50,7 +50,7 @@ bool CGameMainManage::OnInit(ManageInfoStruct* pInitData, KernelInfoStruct * pKe
 		return false;
 	}
 
-	// »Ö¸´ÓÎÏ·µÄÊı¾İ
+	// æ¢å¤æ¸¸æˆçš„æ•°æ®
 	int roomID = GetRoomID();
 	ret = m_pRedis->CleanRoomAllData(roomID);
 	if (!ret)
@@ -81,12 +81,12 @@ bool CGameMainManage::OnUnInit()
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnStart()
 {
-	// ÉèÖÃÊı¾İ¿â¾ä±ú
+	// è®¾ç½®æ•°æ®åº“å¥æŸ„
 	if (m_pRedis)
 	{
 		m_pRedis->SetDBManage(&m_SQLDataManage);
 
-		// ¼ÓÔØ½±³ØÊı¾İ
+		// åŠ è½½å¥–æ± æ•°æ®
 		LoadPoolData();
 	}
 	if (m_pRedisPHP)
@@ -94,7 +94,7 @@ bool CGameMainManage::OnStart()
 		m_pRedisPHP->SetDBManage(&m_SQLDataManage);
 	}
 
-	// Æô¶¯Ò»Ğ©¶¨Ê±Æ÷
+	// å¯åŠ¨ä¸€äº›å®šæ—¶å™¨
 	SetTimer(LOADER_TIMER_SAVE_ROOM_PEOPLE_COUNT, CHECK_SAVE_ROOM_PEOPLE_COUNT * 1000);
 	SetTimer(LOADER_TIMER_CHECK_REDIS_CONNECTION, CHECK_REDIS_CONNECTION_SECS * 1000);
 	SetTimer(LOADER_TIMER_CHECK_INVALID_STATUS_USER, CHECK_INVALID_STATUS_USER_SECS * 1000);
@@ -132,7 +132,7 @@ bool CGameMainManage::OnStop()
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnUpdate()
 {
-	// ¼ÓÔØ½±³ØÊı¾İ
+	// åŠ è½½å¥–æ± æ•°æ®
 	LoadPoolData();
 
 	for (unsigned int i = 0; i < m_uDeskCount; i++)
@@ -165,35 +165,35 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 		return false;
 	}
 
-	// Í³¼ÆÏûºÄ
+	// ç»Ÿè®¡æ¶ˆè€—
 	WAUTOCOST("statistics message cost mainID: %d assistID: %d", pNetHead->uMainID, pNetHead->uAssistantID);
 
 	int userID = pNetHead->uIdentification;
 	if (userID <= 0)
 	{
-		ERROR_LOG("not send userID£¬OnSocketRead failed mainID=%d assistID=%d socketIdx:%d", pNetHead->uMainID, pNetHead->uAssistantID, uIndex);
+		ERROR_LOG("not send userIDï¼ŒOnSocketRead failed mainID=%d assistID=%d socketIdx:%d", pNetHead->uMainID, pNetHead->uAssistantID, uIndex);
 		return false;
 	}
 
 	if (!m_pGServerConnect)
 	{
-		ERROR_LOG("m_pGServerConnect == NULL ÎŞ·¨´¦ÀíÊı¾İ");
+		ERROR_LOG("m_pGServerConnect == NULL æ— æ³•å¤„ç†æ•°æ®");
 		return false;
 	}
 
-	// µôÏßÌØÊâ´¦Àí
+	// æ‰çº¿ç‰¹æ®Šå¤„ç†
 	if (pNetHead->uMainID == MSG_MAIN_USER_SOCKET_CLOSE)
 	{
 		return OnUserSocketClose(userID, uIndex);
 	}
 
-	// µÇÂ¼ÌØÊâ´¦Àí
+	// ç™»å½•ç‰¹æ®Šå¤„ç†
 	if (pNetHead->uMainID == MSG_MAIN_LOADER_LOGON)
 	{
 		return OnHandleLogonMessage(pNetHead->uAssistantID, pData, uSize, uAccessIP, uIndex, userID);
 	}
 
-	// ÅĞ¶ÏÄÚ´æÖĞÊÇ·ñ»¹´æÔÚ¸ÃÍæ¼Ò£¬¶¯×÷ÏûÏ¢ÌØÊâ´¦Àí¡£ĞŞ¸Ä²¿·Öbug
+	// åˆ¤æ–­å†…å­˜ä¸­æ˜¯å¦è¿˜å­˜åœ¨è¯¥ç©å®¶ï¼ŒåŠ¨ä½œæ¶ˆæ¯ç‰¹æ®Šå¤„ç†ã€‚ä¿®æ”¹éƒ¨åˆ†bug
 	if (pNetHead->uMainID == MSG_MAIN_LOADER_ACTION && pNetHead->uAssistantID == MSG_ASS_LOADER_ACTION_STAND && GetUser(userID) == NULL)
 	{
 		m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_NO_USER, 0, userID);
@@ -202,15 +202,15 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 
 	switch (pNetHead->uMainID)
 	{
-	case MSG_MAIN_LOADER_ACTION:			//ÓÃ»§¶¯×÷
+	case MSG_MAIN_LOADER_ACTION:			//ç”¨æˆ·åŠ¨ä½œ
 	{
 		return OnHandleActionMessage(userID, pNetHead->uAssistantID, pData, uSize);
 	}
-	case MSG_MAIN_LOADER_FRAME:				//¿ò¼ÜÏûÏ¢
+	case MSG_MAIN_LOADER_FRAME:				//æ¡†æ¶æ¶ˆæ¯
 	{
 		return OnHandleFrameMessage(userID, pNetHead->uAssistantID, pData, uSize);
 	}
-	case MSG_MAIN_LOADER_GAME:			// ÓÎÏ·ÏûÏ¢
+	case MSG_MAIN_LOADER_GAME:			// æ¸¸æˆæ¶ˆæ¯
 	{
 		return OnHandleGameMessage(userID, pNetHead->uAssistantID, pData, uSize);
 	}
@@ -238,7 +238,7 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 //////////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime)
 {
-	// ·ÏÆú²»ÓÃ¸ÄÓÃ£¬OnUserSocketClose
+	// åºŸå¼ƒä¸ç”¨æ”¹ç”¨ï¼ŒOnUserSocketClose
 	return true;
 }
 
@@ -259,13 +259,13 @@ bool CGameMainManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, voi
 		char * pBuffer = (char *)pData;
 		if (pBuffer == NULL)
 		{
-			ERROR_LOG("ÇëÇóphpÊ§°Ü£¬userID=%d,postType=%d", pResultData->uHandleID, pResultData->LineHead.uDataKind);
+			ERROR_LOG("è¯·æ±‚phpå¤±è´¥ï¼ŒuserID=%d,postType=%d", pResultData->uHandleID, pResultData->LineHead.uDataKind);
 			return false;
 		}
 
 		if (strcmp(pBuffer, "0"))
 		{
-			ERROR_LOG("ÇëÇóphpÊ§°Ü£¬userID=%d,postType=%d,result=%s", pResultData->uHandleID, pResultData->LineHead.uDataKind, pBuffer);
+			ERROR_LOG("è¯·æ±‚phpå¤±è´¥ï¼ŒuserID=%d,postType=%d,result=%s", pResultData->uHandleID, pResultData->LineHead.uDataKind, pBuffer);
 			return false;
 		}
 	}
@@ -292,9 +292,9 @@ CGameDesk* CGameMainManage::GetDeskObject(int deskIdx)
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnTimerMessage(UINT uTimerID)
 {
-	WAUTOCOST("£¨timerID: %d £©¶¨Ê±Æ÷ºÄÊ± ", uTimerID);
+	WAUTOCOST("ï¼ˆtimerID: %d ï¼‰å®šæ—¶å™¨è€—æ—¶ ", uTimerID);
 
-	//ÓÎÏ·¶¨Ê±Æ÷
+	//æ¸¸æˆå®šæ—¶å™¨
 	if (uTimerID >= TIME_START_ID)
 	{
 		int deskIdx = (int)((uTimerID - TIME_START_ID) / TIME_SPACE);
@@ -304,7 +304,7 @@ bool CGameMainManage::OnTimerMessage(UINT uTimerID)
 		}
 	}
 
-	//ÄÚ²¿¶¨Ê±Æ÷
+	//å†…éƒ¨å®šæ—¶å™¨
 	switch (uTimerID)
 	{
 	case LOADER_TIMER_SAVE_ROOM_PEOPLE_COUNT:
@@ -354,7 +354,7 @@ bool CGameMainManage::OnTimerMessage(UINT uTimerID)
 	return true;
 }
 
-// Çå³ıËùÓĞ¶¨Ê±Æ÷
+// æ¸…é™¤æ‰€æœ‰å®šæ—¶å™¨
 void CGameMainManage::KillAllTimer()
 {
 	for (unsigned int i = LOADER_TIMER_BEGIN + 1; i < LOADER_TIMER_END; i++)
@@ -366,23 +366,23 @@ void CGameMainManage::KillAllTimer()
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::InitGameDesk(UINT uDeskCount, UINT uDeskType)
 {
-	//½¨Á¢ÓÎÏ·×À×Ó
+	//å»ºç«‹æ¸¸æˆæ¡Œå­
 	UINT uDeskClassSize = 0;
 	m_pDeskArray = CreateDeskObject(uDeskCount, uDeskClassSize);
 	if (m_pDeskArray == NULL || uDeskClassSize == 0)
 	{
-		throw new CException("CGameMainManage::InitGameDesk ÄÚ´æÉêÇëÊ§°Ü", 0x418);
+		throw new CException("CGameMainManage::InitGameDesk å†…å­˜ç”³è¯·å¤±è´¥", 0x418);
 	}
 
-	//ÉêÇëÄÚ´æ
+	//ç”³è¯·å†…å­˜
 	m_uDeskCount = uDeskCount;
 	m_pDesk = new CGameDesk *[m_uDeskCount];
 	if (m_pDesk == NULL)
 	{
-		throw new CException("CGameMainManage::InitGameDesk ÄÚ´æÉêÇëÊ§°Ü", 0x419);
+		throw new CException("CGameMainManage::InitGameDesk å†…å­˜ç”³è¯·å¤±è´¥", 0x419);
 	}
 
-	//ÉèÖÃÖ¸Õë
+	//è®¾ç½®æŒ‡é’ˆ
 	for (UINT i = 0; i < m_uDeskCount; i++)
 	{
 		*(m_pDesk + i) = (CGameDesk *)((char *)m_pDeskArray + i*uDeskClassSize);
@@ -393,7 +393,7 @@ bool CGameMainManage::InitGameDesk(UINT uDeskCount, UINT uDeskType)
 }
 
 //////////////////////////////////////////////////////////////////////////
-//Íæ¼ÒµôÏß
+//ç©å®¶æ‰çº¿
 bool CGameMainManage::OnUserSocketClose(int userID, UINT uSocketIndex)
 {
 	GameUserInfo* pUser = GetUser(userID);
@@ -411,8 +411,8 @@ bool CGameMainManage::OnUserSocketClose(int userID, UINT uSocketIndex)
 	pUser->IsOnline = false;
 	pUser->socketIdx = -1;
 
-#ifdef OFFLINE_CHANGE_AGREE_STATUS  //¶ÏÏßÈ¡Ïû×¼±¸
-	// ×¼±¸×´Ì¬±äÎª×øÏÂ
+#ifdef OFFLINE_CHANGE_AGREE_STATUS  //æ–­çº¿å–æ¶ˆå‡†å¤‡
+	// å‡†å¤‡çŠ¶æ€å˜ä¸ºåä¸‹
 	if (pUser->playStatus == USER_STATUS_AGREE)
 	{
 		pUser->playStatus = USER_STATUS_SITING;
@@ -421,14 +421,14 @@ bool CGameMainManage::OnUserSocketClose(int userID, UINT uSocketIndex)
 
 	CGameDesk* pDesk = GetDeskObject(pUser->deskIdx);
 
-	// ÅÔ¹ÛÕß¶ÏÏß
+	// æ—è§‚è€…æ–­çº¿
 	if (pUser->playStatus == USER_STATUS_WATCH && pDesk)
 	{
-		// Ö±½ÓÈÃÍæ¼Ò»Øµ½´óÌü
+		// ç›´æ¥è®©ç©å®¶å›åˆ°å¤§å…
 		return pDesk->OnWatchUserOffline(pUser->userID);
 	}
 
-	// ±ÈÈü³¡ÅÔ¹ÛÕßµôÏß
+	// æ¯”èµ›åœºæ—è§‚è€…æ‰çº¿
 	if (GetRoomType() == ROOM_TYPE_MATCH && pUser->watchDeskIdx != INVALID_DESKIDX)
 	{
 		CGameDesk* pDeskWatch = GetDeskObject(pUser->watchDeskIdx);
@@ -453,13 +453,13 @@ bool CGameMainManage::OnUserSocketClose(int userID, UINT uSocketIndex)
 	{
 		if (m_InitData.bCanCombineDesk)
 		{
-			// Íæ¼ÒµôÏß£¬´ÓÆ¥ÅäÁĞ±íÖĞÉ¾³ı
+			// ç©å®¶æ‰çº¿ï¼Œä»åŒ¹é…åˆ—è¡¨ä¸­åˆ é™¤
 			DelCombineDeskUser(userID, pUser->isVirtual);
 		}
 
-		// ×ßµ½Õâ¶ÎµÄÁ½ÖÖÇé¿ö
-		// 1: ·¿¿¨³¡·¿¼ä½âÉ¢µ«Íæ¼Ò»¹Î´µÇ³ö
-		// 2: ½ğ±Ò³¡Àë¿ª×À×ÓÖ®ºóÎ´½øÈëÏÂÒ»¸ö×À×Ó
+		// èµ°åˆ°è¿™æ®µçš„ä¸¤ç§æƒ…å†µ
+		// 1: æˆ¿å¡åœºæˆ¿é—´è§£æ•£ä½†ç©å®¶è¿˜æœªç™»å‡º
+		// 2: é‡‘å¸åœºç¦»å¼€æ¡Œå­ä¹‹åæœªè¿›å…¥ä¸‹ä¸€ä¸ªæ¡Œå­
 		DelUser(userID);
 	}
 
@@ -583,7 +583,7 @@ bool CGameMainManage::LoadPoolData()
 
 	if (!m_pRedis->GetRewardsPoolInfo(m_InitData.uRoomID, m_rewardsPoolInfo))
 	{
-		ERROR_LOG("¼ÓÔØ½±³ØÊı¾İÊ§°Ü");
+		ERROR_LOG("åŠ è½½å¥–æ± æ•°æ®å¤±è´¥");
 		return false;
 	}
 
@@ -617,7 +617,7 @@ int CGameMainManage::GetPoolConfigInfo(const char * fieldName)
 		}
 		else
 		{
-			ERROR_LOG("×Ö¶Î´íÎó£¬fieldName=%s", fieldName);
+			ERROR_LOG("å­—æ®µé”™è¯¯ï¼ŒfieldName=%s", fieldName);
 		}
 	}
 
@@ -647,7 +647,7 @@ bool CGameMainManage::GetPoolConfigInfoString(const char * fieldName, int * pArr
 
 		if (jsonValue.size() > (UINT)size)
 		{
-			ERROR_LOG("json¹ı³¤");
+			ERROR_LOG("jsonè¿‡é•¿");
 			return false;
 		}
 
@@ -660,7 +660,7 @@ bool CGameMainManage::GetPoolConfigInfoString(const char * fieldName, int * pArr
 			}
 			else
 			{
-				ERROR_LOG("×Ö¶Î´íÎó£¬fieldName=%s", fieldName);
+				ERROR_LOG("å­—æ®µé”™è¯¯ï¼ŒfieldName=%s", fieldName);
 				return false;
 			}
 		}
@@ -678,17 +678,17 @@ bool CGameMainManage::IsOneToOnePlatform()
 	return otherConfig.byIsOneToOne == 0 ? false : true;
 }
 
-///////////////////////////////µÇÂ½Ïà¹Ø///////////////////////////////////////
+///////////////////////////////ç™»é™†ç›¸å…³///////////////////////////////////////
 bool CGameMainManage::OnHandleLogonMessage(unsigned int assistID, void* pData, int size, unsigned int accessIP, unsigned int socketIdx, int userID)
 {
 	switch (assistID)
 	{
-		// µÇÂ¼
+		// ç™»å½•
 	case MSG_ASS_LOADER_LOGON:
 	{
 		return OnUserRequestLogon(pData, size, accessIP, socketIdx, userID);
 	}
-	// µÇ³ö
+	// ç™»å‡º
 	case MSG_ADD_LOADER_LOGOUT:
 	{
 		return OnUserRequestLogout(pData, size, accessIP, socketIdx, userID);
@@ -700,7 +700,7 @@ bool CGameMainManage::OnHandleLogonMessage(unsigned int assistID, void* pData, i
 	return true;
 }
 
-///////////////////////////////×ÓÀàĞÍ///////////////////////////////////////////
+///////////////////////////////å­ç±»å‹///////////////////////////////////////////
 bool CGameMainManage::OnUserRequestLogon(void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, int userID)
 {
 	int roomType = GetRoomType();
@@ -736,14 +736,14 @@ bool CGameMainManage::OnPrivateLogonLogic(void* pData, UINT uSize, ULONG uAccess
 	UserData userData;
 	if (!m_pRedis->GetUserData(userID, userData))
 	{
-		ERROR_LOG("µÇÂ½Ê§°Ü£¬GetUserData from redis failed: userID£º%d", userID);
+		ERROR_LOG("ç™»é™†å¤±è´¥ï¼ŒGetUserData from redis failed: userIDï¼š%d", userID);
 		return false;
 	}
 
 	if (userData.sealFinishTime != 0)
 	{
 		int iCurTime = (int)time(NULL);
-		if (iCurTime < userData.sealFinishTime || userData.sealFinishTime < 0) //½â·âÊ±¼äµ½ÁË£¬½â·âÕËºÅ
+		if (iCurTime < userData.sealFinishTime || userData.sealFinishTime < 0) //è§£å°æ—¶é—´åˆ°äº†ï¼Œè§£å°è´¦å·
 		{
 			m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, ERROR_ACCOUNT_SEAL, userID);
 			return false;
@@ -752,7 +752,7 @@ bool CGameMainManage::OnPrivateLogonLogic(void* pData, UINT uSize, ULONG uAccess
 
 	if (!userData.isVirtual)
 	{
-		// »ñÈ¡·şÎñÆ÷×´Ì¬
+		// è·å–æœåŠ¡å™¨çŠ¶æ€
 		int serverStatus = 0;
 		m_pRedis->GetServerStatus(serverStatus);
 		if (serverStatus == SERVER_PLATFROM_STATUS_CLOSE)
@@ -794,7 +794,7 @@ bool CGameMainManage::OnPrivateLogonLogic(void* pData, UINT uSize, ULONG uAccess
 		return false;
 	}
 
-	//ÅĞ¶ÏÊÇ·ñ»¹ÓĞ×ùÎ»·ÖÅä¸ø¸ÃÍæ¼Ò
+	//åˆ¤æ–­æ˜¯å¦è¿˜æœ‰åº§ä½åˆ†é…ç»™è¯¥ç©å®¶
 	if (!pDesk->IsHaveDeskStation(userID, privateDeskInfo))
 	{
 		m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, ERROR_DESK_FULL, userID);
@@ -807,10 +807,10 @@ bool CGameMainManage::OnPrivateLogonLogic(void* pData, UINT uSize, ULONG uAccess
 
 	if (pUser && pUser->deskIdx != deskIdx)
 	{
-		ERROR_LOG("userID = %d ÄÚ´æ deskIdx(%d) and redis deskIdx(%d) is not match¡£socketIdx = %d deskStation = %d,playStatus = %d",
+		ERROR_LOG("userID = %d å†…å­˜ deskIdx(%d) and redis deskIdx(%d) is not matchã€‚socketIdx = %d deskStation = %d,playStatus = %d",
 			userID, pUser->deskIdx, deskIdx, pUser->socketIdx, pUser->deskStation, pUser->playStatus);
 
-		// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+		// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 		if (m_pGameUserManage)
 		{
 			m_pGameUserManage->DelUser(userID);
@@ -826,7 +826,7 @@ bool CGameMainManage::OnPrivateLogonLogic(void* pData, UINT uSize, ULONG uAccess
 		m_pGameUserManage->AddUser(pUser);
 	}
 
-	// Íæ¼ÒµÄÒ»Ğ©Êı¾İ
+	// ç©å®¶çš„ä¸€äº›æ•°æ®
 	pUser->IsOnline = true;
 	pUser->socketIdx = uIndex;
 	pUser->userStatus = userData.status;
@@ -860,7 +860,7 @@ bool CGameMainManage::OnPrivateLogonLogic(void* pData, UINT uSize, ULONG uAccess
 		}
 
 	}
-#ifdef OFFLINE_CHANGE_AGREE_STATUS  //¶ÏÏßÈ¡Ïû×¼±¸
+#ifdef OFFLINE_CHANGE_AGREE_STATUS  //æ–­çº¿å–æ¶ˆå‡†å¤‡
 	else if (pUser->playStatus == USER_STATUS_AGREE)
 	{
 		msg.playStatus = USER_STATUS_SITING;
@@ -898,14 +898,14 @@ bool CGameMainManage::OnMoneyLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 	UserData userData;
 	if (!m_pRedis->GetUserData(userID, userData))
 	{
-		ERROR_LOG("OnMoneyLogonLogic::GetUserData from redis failed: userID£º%d", userID);
+		ERROR_LOG("OnMoneyLogonLogic::GetUserData from redis failed: userIDï¼š%d", userID);
 		return false;
 	}
 
 	if (userData.sealFinishTime != 0)
 	{
 		int iCurTime = (int)time(NULL);
-		if (iCurTime < userData.sealFinishTime || userData.sealFinishTime < 0) //½â·âÊ±¼äµ½ÁË£¬½â·âÕËºÅ
+		if (iCurTime < userData.sealFinishTime || userData.sealFinishTime < 0) //è§£å°æ—¶é—´åˆ°äº†ï¼Œè§£å°è´¦å·
 		{
 			m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, ERROR_ACCOUNT_SEAL, userID);
 			return false;
@@ -914,7 +914,7 @@ bool CGameMainManage::OnMoneyLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 
 	if (!userData.isVirtual)
 	{
-		// »ñÈ¡·şÎñÆ÷×´Ì¬
+		// è·å–æœåŠ¡å™¨çŠ¶æ€
 		int serverStatus = 0;
 		m_pRedis->GetServerStatus(serverStatus);
 		if (serverStatus == SERVER_PLATFROM_STATUS_CLOSE)
@@ -974,10 +974,10 @@ bool CGameMainManage::OnMoneyLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 
 	if (pUser && pUser->deskIdx == INVALID_DESKIDX)
 	{
-		//INFO_LOG("ÓÃ»§×À×ÓË÷ÒıÒì³£ uIndex=%d,userID = %d,pUser->socketIdx = %d,pUser->deskStation = %d,pUser->playStatus = %d ",
+		//INFO_LOG("ç”¨æˆ·æ¡Œå­ç´¢å¼•å¼‚å¸¸ uIndex=%d,userID = %d,pUser->socketIdx = %d,pUser->deskStation = %d,pUser->playStatus = %d ",
 		//	uIndex, userID, pUser->socketIdx, pUser->deskStation, pUser->playStatus);
 
-		// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+		// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 		if (m_pGameUserManage)
 		{
 			m_pGameUserManage->DelUser(userID);
@@ -1012,31 +1012,31 @@ bool CGameMainManage::OnMoneyLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 			}
 			else
 			{
-				ERROR_LOG("ÓÃ»§×À×Ó²»´æÔÚ,userID = %d,pUser->deskIdx = %d", userID, pUser->deskIdx);
+				ERROR_LOG("ç”¨æˆ·æ¡Œå­ä¸å­˜åœ¨,userID = %d,pUser->deskIdx = %d", userID, pUser->deskIdx);
 				return false;
 			}
 		}
 		else
 		{
-			ERROR_LOG("ÓÃ»§×À×ÓË÷ÒıÒì³£,userID = %d", userID);
+			ERROR_LOG("ç”¨æˆ·æ¡Œå­ç´¢å¼•å¼‚å¸¸,userID = %d", userID);
 			return false;
 		}
 	}
 	else
 	{
-		// Ô¤ÅĞÊÇ·ñ»¹ÓĞÎ»ÖÃ¸øÍæ¼Ò×øÏÂ
+		// é¢„åˆ¤æ˜¯å¦è¿˜æœ‰ä½ç½®ç»™ç©å®¶åä¸‹
 		if (!userData.isVirtual && !GoldRoomIsHaveDeskstation())
 		{
-			ERROR_LOG("Ã»ÓĞ×ã¹»µÄÎ»ÖÃ×øÏÂ userID=%d", userID);
+			ERROR_LOG("æ²¡æœ‰è¶³å¤Ÿçš„ä½ç½®åä¸‹ userID=%d", userID);
 			m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, ERROR_DESK_FULL, userID);
 			return false;
 		}
 
-		// ´´½¨Ò»¸öĞÂÍæ¼Ò
+		// åˆ›å»ºä¸€ä¸ªæ–°ç©å®¶
 		pUser = new GameUserInfo;
 		if (!pUser)
 		{
-			ERROR_LOG("·ÖÅäÄÚ´æÊ§°Ü,userID = %d", userID);
+			ERROR_LOG("åˆ†é…å†…å­˜å¤±è´¥,userID = %d", userID);
 			return false;
 		}
 
@@ -1063,7 +1063,7 @@ bool CGameMainManage::OnMoneyLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 		m_pGServerConnect->SendData(uIndex, &msg, sizeof(msg), MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, 0, userID);
 	}
 
-	// ¼ÇÂ¼µÇÂ½¼ÇÂ¼
+	// è®°å½•ç™»é™†è®°å½•
 	if (!userData.isVirtual)
 	{
 		char tableName[128] = "";
@@ -1074,7 +1074,7 @@ bool CGameMainManage::OnMoneyLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 	}
 	else
 	{
-		// »úÆ÷ÈËµÇÂ½ÏÈ¼ÇÂ¼redisÖĞµÄroomID
+		// æœºå™¨äººç™»é™†å…ˆè®°å½•redisä¸­çš„roomID
 		m_pRedis->SetUserRoomID(userID, GetRoomID());
 	}
 
@@ -1099,14 +1099,14 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 	UserData userData;
 	if (!m_pRedis->GetUserData(userID, userData))
 	{
-		ERROR_LOG("OnMoneyLogonLogic::GetUserData from redis failed: userID£º%d", userID);
+		ERROR_LOG("OnMoneyLogonLogic::GetUserData from redis failed: userIDï¼š%d", userID);
 		return false;
 	}
 
 	if (userData.sealFinishTime != 0)
 	{
 		int iCurTime = (int)time(NULL);
-		if (iCurTime < userData.sealFinishTime || userData.sealFinishTime < 0) //½â·âÊ±¼äµ½ÁË£¬½â·âÕËºÅ
+		if (iCurTime < userData.sealFinishTime || userData.sealFinishTime < 0) //è§£å°æ—¶é—´åˆ°äº†ï¼Œè§£å°è´¦å·
 		{
 			m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, ERROR_ACCOUNT_SEAL, userID);
 			return false;
@@ -1115,7 +1115,7 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 
 	if (!userData.isVirtual)
 	{
-		// »ñÈ¡·şÎñÆ÷×´Ì¬
+		// è·å–æœåŠ¡å™¨çŠ¶æ€
 		int serverStatus = 0;
 		m_pRedis->GetServerStatus(serverStatus);
 		if (serverStatus == SERVER_PLATFROM_STATUS_CLOSE)
@@ -1133,7 +1133,7 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 		return false;
 	}
 
-	//±ÈÈü³¡ÅĞ¶Ï
+	//æ¯”èµ›åœºåˆ¤æ–­
 	if (userData.roomID == 0)
 	{
 		m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ASS_LOADER_LOGON, ERROR_NO_USER_DATA, userID);
@@ -1144,10 +1144,10 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 
 	if (pUser && pUser->deskIdx == INVALID_DESKIDX)
 	{
-		//INFO_LOG("ÓÃ»§×À×ÓË÷ÒıÒì³£ uIndex=%d,userID = %d,pUser->socketIdx = %d,pUser->deskStation = %d,pUser->playStatus = %d ",
+		//INFO_LOG("ç”¨æˆ·æ¡Œå­ç´¢å¼•å¼‚å¸¸ uIndex=%d,userID = %d,pUser->socketIdx = %d,pUser->deskStation = %d,pUser->playStatus = %d ",
 		//	uIndex, userID, pUser->socketIdx, pUser->deskStation, pUser->playStatus);
 
-		// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+		// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 		if (m_pGameUserManage)
 		{
 			m_pGameUserManage->DelUser(userID);
@@ -1155,10 +1155,10 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 		pUser = NULL;
 	}
 
-	// ±ÈÈü³¡²»ÄÜ×Ô¶¯µÇÂ¼£¬±ØĞëÏµÍ³À­½øÈ¥
+	// æ¯”èµ›åœºä¸èƒ½è‡ªåŠ¨ç™»å½•ï¼Œå¿…é¡»ç³»ç»Ÿæ‹‰è¿›å»
 	if (pUser == NULL)
 	{
-		ERROR_LOG("Ã»ÓĞ±¨Ãû¸Ã±ÈÈü,userID=%d", userID);
+		ERROR_LOG("æ²¡æœ‰æŠ¥åè¯¥æ¯”èµ›,userID=%d", userID);
 		m_pRedis->SetUserDeskIdx(userID, INVALID_DESKIDX);
 		m_pRedis->SetUserRoomID(userID, 0);
 		m_pRedis->SetUserMatchStatus(userID, MATCH_TYPE_NORMAL, USER_MATCH_STATUS_NORMAL);
@@ -1191,17 +1191,17 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 		}
 		else
 		{
-			ERROR_LOG("ÓÃ»§×À×Ó²»´æÔÚ,userID = %d,pUser->deskIdx = %d", userID, pUser->deskIdx);
+			ERROR_LOG("ç”¨æˆ·æ¡Œå­ä¸å­˜åœ¨,userID = %d,pUser->deskIdx = %d", userID, pUser->deskIdx);
 			return false;
 		}
 	}
 	else
 	{
-		ERROR_LOG("ÓÃ»§×À×ÓË÷ÒıÒì³£,userID = %d", userID);
+		ERROR_LOG("ç”¨æˆ·æ¡Œå­ç´¢å¼•å¼‚å¸¸,userID = %d", userID);
 		return false;
 	}
 
-	// ¼ÇÂ¼µÇÂ½¼ÇÂ¼
+	// è®°å½•ç™»é™†è®°å½•
 	if (!userData.isVirtual)
 	{
 		char tableName[128] = "";
@@ -1212,17 +1212,17 @@ bool CGameMainManage::OnMatchLogonLogic(void* pData, UINT uSize, ULONG uAccessIP
 	}
 	else
 	{
-		// »úÆ÷ÈËµÇÂ½ÏÈ¼ÇÂ¼redisÖĞµÄroomID
+		// æœºå™¨äººç™»é™†å…ˆè®°å½•redisä¸­çš„roomID
 		m_pRedis->SetUserRoomID(userID, GetRoomID());
 	}
 
 	return true;
 }
 
-////////////////////////////////µÇ³öÏà¹Ø//////////////////////////////////////////
+////////////////////////////////ç™»å‡ºç›¸å…³//////////////////////////////////////////
 bool CGameMainManage::OnUserRequestLogout(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, int userID)
 {
-	// Íæ¼ÒÄÜ·ñÍË³ö
+	// ç©å®¶èƒ½å¦é€€å‡º
 	GameUserInfo* pUser = GetUser(userID);
 	if (!pUser)
 	{
@@ -1232,7 +1232,7 @@ bool CGameMainManage::OnUserRequestLogout(void* pData, UINT size, ULONG uAccessI
 
 	if (GetRoomType() == ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("±ÈÈü³¡²»ÄÜµÇ³ö");
+		ERROR_LOG("æ¯”èµ›åœºä¸èƒ½ç™»å‡º");
 		return false;
 	}
 
@@ -1243,7 +1243,7 @@ bool CGameMainManage::OnUserRequestLogout(void* pData, UINT size, ULONG uAccessI
 		return false;
 	}
 
-	// Íæ¼Ò±ØĞë²»ÔÚ×À×ÓÉÏ²ÅÄÜµÇ³ö
+	// ç©å®¶å¿…é¡»ä¸åœ¨æ¡Œå­ä¸Šæ‰èƒ½ç™»å‡º
 	if (pUser->deskIdx != INVALID_DESKIDX || pUser->deskStation != INVALID_DESKSTATION)
 	{
 		m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ADD_LOADER_LOGOUT, 0, userID);
@@ -1252,7 +1252,7 @@ bool CGameMainManage::OnUserRequestLogout(void* pData, UINT size, ULONG uAccessI
 
 	OnUserLogout(userID);
 
-	// ·¢ËÍµÇ³ö³É¹¦
+	// å‘é€ç™»å‡ºæˆåŠŸ
 	m_pGServerConnect->SendData(uIndex, NULL, 0, MSG_MAIN_LOADER_LOGON, MSG_ADD_LOADER_LOGOUT, 0, userID);
 
 	return true;
@@ -1327,7 +1327,7 @@ bool CGameMainManage::OnHandleUserRequestSit(int userID, void* pData, int size)
 		return false;
 	}
 
-	// Éè¶¨Ñ¡ÔñµÄ×ùÎ»ºÅ
+	// è®¾å®šé€‰æ‹©çš„åº§ä½å·
 	pUser->choiceDeskStation = pMessage->deskStation;
 
 	return pDesk->UserSitDesk(pUser);
@@ -1350,13 +1350,13 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 
 	if (GetRoomType() == ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("±ÈÈü³¡²»ÄÜÆ¥Åä×ø×À");
+		ERROR_LOG("æ¯”èµ›åœºä¸èƒ½åŒ¹é…åæ¡Œ");
 		return false;
 	}
 
 	if (GetRoomType() != ROOM_TYPE_GOLD)
 	{
-		ERROR_LOG("Ö»ÓĞ½ğ±Ò³¡²ÅÄÜÆ¥Åä×ø×À£¬userID=%d", userID);
+		ERROR_LOG("åªæœ‰é‡‘å¸åœºæ‰èƒ½åŒ¹é…åæ¡Œï¼ŒuserID=%d", userID);
 		return false;
 	}
 
@@ -1367,13 +1367,13 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 		return false;
 	}
 
-	// ×é×ÀÄ£Ê½²»ÄÜ´ê×À×øÏÂ
+	// ç»„æ¡Œæ¨¡å¼ä¸èƒ½æ“æ¡Œåä¸‹
 	if (IsCanCombineDesk())
 	{
 		if (!pUser->isVirtual)
 		{
-			ERROR_LOG("Íæ¼Ò×ø×ÀÊ§°Ü£¬×é×ÀÓÎÏ·²»ÄÜ´ê×À×øÏÂ£¬userID=%d,name=%s", userID, pUser->name);
-			SendErrNotifyMessage(userID, "×é×ÀÓÎÏ·²»ÄÜ´ê×À×øÏÂ", SMT_EJECT);
+			ERROR_LOG("ç©å®¶åæ¡Œå¤±è´¥ï¼Œç»„æ¡Œæ¸¸æˆä¸èƒ½æ“æ¡Œåä¸‹ï¼ŒuserID=%d,name=%s", userID, pUser->name);
+			SendErrNotifyMessage(userID, "ç»„æ¡Œæ¸¸æˆä¸èƒ½æ“æ¡Œåä¸‹", SMT_EJECT);
 		}
 		return false;
 	}
@@ -1390,11 +1390,11 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 	}
 	if (!pRoomBaseInfo)
 	{
-		ERROR_LOG("m_InitData.uRoomID=%d²»´æÔÚ", m_InitData.uRoomID);
+		ERROR_LOG("m_InitData.uRoomID=%dä¸å­˜åœ¨", m_InitData.uRoomID);
 		return false;
 	}
 
-	//³õÊ¼»¯´ıÑ¡×À×ÓË÷Òı
+	//åˆå§‹åŒ–å¾…é€‰æ¡Œå­ç´¢å¼•
 	int iArrDeskIndex[G_CHANGEDESK_MAX_COUNT], iArrRealDeskIndex[G_CHANGEDESK_MAX_COUNT];
 	int iArrDeskIndexCount = 0, iArrRealDeskIndexCount = 0;
 	memset(iArrDeskIndex, INVALID_DESKIDX, sizeof(iArrDeskIndex));
@@ -1411,7 +1411,7 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 		}
 		else
 		{
-			ERROR_LOG("ÓÎÏ·ÖĞ²»ÄÜ»»×À,userID=%d", userID);
+			ERROR_LOG("æ¸¸æˆä¸­ä¸èƒ½æ¢æ¡Œ,userID=%d", userID);
 			return false;
 		}
 	}
@@ -1461,7 +1461,7 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 
 			if (i == pMessage->deskIdx)
 			{
-				// Ô­À´µÄ×À×Ó
+				// åŸæ¥çš„æ¡Œå­
 				continue;
 			}
 
@@ -1486,7 +1486,7 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 			}
 		}
 
-		//Ëæ»úÑ¡×À×Ó
+		//éšæœºé€‰æ¡Œå­
 		if (iArrRealDeskIndexCount > 0)
 		{
 			iDeskIndex = iArrRealDeskIndex[CUtil::GetRandNum() % iArrRealDeskIndexCount];
@@ -1515,7 +1515,7 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 
 			if (i == pMessage->deskIdx)
 			{
-				// Ô­À´µÄ×À×Ó
+				// åŸæ¥çš„æ¡Œå­
 				continue;
 			}
 
@@ -1545,7 +1545,7 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 			}
 		}
 
-		//Ëæ»úÑ¡×À×Ó
+		//éšæœºé€‰æ¡Œå­
 		if (iArrRealDeskIndexCount > 0)
 		{
 			iDeskIndex = iArrRealDeskIndex[CUtil::GetRandNum() % iArrRealDeskIndexCount];
@@ -1586,7 +1586,7 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 		m_pGServerConnect->SendData(pUser->socketIdx, NULL, 0, MSG_MAIN_LOADER_NOTIFY_USER, MSG_NTF_LOADER_DESK_USER_NOFIND_DESK, 0, pUser->userID);
 		if (!pUser->isVirtual)
 		{
-			ERROR_LOG("Ã»ÓĞ¸øÍæ¼ÒÅäÖÃµ½×À×Ó,userID=%d", pUser->userID);
+			ERROR_LOG("æ²¡æœ‰ç»™ç©å®¶é…ç½®åˆ°æ¡Œå­,userID=%d", pUser->userID);
 		}
 		return false;
 	}
@@ -1598,7 +1598,7 @@ bool CGameMainManage::OnHandleUserRequestStand(int userID, void * pData, int siz
 {
 	if (GetRoomType() == ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("±ÈÈü³¡²»ÄÜÕ¾Æğ");
+		ERROR_LOG("æ¯”èµ›åœºä¸èƒ½ç«™èµ·");
 		return false;
 	}
 
@@ -1609,7 +1609,7 @@ bool CGameMainManage::OnHandleUserRequestStand(int userID, void * pData, int siz
 		return true;
 	}
 
-	// Ö»ÓĞÔÚÒ»¸ö×À×ÓÖĞ²ÅÄÜÕ¾ÆğÀ´
+	// åªæœ‰åœ¨ä¸€ä¸ªæ¡Œå­ä¸­æ‰èƒ½ç«™èµ·æ¥
 	if (pUser->deskIdx == INVALID_DESKIDX)
 	{
 		return false;
@@ -1634,7 +1634,7 @@ bool CGameMainManage::OnHandleUserRequestStand(int userID, void * pData, int siz
 		{
 			if (pGameDesk->IsPlayGame(pUser->deskStation))
 			{
-				return SendErrNotifyMessage(userID, "ÓÎÏ·ÖĞ²»ÄÜÀë¿ª", SMT_EJECT);
+				return SendErrNotifyMessage(userID, "æ¸¸æˆä¸­ä¸èƒ½ç¦»å¼€", SMT_EJECT);
 			}
 			else
 			{
@@ -1646,7 +1646,7 @@ bool CGameMainManage::OnHandleUserRequestStand(int userID, void * pData, int siz
 	{
 		if (pGameDesk->IsPlayGame(pUser->deskStation))
 		{
-			return SendErrNotifyMessage(userID, "ÓÎÏ·ÖĞ²»ÄÜÀë¿ª", SMT_EJECT);
+			return SendErrNotifyMessage(userID, "æ¸¸æˆä¸­ä¸èƒ½ç¦»å¼€", SMT_EJECT);
 		}
 		else
 		{
@@ -1683,7 +1683,7 @@ bool CGameMainManage::OnHandleRobotRequestTakeMoney(int userID, void* pData, int
 		return true;
 	}
 
-	//Èç¹ûºóÌ¨ÉèÖÃÁË½ğ±Ò·¶Î§Ö±½Ó°´ÕÕºóÌ¨À´
+	//å¦‚æœåå°è®¾ç½®äº†é‡‘å¸èŒƒå›´ç›´æ¥æŒ‰ç…§åå°æ¥
 	int iMinRobotHaveMoney_ = GetPoolConfigInfo("minM");
 	int iMaxRobotHaveMoney_ = GetPoolConfigInfo("maxM");
 	if (iMaxRobotHaveMoney_ > iMinRobotHaveMoney_ && m_InitData.iRoomSort != ROOM_SORT_HUNDRED)
@@ -1691,7 +1691,7 @@ bool CGameMainManage::OnHandleRobotRequestTakeMoney(int userID, void* pData, int
 		pMessage->iMoney = CUtil::GetRandRange(iMinRobotHaveMoney_, iMaxRobotHaveMoney_);
 	}
 
-	//»úÆ÷ÈË´Ó½±³ØÖĞÈ¡½ğ±Ò
+	//æœºå™¨äººä»å¥–æ± ä¸­å–é‡‘å¸
 	long long _i64PoolMoney = 0;
 	_i64PoolMoney = pUser->money - (long long)pMessage->iMoney;
 	//m_pRedis->SetRoomPoolMoney(GetRoomID(), _i64PoolMoney, true);
@@ -1740,7 +1740,7 @@ bool CGameMainManage::OnHandleUserRequestCombineSit(int userID, void* pData, int
 
 	if (GetRoomType() == ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("±ÈÈü³¡²»ÄÜ×é×À");
+		ERROR_LOG("æ¯”èµ›åœºä¸èƒ½ç»„æ¡Œ");
 		return false;
 	}
 
@@ -1756,12 +1756,12 @@ bool CGameMainManage::OnHandleUserRequestCombineSit(int userID, void* pData, int
 		return false;
 	}
 
-	// Ã»ÓĞÅäÖÃ×é×À
+	// æ²¡æœ‰é…ç½®ç»„æ¡Œ
 	if (!IsCanCombineDesk())
 	{
 		if (!pUser->isVirtual)
 		{
-			ERROR_LOG("Ã»ÓĞÅäÖÃ×é×À£¬×é×ÀÊ§°Ü£¬userID=%d,name=%s", userID, pUser->name);
+			ERROR_LOG("æ²¡æœ‰é…ç½®ç»„æ¡Œï¼Œç»„æ¡Œå¤±è´¥ï¼ŒuserID=%d,name=%s", userID, pUser->name);
 		}
 		return false;
 	}
@@ -1776,12 +1776,12 @@ bool CGameMainManage::OnHandleUserRequestCombineSit(int userID, void* pData, int
 		}
 		else
 		{
-			ERROR_LOG("ÓÎÏ·ÖĞ²»ÄÜ×é×À,userID=%d", userID);
+			ERROR_LOG("æ¸¸æˆä¸­ä¸èƒ½ç»„æ¡Œ,userID=%d", userID);
 			return false;
 		}
 	}
 
-	// Ìí¼Óµ½¼¯ºÏ
+	// æ·»åŠ åˆ°é›†åˆ
 	AddCombineDeskUser(userID, pUser->isVirtual);
 
 	return true;
@@ -1802,7 +1802,7 @@ bool CGameMainManage::OnHandleUserRequestCancelSit(int userID, void* pData, int 
 
 	if (GetRoomType() != ROOM_TYPE_GOLD)
 	{
-		ERROR_LOG("Ö»ÓĞ½ğ±Ò³¡²ÅÄÜÆ¥Åä×ø×À£¬userID=%d", userID);
+		ERROR_LOG("åªæœ‰é‡‘å¸åœºæ‰èƒ½åŒ¹é…åæ¡Œï¼ŒuserID=%d", userID);
 		return false;
 	}
 
@@ -1813,25 +1813,25 @@ bool CGameMainManage::OnHandleUserRequestCancelSit(int userID, void* pData, int 
 		return false;
 	}
 
-	// Ã»ÓĞÅäÖÃ×é×À
+	// æ²¡æœ‰é…ç½®ç»„æ¡Œ
 	if (!IsCanCombineDesk())
 	{
 		if (!pUser->isVirtual)
 		{
-			ERROR_LOG("Ã»ÓĞÅäÖÃ×é×À£¬×é×ÀÊ§°Ü£¬userID=%d,name=%s", userID, pUser->name);
+			ERROR_LOG("æ²¡æœ‰é…ç½®ç»„æ¡Œï¼Œç»„æ¡Œå¤±è´¥ï¼ŒuserID=%d,name=%s", userID, pUser->name);
 		}
 		return false;
 	}
 
 	if (INVALID_DESKIDX != pUser->deskIdx)
 	{
-		ERROR_LOG("ÒÑ¾­ÔÚ×À×ÓÄÚµÄÍæ¼Ò²»ÄÜ×ø×À£¬userID=%d", userID);
+		ERROR_LOG("å·²ç»åœ¨æ¡Œå­å†…çš„ç©å®¶ä¸èƒ½åæ¡Œï¼ŒuserID=%d", userID);
 		return false;
 	}
 
 	if (!DelCombineDeskUser(userID, pUser->isVirtual))
 	{
-		ERROR_LOG("ÅÅ¶ÓÁĞ±íÖĞ²»´æÔÚ¸ÃÍæ¼Ò,userID=%d", userID);
+		ERROR_LOG("æ’é˜Ÿåˆ—è¡¨ä¸­ä¸å­˜åœ¨è¯¥ç©å®¶,userID=%d", userID);
 		return false;
 	}
 
@@ -1855,7 +1855,7 @@ bool CGameMainManage::OnHandleFrameMessage(int userID, unsigned int assistID, vo
 		return false;
 	}
 
-	// Ñ¡Ôñ×À×Ó
+	// é€‰æ‹©æ¡Œå­
 	CGameDesk* pGameDesk = GetDeskObject(pUser->deskIdx);
 	if (!pGameDesk)
 	{
@@ -1900,7 +1900,7 @@ bool CGameMainManage::OnHandleGameMessage(int userID, unsigned int assistID, voi
 		return false;
 	}
 
-	// ¼ÇÂ¼Íæ¼Ò²Ù×÷Ê±¼ä
+	// è®°å½•ç©å®¶æ“ä½œæ—¶é—´
 	pUser->lastOperateTime = time(NULL);
 
 	return pGameDesk->HandleNotifyMessage(pUser->deskStation, assistID, pData, size, pUser->playStatus == USER_STATUS_WATCH);
@@ -1989,14 +1989,14 @@ bool CGameMainManage::OnHandleMatchAllDeskStatusMessage(int userID, void* pData,
 	auto itr = m_matchGameDeskMap.find(pMessage->llPartOfMatchID);
 	if (itr == m_matchGameDeskMap.end())
 	{
-		ERROR_LOG("Ã»ÓĞ¸Ã±ÈÈü:%lld", pMessage->llPartOfMatchID);
+		ERROR_LOG("æ²¡æœ‰è¯¥æ¯”èµ›:%lld", pMessage->llPartOfMatchID);
 		return false;
 	}
 
 	auto itrUser = m_matchUserMap.find(pMessage->llPartOfMatchID);
 	if (itrUser == m_matchUserMap.end())
 	{
-		ERROR_LOG("Ã»ÓĞÕÒµ½¸Ã±ÈÈüÈËÊı£º%lld", pMessage->llPartOfMatchID);
+		ERROR_LOG("æ²¡æœ‰æ‰¾åˆ°è¯¥æ¯”èµ›äººæ•°ï¼š%lld", pMessage->llPartOfMatchID);
 		return false;
 	}
 
@@ -2004,7 +2004,7 @@ bool CGameMainManage::OnHandleMatchAllDeskStatusMessage(int userID, void* pData,
 
 	if (deskList.size() <= 0)
 	{
-		ERROR_LOG("±ÈÈüÒÑ¾­½áÊø£º%lld", pMessage->llPartOfMatchID);
+		ERROR_LOG("æ¯”èµ›å·²ç»ç»“æŸï¼š%lld", pMessage->llPartOfMatchID);
 		return false;
 	}
 
@@ -2047,7 +2047,7 @@ bool CGameMainManage::OnHandleMatchAllDeskStatusMessage(int userID, void* pData,
 	return true;
 }
 
-//ÅÔ¹ÛÆäËü×À×Ó
+//æ—è§‚å…¶å®ƒæ¡Œå­
 bool CGameMainManage::OnHandleMatchEnterWatchDeskMessage(int userID, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, LoaderRequestMatchEnterWatch, pData, size);
@@ -2055,14 +2055,14 @@ bool CGameMainManage::OnHandleMatchEnterWatchDeskMessage(int userID, void* pData
 	GameUserInfo *pUser = GetUser(userID);
 	if (!pUser)
 	{
-		ERROR_LOG("ÓÃ»§²»´æÔÚ£¬²»ÄÜ½øÈëÅÔ¹Û,userID=%d", userID);
+		ERROR_LOG("ç”¨æˆ·ä¸å­˜åœ¨ï¼Œä¸èƒ½è¿›å…¥æ—è§‚,userID=%d", userID);
 		return false;
 	}
 
 	CGameDesk* pDesk = GetDeskObject(pMessage->deskIdx);
 	if (!pDesk)
 	{
-		ERROR_LOG("ÅÔ¹ÛµÄ×À×Ó²»´æÔÚ:%d", pMessage->deskIdx);
+		ERROR_LOG("æ—è§‚çš„æ¡Œå­ä¸å­˜åœ¨:%d", pMessage->deskIdx);
 		return false;
 	}
 
@@ -2071,7 +2071,7 @@ bool CGameMainManage::OnHandleMatchEnterWatchDeskMessage(int userID, void* pData
 	return true;
 }
 
-//ÍË³öÅÔ¹Û
+//é€€å‡ºæ—è§‚
 bool CGameMainManage::OnHandleMatchQuitWatchDeskMessage(int userID, void* pData, int size)
 {
 	if (size != 0)
@@ -2082,14 +2082,14 @@ bool CGameMainManage::OnHandleMatchQuitWatchDeskMessage(int userID, void* pData,
 	GameUserInfo *pUser = GetUser(userID);
 	if (!pUser)
 	{
-		ERROR_LOG("ÓÃ»§²»´æÔÚ£¬²»ÄÜÍË³öÅÔ¹Û,userID=%d", userID);
+		ERROR_LOG("ç”¨æˆ·ä¸å­˜åœ¨ï¼Œä¸èƒ½é€€å‡ºæ—è§‚,userID=%d", userID);
 		return false;
 	}
 
 	CGameDesk* pDesk = GetDeskObject(pUser->watchDeskIdx);
 	if (!pDesk)
 	{
-		ERROR_LOG("Íæ¼ÒÖ®Ç°Ã»ÓĞÅÔ¹ÛÆäËü×À×Ó,watchDeskIdx=%d", pUser->watchDeskIdx);
+		ERROR_LOG("ç©å®¶ä¹‹å‰æ²¡æœ‰æ—è§‚å…¶å®ƒæ¡Œå­,watchDeskIdx=%d", pUser->watchDeskIdx);
 		return false;
 	}
 
@@ -2177,7 +2177,7 @@ bool CGameMainManage::OnUserLogout(int userID)
 		return false;
 	}
 
-	// ÇåÀíÄÚ´æºÍ»º´æÊı¾İ
+	// æ¸…ç†å†…å­˜å’Œç¼“å­˜æ•°æ®
 	DelUser(userID);
 
 	return true;
@@ -2217,14 +2217,14 @@ bool CGameMainManage::RemoveOfflineUser(int userID)
 		return false;
 	}
 
-	// ±»ÒÆ³ıµÄÊ±ºòÍæ¼Ò±ØĞë´¦ÓÚÕ¾Æğ×´Ì¬
+	// è¢«ç§»é™¤çš„æ—¶å€™ç©å®¶å¿…é¡»å¤„äºç«™èµ·çŠ¶æ€
 	if (pUser->playStatus != USER_STATUS_STAND)
 	{
 		ERROR_LOG("user status is invalid userID=%d, status=%d", userID, pUser->playStatus);
 		return false;
 	}
 
-	// ÇåÀíÄÚ´æºÍ»º´æÊı¾İ
+	// æ¸…ç†å†…å­˜å’Œç¼“å­˜æ•°æ®
 	DelUser(userID);
 
 	return true;
@@ -2239,14 +2239,14 @@ bool CGameMainManage::RemoveWatchUser(int userID)
 		return false;
 	}
 
-	// ÊÇ·ñÅÔ¹Û×´Ì¬
+	// æ˜¯å¦æ—è§‚çŠ¶æ€
 	if (pUser->playStatus != USER_STATUS_WATCH)
 	{
 		ERROR_LOG("user status is invalid userID=%d, status=%d", userID, pUser->playStatus);
 		return false;
 	}
 
-	// ÇåÀíÍæ¼ÒÄÚ´æ
+	// æ¸…ç†ç©å®¶å†…å­˜
 	DelUser(userID);
 
 	return true;
@@ -2284,7 +2284,7 @@ void CGameMainManage::CheckTimeOutDesk()
 	for (unsigned int i = 0; i < m_uDeskCount; i++)
 	{
 		CGameDesk* pDesk = GetDeskObject(i);
-		if (!pDesk || !pDesk->IsEnable()) //µ÷ÓÃIsEnable£ºÖ»ÓĞÍæ¼Ò½ø¹ıµÄ×À×Ó£¬10·ÖÖÓ²Å¿ÉÒÔ½âÉ¢¡£´ú¿ªÃ»ÓĞ½ø¹ıµÄ×À×Ó²»»á½âÉ¢
+		if (!pDesk || !pDesk->IsEnable()) //è°ƒç”¨IsEnableï¼šåªæœ‰ç©å®¶è¿›è¿‡çš„æ¡Œå­ï¼Œ10åˆ†é’Ÿæ‰å¯ä»¥è§£æ•£ã€‚ä»£å¼€æ²¡æœ‰è¿›è¿‡çš„æ¡Œå­ä¸ä¼šè§£æ•£
 		{
 			continue;
 		}
@@ -2299,7 +2299,7 @@ void CGameMainManage::CheckTimeOutDesk()
 
 		if (privateDeskInfo.masterID <= 0 || privateDeskInfo.roomID <= 0)
 		{
-			ERROR_LOG("¼ì²âµ½ÎŞĞ§µÄ×À×Ó deskMixID=%d", deskMixID);
+			ERROR_LOG("æ£€æµ‹åˆ°æ— æ•ˆçš„æ¡Œå­ deskMixID=%d", deskMixID);
 			m_pRedis->DelPrivateDeskRecord(deskMixID);
 			continue;
 		}
@@ -2309,16 +2309,16 @@ void CGameMainManage::CheckTimeOutDesk()
 			continue;
 		}
 
-		//ÅĞ¶ÏÊÇ·ñ³¬Ê±
+		//åˆ¤æ–­æ˜¯å¦è¶…æ—¶
 		if (currTime - privateDeskInfo.checkTime <= PRIVATE_DESK_TIMEOUT_SECS)
 		{
 			continue;
 		}
 
-		// µ±Ç°Ã»ÓĞÍæ¼Ò»òÕßËùÓĞÈË¶¼ÀëÏß
+		// å½“å‰æ²¡æœ‰ç©å®¶æˆ–è€…æ‰€æœ‰äººéƒ½ç¦»çº¿
 		if (privateDeskInfo.currDeskUserCount <= 0 || pDesk->IsAllUserOffline())
 		{
-			INFO_LOG("ÇåÀí³¬Ê±×À×Ó roomID=%d,masterID=%d,passwd=%s",
+			INFO_LOG("æ¸…ç†è¶…æ—¶æ¡Œå­ roomID=%d,masterID=%d,passwd=%s",
 				privateDeskInfo.roomID, privateDeskInfo.masterID, privateDeskInfo.passwd);
 			pDesk->ProcessCostJewels();
 			pDesk->ClearAllData(privateDeskInfo);
@@ -2381,7 +2381,7 @@ void CGameMainManage::CheckTimeoutNotAgreeUser()
 	}
 }
 
-// ¼ì²é³¬Ê±²»²Ù×÷Íæ¼Ò
+// æ£€æŸ¥è¶…æ—¶ä¸æ“ä½œç©å®¶
 void CGameMainManage::CheckTimeoutNotOperateUser()
 {
 	if (GetRoomType() != ROOM_TYPE_GOLD)
@@ -2442,7 +2442,7 @@ void CGameMainManage::OnSceneGameStart()
 	}
 }
 
-// ¶¨ÆÚ±£´æµ±Ç°·¿¼äÈËÊı
+// å®šæœŸä¿å­˜å½“å‰æˆ¿é—´äººæ•°
 void CGameMainManage::OnSaveRoomPeopleCount()
 {
 	if (m_pRedis)
@@ -2451,25 +2451,25 @@ void CGameMainManage::OnSaveRoomPeopleCount()
 	}
 }
 
-// Í³¼ÆÆ¥Åä×À×ÓËÙ¶È
+// ç»Ÿè®¡åŒ¹é…æ¡Œå­é€Ÿåº¦
 void CGameMainManage::OnCombineDeskGameBegin()
 {
-	// Ã»ÓĞÕæÈË²»¿ªÊ¼ÓÎÏ·
+	// æ²¡æœ‰çœŸäººä¸å¼€å§‹æ¸¸æˆ
 	if (m_combineRealUserVec.size() <= 0)
 	{
 		return;
 	}
 
-	// ²»¹»´Õ³ÉÒ»×À
+	// ä¸å¤Ÿå‡‘æˆä¸€æ¡Œ
 	if (m_combineRealUserVec.size() + m_combineRobotUserVec.size() < m_KernelData.uDeskPeople)
 	{
 		return;
 	}
 
-	// Çå¿Õ
+	// æ¸…ç©º
 	m_allCombineDeskUserVec.clear();
 
-	// ½«ÕæÈËºÍ»úÆ÷ÈË·ÅÈë¼¯ºÏ
+	// å°†çœŸäººå’Œæœºå™¨äººæ”¾å…¥é›†åˆ
 	for (size_t i = 0; i < m_combineRealUserVec.size(); i++)
 	{
 		m_allCombineDeskUserVec.push_back(m_combineRealUserVec[i]);
@@ -2480,10 +2480,10 @@ void CGameMainManage::OnCombineDeskGameBegin()
 		m_allCombineDeskUserVec.push_back(m_combineRobotUserVec[i]);
 	}
 
-	// ÂÒĞò¼¯ºÏ
+	// ä¹±åºé›†åˆ
 	random_shuffle(m_allCombineDeskUserVec.begin(), m_allCombineDeskUserVec.end());
 
-	// ÕÒµ½×À×Ó£¬½«Íæ¼ÒÈ«²¿×øÏÂ
+	// æ‰¾åˆ°æ¡Œå­ï¼Œå°†ç©å®¶å…¨éƒ¨åä¸‹
 	for (int i = 0; i < (int)m_uDeskCount; i++)
 	{
 		if (m_allCombineDeskUserVec.size() < m_KernelData.uDeskPeople)
@@ -2498,7 +2498,7 @@ void CGameMainManage::OnCombineDeskGameBegin()
 			continue;
 		}
 
-		// ÕÒµ½Ò»ÕÅ¿ÉÒÔ×ùµÄ×À×Ó
+		// æ‰¾åˆ°ä¸€å¼ å¯ä»¥åº§çš„æ¡Œå­
 		if (pGameDesk->IsCanSitDesk())
 		{
 			while (pGameDesk->GetUserCount() < pGameDesk->m_iConfigCount && !pGameDesk->IsPlayGame(0))
@@ -2513,7 +2513,7 @@ void CGameMainManage::OnCombineDeskGameBegin()
 					continue;
 				}
 
-				// ¸ø¸ÃÍæ¼Ò·¢ËÍÆ¥Åä×ø×À³É¹¦
+				// ç»™è¯¥ç©å®¶å‘é€åŒ¹é…åæ¡ŒæˆåŠŸ
 				m_pGServerConnect->SendData(pTempUser->socketIdx, NULL, 0, MSG_MAIN_LOADER_ACTION, MSG_ASS_LOADER_ACTION_COMBINE_SIT, 0, pTempUser->userID);
 
 				if (!pGameDesk->UserSitDesk(pTempUser))
@@ -2521,7 +2521,7 @@ void CGameMainManage::OnCombineDeskGameBegin()
 					ERROR_LOG("UserSitDesk Fail");
 				}
 
-				// ÅÅ¶ÓÁĞ±íÖĞÉ¾³ı
+				// æ’é˜Ÿåˆ—è¡¨ä¸­åˆ é™¤
 				DelCombineDeskUser(tempUserID, pTempUser->isVirtual);
 				m_allCombineDeskUserVec.pop_back();
 			}
@@ -2540,10 +2540,10 @@ int CGameMainManage::GetRoomType()
 }
 
 //////////////////////////////////////////////////////////////////////////
-// ×é×À
+// ç»„æ¡Œ
 bool CGameMainManage::AddCombineDeskUser(int userID, BYTE isVirtual)
 {
-	// ÒÑ¾­´æÔÚ
+	// å·²ç»å­˜åœ¨
 	if (m_combineUserSet.count(userID) > 0)
 	{
 		return false;
@@ -2598,7 +2598,7 @@ bool CGameMainManage::DelCombineDeskUser(int userID, BYTE isVirtual)
 	return true;
 }
 
-//////////////////////////////////ÖĞĞÄ·şÏûÏ¢////////////////////////////////////////
+//////////////////////////////////ä¸­å¿ƒæœæ¶ˆæ¯////////////////////////////////////////
 bool CGameMainManage::SendMessageToCenterServer(UINT msgID, void * pData, UINT size, int userID/* = 0*/)
 {
 	if (m_pTcpConnect)
@@ -2606,13 +2606,13 @@ bool CGameMainManage::SendMessageToCenterServer(UINT msgID, void * pData, UINT s
 		bool ret = m_pTcpConnect->Send(msgID, pData, size, userID);
 		if (!ret)
 		{
-			ERROR_LOG("ÏòÖĞĞÄ·ş·¢ËÍÊı¾İÊ§°Ü£¡£¡£¡");
+			ERROR_LOG("å‘ä¸­å¿ƒæœå‘é€æ•°æ®å¤±è´¥ï¼ï¼ï¼");
 		}
 		return ret;
 	}
 	else
 	{
-		ERROR_LOG("ÏòÖĞĞÄ·ş·¢ËÍÊı¾İÊ§°Ü£º£ºm_pTcpConnect=NULL");
+		ERROR_LOG("å‘ä¸­å¿ƒæœå‘é€æ•°æ®å¤±è´¥ï¼šï¼šm_pTcpConnect=NULL");
 	}
 
 	return false;
@@ -2642,12 +2642,12 @@ void CGameMainManage::SendFireCoinChangeToLogonServer(int friendsGroupID, int us
 	SendMessageToCenterServer(CENTER_MESSAGE_LOADER_FIRECOIN_CHANGE, &msg, sizeof(msg), userID);
 }
 
-// Í¨ÖªÈ«·ş´ó½±»òÕß¹«¸æ
+// é€šçŸ¥å…¨æœå¤§å¥–æˆ–è€…å…¬å‘Š
 void CGameMainManage::SendRewardActivityNotify(const char * rewardMsg)
 {
 	if (rewardMsg == NULL)
 	{
-		ERROR_LOG("½±ÀøÏûÏ¢²»ÄÜÎª¿Õ");
+		ERROR_LOG("å¥–åŠ±æ¶ˆæ¯ä¸èƒ½ä¸ºç©º");
 		return;
 	}
 
@@ -2656,7 +2656,7 @@ void CGameMainManage::SendRewardActivityNotify(const char * rewardMsg)
 	msg.sizeCount = strlen(rewardMsg) + 1;
 	if (msg.sizeCount > sizeof(msg.content))
 	{
-		ERROR_LOG("½±ÀøÏûÏ¢Ì«³¤:%d", msg.sizeCount);
+		ERROR_LOG("å¥–åŠ±æ¶ˆæ¯å¤ªé•¿:%d", msg.sizeCount);
 		return;
 	}
 
@@ -2776,7 +2776,7 @@ bool CGameMainManage::OnCenterMessageResourceChange(void* pData, int size, int u
 	if (pMessage->resourceType == RESOURCE_TYPE_FIRECOIN && roomType == ROOM_TYPE_FG_VIP
 		&& pDesk->m_friendsGroupMsg.friendsGroupID != pMessage->reserveData)
 	{
-		ERROR_LOG("¾ãÀÖ²¿id²»ÕıÈ·,×À×ÓfriendsGroupID=%d,reserveData=%d", pDesk->m_friendsGroupMsg.friendsGroupID, pMessage->reserveData);
+		ERROR_LOG("ä¿±ä¹éƒ¨idä¸æ­£ç¡®,æ¡Œå­friendsGroupID=%d,reserveData=%d", pDesk->m_friendsGroupMsg.friendsGroupID, pMessage->reserveData);
 		return false;
 	}
 
@@ -2805,11 +2805,11 @@ bool CGameMainManage::OnCenterMessageFGDissmissDesk(void* pData, int size)
 	CGameDesk* pDesk = GetDeskObject(deskIdx);
 	if (!pDesk)
 	{
-		ERROR_LOG("´óÌü½âÉ¢×À×ÓGetDeskObject failed deskIdx=%d", deskIdx);
+		ERROR_LOG("å¤§å…è§£æ•£æ¡Œå­GetDeskObject failed deskIdx=%d", deskIdx);
 		return false;
 	}
 
-	//½âÉ¢×À×Ó
+	//è§£æ•£æ¡Œå­
 	pDesk->LogonDissmissDesk(userID, pMessage->bDelete);
 
 	return true;
@@ -2833,22 +2833,22 @@ bool CGameMainManage::OnCenterMessageMasterDissmissDesk(void* pData, int size)
 	CGameDesk* pDesk = GetDeskObject(deskIdx);
 	if (!pDesk)
 	{
-		ERROR_LOG("´óÌü½âÉ¢×À×ÓGetDeskObject failed deskIdx=%d", deskIdx);
+		ERROR_LOG("å¤§å…è§£æ•£æ¡Œå­GetDeskObject failed deskIdx=%d", deskIdx);
 		return false;
 	}
 
-	//½âÉ¢×À×Ó
+	//è§£æ•£æ¡Œå­
 	pDesk->LogonDissmissDesk();
 
 	return true;
 }
 
-// ¹Ø·ş£¬½âÉ¢ËùÓĞ×À×Ó
+// å…³æœï¼Œè§£æ•£æ‰€æœ‰æ¡Œå­
 void CGameMainManage::OnCenterCloseServerDissmissAllDesk(void* pData, int size)
 {
 	if (size != 0)
 	{
-		ERROR_LOG("¹Ø·şÃüÁîÊ§°Ü¡£Êı¾İ°ü´óĞ¡²»¶Ô");
+		ERROR_LOG("å…³æœå‘½ä»¤å¤±è´¥ã€‚æ•°æ®åŒ…å¤§å°ä¸å¯¹");
 		return;
 	}
 
@@ -2892,19 +2892,19 @@ void CGameMainManage::OnCenterCloseServerDissmissAllDesk(void* pData, int size)
 			}
 		}
 
-		//½âÉ¢ËùÓĞ×À×Ó£¨Ç¿ĞĞ½âÉ¢£©
+		//è§£æ•£æ‰€æœ‰æ¡Œå­ï¼ˆå¼ºè¡Œè§£æ•£ï¼‰
 		pDesk->LogonDissmissDesk();
 	}
 
-	INFO_LOG("======== LoaderServer ¹Ø±Õ³É¹¦ ,¹Ø±Õ×À×ÓÊıÁ¿%d£¬±£´æ×À×ÓÊıÁ¿%d=======", vecRooms.size(), iSaveCount);
+	INFO_LOG("======== LoaderServer å…³é—­æˆåŠŸ ,å…³é—­æ¡Œå­æ•°é‡%dï¼Œä¿å­˜æ¡Œå­æ•°é‡%d=======", vecRooms.size(), iSaveCount);
 }
 
-// ÖØĞÂ¼ÓÔØÅäÖÃÊı¾İ
+// é‡æ–°åŠ è½½é…ç½®æ•°æ®
 bool CGameMainManage::OnCenterMessageReloadGameConfig(void* pData, int size)
 {
 	if (size != 0)
 	{
-		ERROR_LOG("²»Æ¥Åä");
+		ERROR_LOG("ä¸åŒ¹é…");
 		return false;
 	}
 
@@ -2913,11 +2913,11 @@ bool CGameMainManage::OnCenterMessageReloadGameConfig(void* pData, int size)
 	return true;
 }
 
-// ¿ªÊ¼±ÈÈü(ÊµÊ±Èü)
+// å¼€å§‹æ¯”èµ›(å®æ—¶èµ›)
 bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 {
-	// Í³¼ÆÏûºÄ
-	WAUTOCOST("PHPÇëÇó¿ªÊ¼±ÈÈüºÄÊ±£º");
+	// ç»Ÿè®¡æ¶ˆè€—
+	WAUTOCOST("PHPè¯·æ±‚å¼€å§‹æ¯”èµ›è€—æ—¶ï¼š");
 
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPReqStartMatchPeople, pData, size);
 
@@ -2928,61 +2928,61 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 
 	if (GetRoomType() != ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("·¿¼äÀàĞÍ²»ÕıÈ·,roomType=%d", GetRoomType());
+		ERROR_LOG("æˆ¿é—´ç±»å‹ä¸æ­£ç¡®,roomType=%d", GetRoomType());
 		return false;
 	}
 
 	if (pMessage->gameID != m_uNameID)
 	{
-		ERROR_LOG("ÓÎÏ·id²»Æ¥Åä£¬gameID=%d,pMessage->gameID=%d", m_uNameID, pMessage->gameID);
+		ERROR_LOG("æ¸¸æˆidä¸åŒ¹é…ï¼ŒgameID=%d,pMessage->gameID=%d", m_uNameID, pMessage->gameID);
 		return false;
 	}
 
 	GameBaseInfo * pGameBaseInfo = ConfigManage()->GetGameBaseInfo(m_uNameID);
 	if (!pGameBaseInfo)
 	{
-		ERROR_LOG("Ã»ÓĞÅäÖÃ¸ÃÓÎÏ·£¬gameID=%d", m_uNameID);
+		ERROR_LOG("æ²¡æœ‰é…ç½®è¯¥æ¸¸æˆï¼ŒgameID=%d", m_uNameID);
 		return false;
 	}
 
-	//·ÖÅäÒ»¸ö¾Ö²¿±ÈÈüid
+	//åˆ†é…ä¸€ä¸ªå±€éƒ¨æ¯”èµ›id
 	long long llPartOfMatchID = m_pRedis->GetPartOfMatchIndex();
 	if (llPartOfMatchID <= 0)
 	{
-		ERROR_LOG("±ÈÈü¿ªÈüÊ§°Ü,llPartOfMatchID=%lld", llPartOfMatchID);
+		ERROR_LOG("æ¯”èµ›å¼€èµ›å¤±è´¥,llPartOfMatchID=%lld", llPartOfMatchID);
 		return false;
 	}
 
-	//»ñÈ¡±ÈÈüÈËÊı
+	//è·å–æ¯”èµ›äººæ•°
 	std::vector<MatchUserInfo> vecPeople;
 	if (!m_pRedis->GetFullPeopleMatchPeople(m_uNameID, pMessage->matchID, pMessage->peopleCount, vecPeople))
 	{
-		ERROR_LOG("¿ªÈüÈËÊı²»¹»£¬ÎŞ·¨¿ªÈü£¬µ±Ç°ÈËÊı=%d£¬ĞèÒªÈËÊı=%d", vecPeople.size(), pMessage->peopleCount);
+		ERROR_LOG("å¼€èµ›äººæ•°ä¸å¤Ÿï¼Œæ— æ³•å¼€èµ›ï¼Œå½“å‰äººæ•°=%dï¼Œéœ€è¦äººæ•°=%d", vecPeople.size(), pMessage->peopleCount);
 		return true;
 	}
 
-	//»ñÈ¡±ÈÈüµÄ×À×Ó
+	//è·å–æ¯”èµ›çš„æ¡Œå­
 	std::list<int> matchDeskList;
 	if (!GetMatchDesk(pMessage->peopleCount / pGameBaseInfo->deskPeople, matchDeskList))
 	{
 		return true;
 	}
 
-	//½«Ïà¹Ø±ÈÈüÈËÔ±£¬È«²¿À­½ø×À×Ó
+	//å°†ç›¸å…³æ¯”èµ›äººå‘˜ï¼Œå…¨éƒ¨æ‹‰è¿›æ¡Œå­
 	for (size_t i = 0; i < vecPeople.size(); i++)
 	{
 		int userID = vecPeople[i].userID;
 		UserData userData;
 		if (!m_pRedis->GetUserData(userID, userData))
 		{
-			ERROR_LOG("»ñÈ¡Íæ¼ÒÊı¾İÊ§°Ü£¬µ¼ÖÂÎŞ·¨¿ªÈü,uerID=%d", userID);
+			ERROR_LOG("è·å–ç©å®¶æ•°æ®å¤±è´¥ï¼Œå¯¼è‡´æ— æ³•å¼€èµ›,uerID=%d", userID);
 			return false;
 		}
 
-		// ¸üĞÂ×´Ì¬
+		// æ›´æ–°çŠ¶æ€
 		vecPeople[i].byMatchStatus = DESK_MATCH_STATUS_NORMAL;
 
-		// ÄÚ´æÊı¾İ
+		// å†…å­˜æ•°æ®
 		GameUserInfo* pUser = m_pGameUserManage->GetUser(userID);
 		if (pUser)
 		{
@@ -2990,18 +2990,18 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 			pUser = NULL;
 		}
 
-		// ´´½¨Ò»¸öĞÂÍæ¼Ò
+		// åˆ›å»ºä¸€ä¸ªæ–°ç©å®¶
 		pUser = new GameUserInfo;
 		if (!pUser)
 		{
-			ERROR_LOG("ÎŞ·¨¿ªÈü£¬·ÖÅäÄÚ´æÊ§°Ü,userID = %d", userID);
+			ERROR_LOG("æ— æ³•å¼€èµ›ï¼Œåˆ†é…å†…å­˜å¤±è´¥,userID = %d", userID);
 			return false;
 		}
 
-		//³õÊ¼»¯±ÈÈüĞÅÏ¢
+		//åˆå§‹åŒ–æ¯”èµ›ä¿¡æ¯
 		pUser->matchSocre = 0;
 
-		//Ìî³äÄÚ´æÊı¾İ
+		//å¡«å……å†…å­˜æ•°æ®
 		pUser->userID = userID;
 		pUser->money = userData.money;
 		pUser->jewels = userData.jewels;
@@ -3038,13 +3038,13 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 
 	time_t currTime = time(NULL);
 
-	//³õÊ¼»¯±ÈÈü×À×Ó
+	//åˆå§‹åŒ–æ¯”èµ›æ¡Œå­
 	for (auto itr = matchDeskList.begin(); itr != matchDeskList.end(); itr++)
 	{
 		CGameDesk * pGameDesk = GetDeskObject(*itr);
 		if (pGameDesk == NULL)
 		{
-			ERROR_LOG("### ×À×ÓÄÚ´æÕÒ²»µ½,index=%d ###", *itr);
+			ERROR_LOG("### æ¡Œå­å†…å­˜æ‰¾ä¸åˆ°,index=%d ###", *itr);
 			return false;
 		}
 
@@ -3052,10 +3052,10 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 		pGameDesk->m_llPartOfMatchID = llPartOfMatchID;
 		pGameDesk->m_iCurMatchRound = 1;
 		pGameDesk->m_iMaxMatchRound = pMessage->matchRound;
-		pGameDesk->m_llStartMatchTime = currTime + 10; //ÉèÖÃ¿ªÊ¼±ÈÈüÊ±¼ä
+		pGameDesk->m_llStartMatchTime = currTime + 10; //è®¾ç½®å¼€å§‹æ¯”èµ›æ—¶é—´
 	}
 
-	//Í¨ÖªÕâĞ©Íæ¼Ò¹ıÀ´²Î¼Ó±ÈÈü
+	//é€šçŸ¥è¿™äº›ç©å®¶è¿‡æ¥å‚åŠ æ¯”èµ›
 	PlatformLoaderNotifyStartMatch notifyMsg;
 	notifyMsg.gameID = m_uNameID;
 	notifyMsg.matchType = MATCH_TYPE_PEOPLE;
@@ -3068,32 +3068,32 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 	}
 	SendMessageToCenterServer(CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH, &notifyMsg, sizeof(notifyMsg));
 
-	//½«×À×Ó¼ÓÈëÄÚ´æ
+	//å°†æ¡Œå­åŠ å…¥å†…å­˜
 	m_matchGameDeskMap.insert(std::make_pair(llPartOfMatchID, matchDeskList));
 
-	//½«±ÈÈüÈËÔ±ÔÚÄÚ´æÖĞ±£´æ
+	//å°†æ¯”èµ›äººå‘˜åœ¨å†…å­˜ä¸­ä¿å­˜
 	m_matchUserMap.insert(std::make_pair(llPartOfMatchID, vecPeople));
 
-	//±£´æ±ÈÈü´óID
+	//ä¿å­˜æ¯”èµ›å¤§ID
 	m_matchMainIDMap[llPartOfMatchID] = pMessage->matchID;
 
-	//±£´æ±ÈÈüÀàĞÍ
+	//ä¿å­˜æ¯”èµ›ç±»å‹
 	m_matchTypeMap[llPartOfMatchID] = MATCH_TYPE_PEOPLE;
 
-	//½«ÕâĞ©²ÎÈüÈËÔ±´ÓredisÖĞÉ¾³ı
+	//å°†è¿™äº›å‚èµ›äººå‘˜ä»redisä¸­åˆ é™¤
 	m_pRedis->DelFullPeopleMatchPeople(m_uNameID, pMessage->matchID, vecPeople);
 
-	//¿ªÊ¼±ÈÈü
+	//å¼€å§‹æ¯”èµ›
 	AllocDeskStartMatch(matchDeskList, vecPeople);
 
 	return true;
 }
 
-// ¿ªÊ¼±ÈÈü(¶¨Ê±Èü)
+// å¼€å§‹æ¯”èµ›(å®šæ—¶èµ›)
 bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 {
-	// Í³¼ÆÏûºÄ
-	WAUTOCOST("¶¨Ê±Èü¿ªÊ¼±ÈÈüºÄÊ±£º");
+	// ç»Ÿè®¡æ¶ˆè€—
+	WAUTOCOST("å®šæ—¶èµ›å¼€å§‹æ¯”èµ›è€—æ—¶ï¼š");
 
 	SAFECHECK_MESSAGE(pMessage, PlatformReqStartMatchTime, pData, size);
 
@@ -3106,63 +3106,63 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 
 	if (GetRoomType() != ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("·¿¼äÀàĞÍ²»ÕıÈ·,roomType=%d", GetRoomType());
+		ERROR_LOG("æˆ¿é—´ç±»å‹ä¸æ­£ç¡®,roomType=%d", GetRoomType());
 		return false;
 	}
 
 	if (pMessage->gameID != m_uNameID)
 	{
-		ERROR_LOG("ÓÎÏ·id²»Æ¥Åä£¬gameID=%d,pMessage->gameID=%d", m_uNameID, pMessage->gameID);
+		ERROR_LOG("æ¸¸æˆidä¸åŒ¹é…ï¼ŒgameID=%d,pMessage->gameID=%d", m_uNameID, pMessage->gameID);
 		return false;
 	}
 
 	GameBaseInfo * pGameBaseInfo = ConfigManage()->GetGameBaseInfo(m_uNameID);
 	if (!pGameBaseInfo)
 	{
-		ERROR_LOG("Ã»ÓĞÅäÖÃ¸ÃÓÎÏ·£¬gameID=%d", m_uNameID);
+		ERROR_LOG("æ²¡æœ‰é…ç½®è¯¥æ¸¸æˆï¼ŒgameID=%d", m_uNameID);
 		SendMatchFailMail(MATCH_FAIL_REASON_SYSTEM_ERROR, 0, MATCH_TYPE_TIME, pMessage->matchID);
 		return false;
 	}
 
-	//·ÖÅäÒ»¸ö¾Ö²¿±ÈÈüid
+	//åˆ†é…ä¸€ä¸ªå±€éƒ¨æ¯”èµ›id
 	long long llPartOfMatchID = m_pRedis->GetPartOfMatchIndex();
 	if (llPartOfMatchID <= 0)
 	{
-		ERROR_LOG("±ÈÈü¿ªÈüÊ§°Ü,llPartOfMatchID=%lld", llPartOfMatchID);
+		ERROR_LOG("æ¯”èµ›å¼€èµ›å¤±è´¥,llPartOfMatchID=%lld", llPartOfMatchID);
 		SendMatchFailMail(MATCH_FAIL_REASON_SYSTEM_ERROR, 0, MATCH_TYPE_TIME, pMessage->matchID);
 		return false;
 	}
 
-	//»ñÈ¡±ÈÈüÈËÊı
+	//è·å–æ¯”èµ›äººæ•°
 	std::vector<MatchUserInfo> vecPeople;
 	if (!m_pRedis->GetTimeMatchPeople(pMessage->matchID, vecPeople))
 	{
-		ERROR_LOG("ÎŞ·¨¿ªÈü£¬matchID=%d µ±Ç°ÈËÊı=%d", pMessage->matchID, vecPeople.size());
+		ERROR_LOG("æ— æ³•å¼€èµ›ï¼ŒmatchID=%d å½“å‰äººæ•°=%d", pMessage->matchID, vecPeople.size());
 		SendMatchFailMail(MATCH_FAIL_REASON_NOT_ENOUGH_PEOPLE, 0, MATCH_TYPE_TIME, pMessage->matchID);
 		return true;
 	}
 
-	//×î´óÈËÊıÏŞÖÆ
+	//æœ€å¤§äººæ•°é™åˆ¶
 	if (vecPeople.size() > MAX_MATCH_PEOPLE_COUNT)
 	{
-		ERROR_LOG("±ÈÈüÈËÊı³¬¹ıÏŞÖÆ£¬µ±Ç°ÈËÊı=%d", vecPeople.size());
+		ERROR_LOG("æ¯”èµ›äººæ•°è¶…è¿‡é™åˆ¶ï¼Œå½“å‰äººæ•°=%d", vecPeople.size());
 		SendMatchFailMail(MATCH_FAIL_REASON_SYSTEM_ERROR, 0, MATCH_TYPE_TIME, pMessage->matchID);
 		return true;
 	}
 
-	//ÓĞĞ§Íæ¼Ò¼ÓÈëÄÚ´æ¡£Ê§°ÜÇåÀíÄÚ´æ
+	//æœ‰æ•ˆç©å®¶åŠ å…¥å†…å­˜ã€‚å¤±è´¥æ¸…ç†å†…å­˜
 	for (auto itr = vecPeople.begin(); itr != vecPeople.end();)
 	{
 		int userID = itr->userID;
 		UserData userData;
 		if (!m_pRedis->GetUserData(userID, userData))
 		{
-			ERROR_LOG("»ñÈ¡Íæ¼ÒÊı¾İÊ§°Ü,uerID=%d", userID);
+			ERROR_LOG("è·å–ç©å®¶æ•°æ®å¤±è´¥,uerID=%d", userID);
 			itr = vecPeople.erase(itr);
 			continue;
 		}
 
-		//ÓÎÏ·ÖĞ£¬ÊÓÎªÆúÈ¨
+		//æ¸¸æˆä¸­ï¼Œè§†ä¸ºå¼ƒæƒ
 		if (userData.roomID > 0)
 		{
 			SendMatchFailMail(MATCH_FAIL_REASON_PLAYING, userID, MATCH_TYPE_TIME, pMessage->matchID);
@@ -3171,10 +3171,10 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 			continue;
 		}
 
-		// ¸üĞÂ×´Ì¬
+		// æ›´æ–°çŠ¶æ€
 		itr->byMatchStatus = DESK_MATCH_STATUS_NORMAL;
 
-		// ÄÚ´æÊı¾İ
+		// å†…å­˜æ•°æ®
 		GameUserInfo* pUser = m_pGameUserManage->GetUser(userID);
 		if (pUser)
 		{
@@ -3182,19 +3182,19 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 			pUser = NULL;
 		}
 
-		// ´´½¨Ò»¸öĞÂÍæ¼Ò
+		// åˆ›å»ºä¸€ä¸ªæ–°ç©å®¶
 		pUser = new GameUserInfo;
 		if (!pUser)
 		{
-			ERROR_LOG("·ÖÅäÄÚ´æÊ§°Ü,userID = %d", userID);
+			ERROR_LOG("åˆ†é…å†…å­˜å¤±è´¥,userID = %d", userID);
 			itr = vecPeople.erase(itr);
 			continue;
 		}
 
-		//³õÊ¼»¯±ÈÈüĞÅÏ¢
+		//åˆå§‹åŒ–æ¯”èµ›ä¿¡æ¯
 		pUser->matchSocre = 0;
 
-		//Ìî³äÄÚ´æÊı¾İ
+		//å¡«å……å†…å­˜æ•°æ®
 		pUser->userID = userID;
 		pUser->money = userData.money;
 		pUser->jewels = userData.jewels;
@@ -3215,12 +3215,12 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		itr++;
 	}
 
-	//ÅĞ¶ÏÓĞĞ§ÈËÊıÊıÁ¿£¬ÊÇ·ñĞ¡ÓÚ×îĞ¡Öµ
+	//åˆ¤æ–­æœ‰æ•ˆäººæ•°æ•°é‡ï¼Œæ˜¯å¦å°äºæœ€å°å€¼
 	if (vecPeople.size() < (UINT)pMessage->minPeople || vecPeople.size() < m_KernelData.uDeskPeople)
 	{
-		ERROR_LOG("¿ªÊ¼Ê§°Ü£¬±ÈÈüÉÙÓÚËùĞèÈËÊı£¬×îÉÙÈËÊı=%d,µ±Ç°ÈËÊı=%d,matchID=%d", pMessage->minPeople, vecPeople.size(), pMessage->matchID);
+		ERROR_LOG("å¼€å§‹å¤±è´¥ï¼Œæ¯”èµ›å°‘äºæ‰€éœ€äººæ•°ï¼Œæœ€å°‘äººæ•°=%d,å½“å‰äººæ•°=%d,matchID=%d", pMessage->minPeople, vecPeople.size(), pMessage->matchID);
 
-		//·¢ËÍ±ÈÈüÊ§°ÜÓÊ¼şÍ¨Öª£¬ÍË±¨Ãû·Ñ£¬ÇåÀí±ÈÈü×´Ì¬
+		//å‘é€æ¯”èµ›å¤±è´¥é‚®ä»¶é€šçŸ¥ï¼Œé€€æŠ¥åè´¹ï¼Œæ¸…ç†æ¯”èµ›çŠ¶æ€
 		for (size_t i = 0; i < vecPeople.size(); i++)
 		{
 			ClearMatchStatus(MATCH_FAIL_REASON_NOT_ENOUGH_PEOPLE, vecPeople[i].userID, MATCH_TYPE_TIME, pMessage->matchID);
@@ -3232,7 +3232,7 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		return false;
 	}
 
-	//Ìí¼Ó»úÆ÷ÈË£¬Âú×ã±ÈÈüËùĞèÈËÊı
+	//æ·»åŠ æœºå™¨äººï¼Œæ»¡è¶³æ¯”èµ›æ‰€éœ€äººæ•°
 	bool bStartMatchSuccess = true;
 	int iNeedRobotCount = vecPeople.size() % m_KernelData.uDeskPeople == 0 ? 0 : (m_KernelData.uDeskPeople - (vecPeople.size() % m_KernelData.uDeskPeople));
 	for (int i = 0; i < iNeedRobotCount; i++)
@@ -3241,20 +3241,20 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		if (userID <= 0)
 		{
 			bStartMatchSuccess = false;
-			ERROR_LOG("Ìí¼Ó»úÆ÷ÈËÊ§°Ü");
+			ERROR_LOG("æ·»åŠ æœºå™¨äººå¤±è´¥");
 			break;
 		}
 
-		// ÄÚ´æÊı¾İ
+		// å†…å­˜æ•°æ®
 		GameUserInfo* pUser = new GameUserInfo;
 		if (!pUser)
 		{
-			ERROR_LOG("·ÖÅäÄÚ´æÊ§°Ü,userID = %d", userID);
+			ERROR_LOG("åˆ†é…å†…å­˜å¤±è´¥,userID = %d", userID);
 			bStartMatchSuccess = false;
 			break;
 		}
 
-		//³õÊ¼»¯±ÈÈüĞÅÏ¢
+		//åˆå§‹åŒ–æ¯”èµ›ä¿¡æ¯
 		pUser->matchSocre = 0;
 		MatchUserInfo robotMatchUser;
 		robotMatchUser.userID = userID;
@@ -3262,7 +3262,7 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		robotMatchUser.signUpTime = currTime;
 		vecPeople.push_back(robotMatchUser);
 
-		//Ìî³äÄÚ´æÊı¾İ
+		//å¡«å……å†…å­˜æ•°æ®
 		pUser->userID = userID;
 		pUser->money = 0;
 		pUser->jewels = 0;
@@ -3285,7 +3285,7 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 	}
 	if (!bStartMatchSuccess)
 	{
-		//·¢ËÍ±ÈÈüÊ§°ÜÓÊ¼şÍ¨Öª£¬ÍË±¨Ãû·Ñ£¬ÇåÀí±ÈÈü×´Ì¬
+		//å‘é€æ¯”èµ›å¤±è´¥é‚®ä»¶é€šçŸ¥ï¼Œé€€æŠ¥åè´¹ï¼Œæ¸…ç†æ¯”èµ›çŠ¶æ€
 		for (size_t i = 0; i < vecPeople.size() - iNeedRobotCount; i++)
 		{
 			ClearMatchStatus(MATCH_FAIL_REASON_SYSTEM_ERROR, vecPeople[i].userID, MATCH_TYPE_TIME, pMessage->matchID);
@@ -3294,18 +3294,18 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		SendMatchFailMail(MATCH_FAIL_REASON_SYSTEM_ERROR, 0, MATCH_TYPE_TIME, pMessage->matchID);
 		ClearMatchUser(pMessage->matchID, vecPeople);
 
-		ERROR_LOG("±ÈÈü¿ªÊ¼Ê§°Ü£¬Ìí¼Ó»úÆ÷ÈËÊ§°Ü");
+		ERROR_LOG("æ¯”èµ›å¼€å§‹å¤±è´¥ï¼Œæ·»åŠ æœºå™¨äººå¤±è´¥");
 		return false;
 	}
 
-	//»ñÈ¡±ÈÈüµÄ×À×Ó
+	//è·å–æ¯”èµ›çš„æ¡Œå­
 	int iNeedDeskCount = vecPeople.size() / m_KernelData.uDeskPeople;
 	std::list<int> matchDeskList;
 	if (!GetMatchDesk(iNeedDeskCount, matchDeskList))
 	{
-		ERROR_LOG("ÎŞ·¨¿ªÈü£¬×À×ÓÊıÁ¿²»¹» iNeedDeskCount=%d", iNeedDeskCount);
+		ERROR_LOG("æ— æ³•å¼€èµ›ï¼Œæ¡Œå­æ•°é‡ä¸å¤Ÿ iNeedDeskCount=%d", iNeedDeskCount);
 
-		//·¢ËÍ±ÈÈüÊ§°ÜÓÊ¼şÍ¨Öª£¬ÍË±¨Ãû·Ñ£¬ÇåÀí±ÈÈü×´Ì¬
+		//å‘é€æ¯”èµ›å¤±è´¥é‚®ä»¶é€šçŸ¥ï¼Œé€€æŠ¥åè´¹ï¼Œæ¸…ç†æ¯”èµ›çŠ¶æ€
 		for (size_t i = 0; i < vecPeople.size() - iNeedRobotCount; i++)
 		{
 			ClearMatchStatus(MATCH_FAIL_REASON_SYSTEM_ERROR, vecPeople[i].userID, MATCH_TYPE_TIME, pMessage->matchID);
@@ -3317,7 +3317,7 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		return false;
 	}
 
-	//È«²¿ÑéÖ¤Í¨¹ı¿ÉÒÔ¿ªÊ¼±ÈÈü£¬¼ÆËã±ÈÈüËùĞèÂÖÊı
+	//å…¨éƒ¨éªŒè¯é€šè¿‡å¯ä»¥å¼€å§‹æ¯”èµ›ï¼Œè®¡ç®—æ¯”èµ›æ‰€éœ€è½®æ•°
 	int iMaxMatchRound = 0;
 	for (iMaxMatchRound = 1; iMaxMatchRound <= MAX_MATCH_ROUND + 1; iMaxMatchRound++)
 	{
@@ -3328,13 +3328,13 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 	}
 	iMaxMatchRound = iMaxMatchRound - 1;
 
-	//³õÊ¼»¯±ÈÈü×À×Ó
+	//åˆå§‹åŒ–æ¯”èµ›æ¡Œå­
 	for (auto itr = matchDeskList.begin(); itr != matchDeskList.end(); itr++)
 	{
 		CGameDesk * pGameDesk = GetDeskObject(*itr);
 		if (pGameDesk == NULL)
 		{
-			ERROR_LOG("######  ¿ªÊ¼±ÈÈüÊ§°Ü£¬×À×ÓÄÚ´æÕÒ²»µ½,index=%d  ######", *itr);
+			ERROR_LOG("######  å¼€å§‹æ¯”èµ›å¤±è´¥ï¼Œæ¡Œå­å†…å­˜æ‰¾ä¸åˆ°,index=%d  ######", *itr);
 			return false;
 		}
 
@@ -3342,10 +3342,10 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 		pGameDesk->m_llPartOfMatchID = llPartOfMatchID;
 		pGameDesk->m_iCurMatchRound = 1;
 		pGameDesk->m_iMaxMatchRound = iMaxMatchRound;
-		pGameDesk->m_llStartMatchTime = currTime + 10; //ÉèÖÃ¿ªÊ¼±ÈÈüÊ±¼ä
+		pGameDesk->m_llStartMatchTime = currTime + 10; //è®¾ç½®å¼€å§‹æ¯”èµ›æ—¶é—´
 	}
 
-	//Í¨ÖªÕâĞ©Íæ¼Ò¹ıÀ´²Î¼Ó±ÈÈü
+	//é€šçŸ¥è¿™äº›ç©å®¶è¿‡æ¥å‚åŠ æ¯”èµ›
 	PlatformLoaderNotifyStartMatch notifyMsg;
 	notifyMsg.gameID = m_uNameID;
 	notifyMsg.matchType = MATCH_TYPE_TIME;
@@ -3358,39 +3358,39 @@ bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 	}
 	SendMessageToCenterServer(CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH, &notifyMsg, sizeof(notifyMsg));
 
-	//ÉèÖÃ±ÈÈü×´Ì¬Îª±ÈÈüÖĞ
+	//è®¾ç½®æ¯”èµ›çŠ¶æ€ä¸ºæ¯”èµ›ä¸­
 	if (m_pRedisPHP)
 	{
 		m_pRedisPHP->SetMatchStatus(pMessage->matchID, MATCH_STATUS_PLAYING);
 	}
 
-	//½«×À×Ó¼ÓÈëÄÚ´æ
+	//å°†æ¡Œå­åŠ å…¥å†…å­˜
 	m_matchGameDeskMap.insert(std::make_pair(llPartOfMatchID, matchDeskList));
 
-	//½«±ÈÈüÈËÔ±ÔÚÄÚ´æÖĞ±£´æ
+	//å°†æ¯”èµ›äººå‘˜åœ¨å†…å­˜ä¸­ä¿å­˜
 	m_matchUserMap.insert(std::make_pair(llPartOfMatchID, vecPeople));
 
-	//±£´æ±ÈÈü´óID
+	//ä¿å­˜æ¯”èµ›å¤§ID
 	m_matchMainIDMap[llPartOfMatchID] = pMessage->matchID;
 
-	//±£´æ±ÈÈüÀàĞÍ
+	//ä¿å­˜æ¯”èµ›ç±»å‹
 	m_matchTypeMap[llPartOfMatchID] = MATCH_TYPE_TIME;
 
-	//¿ªÊ¼±ÈÈü
+	//å¼€å§‹æ¯”èµ›
 	AllocDeskStartMatch(matchDeskList, vecPeople);
 
 	return true;
 }
 
 //////////////////////////////////////////////////////////////////////
-//±ÈÈü³¡
+//æ¯”èµ›åœº
 
-// Îª±ÈÈü·ÖÅäÒ»¶¨ÊıÁ¿µÄ×À×Ó
+// ä¸ºæ¯”èµ›åˆ†é…ä¸€å®šæ•°é‡çš„æ¡Œå­
 bool CGameMainManage::GetMatchDesk(int needDeskCount, std::list<int> &listDesk)
 {
 	if (needDeskCount <= 0)
 	{
-		ERROR_LOG("²ÎÊı´íÎó,needDeskCount=%d", needDeskCount);
+		ERROR_LOG("å‚æ•°é”™è¯¯,needDeskCount=%d", needDeskCount);
 		return false;
 	}
 
@@ -3412,19 +3412,19 @@ bool CGameMainManage::GetMatchDesk(int needDeskCount, std::list<int> &listDesk)
 
 	if (listDesk.size() != needDeskCount)
 	{
-		ERROR_LOG("×À×Ó·ÖÅä´íÎó,listDeskCount=%d,needDeskCount=%d", listDesk.size(), needDeskCount);
+		ERROR_LOG("æ¡Œå­åˆ†é…é”™è¯¯,listDeskCount=%d,needDeskCount=%d", listDesk.size(), needDeskCount);
 		return false;
 	}
 
 	return true;
 }
 
-// Îª±ÈÈüÈËÔ±·ÖÅä×À×Ó£¬²¢×øÏÂ
+// ä¸ºæ¯”èµ›äººå‘˜åˆ†é…æ¡Œå­ï¼Œå¹¶åä¸‹
 void CGameMainManage::AllocDeskStartMatch(const std::list<int> &matchDeskList, const std::vector<MatchUserInfo> &vecPeople)
 {
 	if (matchDeskList.size() <= 0 || vecPeople.size() <= 0)
 	{
-		ERROR_LOG("·ÖÅä×À×ÓÊ§°Ü£¬desklistCount=%d,peopleCount=%d", matchDeskList.size(), vecPeople.size());
+		ERROR_LOG("åˆ†é…æ¡Œå­å¤±è´¥ï¼ŒdesklistCount=%d,peopleCount=%d", matchDeskList.size(), vecPeople.size());
 		return;
 	}
 
@@ -3446,12 +3446,12 @@ void CGameMainManage::AllocDeskStartMatch(const std::list<int> &matchDeskList, c
 
 	if (iRemainMatchPeopleCount / m_KernelData.uDeskPeople != matchDeskList.size())
 	{
-		ERROR_LOG("####  Ê£ÓàÈËÊı´íÎó:iRemainMatchPeopleCount=%d,m_KernelData.uDeskPeople=%d,matchDeskList.size()=%d  ####",
+		ERROR_LOG("####  å‰©ä½™äººæ•°é”™è¯¯:iRemainMatchPeopleCount=%d,m_KernelData.uDeskPeople=%d,matchDeskList.size()=%d  ####",
 			iRemainMatchPeopleCount, m_KernelData.uDeskPeople, matchDeskList.size());
 		return;
 	}
 
-	//Ëæ»úÂÒĞò£¬Êı×é
+	//éšæœºä¹±åºï¼Œæ•°ç»„
 	int temp = 0, data_ = 0;
 	int iCount = 2;
 	while (--iCount >= 0)
@@ -3470,16 +3470,16 @@ void CGameMainManage::AllocDeskStartMatch(const std::list<int> &matchDeskList, c
 		CGameDesk* pDesk = GetDeskObject(*itr);
 		if (!pDesk)
 		{
-			ERROR_LOG("ÎŞĞ§µÄ×À×ÓË÷Òı:%d", *itr);
+			ERROR_LOG("æ— æ•ˆçš„æ¡Œå­ç´¢å¼•:%d", *itr);
 			continue;
 		}
 
-		//´ÓÊı×éÖĞÈ¡Íæ¼Ò×ø×À
+		//ä»æ•°ç»„ä¸­å–ç©å®¶åæ¡Œ
 		for (size_t i = 0; i < m_KernelData.uDeskPeople; i++)
 		{
 			if (iRemainMatchPeopleCount <= 0)
 			{
-				ERROR_LOG("#### Ê£ÓàÈËÊı²»¹» ####");
+				ERROR_LOG("#### å‰©ä½™äººæ•°ä¸å¤Ÿ ####");
 				return;
 			}
 
@@ -3488,13 +3488,13 @@ void CGameMainManage::AllocDeskStartMatch(const std::list<int> &matchDeskList, c
 			GameUserInfo* pUser = m_pGameUserManage->GetUser(userID);
 			if (!pUser)
 			{
-				ERROR_LOG("###### ÖØ´ó´íÎó,userID=%d #######", userID);
+				ERROR_LOG("###### é‡å¤§é”™è¯¯,userID=%d #######", userID);
 				return;
 			}
 
 			if (!pDesk->UserSitDesk(pUser))
 			{
-				ERROR_LOG("###### ÖØ´ó´íÎó,userID=%d #######", userID);
+				ERROR_LOG("###### é‡å¤§é”™è¯¯,userID=%d #######", userID);
 				return;
 			}
 
@@ -3503,7 +3503,7 @@ void CGameMainManage::AllocDeskStartMatch(const std::list<int> &matchDeskList, c
 	}
 }
 
-// ¶¨Ê±¼ì²é¿ÉÒÔ¿ªÊ¼±ÈÈüµÄ×À×Ó
+// å®šæ—¶æ£€æŸ¥å¯ä»¥å¼€å§‹æ¯”èµ›çš„æ¡Œå­
 void CGameMainManage::CheckDeskStartMatch()
 {
 	time_t currTime = time(NULL);
@@ -3518,14 +3518,14 @@ void CGameMainManage::CheckDeskStartMatch()
 	}
 }
 
-// ÊÇ·ñÈ«²¿×À×Ó¶¼Íê³É±ÈÈü
+// æ˜¯å¦å…¨éƒ¨æ¡Œå­éƒ½å®Œæˆæ¯”èµ›
 bool CGameMainManage::IsAllDeskFinishMatch(long long llPartOfMatchID)
 {
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];
 
 	if (deskList.size() <= 0)
 	{
-		ERROR_LOG("ÅĞ¶ÏÒ»ÂÖ±ÈÈüÊÇ·ñ½áÊøÊ§°Ü£¬desklistCount=%d", deskList.size());
+		ERROR_LOG("åˆ¤æ–­ä¸€è½®æ¯”èµ›æ˜¯å¦ç»“æŸå¤±è´¥ï¼ŒdesklistCount=%d", deskList.size());
 		return false;
 	}
 
@@ -3547,10 +3547,10 @@ bool CGameMainManage::IsAllDeskFinishMatch(long long llPartOfMatchID)
 	return false;
 }
 
-// Ä³Ò»ÕÅ×À×ÓÓÎÏ·½áÊø
+// æŸä¸€å¼ æ¡Œå­æ¸¸æˆç»“æŸ
 void CGameMainManage::MatchDeskFinish(long long llPartOfMatchID, int deskIdx)
 {
-	// Í¨ÖªËùÓĞ»¹Ã»ÓĞ±»ÌÔÌ­µÄÍæ¼Ò£¬Ò»¸ö×À×ÓÍê³É±ÈÈü
+	// é€šçŸ¥æ‰€æœ‰è¿˜æ²¡æœ‰è¢«æ·˜æ±°çš„ç©å®¶ï¼Œä¸€ä¸ªæ¡Œå­å®Œæˆæ¯”èµ›
 	LoaderNotifyDeskFinishMatch msg;
 	msg.deskIdx = deskIdx;
 
@@ -3565,20 +3565,20 @@ void CGameMainManage::MatchDeskFinish(long long llPartOfMatchID, int deskIdx)
 	}
 }
 
-// ±ÈÈü½øÈëÏÂÒ»ÂÖ
+// æ¯”èµ›è¿›å…¥ä¸‹ä¸€è½®
 void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRound, int iMaxMatchRound)
 {
-	// Í³¼ÆÏûºÄ
-	WAUTOCOST("½øÈëÏÂÒ»ÂÖ±ÈÈüºÄÊ±£º");
+	// ç»Ÿè®¡æ¶ˆè€—
+	WAUTOCOST("è¿›å…¥ä¸‹ä¸€è½®æ¯”èµ›è€—æ—¶ï¼š");
 
 	std::vector<MatchUserInfo> &vecPeople = m_matchUserMap[llPartOfMatchID];
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];
 	BYTE matchType = m_matchTypeMap[llPartOfMatchID];
 
-	//¸ù¾İ»ı·ÖÅÅĞò
+	//æ ¹æ®ç§¯åˆ†æ’åº
 	int allUserCount = MatchSortUser(vecPeople, iCurMatchRound);
 
-	//¼ÆËã½ú¼¶Íæ¼ÒÊıÁ¿
+	//è®¡ç®—æ™‹çº§ç©å®¶æ•°é‡
 	int iPromotionCount = 0;
 	if (matchType == MATCH_TYPE_PEOPLE || matchType == MATCH_TYPE_TIME && iCurMatchRound > 1)
 	{
@@ -3601,7 +3601,7 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 
 	LoaderNotifyMatchRank rankmsg;
 
-	//½«ËùÓĞÍæ¼ÒÅÅÃûÌî³ä
+	//å°†æ‰€æœ‰ç©å®¶æ’åå¡«å……
 	rankmsg.peopleCount = allUserCount;
 	for (int i = 0; i < allUserCount; i++)
 	{
@@ -3610,7 +3610,7 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 	}
 	int iRankMsgSize = sizeof(LoaderNotifyMatchRank::LoaderNotifyMatchRankUser) * allUserCount + sizeof(rankmsg) - sizeof(rankmsg.user);
 
-	//ÌÔÌ­Íæ¼Ò
+	//æ·˜æ±°ç©å®¶
 	for (int i = 0; i < allUserCount; i++)
 	{
 		int userID = vecPeople[i].userID;
@@ -3620,7 +3620,7 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 			continue;
 		}
 
-		//ÈÃÍæ¼ÒÀë¿ª×À×Ó
+		//è®©ç©å®¶ç¦»å¼€æ¡Œå­
 		CGameDesk* pDesk = GetDeskObject(pUser->deskIdx);
 		if (pDesk)
 		{
@@ -3632,16 +3632,16 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 		rankmsg.iCurMatchRound = iCurMatchRound;
 		rankmsg.iMaxMatchRound = iMaxMatchRound;
 
-		if (i < iPromotionCount) //½ú¼¶Íæ¼Ò
+		if (i < iPromotionCount) //æ™‹çº§ç©å®¶
 		{
 			vecPeople[i].byMatchStatus = DESK_MATCH_STATUS_NORMAL;
 			rankmsg.type = 1;
 			rankmsg.rankMatch = i + 1;
 
-			//ÍÆËÍÅÅÃûÍ¨Öª
+			//æ¨é€æ’åé€šçŸ¥
 			SendData(userID, &rankmsg, iRankMsgSize, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_MATCH_RANK, 0);
 
-			//·ÖÊı±ä³É1/3£¬×¼±¸½øÈëÏÂÒ»ÂÖ
+			//åˆ†æ•°å˜æˆ1/3ï¼Œå‡†å¤‡è¿›å…¥ä¸‹ä¸€è½®
 			if (pUser->matchSocre > 0)
 			{
 				pUser->matchSocre /= 3;
@@ -3651,26 +3651,26 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 				pUser->matchSocre = 0;
 			}
 		}
-		else //ÌÔÌ­Íæ¼Ò
+		else //æ·˜æ±°ç©å®¶
 		{
 			vecPeople[i].byMatchStatus = DESK_MATCH_STATUS_FAIL;
 			rankmsg.type = 0;
 			rankmsg.rankMatch = i + 1;
 
-			//ÍÆËÍÅÅÃûÍ¨Öª
+			//æ¨é€æ’åé€šçŸ¥
 			SendData(userID, &rankmsg, iRankMsgSize, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_MATCH_RANK, 0);
 
-			//ÇåÀíÍæ¼ÒÄÚ´æºÍredis×´Ì¬£¬Ä¿Ç°²»¶Ïsocket£¬Íæ¼Ò»¹¿ÉÒÔ¼ÌĞø¹ÛÕ½
+			//æ¸…ç†ç©å®¶å†…å­˜å’ŒredisçŠ¶æ€ï¼Œç›®å‰ä¸æ–­socketï¼Œç©å®¶è¿˜å¯ä»¥ç»§ç»­è§‚æˆ˜
 			DelUser(userID);
 			m_pRedis->SetUserMatchStatus(userID, MATCH_TYPE_NORMAL, USER_MATCH_STATUS_NORMAL);
 			m_pRedis->SetUserMatchRank(userID, (long long)m_uNameID*MAX_GAME_MATCH_ID + rankmsg.gameMatchID, i + 1);
 
-			//·¢ËÍÓÊ¼şÍ¨Öª
+			//å‘é€é‚®ä»¶é€šçŸ¥
 			SendMatchGiftMail(userID, m_uNameID, matchType, rankmsg.gameMatchID, i + 1);
 		}
 	}
 
-	//¼ÆËãĞèÒªÇåÀíµÄ×À×ÓÊıÁ¿
+	//è®¡ç®—éœ€è¦æ¸…ç†çš„æ¡Œå­æ•°é‡
 	int iDeskCount = deskList.size();
 	int iClearDeskCount = 0;
 	if (matchType == MATCH_TYPE_PEOPLE || matchType == MATCH_TYPE_TIME && iCurMatchRound > 1)
@@ -3682,7 +3682,7 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 		iClearDeskCount = (allUserCount - iPromotionCount) / m_KernelData.uDeskPeople;
 	}
 
-	//ÇåÀí×À×Ó£¬²¢ÉèÖÃ×À×ÓÊı¾İ
+	//æ¸…ç†æ¡Œå­ï¼Œå¹¶è®¾ç½®æ¡Œå­æ•°æ®
 	int iIndex = 0;
 	time_t currTime = time(NULL);
 	for (auto itr = deskList.begin(); itr != deskList.end(); iIndex++)
@@ -3701,33 +3701,33 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 		}
 
 		pDesk->m_iCurMatchRound++;
-		pDesk->m_llStartMatchTime = currTime + 15; //ÉèÖÃ¿ªÊ¼±ÈÈüÊ±¼ä
+		pDesk->m_llStartMatchTime = currTime + 15; //è®¾ç½®å¼€å§‹æ¯”èµ›æ—¶é—´
 		pDesk->m_bFinishMatch = false;
 
 		itr++;
 	}
 
-	// ËùÓĞ½ú¼¶Íæ¼ÒÖØĞÂ×ø×À
+	// æ‰€æœ‰æ™‹çº§ç©å®¶é‡æ–°åæ¡Œ
 	AllocDeskStartMatch(deskList, vecPeople);
 }
 
-// ±ÈÈü½áÊø
+// æ¯”èµ›ç»“æŸ
 void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, int iMaxMatchRound)
 {
-	// Í³¼ÆÏûºÄ
-	WAUTOCOST("±ÈÈü½áÊøºÄÊ±£º");
+	// ç»Ÿè®¡æ¶ˆè€—
+	WAUTOCOST("æ¯”èµ›ç»“æŸè€—æ—¶ï¼š");
 
 	std::vector<MatchUserInfo> &vecPeople = m_matchUserMap[llPartOfMatchID];
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];
 	BYTE matchType = m_matchTypeMap[llPartOfMatchID];
 	int gameMatchID = m_matchMainIDMap[llPartOfMatchID];
 
-	//¸ù¾İ»ı·ÖÅÅĞò
+	//æ ¹æ®ç§¯åˆ†æ’åº
 	int allUserCount = MatchSortUser(vecPeople, iCurMatchRound);
 
 	LoaderNotifyMatchRank rankmsg;
 
-	//½«ËùÓĞÍæ¼ÒÅÅÃûÌî³ä
+	//å°†æ‰€æœ‰ç©å®¶æ’åå¡«å……
 	rankmsg.peopleCount = allUserCount;
 	for (int i = 0; i < allUserCount; i++)
 	{
@@ -3736,7 +3736,7 @@ void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, in
 	}
 	int iRankMsgSize = sizeof(LoaderNotifyMatchRank::LoaderNotifyMatchRankUser) * allUserCount + sizeof(rankmsg) - sizeof(rankmsg.user);
 
-	//¾ñÔñ×îÖÕÃû´Î
+	//æŠ‰æ‹©æœ€ç»ˆåæ¬¡
 	for (int i = 0; i < allUserCount; i++)
 	{
 		int userID = vecPeople[i].userID;
@@ -3746,7 +3746,7 @@ void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, in
 			continue;
 		}
 
-		//ÍÆËÍ×îÖÕÅÅÃûÍ¨Öª
+		//æ¨é€æœ€ç»ˆæ’åé€šçŸ¥
 		rankmsg.gameID = m_uNameID;
 		rankmsg.gameMatchID = gameMatchID;
 		rankmsg.iCurMatchRound = iCurMatchRound;
@@ -3755,35 +3755,35 @@ void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, in
 		rankmsg.rankMatch = i + 1;
 		SendData(userID, &rankmsg, iRankMsgSize, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_MATCH_RANK, 0);
 
-		//ÇåÀíÍæ¼Ò±ÈÈü×´Ì¬£¬ÉèÖÃÅÅÃû
+		//æ¸…ç†ç©å®¶æ¯”èµ›çŠ¶æ€ï¼Œè®¾ç½®æ’å
 		m_pRedis->SetUserMatchStatus(userID, MATCH_TYPE_NORMAL, USER_MATCH_STATUS_NORMAL);
 		m_pRedis->SetUserMatchRank(userID, (long long)m_uNameID*MAX_GAME_MATCH_ID + rankmsg.gameMatchID, i + 1);
 
-		// Çå³ıÍæ¼Ò»º´æÖĞµÄÊı¾İ
+		// æ¸…é™¤ç©å®¶ç¼“å­˜ä¸­çš„æ•°æ®
 		m_pRedis->SetUserRoomID(userID, 0);
 		m_pRedis->SetUserDeskIdx(userID, INVALID_DESKIDX);
 
-		// ×îºó²ÅÄÜÇåÀíÍæ¼Ò
+		// æœ€åæ‰èƒ½æ¸…ç†ç©å®¶
 		m_pGameUserManage->DelUser(userID);
 
-		//·¢ËÍÓÊ¼şÍ¨Öª
+		//å‘é€é‚®ä»¶é€šçŸ¥
 		SendMatchGiftMail(userID, m_uNameID, matchType, rankmsg.gameMatchID, i + 1);
 	}
 
-	//ÉèÖÃ±ÈÈü½áÊøÏà¹ØĞÅÏ¢
+	//è®¾ç½®æ¯”èµ›ç»“æŸç›¸å…³ä¿¡æ¯
 	if (matchType == MATCH_TYPE_TIME)
 	{
-		//¸ù¾İÅÅÃûÖØĞÂÉèÖÃ±¨Ãû¼¯ºÏ
+		//æ ¹æ®æ’åé‡æ–°è®¾ç½®æŠ¥åé›†åˆ
 		m_pRedis->SetTimeMatchPeopleRank(gameMatchID, vecPeople);
 
-		//ÉèÖÃ±ÈÈü×´Ì¬Îª±ÈÈü½áÊø
+		//è®¾ç½®æ¯”èµ›çŠ¶æ€ä¸ºæ¯”èµ›ç»“æŸ
 		if (m_pRedisPHP)
 		{
 			m_pRedisPHP->SetMatchStatus(gameMatchID, MATCH_STATUS_GAME_OVER);
 		}
 	}
 
-	//ÇåÀíËùÓĞ×À×Ó
+	//æ¸…ç†æ‰€æœ‰æ¡Œå­
 	for (auto itr = deskList.begin(); itr != deskList.end(); itr++)
 	{
 		CGameDesk* pDesk = GetDeskObject(*itr);
@@ -3796,17 +3796,17 @@ void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, in
 	}
 	m_matchGameDeskMap.erase(llPartOfMatchID);
 
-	//ÇåÀíËùÓĞ±ÈÈüÍæ¼Ò
+	//æ¸…ç†æ‰€æœ‰æ¯”èµ›ç©å®¶
 	m_matchUserMap.erase(llPartOfMatchID);
 
-	//ÇåÀí±ÈÈü¼ÇÂ¼
+	//æ¸…ç†æ¯”èµ›è®°å½•
 	m_matchMainIDMap.erase(llPartOfMatchID);
 
-	//ÇåÀí±ÈÈüÀàĞÍ
+	//æ¸…ç†æ¯”èµ›ç±»å‹
 	m_matchTypeMap.erase(llPartOfMatchID);
 }
 
-// ¸ù¾İ»ı·Ö£¬ÅÅĞòÃ»ÓĞÌÔÌ­µÄÍæ¼Ò
+// æ ¹æ®ç§¯åˆ†ï¼Œæ’åºæ²¡æœ‰æ·˜æ±°çš„ç©å®¶
 int CGameMainManage::MatchSortUser(std::vector<MatchUserInfo> &vecPeople, int iCurMatchRound)
 {
 	int iSortSize = vecPeople.size();
@@ -3851,12 +3851,12 @@ int CGameMainManage::MatchSortUser(std::vector<MatchUserInfo> &vecPeople, int iC
 	return iSortSize;
 }
 
-// °²ÅÅ»úÆ÷ÈË¼ÓÈë×À×ÓºÍÍæ¼Ò±ÈÈü
+// å®‰æ’æœºå™¨äººåŠ å…¥æ¡Œå­å’Œç©å®¶æ¯”èµ›
 int CGameMainManage::MatchGetRobotUserID()
 {
 	int userID = 0;
 
-	//×î¶à³¢ÊÔ500´Î»ñÈ¡
+	//æœ€å¤šå°è¯•500æ¬¡è·å–
 	for (int iCount = 0; iCount < 500; iCount++)
 	{
 		userID = m_pRedis->GetRobotUserID();
@@ -3890,7 +3890,7 @@ int CGameMainManage::MatchGetRobotUserID()
 	return userID;
 }
 
-// ·¢ËÍ±ÈÈüÓÊ¼ş½±Àø
+// å‘é€æ¯”èµ›é‚®ä»¶å¥–åŠ±
 void CGameMainManage::SendMatchGiftMail(int userID, int gameID, BYTE matchType, int gameMatchID, int ranking)
 {
 	OtherConfig otherConfig;
@@ -3902,13 +3902,13 @@ void CGameMainManage::SendMatchGiftMail(int userID, int gameID, BYTE matchType, 
 	char bufUserID[20] = "";
 	sprintf(bufUserID, "%d", userID);
 
-	//×éºÏÉú³ÉURL
+	//ç»„åˆç”ŸæˆURL
 	std::string url = "http://";
 	url += otherConfig.http;
 	url += "/hm_ucenter/web/index.php?api=match&action=matchAward&userID=";
 	url += bufUserID;
 
-	//·¢ËÍÓÊ¼şÍ¨Öª
+	//å‘é€é‚®ä»¶é€šçŸ¥
 	LoaderAsyncHTTP asyncEvent;
 	asyncEvent.userID = userID;
 	asyncEvent.postType = HTTP_POST_TYPE_MATCH_GIFT;
@@ -3918,7 +3918,7 @@ void CGameMainManage::SendMatchGiftMail(int userID, int gameID, BYTE matchType, 
 	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
 }
 
-// ·¢ËÍ±ÈÈüÊ§°Ü£¬ÍË±¨Ãû·Ñ£¬ÒÔ¼°ÇåÀí±ÈÈü×´Ì¬
+// å‘é€æ¯”èµ›å¤±è´¥ï¼Œé€€æŠ¥åè´¹ï¼Œä»¥åŠæ¸…ç†æ¯”èµ›çŠ¶æ€
 void CGameMainManage::SendMatchFailMail(BYTE failReason, int userID, BYTE matchType, int gameMatchID)
 {
 	OtherConfig otherConfig;
@@ -3927,7 +3927,7 @@ void CGameMainManage::SendMatchFailMail(BYTE failReason, int userID, BYTE matchT
 		otherConfig = ConfigManage()->GetOtherConfig();
 	}
 
-	// ·¢ËÍÓÊ¼ş
+	// å‘é€é‚®ä»¶
 	char bufURL[256] = "";
 
 	if (userID == 0)
@@ -3948,13 +3948,13 @@ void CGameMainManage::SendMatchFailMail(BYTE failReason, int userID, BYTE matchT
 	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
 }
 
-// ÇåÀí±ÈÈü×´Ì¬
+// æ¸…ç†æ¯”èµ›çŠ¶æ€
 void CGameMainManage::ClearMatchStatus(BYTE failReason, int userID, BYTE matchType, int gameMatchID)
 {
-	// ÇåÀí±¨Ãû×´Ì¬
+	// æ¸…ç†æŠ¥åçŠ¶æ€
 	m_pRedis->SetUserMatchStatus(userID, MATCH_TYPE_NORMAL, USER_MATCH_STATUS_NORMAL);
 
-	//Í¨ÖªÕâ¸öÍæ¼Ò±ÈÈüÊ§°Ü
+	//é€šçŸ¥è¿™ä¸ªç©å®¶æ¯”èµ›å¤±è´¥
 	PlatformLoaderNotifyStartMatchFail notifyMsg;
 	notifyMsg.gameID = m_uNameID;
 	notifyMsg.matchType = MATCH_TYPE_TIME;
@@ -3963,7 +3963,7 @@ void CGameMainManage::ClearMatchStatus(BYTE failReason, int userID, BYTE matchTy
 	SendMessageToCenterServer(CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH_FAIL, &notifyMsg, sizeof(notifyMsg), userID);
 }
 
-// ÇåÀí±ÈÈüÍæ¼ÒÄÚ´æ
+// æ¸…ç†æ¯”èµ›ç©å®¶å†…å­˜
 void CGameMainManage::ClearMatchUser(int gameMatchID, const std::vector<MatchUserInfo> &vecPeople)
 {
 	for (size_t i = 0; i < vecPeople.size(); i++)
@@ -3971,7 +3971,7 @@ void CGameMainManage::ClearMatchUser(int gameMatchID, const std::vector<MatchUse
 		m_pGameUserManage->DelUser(vecPeople[i].userID);
 	}
 
-	//¿ªÊ¼±ÈÈüÊ§°Ü£¬ÉèÖÃ±ÈÈü×´Ì¬Îª±ÈÈü½áÊø
+	//å¼€å§‹æ¯”èµ›å¤±è´¥ï¼Œè®¾ç½®æ¯”èµ›çŠ¶æ€ä¸ºæ¯”èµ›ç»“æŸ
 	if (m_pRedisPHP)
 	{
 		m_pRedisPHP->SetMatchStatus(gameMatchID, MATCH_STATUS_GAME_OVER);

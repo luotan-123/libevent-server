@@ -75,12 +75,12 @@ int MyCurl::getUrl(const string &url, const vector<string> &vUrlHeader, string &
 	{
 		headers = curl_slist_append(headers, vUrlHeader[i].c_str());
 	}
-	curl = curl_easy_init();    // ³õÊ¼»¯
+	curl = curl_easy_init();    // åˆå§‹åŒ–
 	if (curl)
 	{
 		if (headers)
 		{
-			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);// ¸ÄĞ­ÒéÍ·
+			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);// æ”¹åè®®å¤´
 		}
 
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -93,7 +93,7 @@ int MyCurl::getUrl(const string &url, const vector<string> &vUrlHeader, string &
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 		//curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
 
-		// CURLOPT_FOLLOWLOCATION ÉèÖÃÖ§³Ö302ÖØ¶¨Ïò
+		// CURLOPT_FOLLOWLOCATION è®¾ç½®æ”¯æŒ302é‡å®šå‘
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::parseStreamCallback);
@@ -104,7 +104,7 @@ int MyCurl::getUrl(const string &url, const vector<string> &vUrlHeader, string &
 			curl_easy_setopt(curl, CURLOPT_SSLKEYTYPE, "PEM");
 			curl_easy_setopt(curl, CURLOPT_SSLKEY, MyCurl::RsaPrivateKey.c_str());
 		}
-		res = curl_easy_perform(curl);   // Ö´ĞĞ
+		res = curl_easy_perform(curl);   // æ‰§è¡Œ
 		if (res != 0)
 		{
 			if (headers)
@@ -157,7 +157,7 @@ int MyCurl::postUrl(const string &url, const vector<string> &vUrlHeader, const s
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 		//curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 1000L);
 
-		// CURLOPT_FOLLOWLOCATION ÉèÖÃÖ§³Ö302ÖØ¶¨Ïò
+		// CURLOPT_FOLLOWLOCATION è®¾ç½®æ”¯æŒ302é‡å®šå‘
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::WriteMemoryCallback);
@@ -229,7 +229,7 @@ int MyCurl::postUrlHttps(const string &url, const vector<string> &vUrlHeader, co
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 		//curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 5000L);
 
-		// CURLOPT_FOLLOWLOCATION ÉèÖÃÖ§³Ö302ÖØ¶¨Ïò
+		// CURLOPT_FOLLOWLOCATION è®¾ç½®æ”¯æŒ302é‡å®šå‘
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, MyCurl::WriteMemoryCallback);

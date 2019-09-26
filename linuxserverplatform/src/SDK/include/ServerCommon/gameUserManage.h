@@ -2,43 +2,43 @@
 
 #include "Define.h"
 
-// Íæ¼Ò×´Ì¬
+// ç©å®¶çŠ¶æ€
 enum UserStatus
 {
-	USER_STATUS_DEFAULT = 0,		// Ä¬ÈÏ×´Ì¬
-	USER_STATUS_WATCH,				// ÅÔ¹Û×´Ì¬
-	USER_STATUS_SITING,				// ×øÏÂ
-	USER_STATUS_AGREE,				// Í¬Òâ
-	USER_STATUS_PLAYING,			// ÓÎÏ·ÖĞ
-	USER_STATUS_STAND,				// Õ¾Æğ
+	USER_STATUS_DEFAULT = 0,		// é»˜è®¤çŠ¶æ€
+	USER_STATUS_WATCH,				// æ—è§‚çŠ¶æ€
+	USER_STATUS_SITING,				// åä¸‹
+	USER_STATUS_AGREE,				// åŒæ„
+	USER_STATUS_PLAYING,			// æ¸¸æˆä¸­
+	USER_STATUS_STAND,				// ç«™èµ·
 };
 
-// ÓÎÏ·Íæ¼ÒĞÅÏ¢
+// æ¸¸æˆç©å®¶ä¿¡æ¯
 struct GameUserInfo
 {
 	int		userID;
 	int		socketIdx;
-	bool	IsOnline;						// ÊÇ·ñÔÚÏß
-	int		deskIdx;						// Íæ¼ÒËùÔÚµÄdeskIdx (ÔÚÍæ¼Ò×øÏÂµÄÊ±ºòÉèÖÃ)
-	BYTE	deskStation;					// Íæ¼ÒµÄ×ùÎ»
-	int		playStatus;					    // Íæ¼Ò×´Ì¬
-	long long  money;						// Íæ¼Ò½ğ±Ò
-	int		jewels;							// Íæ¼Ò×êÊ¯
-	char	name[MAX_USER_NAME_LEN];		// Íæ¼ÒêÇ³Æ
+	bool	IsOnline;						// æ˜¯å¦åœ¨çº¿
+	int		deskIdx;						// ç©å®¶æ‰€åœ¨çš„deskIdx (åœ¨ç©å®¶åä¸‹çš„æ—¶å€™è®¾ç½®)
+	BYTE	deskStation;					// ç©å®¶çš„åº§ä½
+	int		playStatus;					    // ç©å®¶çŠ¶æ€
+	long long  money;						// ç©å®¶é‡‘å¸
+	int		jewels;							// ç©å®¶é’»çŸ³
+	char	name[MAX_USER_NAME_LEN];		// ç©å®¶æ˜µç§°
 	char	headURL[MAX_USER_HEADURL_LEN];
-	char	longitude[12];					// ¾­¶È
-	char	latitude[12];					// Î³¶È
-	char	address[64];					// µØÖ·
-	BYTE    userStatus;                     // Íæ¼ÒÉí·İ
+	char	longitude[12];					// ç»åº¦
+	char	latitude[12];					// çº¬åº¦
+	char	address[64];					// åœ°å€
+	BYTE    userStatus;                     // ç©å®¶èº«ä»½
 	char	ip[24];
-	BYTE	isVirtual;						// ÊÇ·ñĞéÄâ
+	BYTE	isVirtual;						// æ˜¯å¦è™šæ‹Ÿ
 	BYTE	sex;
-	BYTE	choiceDeskStation;				// Íæ¼ÒÏëÑ¡ÔñµÄ×ùÎ»
-	int		fireCoin;						// Íæ¼Ò¾ãÀÖ²¿»ğ±Ò
-	char	motto[128];						// ¸öĞÔÇ©Ãû
-	time_t	lastOperateTime;				// ÉÏ´Î²Ù×÷Ê±¼ä
-	int		matchSocre;						// ±ÈÈü»ı·Ö
-	int		watchDeskIdx;					// ÅÔ¹ÛµÄ×À×Ó
+	BYTE	choiceDeskStation;				// ç©å®¶æƒ³é€‰æ‹©çš„åº§ä½
+	int		fireCoin;						// ç©å®¶ä¿±ä¹éƒ¨ç«å¸
+	char	motto[128];						// ä¸ªæ€§ç­¾å
+	time_t	lastOperateTime;				// ä¸Šæ¬¡æ“ä½œæ—¶é—´
+	int		matchSocre;						// æ¯”èµ›ç§¯åˆ†
+	int		watchDeskIdx;					// æ—è§‚çš„æ¡Œå­
 
 	GameUserInfo()
 	{
@@ -56,7 +56,7 @@ struct GameUserInfo
 	}
 };
 
-// ÓÎÏ·Íæ¼Ò¹ÜÀíÀà, ¹ÜÀíÒ»¸öÓÎÏ·ÖĞÍæ¼ÒµÄĞÅÏ¢
+// æ¸¸æˆç©å®¶ç®¡ç†ç±», ç®¡ç†ä¸€ä¸ªæ¸¸æˆä¸­ç©å®¶çš„ä¿¡æ¯
 class CGameMainManage;
 class CGameUserManage
 {

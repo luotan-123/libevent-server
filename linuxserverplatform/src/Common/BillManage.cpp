@@ -29,7 +29,7 @@ void CBillManage::WriteBill(CDataBaseManage* m_pDBManage, const char* pFormat, .
 {
 	if (m_pDBManage == NULL)
 	{
-		ERROR_LOG("数据句柄m_pDBManage=NULL");
+		ERROR_LOG("鏁版嵁鍙ユ焺m_pDBManage=NULL");
 		return;
 	}
 
@@ -47,6 +47,6 @@ void CBillManage::WriteBill(CDataBaseManage* m_pDBManage, const char* pFormat, .
 
 	if (!m_pDBManage->PushLine(&msg.head, sizeof(InternalSqlStatement), DTK_GP_SQL_STATEMENT, 0, 0))
 	{
-		ERROR_LOG("投递队列失败：%s", sql);
+		ERROR_LOG("鎶曢�掗槦鍒楀け璐ワ細%s", sql);
 	}
 }

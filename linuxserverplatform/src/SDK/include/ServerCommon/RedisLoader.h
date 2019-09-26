@@ -12,50 +12,50 @@ public:
 	virtual bool Init();
 	virtual bool Stop();
 
-	//É¾³ı×À×Ó
+	//åˆ é™¤æ¡Œå­
 	bool DelPrivateDeskRecord(int deskMixID);
 	void DelUserBuyDeskInfoInSet(int userID, const char* passwd);
 
-	//¼ÇÂ¼ÈËÊıĞÅÏ¢
+	//è®°å½•äººæ•°ä¿¡æ¯
 	bool SetPrivateDeskCurrUserCount(int deskMixID, int userCount);
 	bool SetPrivateDeskCurrWatchUserCount(int deskMixID, int watchUserCount);
 
-	//ÉèÖÃ¿ª·¿Íæ¼ÒÁĞ±í
-	bool SetPrivateDeskUserID(int deskMixID, int userID, int type);//0ĞÂÔö£¬1É¾³ı
+	//è®¾ç½®å¼€æˆ¿ç©å®¶åˆ—è¡¨
+	bool SetPrivateDeskUserID(int deskMixID, int userID, int type);//0æ–°å¢ï¼Œ1åˆ é™¤
 
-	//Ê¤¾ÖÊıÏà¹Ø
+	//èƒœå±€æ•°ç›¸å…³
 	bool SetUserWinCount(int userID);
 	bool SetUserTotalGameCount(int userID);
 
-	//ÉèÖÃ×À×ÓÓÎÏ·¾ÖÊı
+	//è®¾ç½®æ¡Œå­æ¸¸æˆå±€æ•°
 	bool SetPrivateDeskGameCount(int deskMixID, int gameCount);
 
-	//Éú³ÉÕ½¼¨
+	//ç”Ÿæˆæˆ˜ç»©
 	bool SetPrivateDeskGrade(GameGradeInfo& gameGradeInfo, long long& gradeID);
 	bool SetPrivateDeskSimpleInfo(const std::vector<int>& userIDVec, PrivateDeskGradeSimpleInfo& simpleInfo, const std::vector<long long>& gradeIDVec);
 
-	//»úÆ÷ÈËË÷Òı
+	//æœºå™¨äººç´¢å¼•
 	int GetRobotInfoIndex();
 
-	//ÉèÖÃµ±Ç°·¿¼äÈËÊı
+	//è®¾ç½®å½“å‰æˆ¿é—´äººæ•°
 	bool SetRoomServerPeopleCount(int roomID, int peopleCount);
 
-	//¹Ø·ş±£´æ×À×Ó
+	//å…³æœä¿å­˜æ¡Œå­
 	bool SaveFGDeskRoom(const PrivateDeskInfo &privateDeskInfo);
 
-	//¿ª·şÇåÀí×À×Ó
+	//å¼€æœæ¸…ç†æ¡Œå­
 	bool CleanRoomAllData(int roomID);
 
-	//»ñÈ¡·¿¼äËùÓĞ´´½¨µÄ×À×Ó
+	//è·å–æˆ¿é—´æ‰€æœ‰åˆ›å»ºçš„æ¡Œå­
 	bool GetAllDesk(int roomID, std::vector<int>& vecRooms);
 
-	// ÉèÖÃ³¬Ê±Êı¾İ
+	// è®¾ç½®è¶…æ—¶æ•°æ®
 	bool SetPrivateDeskCheckTime(int deskMixID, int checkTime);
 
-	//»ñÈ¡Íæ¼Ò¿ØÖÆ²ÎÊı
+	//è·å–ç©å®¶æ§åˆ¶å‚æ•°
 	bool GetUserControlParam(int userID, int &value);
 
-	//±ÈÈü³¡
+	//æ¯”èµ›åœº
 	long long GetPartOfMatchIndex();
 	bool DelFullPeopleMatchPeople(int gameID, int matchID, const std::vector<MatchUserInfo> &vecPeople);
 	bool SetUserMatchStatus(int userID, BYTE matchType, int matchStatus);

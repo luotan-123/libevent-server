@@ -4,64 +4,64 @@
 #include "Define.h"
 
 /*
-ÍÆËÍÏûÏ¢·Ö3´óÀà:
-	1£ºÏòµ¥¸öÈËÍÆËÍ
-	2£ºÏò¾ãÀÖ²¿ËùÓĞÔÚÏßÍæ¼ÒÍÆËÍ
-	3£ºÏòµÇÂ½·şËùÓĞÔÚÏßÍæ¼ÒÍÆËÍ
+æ¨é€æ¶ˆæ¯åˆ†3å¤§ç±»:
+	1ï¼šå‘å•ä¸ªäººæ¨é€
+	2ï¼šå‘ä¿±ä¹éƒ¨æ‰€æœ‰åœ¨çº¿ç©å®¶æ¨é€
+	3ï¼šå‘ç™»é™†æœæ‰€æœ‰åœ¨çº¿ç©å®¶æ¨é€
 */
 
 #pragma pack(1)
 
-/////////////////////////////// PHP -----> ÖĞĞÄ·ş ///////////////////////////////////////////
-// ºÍPHPÍ¨ĞÅµÄÏûÏ¢¶¨Òå 10001-20000
+/////////////////////////////// PHP -----> ä¸­å¿ƒæœ ///////////////////////////////////////////
+// å’ŒPHPé€šä¿¡çš„æ¶ˆæ¯å®šä¹‰ 10001-20000
 const int PLATFORM_MESSAGE_BEGIN = 10000;
 
-const int PLATFORM_MESSAGE_NOTICE = 10001;					// ¹«¸æ
-const int PLATFORM_MESSAGE_REQ_ALL_USER_MAIL = 10002;		// ÇëÇóÈ«·şÓÊ¼şÍ¨Öª
-const int PLATFORM_MESSAGE_CLOSE_SERVER = 10003;			// ¹Ø·ş£¬±£´æÊı¾İ
-const int PLATFORM_MESSAGE_OPEN_SERVER = 10004;				// ¿ª·ş£¬»Ö¸´Êı¾İ
-const int PLATFORM_MESSAGE_SEND_HORN = 10005;				// ·¢ËÍÀ®°È
-const int PLATFORM_MESSAGE_MASTER_DISSMISS_DESK = 10006;	// ·¿Ö÷½âÉ¢·¿¼ä
-const int PLATFORM_MESSAGE_FG_DISSMISS_DESK = 10007;		// ¾ãÀÖ²¿ÅÆ×À½âÉ¢·¿¼ä
-const int PLATFORM_MESSAGE_RESOURCE_CHANGE = 10008;			// £¨Í¨ÖªÄ³¸öÈË£©×ÊÔ´±ä»¯
-const int PLATFORM_MESSAGE_NOTIFY_USERID = 10009;			// ÏòÒ»¸öÍæ¼ÒÍÆËÍÏûÏ¢
-const int PLATFORM_MESSAGE_NOTIFY_FG = 10010;				// Ïò¾ãÀÖ²¿ËùÓĞÍæ¼ÒÍÆËÍÏûÏ¢
-const int PLATFORM_MESSAGE_IDENTUSER = 10011;				// ÉèÖÃÓÃ»§Éí·İ
-const int PLATFORM_MESSAGE_RED_SPOT = 10012;				// ÇëÇóÍ¨ÖªĞ¡ºìµã
-const int PLATFORM_MESSAGE_RED_FG_SPOT = 10013;				// ÇëÇóÍ¨Öª¾ãÀÖ²¿Ğ¡ºìµã
-const int PLATFORM_MESSAGE_RELOAD_GAME_CONFIG = 10014;		// ÖØĞÂ¼ÓÔØÓÎÏ·ÅäÖÃ
-const int PLATFORM_MESSAGE_PHONE_INFO = 10015;				// ÊÖ»úÑéÖ¤³É¹¦£¬×¢²áÕËºÅ
-const int PLATFORM_MESSAGE_OPEN_ROOM_NOTICE = 10016;		// ÍÆËÍÒ»¸öĞÂµÄ¿ª·¿ĞÅÏ¢
-const int PLATFORM_MESSAGE_NOTIFY_MUCH_USERID = 10017;		// Ïò¶à¸öÍæ¼ÒÍÆËÍÏûÏ¢
-const int PLATFORM_MESSAGE_SIGN_UP_MATCH_PEOPLE = 10018;	// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨ÊµÊ±Èü£©
-const int PLATFORM_MESSAGE_START_MATCH_PEOPLE = 10019;		// ÇëÇó¿ªÊ¼±ÈÈü(ÊµÊ±Èü)
-const int PLATFORM_MESSAGE_MODIFY_TIME_MATCH = 10020;		// ´´½¨¡¢ĞŞ¸Ä¡¢É¾³ı£¬Ò»¸ö¶¨Ê±Èü
-const int PLATFORM_MESSAGE_SIGN_UP_MATCH_TIME = 10021;		// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨¶¨Ê±Èü£©
+const int PLATFORM_MESSAGE_NOTICE = 10001;					// å…¬å‘Š
+const int PLATFORM_MESSAGE_REQ_ALL_USER_MAIL = 10002;		// è¯·æ±‚å…¨æœé‚®ä»¶é€šçŸ¥
+const int PLATFORM_MESSAGE_CLOSE_SERVER = 10003;			// å…³æœï¼Œä¿å­˜æ•°æ®
+const int PLATFORM_MESSAGE_OPEN_SERVER = 10004;				// å¼€æœï¼Œæ¢å¤æ•°æ®
+const int PLATFORM_MESSAGE_SEND_HORN = 10005;				// å‘é€å–‡å­
+const int PLATFORM_MESSAGE_MASTER_DISSMISS_DESK = 10006;	// æˆ¿ä¸»è§£æ•£æˆ¿é—´
+const int PLATFORM_MESSAGE_FG_DISSMISS_DESK = 10007;		// ä¿±ä¹éƒ¨ç‰Œæ¡Œè§£æ•£æˆ¿é—´
+const int PLATFORM_MESSAGE_RESOURCE_CHANGE = 10008;			// ï¼ˆé€šçŸ¥æŸä¸ªäººï¼‰èµ„æºå˜åŒ–
+const int PLATFORM_MESSAGE_NOTIFY_USERID = 10009;			// å‘ä¸€ä¸ªç©å®¶æ¨é€æ¶ˆæ¯
+const int PLATFORM_MESSAGE_NOTIFY_FG = 10010;				// å‘ä¿±ä¹éƒ¨æ‰€æœ‰ç©å®¶æ¨é€æ¶ˆæ¯
+const int PLATFORM_MESSAGE_IDENTUSER = 10011;				// è®¾ç½®ç”¨æˆ·èº«ä»½
+const int PLATFORM_MESSAGE_RED_SPOT = 10012;				// è¯·æ±‚é€šçŸ¥å°çº¢ç‚¹
+const int PLATFORM_MESSAGE_RED_FG_SPOT = 10013;				// è¯·æ±‚é€šçŸ¥ä¿±ä¹éƒ¨å°çº¢ç‚¹
+const int PLATFORM_MESSAGE_RELOAD_GAME_CONFIG = 10014;		// é‡æ–°åŠ è½½æ¸¸æˆé…ç½®
+const int PLATFORM_MESSAGE_PHONE_INFO = 10015;				// æ‰‹æœºéªŒè¯æˆåŠŸï¼Œæ³¨å†Œè´¦å·
+const int PLATFORM_MESSAGE_OPEN_ROOM_NOTICE = 10016;		// æ¨é€ä¸€ä¸ªæ–°çš„å¼€æˆ¿ä¿¡æ¯
+const int PLATFORM_MESSAGE_NOTIFY_MUCH_USERID = 10017;		// å‘å¤šä¸ªç©å®¶æ¨é€æ¶ˆæ¯
+const int PLATFORM_MESSAGE_SIGN_UP_MATCH_PEOPLE = 10018;	// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®æ—¶èµ›ï¼‰
+const int PLATFORM_MESSAGE_START_MATCH_PEOPLE = 10019;		// è¯·æ±‚å¼€å§‹æ¯”èµ›(å®æ—¶èµ›)
+const int PLATFORM_MESSAGE_MODIFY_TIME_MATCH = 10020;		// åˆ›å»ºã€ä¿®æ”¹ã€åˆ é™¤ï¼Œä¸€ä¸ªå®šæ—¶èµ›
+const int PLATFORM_MESSAGE_SIGN_UP_MATCH_TIME = 10021;		// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®šæ—¶èµ›ï¼‰
 
 const int PLATFORM_MESSAGE_END = 20000;
 
 enum PlatformRetCode
 {
-	PF_SUCCESS = 0,                 // ²Ù×÷³É¹¦
-	PF_NOUSER = 1,					// ÓÃ»§²»´æÔÚ
-	PF_SIZEERROR = 2,               // Êı¾İ³¤¶È²»¶Ô
-	PF_DATA_NULL = 3,               // Êı¾İ°üÎª¿Õ
-	PF_NOTICE_NUM_NULL = 4,         // ¹«¸æÊıÖµĞ¡ÓÚ0
-	PF_REDIS_NULL = 5,				// redisÎª¿Õ
-	PF_CLOSE_STATUS_ERR = 6,		// ·¢ËÍµÄÍ£·ş×´Ì¬²»ÕıÈ·
-	PF_DISSMISS_DESK_ERR = 7,       // ×À×ÓË÷ÒıĞ¡ÓÚ0
-	PF_SEND_DATA_ERR = 8,			// ·¢ËÍÊı¾İÊ§°Ü
-	PF_REDSPOT_NOT_EXIST = 9,		// Ã»ÓĞ¼ÇÂ¼Íæ¼ÒĞ¡ºìµãÊı¾İ
+	PF_SUCCESS = 0,                 // æ“ä½œæˆåŠŸ
+	PF_NOUSER = 1,					// ç”¨æˆ·ä¸å­˜åœ¨
+	PF_SIZEERROR = 2,               // æ•°æ®é•¿åº¦ä¸å¯¹
+	PF_DATA_NULL = 3,               // æ•°æ®åŒ…ä¸ºç©º
+	PF_NOTICE_NUM_NULL = 4,         // å…¬å‘Šæ•°å€¼å°äº0
+	PF_REDIS_NULL = 5,				// redisä¸ºç©º
+	PF_CLOSE_STATUS_ERR = 6,		// å‘é€çš„åœæœçŠ¶æ€ä¸æ­£ç¡®
+	PF_DISSMISS_DESK_ERR = 7,       // æ¡Œå­ç´¢å¼•å°äº0
+	PF_SEND_DATA_ERR = 8,			// å‘é€æ•°æ®å¤±è´¥
+	PF_REDSPOT_NOT_EXIST = 9,		// æ²¡æœ‰è®°å½•ç©å®¶å°çº¢ç‚¹æ•°æ®
 };
 
-// ·¢ËÍ¹«¸æÏûÏ¢
+// å‘é€å…¬å‘Šæ¶ˆæ¯
 struct PlatformNoticeMessage
 {
-	char	tile[24];		// ±êÌâ
-	char	content[1024];	// ÄÚÈİ
-	int		interval;		// ¼ä¸ô
-	int		times;			// ´ÎÊı
-	int		type;			// ÀàĞÍ (1:ÆÕÍ¨ 2£ºÌØÊâ 3:µ¯³ö)
+	char	tile[24];		// æ ‡é¢˜
+	char	content[1024];	// å†…å®¹
+	int		interval;		// é—´éš”
+	int		times;			// æ¬¡æ•°
+	int		type;			// ç±»å‹ (1:æ™®é€š 2ï¼šç‰¹æ®Š 3:å¼¹å‡º)
 
 	PlatformNoticeMessage()
 	{
@@ -69,16 +69,16 @@ struct PlatformNoticeMessage
 	}
 };
 
-struct PlatformCloseServerMessage //¹Ø·ş
+struct PlatformCloseServerMessage //å…³æœ
 {
-	int status;	 // 1:¹Ø·ş£¬2£º²âÊÔ
+	int status;	 // 1:å…³æœï¼Œ2ï¼šæµ‹è¯•
 	PlatformCloseServerMessage()
 	{
 		memset(this, 0, sizeof(PlatformCloseServerMessage));
 	}
 };
 
-// ·¢ËÍÀ®°È
+// å‘é€å–‡å­
 struct PlatformHorn
 {
 	int userID;
@@ -106,9 +106,9 @@ struct PlatformDissmissDesk
 
 struct PlatformIdentUser
 {
-	BYTE type;			// 0 È¡Ïû 1 ÉèÖÃ
-	BYTE statusValue;	// 1 ³¬¶Ë 2 Ó®Íæ¼Ò 4 ÊäÍæ¼Ò 8 ·âºÅ
-	int otherValue;     // ·âºÅ¹¦ÄÜ£¬ÔÚÕâÌîĞ´·âºÅÊ±¼ä£¨µ¥Î»Ãë£©£¬-1ÓÀ¾Ã·âºÅ
+	BYTE type;			// 0 å–æ¶ˆ 1 è®¾ç½®
+	BYTE statusValue;	// 1 è¶…ç«¯ 2 èµ¢ç©å®¶ 4 è¾“ç©å®¶ 8 å°å·
+	int otherValue;     // å°å·åŠŸèƒ½ï¼Œåœ¨è¿™å¡«å†™å°å·æ—¶é—´ï¼ˆå•ä½ç§’ï¼‰ï¼Œ-1æ°¸ä¹…å°å·
 
 	PlatformIdentUser()
 	{
@@ -116,13 +116,13 @@ struct PlatformIdentUser
 	}
 };
 
-struct PlatformPHPRedSpotNotify //Í¨ÖªĞ¡ºìµã
+struct PlatformPHPRedSpotNotify //é€šçŸ¥å°çº¢ç‚¹
 {
 	enum PHPRedSpotType
 	{
-		PHP_REDSPOT_TYPE_EMAIL = 0,			//ÓÊ¼şĞ¡ºìµã
-		PHP_REDSPOT_TYPE_FIREND = 1,		//ºÃÓÑĞ¡ºìµã
-		PHP_REDSPOT_TYPE_FG = 2,			//¾ãÀÖ²¿Ğ¡ºìµã
+		PHP_REDSPOT_TYPE_EMAIL = 0,			//é‚®ä»¶å°çº¢ç‚¹
+		PHP_REDSPOT_TYPE_FIREND = 1,		//å¥½å‹å°çº¢ç‚¹
+		PHP_REDSPOT_TYPE_FG = 2,			//ä¿±ä¹éƒ¨å°çº¢ç‚¹
 	};
 	BYTE redspotType;
 
@@ -132,7 +132,7 @@ struct PlatformPHPRedSpotNotify //Í¨ÖªĞ¡ºìµã
 	}
 };
 
-struct PlatformPHPReloadGameConfig //¼ÓÔØÓÎÏ·ÅäÖÃ
+struct PlatformPHPReloadGameConfig //åŠ è½½æ¸¸æˆé…ç½®
 {
 	int roomID;
 
@@ -142,13 +142,13 @@ struct PlatformPHPReloadGameConfig //¼ÓÔØÓÎÏ·ÅäÖÃ
 	}
 };
 
-//ÊÖ»ú×¢²áĞÅÏ¢
+//æ‰‹æœºæ³¨å†Œä¿¡æ¯
 struct PlatformPhoneInfo
 {
 	char phone[24];
 	char passwd[64];
 	char name[64];
-	char headURL[256];			// Íæ¼ÒÍ·Ïñ
+	char headURL[256];			// ç©å®¶å¤´åƒ
 	char sex;
 
 	PlatformPhoneInfo()
@@ -157,14 +157,14 @@ struct PlatformPhoneInfo
 	}
 };
 
-//±¨Ãû»òÕßÍË³ö±ÈÈü£¨ÊµÊ±Èü£©
+//æŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®æ—¶èµ›ï¼‰
 struct PlatformPHPSignUpMatchPeople
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int curSignUpCount;	//µ±Ç°±¨ÃûÈËÊı
-	int peopleCount;	//Âú¶àÉÙÈË¿ªÈü
-	int allSignUpCount;	//ÀÛ¼Æ±¨ÃûÈËÊı
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int curSignUpCount;	//å½“å‰æŠ¥åäººæ•°
+	int peopleCount;	//æ»¡å¤šå°‘äººå¼€èµ›
+	int allSignUpCount;	//ç´¯è®¡æŠ¥åäººæ•°
 
 	PlatformPHPSignUpMatchPeople()
 	{
@@ -172,13 +172,13 @@ struct PlatformPHPSignUpMatchPeople
 	}
 };
 
-//¿ªÈü(ÊµÊ±Èü)
+//å¼€èµ›(å®æ—¶èµ›)
 struct PlatformPHPReqStartMatchPeople
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int matchRound;		//±ÈÈüÂÖÊı
-	int peopleCount;	//Âú¶àÉÙÈË¿ª
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int matchRound;		//æ¯”èµ›è½®æ•°
+	int peopleCount;	//æ»¡å¤šå°‘äººå¼€
 
 	PlatformPHPReqStartMatchPeople()
 	{
@@ -186,16 +186,16 @@ struct PlatformPHPReqStartMatchPeople
 	}
 };
 
-//´´½¨¡¢ĞŞ¸Ä¡¢É¾³ı£¬Ò»¸ö¶¨Ê±Èü
+//åˆ›å»ºã€ä¿®æ”¹ã€åˆ é™¤ï¼Œä¸€ä¸ªå®šæ—¶èµ›
 struct PlatformPHPModifyTimeMatch
 {
-	BYTE type;			//0£º´´½¨£¬1£ºÉ¾³ı£¬2£ºĞŞ¸Ä
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int gameID;			//ÓÎÏ·id
-	int minPeople;		//±ÈÈüËùĞè×îĞ¡ÈËÊı
-	BYTE costResType;	//ÏûºÄ×ÊÔ´ÀàĞÍ
-	int costResNums;	//ÏûÏ¢×ÊÔ´ÊıÁ¿
-	long long startTime;//±ÈÈü¿ªÊ¼Ê±¼ä
+	BYTE type;			//0ï¼šåˆ›å»ºï¼Œ1ï¼šåˆ é™¤ï¼Œ2ï¼šä¿®æ”¹
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int gameID;			//æ¸¸æˆid
+	int minPeople;		//æ¯”èµ›æ‰€éœ€æœ€å°äººæ•°
+	BYTE costResType;	//æ¶ˆè€—èµ„æºç±»å‹
+	int costResNums;	//æ¶ˆæ¯èµ„æºæ•°é‡
+	long long startTime;//æ¯”èµ›å¼€å§‹æ—¶é—´
 
 	PlatformPHPModifyTimeMatch()
 	{
@@ -203,11 +203,11 @@ struct PlatformPHPModifyTimeMatch
 	}
 };
 
-//±¨Ãû»òÕßÍË³ö±ÈÈü£¨¶¨Ê±Èü£©
+//æŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®šæ—¶èµ›ï¼‰
 struct PlatformPHPSignUpMatchTime
 {
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int curSignUpCount;	//µ±Ç°±¨ÃûÈËÊı
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int curSignUpCount;	//å½“å‰æŠ¥åäººæ•°
 
 	PlatformPHPSignUpMatchTime()
 	{
@@ -215,26 +215,26 @@ struct PlatformPHPSignUpMatchTime
 	}
 };
 
-///////////////////////////////// ¡¾ÖĞĞÄ·ş -----> µÇÂ½·ş¡¿  ¡¾ÖĞĞÄ·ş -----> ÓÎÏ··ş¡¿ ///////////////////////////////////
+///////////////////////////////// ã€ä¸­å¿ƒæœ -----> ç™»é™†æœã€‘  ã€ä¸­å¿ƒæœ -----> æ¸¸æˆæœã€‘ ///////////////////////////////////
 const int CENTER_MESSAGE_COMMON_BEGIN = 20000;
 
-// ÖĞĞÄ·ş·¢ËÍ£¬Ğ¡ÓÚ20100¶¨ÒåÔÚTcpConnect.hÖĞ
-const int CENTER_MESSAGE_COMMON_REPEAT_ID = 20101;			// ·şÎñÆ÷Î¨Ò»idÖØ¸´
-const int CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO = 20102;	// µÇÂ½·ş¼¯ÈºĞÅÏ¢
-const int CENTER_MESSAGE_COMMON_RESOURCE_CHANGE = 20103;	// £¨Í¨ÖªÄ³¸öÈË£©×ÊÔ´±ä»¯
-const int CENTER_MESSAGE_COMMON_AUTO_CREATEROOM = 20104;	// Í¨ÖªµÇÂ½·şÎñÆ÷£¬×Ô¶¯¿ª·¿
-const int CENTER_MESSAGE_COMMON_START_MATCH_TIME = 20105;	// Í¨ÖªÓÎÏ··ş¿ªÊ¼¶¨Ê±Èü
+// ä¸­å¿ƒæœå‘é€ï¼Œå°äº20100å®šä¹‰åœ¨TcpConnect.hä¸­
+const int CENTER_MESSAGE_COMMON_REPEAT_ID = 20101;			// æœåŠ¡å™¨å”¯ä¸€idé‡å¤
+const int CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO = 20102;	// ç™»é™†æœé›†ç¾¤ä¿¡æ¯
+const int CENTER_MESSAGE_COMMON_RESOURCE_CHANGE = 20103;	// ï¼ˆé€šçŸ¥æŸä¸ªäººï¼‰èµ„æºå˜åŒ–
+const int CENTER_MESSAGE_COMMON_AUTO_CREATEROOM = 20104;	// é€šçŸ¥ç™»é™†æœåŠ¡å™¨ï¼Œè‡ªåŠ¨å¼€æˆ¿
+const int CENTER_MESSAGE_COMMON_START_MATCH_TIME = 20105;	// é€šçŸ¥æ¸¸æˆæœå¼€å§‹å®šæ—¶èµ›
 
 const int CENTER_MESSAGE_COMMON_END = 30000;
 
-struct PlatformResourceChange //Í¨Öª(ÓÎÏ··şºÍ´óÌü·ş)Íæ¼Ò×ÊÔ´±ä»¯
+struct PlatformResourceChange //é€šçŸ¥(æ¸¸æˆæœå’Œå¤§å…æœ)ç©å®¶èµ„æºå˜åŒ–
 {
 	int resourceType;
-	long long value;		// È«Á¿
-	long long changeValue;	// ÔöÁ¿
-	int reason;				// Ô­Òò
-	int reserveData;		// Ô¤Áô×Ö¶Î£¬Ö÷Òª±£´æ¾ãÀÖ²¿id
-	BYTE isNotifyRoom;		// ÊÇ·ñÍ¨Öªµ½ÓÎÏ·
+	long long value;		// å…¨é‡
+	long long changeValue;	// å¢é‡
+	int reason;				// åŸå› 
+	int reserveData;		// é¢„ç•™å­—æ®µï¼Œä¸»è¦ä¿å­˜ä¿±ä¹éƒ¨id
+	BYTE isNotifyRoom;		// æ˜¯å¦é€šçŸ¥åˆ°æ¸¸æˆ
 
 	PlatformResourceChange()
 	{
@@ -244,9 +244,9 @@ struct PlatformResourceChange //Í¨Öª(ÓÎÏ··şºÍ´óÌü·ş)Íæ¼Ò×ÊÔ´±ä»¯
 
 struct PlatformDistributedSystemInfo
 {
-	UINT logonGroupIndex;		//µÇÂ½·ş¼¯ÈºË÷Òı
-	UINT logonGroupCount;		//µÇÂ½·ş¼¯ÈºÊıÁ¿
-	UINT mainLogonGroupIndex;	//µ±Ç°Ö÷ÒªµÇÂ½·ş¼¯ÈºË÷Òı£¨Ïà±ÈÆäËü·şÎñÆ÷¼¯Èº´¦Àí¸ü¶àÊı¾İ£©
+	UINT logonGroupIndex;		//ç™»é™†æœé›†ç¾¤ç´¢å¼•
+	UINT logonGroupCount;		//ç™»é™†æœé›†ç¾¤æ•°é‡
+	UINT mainLogonGroupIndex;	//å½“å‰ä¸»è¦ç™»é™†æœé›†ç¾¤ç´¢å¼•ï¼ˆç›¸æ¯”å…¶å®ƒæœåŠ¡å™¨é›†ç¾¤å¤„ç†æ›´å¤šæ•°æ®ï¼‰
 
 	PlatformDistributedSystemInfo()
 	{
@@ -267,12 +267,12 @@ struct PlatformRepeatUserLogon
 struct PlatformAutoCreateRoom
 {
 	int masterID;
-	int	friendsGroupID;			// ×À×ÓµÄ¾ãÀÖ²¿ID
-	int friendsGroupDeskNumber;	// ¾ãÀÖ²¿×À×ÓºÅÂë£¬<=0·Ç×À×ÓÁĞ±í£¬>0¾ãÀÖ²¿×À×Óid
-	int roomType;				//·¿¼äÀàĞÍ
-	int gameID;			//ÓÎÏ·ID
-	int	maxCount;		//×î´óÓÎÏ·¾ÖÊı
-	char gameRules[256];//ÓÎÏ·¹æÔò
+	int	friendsGroupID;			// æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int friendsGroupDeskNumber;	// ä¿±ä¹éƒ¨æ¡Œå­å·ç ï¼Œ<=0éæ¡Œå­åˆ—è¡¨ï¼Œ>0ä¿±ä¹éƒ¨æ¡Œå­id
+	int roomType;				//æˆ¿é—´ç±»å‹
+	int gameID;			//æ¸¸æˆID
+	int	maxCount;		//æœ€å¤§æ¸¸æˆå±€æ•°
+	char gameRules[256];//æ¸¸æˆè§„åˆ™
 
 	PlatformAutoCreateRoom()
 	{
@@ -280,14 +280,14 @@ struct PlatformAutoCreateRoom
 	}
 };
 
-//¿ªÈü(¶¨Ê±Èü)
+//å¼€èµ›(å®šæ—¶èµ›)
 struct PlatformReqStartMatchTime
 {
-	int gameID;			//ÓÎÏ·id
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int minPeople;		//±ÈÈüËùĞè×îĞ¡ÈËÊı
-	BYTE costResType;	//ÏûºÄ×ÊÔ´ÀàĞÍ
-	int costResNums;	//ÏûÏ¢×ÊÔ´ÊıÁ¿
+	int gameID;			//æ¸¸æˆid
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int minPeople;		//æ¯”èµ›æ‰€éœ€æœ€å°äººæ•°
+	BYTE costResType;	//æ¶ˆè€—èµ„æºç±»å‹
+	int costResNums;	//æ¶ˆæ¯èµ„æºæ•°é‡
 
 	PlatformReqStartMatchTime()
 	{
@@ -295,16 +295,16 @@ struct PlatformReqStartMatchTime
 	}
 };
 
-//////////////////////////// µÇÂ½·ş -----> ÖĞĞÄ·ş ////////////////////////////////////
+//////////////////////////// ç™»é™†æœ -----> ä¸­å¿ƒæœ ////////////////////////////////////
 const int CENTER_MESSAGE_LOGON_BEGIN = 30000;
 
-const int CENTER_MESSAGE_LOGON_RESOURCE_CHANGE = 30001;			// ×ÊÔ´±ä»¯
-const int CENTER_MESSAGE_LOGON_USER_LOGON_OUT = 30002;			// Íæ¼ÒµÇÂ¼£¬»òÕßµôÏß
-const int CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON = 30003;		// Íæ¼ÒÖØ¸´µÇÂ¼
-const int CENTER_MESSAGE_LOGON_RELAY_USER_MSG = 30004;			// ×ª·¢ÏûÏ¢¸ø¸öÈË
-const int CENTER_MESSAGE_LOGON_RELAY_FG_MSG = 30005;			// ×ª·¢ÏûÏ¢¸ø¾ãÀÖ²¿
-const int CENTER_MESSAGE_LOGON_REQ_FG_REDSPOT_MSG = 30006;		// ÇëÇó¸ø¾ãÀÖ²¿ËùÓĞÍæ¼Ò·¢ËÍĞ¡ºìµã
-const int CENTER_MESSAGE_LOGON_MASTER_DISSMISS_DESK = 30007;	// ÇëÇó½âÉ¢·¿¼ä
+const int CENTER_MESSAGE_LOGON_RESOURCE_CHANGE = 30001;			// èµ„æºå˜åŒ–
+const int CENTER_MESSAGE_LOGON_USER_LOGON_OUT = 30002;			// ç©å®¶ç™»å½•ï¼Œæˆ–è€…æ‰çº¿
+const int CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON = 30003;		// ç©å®¶é‡å¤ç™»å½•
+const int CENTER_MESSAGE_LOGON_RELAY_USER_MSG = 30004;			// è½¬å‘æ¶ˆæ¯ç»™ä¸ªäºº
+const int CENTER_MESSAGE_LOGON_RELAY_FG_MSG = 30005;			// è½¬å‘æ¶ˆæ¯ç»™ä¿±ä¹éƒ¨
+const int CENTER_MESSAGE_LOGON_REQ_FG_REDSPOT_MSG = 30006;		// è¯·æ±‚ç»™ä¿±ä¹éƒ¨æ‰€æœ‰ç©å®¶å‘é€å°çº¢ç‚¹
+const int CENTER_MESSAGE_LOGON_MASTER_DISSMISS_DESK = 30007;	// è¯·æ±‚è§£æ•£æˆ¿é—´
 
 const int CENTER_MESSAGE_LOGON_END = 40000;
 
@@ -312,7 +312,7 @@ const int CENTER_MESSAGE_LOGON_END = 40000;
 struct PlatformUserLogonLogout
 {
 	int userID;
-	BYTE type; //ÀàĞÍËµÃ÷ 0:ĞÂÔö 1£ºÒÆ³ı
+	BYTE type; //ç±»å‹è¯´æ˜ 0:æ–°å¢ 1ï¼šç§»é™¤
 	BYTE isVirtual;
 
 	PlatformUserLogonLogout()
@@ -321,12 +321,12 @@ struct PlatformUserLogonLogout
 	}
 };
 
-//·şÎñÆ÷ÍÆËÍµÄĞ¡ºìµãÊıÁ¿
+//æœåŠ¡å™¨æ¨é€çš„å°çº¢ç‚¹æ•°é‡
 struct PlatformFriendsGroupPushRedSpot
 {
-	int friendsGroupID;			//¾ãÀÖ²¿id
-	int deskMsgRedSpotCount;    //ÅÆ×ÀÏûÏ¢ÊıÁ¿
-	int VIPRoomMsgRedSpotCount;	//VIP·¿¼äÏûÏ¢ÊıÁ¿
+	int friendsGroupID;			//ä¿±ä¹éƒ¨id
+	int deskMsgRedSpotCount;    //ç‰Œæ¡Œæ¶ˆæ¯æ•°é‡
+	int VIPRoomMsgRedSpotCount;	//VIPæˆ¿é—´æ¶ˆæ¯æ•°é‡
 
 	PlatformFriendsGroupPushRedSpot()
 	{
@@ -334,26 +334,26 @@ struct PlatformFriendsGroupPushRedSpot
 	}
 };
 
-////////////////////////////ÓÎÏ··ş -----> ÖĞĞÄ·ş////////////////////////////////////
+////////////////////////////æ¸¸æˆæœ -----> ä¸­å¿ƒæœ////////////////////////////////////
 const int CENTER_MESSAGE_LOADER_BEGIN = 40000;
 
-const int CENTER_MESSAGE_LOADER_RESOURCE_CHANGE = 40001;			// ×ÊÔ´±ä»¯(½ğ±ÒºÍ×êÊ¯±ä»¯)
-const int CENTER_MESSAGE_LOADER_BUYDESKINFO_CHANGE = 40002;			// ¿ª·¿ĞÅÏ¢·¢Éú±ä»¯(ÈËÊı±ä»¯)
-const int CENTER_MESSAGE_LOADER_DESK_DISSMISS = 40003;				// ×À×Ó½âÉ¢
-const int CENTER_MESSAGE_LOADER_DESK_STATUS_CHANGE = 40004;			// ×À×Ó¾ÖÊı±ä»¯
-const int CENTER_MESSAGE_LOADER_FIRECOIN_CHANGE = 40005;			// ×ÊÔ´±ä»¯(»ğ±Ò±ä»¯)
-const int CENTER_MESSAGE_LOADER_REWARD_ACTIVITY = 40006;			// »î¶¯´ó½±Í¨Öª
-const int CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH = 40007;			// Í¨ÖªÇ°¶Ë½øÈëÓÎÏ·¿ªÊ¼±ÈÈü
-const int CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH_FAIL = 40008;	// Í¨ÖªÇ°¶Ë±ÈÈü¿ªÊ¼Ê§°Ü
+const int CENTER_MESSAGE_LOADER_RESOURCE_CHANGE = 40001;			// èµ„æºå˜åŒ–(é‡‘å¸å’Œé’»çŸ³å˜åŒ–)
+const int CENTER_MESSAGE_LOADER_BUYDESKINFO_CHANGE = 40002;			// å¼€æˆ¿ä¿¡æ¯å‘ç”Ÿå˜åŒ–(äººæ•°å˜åŒ–)
+const int CENTER_MESSAGE_LOADER_DESK_DISSMISS = 40003;				// æ¡Œå­è§£æ•£
+const int CENTER_MESSAGE_LOADER_DESK_STATUS_CHANGE = 40004;			// æ¡Œå­å±€æ•°å˜åŒ–
+const int CENTER_MESSAGE_LOADER_FIRECOIN_CHANGE = 40005;			// èµ„æºå˜åŒ–(ç«å¸å˜åŒ–)
+const int CENTER_MESSAGE_LOADER_REWARD_ACTIVITY = 40006;			// æ´»åŠ¨å¤§å¥–é€šçŸ¥
+const int CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH = 40007;			// é€šçŸ¥å‰ç«¯è¿›å…¥æ¸¸æˆå¼€å§‹æ¯”èµ›
+const int CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH_FAIL = 40008;	// é€šçŸ¥å‰ç«¯æ¯”èµ›å¼€å§‹å¤±è´¥
 
 const int CENTER_MESSAGE_LOADER_END = 50000;
 
-//¾ãÀÖ²¿ÏûÏ¢½á¹¹Ìå
+//ä¿±ä¹éƒ¨æ¶ˆæ¯ç»“æ„ä½“
 struct PlatformFriendsGroupMsg
 {
-	int	friendsGroupID;			// ×À×ÓµÄ¾ãÀÖ²¿ID
-	int friendsGroupDeskNumber;	// ¾ãÀÖ²¿×À×ÓºÅÂë£¬<=0·Ç×À×ÓÁĞ±í£¬>0¾ãÀÖ²¿×À×Óid
-	bool bDeleteDesk;			// ¾ãÀÖ²¿·¿¼äÊÇ·ñ¼ÌĞø¿ª·¿
+	int	friendsGroupID;			// æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int friendsGroupDeskNumber;	// ä¿±ä¹éƒ¨æ¡Œå­å·ç ï¼Œ<=0éæ¡Œå­åˆ—è¡¨ï¼Œ>0ä¿±ä¹éƒ¨æ¡Œå­id
+	bool bDeleteDesk;			// ä¿±ä¹éƒ¨æˆ¿é—´æ˜¯å¦ç»§ç»­å¼€æˆ¿
 
 	PlatformFriendsGroupMsg()
 	{
@@ -365,36 +365,36 @@ struct PlatformFriendsGroupMsg
 	}
 };
 
-// ÈËÊı±ä»¯
+// äººæ•°å˜åŒ–
 struct PlatformDeskPeopleCountChange
 {
-	int	friendsGroupID;			// ×À×ÓµÄ¾ãÀÖ²¿ID
-	int friendsGroupDeskNumber;	// ¾ãÀÖ²¿×À×ÓºÅÂë£¬<=0·Ç×À×ÓÁĞ±í£¬>0¾ãÀÖ²¿×À×Óid
+	int	friendsGroupID;			// æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int friendsGroupDeskNumber;	// ä¿±ä¹éƒ¨æ¡Œå­å·ç ï¼Œ<=0éæ¡Œå­åˆ—è¡¨ï¼Œ>0ä¿±ä¹éƒ¨æ¡Œå­id
 	int masterID;
 	char roomPasswd[20];
 	int currUserCount;
-	BYTE updateType;			// 0:Ôö¼Ó£¬1£º¼õÉÙ
-	int userID;					// Ôö¼Ó»ò¼õÉÙÍæ¼ÒµÄID
+	BYTE updateType;			// 0:å¢åŠ ï¼Œ1ï¼šå‡å°‘
+	int userID;					// å¢åŠ æˆ–å‡å°‘ç©å®¶çš„ID
 	PlatformDeskPeopleCountChange()
 	{
 		memset(this, 0, sizeof(PlatformDeskPeopleCountChange));
 	}
 };
 
-// ÓÎÏ·´ó½áËã
+// æ¸¸æˆå¤§ç»“ç®—
 struct PlatformDeskDismiss
 {
 	int masterID;
-	int	friendsGroupID;			// ×À×ÓµÄ¾ãÀÖ²¿ID
-	int friendsGroupDeskNumber;	// ¾ãÀÖ²¿×À×ÓºÅÂë£¬<=0·Ç×À×ÓÁĞ±í£¬>0¾ãÀÖ²¿×À×Óid
-	char passwd[20];			// ·¿¼äºÅ
-	BYTE bDeleteDesk;			// ¾ãÀÖ²¿·¿¼äÊÇ·ñ¼ÌĞø¿ª·¿
+	int	friendsGroupID;			// æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int friendsGroupDeskNumber;	// ä¿±ä¹éƒ¨æ¡Œå­å·ç ï¼Œ<=0éæ¡Œå­åˆ—è¡¨ï¼Œ>0ä¿±ä¹éƒ¨æ¡Œå­id
+	char passwd[20];			// æˆ¿é—´å·
+	BYTE bDeleteDesk;			// ä¿±ä¹éƒ¨æˆ¿é—´æ˜¯å¦ç»§ç»­å¼€æˆ¿
 
-	// ×Ô¶¯¿ª·¿Ê¹ÓÃ
-	int roomType;				//·¿¼äÀàĞÍ
-	int gameID;					//ÓÎÏ·ID
-	int	maxCount;				//×î´óÓÎÏ·¾ÖÊı
-	char gameRules[256];		//ÓÎÏ·¹æÔò
+	// è‡ªåŠ¨å¼€æˆ¿ä½¿ç”¨
+	int roomType;				//æˆ¿é—´ç±»å‹
+	int gameID;					//æ¸¸æˆID
+	int	maxCount;				//æœ€å¤§æ¸¸æˆå±€æ•°
+	char gameRules[256];		//æ¸¸æˆè§„åˆ™
 
 	PlatformDeskDismiss()
 	{
@@ -402,26 +402,26 @@ struct PlatformDeskDismiss
 	}
 };
 
-// ¾ÖÊı±ä»¯
+// å±€æ•°å˜åŒ–
 struct PlatformDeskGameCountChange
 {
-	int	friendsGroupID;			// ×À×ÓµÄ¾ãÀÖ²¿ID
-	int friendsGroupDeskNumber;	// ¾ãÀÖ²¿×À×ÓºÅÂë£¬<=0·Ç×À×ÓÁĞ±í£¬>0¾ãÀÖ²¿×À×Óid
-	BYTE gameStatus;			// ÓÎÏ·×´Ì¬£¬0£ºÎ´¿ªÊ¼£¬1ÕıÔÚÓÎÏ·ÖĞ
+	int	friendsGroupID;			// æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int friendsGroupDeskNumber;	// ä¿±ä¹éƒ¨æ¡Œå­å·ç ï¼Œ<=0éæ¡Œå­åˆ—è¡¨ï¼Œ>0ä¿±ä¹éƒ¨æ¡Œå­id
+	BYTE gameStatus;			// æ¸¸æˆçŠ¶æ€ï¼Œ0ï¼šæœªå¼€å§‹ï¼Œ1æ­£åœ¨æ¸¸æˆä¸­
 	PlatformDeskGameCountChange()
 	{
 		memset(this, 0, sizeof(PlatformDeskGameCountChange));
 	}
 };
 
-// Í¨Öª¿ªÈü
+// é€šçŸ¥å¼€èµ›
 struct PlatformLoaderNotifyStartMatch
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	BYTE matchType;		//±ÈÈüÀàĞÍ
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	BYTE matchType;		//æ¯”èµ›ç±»å‹
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
 	int roomID;
-	int peopleCount;	//²ÎÈüÈËÊı
+	int peopleCount;	//å‚èµ›äººæ•°
 	int userID[MAX_MATCH_PEOPLE_COUNT];
 
 	PlatformLoaderNotifyStartMatch()
@@ -430,13 +430,13 @@ struct PlatformLoaderNotifyStartMatch
 	}
 };
 
-// Í¨Öª¿ªÈüÊ§°Ü
+// é€šçŸ¥å¼€èµ›å¤±è´¥
 struct PlatformLoaderNotifyStartMatchFail
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	BYTE matchType;		//±ÈÈüÀàĞÍ
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	BYTE reason;		//±ÈÈüÊ§°ÜÔ­Òò
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	BYTE matchType;		//æ¯”èµ›ç±»å‹
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	BYTE reason;		//æ¯”èµ›å¤±è´¥åŸå› 
 
 	PlatformLoaderNotifyStartMatchFail()
 	{

@@ -1,133 +1,133 @@
 #pragma once
-//ÔËÓª°æ¾­¹ı±àÒëÓÅ»¯£¬ÎŞ·¨µ÷ÊÔµ«ÊÇÔËĞĞËÙ¶È¸ü¿ì
+//è¿è¥ç‰ˆç»è¿‡ç¼–è¯‘ä¼˜åŒ–ï¼Œæ— æ³•è°ƒè¯•ä½†æ˜¯è¿è¡Œé€Ÿåº¦æ›´å¿«
 #pragma pack(1)
-//ÎÄ¼şÃû×Ö¶¨Òå
-#define GAMENAME						TEXT("³±ÉÇ¶·µØÖ÷")
-#define NAME_ID							36610103								//Ãû×Ö ID
+//æ–‡ä»¶åå­—å®šä¹‰
+#define GAMENAME						TEXT("æ½®æ±•æ–—åœ°ä¸»")
+#define NAME_ID							36610103								//åå­— ID
 
-//°æ±¾¶¨Òå
-#define GAME_MAX_VER					1								//ÏÖÔÚ×î¸ß°æ±¾
-#define GAME_LESS_VER					1								//ÏÖÔÚ×îµÍ°æ±¾
-#define GAME_CHANGE_VER					0								//ĞŞ¸Ä°æ±¾
+//ç‰ˆæœ¬å®šä¹‰
+#define GAME_MAX_VER					1								//ç°åœ¨æœ€é«˜ç‰ˆæœ¬
+#define GAME_LESS_VER					1								//ç°åœ¨æœ€ä½ç‰ˆæœ¬
+#define GAME_CHANGE_VER					0								//ä¿®æ”¹ç‰ˆæœ¬
 
-//Ö§³ÖÀàĞÍ
+//æ”¯æŒç±»å‹
 #define SUPPER_TYPE						SUP_NORMAL_GAME|SUP_MATCH_GAME|SUP_MONEY_GAME
-//ÓÎÏ·ÄÚ²¿¿ª·¢°æ±¾ºÅ
-#define DEV_HEIGHT_VERSION				2				//ÄÚ²¿¿ª·¢¸ß°æ±¾ºÅ(Ã¿ĞŞÕıÒ»´ÎLOW_VERSIONG+1)
-#define DEV_LOW_VERSION					0				//ÄÚ²¿¿ª·¢µÍ°æ±¾ºÅ
+//æ¸¸æˆå†…éƒ¨å¼€å‘ç‰ˆæœ¬å·
+#define DEV_HEIGHT_VERSION				2				//å†…éƒ¨å¼€å‘é«˜ç‰ˆæœ¬å·(æ¯ä¿®æ­£ä¸€æ¬¡LOW_VERSIONG+1)
+#define DEV_LOW_VERSION					0				//å†…éƒ¨å¼€å‘ä½ç‰ˆæœ¬å·
 
-//ÓÎÏ·ĞÅÏ¢
-#define PLAY_COUNT						3								//ÓÎÏ·ÈËÊı
-#define SKIN_CARD						TEXT(".\\image\\cardskin")		//¹²ÓÃÍ¼Æ¬ÎÄ¼ş¼Ğ
-static TCHAR szTempStr[MAX_PATH] = { 0 };//Ôİ´æ×Ö·û´®£¬ÓÃÀ´»ñÈ¡ dll_name µÈµÄÊ±ºòÊ¹ÓÃ
+//æ¸¸æˆä¿¡æ¯
+#define PLAY_COUNT						3								//æ¸¸æˆäººæ•°
+#define SKIN_CARD						TEXT(".\\image\\cardskin")		//å…±ç”¨å›¾ç‰‡æ–‡ä»¶å¤¹
+static TCHAR szTempStr[MAX_PATH] = { 0 };//æš‚å­˜å­—ç¬¦ä¸²ï¼Œç”¨æ¥è·å– dll_name ç­‰çš„æ—¶å€™ä½¿ç”¨
 #define GET_CLIENT_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".ico"))
 #define GET_SERVER_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".dll"))
 #define GET_CLIENT_BCF_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".bcf"))
 
-//ÓÎÏ·×´Ì¬¶¨Òå
-#define GS_WAIT_SETGAME					0				//µÈ´ı¶«¼ÒÉèÖÃ×´Ì¬
-#define GS_WAIT_ARGEE					1				//µÈ´ıÍ¬ÒâÉèÖÃ
-#define GS_SEND_CARD					20				//·¢ÅÆ×´Ì¬
-#define GS_WAIT_BACK					21				//µÈ´ı¿ÛÑ¹µ×ÅÆ
-#define GS_PLAY_GAME					22				//ÓÎÏ·ÖĞ×´Ì¬.
-#define GS_WAIT_NEXT					23				//µÈ´ıÏÂÒ»ÅÌ¿ªÊ¼ 
+//æ¸¸æˆçŠ¶æ€å®šä¹‰
+#define GS_WAIT_SETGAME					0				//ç­‰å¾…ä¸œå®¶è®¾ç½®çŠ¶æ€
+#define GS_WAIT_ARGEE					1				//ç­‰å¾…åŒæ„è®¾ç½®
+#define GS_SEND_CARD					20				//å‘ç‰ŒçŠ¶æ€
+#define GS_WAIT_BACK					21				//ç­‰å¾…æ‰£å‹åº•ç‰Œ
+#define GS_PLAY_GAME					22				//æ¸¸æˆä¸­çŠ¶æ€.
+#define GS_WAIT_NEXT					23				//ç­‰å¾…ä¸‹ä¸€ç›˜å¼€å§‹ 
 
-#define GS_FLAG_NORMAL					0				//Õı³£Çé¿ö
-#define GS_FLAG_CALL_SCORE				1				//½Ğ·Ö
-#define GS_FLAG_ROB_NT					2				//ÇÀµØÖ÷
-#define GS_FLAG_ADD_DOUBLE				3				//¼Ó±¶
-#define GS_FLAG_SHOW_CARD				4				//ÁÁÅÆ
+#define GS_FLAG_NORMAL					0				//æ­£å¸¸æƒ…å†µ
+#define GS_FLAG_CALL_SCORE				1				//å«åˆ†
+#define GS_FLAG_ROB_NT					2				//æŠ¢åœ°ä¸»
+#define GS_FLAG_ADD_DOUBLE				3				//åŠ å€
+#define GS_FLAG_SHOW_CARD				4				//äº®ç‰Œ
 #define GS_FLAG_PLAY_GAME               5 
 
 //-------------------------------------------------------------------------------
 /********************************************************************************/
-// Êı¾İ°ü´¦Àí¸¨Öú±êÊ¶
-//warning:79ºÅIDÔ¤Áô¸ø³¬¼¶¿Í»§¶Ë,ÓÀ²»Ê¹ÓÃ
+// æ•°æ®åŒ…å¤„ç†è¾…åŠ©æ ‡è¯†
+//warning:79å·IDé¢„ç•™ç»™è¶…çº§å®¢æˆ·ç«¯,æ°¸ä¸ä½¿ç”¨
 /********************************************************************************/
-#define ASS_GAME_BEGIN					51				//ÓÎÏ·¿ªÊ¼
-#define ASS_SEND_CARD					53				//·¢ÅÆĞÅÏ¢
-#define ASS_SEND_CARD_MSG				54				//·¢ÅÆ¹ı³ÌÖĞ´¦ÀíÏûÏ¢
-#define ASS_SEND_ALL_CARD				55				//·¢ËÍËùÓĞÅÆ(Ò»ÏÂ·¢·ÅÈ«²¿)
-#define ASS_SEND_FINISH					56				//·¢ÅÆÍê³É
-#define ASS_CALL_SCORE					57				//½Ğ·Ö
-#define ASS_CALL_SCORE_RESULT			58				//½Ğ·Ö½á¹û
-#define ASS_CALL_SCORE_FINISH			59				//½Ğ·Ö½áÊø
+#define ASS_GAME_BEGIN					51				//æ¸¸æˆå¼€å§‹
+#define ASS_SEND_CARD					53				//å‘ç‰Œä¿¡æ¯
+#define ASS_SEND_CARD_MSG				54				//å‘ç‰Œè¿‡ç¨‹ä¸­å¤„ç†æ¶ˆæ¯
+#define ASS_SEND_ALL_CARD				55				//å‘é€æ‰€æœ‰ç‰Œ(ä¸€ä¸‹å‘æ”¾å…¨éƒ¨)
+#define ASS_SEND_FINISH					56				//å‘ç‰Œå®Œæˆ
+#define ASS_CALL_SCORE					57				//å«åˆ†
+#define ASS_CALL_SCORE_RESULT			58				//å«åˆ†ç»“æœ
+#define ASS_CALL_SCORE_FINISH			59				//å«åˆ†ç»“æŸ
 
-#define ASS_ROB_NT						61				//ÇÀµØÖ÷
-#define ASS_ROB_NT_RESULT				62				//ÇÀµØÖ÷½á¹û
-#define ASS_GAME_MULTIPLE				64				//ÓÎÏ·±¶Êı(ÇÀµØÖ÷ºó»á¼Ó±¶)
-#define ASS_ROB_NT_FINISH				65				//ÇÀµØÖ÷½á¹û
+#define ASS_ROB_NT						61				//æŠ¢åœ°ä¸»
+#define ASS_ROB_NT_RESULT				62				//æŠ¢åœ°ä¸»ç»“æœ
+#define ASS_GAME_MULTIPLE				64				//æ¸¸æˆå€æ•°(æŠ¢åœ°ä¸»åä¼šåŠ å€)
+#define ASS_ROB_NT_FINISH				65				//æŠ¢åœ°ä¸»ç»“æœ
 
-#define ASS_BACK_CARD					66				//µ×ÅÆÊı¾İ
-#define ASS_BACK_CARD_EX				67				//À©Õ¹µ×ÅÆÊı¾İ(ÆäËûÍæ¼Ò¿É¼û)
-#define ASS_ADD_DOUBLE					68				//Í¨Öª¼Ó±¶
-#define ASS_ADD_DOUBLE_RESULT			69				//¼Ó±¶½á¹û
-#define ASS_ADD_DOUBLE_FINISH			71				//¼Ó±¶½áÊø
-#define ASS_SHOW_CARD					72				//ÁÁÅÆ
-#define ASS_SHOW_CARD_RESULT			73				//ÁÁÅÆ½á¹û
-#define ASS_SHOW_CARD_FINISH			75				//ÁÁÅÆ½áÊø
-#define ASS_GAME_PLAY					76				//¿ªÊ¼ÓÎÏ·
-#define ASS_OUT_CARD					77				//ÓÃ»§³öÅÆ
-#define ASS_OUT_CARD_RESULT				78				//³öÅÆ½Y¹û
-#define	ASS_SUPER_USER					79				//³¬¶ËÏûÏ¢
-#define ASS_REPLACE_OUT_CARD			80				//´úÌæ³öÅÆ(79Áô¸ø³¬¼¶¿Í»§¶Ë·¢ÅÆÆ÷)
-#define ASS_ONE_TURN_OVER				81				//Ò»ÂÖÍê³É(Ê¹¿Í»§¶ËÉÏÒ»ÂÖ¿ÉÓÃ)
-#define ASS_NEW_TURN					82				//ĞÂÒ»ÂÖ¿ªÊ¼
-#define ASS_AWARD_POINT					83				//½±·Ö(Õ¨µ¯»ğ¼ı)
-#define ASS_CONTINUE_END				84				//ÓÎÏ·½áÊø
-#define ASS_NO_CONTINUE_END				85				//ÓÎÏ·½áÊø
-#define ASS_NO_CALL_SCORE_END			86				//ÎŞÈË½Ğ·Ö
-#define ASS_CUT_END						87				//ÓÃ»§Ç¿ĞĞÀë¿ª
-#define ASS_SAFE_END					88				//ÓÎÏ·°²È«½áÊø
-#define ASS_TERMINATE_END				89				//ÒâÍâ½áÊø
-#define ASS_AHEAD_END					90				//ÌáÇ°½áÊø
-#define ASS_AUTO						91				//ÓÃ»§ÍĞ¹Ü
-#define ASS_HAVE_THING					92				//ÓĞÊÂ
-#define ASS_LEFT_RESULT					93				//ÓĞÊÂÀë¿ª½á¹û
-#define ASS_AI_STATION					95				//»úÆ÷ÈËÍĞ¹Ü(¶ÏÏß»§ÓÃ)
-#define ASS_USER_LEFTDESK               97              //Íæ¼ÒÀë¿ª×À×Ó»ò¶ÏÏß
+#define ASS_BACK_CARD					66				//åº•ç‰Œæ•°æ®
+#define ASS_BACK_CARD_EX				67				//æ‰©å±•åº•ç‰Œæ•°æ®(å…¶ä»–ç©å®¶å¯è§)
+#define ASS_ADD_DOUBLE					68				//é€šçŸ¥åŠ å€
+#define ASS_ADD_DOUBLE_RESULT			69				//åŠ å€ç»“æœ
+#define ASS_ADD_DOUBLE_FINISH			71				//åŠ å€ç»“æŸ
+#define ASS_SHOW_CARD					72				//äº®ç‰Œ
+#define ASS_SHOW_CARD_RESULT			73				//äº®ç‰Œç»“æœ
+#define ASS_SHOW_CARD_FINISH			75				//äº®ç‰Œç»“æŸ
+#define ASS_GAME_PLAY					76				//å¼€å§‹æ¸¸æˆ
+#define ASS_OUT_CARD					77				//ç”¨æˆ·å‡ºç‰Œ
+#define ASS_OUT_CARD_RESULT				78				//å‡ºç‰Œçµæœ
+#define	ASS_SUPER_USER					79				//è¶…ç«¯æ¶ˆæ¯
+#define ASS_REPLACE_OUT_CARD			80				//ä»£æ›¿å‡ºç‰Œ(79ç•™ç»™è¶…çº§å®¢æˆ·ç«¯å‘ç‰Œå™¨)
+#define ASS_ONE_TURN_OVER				81				//ä¸€è½®å®Œæˆ(ä½¿å®¢æˆ·ç«¯ä¸Šä¸€è½®å¯ç”¨)
+#define ASS_NEW_TURN					82				//æ–°ä¸€è½®å¼€å§‹
+#define ASS_AWARD_POINT					83				//å¥–åˆ†(ç‚¸å¼¹ç«ç®­)
+#define ASS_CONTINUE_END				84				//æ¸¸æˆç»“æŸ
+#define ASS_NO_CONTINUE_END				85				//æ¸¸æˆç»“æŸ
+#define ASS_NO_CALL_SCORE_END			86				//æ— äººå«åˆ†
+#define ASS_CUT_END						87				//ç”¨æˆ·å¼ºè¡Œç¦»å¼€
+#define ASS_SAFE_END					88				//æ¸¸æˆå®‰å…¨ç»“æŸ
+#define ASS_TERMINATE_END				89				//æ„å¤–ç»“æŸ
+#define ASS_AHEAD_END					90				//æå‰ç»“æŸ
+#define ASS_AUTO						91				//ç”¨æˆ·æ‰˜ç®¡
+#define ASS_HAVE_THING					92				//æœ‰äº‹
+#define ASS_LEFT_RESULT					93				//æœ‰äº‹ç¦»å¼€ç»“æœ
+#define ASS_AI_STATION					95				//æœºå™¨äººæ‰˜ç®¡(æ–­çº¿æˆ·ç”¨)
+#define ASS_USER_LEFTDESK               97              //ç©å®¶ç¦»å¼€æ¡Œå­æˆ–æ–­çº¿
 
-#define S_C_UPDATE_CALCULATE_BOARD_SIG	98				//¸üĞÂ½áËã°ñ
-#define S_C_UPDATE_REMAIN_JUSHU_SIG		99				//¸üĞÂÊ£Óà¾ÖÊı
+#define S_C_UPDATE_CALCULATE_BOARD_SIG	98				//æ›´æ–°ç»“ç®—æ¦œ
+#define S_C_UPDATE_REMAIN_JUSHU_SIG		99				//æ›´æ–°å‰©ä½™å±€æ•°
 
-#define S_C_ROBOT_CARD					100				//»úÆ÷ÈË×¨ÊôÏûÏ¢
-#define S_C_OUT_CARD_RESULT				109             //³öÅÆ½á¹û(Ö÷Òª³ö´í)
+#define S_C_ROBOT_CARD					100				//æœºå™¨äººä¸“å±æ¶ˆæ¯
+#define S_C_OUT_CARD_RESULT				109             //å‡ºç‰Œç»“æœ(ä¸»è¦å‡ºé”™)
 
-const  int  MAX_TASK_TYPE = 4;  ///ÈÎÎñ×î´óÖÖÀà 
-const  int  MAX_CARD_SHAPE = 8;  ///ÅÆĞÍ×î´óÖÖÀà
-const  int  MAX_CARD_TYPE = 15; ///ÅÆÖÖÀà
+const  int  MAX_TASK_TYPE = 4;  ///ä»»åŠ¡æœ€å¤§ç§ç±» 
+const  int  MAX_CARD_SHAPE = 8;  ///ç‰Œå‹æœ€å¤§ç§ç±»
+const  int  MAX_CARD_TYPE = 15; ///ç‰Œç§ç±»
 
-///µ×ÅÆÀàĞÍ
+///åº•ç‰Œç±»å‹
 enum BackCardType
 {
-	TYPE_NONE = 0,//Ê²Ã´ÅÆĞÍ¶¼²»ÊÇ
+	TYPE_NONE = 0,//ä»€ä¹ˆç‰Œå‹éƒ½ä¸æ˜¯
 	TYPE_DOUBLE_CARD = 10,
 	TYPE_SAME_HUA = 11,
 	TYPE_SMALL_KING = 12,
-	TYPE_BIG_KING = 13, //´óÍõ
+	TYPE_BIG_KING = 13, //å¤§ç‹
 	TYPE_TRIPLE_CARD = 14,
 	TYPE_STRAIT = 15,
 	TYPE_ROCKET = 16
 };
 
-///ÈÎÎñÀàĞÍ
+///ä»»åŠ¡ç±»å‹
 enum LastTaskType
 {
-	TYPE_LAST_NONE = 0,    ///ÎŞÈÎºÎÅÆĞÍ 
-	TYPE_HAVE_A_CARD = 100,  ///ÓĞÄ³ÕÅÅÆ
-	TYPE_SOME_SHAPE = 101,  ///ÓĞÄ³ÖÖÅÆĞÍ
-	TYPE_SINGLE_SOME_CARD = 102,  ///´òµÄÄ³ÕÅÅÆ
-	TYPE_DOUBLE_SOME_CARD = 103   ///´òµÄÒ»¶ÔÄ³ÖÖÅÆ
+	TYPE_LAST_NONE = 0,    ///æ— ä»»ä½•ç‰Œå‹ 
+	TYPE_HAVE_A_CARD = 100,  ///æœ‰æŸå¼ ç‰Œ
+	TYPE_SOME_SHAPE = 101,  ///æœ‰æŸç§ç‰Œå‹
+	TYPE_SINGLE_SOME_CARD = 102,  ///æ‰“çš„æŸå¼ ç‰Œ
+	TYPE_DOUBLE_SOME_CARD = 103   ///æ‰“çš„ä¸€å¯¹æŸç§ç‰Œ
 };
 
-///ÓÎÏ·ÈÎÎñ½á¹¹
+///æ¸¸æˆä»»åŠ¡ç»“æ„
 struct GameTaskStruct
 {
 	BYTE     byBackCardType;
 	BYTE     byTaskType;
 	BYTE     bySpecifyShape;
 	BYTE     bySpecifyCard;
-	BYTE     byBackCardMutiple;  ///µ×ÅÆ±¶Êı
+	BYTE     byBackCardMutiple;  ///åº•ç‰Œå€æ•°
 
 	GameTaskStruct()
 	{
@@ -139,17 +139,17 @@ struct GameTaskStruct
 	}
 };
 
-///ÓÎÏ·ÖĞµÄ±¶Êı
+///æ¸¸æˆä¸­çš„å€æ•°
 struct  GameMutipleStruct
 {
-	int       sBaseMutiple;                 ///ÓÎÏ·ÖĞµÄ»ù±¾µ××¢
-	int       sBackCardMutiple;             ///µ×ÅÆ±¶Êı
-	int       sBombCount;                   ///Õ¨µ¯±¶Êı
-	int       sSprintMutiple;               ///´ºÌì
-	int       sCardShapeMutiple;           ///ÅÆĞÍ±¶Êı£¨Ò»°ãÖ¸ÈÎÎñÖĞµÄ±¶Êı£©
-	BYTE      sAddGameMutiple[PLAY_COUNT];  /// ÓÎÏ·ÖĞ¼Ó±¶
-	BYTE      sRobNtMutiple[PLAY_COUNT];    ///ÇÀµØÖ÷±¶Êı
-	BYTE      sMingPaiMutiple[PLAY_COUNT];  ///Ã¿¸öÈËµÄÃ÷ÅÆ±¶Êı
+	int       sBaseMutiple;                 ///æ¸¸æˆä¸­çš„åŸºæœ¬åº•æ³¨
+	int       sBackCardMutiple;             ///åº•ç‰Œå€æ•°
+	int       sBombCount;                   ///ç‚¸å¼¹å€æ•°
+	int       sSprintMutiple;               ///æ˜¥å¤©
+	int       sCardShapeMutiple;           ///ç‰Œå‹å€æ•°ï¼ˆä¸€èˆ¬æŒ‡ä»»åŠ¡ä¸­çš„å€æ•°ï¼‰
+	BYTE      sAddGameMutiple[PLAY_COUNT];  /// æ¸¸æˆä¸­åŠ å€
+	BYTE      sRobNtMutiple[PLAY_COUNT];    ///æŠ¢åœ°ä¸»å€æ•°
+	BYTE      sMingPaiMutiple[PLAY_COUNT];  ///æ¯ä¸ªäººçš„æ˜ç‰Œå€æ•°
 	GameMutipleStruct()
 	{
 		sBaseMutiple = 1;
@@ -174,14 +174,14 @@ struct  GameMutipleStruct
 		memset(sRobNtMutiple, 0, sizeof(sRobNtMutiple));
 		memset(sMingPaiMutiple, 0, sizeof(sMingPaiMutiple));
 	}
-	///»ñÈ¡Ã÷ÅÆ×î´ó±¶Êı
+	///è·å–æ˜ç‰Œæœ€å¤§å€æ•°
 	int  GetMingMaxMutiple(void)
 	{
 		int iMingMutiple = max(max(sMingPaiMutiple[0], sMingPaiMutiple[1]), sMingPaiMutiple[2]);
 
 		return (iMingMutiple > 0 ? iMingMutiple : 1);
 	}
-	///»ñÈ¡Æ÷ÇÀµØÖ÷±¶Êı
+	///è·å–å™¨æŠ¢åœ°ä¸»å€æ•°
 	int  GetRobNtMutiple(void)
 	{
 		int  iRobMutiple = 0;
@@ -196,7 +196,7 @@ struct  GameMutipleStruct
 
 		return iRobMutiple;
 	}
-	///»ñÈ¡¹«¹²±¶Êı
+	///è·å–å…¬å…±å€æ•°
 	int  GetPublicMutiple(void)
 	{
 		int  iBombMutiple = pow(2.0, sBombCount);
@@ -204,7 +204,7 @@ struct  GameMutipleStruct
 		int  iGameMutiple = sBaseMutiple*sBackCardMutiple*iBombMutiple*sSprintMutiple*sCardShapeMutiple*GetRobNtMutiple()*GetMingMaxMutiple() / 100;
 		return iGameMutiple;
 	}
-	//»ñÈ¡Õ¨µ¯±¶Êı
+	//è·å–ç‚¸å¼¹å€æ•°
 	int GetBombMutiple()
 	{
 		int  iBombMutiple = pow(2.0, sBombCount);
@@ -214,34 +214,34 @@ struct  GameMutipleStruct
 };
 
 /********************************************************************************/
-//ÓÎÏ·Êı¾İ°ü
+//æ¸¸æˆæ•°æ®åŒ…
 /********************************************************************************/
-//ÓÎÏ·×´Ì¬Êı¾İ°ü	£¨ µÈ´ıÆäËûÍæ¼Ò¿ªÊ¼ £©
+//æ¸¸æˆçŠ¶æ€æ•°æ®åŒ…	ï¼ˆ ç­‰å¾…å…¶ä»–ç©å®¶å¼€å§‹ ï¼‰
 struct GameStation_2
 {
-	BYTE				iVersion;						//ÓÎÏ·°æ±¾ºÅ
-	BYTE				iVersion2;						//ÓÎÏ·°æ±¾ºÅ
-	bool                bUserReady[PLAY_COUNT];        ///Íæ¼ÒÊÇ·ñÒÑ×¼±¸
+	BYTE				iVersion;						//æ¸¸æˆç‰ˆæœ¬å·
+	BYTE				iVersion2;						//æ¸¸æˆç‰ˆæœ¬å·
+	bool                bUserReady[PLAY_COUNT];        ///ç©å®¶æ˜¯å¦å·²å‡†å¤‡
 
-	BYTE				iBeginTime;						//¿ªÊ¼×¼±¸Ê±¼ä
-	BYTE				iThinkTime;						//³öÅÆË¼¿¼Ê±¼ä
-	BYTE				iCallScoreTime;					//½Ğ·Ö¼ÆÊ±
-	BYTE                iRobNTTime;                    //ÇÀµØÖ÷Ê±¼ä
-	BYTE				iAddDoubleTime;					//¼Ó±¶Ê±¼ä
+	BYTE				iBeginTime;						//å¼€å§‹å‡†å¤‡æ—¶é—´
+	BYTE				iThinkTime;						//å‡ºç‰Œæ€è€ƒæ—¶é—´
+	BYTE				iCallScoreTime;					//å«åˆ†è®¡æ—¶
+	BYTE                iRobNTTime;                    //æŠ¢åœ°ä¸»æ—¶é—´
+	BYTE				iAddDoubleTime;					//åŠ å€æ—¶é—´
 
-	int                 iGameMutiple;             ///ÓÎÏ·ÖĞµÄ±¶Êı
-	int                 iAddDoubleLimit;             //¼Ó±¶ÏŞÖÆ
-	int                 iGameMaxLimit;              ///ÓÎÏ·×î´óÊäÓ®
+	int                 iGameMutiple;             ///æ¸¸æˆä¸­çš„å€æ•°
+	int                 iAddDoubleLimit;             //åŠ å€é™åˆ¶
+	int                 iGameMaxLimit;              ///æ¸¸æˆæœ€å¤§è¾“èµ¢
 
-	DWORD				iCardShape;						//ÅÆĞÍÉèÖÃ
-	//ÓÎÏ·±¶Êı
-	UINT				iDeskBasePoint;					//×ÀÃæ»ù´¡·Ö
-	UINT				iRoomBasePoint;					//·¿¼ä±¶Êı
-	__int64				iRunPublish;					//ÌÓÅÜ¿Û·Ö
+	DWORD				iCardShape;						//ç‰Œå‹è®¾ç½®
+	//æ¸¸æˆå€æ•°
+	UINT				iDeskBasePoint;					//æ¡Œé¢åŸºç¡€åˆ†
+	UINT				iRoomBasePoint;					//æˆ¿é—´å€æ•°
+	__int64				iRunPublish;					//é€ƒè·‘æ‰£åˆ†
 
-	int					iFengDing;//·â¶¥±¶Êı£¨Õ¨µ¯£©
-	int                 iRunTime;//µ¥Î»Ãë
-	int                 iRemainRunTime; //µ¥Î»Ãë
+	int					iFengDing;//å°é¡¶å€æ•°ï¼ˆç‚¸å¼¹ï¼‰
+	int                 iRunTime;//å•ä½ç§’
+	int                 iRemainRunTime; //å•ä½ç§’
 
 	GameStation_2()
 	{
@@ -249,54 +249,54 @@ struct GameStation_2
 	}
 };
 
-//ÓÎÏ·×´Ì¬Êı¾İ°ü	£¨ µÈ´ı¿ÛÑºµ×ÅÆ×´Ì¬ £©
+//æ¸¸æˆçŠ¶æ€æ•°æ®åŒ…	ï¼ˆ ç­‰å¾…æ‰£æŠ¼åº•ç‰ŒçŠ¶æ€ ï¼‰
 struct GameStation_3
 {
-	BYTE				iVersion;						//ÓÎÏ·°æ±¾ºÅ
-	BYTE				iVersion2;						//ÓÎÏ·°æ±¾ºÅ
+	BYTE				iVersion;						//æ¸¸æˆç‰ˆæœ¬å·
+	BYTE				iVersion2;						//æ¸¸æˆç‰ˆæœ¬å·
 
-	BYTE				iBackCount;						//µ×ÅÆÊı
-	BYTE				iBeginTime;						//¿ªÊ¼×¼±¸Ê±¼ä
-	BYTE				iThinkTime;						//³öÅÆË¼¿¼Ê±¼ä
-	BYTE                iRobNTTime;                    //ÇÀµØÖ÷Ê±¼ä
-	BYTE				iCallScoreTime;					//½Ğ·Ö¼ÆÊ±
-	BYTE				iAddDoubleTime;					//¼Ó±¶Ê±¼ä
+	BYTE				iBackCount;						//åº•ç‰Œæ•°
+	BYTE				iBeginTime;						//å¼€å§‹å‡†å¤‡æ—¶é—´
+	BYTE				iThinkTime;						//å‡ºç‰Œæ€è€ƒæ—¶é—´
+	BYTE                iRobNTTime;                    //æŠ¢åœ°ä¸»æ—¶é—´
+	BYTE				iCallScoreTime;					//å«åˆ†è®¡æ—¶
+	BYTE				iAddDoubleTime;					//åŠ å€æ—¶é—´
 
-	BYTE				iCallScorePeople;				//µ±Ç°½Ğ·ÖÈË
-	BYTE				iGameFlag;						//½Ğ·Ö±ê¼Ç
-	BYTE				iCallScoreResult;				//Ëù½ĞµÄ·Ö
+	BYTE				iCallScorePeople;				//å½“å‰å«åˆ†äºº
+	BYTE				iGameFlag;						//å«åˆ†æ ‡è®°
+	BYTE				iCallScoreResult;				//æ‰€å«çš„åˆ†
 
-	int					iUpGradePeople;					//×¯¼ÒÎ»ÖÃ
-	int                 iCurOperator;                 ///µ±Ç°²Ù×÷µÄÈË
+	int					iUpGradePeople;					//åº„å®¶ä½ç½®
+	int                 iCurOperator;                 ///å½“å‰æ“ä½œçš„äºº
 
-	UINT				iDeskBasePoint;					//×ÀÃæ»ù´¡·Ö
-	UINT				iRoomBasePoint;					//·¿¼ä±¶Êı
+	UINT				iDeskBasePoint;					//æ¡Œé¢åŸºç¡€åˆ†
+	UINT				iRoomBasePoint;					//æˆ¿é—´å€æ•°
 
-	DWORD				iCardShape;						//ÅÆĞÍÉèÖÃ
-	int                 iGameMutiple;             ///ÓÎÏ·ÖĞµÄ±¶Êı
-	int                 iAddDoubleLimit;             //¼Ó±¶ÏŞÖÆ
-	int                 iGameMaxLimit;              ///ÓÎÏ·×î´óÊäÓ®
+	DWORD				iCardShape;						//ç‰Œå‹è®¾ç½®
+	int                 iGameMutiple;             ///æ¸¸æˆä¸­çš„å€æ•°
+	int                 iAddDoubleLimit;             //åŠ å€é™åˆ¶
+	int                 iGameMaxLimit;              ///æ¸¸æˆæœ€å¤§è¾“èµ¢
 
-	bool				bAuto[PLAY_COUNT];				//ÍĞ¹ÜÇé¿ö
-	bool				bCanleave[PLAY_COUNT];			//ÄÜ·ñµãÍË³ö
-	int					iCallScore[PLAY_COUNT];			//¼¸¼Ò½Ğ·ÖÇé¿ö
-	int 				iRobNT[PLAY_COUNT];				//ÇÀµØÖ÷Çé¿ö
-	int                 iUserDoubleValue[PLAY_COUNT];  ///Íæ¼Ò¼Ó±¶Çé¿ö
-	BYTE				iUserCardCount[PLAY_COUNT];		//ÓÃ»§ÊÖÉÏÆË¿ËÊıÄ¿
-	BYTE				iUserCardList[195];				//ÓÃ»§ÊÖÉÏµÄÆË¿Ë
-	BYTE                iGameBackCard[12];                 ///µ×ÅÆ
-	BYTE 				iBackCardCount;						//µ×ÅÆÊıÁ¿
-	__int64				iRunPublish;					//ÌÓÅÜ¿Û·Ö
+	bool				bAuto[PLAY_COUNT];				//æ‰˜ç®¡æƒ…å†µ
+	bool				bCanleave[PLAY_COUNT];			//èƒ½å¦ç‚¹é€€å‡º
+	int					iCallScore[PLAY_COUNT];			//å‡ å®¶å«åˆ†æƒ…å†µ
+	int 				iRobNT[PLAY_COUNT];				//æŠ¢åœ°ä¸»æƒ…å†µ
+	int                 iUserDoubleValue[PLAY_COUNT];  ///ç©å®¶åŠ å€æƒ…å†µ
+	BYTE				iUserCardCount[PLAY_COUNT];		//ç”¨æˆ·æ‰‹ä¸Šæ‰‘å…‹æ•°ç›®
+	BYTE				iUserCardList[195];				//ç”¨æˆ·æ‰‹ä¸Šçš„æ‰‘å…‹
+	BYTE                iGameBackCard[12];                 ///åº•ç‰Œ
+	BYTE 				iBackCardCount;						//åº•ç‰Œæ•°é‡
+	__int64				iRunPublish;					//é€ƒè·‘æ‰£åˆ†
 
-	GameMutipleStruct   gameMutiple;                      ///ÓÎÏ·±¶Êı  
-	GameTaskStruct      gameTask;                         ///ÓÎÏ·ÈÎÎñ
+	GameMutipleStruct   gameMutiple;                      ///æ¸¸æˆå€æ•°  
+	GameTaskStruct      gameTask;                         ///æ¸¸æˆä»»åŠ¡
 
-	int					iFengDing;//·â¶¥±¶Êı£¨Õ¨µ¯£©
-	int                 iRunTime;//µ¥Î»Ãë
-	int                 iRemainRunTime; //µ¥Î»Ãë
+	int					iFengDing;//å°é¡¶å€æ•°ï¼ˆç‚¸å¼¹ï¼‰
+	int                 iRunTime;//å•ä½ç§’
+	int                 iRemainRunTime; //å•ä½ç§’
 
-	BYTE                byJiaoFenSFTime;                //½Ğ·ÖÊ£ÓàÊ±¼ä
-	bool				bIsCall[3];						//±ê¼Ç1,2,3·ÖÊÇ·ñ±»½Ğ
+	BYTE                byJiaoFenSFTime;                //å«åˆ†å‰©ä½™æ—¶é—´
+	bool				bIsCall[3];						//æ ‡è®°1,2,3åˆ†æ˜¯å¦è¢«å«
 	GameStation_3()
 	{
 		memset(this, 0, sizeof(GameStation_3));
@@ -304,99 +304,99 @@ struct GameStation_3
 
 };
 
-//ÓÎÏ·×´Ì¬Êı¾İ°ü	£¨ ÓÎÏ·ÖĞ×´Ì¬ £©
+//æ¸¸æˆçŠ¶æ€æ•°æ®åŒ…	ï¼ˆ æ¸¸æˆä¸­çŠ¶æ€ ï¼‰
 struct GameStation_4
 {
-	bool				bIsLastCard;						//ÊÇ·ñÓĞÉÏÂÖÊı¾İ
+	bool				bIsLastCard;						//æ˜¯å¦æœ‰ä¸Šè½®æ•°æ®
 
-	BYTE				iVersion;							//ÓÎÏ·°æ±¾ºÅ
-	BYTE				iVersion2;							//ÓÎÏ·°æ±¾ºÅ
-	BYTE				iBackCount;							//µ×ÅÆÊı
+	BYTE				iVersion;							//æ¸¸æˆç‰ˆæœ¬å·
+	BYTE				iVersion2;							//æ¸¸æˆç‰ˆæœ¬å·
+	BYTE				iBackCount;							//åº•ç‰Œæ•°
 
-	BYTE				iBeginTime;							//¿ªÊ¼×¼±¸Ê±¼ä
-	BYTE				iThinkTime;							//³öÅÆË¼¿¼Ê±¼ä
-	BYTE                iRobNTTime;                    //ÇÀµØÖ÷Ê±¼ä
-	BYTE				iCallScoreTime;						//½Ğ·Ö¼ÆÊ±
-	BYTE				iAddDoubleTime;						//¼Ó±¶Ê±¼ä
+	BYTE				iBeginTime;							//å¼€å§‹å‡†å¤‡æ—¶é—´
+	BYTE				iThinkTime;							//å‡ºç‰Œæ€è€ƒæ—¶é—´
+	BYTE                iRobNTTime;                    //æŠ¢åœ°ä¸»æ—¶é—´
+	BYTE				iCallScoreTime;						//å«åˆ†è®¡æ—¶
+	BYTE				iAddDoubleTime;						//åŠ å€æ—¶é—´
 
-	BYTE				bIsPass;							//ÊÇ·ñ²»³ö
+	BYTE				bIsPass;							//æ˜¯å¦ä¸å‡º
 
-	int					iRunPublish;						//ÌÓÅÜ¿Û·Ö	
-	int					iBase;								//µ±Ç°Õ¨µ¯¸öÊı
-	int					iUpGradePeople;						//×¯¼ÒÎ»ÖÃ
+	int					iRunPublish;						//é€ƒè·‘æ‰£åˆ†	
+	int					iBase;								//å½“å‰ç‚¸å¼¹ä¸ªæ•°
+	int					iUpGradePeople;						//åº„å®¶ä½ç½®
 
-	int 				iCallScoreResult[PLAY_COUNT];		//½Ğ·Ö½á¹û
-	int					iOutCardPeople;						//ÏÖÔÚ³öÅÆÓÃ»§
-	int					iFirstOutPeople;					//ÏÈ³öÅÆµÄÓÃ»§
-	int					iBigOutPeople;						//ÏÈ³öÅÆµÄÓÃ»§
+	int 				iCallScoreResult[PLAY_COUNT];		//å«åˆ†ç»“æœ
+	int					iOutCardPeople;						//ç°åœ¨å‡ºç‰Œç”¨æˆ·
+	int					iFirstOutPeople;					//å…ˆå‡ºç‰Œçš„ç”¨æˆ·
+	int					iBigOutPeople;						//å…ˆå‡ºç‰Œçš„ç”¨æˆ·
 
-	UINT				iDeskBasePoint;						//×ÀÃæ»ù´¡·Ö
-	UINT				iRoomBasePoint;						//·¿¼ä±¶Êı
+	UINT				iDeskBasePoint;						//æ¡Œé¢åŸºç¡€åˆ†
+	UINT				iRoomBasePoint;						//æˆ¿é—´å€æ•°
 
-	int                 iGameMutiple;             ///ÓÎÏ·ÖĞµÄ±¶Êı
-	DWORD				iCardShape;							//ÅÆĞÍÉèÖÃ
-	int                 iAddDoubleLimit;             //¼Ó±¶ÏŞÖÆ
-	int                 iGameMaxLimit;              ///ÓÎÏ·×î´óÊäÓ®
+	int                 iGameMutiple;             ///æ¸¸æˆä¸­çš„å€æ•°
+	DWORD				iCardShape;							//ç‰Œå‹è®¾ç½®
+	int                 iAddDoubleLimit;             //åŠ å€é™åˆ¶
+	int                 iGameMaxLimit;              ///æ¸¸æˆæœ€å¤§è¾“èµ¢
 
-	BYTE				iAwardPoint[PLAY_COUNT];			//½±·Ö
-	BYTE				iPeopleBase[PLAY_COUNT];			//¼Ó±¶
-	BYTE				iRobNT[PLAY_COUNT];					//ÇÀµØÖ÷
+	BYTE				iAwardPoint[PLAY_COUNT];			//å¥–åˆ†
+	BYTE				iPeopleBase[PLAY_COUNT];			//åŠ å€
+	BYTE				iRobNT[PLAY_COUNT];					//æŠ¢åœ°ä¸»
 
 
-	bool				bAuto[PLAY_COUNT];					//ÍĞ¹ÜÇé¿ö
-	bool				bCanleave[PLAY_COUNT];				//ÄÜ·ñµãÍË³ö
+	bool				bAuto[PLAY_COUNT];					//æ‰˜ç®¡æƒ…å†µ
+	bool				bCanleave[PLAY_COUNT];				//èƒ½å¦ç‚¹é€€å‡º
 
-	BYTE				iUserCardCount[PLAY_COUNT];			//ÓÃ»§ÊÖÉÏÆË¿ËÊıÄ¿
-	BYTE				iUserCardList[195];					//ÓÃ»§ÊÖÉÏµÄÆË¿Ë
+	BYTE				iUserCardCount[PLAY_COUNT];			//ç”¨æˆ·æ‰‹ä¸Šæ‰‘å…‹æ•°ç›®
+	BYTE				iUserCardList[195];					//ç”¨æˆ·æ‰‹ä¸Šçš„æ‰‘å…‹
 
-	BYTE				iBaseOutCount;						//³öÅÆµÄÊıÄ¿
-	BYTE                iBaseCardList[45];                //×ÀÃæÉÏµÄÅÆ
+	BYTE				iBaseOutCount;						//å‡ºç‰Œçš„æ•°ç›®
+	BYTE                iBaseCardList[45];                //æ¡Œé¢ä¸Šçš„ç‰Œ
 
-	BYTE				iDeskCardCount[PLAY_COUNT];			//×ÀÃæÆË¿ËµÄÊıÄ¿
-	BYTE                iDeskCardList[PLAY_COUNT][45];    ///×ÀÃæÉÏµÄÅÆ
+	BYTE				iDeskCardCount[PLAY_COUNT];			//æ¡Œé¢æ‰‘å…‹çš„æ•°ç›®
+	BYTE                iDeskCardList[PLAY_COUNT][45];    ///æ¡Œé¢ä¸Šçš„ç‰Œ
 
-	BYTE				iLastCardCount[PLAY_COUNT];			//ÉÏÂÖÆË¿ËµÄÊıÄ¿
-	BYTE				iLastOutCard[PLAY_COUNT][45];		//ÉÏÂÖµÄÆË¿Ë
+	BYTE				iLastCardCount[PLAY_COUNT];			//ä¸Šè½®æ‰‘å…‹çš„æ•°ç›®
+	BYTE				iLastOutCard[PLAY_COUNT][45];		//ä¸Šè½®çš„æ‰‘å…‹
 
-	bool                bPass[PLAY_COUNT];                //²»³ö
-	bool                bLastTurnPass[PLAY_COUNT];         //ÉÏÒ»ÂÖ²»³ö
+	bool                bPass[PLAY_COUNT];                //ä¸å‡º
+	bool                bLastTurnPass[PLAY_COUNT];         //ä¸Šä¸€è½®ä¸å‡º
 
-	BYTE                iGameBackCard[12];                 ///µ×ÅÆ
-	BYTE 				iBackCardCount;						//µ×ÅÆÊıÁ¿
+	BYTE                iGameBackCard[12];                 ///åº•ç‰Œ
+	BYTE 				iBackCardCount;						//åº•ç‰Œæ•°é‡
 
-	GameMutipleStruct   gameMutiple;                      ///ÓÎÏ·±¶Êı  
-	GameTaskStruct      gameTask;                         ///ÓÎÏ·ÈÎÎñ
+	GameMutipleStruct   gameMutiple;                      ///æ¸¸æˆå€æ•°  
+	GameTaskStruct      gameTask;                         ///æ¸¸æˆä»»åŠ¡
 
-	int					iFengDing;//·â¶¥±¶Êı£¨Õ¨µ¯£©
-	int                 iRunTime;//µ¥Î»Ãë
-	int                 iRemainRunTime; //µ¥Î»Ãë
+	int					iFengDing;//å°é¡¶å€æ•°ï¼ˆç‚¸å¼¹ï¼‰
+	int                 iRunTime;//å•ä½ç§’
+	int                 iRemainRunTime; //å•ä½ç§’
 
-	BYTE                byOutCardSFTime;                //³öÅÆÊ£ÓàÊ±¼ä
+	BYTE                byOutCardSFTime;                //å‡ºç‰Œå‰©ä½™æ—¶é—´
 	GameStation_4()
 	{
 		memset(this, 0, sizeof(GameStation_4));
 	}
 };
 
-//ÓÃ»§³öÅÆÊı¾İ°ü £¨·¢Ïò·şÎñÆ÷£©
+//ç”¨æˆ·å‡ºç‰Œæ•°æ®åŒ… ï¼ˆå‘å‘æœåŠ¡å™¨ï¼‰
 struct CMD_C_OutCard
 {
-	int					iCardCount;						//ÆË¿ËÊıÄ¿
-	BYTE				iCardList[45];					//ÆË¿ËĞÅÏ¢
+	int					iCardCount;						//æ‰‘å…‹æ•°ç›®
+	BYTE				iCardList[45];					//æ‰‘å…‹ä¿¡æ¯
 	CMD_C_OutCard()
 	{
 		memset(this, 0, sizeof(CMD_C_OutCard));
 	}
 };
 
-//³öÅÆ½á¹û
+//å‡ºç‰Œç»“æœ
 struct CMD_S_OutCard
 {
-	BYTE byCurOutCardStation;   //µ±Ç°³öÅÆÍæ¼Ò
-	BYTE byCardCount;			//³öÆË¿ËÊıÄ¿
-	BYTE byCardList[45];		//ÆË¿ËĞÅÏ¢
-	BYTE byHandCardCount;       //ÊÖÅÆÊıÁ¿
-	BYTE byHandCard[45];		//³öÅÆÖ®ºóÍæ¼ÒÊÖÅÆ
+	BYTE byCurOutCardStation;   //å½“å‰å‡ºç‰Œç©å®¶
+	BYTE byCardCount;			//å‡ºæ‰‘å…‹æ•°ç›®
+	BYTE byCardList[45];		//æ‰‘å…‹ä¿¡æ¯
+	BYTE byHandCardCount;       //æ‰‹ç‰Œæ•°é‡
+	BYTE byHandCard[45];		//å‡ºç‰Œä¹‹åç©å®¶æ‰‹ç‰Œ
 	CMD_S_OutCard()
 	{
 		byCurOutCardStation = 255;
@@ -407,39 +407,39 @@ struct CMD_S_OutCard
 	}
 };
 
-//Í¨Öª³öÅÆ
+//é€šçŸ¥å‡ºç‰Œ
 struct CMD_S_NotifyOutCard
 {
-	BYTE byNextDeskStation;//ÏÂÒ»³öÅÆÕß
+	BYTE byNextDeskStation;//ä¸‹ä¸€å‡ºç‰Œè€…
 	CMD_S_NotifyOutCard()
 	{
 		byNextDeskStation = 255;
 	}
 };
 
-//ĞÂÒ»ÂÖ
+//æ–°ä¸€è½®
 struct NewTurnStruct
 {
-	BYTE				bDeskStation;					//×øºÅ
-	BYTE				bReserve;						//±£Áô
+	BYTE				bDeskStation;					//åå·
+	BYTE				bReserve;						//ä¿ç•™
 };
 
-///Ã÷ÅÆ¿ªÊ¼
+///æ˜ç‰Œå¼€å§‹
 struct  UserMingStruct
 {
-	bool    bStart;       ///ÊÇ·ñÎª¿ªÊ¼
-	bool    bMing;         ///Íæ¼ÒÊÇ·ñÃ÷ÅÆ
-	BYTE    bDeskStaion;   ///Íæ¼ÒµÄÎ»ÖÃ
-	BYTE    byCardCount;   ///Ã÷ÅÆÊ±Íæ¼ÒÆË¿ËµÄÊıÁ¿
+	bool    bStart;       ///æ˜¯å¦ä¸ºå¼€å§‹
+	bool    bMing;         ///ç©å®¶æ˜¯å¦æ˜ç‰Œ
+	BYTE    bDeskStaion;   ///ç©å®¶çš„ä½ç½®
+	BYTE    byCardCount;   ///æ˜ç‰Œæ—¶ç©å®¶æ‰‘å…‹çš„æ•°é‡
 };
 
-//ÓÎÏ·¿ªÊ¼
+//æ¸¸æˆå¼€å§‹
 struct	GameBeginStruct
 {
-	BYTE				iPlayLimit;							//ÓÎÏ·×Ü¾ÖÊı
-	BYTE				iBeenPlayGame;						//ÒÑ¾­ÍæÁË¶àÉÙ¾Ö
-	BYTE                byUserMingBase[PLAY_COUNT];        ///Íæ¼ÒÃ÷ÅÆ±¶ÊıÇé¿ö
-	DWORD				iCardShape;							//ÅÆĞÍÉèÖÃ
+	BYTE				iPlayLimit;							//æ¸¸æˆæ€»å±€æ•°
+	BYTE				iBeenPlayGame;						//å·²ç»ç©äº†å¤šå°‘å±€
+	BYTE                byUserMingBase[PLAY_COUNT];        ///ç©å®¶æ˜ç‰Œå€æ•°æƒ…å†µ
+	DWORD				iCardShape;							//ç‰Œå‹è®¾ç½®
 
 	GameBeginStruct()
 	{
@@ -447,18 +447,18 @@ struct	GameBeginStruct
 	}
 };
 
-//·¢ÅÆÊı¾İ°ü
+//å‘ç‰Œæ•°æ®åŒ…
 struct	SendCardStruct
 {
-	BYTE				bDeskStation;							//Íæ¼Ò
-	BYTE				bCard;									//ÅÆ±êºÅ
+	BYTE				bDeskStation;							//ç©å®¶
+	BYTE				bCard;									//ç‰Œæ ‡å·
 };
 
-//·¢ËÍËùÓĞÅÆÊı¾İ
+//å‘é€æ‰€æœ‰ç‰Œæ•°æ®
 struct	SendAllStruct
 {
-	BYTE             iUserCardCount[PLAY_COUNT];		//·¢ÅÆÊıÁ¿
-	BYTE             iUserCardList[108];				//·¢ÅÆ¶ÓÀı
+	BYTE             iUserCardCount[PLAY_COUNT];		//å‘ç‰Œæ•°é‡
+	BYTE             iUserCardList[108];				//å‘ç‰Œé˜Ÿä¾‹
 
 	SendAllStruct()
 	{
@@ -466,47 +466,47 @@ struct	SendAllStruct
 	}
 };
 
-//·¢ÅÆ½áÊø
+//å‘ç‰Œç»“æŸ
 struct	SendCardFinishStruct
 {
 	BYTE		bReserve;
-	BYTE		byBackCardList[12];						//µ×ÅÆÊı¾İ
-	BYTE		byUserCardCount[PLAY_COUNT];			//ÓÃ»§ÊÖÉÏÆË¿ËÊıÄ¿
-	BYTE		byUserCard[PLAY_COUNT][45];				//ÓÃ»§ÊÖÉÏµÄÆË¿Ë
+	BYTE		byBackCardList[12];						//åº•ç‰Œæ•°æ®
+	BYTE		byUserCardCount[PLAY_COUNT];			//ç”¨æˆ·æ‰‹ä¸Šæ‰‘å…‹æ•°ç›®
+	BYTE		byUserCard[PLAY_COUNT][45];				//ç”¨æˆ·æ‰‹ä¸Šçš„æ‰‘å…‹
 	SendCardFinishStruct()
 	{
 		memset(this, 0, sizeof(SendCardFinishStruct));
 	}
 };
 
-//µ×ÅÆÊı¾İ°ü
+//åº•ç‰Œæ•°æ®åŒ…
 struct BackCardExStruct
 {
-	BYTE				iGiveBackPeople;				//µ×ÅÆÍæ¼Ò
-	BYTE				iBackCardCount;					//ÆË¿ËÊıÄ¿
-	BYTE				iBackCard[12];					//µ×ÅÆÊı¾İ
+	BYTE				iGiveBackPeople;				//åº•ç‰Œç©å®¶
+	BYTE				iBackCardCount;					//æ‰‘å…‹æ•°ç›®
+	BYTE				iBackCard[12];					//åº•ç‰Œæ•°æ®
 
-	GameTaskStruct      gameTask;                      //ÓÎÏ·ÈÎÎñ  
+	GameTaskStruct      gameTask;                      //æ¸¸æˆä»»åŠ¡  
 	BackCardExStruct()
 	{
 		memset(this, 0, sizeof(BackCardExStruct));
 	}
 };
 
-//ÓÎÏ·¿ªÊ¼Êı¾İ°ü
+//æ¸¸æˆå¼€å§‹æ•°æ®åŒ…
 struct BeginPlayStruct
 {
-	BYTE				iOutDeskStation;				//³öÅÆµÄÎ»ÖÃ
+	BYTE				iOutDeskStation;				//å‡ºç‰Œçš„ä½ç½®
 };
 
-//½Ğ·ÖÊı¾İ°ü
+//å«åˆ†æ•°æ®åŒ…
 struct CallScoreStruct
 {
-	BYTE				bDeskStation;		//µ±Ç°½Ğ·ÖÕß
-	int					iValue;				//½Ğ·ÖÀàĞÍ
-	bool 				bCallScoreflag;		//½Ğ·Ö±ê¼Ç			
-	BYTE                byFirstCard;        //½Ğ·ÖÅÆ
-	bool                bIsCall[3];			//±ê¼Ç1,2,3·ÖÊÇ·ñ±»½Ğ
+	BYTE				bDeskStation;		//å½“å‰å«åˆ†è€…
+	int					iValue;				//å«åˆ†ç±»å‹
+	bool 				bCallScoreflag;		//å«åˆ†æ ‡è®°			
+	BYTE                byFirstCard;        //å«åˆ†ç‰Œ
+	bool                bIsCall[3];			//æ ‡è®°1,2,3åˆ†æ˜¯å¦è¢«å«
 	CallScoreStruct()
 	{
 		bDeskStation = 255;
@@ -517,13 +517,13 @@ struct CallScoreStruct
 	}
 };
 
-//ÇÀµØÖ÷
+//æŠ¢åœ°ä¸»
 struct	RobNTStruct
 {
-	BYTE   byDeskStation;		//ÇÀµØÖ÷×øºÅ
-	BYTE   byRobCount;         //Íæ¼ÒÇÀµØÖ÷´ÎÊı
-	int    iValue;				//ÇÀµØÖ÷Çé¿ö(0-½ĞµØÖ÷×´Ì¬ 1-ÇÀµØÖ÷×´Ì¬)
-	BYTE   byFirstCard;         //½Ğ·ÖÅÆ
+	BYTE   byDeskStation;		//æŠ¢åœ°ä¸»åå·
+	BYTE   byRobCount;         //ç©å®¶æŠ¢åœ°ä¸»æ¬¡æ•°
+	int    iValue;				//æŠ¢åœ°ä¸»æƒ…å†µ(0-å«åœ°ä¸»çŠ¶æ€ 1-æŠ¢åœ°ä¸»çŠ¶æ€)
+	BYTE   byFirstCard;         //å«åˆ†ç‰Œ
 	RobNTStruct()
 	{
 		byDeskStation = 255;
@@ -533,73 +533,73 @@ struct	RobNTStruct
 	}
 };
 
-//Ã÷ÅÆ
+//æ˜ç‰Œ
 struct ShowCardStruct
 {
-	BYTE bDeskStation;										//×øºÅ
-	BYTE iCardList[54];					                   //ÆË¿ËĞÅÏ¢
-	BYTE iCardCount;						              //ÆË¿ËÊıÄ¿
-	int iValue;											  //±£Áô
-	int iBase;											  //±¶Êı 20081204
+	BYTE bDeskStation;										//åå·
+	BYTE iCardList[54];					                   //æ‰‘å…‹ä¿¡æ¯
+	BYTE iCardCount;						              //æ‰‘å…‹æ•°ç›®
+	int iValue;											  //ä¿ç•™
+	int iBase;											  //å€æ•° 20081204
 };
 
-//¼Ó±¶
+//åŠ å€
 struct AddDoubleStruct
 {
-	BYTE bDeskStation;										//¼Ó±¶Î»ÖÃ
-	int iValue;												//¼Ó±¶Çé¿ö
+	BYTE bDeskStation;										//åŠ å€ä½ç½®
+	int iValue;												//åŠ å€æƒ…å†µ
 };
 
-//½±·Ö
+//å¥–åˆ†
 struct AwardPointStruct
 {
-	BYTE	iAwardPoint;									//½±·Ö
-	BYTE	bDeskStation;									//×øºÅ
-	int		iBase;											//±¶Êı
+	BYTE	iAwardPoint;									//å¥–åˆ†
+	BYTE	bDeskStation;									//åå·
+	int		iBase;											//å€æ•°
 };
 
-//ÍĞ¹ÜÊı¾İ½á¹¹
+//æ‰˜ç®¡æ•°æ®ç»“æ„
 struct AutoStruct
 {
 	BYTE bDeskStation;
 	bool bAuto;
 };
 
-//»úÆ÷ÈËÍĞ¹Ü
+//æœºå™¨äººæ‰˜ç®¡
 struct UseAIStation
 {
-	BYTE bDeskStation;					//×øºÅ
-	BOOL bState;						//×´Ì¬
+	BYTE bDeskStation;					//åå·
+	BOOL bState;						//çŠ¶æ€
 };
 
-//ÓÎÏ·½áÊøÍ³¼ÆÊı¾İ°ü
+//æ¸¸æˆç»“æŸç»Ÿè®¡æ•°æ®åŒ…
 struct GameEndStruct
 {
-	bool bChunTian;	//ÊÇ·ñ´ºÌì
-	int iBaseFen;	//µ×·Ö
-	int iBombCount;	//Õ¨µ¯ÊıÁ¿
-	int iAllDouble[PLAY_COUNT];//Ã¿¸öÍæ¼ÒµÄ×Ü±¶Êı
-	bool bAddDouble[PLAY_COUNT];//Ã¿¸öÍæ¼ÒÊÇ·ñ¼Ó±¶
-	int iZongFen;				//×Ü·Ö
-	BYTE	iUserCard[PLAY_COUNT][45];			//ÓÃ»§ÊÖÉÏµÄÆË¿Ë
-	BYTE	iUserCardCount[PLAY_COUNT];			//ÓÃ»§ÊÖÉÏÆË¿ËÊıÄ¿
-	int		iUserScore[PLAY_COUNT];				//¸÷¸öÍæ¼ÒµÄµÃ·Ö
-	int     iVipGameCount;                      //¾ÖÊı
+	bool bChunTian;	//æ˜¯å¦æ˜¥å¤©
+	int iBaseFen;	//åº•åˆ†
+	int iBombCount;	//ç‚¸å¼¹æ•°é‡
+	int iAllDouble[PLAY_COUNT];//æ¯ä¸ªç©å®¶çš„æ€»å€æ•°
+	bool bAddDouble[PLAY_COUNT];//æ¯ä¸ªç©å®¶æ˜¯å¦åŠ å€
+	int iZongFen;				//æ€»åˆ†
+	BYTE	iUserCard[PLAY_COUNT][45];			//ç”¨æˆ·æ‰‹ä¸Šçš„æ‰‘å…‹
+	BYTE	iUserCardCount[PLAY_COUNT];			//ç”¨æˆ·æ‰‹ä¸Šæ‰‘å…‹æ•°ç›®
+	int		iUserScore[PLAY_COUNT];				//å„ä¸ªç©å®¶çš„å¾—åˆ†
+	int     iVipGameCount;                      //å±€æ•°
 	GameEndStruct()
 	{
 		memset(this, 0, sizeof(GameEndStruct));
 	}
 };
 
-//ÓÎÏ·½áÊøÍ³¼ÆÊı¾İ°ü
+//æ¸¸æˆç»“æŸç»Ÿè®¡æ•°æ®åŒ…
 struct GameCutStruct
 {
-	int					iRoomBasePoint;					//±¶Êı
-	int					iDeskBasePoint;					//×ÀÃæ±¶Êı
-	int					iHumanBasePoint;				//ÈËÍ·±¶Êı
-	int					bDeskStation;					//ÍË³öÎ»ÖÃ
-	__int64				iChangeMoney[8];				//Íæ¼Ò½ğ±Ò
-	__int64				iTurePoint[PLAY_COUNT];			//×¯¼ÒµÃ·Ö
+	int					iRoomBasePoint;					//å€æ•°
+	int					iDeskBasePoint;					//æ¡Œé¢å€æ•°
+	int					iHumanBasePoint;				//äººå¤´å€æ•°
+	int					bDeskStation;					//é€€å‡ºä½ç½®
+	__int64				iChangeMoney[8];				//ç©å®¶é‡‘å¸
+	__int64				iTurePoint[PLAY_COUNT];			//åº„å®¶å¾—åˆ†
 
 };
 
@@ -617,10 +617,10 @@ struct LeaveResultStruct
 
 struct UserleftDesk
 {
-	BYTE bDeskStation;                //¶ÏÏßÍæ¼Ò
+	BYTE bDeskStation;                //æ–­çº¿ç©å®¶
 };
 
-//³¬¶ËĞÅÏ¢½á¹¹Ìå
+//è¶…ç«¯ä¿¡æ¯ç»“æ„ä½“
 struct	SuperUserMsg
 {
 	BYTE	byDeskStation;
@@ -631,17 +631,17 @@ struct	SuperUserMsg
 	}
 };
 
-//´ó½áËã
+//å¤§ç»“ç®—
 struct	TZongResult
 {
-	bool	bWinner[PLAY_COUNT];				//´óÓ®¼Ò
-	int		iBombCount[PLAY_COUNT];				//Õ¨µ¯´ÎÊı
-	int		iMaxWinMoney[PLAY_COUNT];			//×î¶àÓ®Ç®ÊıÄ¿
-	int		iMaxContinueCount[PLAY_COUNT];		//×î¸ßÁ¬Ê¤
-	int		iWinCount[PLAY_COUNT];				//Ê¤Àû¾ÖÊı
-	__int64	i64WinMoney[PLAY_COUNT];			//ÊäÓ®½ğ±Ò
-	__int64	i64UserMoney[PLAY_COUNT];			//Íæ¼Ò½ğ±Ò
-	BYTE    byGameEndType[PLAY_COUNT];          //´ó½áËã½áÊøÀàĞÍ£¬0£º×îºóÒ»¾ÖÕı³££¬1£º×îºóÒ»¾ÖÎŞÈË½Ğ·Ö
+	bool	bWinner[PLAY_COUNT];				//å¤§èµ¢å®¶
+	int		iBombCount[PLAY_COUNT];				//ç‚¸å¼¹æ¬¡æ•°
+	int		iMaxWinMoney[PLAY_COUNT];			//æœ€å¤šèµ¢é’±æ•°ç›®
+	int		iMaxContinueCount[PLAY_COUNT];		//æœ€é«˜è¿èƒœ
+	int		iWinCount[PLAY_COUNT];				//èƒœåˆ©å±€æ•°
+	__int64	i64WinMoney[PLAY_COUNT];			//è¾“èµ¢é‡‘å¸
+	__int64	i64UserMoney[PLAY_COUNT];			//ç©å®¶é‡‘å¸
+	BYTE    byGameEndType[PLAY_COUNT];          //å¤§ç»“ç®—ç»“æŸç±»å‹ï¼Œ0ï¼šæœ€åä¸€å±€æ­£å¸¸ï¼Œ1ï¼šæœ€åä¸€å±€æ— äººå«åˆ†
 	TZongResult()
 	{
 		Init();
@@ -660,15 +660,15 @@ struct	TZongResult
 	}
 };
 
-//³öÅÆ½á¹û
+//å‡ºç‰Œç»“æœ
 struct CMD_S_OutCard_Result
 {
-	bool bResult;        //³öÅÆ½á¹û£¬³É¹¦true£¬Ê§°Üfalse
-	//´íÎóÂë£¬1£ºĞ­Òé´óĞ¡²»¶Ô£¬2£º·ÇÓÎÏ·×´Ì¬£¬3:²»ÊÇ³öÅÆÍæ¼Ò£¬4£ºÃ»ÓĞÕâÕÅÊÖÅÆ£¬5£º·şÎñÆ÷´íÎó ,6£ºÅÆĞÍ´íÎó
+	bool bResult;        //å‡ºç‰Œç»“æœï¼ŒæˆåŠŸtrueï¼Œå¤±è´¥false
+	//é”™è¯¯ç ï¼Œ1ï¼šåè®®å¤§å°ä¸å¯¹ï¼Œ2ï¼šéæ¸¸æˆçŠ¶æ€ï¼Œ3:ä¸æ˜¯å‡ºç‰Œç©å®¶ï¼Œ4ï¼šæ²¡æœ‰è¿™å¼ æ‰‹ç‰Œï¼Œ5ï¼šæœåŠ¡å™¨é”™è¯¯ ,6ï¼šç‰Œå‹é”™è¯¯
 	BYTE byErrorCode;
 
-	BYTE byHandCardCount;	//ÊÖÅÆÊıÁ¿
-	BYTE byHandCard[45];	//Íæ¼ÒÊÖÅÆ
+	BYTE byHandCardCount;	//æ‰‹ç‰Œæ•°é‡
+	BYTE byHandCard[45];	//ç©å®¶æ‰‹ç‰Œ
 	CMD_S_OutCard_Result()
 	{
 		bResult = false;

@@ -35,7 +35,7 @@ UINT CGameDataBaseHandle::HandleDataBase(DataBaseLineHead* pSourceData)
 	{
 		return OnUploadVideo(pSourceData);
 	}
-	case DTK_GP_SQL_STATEMENT:			// ´¦ÀísqlÓï¾ä
+	case DTK_GP_SQL_STATEMENT:			// å¤„ç†sqlè¯­å¥
 	{
 		return OnHandleExecuteSQLStatement(pSourceData);
 	}
@@ -65,7 +65,7 @@ int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("ÉÏ´«Â¼ÏñjsonºÄÊ±: %s", pAsyncMessage->videoCode);
+	AUTOCOST("ä¸Šä¼ å½•åƒjsonè€—æ—¶: %s", pAsyncMessage->videoCode);
 
 	if (!m_pInitInfo)
 	{
@@ -81,10 +81,10 @@ int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead* pSourceData)
 	return 0;
 }
 
-// Ö´ĞĞsqlÓï¾ä
+// æ‰§è¡Œsqlè¯­å¥
 int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData)
 {
-	AUTOCOST("Ö´ĞĞSQLÓï¾äºÄÊ±");
+	AUTOCOST("æ‰§è¡ŒSQLè¯­å¥è€—æ—¶");
 
 	InternalSqlStatement* pMessage = (InternalSqlStatement*)pSourceData;
 	if (!pMessage)
@@ -105,14 +105,14 @@ int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceDa
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü==>>%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥==>>%s", excep.errorInfo.c_str());
 		return -3;
 	}
 
 	return 0;
 }
 
-// HTTPÇëÇó
+// HTTPè¯·æ±‚
 int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 {
 	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncHTTP))
@@ -128,16 +128,16 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("HTTPÇëÇó: userID=%d", pAsyncMessage->userID);
+	AUTOCOST("HTTPè¯·æ±‚: userID=%d", pAsyncMessage->userID);
 
-	//·¢ËÍÓÊ¼ş½Ó¿Ú
+	//å‘é€é‚®ä»¶æ¥å£
 	MyCurl curl;
 	std::vector<std::string> vUrlHeader;
 	std::string postFields = "";
 	std::string result = "";
 
-	//Ìî³ä¹Ì¶¨Í·²¿
-	//todo£º¸ù¾İ¾ßÌåÒµÎñ¿ÉÒÔ¸Ä£¬Ò²¿ÉÒÔ²»Ìî³äÍ·²¿
+	//å¡«å……å›ºå®šå¤´éƒ¨
+	//todoï¼šæ ¹æ®å…·ä½“ä¸šåŠ¡å¯ä»¥æ”¹ï¼Œä¹Ÿå¯ä»¥ä¸å¡«å……å¤´éƒ¨
 	if (pAsyncMessage->postType == HTTP_POST_TYPE_REQ_DATA)
 	{
 		vUrlHeader.push_back("Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
@@ -151,19 +151,19 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		vUrlHeader.push_back("User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
 	}
 
-	//×éºÏÉú³ÉURL
+	//ç»„åˆç”ŸæˆURL
 	std::string url = pAsyncMessage->url;
 
 	curl.postUrlHttps(url, vUrlHeader, postFields, result);
 	if (result.size() <= 0)
 	{
-		ERROR_LOG("HTTPÇëÇóÊ§°Ü£ºurl=[%s],userID=[%d],ret=[%s]", pAsyncMessage->url, pAsyncMessage->userID, result.c_str());
+		ERROR_LOG("HTTPè¯·æ±‚å¤±è´¥ï¼šurl=[%s],userID=[%d],ret=[%s]", pAsyncMessage->url, pAsyncMessage->userID, result.c_str());
 		return -2;
 	}
 
 	if (result.size() < LD_MAX_PART - 1)
 	{
-		//·µ»Ø½á¹û
+		//è¿”å›ç»“æœ
 		char szBuffer[LD_MAX_PART] = "";
 		memcpy(szBuffer, result.c_str(), Min_(result.size(), LD_MAX_PART - 1));
 
@@ -174,7 +174,7 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 	}
 	else
 	{
-		ERROR_LOG("httpÇëÇó·µ»ØÊı¾İ¹ı³¤ size=%d", result.size());
+		ERROR_LOG("httpè¯·æ±‚è¿”å›æ•°æ®è¿‡é•¿ size=%d", result.size());
 	}
 
 	return 0;

@@ -7,12 +7,12 @@
 #include "MD5.h"
 #include "Util.h"
 
-// ¼ÆËã¾àÀëÓÃ
+// è®¡ç®—è·ç¦»ç”¨
 #define EARTH_RADIUS  6371004  
 #define PI 3.1415926  
 #define rad(d) ((d)*PI/180.0)
 
-// µ÷ÓÃËæ»úÊıÏà¹Ø½Ó¿Ú
+// è°ƒç”¨éšæœºæ•°ç›¸å…³æ¥å£
 std::random_device g_rd;
 std::mt19937 g_mt(g_rd());
 
@@ -44,7 +44,7 @@ bool CUtil::CheckString(const char * src)
 	return true;
 }
 
-// ½«#ºÍ%ºÅÌæ»»³É£¿
+// å°†#å’Œ%å·æ›¿æ¢æˆï¼Ÿ
 bool CUtil::CheckString(char* src, int size)
 {
 	if (!src)
@@ -73,7 +73,7 @@ void CUtil::SplitString(std::string str, std::string pattern, std::vector<std::s
 {
 	vecSplitData.clear();
 	std::string::size_type pos;
-	str += pattern;//À©Õ¹×Ö·û´®ÒÔ·½±ã²Ù×÷
+	str += pattern;//æ‰©å±•å­—ç¬¦ä¸²ä»¥æ–¹ä¾¿æ“ä½œ
 	size_t size = (int)str.size();
 	for (size_t i = 0; i < size; i++)
 	{
@@ -186,7 +186,7 @@ int CUtil::GetWeekdayFromTimeStamp(time_t time)
 	return p->tm_wday;
 }
 
-// ´ÓÊ±¼ä´ÁÖĞ»ñÈ¡Ğ¡Ê± (0-23)
+// ä»æ—¶é—´æˆ³ä¸­è·å–å°æ—¶ (0-23)
 int CUtil::GetHourTimeStamp(time_t time)
 {
 	tm* p = localtime(&time);
@@ -315,7 +315,7 @@ std::string CUtil::Tostring(double value)
 	return std::string(buf);
 }
 
-//Ìæ»»×Ö·û´®
+//æ›¿æ¢å­—ç¬¦ä¸²
 void CUtil::ReplaceStr(char str[], int count, char src, char dst)
 {
 	for (int i = 0; i < count; i++)
@@ -327,7 +327,7 @@ void CUtil::ReplaceStr(char str[], int count, char src, char dst)
 	}
 }
 
-//×Ö·û´®½âÎöº¯Êı
+//å­—ç¬¦ä¸²è§£æå‡½æ•°
 bool CUtil::GetKeyAndValue(const char * pStr, int &iKey, long long &llValue)
 {
 	char keyStr[20] = "";
@@ -391,7 +391,7 @@ void CUtil::StringToArray(char * pStr, long long * pArray, int &iArrayCount)
 
 	iArrayCount = 0;
 
-	//·Ö¸îµÃµ½ÓÃ»§idºÍ·ÖÊı
+	//åˆ†å‰²å¾—åˆ°ç”¨æˆ·idå’Œåˆ†æ•°
 	const char * split = ",";
 	char * pStr_ = NULL;
 	pStr_ = strtok(pStr, split);
@@ -434,7 +434,7 @@ void CUtil::StringToKYArray(char * pStr, Util_KeyValueStruct_ * pKYArray, int &i
 
 	iArrayCount = 0;
 
-	//·Ö¸îµÃµ½ÓÃ»§idºÍ·ÖÊı
+	//åˆ†å‰²å¾—åˆ°ç”¨æˆ·idå’Œåˆ†æ•°
 	const char * split = "|";
 	char * pStr_ = NULL;
 	pStr_ = strtok(pStr, split);
@@ -449,13 +449,13 @@ void CUtil::StringToKYArray(char * pStr, Util_KeyValueStruct_ * pKYArray, int &i
 	}
 }
 
-//»ñÈ¡Ò»¸öËæ»úÊı
+//è·å–ä¸€ä¸ªéšæœºæ•°
 unsigned int CUtil::GetRandNum()
 {
 	return g_mt();
 }
 
-// »ñÈ¡[A,B)Ëæ»úÊı,min<= Ëæ»úÊı < iMax
+// è·å–[A,B)éšæœºæ•°,min<= éšæœºæ•° < iMax
 int CUtil::GetRandRange(int iMin, int iMax)
 {
 	if (iMin >= iMax)
@@ -466,10 +466,10 @@ int CUtil::GetRandRange(int iMin, int iMax)
 	return iMin + (int)(GetRandNum() % (iMax - iMin));
 }
 
-//×ªÒå×Ö·û´®
+//è½¬ä¹‰å­—ç¬¦ä¸²
 void CUtil::TransString(char * pStr, int iCount, int iMaxSignCount, bool bUTF/* = false*/)
 {
-	//39ÊÇ"'"      92ÊÇ"\"
+	//39æ˜¯"'"      92æ˜¯"\"
 	if (!bUTF && iMaxSignCount > 1 && pStr[iMaxSignCount - 1] == 92)
 	{
 		pStr[iMaxSignCount - 1] = '?';
@@ -512,7 +512,7 @@ void CUtil::TransString(char * pStr, int iCount, int iMaxSignCount, bool bUTF/* 
 	}
 }
 
-//×Ö·û´®¹şÏ£º¯Êı
+//å­—ç¬¦ä¸²å“ˆå¸Œå‡½æ•°
 unsigned int CUtil::BKDRHash(const char *str)
 {
 	unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
@@ -591,13 +591,13 @@ bool CUtil::GetScoreFromUserInfoList(int userID, char* userInfoList, long long &
 	return false;
 }
 
-//Ğ£ÑéÍ·²¿
+//æ ¡éªŒå¤´éƒ¨
 bool CUtil::CheckCode(UINT uReserve)
 {
 	return uReserve == 18080815 ? true : false;
 }
 
-// ¸ù¾İ¾­Î³¶È¼ÆËã¾àÀë£¨µ¥Î»m£©
+// æ ¹æ®ç»çº¬åº¦è®¡ç®—è·ç¦»ï¼ˆå•ä½mï¼‰
 double CUtil::GetDistanceVer(const char* lat1, const char* lng1, const char* lat2, const char* lng2)
 {
 	if (lat1 == NULL || lng1 == NULL || lat2 == NULL || lng2 == NULL)

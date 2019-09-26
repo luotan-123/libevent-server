@@ -9,33 +9,33 @@ public:
 	virtual ~CRedisCenter();
 
 public:
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	virtual bool Init();
-	// ¹Ø±Õ
+	// å…³é—­
 	virtual bool Stop();
 
 public:
-	// bUnBind±íÊ¾ÊÇ·ñ½â°ó
+	// bUnBindè¡¨ç¤ºæ˜¯å¦è§£ç»‘
 	bool SetUserPhone(int userID, const char* phone, bool bUnBind = false);
 
-	// ÏĞÁÄ°ó¶¨
+	// é—²èŠç»‘å®š
 	bool SetUserXianLiao(int userID, const char* xianliao);
 
-	// ÉèÖÃÓÎÏ··ş×´Ì¬
+	// è®¾ç½®æ¸¸æˆæœçŠ¶æ€
 	bool SetRoomServerStatus(int roomID, int status);
 
-	// ÉèÖÃµÇÂ½·ş×´Ì¬
+	// è®¾ç½®ç™»é™†æœçŠ¶æ€
 	bool SetLogonServerStatus(int logonID, int status);
 
-	// ÉèÖÃ·âºÅÊ±¼ä
+	// è®¾ç½®å°å·æ—¶é—´
 	bool SetUserSealTime(int userID, int time);
 
 private:
-	int NeedLoadAllUserData();		//ÅĞ¶ÏÊÇ·ñĞèÒª¼ÓÔØÊı¾İ¿âÖĞËùÓĞÓÃ»§Êı¾İµ½redis£¬0£º²»ĞèÒª£¬1£ºĞèÒª£¬>1£ºÒì³£´íÎó
-	bool LoadAllUserData();			//¼ÓÔØËùÓĞÓÃ»§
-	bool LoadAllRewardsPoolData();	//¼ÓÔØËùÓĞÓÎÏ·½±³Ø
-	bool LoadAllAgentUser();		//¼ÓÔØËùÓĞ´úÀí
-	bool LoadAllConfig();			//¼ÓÔØÏµÍ³ËùÓĞÅäÖÃµ½redis
-	bool LoadAllUserBag();			//¼ÓÔØÓÃ»§±³°üÊı¾İ
+	int NeedLoadAllUserData();		//åˆ¤æ–­æ˜¯å¦éœ€è¦åŠ è½½æ•°æ®åº“ä¸­æ‰€æœ‰ç”¨æˆ·æ•°æ®åˆ°redisï¼Œ0ï¼šä¸éœ€è¦ï¼Œ1ï¼šéœ€è¦ï¼Œ>1ï¼šå¼‚å¸¸é”™è¯¯
+	bool LoadAllUserData();			//åŠ è½½æ‰€æœ‰ç”¨æˆ·
+	bool LoadAllRewardsPoolData();	//åŠ è½½æ‰€æœ‰æ¸¸æˆå¥–æ± 
+	bool LoadAllAgentUser();		//åŠ è½½æ‰€æœ‰ä»£ç†
+	bool LoadAllConfig();			//åŠ è½½ç³»ç»Ÿæ‰€æœ‰é…ç½®åˆ°redis
+	bool LoadAllUserBag();			//åŠ è½½ç”¨æˆ·èƒŒåŒ…æ•°æ®
 
 };

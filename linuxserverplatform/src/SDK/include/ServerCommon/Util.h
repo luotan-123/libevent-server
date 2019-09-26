@@ -16,7 +16,7 @@ struct Util_KeyValueStruct_
 	}
 };
 
-// ¹¤¾ßÀà
+// å·¥å…·ç±»
 class CUtil
 {
 public:
@@ -24,32 +24,32 @@ public:
 	~CUtil();
 
 public:
-	// ¼ì²é×Ö·û´®
+	// æ£€æŸ¥å­—ç¬¦ä¸²
 	static bool CheckString(const char* src);
-	// ½«#ºÍ%ºÅÌæ»»³É£¿
+	// å°†#å’Œ%å·æ›¿æ¢æˆï¼Ÿ
 	static bool CheckString(char* src, int size);
-	// ·Ö¸î×Ö·û´®
+	// åˆ†å‰²å­—ç¬¦ä¸²
 	static void SplitString(std::string str, std::string pattern, std::vector<std::string> &vecSplitData);
 	static std::string &TrimString(std::string &s);
-	// »ñÈ¡uuid
+	// è·å–uuid
 	static void GetUuid(char* out, int len);
-	// MD5¼ÓÃÜ
+	// MD5åŠ å¯†
 	static void MD5(std::string &str);
-	// »ñÈ¡µ±Ç°Ê±¼ä
+	// è·å–å½“å‰æ—¶é—´
 	static long long GetTime(int format);
-	// ´ÓÊ±¼ä´ÁÖĞ»ñÈ¡ÈÕÆÚ
+	// ä»æ—¶é—´æˆ³ä¸­è·å–æ—¥æœŸ
 	static int GetDateFromTimeStamp(time_t time);
-	// ´ÓÊ±¼ä´ÁÖĞ»ñÈ¡weekday (0-6)
+	// ä»æ—¶é—´æˆ³ä¸­è·å–weekday (0-6)
 	static int GetWeekdayFromTimeStamp(time_t time);
-	// ´ÓÊ±¼ä´ÁÖĞ»ñÈ¡Ğ¡Ê± (0-23)
+	// ä»æ—¶é—´æˆ³ä¸­è·å–å°æ—¶ (0-23)
 	static int GetHourTimeStamp(time_t time);
-	// ½âÎöjsonÊı¾İ
+	// è§£æjsonæ•°æ®
 	static std::string ParseJsonValue(const std::string& src, const char* key);
-	// ÊÇ·ñ°üº¬Ãô¸Ğ´Ê
+	// æ˜¯å¦åŒ…å«æ•æ„Ÿè¯
 	static bool IsContainDirtyWord(const std::string& str);
-	// Èç¹ûÎÄ¼ş¼Ğ²»´æÔÚÔò´´½¨ÎÄ¼ş¼Ğ
+	// å¦‚æœæ–‡ä»¶å¤¹ä¸å­˜åœ¨åˆ™åˆ›å»ºæ–‡ä»¶å¤¹
 	static void MkdirIfNotExists(const char* dir);
-	// ×Ö·û´®×ª»»
+	// å­—ç¬¦ä¸²è½¬æ¢
 	static std::string Tostring(BYTE value);
 	static std::string Tostring(int value);
 	static std::string Tostring(unsigned int value);
@@ -57,27 +57,27 @@ public:
 	static std::string Tostring(size_t value);
 	static std::string Tostring(long long value);
 	static std::string Tostring(double value);
-	// Ìæ»»×Ö·û´®
+	// æ›¿æ¢å­—ç¬¦ä¸²
 	static void ReplaceStr(char str[], int count, char src, char dst);
-	// ×Ö·û´®½âÎöº¯Êı
+	// å­—ç¬¦ä¸²è§£æå‡½æ•°
 	static bool GetKeyAndValue(const char * pStr, int &iKey, long long &llValue);
 	static void ArrayToString(long long * pArray, int iArrayCount, char * pStr);
 	static void StringToArray(char * pStr, long long * pArray, int &iArrayCount);
 	static void KYArrayToString(Util_KeyValueStruct_ * pKYArray, int iArrayCount, char * pStr);
 	static void StringToKYArray(char * pStr, Util_KeyValueStruct_ * pKYArray, int &iArrayCount);
-	// »ñÈ¡Ò»¸öËæ»úÊı¡£·¶Î§0-mt19937.min() [0-UINT_MAX]
+	// è·å–ä¸€ä¸ªéšæœºæ•°ã€‚èŒƒå›´0-mt19937.min() [0-UINT_MAX]
 	static unsigned int GetRandNum();
-	// »ñÈ¡[A,B)Ëæ»úÊı,min<= Ëæ»úÊı < iMax
+	// è·å–[A,B)éšæœºæ•°,min<= éšæœºæ•° < iMax
 	static int GetRandRange(int iMin, int iMax);
-	// ×ªÒå×Ö·û´®
+	// è½¬ä¹‰å­—ç¬¦ä¸²
 	static void TransString(char * pStr, int iCount, int iMaxSignCount, bool bUTF = false);
-	// ×Ö·û´®¹şÏ£º¯Êı
+	// å­—ç¬¦ä¸²å“ˆå¸Œå‡½æ•°
 	static unsigned int BKDRHash(const char *str);
 	static unsigned int APHash(const char *str);
 	static unsigned int DJBHash(const char *str);
 	static bool GetScoreFromUserInfoList(int userID, char* userInfoList, long long &llScore);
-	// Ğ£ÑéÍ·²¿
+	// æ ¡éªŒå¤´éƒ¨
 	static bool CheckCode(UINT uReserve);
-	// ¸ù¾İ¾­Î³¶È¼ÆËã¾àÀë£¨µ¥Î»m£©
+	// æ ¹æ®ç»çº¬åº¦è®¡ç®—è·ç¦»ï¼ˆå•ä½mï¼‰
 	static double GetDistanceVer(const char * lat1, const char *  lng1, const char *  lat2, const char *  lng2);
 };

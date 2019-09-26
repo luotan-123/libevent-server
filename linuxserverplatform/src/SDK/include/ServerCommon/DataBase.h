@@ -10,41 +10,41 @@
 class CDataLine;
 class CDataBaseManage;
 
-// Êı¾İ¿â´¦ÀíÀà
+// æ•°æ®åº“å¤„ç†ç±»
 class CDataBaseManage
 {
 public:
-	KernelInfoStruct* m_pKernelInfo;	// ÄÚºËÊı¾İ
-	ManageInfoStruct* m_pInitInfo;		// ³õÊ¼»¯Êı¾İÖ¸Õë
-	CDataLine	m_DataLine;				// Êı¾İ¶ÓÁĞ
-	CMysqlHelper* m_pMysqlHelper;		// Êı¾İ¿âÄ£¿é
+	KernelInfoStruct* m_pKernelInfo;	// å†…æ ¸æ•°æ®
+	ManageInfoStruct* m_pInitInfo;		// åˆå§‹åŒ–æ•°æ®æŒ‡é’ˆ
+	CDataLine	m_DataLine;				// æ•°æ®é˜Ÿåˆ—
+	CMysqlHelper* m_pMysqlHelper;		// æ•°æ®åº“æ¨¡å—
 protected:
-	pthread_t	m_hThread;			// Ïß³Ì¾ä±ú
-	//HANDLE	m_hCompletePort;	// Íê³É¶Ë¿Ú
-	bool	m_bInit;			// ³õÊ¼»¯±êÖ¾
-	bool	m_bRun;				// ÔËĞĞ±êÖ¾
-	IDataBaseHandleService* m_pHandleService;	// Êı¾İ´¦Àí½Ó¿Ú
+	pthread_t	m_hThread;			// çº¿ç¨‹å¥æŸ„
+	//HANDLE	m_hCompletePort;	// å®Œæˆç«¯å£
+	bool	m_bInit;			// åˆå§‹åŒ–æ ‡å¿—
+	bool	m_bRun;				// è¿è¡Œæ ‡å¿—
+	IDataBaseHandleService* m_pHandleService;	// æ•°æ®å¤„ç†æ¥å£
 
 public:
 	CDataBaseManage();
 	virtual ~CDataBaseManage();
 
 public:
-	//³õÊ¼»¯º¯Êı
+	//åˆå§‹åŒ–å‡½æ•°
 	bool Init(ManageInfoStruct* pInitInfo, KernelInfoStruct* pKernelInfo, IDataBaseHandleService* pHandleService, IAsynThreadResultService* pResultService);
-	//È¡Ïû³õÊ¼»¯
+	//å–æ¶ˆåˆå§‹åŒ–
 	bool UnInit();
-	//¿ªÊ¼·şÎñ
+	//å¼€å§‹æœåŠ¡
 	bool Start();
-	//Í£Ö¹·şÎñ
+	//åœæ­¢æœåŠ¡
 	bool Stop();
-	//¼ÓÈë´¦Àí¶ÓÁĞ
+	//åŠ å…¥å¤„ç†é˜Ÿåˆ—
 	bool PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT dwHandleID);
 
 public:
-	//¼ì²âÊı¾İÁ¬½Ó
+	//æ£€æµ‹æ•°æ®è¿æ¥
 	bool CheckSQLConnect();
-	//ÖØÁªÊı¾İ¿â
+	//é‡è”æ•°æ®åº“
 	bool SQLConnectReset();
 
 	int		m_sqlClass;
@@ -58,12 +58,12 @@ public:
 	char	m_name[48];
 
 private:
-	//Êı¾İ¿â´¦ÀíÏß³Ì
+	//æ•°æ®åº“å¤„ç†çº¿ç¨‹
 	static void* DataServiceThread(void* pThreadData);
 };
 
 ///***********************************************************************************************///
-//Êı¾İ¿â´¦Àí½Ó¿ÚÀà
+//æ•°æ®åº“å¤„ç†æ¥å£ç±»
 class CDataBaseHandle : public IDataBaseHandleService
 {
 public:
@@ -71,12 +71,12 @@ public:
 	virtual ~CDataBaseHandle();
 
 protected:
-	KernelInfoStruct* m_pKernelInfo;			//ÄÚºËÊı¾İ
-	ManageInfoStruct* m_pInitInfo;				//³õÊ¼»¯Êı¾İÖ¸Õë
-	IAsynThreadResultService* m_pRusultService;	//½á¹û´¦Àí½Ó¿Ú
-	CDataBaseManage* m_pDataBaseManage;		//Êı¾İ¿â¶ÔÏó
+	KernelInfoStruct* m_pKernelInfo;			//å†…æ ¸æ•°æ®
+	ManageInfoStruct* m_pInitInfo;				//åˆå§‹åŒ–æ•°æ®æŒ‡é’ˆ
+	IAsynThreadResultService* m_pRusultService;	//ç»“æœå¤„ç†æ¥å£
+	CDataBaseManage* m_pDataBaseManage;		//æ•°æ®åº“å¯¹è±¡
 
 public:
-	//ÉèÖÃ²ÎÊı
+	//è®¾ç½®å‚æ•°
 	virtual bool SetParameter(IAsynThreadResultService* pRusultService, CDataBaseManage* pDataBaseManage, ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData);
 };

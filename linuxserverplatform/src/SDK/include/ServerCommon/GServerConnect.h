@@ -1,14 +1,14 @@
 #pragma once
 
-#define GSERVER_SOCKET_SEND_BUF		(128 * 1024)		// ·¢ËÍ»º³åÇø´óĞ¡
-#define GSERVER_SOCKET_RECV_BUF		(64 * 1024)			// ½ÓÊÕ»º³åÇø´óĞ¡
-#define MAX_RECONNECT_COUNT			5					// ×î¶àÖØÁ¬´ÎÊı£¬0£ºÎŞÏŞÖØÁ¬
+#define GSERVER_SOCKET_SEND_BUF		(128 * 1024)		// å‘é€ç¼“å†²åŒºå¤§å°
+#define GSERVER_SOCKET_RECV_BUF		(64 * 1024)			// æ¥æ”¶ç¼“å†²åŒºå¤§å°
+#define MAX_RECONNECT_COUNT			5					// æœ€å¤šé‡è¿æ¬¡æ•°ï¼Œ0ï¼šæ— é™é‡è¿
 
 class CDataLine;
 class CGServerConnect;
 class CSignedLock;
 
-// µ¥¸ösocket
+// å•ä¸ªsocket
 class CGServerClient
 {
 public:
@@ -19,25 +19,25 @@ public:
 	bool Init(CDataLine* pDataLine, CGServerConnect* pCGServerConnect, int index, char ip[24], int port);
 	bool Connect();
 
-	// ¶ÁÊı¾İ
+	// è¯»æ•°æ®
 	bool OnRead();
 
-	// ·¢Êı¾İ
+	// å‘æ•°æ®
 	bool Send(const void* pData, int size);
 
-	// socket¹Ø±Õ
+	// socketå…³é—­
 	bool OnClose();
 
-	// »ñÈ¡socketÊôĞÔ
+	// è·å–socketå±æ€§
 	bool IsConnected();
 	int GetSocket() { return m_socket; }
 	int GetSocketIdx() { return m_index; }
 	int GetRemainSendBufSize() { return m_remainSendBytes; }
 
-	// Çå¿Õ·ÇÓÀ¾ÃÊôĞÔ(³õÊ¼»¯»òÕßÖØĞÂÆôÓÃÒ»¸ö¶ÔÏóµ÷ÓÃ)
+	// æ¸…ç©ºéæ°¸ä¹…å±æ€§(åˆå§‹åŒ–æˆ–è€…é‡æ–°å¯ç”¨ä¸€ä¸ªå¯¹è±¡è°ƒç”¨)
 	void Clear();
 
-	// ÖØÁ¬Ïà¹Øº¯Êı
+	// é‡è¿ç›¸å…³å‡½æ•°
 	bool IsNeedReConnect();
 	bool ReConnect();
 private:
@@ -51,15 +51,15 @@ private:
 	char m_sendBuf[GSERVER_SOCKET_SEND_BUF];
 	int m_remainSendBytes;
 
-	CDataLine* m_pDataLine;			//¹²ÏíµÄdataline¶ÔÏó
+	CDataLine* m_pDataLine;			//å…±äº«çš„datalineå¯¹è±¡
 	CSignedLock m_lock;
-	CGServerConnect* m_pCGServerConnect;		//¹²Ïí¹ÜÀíÀà
+	CGServerConnect* m_pCGServerConnect;		//å…±äº«ç®¡ç†ç±»
 	int m_index;
 	char m_ip[24];
 	int m_port;
 };
 
-// socket¹ÜÀí
+// socketç®¡ç†
 class CGServerConnect
 {
 public:
@@ -71,20 +71,20 @@ public:
 	bool Stop();
 
 public:
-	// ·¢ËÍÊı¾İº¯Êı
+	// å‘é€æ•°æ®å‡½æ•°
 	bool SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification);
 
-	// ½Ó¿Ú
+	// æ¥å£
 public:
 	int GetRoomID();
 	const std::vector<CGServerClient*>& GetSocketVec();
 	void GetIndexByThreadID(pthread_t uThreadID, size_t& uMin, size_t& uMax);
 
-	// Ïß³Ìº¯Êı
+	// çº¿ç¨‹å‡½æ•°
 private:
-	// SOCKET ¼ì²âÁ¬½ÓÏß³Ì
+	// SOCKET æ£€æµ‹è¿æ¥çº¿ç¨‹
 	static void* ThreadCheckConnect(void* pThreadData);
-	// SOCKET Êı¾İ½ÓÊÕÏß³Ì
+	// SOCKET æ•°æ®æ¥æ”¶çº¿ç¨‹
 	static void* ThreadRSSocket(void* pThreadData);
 
 private:

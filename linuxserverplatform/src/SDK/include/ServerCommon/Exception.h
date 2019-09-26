@@ -2,58 +2,58 @@
 
 ///***********************************************************************************************///
 
-///ÏµÍ³´íÎó
-#define EX_UNKNOWN_ERROR			0						///Î´Öª´íÎó
-#define EX_VIRTUAL_MEM_LOW			1						///ĞéÄâÄÚ´æ²»×ã
-#define EX_HEAP_MEM_LOW				2						///¶ÑÄÚ´æ²»×ã
+///ç³»ç»Ÿé”™è¯¯
+#define EX_UNKNOWN_ERROR			0						///æœªçŸ¥é”™è¯¯
+#define EX_VIRTUAL_MEM_LOW			1						///è™šæ‹Ÿå†…å­˜ä¸è¶³
+#define EX_HEAP_MEM_LOW				2						///å †å†…å­˜ä¸è¶³
 
-///Êı¾İ¿â´íÎó
-#define EX_DATA_CONNECT				100						///Êı¾İ¿âÁ¬½Ó´íÎó
-#define EX_DATA_USER				101						///Êı¾İ¿âÃû×Ö´íÎó
-#define EX_DATA_PASS				102						///Êı¾İ¿âÃÜÂë´íÎó
-#define EX_DATA_EXEC				103						///Êı¾İ¿âÖ´ĞĞ´íÎó
+///æ•°æ®åº“é”™è¯¯
+#define EX_DATA_CONNECT				100						///æ•°æ®åº“è¿æ¥é”™è¯¯
+#define EX_DATA_USER				101						///æ•°æ®åº“åå­—é”™è¯¯
+#define EX_DATA_PASS				102						///æ•°æ®åº“å¯†ç é”™è¯¯
+#define EX_DATA_EXEC				103						///æ•°æ®åº“æ‰§è¡Œé”™è¯¯
 
-///ÍøÂç´íÎó
-#define EX_SOCKET_CREATE			200						///ÍøÂç½¨Á¢´íÎó
-#define EX_SOCKET_SEND_ERROR		201						///ÍøÂç·¢ËÍ´íÎó
-#define EX_SOCKET_RECV_ERROR		202						///ÍøÂç½ÓÊÜ´íÎó
+///ç½‘ç»œé”™è¯¯
+#define EX_SOCKET_CREATE			200						///ç½‘ç»œå»ºç«‹é”™è¯¯
+#define EX_SOCKET_SEND_ERROR		201						///ç½‘ç»œå‘é€é”™è¯¯
+#define EX_SOCKET_RECV_ERROR		202						///ç½‘ç»œæ¥å—é”™è¯¯
 
-///·şÎñ´íÎó
-#define EX_SERVICE_START			300						///·şÎñÆô¶¯
-#define EX_SERVICE_PAUSE			301						///·şÎñÔİÍ£
-#define EX_SERVICE_STOP				302						///·şÎñÍ£Ö¹
-#define EX_SERVICE_BUSY				303						///·şÎñ·±Ã¦
-#define EX_SERVICE_UNKNOW			304						///Î´Öª·şÎñĞÅÏ¢
+///æœåŠ¡é”™è¯¯
+#define EX_SERVICE_START			300						///æœåŠ¡å¯åŠ¨
+#define EX_SERVICE_PAUSE			301						///æœåŠ¡æš‚åœ
+#define EX_SERVICE_STOP				302						///æœåŠ¡åœæ­¢
+#define EX_SERVICE_BUSY				303						///æœåŠ¡ç¹å¿™
+#define EX_SERVICE_UNKNOW			304						///æœªçŸ¥æœåŠ¡ä¿¡æ¯
 
-///CRT Òì³£
-#define EX_CRT_INVALID_PARAM		401						///ÏµÍ³º¯Êıµ÷ÓÃ,¼ì²âµ½·Ç·¨µÄ²ÎÊı
-#define EX_CRT_PURECALL				402						///´¿Ğéº¯Êıµ÷ÓÃ´íÎó
-#define EX_CRT_NEW					403						///·ÖÅäÄÚ´æ´íÎó
-#define EX_CRT_TERMINATE			404						///CRTÓöµ½Ò»¸öÎ´±»´¦ÀíµÄC++ÀàĞÍ»¯Òì³£Ê±£¬Ëü»áµ÷ÓÃterminate()º¯Êı
+///CRT å¼‚å¸¸
+#define EX_CRT_INVALID_PARAM		401						///ç³»ç»Ÿå‡½æ•°è°ƒç”¨,æ£€æµ‹åˆ°éæ³•çš„å‚æ•°
+#define EX_CRT_PURECALL				402						///çº¯è™šå‡½æ•°è°ƒç”¨é”™è¯¯
+#define EX_CRT_NEW					403						///åˆ†é…å†…å­˜é”™è¯¯
+#define EX_CRT_TERMINATE			404						///CRTé‡åˆ°ä¸€ä¸ªæœªè¢«å¤„ç†çš„C++ç±»å‹åŒ–å¼‚å¸¸æ—¶ï¼Œå®ƒä¼šè°ƒç”¨terminate()å‡½æ•°
 
-///×Ô¶¨Òå´íÎó
+///è‡ªå®šä¹‰é”™è¯¯
 ///***********************************************************************************************///
 
-//Òì³£Àà
+//å¼‚å¸¸ç±»
 class CException
 {
 protected:
-	UINT					m_uErrorCode;					///´íÎóÂë
-	bool					m_bAutoDelete;					///ÊÇ·ñ×Ô¶¯É¾³ı
-	char					m_szMessage[255];				///´íÎóĞÅÏ¢
-	static bool				m_bShowError;					///ÊÇ·ñÏÔÊ¾´íÎó
+	UINT					m_uErrorCode;					///é”™è¯¯ç 
+	bool					m_bAutoDelete;					///æ˜¯å¦è‡ªåŠ¨åˆ é™¤
+	char					m_szMessage[255];				///é”™è¯¯ä¿¡æ¯
+	static bool				m_bShowError;					///æ˜¯å¦æ˜¾ç¤ºé”™è¯¯
 
 public:
 	CException(const char* szErrorMessage, unsigned int uErrorCode = EX_UNKNOWN_ERROR, bool bAutoDelete = true);
 	virtual ~CException();
 
 public:
-	//»ñÈ¡´íÎó´úÂë
+	//è·å–é”™è¯¯ä»£ç 
 	virtual UINT GetErrorCode() const;
-	//»ñÈ¡´íÎóĞÅÏ¢
+	//è·å–é”™è¯¯ä¿¡æ¯
 	virtual char const* GetErrorMessage(char* szBuffer, int iBufLength) const;
-	//É¾³ıº¯Êı
+	//åˆ é™¤å‡½æ•°
 	virtual bool Delete();
-	//ÉèÖÃÊÇ·ñÏÔÊ¾´íÎó
+	//è®¾ç½®æ˜¯å¦æ˜¾ç¤ºé”™è¯¯
 	static bool ShowErrorMessage(bool bShowError);
 };

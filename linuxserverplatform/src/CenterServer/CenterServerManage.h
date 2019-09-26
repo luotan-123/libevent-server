@@ -5,30 +5,30 @@
 #include <map>
 #include <unordered_map>
 
-// ¶¨Ê±Æ÷ID
+// å®šæ—¶å™¨ID
 enum CenterServerTimerID
 {
 	CENTER_TIMER_BEGIN = 0,
-	CENTER_TIMER_CHECK_REDIS_CONNECTION,			// redisÁ¬½ÓĞÔ
-	CENTER_TIMER_NORMAL,							// Í¨ÓÃ¶¨Ê±Æ÷(s)
-	CENTER_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET,		// ÇåÀíÎŞ°ó¶¨Á¬½Ó
-	CENTER_TIMER_LOAD_MATCH_INFO,					// ¼ÓÔØ±ÈÈüĞÅÏ¢
+	CENTER_TIMER_CHECK_REDIS_CONNECTION,			// redisè¿æ¥æ€§
+	CENTER_TIMER_NORMAL,							// é€šç”¨å®šæ—¶å™¨(s)
+	CENTER_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET,		// æ¸…ç†æ— ç»‘å®šè¿æ¥
+	CENTER_TIMER_LOAD_MATCH_INFO,					// åŠ è½½æ¯”èµ›ä¿¡æ¯
 	CENTER_TIMER_END,
 };
 
-const int CHECK_REDIS_CONNECTION_SECS = 307;		// ¶¨ÆÚ¼ì²éredisÁ¬½Ó(s)
-const int ROUTINE_CHECK_UNBINDID_SOCKET = 53;		// ¶¨ÆÚÇåÀíÁ¬½Ó(s)
-const int NORMAL_TIMER_SECS = 3;					// Í¨ÓÃ¶¨Ê±Æ÷(s)
-const int CHECK_REDIS_LOAD_MATCH_INFO = 1200;		// ¼ÓÔØ±ÈÈüĞÅÏ¢(s)
+const int CHECK_REDIS_CONNECTION_SECS = 307;		// å®šæœŸæ£€æŸ¥redisè¿æ¥(s)
+const int ROUTINE_CHECK_UNBINDID_SOCKET = 53;		// å®šæœŸæ¸…ç†è¿æ¥(s)
+const int NORMAL_TIMER_SECS = 3;					// é€šç”¨å®šæ—¶å™¨(s)
+const int CHECK_REDIS_LOAD_MATCH_INFO = 1200;		// åŠ è½½æ¯”èµ›ä¿¡æ¯(s)
 
-//·Ç¶¨Ê±Æ÷Ê±¼ä
-const int CONNECT_TIME_SECS = 20;					// Ã¿¸öÁ¬½Ó×î¶à´æÔÚÊ±¼ä
+//éå®šæ—¶å™¨æ—¶é—´
+const int CONNECT_TIME_SECS = 20;					// æ¯ä¸ªè¿æ¥æœ€å¤šå­˜åœ¨æ—¶é—´
 
-// ÖĞĞÄ·şÎñÆ÷Íæ¼Ò½á¹¹
+// ä¸­å¿ƒæœåŠ¡å™¨ç©å®¶ç»“æ„
 struct CenterUserInfo
 {
 	int userID;
-	UINT socketIdx; //µÇÂ¼·şË÷Òı
+	UINT socketIdx; //ç™»å½•æœç´¢å¼•
 	BYTE isVirtual;
 
 	CenterUserInfo()
@@ -41,8 +41,8 @@ struct CenterUserInfo
 
 struct ServerBaseInfo
 {
-	int serverType; // ·şÎñÆ÷ÀàĞÍ   SERVICE_TYPE_LOGON//´óÌü    SERVICE_TYPE_LOADER//ÓÎÏ·
-	int serverID;	// ´óÌü·şÊÇlogonID£¬ÓÎÏ··şÊÇroomID
+	int serverType; // æœåŠ¡å™¨ç±»å‹   SERVICE_TYPE_LOGON//å¤§å…    SERVICE_TYPE_LOADER//æ¸¸æˆ
+	int serverID;	// å¤§å…æœæ˜¯logonIDï¼Œæ¸¸æˆæœæ˜¯roomID
 	ServerBaseInfo()
 	{
 		serverType = SERVICE_TYPE_BEGIN;
@@ -68,17 +68,17 @@ struct ServerBaseInfo
 class CCenterServerManage : public CBaseCenterServer
 {
 public:
-	UINT						m_nPort;				//µÇÂ½·şÎñÆ÷¶Ë¿Ú
-	UINT						m_uMaxPeople;			//Ö§³Ö×î´ó·Ö²¼Ê½Á¬½ÓÊıÁ¿
+	UINT						m_nPort;				//ç™»é™†æœåŠ¡å™¨ç«¯å£
+	UINT						m_uMaxPeople;			//æ”¯æŒæœ€å¤§åˆ†å¸ƒå¼è¿æ¥æ•°é‡
 
 private:
-	std::vector<ServerBaseInfo>					m_socketToServerVec;	// socketIdxµ½·şÎñÆ÷IDµÄÓ³Éä(key=socketIdx,value=ServerBaseInfo)
-	std::map<ServerBaseInfo, UINT>				m_serverToSocketMap;	// ·şÎñÆ÷µ½socketIdxµÄÓ³Éä  (key=ServerBaseInfo,value=socketIdx)
-	std::vector<UINT>							m_logonGroupSocket;		// µÇÂ½·ş¼¯Èº(value=socketIdx)
-	std::map<int, CenterUserInfo>				m_centerUserInfoMap;	// ¼¯ÈºÏµÍ³ÔÚÏßÍæ¼Ò(Ö»Í³¼ÆµÇÂ¼·şµÄ)
-	std::vector<int>							m_memberUserIDVec;		// ÁÙÊ±±£´æµÄ¾ãÀÖ²¿³ÉÔ±
+	std::vector<ServerBaseInfo>					m_socketToServerVec;	// socketIdxåˆ°æœåŠ¡å™¨IDçš„æ˜ å°„(key=socketIdx,value=ServerBaseInfo)
+	std::map<ServerBaseInfo, UINT>				m_serverToSocketMap;	// æœåŠ¡å™¨åˆ°socketIdxçš„æ˜ å°„  (key=ServerBaseInfo,value=socketIdx)
+	std::vector<UINT>							m_logonGroupSocket;		// ç™»é™†æœé›†ç¾¤(value=socketIdx)
+	std::map<int, CenterUserInfo>				m_centerUserInfoMap;	// é›†ç¾¤ç³»ç»Ÿåœ¨çº¿ç©å®¶(åªç»Ÿè®¡ç™»å½•æœçš„)
+	std::vector<int>							m_memberUserIDVec;		// ä¸´æ—¶ä¿å­˜çš„ä¿±ä¹éƒ¨æˆå‘˜
 	time_t										m_lastNormalTimerTime;
-	std::map<long long, MatchInfo>				m_timeMatchInfoMap;		// ¶¨Ê±ÈüĞÅÏ¢£¬¸ù¾İ±ÈÈü¿ªÊ¼Ê±¼äÅÅĞò¡£tips£ºËùÓĞ¶¨Ê±Èü±ÈÈü¿ªÊ¼Ê±¼ä²»ÄÜÏàÍ¬
+	std::map<long long, MatchInfo>				m_timeMatchInfoMap;		// å®šæ—¶èµ›ä¿¡æ¯ï¼Œæ ¹æ®æ¯”èµ›å¼€å§‹æ—¶é—´æ’åºã€‚tipsï¼šæ‰€æœ‰å®šæ—¶èµ›æ¯”èµ›å¼€å§‹æ—¶é—´ä¸èƒ½ç›¸åŒ
 
 public:
 	CCenterServerManage();
@@ -87,133 +87,133 @@ public:
 	virtual ~CCenterServerManage();
 
 public:
-	//Êı¾İ¹ÜÀíÄ£¿éÆô¶¯
+	//æ•°æ®ç®¡ç†æ¨¡å—å¯åŠ¨
 	virtual bool OnStart();
-	//Êı¾İ¹ÜÀíÄ£¿é¹Ø±Õ
+	//æ•°æ®ç®¡ç†æ¨¡å—å…³é—­
 	virtual bool OnStop();
 
-	//·şÎñÀ©Õ¹½Ó¿Úº¯Êı
+	//æœåŠ¡æ‰©å±•æ¥å£å‡½æ•°
 private:
-	//»ñÈ¡ĞÅÏ¢º¯Êı
+	//è·å–ä¿¡æ¯å‡½æ•°
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
-	//SOCKET Êı¾İ¶ÁÈ¡
+	//SOCKET æ•°æ®è¯»å–
 	virtual bool OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	//SOCKET ¹Ø±Õ
+	//SOCKET å…³é—­
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
-	//¶¨Ê±Æ÷ÏûÏ¢
+	//å®šæ—¶å™¨æ¶ˆæ¯
 	virtual bool OnTimerMessage(UINT uTimerID);
 
-public:///////////////////////////////////·¢ËÍÊı¾İÏà¹Ø///////////////////////////////////////
-	// ¸øÍæ¼Ò(µÇÂ¼·ş)·¢ËÍÊı¾İ
+public:///////////////////////////////////å‘é€æ•°æ®ç›¸å…³///////////////////////////////////////
+	// ç»™ç©å®¶(ç™»å½•æœ)å‘é€æ•°æ®
 	bool SendData(int userID, UINT msgID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode);
-	// Ïò·şÎñÆ÷·¢ËÍÊı¾İ
+	// å‘æœåŠ¡å™¨å‘é€æ•°æ®
 	bool SendData(ServerBaseInfo * pServer, UINT msgID, void* pData, UINT size, int userID = 0, UINT mainID = 0, UINT assistID = 0, UINT handleCode = 0);
-	// Ïò·şÎñÆ÷·¢ËÍÊı¾İ
+	// å‘æœåŠ¡å™¨å‘é€æ•°æ®
 	bool SendData(UINT uScoketIndex, UINT msgID, void* pData, UINT size, UINT handleCode = 0);
-	// Í¨Öª×ÊÔ´±ä»¯
+	// é€šçŸ¥èµ„æºå˜åŒ–
 	void NotifyResourceChange(int userID, int resourceType, long long value, long long changeValue, int reason, int reserveData = 0, BYTE isNotifyRoom = 0);
-	// ¸øµÇÂ¼·ş·şÎñÆ÷¼¯Èº·¢ËÍµ±Ç°¼¯ÈºĞÅÏ¢
+	// ç»™ç™»å½•æœæœåŠ¡å™¨é›†ç¾¤å‘é€å½“å‰é›†ç¾¤ä¿¡æ¯
 	void SendDistributedSystemInfo();
-	// ±ÈÈü¼´½«¿ªÊ¼£¬¸øËùÓĞ±¨ÃûÍæ¼Ò·¢ËÍÏûÏ¢Í¨Öª
+	// æ¯”èµ›å³å°†å¼€å§‹ï¼Œç»™æ‰€æœ‰æŠ¥åç©å®¶å‘é€æ¶ˆæ¯é€šçŸ¥
 	void SendNotifyMatchStart(const MatchInfo &matchInfo);
-private: /////////////////////////ÄÚ²¿ÏµÍ³////////////////////////
-	// ³õÊ¼»¯ĞèÒª¶¨ÆÚ¼ì²éµÄÊÂ¼ş
+private: /////////////////////////å†…éƒ¨ç³»ç»Ÿ////////////////////////
+	// åˆå§‹åŒ–éœ€è¦å®šæœŸæ£€æŸ¥çš„äº‹ä»¶
 	void InitRounteCheckEvent();
-	// ¼ì²éredisÁ¬½ÓĞÔ
+	// æ£€æŸ¥redisè¿æ¥æ€§
 	void CheckRedisConnection();
-	// Í¨ÓÃ¶¨Ê±Æ÷
+	// é€šç”¨å®šæ—¶å™¨
 	void OnNormalTimer();
-	// ÇåÀíÁ¬½Ó
+	// æ¸…ç†è¿æ¥
 	void RoutineCheckUnbindIDSocket();
-	// ¿çÌì
+	// è·¨å¤©
 	void OnServerCrossDay();
-	// ¿çÖÜ
+	// è·¨å‘¨
 	void OnServerCrossWeek();
-	// Íæ¼ÒÊÇ·ñÔÚÏß
+	// ç©å®¶æ˜¯å¦åœ¨çº¿
 	bool IsUserOnline(int userID);
-	// ¼ì²é¶¨Ê±Èü
+	// æ£€æŸ¥å®šæ—¶èµ›
 	void CheckTimeMatch(const time_t &currTime);
 
 private:
-	////////////////////////////////´¦ÀíPHP·şÏûÏ¢//////////////////////////////////////////
+	////////////////////////////////å¤„ç†PHPæœæ¶ˆæ¯//////////////////////////////////////////
 	bool OnHandlePHPMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// Æ½Ì¨¹«¸æÏà¹Ø
+	// å¹³å°å…¬å‘Šç›¸å…³
 	bool OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, int size);
-	// È«·şÓÊ¼şÍ¨Öª
+	// å…¨æœé‚®ä»¶é€šçŸ¥
 	bool OnHandlePHPAllUserMailMessage(UINT socketIdx, void* pData, int size);
-	// ¹Ø·ş
+	// å…³æœ
 	bool OnHandlePHPCloseServerMessage(UINT socketIdx, void*pData, int size);
-	// ¿ª·ş
+	// å¼€æœ
 	bool OnHandlePHPOpenServerMessage(UINT socketIdx, void*pData, int size);
-	// ·¢ËÍÀ®°È
+	// å‘é€å–‡å­
 	bool OnHandlePHPHornMessage(UINT socketIdx, void*pData, int size);
-	// ½âÉ¢×À×Ó
+	// è§£æ•£æ¡Œå­
 	bool OnHandlePHPDissmissDeskMessage(UINT socketIdx, UINT msgID, void*pData, int size);
-	// Í¨ÖªÄ³¸öÈË×ÊÔ´±ä»¯
+	// é€šçŸ¥æŸä¸ªäººèµ„æºå˜åŒ–
 	bool OnHandlePHPNotifyResChangeMessage(UINT socketIdx, int userID, void*pData, int size);
-	// ÏòÄ³¸öÍæ¼ÒÍÆËÍÏûÏ¢
+	// å‘æŸä¸ªç©å®¶æ¨é€æ¶ˆæ¯
 	bool OnHandlePHPNotifyOneUserMessage(UINT socketIdx, int userID, void*pData, int size, unsigned int mainID, unsigned int assistID);
-	// Ïò¾ãÀÖ²¿Íæ¼ÒÍÆËÍÏûÏ¢
+	// å‘ä¿±ä¹éƒ¨ç©å®¶æ¨é€æ¶ˆæ¯
 	bool OnHandlePHPNotifyFGMessage(UINT socketIdx, int friendsGroupID, void*pData, int size, unsigned int mainID, unsigned int assistID);
-	// ÉèÖÃÍæ¼ÒÉí·İ
+	// è®¾ç½®ç©å®¶èº«ä»½
 	bool OnHandlePHPSetUserMessage(UINT socketIdx, int userID, void* pData, int size);
-	// Í¨ÖªĞ¡ºìµã
+	// é€šçŸ¥å°çº¢ç‚¹
 	bool OnHandlePHPNotifyUserRedspotMessage(UINT socketIdx, int userID, void* pData, int size);
-	// Í¨Öª¾ãÀÖ²¿Ğ¡ºìµã
+	// é€šçŸ¥ä¿±ä¹éƒ¨å°çº¢ç‚¹
 	bool OnHandlePHPNotifyUserRedFGspotMessage(UINT socketIdx, int friendsGroupID, void* pData, int size);
-	// ¼ÓÔØÓÎÏ·ÅäÖÃ
+	// åŠ è½½æ¸¸æˆé…ç½®
 	bool OnHandlePHPReloadGameConfigMessage(UINT socketIdx, void* pData, int size);
-	// ÊÖ»ú×¢²áÑéÖ¤³É¹¦£¬×¢²áÕËºÅ
+	// æ‰‹æœºæ³¨å†ŒéªŒè¯æˆåŠŸï¼Œæ³¨å†Œè´¦å·
 	bool OnHandlePHPPhoneInfoMessage(UINT socketIdx, void* pData, int size);
-	// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨ÊµÊ±Èü£©
+	// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®æ—¶èµ›ï¼‰
 	bool OnHandlePHPSignUpMatchMessage(UINT socketIdx, void*pData, int size);
-	// ÇëÇó¿ªÊ¼±ÈÈü
+	// è¯·æ±‚å¼€å§‹æ¯”èµ›
 	bool OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*pData, int size);
-	// ´´½¨¡¢ĞŞ¸Ä¡¢É¾³ı£¬Ò»¸ö¶¨Ê±Èü
+	// åˆ›å»ºã€ä¿®æ”¹ã€åˆ é™¤ï¼Œä¸€ä¸ªå®šæ—¶èµ›
 	bool OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, void*pData, int size);
-	// Íæ¼Ò±¨Ãû»òÕßÍË³ö±¨Ãû£¨¶¨Ê±Èü£©
+	// ç©å®¶æŠ¥åæˆ–è€…é€€å‡ºæŠ¥åï¼ˆå®šæ—¶èµ›ï¼‰
 	bool OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx, void*pData, int size);
 
-	////////////////////////////////´¦ÀíÍ¨ÓÃ(Íø¹ØºÍÓÎÏ·£¬²»°üº¬PHP)ÏûÏ¢//////////////////////////////////////////
+	////////////////////////////////å¤„ç†é€šç”¨(ç½‘å…³å’Œæ¸¸æˆï¼Œä¸åŒ…å«PHP)æ¶ˆæ¯//////////////////////////////////////////
 	bool OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// ÎªÃ¿¸ö·şÎñÆ÷°ó¶¨socketIdx
+	// ä¸ºæ¯ä¸ªæœåŠ¡å™¨ç»‘å®šsocketIdx
 	bool OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
 
 
-	////////////////////////////////´¦Àí´óÌü·şÏûÏ¢//////////////////////////////////////////
+	////////////////////////////////å¤„ç†å¤§å…æœæ¶ˆæ¯//////////////////////////////////////////
 	bool OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// µÇÂ½·ş×ÊÔ´±ä»¯
+	// ç™»é™†æœèµ„æºå˜åŒ–
 	bool OnHandleLogonResChangeMessage(int userID, void* pData, UINT size);
-	// Íæ¼ÒÉÏÏÂÏß
+	// ç©å®¶ä¸Šä¸‹çº¿
 	bool OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// ¸øÆäËüµÇÂ¼·ş·¢ËÍÊı¾İ£¬Ìßµô¾É·şÎñÆ÷Íæ¼Ò
+	// ç»™å…¶å®ƒç™»å½•æœå‘é€æ•°æ®ï¼Œè¸¢æ‰æ—§æœåŠ¡å™¨ç©å®¶
 	bool OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// ×ª·¢ÏûÏ¢¸øÄ³¸öÈË
+	// è½¬å‘æ¶ˆæ¯ç»™æŸä¸ªäºº
 	bool OnHandleLogonRelayUserMessage(NetMessageHead * pNetHead, void* pData, UINT size, int userID);
-	// ×ª·¢ÏûÏ¢¸ø¾ãÀÖ²¿
+	// è½¬å‘æ¶ˆæ¯ç»™ä¿±ä¹éƒ¨
 	bool OnHandleLogonRelayFGMessage(NetMessageHead * pNetHead, void* pData, UINT size, int friendsGroupID);
-	// ÇëÇó¸ø¾ãÀÖ²¿ËùÓĞÍæ¼Ò·¢ËÍĞ¡ºìµã
+	// è¯·æ±‚ç»™ä¿±ä¹éƒ¨æ‰€æœ‰ç©å®¶å‘é€å°çº¢ç‚¹
 	bool OnHandleLogonReqFGRedSpotMessage(void* pData, UINT size, int friendsGroupID);
-	// ÇëÇó½âÉ¢·¿¼ä
+	// è¯·æ±‚è§£æ•£æˆ¿é—´
 	bool OnHandleLogonReqDissmissDeskessage(void* pData, UINT size);
 
 
-	////////////////////////////////´¦ÀíÓÎÏ··şÏûÏ¢//////////////////////////////////////////
+	////////////////////////////////å¤„ç†æ¸¸æˆæœæ¶ˆæ¯//////////////////////////////////////////
 	bool OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// ÓÎÏ··ş×ÊÔ´±ä»¯£¨½ğ±ÒºÍ×êÊ¯£©
+	// æ¸¸æˆæœèµ„æºå˜åŒ–ï¼ˆé‡‘å¸å’Œé’»çŸ³ï¼‰
 	bool OnHandleLoaderResChangeMessage(int userID, void* pData, UINT size);
-	// ¿ª·¿ÁĞ±íĞÅÏ¢±ä»¯(ÈËÊı±ä»¯)
+	// å¼€æˆ¿åˆ—è¡¨ä¿¡æ¯å˜åŒ–(äººæ•°å˜åŒ–)
 	bool OnHandleLoaderBuyDeskInfoChangeMessage(void* pData, UINT size);
-	// ÓÎÏ·´ó½áËã
+	// æ¸¸æˆå¤§ç»“ç®—
 	bool OnHandleLoaderDeskDissmissMessage(void* pData, UINT size);
-	// ¾ÖÊı±ä»¯
+	// å±€æ•°å˜åŒ–
 	bool OnHandleLoaderDeskStatusChangeMessage(void* pData, UINT size);
-	// »ğ±Ò±ä»¯Í¨Öª
+	// ç«å¸å˜åŒ–é€šçŸ¥
 	bool OnHandleLoaderFireCoinChangeMessage(int userID, void* pData, UINT size);
-	// ´ó½±Í¨Öª
+	// å¤§å¥–é€šçŸ¥
 	bool OnHandleLoaderRewardMessage(void* pData, UINT size);
-	// ¿ªÊ¼±ÈÈü
+	// å¼€å§‹æ¯”èµ›
 	bool OnHandleLoaderNotifyStartMatchMessage(void* pData, UINT size);
-	// ¿ªÊ¼±ÈÈüÊ§°Ü
+	// å¼€å§‹æ¯”èµ›å¤±è´¥
 	bool OnHandleLoaderNotifyStartMatchFailMessage(int userID, void* pData, UINT size);
 };

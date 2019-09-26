@@ -7,16 +7,16 @@
 #include "BaseMainManage.h"
 
 
-//´¦ÀíÏß³ÌÆô¶¯½á¹¹
+//å¤„ç†çº¿ç¨‹å¯åŠ¨ç»“æ„
 struct HandleThreadStartStruct
 {
-	//±äÁ¿¶¨Òå
-	HANDLE								hEvent;						//Æô¶¯ÊÂ¼ş
-	HANDLE								hCompletionPort;			//Íê³É¶Ë¿Ú
-	CBaseMainManage* pMainManage;				//Êı¾İ¹ÜÀíÖ¸Õë
+	//å˜é‡å®šä¹‰
+	HANDLE								hEvent;						//å¯åŠ¨äº‹ä»¶
+	HANDLE								hCompletionPort;			//å®Œæˆç«¯å£
+	CBaseMainManage* pMainManage;				//æ•°æ®ç®¡ç†æŒ‡é’ˆ
 };
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 CBaseMainManage::CBaseMainManage()
 {
 	m_bInit = false;
@@ -65,7 +65,7 @@ bool CBaseMainManage::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	ret = PreInitParameter(&m_InitData, &m_KernelData);
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::Init PreInitParameter ²ÎÊıµ÷½Ú´íÎó", 0x41A);
+		throw new CException("CBaseMainManage::Init PreInitParameter å‚æ•°è°ƒèŠ‚é”™è¯¯", 0x41A);
 	}
 
 	m_pRedis = new CRedisLoader;
@@ -77,10 +77,10 @@ bool CBaseMainManage::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	ret = m_pRedis->Init();
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::Init redis³õÊ¼»¯Ê§°Ü£¨¿ÉÄÜÊÇredis·şÎñÆ÷Î´Æô¶¯£©", 0x401);
+		throw new CException("CBaseMainManage::Init redisåˆå§‹åŒ–å¤±è´¥ï¼ˆå¯èƒ½æ˜¯redisæœåŠ¡å™¨æœªå¯åŠ¨ï¼‰", 0x401);
 	}
 
-	//vip·¿¼ä²ÅĞèÒªÁ¬½Óphp redis
+	//vipæˆ¿é—´æ‰éœ€è¦è¿æ¥php redis
 	if (m_InitData.iRoomType != ROOM_TYPE_GOLD)
 	{
 		m_pRedisPHP = new CRedisPHP;
@@ -92,20 +92,20 @@ bool CBaseMainManage::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 		ret = m_pRedisPHP->Init();
 		if (!ret)
 		{
-			throw new CException("CBaseMainManage::Init redisPHP³õÊ¼»¯Ê§°Ü£¨¿ÉÄÜÊÇredis PHP·şÎñÆ÷Î´Æô¶¯£©", 0x402);
+			throw new CException("CBaseMainManage::Init redisPHPåˆå§‹åŒ–å¤±è´¥ï¼ˆå¯èƒ½æ˜¯redis PHPæœåŠ¡å™¨æœªå¯åŠ¨ï¼‰", 0x402);
 		}
 	}
 
 	ret = pDataHandleService->SetParameter(this, &m_SQLDataManage, &m_InitData, &m_KernelData);
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::Init pDataHandleService->SetParameterÊ§°Ü", 0x41C);
+		throw new CException("CBaseMainManage::Init pDataHandleService->SetParameterå¤±è´¥", 0x41C);
 	}
 
 	ret = m_SQLDataManage.Init(&m_InitData, &m_KernelData, pDataHandleService, this);
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::Init m_SQLDataManage ³õÊ¼»¯Ê§°Ü", 0x41D);
+		throw new CException("CBaseMainManage::Init m_SQLDataManage åˆå§‹åŒ–å¤±è´¥", 0x41D);
 	}
 
 	m_pTcpConnect = new CTcpConnect;
@@ -131,7 +131,7 @@ bool CBaseMainManage::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	ret = OnInit(&m_InitData, &m_KernelData);
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::Init OnInit º¯Êı´íÎó", 0x41B);
+		throw new CException("CBaseMainManage::Init OnInit å‡½æ•°é”™è¯¯", 0x41B);
 	}
 
 	m_bInit = true;
@@ -139,28 +139,28 @@ bool CBaseMainManage::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	return true;
 }
 
-//È¡Ïû³õÊ¼»¯º¯Êı 
+//å–æ¶ˆåˆå§‹åŒ–å‡½æ•° 
 bool CBaseMainManage::UnInit()
 {
-	//Í£Ö¹·şÎñ
+	//åœæ­¢æœåŠ¡
 	if (m_bRun)
 	{
 		Stop();
 	}
 
-	//µ÷ÓÃ½Ó¿Ú
+	//è°ƒç”¨æ¥å£
 	OnUnInit();
 
-	//È¡Ïû³õÊ¼»¯
+	//å–æ¶ˆåˆå§‹åŒ–
 	m_bInit = false;
 	m_SQLDataManage.UnInit();
 
-	//ÉèÖÃÊı¾İ
+	//è®¾ç½®æ•°æ®
 	memset(&m_DllInfo, 0, sizeof(m_DllInfo));
 	memset(&m_InitData, 0, sizeof(m_InitData));
 	memset(&m_KernelData, 0, sizeof(m_KernelData));
 
-	//ÊÍ·Åredis
+	//é‡Šæ”¾redis
 	m_pRedis->Stop();
 	SAFE_DELETE(m_pRedis);
 	if (m_pRedisPHP)
@@ -176,7 +176,7 @@ bool CBaseMainManage::UnInit()
 	return true;
 }
 
-//Æô¶¯º¯Êı
+//å¯åŠ¨å‡½æ•°
 bool CBaseMainManage::Start()
 {
 	if (!m_bInit || m_bRun)
@@ -186,18 +186,18 @@ bool CBaseMainManage::Start()
 
 	m_bRun = true;
 
-	////½¨Á¢ÊÂ¼ş
+	////å»ºç«‹äº‹ä»¶
 	//HANDLE StartEvent = CreateEvent(FALSE, true, NULL, NULL);
 
-	////½¨Á¢Íê³É¶Ë¿Ú
+	////å»ºç«‹å®Œæˆç«¯å£
 	//m_hCompletePort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
 	//if (m_hCompletePort == NULL)
 	//{
-	//	throw new CException("CBaseMainManage::Start m_hCompletePort ½¨Á¢Ê§°Ü", 0x41D);
+	//	throw new CException("CBaseMainManage::Start m_hCompletePort å»ºç«‹å¤±è´¥", 0x41D);
 	//}
 	//m_DataLine.SetCompletionHandle(m_hCompletePort);
 
-	//Æô¶¯´¦ÀíÏß³Ì
+	//å¯åŠ¨å¤„ç†çº¿ç¨‹
 	pthread_t uThreadID = 0;
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
@@ -207,11 +207,11 @@ bool CBaseMainManage::Start()
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("LineDataHandleThread failed");
-		throw new CException("CBaseMainManage::Start LineDataHandleThread Ïß³ÌÆô¶¯Ê§°Ü", 0x41E);
+		throw new CException("CBaseMainManage::Start LineDataHandleThread çº¿ç¨‹å¯åŠ¨å¤±è´¥", 0x41E);
 	}
 	m_hHandleThread = uThreadID;
 
-	// ¹ØÁªÓÎÏ·ÒµÎñÂß¼­Ïß³ÌÓë¶ÔÓ¦ÈÕÖ¾ÎÄ¼ş
+	// å…³è”æ¸¸æˆä¸šåŠ¡é€»è¾‘çº¿ç¨‹ä¸å¯¹åº”æ—¥å¿—æ–‡ä»¶
 	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
 
 	//WaitForSingleObject(StartEvent, INFINITE);
@@ -220,38 +220,38 @@ bool CBaseMainManage::Start()
 	ret = m_SQLDataManage.Start();
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::m_SQLDataManage.Start Êı¾İ¿âÄ£¿éÆô¶¯Ê§°Ü", 0x420);
+		throw new CException("CBaseMainManage::m_SQLDataManage.Start æ•°æ®åº“æ¨¡å—å¯åŠ¨å¤±è´¥", 0x420);
 	}
 
-	//////////////////////////////////½¨Á¢ÓëÖĞĞÄ·şµÄÁ¬½Ó////////////////////////////////////////
+	//////////////////////////////////å»ºç«‹ä¸ä¸­å¿ƒæœçš„è¿æ¥////////////////////////////////////////
 	const CenterServerConfig& centerServerConfig = ConfigManage()->GetCenterServerConfig();
 	ret = m_pTcpConnect->Start(&m_DataLine, centerServerConfig.ip, centerServerConfig.port, SERVICE_TYPE_LOADER, m_InitData.uRoomID);
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::m_pTcpConnect.Start Á¬½ÓÄ£¿éÆô¶¯Ê§°Ü", 0x433);
+		throw new CException("CBaseMainManage::m_pTcpConnect.Start è¿æ¥æ¨¡å—å¯åŠ¨å¤±è´¥", 0x433);
 	}
 
 	err = pthread_create(&m_connectCServerHandle, NULL, TcpConnectThread, (void*)this);
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("TcpConnectThread failed");
-		throw new CException("CBaseMainManage::m_pTcpConnect.Start Á¬½ÓÏß³Ìº¯ÊıÆô¶¯Ê§°Ü", 0x434);
+		throw new CException("CBaseMainManage::m_pTcpConnect.Start è¿æ¥çº¿ç¨‹å‡½æ•°å¯åŠ¨å¤±è´¥", 0x434);
 	}
 
-	//////////////////////////////////½¨Á¢ÓëµÇÂ¼·şµÄÁ¬½Ó////////////////////////////////////////
+	//////////////////////////////////å»ºç«‹ä¸ç™»å½•æœçš„è¿æ¥////////////////////////////////////////
 	ret = m_pGServerConnect->Start(&m_DataLine, m_InitData.uRoomID);
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::m_pGServerConnect.Start Á¬½ÓÄ£¿éÆô¶¯Ê§°Ü", 0x433);
+		throw new CException("CBaseMainManage::m_pGServerConnect.Start è¿æ¥æ¨¡å—å¯åŠ¨å¤±è´¥", 0x433);
 	}
 
-	//////////////////////////////////Æô¶¯¶¨Ê±Æ÷////////////////////////////////////////
+	//////////////////////////////////å¯åŠ¨å®šæ—¶å™¨////////////////////////////////////////
 
 	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
 	{
 		if (!m_pServerTimer[i].Start(&m_DataLine))
 		{
-			throw new CException("CBaseMainManage::m_pServerTimer.Start ¶¨Ê±Æ÷Æô¶¯Ê§°Ü", 0x433);
+			throw new CException("CBaseMainManage::m_pServerTimer.Start å®šæ—¶å™¨å¯åŠ¨å¤±è´¥", 0x433);
 		}
 	}
 
@@ -260,16 +260,16 @@ bool CBaseMainManage::Start()
 	ret = OnStart();
 	if (!ret)
 	{
-		throw new CException("CBaseMainManage::Start OnStart º¯Êı´íÎó", 0x422);
+		throw new CException("CBaseMainManage::Start OnStart å‡½æ•°é”™è¯¯", 0x422);
 	}
 
-	//ĞİÏ¢Ò»µãÊ±¼ä
+	//ä¼‘æ¯ä¸€ç‚¹æ—¶é—´
 	usleep(THREAD_ONCE_HANDLE_MSG);
 
 	return true;
 }
 
-//Í£Ö¹·şÎñ
+//åœæ­¢æœåŠ¡
 bool CBaseMainManage::Stop()
 {
 	if (m_bRun == false)
@@ -295,7 +295,7 @@ bool CBaseMainManage::Stop()
 		m_pGServerConnect->Stop();
 	}
 
-	////¹Ø±ÕÍê³É¶Ë¿Ú
+	////å…³é—­å®Œæˆç«¯å£
 	//if (m_hCompletePort != NULL)
 	//{
 	//	::PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
@@ -303,44 +303,44 @@ bool CBaseMainManage::Stop()
 	//	m_hCompletePort = NULL;
 	//}
 
-	// ¹Ø±ÕÖĞĞÄ·şÁ¬½ÓÏß³Ì
+	// å…³é—­ä¸­å¿ƒæœè¿æ¥çº¿ç¨‹
 	if (m_connectCServerHandle)
 	{
 		pthread_cancel(m_connectCServerHandle);
 		m_connectCServerHandle = 0;
 	}
 
-	//ÍË³ö´¦ÀíÏß³Ì
+	//é€€å‡ºå¤„ç†çº¿ç¨‹
 	if (m_hHandleThread)
 	{
 		pthread_cancel(m_hHandleThread);
 		m_hHandleThread = 0;
 	}
 
-	//¹Ø±Õ¶¨Ê±Æ÷
+	//å…³é—­å®šæ—¶å™¨
 	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
 	{
 		m_pServerTimer[i].Stop();
 	}
 
-	//ÇåÀí¶ÓÁĞÊı¾İ
+	//æ¸…ç†é˜Ÿåˆ—æ•°æ®
 	m_DataLine.CleanLineData();
 
 	return true;
 }
 
-//Ë¢ĞÂ·şÎñ
+//åˆ·æ–°æœåŠ¡
 bool CBaseMainManage::Update()
 {
 	return OnUpdate();
 }
 
-//Òì²½Ïß³Ì½á¹û´¦Àí
+//å¼‚æ­¥çº¿ç¨‹ç»“æœå¤„ç†
 bool CBaseMainManage::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
 {
 	AsynThreadResultLine resultData;
 
-	//°ü×°Êı¾İ
+	//åŒ…è£…æ•°æ®
 	resultData.LineHead.uSize = uResultSize;
 	resultData.LineHead.uDataKind = uDataType;
 
@@ -348,11 +348,11 @@ bool CBaseMainManage::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResu
 	resultData.uHandleResult = uHandleResult;
 	resultData.uHandleID = uHandleID;
 
-	//¼ÓÈë¶ÓÁĞ
+	//åŠ å…¥é˜Ÿåˆ—
 	return (m_DataLine.AddData(&resultData.LineHead, sizeof(resultData), HD_ASYN_THREAD_RESULT, pData, uResultSize) != 0);
 }
 
-//Éè¶¨¶¨Ê±Æ÷
+//è®¾å®šå®šæ—¶å™¨
 bool CBaseMainManage::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = SERVERTIMER_TYPE_PERISIST*/)
 {
 	if (!m_pServerTimer)
@@ -373,7 +373,7 @@ bool CBaseMainManage::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = S
 	return true;
 }
 
-//Çå³ı¶¨Ê±Æ÷
+//æ¸…é™¤å®šæ—¶å™¨
 bool CBaseMainManage::KillTimer(UINT uTimerID)
 {
 	if (!m_pServerTimer)
@@ -394,25 +394,25 @@ bool CBaseMainManage::KillTimer(UINT uTimerID)
 	return true;
 }
 
-//¶ÓÁĞÊı¾İ´¦ÀíÏß³Ì
+//é˜Ÿåˆ—æ•°æ®å¤„ç†çº¿ç¨‹
 void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 {
-	//Êı¾İ¶¨Òå
-	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//Ïß³ÌÆô¶¯Êı¾İÖ¸Õë
-	CBaseMainManage* pMainManage = pData->pMainManage;						//Êı¾İ¹ÜÀíÖ¸Õë
-	CDataLine* m_pDataLine = &pMainManage->m_DataLine;				//Êı¾İ¶ÓÁĞÖ¸Õë
-	//HANDLE	hCompletionPort = pData->hCompletionPort;				//Íê³É¶Ë¿Ú
+	//æ•°æ®å®šä¹‰
+	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//çº¿ç¨‹å¯åŠ¨æ•°æ®æŒ‡é’ˆ
+	CBaseMainManage* pMainManage = pData->pMainManage;						//æ•°æ®ç®¡ç†æŒ‡é’ˆ
+	CDataLine* m_pDataLine = &pMainManage->m_DataLine;				//æ•°æ®é˜Ÿåˆ—æŒ‡é’ˆ
+	//HANDLE	hCompletionPort = pData->hCompletionPort;				//å®Œæˆç«¯å£
 
-	//Ïß³ÌÊı¾İ¶ÁÈ¡Íê³É
+	//çº¿ç¨‹æ•°æ®è¯»å–å®Œæˆ
 	//::SetEvent(pData->hEvent);
 
-	//Êı¾İ»º´æ
+	//æ•°æ®ç¼“å­˜
 	BYTE						szBuffer[LD_MAX_PART];
 	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
 
 	while (pMainManage->m_bRun)
 	{
-		////µÈ´ıÍê³É¶Ë¿Ú
+		////ç­‰å¾…å®Œæˆç«¯å£
 		//bSuccess = ::GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED*)& OverData, INFINITE);
 		//if (bSuccess == FALSE || dwThancferred == 0)
 		//{
@@ -432,7 +432,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 				switch (pDataLineHead->uDataKind)
 				{
-				case HD_SOCKET_READ://SOCKETÊı¾İ¶ÁÈ¡
+				case HD_SOCKET_READ://SOCKETæ•°æ®è¯»å–
 				{
 					SocketReadLine* pSocketRead = (SocketReadLine*)pDataLineHead;
 					if (pMainManage->OnSocketRead(&pSocketRead->netMessageHead,
@@ -444,7 +444,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 					}
 					break;
 				}
-				case HD_ASYN_THREAD_RESULT://Òì²½Ïß³Ì´¦Àí½á¹û
+				case HD_ASYN_THREAD_RESULT://å¼‚æ­¥çº¿ç¨‹å¤„ç†ç»“æœ
 				{
 					AsynThreadResultLine* pDataRead = (AsynThreadResultLine*)pDataLineHead;
 					void* pBuffer = NULL;
@@ -458,20 +458,20 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 					if (size > sizeof(AsynThreadResultLine))
 					{
-						pBuffer = (void*)(pDataRead + 1);			// ÒÆ¶¯Ò»¸öSocketReadLine
+						pBuffer = (void*)(pDataRead + 1);			// ç§»åŠ¨ä¸€ä¸ªSocketReadLine
 					}
 
 					pMainManage->OnAsynThreadResult(pDataRead, pBuffer, size - sizeof(AsynThreadResultLine));
 
 					break;
 				}
-				case HD_TIMER_MESSAGE://¶¨Ê±Æ÷ÏûÏ¢
+				case HD_TIMER_MESSAGE://å®šæ—¶å™¨æ¶ˆæ¯
 				{
 					ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
 					pMainManage->OnTimerMessage(pTimerMessage->uTimerID);
 					break;
 				}
-				case HD_PLATFORM_SOCKET_READ:	// ÖĞĞÄ·şÎñÆ÷·¢¹ıÀ´µÄÏûÏ¢
+				case HD_PLATFORM_SOCKET_READ:	// ä¸­å¿ƒæœåŠ¡å™¨å‘è¿‡æ¥çš„æ¶ˆæ¯
 				{
 					PlatformDataLineHead* pPlaformMessageHead = (PlatformDataLineHead*)pDataLineHead;
 					int sizeCenterMsg = pPlaformMessageHead->platformMessageHead.MainHead.uMessageSize - sizeof(PlatformMessageHead);
@@ -493,13 +493,13 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 			catch (int iCode)
 			{
-				CON_ERROR_LOG("[ LoaderServer ±àºÅ£º%d ] [ ÃèÊö£ºÈç¹ûÓĞcoreÎÄ¼ş£¬Çë²é¿´coreÎÄ¼ş ] [ Ô´´úÂëÎ»ÖÃ£ºÎ´Öª ]", iCode);
+				CON_ERROR_LOG("[ LoaderServer ç¼–å·ï¼š%d ] [ æè¿°ï¼šå¦‚æœæœ‰coreæ–‡ä»¶ï¼Œè¯·æŸ¥çœ‹coreæ–‡ä»¶ ] [ æºä»£ç ä½ç½®ï¼šæœªçŸ¥ ]", iCode);
 				continue;
 			}
 
 			catch (...)
 			{
-				CON_ERROR_LOG("#### Î´Öª±ÀÀ£¡£####");
+				CON_ERROR_LOG("#### æœªçŸ¥å´©æºƒã€‚####");
 				continue;
 			}
 		}
@@ -511,7 +511,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// ÖĞĞÄ·şÁ¬½ÓÏß³Ì
+// ä¸­å¿ƒæœè¿æ¥çº¿ç¨‹
 void * CBaseMainManage::TcpConnectThread(void* pThreadData)
 {
 	CBaseMainManage* pThis = (CBaseMainManage*)pThreadData;

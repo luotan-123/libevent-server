@@ -1,4 +1,4 @@
-﻿#include "main.h"
+#include "main.h"
 #include "GameLogonManage.h"
 #include "GameLogonModule.h"
 #include "Exception.h"

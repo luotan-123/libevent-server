@@ -5,286 +5,286 @@
 #include "fstream"
 #pragma comment(lib,"json_vc71_libmt.lib")
 
-//¶¨Ê±Æ÷ ID
-#define IDT_USER_CUT				1L										//¶ÏÏß¶¨Ê±Æ÷ ID
+//å®šæ—¶å™¨ ID
+#define IDT_USER_CUT				1L										//æ–­çº¿å®šæ—¶å™¨ ID
 
-#define TIME_SEND_CARD				30				//·¢ÅÆ¶¨Ê±Æ÷
-#define TIME_SEND_ALL_CARD			31				//·¢ËùÓĞÅÆ
-#define TIME_SEND_CARD_ANI      	32				//µÈ´ı·´ÅÆ
-#define TIME_SEND_CARD_FINISH       33              //·¢ÅÆ½áÊø
-#define TIME_ROB_NT					34				//ÇÀµØÖ÷
-#define TIME_ADD_DOUBLE				35				//¼Ó±¶
-#define TIME_OUT_CARD				36				//³öÅÆ
-#define TIME_WAIT_NEWTURN			37				//ĞÂÒ»ÂÖÊ±¼äÉèÖÃ
-#define TIME_GAME_FINISH			38				//ÓÎÏ·½áÊø¶¨Ê±Æ÷
-#define TIME_JIAO_FEN               39              //½Ğ·Ö¶¨Ê±Æ÷
-#define TIME_SHOW_CARD              40              //ÁÁÅÆ
-#define TIME_START_GAME				41				//±ÈÈü¿ªÊ¼Ê±¼äÉèÖÃ
-//ÓÎÏ·½áÊø±êÖ¾¶¨Òå
-#define GF_NO_CALL_SCORE			15				//ÎŞÈË½Ğ·Ö
-#define GF_AHEAD_END				16				//ÌáÇ°½áÊø
+#define TIME_SEND_CARD				30				//å‘ç‰Œå®šæ—¶å™¨
+#define TIME_SEND_ALL_CARD			31				//å‘æ‰€æœ‰ç‰Œ
+#define TIME_SEND_CARD_ANI      	32				//ç­‰å¾…åç‰Œ
+#define TIME_SEND_CARD_FINISH       33              //å‘ç‰Œç»“æŸ
+#define TIME_ROB_NT					34				//æŠ¢åœ°ä¸»
+#define TIME_ADD_DOUBLE				35				//åŠ å€
+#define TIME_OUT_CARD				36				//å‡ºç‰Œ
+#define TIME_WAIT_NEWTURN			37				//æ–°ä¸€è½®æ—¶é—´è®¾ç½®
+#define TIME_GAME_FINISH			38				//æ¸¸æˆç»“æŸå®šæ—¶å™¨
+#define TIME_JIAO_FEN               39              //å«åˆ†å®šæ—¶å™¨
+#define TIME_SHOW_CARD              40              //äº®ç‰Œ
+#define TIME_START_GAME				41				//æ¯”èµ›å¼€å§‹æ—¶é—´è®¾ç½®
+//æ¸¸æˆç»“æŸæ ‡å¿—å®šä¹‰
+#define GF_NO_CALL_SCORE			15				//æ— äººå«åˆ†
+#define GF_AHEAD_END				16				//æå‰ç»“æŸ
 
 //*****************************************************************************************
-//ÓÎÏ·×ÀÀà
+//æ¸¸æˆæ¡Œç±»
 class CServerGameDesk : public CGameDesk
 {
-	//¾²Ì¬±äÁ¿
+	//é™æ€å˜é‡
 private:
-	bool  m_bHaveKing;      			//ÊÇ·ñÓĞÍõ(DEF=1,0)
-	BOOL  m_bKingCanReplace;			//Íõ¿É·ñ´úÌæÅÆ(DEF=1,0)
-	int	  m_iModel;						//ÇÀµØÖ÷»¹ÊÇ½Ğ·ÖÄ£Ê½(1:½Ğ·ÖÄ£Ê½,0:ÇÀµØÖ÷Ä£Ê½)
-	bool  m_bRobnt;         			//ÊÇ·ñ¿ÉÒÔÇÀµØÖ÷
-	bool  m_bAdddouble;    				//ÊÇ·ñ¿ÉÒÔ¼Ó±¶
-	bool  m_bShowcard;     				//ÊÇ·ñ¿ÉÒÔÃ÷ÅÆ
-	UINT  m_iPlayCard;     				//ËùÓĞÆË¿Ë¸±Êı(1,DEF=2,3
-	UINT  m_iPlayCount;    				//Ê¹ÓÃÆË¿ËÊı(52,54,104,DEF=108)
-	UINT  m_iSendCount;    				//·¢ÅÆÊı(48,51,DEF=100,108)
-	UINT  m_iBackCount;    				//µ×ÅÆÊı(3,6,DEF=8,12)
-	UINT  m_iUserCount;    				//Íæ¼ÒÊÖÖĞÅÆÊı(12,13,DEF=25,27)
-	DWORD m_iCardShape;	  				//ÅÆĞÍ
-	//=============À©Õ¹
-	BYTE m_iThinkTime;               	//ÓÎÏ·Ë¼¿¼Ê±¼ä
-	BYTE m_iBeginTime;               	//ÓÎÏ·¿ªÊ¼Ê±¼ä
-	BYTE m_iSendCardTime;           	//·¢ÅÆÊ±¼ä
-	BYTE m_iCallScoreTime;           	//½Ğ·ÖÊ±¼ä
-	BYTE m_iRobNTTime;              	//ÇÀµØÖ÷Ê±¼ä
-	BYTE m_iAddDoubleTime;           	//¼Ó±¶Ê±¼ä
-	bool m_bTurnRule;					//ÓÎÏ·Ë³Ğò
-	int	 m_iTimeOutNoCardOut;			//µ½´ïÊ±¼äÊÇ·ñ¿ÉÒÔ²»³öÅÆ£¨1Îª¿ÉÒÔ²»³öÅÆ£©
-	bool m_bNoXiPai;								//ÊÇ·ñÏ´ÅÆ£¬²»Ï´ÅÆÅÆºÜºÃ
+	bool  m_bHaveKing;      			//æ˜¯å¦æœ‰ç‹(DEF=1,0)
+	BOOL  m_bKingCanReplace;			//ç‹å¯å¦ä»£æ›¿ç‰Œ(DEF=1,0)
+	int	  m_iModel;						//æŠ¢åœ°ä¸»è¿˜æ˜¯å«åˆ†æ¨¡å¼(1:å«åˆ†æ¨¡å¼,0:æŠ¢åœ°ä¸»æ¨¡å¼)
+	bool  m_bRobnt;         			//æ˜¯å¦å¯ä»¥æŠ¢åœ°ä¸»
+	bool  m_bAdddouble;    				//æ˜¯å¦å¯ä»¥åŠ å€
+	bool  m_bShowcard;     				//æ˜¯å¦å¯ä»¥æ˜ç‰Œ
+	UINT  m_iPlayCard;     				//æ‰€æœ‰æ‰‘å…‹å‰¯æ•°(1,DEF=2,3
+	UINT  m_iPlayCount;    				//ä½¿ç”¨æ‰‘å…‹æ•°(52,54,104,DEF=108)
+	UINT  m_iSendCount;    				//å‘ç‰Œæ•°(48,51,DEF=100,108)
+	UINT  m_iBackCount;    				//åº•ç‰Œæ•°(3,6,DEF=8,12)
+	UINT  m_iUserCount;    				//ç©å®¶æ‰‹ä¸­ç‰Œæ•°(12,13,DEF=25,27)
+	DWORD m_iCardShape;	  				//ç‰Œå‹
+	//=============æ‰©å±•
+	BYTE m_iThinkTime;               	//æ¸¸æˆæ€è€ƒæ—¶é—´
+	BYTE m_iBeginTime;               	//æ¸¸æˆå¼€å§‹æ—¶é—´
+	BYTE m_iSendCardTime;           	//å‘ç‰Œæ—¶é—´
+	BYTE m_iCallScoreTime;           	//å«åˆ†æ—¶é—´
+	BYTE m_iRobNTTime;              	//æŠ¢åœ°ä¸»æ—¶é—´
+	BYTE m_iAddDoubleTime;           	//åŠ å€æ—¶é—´
+	bool m_bTurnRule;					//æ¸¸æˆé¡ºåº
+	int	 m_iTimeOutNoCardOut;			//åˆ°è¾¾æ—¶é—´æ˜¯å¦å¯ä»¥ä¸å‡ºç‰Œï¼ˆ1ä¸ºå¯ä»¥ä¸å‡ºç‰Œï¼‰
+	bool m_bNoXiPai;								//æ˜¯å¦æ´—ç‰Œï¼Œä¸æ´—ç‰Œç‰Œå¾ˆå¥½
 protected:
-	CGameTaskLogic          m_Logic;                           //ÓÎÏ·ÖĞµÄÂß¼­£¨°üº¬ÈÎÎñÂß¼­£©
-	GameMutipleStruct       m_GameMutiple;                     //ÓÎÏ·ÖĞµÄ±¶Êı
+	CGameTaskLogic          m_Logic;                           //æ¸¸æˆä¸­çš„é€»è¾‘ï¼ˆåŒ…å«ä»»åŠ¡é€»è¾‘ï¼‰
+	GameMutipleStruct       m_GameMutiple;                     //æ¸¸æˆä¸­çš„å€æ•°
 
-	int                     m_iBaseMult;					    //ÓÎÏ·±¶Êı
-	int                     m_iAddDoubleLimit;                  //¼Ó±¶ÏŞÖÆ
-	int                     m_iGameMaxLimit;                   //·¿¼ä×î´óÊäÓ® 
-	int                     m_iLimitPoint;                     //ÓÎÏ·×î´ó±¶Êı
-	int                     m_iGameBaseScore;                   //ÓÎÏ·µ×·Ö£¬´ÓÊı¾İ¿âÖĞ»ñµÃ
+	int                     m_iBaseMult;					    //æ¸¸æˆå€æ•°
+	int                     m_iAddDoubleLimit;                  //åŠ å€é™åˆ¶
+	int                     m_iGameMaxLimit;                   //æˆ¿é—´æœ€å¤§è¾“èµ¢ 
+	int                     m_iLimitPoint;                     //æ¸¸æˆæœ€å¤§å€æ•°
+	int                     m_iGameBaseScore;                   //æ¸¸æˆåº•åˆ†ï¼Œä»æ•°æ®åº“ä¸­è·å¾—
 
-	int  	                m_iLimitPlayGame;					//ÖÁÉÙ´òÍê¶àÉÙ¾Ö
-	BYTE					m_iBeenPlayGame;					//ÒÑ¾­ÓÎÏ·µÄ¾ÖÊı
-	BYTE					m_iLeaveArgee;						//Àë¿ªÍ¬Òâ±êÖ¾
-	//×´Ì¬ĞÅÏ¢
-	BYTE					m_iUserCardCount[PLAY_COUNT];		//ÓÃ»§ÊÖÉÏÆË¿ËÊıÄ¿
-	BYTE					m_iUserCard[PLAY_COUNT][45];		//ÓÃ»§ÊÖÉÏµÄÆË¿Ë
-	BYTE					m_iBackCard[12];					//µ×ÅÆÁĞ±í
-	BYTE					m_iBaseOutCount;					//³öÅÆµÄÊıÄ¿
-	BYTE					m_iDeskCardCount[PLAY_COUNT];		//×ÀÃæÆË¿ËµÄÊıÄ¿
-	BYTE					m_iDeskCard[PLAY_COUNT][45];		//×ÀÃæµÄÆË¿Ë
-	//·¢ÅÆÊı¾İ
-	BYTE					m_iSendCardPos;						//·¢ÅÆÎ»ÖÃ
+	int  	                m_iLimitPlayGame;					//è‡³å°‘æ‰“å®Œå¤šå°‘å±€
+	BYTE					m_iBeenPlayGame;					//å·²ç»æ¸¸æˆçš„å±€æ•°
+	BYTE					m_iLeaveArgee;						//ç¦»å¼€åŒæ„æ ‡å¿—
+	//çŠ¶æ€ä¿¡æ¯
+	BYTE					m_iUserCardCount[PLAY_COUNT];		//ç”¨æˆ·æ‰‹ä¸Šæ‰‘å…‹æ•°ç›®
+	BYTE					m_iUserCard[PLAY_COUNT][45];		//ç”¨æˆ·æ‰‹ä¸Šçš„æ‰‘å…‹
+	BYTE					m_iBackCard[12];					//åº•ç‰Œåˆ—è¡¨
+	BYTE					m_iBaseOutCount;					//å‡ºç‰Œçš„æ•°ç›®
+	BYTE					m_iDeskCardCount[PLAY_COUNT];		//æ¡Œé¢æ‰‘å…‹çš„æ•°ç›®
+	BYTE					m_iDeskCard[PLAY_COUNT][45];		//æ¡Œé¢çš„æ‰‘å…‹
+	//å‘ç‰Œæ•°æ®
+	BYTE					m_iSendCardPos;						//å‘ç‰Œä½ç½®
 
-	BYTE					m_iHaveThingPeople;					//ÓĞÊÂÒª×ßÍæ¼Ò
-	BYTE					m_iGameFlag;						//ÓÎÏ·×´Ì¬Ğ¡·Ö½â
+	BYTE					m_iHaveThingPeople;					//æœ‰äº‹è¦èµ°ç©å®¶
+	BYTE					m_iGameFlag;						//æ¸¸æˆçŠ¶æ€å°åˆ†è§£
 
-	bool					m_bIsLastCard;						//ÊÇ·ñÓĞÉÏÂÖÊı¾İ
-	BYTE					m_iLastCardCount[PLAY_COUNT];		//ÉÏÂÖÆË¿ËµÄÊıÄ¿
-	BYTE					m_iLastOutCard[PLAY_COUNT][45];		//ÉÏÂÖµÄÆË¿Ë
-	BYTE					m_byteHitPass;						//¼ÇÂ¼²»³ö
-	bool                    m_byPass[PLAY_COUNT];				//±¾ÂÖ²»³ö
-	bool                    m_byLastTurnPass[PLAY_COUNT];     //ÉÏÂÖ²»³ö
-	BYTE                    m_bySendFinishCount;               //·¢ÍêÅÆµÄÈË
+	bool					m_bIsLastCard;						//æ˜¯å¦æœ‰ä¸Šè½®æ•°æ®
+	BYTE					m_iLastCardCount[PLAY_COUNT];		//ä¸Šè½®æ‰‘å…‹çš„æ•°ç›®
+	BYTE					m_iLastOutCard[PLAY_COUNT][45];		//ä¸Šè½®çš„æ‰‘å…‹
+	BYTE					m_byteHitPass;						//è®°å½•ä¸å‡º
+	bool                    m_byPass[PLAY_COUNT];				//æœ¬è½®ä¸å‡º
+	bool                    m_byLastTurnPass[PLAY_COUNT];     //ä¸Šè½®ä¸å‡º
+	BYTE                    m_bySendFinishCount;               //å‘å®Œç‰Œçš„äºº
 
-	BYTE					m_bThrowoutCard;						//Ã÷ÅÆ
-	BYTE					m_bFirstCallScore;						//µÚÒ»¸ö½ĞµØÖ÷Õß
-	BYTE					m_bCurrentCallScore;					//µ±Ç°½Ğ·ÖÕß
+	BYTE					m_bThrowoutCard;						//æ˜ç‰Œ
+	BYTE					m_bFirstCallScore;						//ç¬¬ä¸€ä¸ªå«åœ°ä¸»è€…
+	BYTE					m_bCurrentCallScore;					//å½“å‰å«åˆ†è€…
 
-	int						m_iUpGradePeople;						//×¯¼ÒÎ»ÖÃ
-	int						m_iNtFirstCount;						//µØÖ÷³öµÄµÚÒ»ÊÖÅÆÊı
+	int						m_iUpGradePeople;						//åº„å®¶ä½ç½®
+	int						m_iNtFirstCount;						//åœ°ä¸»å‡ºçš„ç¬¬ä¸€æ‰‹ç‰Œæ•°
 
 	int						m_lastCardListIndex;
-	BYTE					m_lastCardList[128];					//ÉÏ´Î³öÅÆÁĞ±í
+	BYTE					m_lastCardList[128];					//ä¸Šæ¬¡å‡ºç‰Œåˆ—è¡¨
 
-	//ÔËĞĞĞÅÏ¢
-	int						m_iOutCardPeople;						//ÏÖÔÚ³öÅÆÓÃ»§
-	int						m_iFirstOutPeople;						//ÏÈ³öÅÆµÄÓÃ»§
-	int						m_iNowBigPeople;						//µ±Ç°×ÀÃæÉÏ×î´ó³öÅÆÕß
-	int						m_iRecvMsg;								//ÊÕµ½ÏûÏ¢¼ÆÊı
+	//è¿è¡Œä¿¡æ¯
+	int						m_iOutCardPeople;						//ç°åœ¨å‡ºç‰Œç”¨æˆ·
+	int						m_iFirstOutPeople;						//å…ˆå‡ºç‰Œçš„ç”¨æˆ·
+	int						m_iNowBigPeople;						//å½“å‰æ¡Œé¢ä¸Šæœ€å¤§å‡ºç‰Œè€…
+	int						m_iRecvMsg;								//æ”¶åˆ°æ¶ˆæ¯è®¡æ•°
 
-	bool					m_bIsCall[3];			//±ê¼Ç1,2,3·ÖÊÇ·ñ±»½Ğ
+	bool					m_bIsCall[3];			//æ ‡è®°1,2,3åˆ†æ˜¯å¦è¢«å«
 	int						m_iCallScore[PLAY_COUNT];
-	int						m_iAwardPoint[PLAY_COUNT];				//ÅÆĞÎ¼Ó·Ö
-	bool					m_bAuto[PLAY_COUNT];					//ÍĞ¹ÜÉèÖÃ
-	//±ÈÈü³¡Ê¹ÓÃ±äÁ¿
-	int						m_iWinPoint[PLAY_COUNT];				//Ê¤Õß
-	int						m_iDealPeople;							//·´ÅÆÍæ¼Ò
-	bool					m_bHaveSendBack;						//¸ÃÂÖÊÇ·ñ·¢¹ıµ×ÅÆ
-	bool					m_bCanleave[PLAY_COUNT];				//ÄÜ·ñÀë¿ª
+	int						m_iAwardPoint[PLAY_COUNT];				//ç‰Œå½¢åŠ åˆ†
+	bool					m_bAuto[PLAY_COUNT];					//æ‰˜ç®¡è®¾ç½®
+	//æ¯”èµ›åœºä½¿ç”¨å˜é‡
+	int						m_iWinPoint[PLAY_COUNT];				//èƒœè€…
+	int						m_iDealPeople;							//åç‰Œç©å®¶
+	bool					m_bHaveSendBack;						//è¯¥è½®æ˜¯å¦å‘è¿‡åº•ç‰Œ
+	bool					m_bCanleave[PLAY_COUNT];				//èƒ½å¦ç¦»å¼€
 
-	BYTE					m_iPrepareNT;							//Ô¤±¸×¯¼Ò
-	BYTE                    m_iFirstRobNt;                        //µÚÒ»¸ö½ĞµØÖ÷µÄÈË
-	BYTE                    m_iFirstShow;                         ///µÚÒ»¸öÃ÷ÅÆµÄÈË
-	BYTE                    m_iCurrentRobPeople;                  ///µ±Ç°½ĞµØÖ÷µÄÈË
+	BYTE					m_iPrepareNT;							//é¢„å¤‡åº„å®¶
+	BYTE                    m_iFirstRobNt;                        //ç¬¬ä¸€ä¸ªå«åœ°ä¸»çš„äºº
+	BYTE                    m_iFirstShow;                         ///ç¬¬ä¸€ä¸ªæ˜ç‰Œçš„äºº
+	BYTE                    m_iCurrentRobPeople;                  ///å½“å‰å«åœ°ä¸»çš„äºº
 
-	BYTE                    m_iRobStation[PLAY_COUNT];            ///Íæ¼ÒÇÀµØÖ÷×´Ì¬(0-Î´²Ù×÷ 255-²»½ĞµØÖ÷ ÆäËû-½ĞµØÖ÷)
-	BYTE                    m_iAddStation[PLAY_COUNT];            ///Íæ¼Ò¼Ó±¶×´Ì¬                     
+	BYTE                    m_iRobStation[PLAY_COUNT];            ///ç©å®¶æŠ¢åœ°ä¸»çŠ¶æ€(0-æœªæ“ä½œ 255-ä¸å«åœ°ä¸» å…¶ä»–-å«åœ°ä¸»)
+	BYTE                    m_iAddStation[PLAY_COUNT];            ///ç©å®¶åŠ å€çŠ¶æ€                     
 
-	//”à¾€Íæ¼Ò
-	BYTE					m_iFirstCutPeople;						//µÚÒ»‚€µô¾€Íæ¼Ò
-	int                     m_icountleave;                           //µãÀë¿ªÈËÊıÍ³¼Æ
-	///Íæ¼Ò×¼±¸×´Ì¬
+	//æ–·ç·šç©å®¶
+	BYTE					m_iFirstCutPeople;						//ç¬¬ä¸€å€‹æ‰ç·šç©å®¶
+	int                     m_icountleave;                           //ç‚¹ç¦»å¼€äººæ•°ç»Ÿè®¡
+	///ç©å®¶å‡†å¤‡çŠ¶æ€
 	bool                    m_bUserReady[PLAY_COUNT];
-	bool					m_bUserNetCut[PLAY_COUNT];	//±êÊ¶Íæ¼ÒÊÇ·ñ¶ÏÏß
-	///Íæ¼Ò³ÔÅÆ³ôÅÆÊı¾İ
+	bool					m_bUserNetCut[PLAY_COUNT];	//æ ‡è¯†ç©å®¶æ˜¯å¦æ–­çº¿
+	///ç©å®¶åƒç‰Œè‡­ç‰Œæ•°æ®
 	vector<bool>			m_vecWinInfo[PLAY_COUNT];
 	TZongResult				m_tZongResult;
-	bool					m_bRetryStart;//ÊÇ·ñÔÙ´Î¿ªÊ¼
+	bool					m_bRetryStart;//æ˜¯å¦å†æ¬¡å¼€å§‹
 	bool                    m_byGameEndType;
 
-	//×Ô¶¨Òå¹æÔò
-	int                     m_iRunTime; //µ¥Î»Ãë
-	long long               m_iGameBeginTime; //ÓÎÏ·¿ªÊ¼Ê±¼ä
-	long long               m_iGameEndTime;//ÓÎÏ·½áÊøÊ±¼ä
-	int						m_iFengDing;//·â¶¥±¶Êı£¨Õ¨µ¯£©
+	//è‡ªå®šä¹‰è§„åˆ™
+	int                     m_iRunTime; //å•ä½ç§’
+	long long               m_iGameBeginTime; //æ¸¸æˆå¼€å§‹æ—¶é—´
+	long long               m_iGameEndTime;//æ¸¸æˆç»“æŸæ—¶é—´
+	int						m_iFengDing;//å°é¡¶å€æ•°ï¼ˆç‚¸å¼¹ï¼‰
 	BYTE					m_byMaxScoreStation;
-	bool                    m_bPoChan[PLAY_COUNT];//ÊÇ·ñÆÆ²ú
-	long long               m_iJiaoFenBeginTime; //ÓÎÏ·¿ªÊ¼Ê±¼ä
-	long long               m_iOutCardnBeginTime;//³öÅÆ¿ªÊ¼Ê±¼ä
-	int						m_iRobotCount;       //»úÆ÷ÈËÊıÁ¿
-	BYTE					m_byRobotDesk1, m_byRobotDesk2; //»úÆ÷ÈËµÄÎ»ÖÃ
+	bool                    m_bPoChan[PLAY_COUNT];//æ˜¯å¦ç ´äº§
+	long long               m_iJiaoFenBeginTime; //æ¸¸æˆå¼€å§‹æ—¶é—´
+	long long               m_iOutCardnBeginTime;//å‡ºç‰Œå¼€å§‹æ—¶é—´
+	int						m_iRobotCount;       //æœºå™¨äººæ•°é‡
+	BYTE					m_byRobotDesk1, m_byRobotDesk2; //æœºå™¨äººçš„ä½ç½®
 	bool					m_bIsRobot[PLAY_COUNT];
-	//º¯Êı¶¨Òå
+	//å‡½æ•°å®šä¹‰
 public:
-	//¹¹Ôìº¯Êı
+	//æ„é€ å‡½æ•°
 	CServerGameDesk();
-	//Îö¹¹º¯Êı
+	//ææ„å‡½æ•°
 	virtual ~CServerGameDesk();
 
-	//ÖØÔØº¯Êı
+	//é‡è½½å‡½æ•°
 public:
-	//ÓÎÏ·¿ªÊ¼
+	//æ¸¸æˆå¼€å§‹
 	virtual bool GameBegin(BYTE bBeginFlag);
-	//ÓÎÏ·½áÊø
+	//æ¸¸æˆç»“æŸ
 	virtual bool GameFinish(BYTE bDeskStation, BYTE bCloseFlag);
-	//ÅĞ¶ÏÊÇ·ñÕıÔÚÓÎÏ·
+	//åˆ¤æ–­æ˜¯å¦æ­£åœ¨æ¸¸æˆ
 	virtual bool IsPlayGame(BYTE bDeskStation);
-	//ÓÎÏ·Êı¾İ°ü´¦Àíº¯Êı
+	//æ¸¸æˆæ•°æ®åŒ…å¤„ç†å‡½æ•°
 	virtual bool HandleNotifyMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser = false);
-	//Íæ¼Ò¶ÏÏß´¦Àí
+	//ç©å®¶æ–­çº¿å¤„ç†
 	virtual bool UserNetCut(GameUserInfo *pUser);
-	/// ÓÃ»§Àë¿ªÓÎÏ·×À
+	/// ç”¨æˆ·ç¦»å¼€æ¸¸æˆæ¡Œ
 	virtual bool UserLeftDesk(GameUserInfo* pUser);
 public:
-	//»ñÈ¡ÓÎÏ·×´Ì¬ĞÅÏ¢
+	//è·å–æ¸¸æˆçŠ¶æ€ä¿¡æ¯
 	virtual bool OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser);
-	//ÖØÖÃÓÎÏ·×´Ì¬
+	//é‡ç½®æ¸¸æˆçŠ¶æ€
 	virtual bool ReSetGameState(BYTE bLastStation);
-	//¶¨Ê±Æ÷ÏûÏ¢
+	//å®šæ—¶å™¨æ¶ˆæ¯
 	virtual bool OnTimer(UINT uTimerID);
-	//ÅäÖÃINIÎÄ¼ş
+	//é…ç½®INIæ–‡ä»¶
 	virtual bool InitDeskGameStation();
-	//×À×Ó³É¹¦½âÉ¢
+	//æ¡Œå­æˆåŠŸè§£æ•£
 	virtual void OnDeskSuccessfulDissmiss(bool isDismissMidway = true);
-	//³õÊ¼»¯×À×Ó½âÉ¢Êı¾İ
+	//åˆå§‹åŒ–æ¡Œå­è§£æ•£æ•°æ®
 	virtual void InitDeskGameData();
-	// Íæ¼ÒÇëÇóÍĞ¹Ü
+	// ç©å®¶è¯·æ±‚æ‰˜ç®¡
 	virtual bool OnHandleUserRequestAuto(BYTE deskStation);
-	// Íæ¼ÒÈ¡ÏûÍĞ¹Ü
+	// ç©å®¶å–æ¶ˆæ‰˜ç®¡
 	virtual bool OnHandleUserRequestCancelAuto(BYTE deskStation);
-	// ¶¯Ì¬¼ÓÔØÅäÖÃÎÄ¼şÊı¾İ
+	// åŠ¨æ€åŠ è½½é…ç½®æ–‡ä»¶æ•°æ®
 	virtual void LoadDynamicConfig();
 public:
-	//·şÎñ¶Ë×Ô¶¯¿ªÊ¼²»ÓÉ·şÎñ¶Ë¿ØÖÆ
+	//æœåŠ¡ç«¯è‡ªåŠ¨å¼€å§‹ä¸ç”±æœåŠ¡ç«¯æ§åˆ¶
 	BOOL StartGame();
-	//ÓÎÏ·×¼±¸¹¤×÷
+	//æ¸¸æˆå‡†å¤‡å·¥ä½œ
 	BOOL GamePrepare();
-	//·¢ÅÆ¹ı³ÌÖĞ
+	//å‘ç‰Œè¿‡ç¨‹ä¸­
 	BOOL SendCardMsg(BYTE bDeskStation, BYTE bCard);
-	//³õÊ¼»¯Ò»ÏµÁĞ¹¤×÷(ÖØĞÂ¿ªÊ¼ÓÎÏ·²Å½øĞĞ´ËÖÖ³õÊ¼»¯)
+	//åˆå§‹åŒ–ä¸€ç³»åˆ—å·¥ä½œ(é‡æ–°å¼€å§‹æ¸¸æˆæ‰è¿›è¡Œæ­¤ç§åˆå§‹åŒ–)
 	BOOL InitThisGame();
-	//¼ÓÔØÅäÖÃ
+	//åŠ è½½é…ç½®
 	BOOL LoadExtIni();
-	//¸ù¾İ·¿¼äID¼ÓÔØÅäÖÃ
+	//æ ¹æ®æˆ¿é—´IDåŠ è½½é…ç½®
 	BOOL LoadExtIni(int iRoomID);
-	//·¢ËÍÆË¿Ë¸øÓÃ»§
+	//å‘é€æ‰‘å…‹ç»™ç”¨æˆ·
 	BOOL SendCard();
-	//Ò»´Î½«ËùµÄÅÆÈ«²¿·¢ËÍ
+	//ä¸€æ¬¡å°†æ‰€çš„ç‰Œå…¨éƒ¨å‘é€
 	BOOL	SendAllCard();
-	//°lËÍ½YÊø
+	//ç™¼é€çµæŸ
 	BOOL	SendCardFinish();
-	//·¢ËÍ½Ğ·Ö
+	//å‘é€å«åˆ†
 	BOOL SendCallScore(BYTE bDeskStation, BYTE byCard = 0);
-	//ÓÃ»§ÉÏ½»½Ğ·Ö
+	//ç”¨æˆ·ä¸Šäº¤å«åˆ†
 	BOOL UserCallScore(BYTE bDeskStation, int iVal);
-	//½Ğ·Ö½áÊø
+	//å«åˆ†ç»“æŸ
 	BOOL CallScoreFinish();
-	//·¢ËÍÇÀµØÖ÷ÏûÏ¢
+	//å‘é€æŠ¢åœ°ä¸»æ¶ˆæ¯
 	BOOL	SendRobNT(BYTE bDeskStation, BYTE byCard = 0);
-	//Íæ¼ÒÇÀµØÖ÷ÏûÏ¢
+	//ç©å®¶æŠ¢åœ°ä¸»æ¶ˆæ¯
 	BOOL	UserRobNT(BYTE bDeskStation, int iVal);
-	//ÇÀµØÖ÷½áÊø
+	//æŠ¢åœ°ä¸»ç»“æŸ
 	BOOL	RobNTFinish();
-	//·¢ËÍµ×ÅÆ
+	//å‘é€åº•ç‰Œ
 	BOOL	SendBackCard();
-	//·¢ËÍ¼Ó±¶ÏûÏ¢
+	//å‘é€åŠ å€æ¶ˆæ¯
 	BOOL	SendAddDouble();
-	//Íæ¼Ò¼Ó±¶
+	//ç©å®¶åŠ å€
 	BOOL	UserAddDouble(BYTE bDeskStation, int iVal);
-	//¼Ó±¶½á¹û
+	//åŠ å€ç»“æœ
 	BOOL	AddDoubleResult();
-	//¼Ó±¶½áÊø
+	//åŠ å€ç»“æŸ
 	BOOL	AddDoubleFinish();
-	//ÁÁÅÆ
+	//äº®ç‰Œ
 	BOOL	SendShowCard();
-	//Ã÷ÅÆ
+	//æ˜ç‰Œ
 	BOOL	UserShowCard(BYTE bDeskStation, int iValue);
-	//Ã÷ÅÆ½áÊø
+	//æ˜ç‰Œç»“æŸ
 	BOOL	ShowCardFinish();
-	//ÓÎÏ·¿ªÊ¼
+	//æ¸¸æˆå¼€å§‹
 	BOOL	BeginPlay();
-	//ÓÃ»§³öÅÆ
+	//ç”¨æˆ·å‡ºç‰Œ
 	BOOL	UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardCount);
-	//ĞÂÒ»ÂÖ¿ªÊ¼
+	//æ–°ä¸€è½®å¼€å§‹
 	BOOL NewPlayTurn(BYTE bDeskStation);
-	//ÓÃ»§ÇëÇóÀë¿ª
+	//ç”¨æˆ·è¯·æ±‚ç¦»å¼€
 	BOOL UserHaveThing(BYTE bDeskStation, char * szMessage);
-	//Í¬ÒâÓÃ»§Àë¿ª
+	//åŒæ„ç”¨æˆ·ç¦»å¼€
 	BOOL ArgeeUserLeft(BYTE bDeskStation, BOOL bArgee);
-	//ÓÃ»§ÍĞ¹Ü
+	//ç”¨æˆ·æ‰˜ç®¡
 	bool UserSetAuto(BYTE bDeskStation, bool bAutoCard);
-	//Ìî³äÈÕÖ¾±í
+	//å¡«å……æ—¥å¿—è¡¨
 	//	bool FindAllInfo(BYTE iCardList[],int iCardCount,GamePlayInfo  &iWriteInfo);
-	//ÊÇ·ñéĞÂÒ»İ†
+	//æ˜¯å¦ç‚ºæ–°ä¸€è¼ª
 	BOOL IsNewTurn();
-	//š¢ËùÓĞÓ‹•rÆ÷
+	//æ®ºæ‰€æœ‰è¨ˆæ™‚å™¨
 	void KillAllTimer();
-	//¼Ó·ÖÅĞ¶Ï
+	//åŠ åˆ†åˆ¤æ–­
 	BOOL IsAwardPoin(BYTE iOutCard[], int iCardCount, BYTE bDeskStation);
-	//×ÀÃæ±¶Êı
+	//æ¡Œé¢å€æ•°
 	int GetDeskBasePoint();
-	//·¿¼ä±¶Êı
+	//æˆ¿é—´å€æ•°
 	int GetRoomMul();
-	//ÌÓÅÜ¿Û·Ö
+	//é€ƒè·‘æ‰£åˆ†
 	int GetRunPublish();
-	//ÌÓÅÜ¿Û·Ö
+	//é€ƒè·‘æ‰£åˆ†
 	int GetRunPublish(BYTE bDeskStation);
-	//ÉèÖÃÏÂÒ»¸ö×¯¼Ò
+	//è®¾ç½®ä¸‹ä¸€ä¸ªåº„å®¶
 	BOOL SetNextBanker(BYTE bGameFinishState = 0);
-	//»ñÈ¡ÏÂÒ»¸ö×¯¼Ò
+	//è·å–ä¸‹ä¸€ä¸ªåº„å®¶
 	BYTE GetNextBanker();
-	//»úÆ÷ÈËÍĞ¹Ü
+	//æœºå™¨äººæ‰˜ç®¡
 	BOOL UseAI(BYTE bDeskStation);
-	//Íæ¼Ò³¬Ê±³öÅÆ(È«²¿ÓÉ·şÎñ¶Ë½Ó¹Ü)
+	//ç©å®¶è¶…æ—¶å‡ºç‰Œ(å…¨éƒ¨ç”±æœåŠ¡ç«¯æ¥ç®¡)
 	BOOL UserAutoOutCard(BYTE bDeskStation);
-	//»ñÈ¡ÏÂÒ»¸öÍæ¼ÒÎ»ÖÃ
+	//è·å–ä¸‹ä¸€ä¸ªç©å®¶ä½ç½®
 	BYTE GetNextDeskStation(BYTE bDeskStation);
-	//»ñÈ¡Ò»¸öÇÀµØÖ÷Î»ÖÃ
+	//è·å–ä¸€ä¸ªæŠ¢åœ°ä¸»ä½ç½®
 	BYTE GetRobNtDeskStation(BYTE bDeskStation);
-	//ÊÇ·ñÎªÎ´³ö¹ıÅÆ
+	//æ˜¯å¦ä¸ºæœªå‡ºè¿‡ç‰Œ
 	BYTE GetNoOutCard();
 
-	//¼ì²éÊÇ·ñ³¬¶ËÍæ¼Ò
+	//æ£€æŸ¥æ˜¯å¦è¶…ç«¯ç©å®¶
 	bool	IsSuperUser(BYTE byDeskStation);
-	//ÑéÖ¤ÊÇ·ñ³¬¶Ë
+	//éªŒè¯æ˜¯å¦è¶…ç«¯
 	void	SpuerExamine(BYTE byDeskStation);
-	//´ó½áËã
+	//å¤§ç»“ç®—
 	void	UpdateCalculateBoard();
-	//·¿¼ä¹æÔò½âÎö
+	//æˆ¿é—´è§„åˆ™è§£æ
 	void GetSpecialRule();
-	//»ñÈ¡µ±Ç°Ê±¼ä£¬·µ»ØÃë
+	//è·å–å½“å‰æ—¶é—´ï¼Œè¿”å›ç§’
 	long long GetCurTime();
-	//·¢ËÍ³öÅÆ³ö´íÏûÏ¢
+	//å‘é€å‡ºç‰Œå‡ºé”™æ¶ˆæ¯
 	void SendOutCardError(BYTE byDeskStation, int iErrorCode);
 };
 

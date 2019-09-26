@@ -1,46 +1,46 @@
 #pragma once
 
-///¿ª·¢¿â°æ±¾
-#define DEV_LIB_VER				5									///¿ª·¢¿â°æ±¾
+///å¼€å‘åº“ç‰ˆæœ¬
+#define DEV_LIB_VER				5									///å¼€å‘åº“ç‰ˆæœ¬
 
-///³£Á¿¶¨Òå
-#define MAX_SEND_SIZE			2044								//×î´óÏûÏ¢°ü
-#define NET_HEAD_SIZE			sizeof(NetMessageHead)				//Êı¾İ°üÍ·
+///å¸¸é‡å®šä¹‰
+#define MAX_SEND_SIZE			2044								//æœ€å¤§æ¶ˆæ¯åŒ…
+#define NET_HEAD_SIZE			sizeof(NetMessageHead)				//æ•°æ®åŒ…å¤´
 
-///Ö§³ÖÀàĞÍ¶¨Òå
-#define SUP_NORMAL_GAME			0x01								///ÆÕÍ¨ÓÎÏ·
-#define SUP_MATCH_GAME			0x02								///±ÈÈüÓÎÏ·
-#define SUP_MONEY_GAME			0x04								///½ğ±ÒÓÎÏ·
+///æ”¯æŒç±»å‹å®šä¹‰
+#define SUP_NORMAL_GAME			0x01								///æ™®é€šæ¸¸æˆ
+#define SUP_MATCH_GAME			0x02								///æ¯”èµ›æ¸¸æˆ
+#define SUP_MONEY_GAME			0x04								///é‡‘å¸æ¸¸æˆ
 
 
 /********************************************************************************************/
-//	ÏµÍ³ÄÚºËÊ¹ÓÃ £¨MAINID Ê¹ÓÃ 0 - 49 £©
+//	ç³»ç»Ÿå†…æ ¸ä½¿ç”¨ ï¼ˆMAINID ä½¿ç”¨ 0 - 49 ï¼‰
 /********************************************************************************************/
 
-///ÌØÊâÏûÏ¢
-#define MDM_NO_FAILE					0			///²»Ê§°ÜÏûÏ¢
+///ç‰¹æ®Šæ¶ˆæ¯
+#define MDM_NO_FAILE					0			///ä¸å¤±è´¥æ¶ˆæ¯
 
-///Á¬½ÓÏûÏ¢
-#define MDM_CONNECT						1			///Á¬½ÓÏûÏ¢ÀàĞÍ
-///¸¨Öú´¦ÀíÏûÏ¢±êÖ¾
-#define ASS_NET_TEST					1			///ÍøÂç²âÊÔ
-#define ASS_CONNECT_SUCCESS 			3			///Á¬½Ó³É¹¦
+///è¿æ¥æ¶ˆæ¯
+#define MDM_CONNECT						1			///è¿æ¥æ¶ˆæ¯ç±»å‹
+///è¾…åŠ©å¤„ç†æ¶ˆæ¯æ ‡å¿—
+#define ASS_NET_TEST					1			///ç½‘ç»œæµ‹è¯•
+#define ASS_CONNECT_SUCCESS 			3			///è¿æ¥æˆåŠŸ
 
 /********************************************************************************************/
 #pragma pack(1)
-//ÍøÂçÊı¾İ°ü½á¹¹Í·
+//ç½‘ç»œæ•°æ®åŒ…ç»“æ„å¤´
 /*
-¹ØÓÚuIdentificationµÄËµÃ÷£º
-1¡¢Ç°¶Ë -------> logonserver »ò logonserver -------> Ç°¶Ë£¬ uIdentification = roomID
-2¡¢logonserver -----> gameserver »ò gameserver -----> logonserver£¬uIdentification = userID
+å…³äºuIdentificationçš„è¯´æ˜ï¼š
+1ã€å‰ç«¯ -------> logonserver æˆ– logonserver -------> å‰ç«¯ï¼Œ uIdentification = roomID
+2ã€logonserver -----> gameserver æˆ– gameserver -----> logonserverï¼ŒuIdentification = userID
 */
 struct NetMessageHead
 {
-	UINT						uMessageSize;						///Êı¾İ°ü´óĞ¡
-	UINT						uMainID;							///´¦ÀíÖ÷ÀàĞÍ
-	UINT						uAssistantID;						///¸¨Öú´¦ÀíÀàĞÍ ID
-	UINT						uHandleCode;						///Êı¾İ°ü´¦Àí´úÂë
-	UINT						uIdentification;					///Éí·İ±êÊ¶£¨²»Í¬µÄĞ­ÒéÀïÃæÓĞ²»Í¬µÄº¬Òå£©
+	UINT						uMessageSize;						///æ•°æ®åŒ…å¤§å°
+	UINT						uMainID;							///å¤„ç†ä¸»ç±»å‹
+	UINT						uAssistantID;						///è¾…åŠ©å¤„ç†ç±»å‹ ID
+	UINT						uHandleCode;						///æ•°æ®åŒ…å¤„ç†ä»£ç 
+	UINT						uIdentification;					///èº«ä»½æ ‡è¯†ï¼ˆä¸åŒçš„åè®®é‡Œé¢æœ‰ä¸åŒçš„å«ä¹‰ï¼‰
 
 	NetMessageHead()
 	{
@@ -48,22 +48,22 @@ struct NetMessageHead
 	}
 };
 
-//ÖĞĞÄ·ş°üÍ·
+//ä¸­å¿ƒæœåŒ…å¤´
 struct CenterServerMessageHead
 {
 	UINT msgID;				// ID
-	int userID;				// ÓÃ»§ID»òÕß¾ãÀÖ²¿id
+	int userID;				// ç”¨æˆ·IDæˆ–è€…ä¿±ä¹éƒ¨id
 	CenterServerMessageHead()
 	{
 		memset(this, 0, sizeof(CenterServerMessageHead));
 	}
 };
 
-// ÖĞĞÄ·şÎñÆ÷ÏûÏ¢Í·
+// ä¸­å¿ƒæœåŠ¡å™¨æ¶ˆæ¯å¤´
 struct PlatformMessageHead
 {
-	NetMessageHead				MainHead;	//Ö÷°üÍ·
-	CenterServerMessageHead		AssHead;	//¸±°üÍ·
+	NetMessageHead				MainHead;	//ä¸»åŒ…å¤´
+	CenterServerMessageHead		AssHead;	//å‰¯åŒ…å¤´
 
 	PlatformMessageHead()
 	{

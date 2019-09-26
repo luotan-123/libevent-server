@@ -62,7 +62,7 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HGETALL %s|%d", TBL_USER, userID);
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼ÒÊı¾İÊ§°Ü userID=%d", userID);
+		ERROR_LOG("è·å–ç©å®¶æ•°æ®å¤±è´¥ userID=%d", userID);
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
@@ -407,7 +407,7 @@ bool CRedisCommon::SetUserDeskIdx(int userID, int deskIdx)
 	return true;
 }
 
-// »úÆ÷ÈËÊ¹ÓÃ
+// æœºå™¨äººä½¿ç”¨
 bool CRedisCommon::SetUserMoney(int userID, long long money)
 {
 	if (money < 0)
@@ -425,13 +425,13 @@ bool CRedisCommon::SetUserMoney(int userID, long long money)
 		return false;
 	}
 
-	// Ìí¼Ó½øÅÅĞĞ°ñ
+	// æ·»åŠ è¿›æ’è¡Œæ¦œ
 	AddKeyToZSet(TBL_RANKING_MONEY, money, userID);
 
 	return true;
 }
 
-// ÉèÖÃÍæ¼Ò½ğ±Ò£¬ĞÂ·½·¨
+// è®¾ç½®ç©å®¶é‡‘å¸ï¼Œæ–°æ–¹æ³•
 bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= true*/, int reason /*= 0*/, int roomID/* = 0*/, long long rateMoney /*= 0*/, BYTE isVirtual/* = 0*/, int friendsGroupID /*= 0*/, int roomType/* = -1*/)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
@@ -439,7 +439,7 @@ bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= tru
 
 	if (bAdd)
 	{
-		if (money == 0) //²»Ôö²»¼õ
+		if (money == 0) //ä¸å¢ä¸å‡
 		{
 			return true;
 		}
@@ -447,7 +447,7 @@ bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= tru
 	}
 	else
 	{
-		//ÇëÊ¹ÓÃ SetUserMoney
+		//è¯·ä½¿ç”¨ SetUserMoney
 		return true;
 	}
 
@@ -464,7 +464,7 @@ bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= tru
 		bSubsidy = true;
 	}
 
-	// Ìí¼Ó½øÅÅĞĞ°ñ
+	// æ·»åŠ è¿›æ’è¡Œæ¦œ
 	AddKeyToZSet(TBL_RANKING_MONEY, llRet, userID);
 
 	if (!isVirtual)
@@ -473,17 +473,17 @@ bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= tru
 		char tableName[128] = "";
 		ConfigManage()->GetTableNameByDate(TBL_STATI_USER_MONEY_CHANGE, tableName, sizeof(tableName));
 
-		// ÕËµ¥ µ±Ç°½ğ±Ò|´Ë´Î±ä»¯|Ô­Òò
+		// è´¦å• å½“å‰é‡‘å¸|æ­¤æ¬¡å˜åŒ–|åŸå› 
 		BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,money,changeMoney,reason,roomID,friendsGroupID,rateMoney) VALUES(%d,%lld,%lld,%lld,%d,%d,%d,%lld)",
 			tableName, userID, currTime, llRet, money, reason, roomID, friendsGroupID, rateMoney);
 		if (bSubsidy)
 		{
-			// ÕËµ¥ µ±Ç°½ğ±Ò|´Ë´Î±ä»¯|Ô­Òò
+			// è´¦å• å½“å‰é‡‘å¸|æ­¤æ¬¡å˜åŒ–|åŸå› 
 			BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,money,changeMoney,reason,roomID,friendsGroupID,rateMoney) VALUES(%d,%lld,%lld,%lld,%d,%d,%d,%lld)",
 				tableName, userID, currTime, (long long)0, llabs(llRet), RESOURCE_CHANGE_REASON_SYSTEM_SUBSIDY, roomID, friendsGroupID, rateMoney);
 		}
 
-		// Òµ¼¨
+		// ä¸šç»©
 		if (roomType == ROOM_TYPE_GOLD)
 		{
 			ConfigManage()->GetTableNameByDate(TBL_WEB_AGENT_PUMP_MONEY, tableName, sizeof(tableName));
@@ -495,7 +495,7 @@ bool CRedisCommon::SetUserMoneyEx(int userID, long long money, bool bAdd /*= tru
 	return true;
 }
 
-// »ñÈ¡Íæ¼ÒÊôĞÔÖµ£¬Ö»ÄÜ»ñÈ¡ÊıÖµÀàĞÍ
+// è·å–ç©å®¶å±æ€§å€¼ï¼Œåªèƒ½è·å–æ•°å€¼ç±»å‹
 long long CRedisCommon::GetUserResNums(int userID, const char * resName)
 {
 	if (userID <= 0 || !resName)
@@ -520,7 +520,7 @@ long long CRedisCommon::GetUserResNums(int userID, const char * resName)
 	return ret;
 }
 
-// ÉèÖÃÍæ¼ÒÊôĞÔÖµ£¬Ö»ÄÜÉèÖÃÊıÖµÀàĞÍ
+// è®¾ç½®ç©å®¶å±æ€§å€¼ï¼Œåªèƒ½è®¾ç½®æ•°å€¼ç±»å‹
 bool CRedisCommon::SetUserResNums(int userID, const char * resName, long long resNums)
 {
 	if (userID <= 0 || !resName)
@@ -541,7 +541,7 @@ bool CRedisCommon::SetUserResNums(int userID, const char * resName, long long re
 	}
 	else
 	{
-		INFO_LOG("userInfoÌí¼ÓÁËÓòÖµ :%s", resName);
+		INFO_LOG("userInfoæ·»åŠ äº†åŸŸå€¼ :%s", resName);
 	}
 
 	freeReplyObject(pReply);
@@ -549,7 +549,7 @@ bool CRedisCommon::SetUserResNums(int userID, const char * resName, long long re
 	return ret;
 }
 
-// Ôö¼Ó×ÊÔ´Öµ£¬Ö»ÄÜÉèÖÃÊıÖµÀàĞÍ
+// å¢åŠ èµ„æºå€¼ï¼Œåªèƒ½è®¾ç½®æ•°å€¼ç±»å‹
 long long CRedisCommon::AddUserResNums(int userID, const char * resName, long long changeResNums)
 {
 	if (userID <= 0 || !resName)
@@ -591,13 +591,13 @@ bool CRedisCommon::SetUserJewels(int userID, int jewels)
 		return false;
 	}
 
-	// Ìí¼Ó½øÅÅĞĞ°ñ
+	// æ·»åŠ è¿›æ’è¡Œæ¦œ
 	AddKeyToZSet(TBL_RANKING_JEWELS, jewels, userID);
 
 	return true;
 }
 
-// ĞÂµÄÉèÖÃÍæ¼Ò·¿¿¨
+// æ–°çš„è®¾ç½®ç©å®¶æˆ¿å¡
 bool CRedisCommon::SetUserJewelsEx(int userID, int jewels, bool bAdd /*= true*/, int reason /*= 0*/, int roomID/* = 0*/, int rateJewels/* = 0*/, BYTE isVirtual/* = 0*/, int friendsGroupID/* = 0*/, int roomType /*= -1*/)
 {
 	std::string key = MakeKey(TBL_USER, userID);
@@ -605,7 +605,7 @@ bool CRedisCommon::SetUserJewelsEx(int userID, int jewels, bool bAdd /*= true*/,
 
 	if (bAdd)
 	{
-		if (jewels == 0) //²»Ôö²»¼õ
+		if (jewels == 0) //ä¸å¢ä¸å‡
 		{
 			return true;
 		}
@@ -613,7 +613,7 @@ bool CRedisCommon::SetUserJewelsEx(int userID, int jewels, bool bAdd /*= true*/,
 	}
 	else
 	{
-		// ÇëÊ¹ÓÃ SetUserJewels
+		// è¯·ä½¿ç”¨ SetUserJewels
 		return true;
 	}
 
@@ -630,7 +630,7 @@ bool CRedisCommon::SetUserJewelsEx(int userID, int jewels, bool bAdd /*= true*/,
 		bSubsidy = true;
 	}
 
-	// Ìí¼Ó½øÅÅĞĞ°ñ
+	// æ·»åŠ è¿›æ’è¡Œæ¦œ
 	AddKeyToZSet(TBL_RANKING_JEWELS, llRet, userID);
 
 	if (!isVirtual)
@@ -639,17 +639,17 @@ bool CRedisCommon::SetUserJewelsEx(int userID, int jewels, bool bAdd /*= true*/,
 		char tableName[128] = "";
 		ConfigManage()->GetTableNameByDate(TBL_STATI_USER_JEWELS_CHANGE, tableName, sizeof(tableName));
 
-		// ÕËµ¥ µ±Ç°½ğ±Ò|´Ë´Î±ä»¯|Ô­Òò
+		// è´¦å• å½“å‰é‡‘å¸|æ­¤æ¬¡å˜åŒ–|åŸå› 
 		BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,jewels,changeJewels,reason,roomID,friendsGroupID,rateJewels) VALUES(%d,%lld,%d,%d,%d,%d,%d,%d)",
 			tableName, userID, currTime, (int)llRet, jewels, reason, roomID, friendsGroupID, rateJewels);
 		if (bSubsidy)
 		{
-			// ÕËµ¥ µ±Ç°½ğ±Ò|´Ë´Î±ä»¯|Ô­Òò
+			// è´¦å• å½“å‰é‡‘å¸|æ­¤æ¬¡å˜åŒ–|åŸå› 
 			BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,jewels,changeJewels,reason,roomID,friendsGroupID,rateJewels) VALUES(%d,%lld,%d,%d,%d,%d,%d,%d)",
 				tableName, userID, currTime, 0, (int)abs((int)llRet), RESOURCE_CHANGE_REASON_SYSTEM_SUBSIDY, roomID, friendsGroupID, rateJewels);
 		}
 
-		// Òµ¼¨
+		// ä¸šç»©
 		ConfigManage()->GetTableNameByDate(TBL_WEB_AGENT_PUMP_JEWELS, tableName, sizeof(tableName));
 		BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,jewels,changeJewels,reason,roomID,friendsGroupID,rateJewels) VALUES(%d,%lld,%d,%d,%d,%d,%d,%d)",
 			tableName, userID, currTime, (int)llRet, jewels, reason, roomID, friendsGroupID, rateJewels);
@@ -733,7 +733,7 @@ bool CRedisCommon::SetUserToken(int userID, const char* token)
 
 }
 
-// »ñÈ¡Æ½Ì¨¿ØÖÆÊı¾İ
+// è·å–å¹³å°æ§åˆ¶æ•°æ®
 bool CRedisCommon::GetRewardsPoolInfo(int roomID, RewardsPoolInfo& poolInfo)
 {
 	if (roomID <= 0)
@@ -758,7 +758,7 @@ bool CRedisCommon::GetRewardsPoolInfo(int roomID, RewardsPoolInfo& poolInfo)
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
@@ -848,7 +848,7 @@ bool CRedisCommon::InnerHINCRBYCommand(const char* key, const char* redisCmd, lo
 
 	if (!ret)
 	{
-		ERROR_LOG("ÃüÁîÖ´ĞĞÊ§°Ü:[ %s ],errstr=%s", redisCmd, m_pContext->errstr);
+		ERROR_LOG("å‘½ä»¤æ‰§è¡Œå¤±è´¥:[ %s ],errstr=%s", redisCmd, m_pContext->errstr);
 	}
 
 	freeReplyObject(pReply);
@@ -884,7 +884,7 @@ bool CRedisCommon::InnerHMSetCommand(const char* key, const char* redisCmd, int 
 
 	if (!ret)
 	{
-		ERROR_LOG("ÃüÁîÖ´ĞĞÊ§°Ü:[ %s ],errstr=%s", redisCmd, m_pContext->errstr);
+		ERROR_LOG("å‘½ä»¤æ‰§è¡Œå¤±è´¥:[ %s ],errstr=%s", redisCmd, m_pContext->errstr);
 	}
 
 	freeReplyObject(pReply);
@@ -974,7 +974,7 @@ bool CRedisCommon::GetZSetSocreByRank(const char* key, int rank, bool order, lon
 	if (pReply->elements != 2)
 	{
 		freeReplyObject(pReply);
-		ERROR_LOG("»ñÈ¡scoreÊ§°Ü:key=%s", key);
+		ERROR_LOG("è·å–scoreå¤±è´¥:key=%s", key);
 		return false;
 	}
 
@@ -993,7 +993,7 @@ bool CRedisCommon::GetZSetSocreByRank(const char* key, int rank, bool order, lon
 	return true;
 }
 
-// ÉèÖÃ½±³Ø
+// è®¾ç½®å¥–æ± 
 bool CRedisCommon::SetRoomPoolMoney(int roomID, long long money, bool bAdd)
 {
 	if (roomID <= 0)
@@ -1024,14 +1024,14 @@ bool CRedisCommon::SetRoomPoolMoney(int roomID, long long money, bool bAdd)
 			return false;
 		}*/
 
-		INFO_LOG("²»Ö§³ÖÖ±½ÓÉèÖÃ½±³Ø");
+		INFO_LOG("ä¸æ”¯æŒç›´æ¥è®¾ç½®å¥–æ± ");
 		return true;
 	}
 
 	return true;
 }
 
-//½±³Ø
+//å¥–æ± 
 bool CRedisCommon::SetRoomGameWinMoney(int roomID, long long money, bool bAdd)
 {
 	if (roomID <= 0)
@@ -1062,7 +1062,7 @@ bool CRedisCommon::SetRoomGameWinMoney(int roomID, long long money, bool bAdd)
 			return false;
 		}*/
 
-		INFO_LOG("²»Ö§³ÖÖ±½ÓÉèÖÃ½±³Ø");
+		INFO_LOG("ä¸æ”¯æŒç›´æ¥è®¾ç½®å¥–æ± ");
 		return true;
 	}
 
@@ -1099,7 +1099,7 @@ bool CRedisCommon::SetRoomPercentageWinMoney(int roomID, long long money, bool b
 		return false;
 		}*/
 
-		INFO_LOG("²»Ö§³ÖÖ±½ÓÉèÖÃ½±³Ø");
+		INFO_LOG("ä¸æ”¯æŒç›´æ¥è®¾ç½®å¥–æ± ");
 		return true;
 	}
 
@@ -1137,7 +1137,7 @@ bool CRedisCommon::SetRoomPoolData(int roomID, const char * fieldName, long long
 		return false;
 		}*/
 
-		INFO_LOG("²»Ö§³ÖÖ±½ÓÉèÖÃ½±³Ø");
+		INFO_LOG("ä¸æ”¯æŒç›´æ¥è®¾ç½®å¥–æ± ");
 		return true;
 	}
 
@@ -1238,7 +1238,7 @@ bool CRedisCommon::FixAccountIndexInfo(const char * account, const char* passwd,
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
-	if (registerType == LOGON_NORMAL || registerType == LOGON_QUICK)	// ÆÕÍ¨ÓÃ»§
+	if (registerType == LOGON_NORMAL || registerType == LOGON_QUICK)	// æ™®é€šç”¨æˆ·
 	{
 		sprintf(redisCmd, "SET account-%s %d", account, userID);
 	}
@@ -1250,7 +1250,7 @@ bool CRedisCommon::FixAccountIndexInfo(const char * account, const char* passwd,
 	{
 		sprintf(redisCmd, "SET %s|%s %d", TBL_VISITOR_TOUSERID, passwd, userID);
 	}
-	else	// µÚÈı·½ÓÃ»§
+	else	// ç¬¬ä¸‰æ–¹ç”¨æˆ·
 	{
 		sprintf(redisCmd, "SET %s|%s %d", TBL_TRDUSERID, passwd, userID);
 	}
@@ -1263,13 +1263,13 @@ bool CRedisCommon::FixAccountIndexInfo(const char * account, const char* passwd,
 	return true;
 }
 
-//////////////////////////////////Íæ¼ÒÔÚÏßÎ¬»¤////////////////////////////////////////
+//////////////////////////////////ç©å®¶åœ¨çº¿ç»´æŠ¤////////////////////////////////////////
 bool CRedisCommon::IsUserOnline(int userID)
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SISMEMBER %s %d", TBL_ONLINE_USER_SET, userID);
 	if (!pReply)
 	{
-		ERROR_LOG("ÅĞ¶ÏÔÚÏßÍæ¼Ò³ö´í,userID=%d", userID);
+		ERROR_LOG("åˆ¤æ–­åœ¨çº¿ç©å®¶å‡ºé”™,userID=%d", userID);
 		return false;
 	}
 
@@ -1289,7 +1289,7 @@ bool CRedisCommon::RemoveOnlineUser(int userID, BYTE isVirtual)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SREM %s %d", TBL_ONLINE_USER_SET, userID);
 	if (!pReply)
 	{
-		ERROR_LOG("É¾³ıÔÚÏßÍæ¼Ò³ö´í,userID=%d", userID);
+		ERROR_LOG("åˆ é™¤åœ¨çº¿ç©å®¶å‡ºé”™,userID=%d", userID);
 		return false;
 	}
 
@@ -1300,7 +1300,7 @@ bool CRedisCommon::RemoveOnlineUser(int userID, BYTE isVirtual)
 		pReply = (redisReply*)redisCommand(m_pContext, "SREM %s %d", TBL_ONLINE_REALUSER_SET, userID);
 		if (!pReply)
 		{
-			ERROR_LOG("É¾³ıÔÚÏßÍæ¼Ò³ö´í,userID=%d", userID);
+			ERROR_LOG("åˆ é™¤åœ¨çº¿ç©å®¶å‡ºé”™,userID=%d", userID);
 			return false;
 		}
 
@@ -1315,7 +1315,7 @@ bool CRedisCommon::AddOnlineUser(int userID, BYTE isVirtual)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SADD %s %d", TBL_ONLINE_USER_SET, userID);
 	if (!pReply)
 	{
-		ERROR_LOG("Ìí¼ÓÔÚÏßÍæ¼Ò³ö´í,userID=%d", userID);
+		ERROR_LOG("æ·»åŠ åœ¨çº¿ç©å®¶å‡ºé”™,userID=%d", userID);
 		return false;
 	}
 
@@ -1326,7 +1326,7 @@ bool CRedisCommon::AddOnlineUser(int userID, BYTE isVirtual)
 		pReply = (redisReply*)redisCommand(m_pContext, "SADD %s %d", TBL_ONLINE_REALUSER_SET, userID);
 		if (!pReply)
 		{
-			ERROR_LOG("Ìí¼ÓÔÚÏßÍæ¼Ò³ö´í,userID=%d", userID);
+			ERROR_LOG("æ·»åŠ åœ¨çº¿ç©å®¶å‡ºé”™,userID=%d", userID);
 			return false;
 		}
 
@@ -1351,8 +1351,8 @@ int CRedisCommon::GetRandDigit(int digit)
 		return 0;
 	}
 
-	// Í·
-	int head = rand() % 9 + 1;		// È¡1-9ÖĞµÄÒ»¸öÖµ
+	// å¤´
+	int head = rand() % 9 + 1;		// å–1-9ä¸­çš„ä¸€ä¸ªå€¼
 
 	int count = digit - 1;
 	if (count == 0)
@@ -1360,7 +1360,7 @@ int CRedisCommon::GetRandDigit(int digit)
 		return head;
 	}
 
-	// Ê£ÓàµÄ²¿·Ö
+	// å‰©ä½™çš„éƒ¨åˆ†
 	int tailSum = 1;
 	for (int i = 0; i < count; i++)
 	{
@@ -1374,8 +1374,8 @@ int CRedisCommon::GetRandDigit(int digit)
 	return ret;
 }
 
-/////////////////////////////////»ñÈ¡ÏµÍ³ÅäÖÃ/////////////////////////////////////////
-// »ñÈ¡OtherConfig
+/////////////////////////////////è·å–ç³»ç»Ÿé…ç½®/////////////////////////////////////////
+// è·å–OtherConfig
 bool CRedisCommon::GetOtherConfig(OtherConfig &config)
 {
 	std::string key = MakeKey(TBL_BASE_OTHER_CONFIG, SYSTEM_CONFIG_TYPE_OTHER);
@@ -1394,7 +1394,7 @@ bool CRedisCommon::GetOtherConfig(OtherConfig &config)
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
@@ -1475,7 +1475,7 @@ bool CRedisCommon::GetOtherConfig(OtherConfig &config)
 	return true;
 }
 
-// »ñÈ¡roomBaseInfo
+// è·å–roomBaseInfo
 bool CRedisCommon::GetRoomBaseInfo(int roomID, RoomBaseInfo &room)
 {
 	std::string key = MakeKey(TBL_BASE_ROOM, roomID);
@@ -1493,7 +1493,7 @@ bool CRedisCommon::GetRoomBaseInfo(int roomID, RoomBaseInfo &room)
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
@@ -1562,7 +1562,7 @@ bool CRedisCommon::GetRoomBaseInfo(int roomID, RoomBaseInfo &room)
 	return true;
 }
 
-// »ñÈ¡¹ºÂò·¿¿¨ÅäÖÃ privateDeskConfig
+// è·å–è´­ä¹°æˆ¿å¡é…ç½® privateDeskConfig
 bool CRedisCommon::GetBuyGameDeskInfo(const BuyGameDeskInfoKey &buyKey, BuyGameDeskInfo &buyInfo)
 {
 	char key[64] = "";
@@ -1582,7 +1582,7 @@ bool CRedisCommon::GetBuyGameDeskInfo(const BuyGameDeskInfoKey &buyKey, BuyGameD
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
@@ -1647,7 +1647,7 @@ bool CRedisCommon::SetMarkDeskIndex(int roomID, int iMarkIndex)
 	return true;
 }
 
-// É¾³ıÅÆ×À
+// åˆ é™¤ç‰Œæ¡Œ
 bool CRedisCommon::DelFGDeskRoom(int friendsGroupID, int friendsGroupDeskNumber)
 {
 	if (friendsGroupID <= 0)
@@ -1655,14 +1655,14 @@ bool CRedisCommon::DelFGDeskRoom(int friendsGroupID, int friendsGroupDeskNumber)
 		return false;
 	}
 
-	// É¾³ıredisÖĞµÄÅÆ×À
+	// åˆ é™¤redisä¸­çš„ç‰Œæ¡Œ
 	char combinationKey[64] = "";
 	sprintf(combinationKey, "%s|%d,%d", TBL_FG_ROOM_INFO, friendsGroupID, friendsGroupDeskNumber);
 
 	return DelKey(combinationKey);
 }
 
-// »ñÈ¡Íæ¼ÒĞ¡ºìµãĞÅÏ¢
+// è·å–ç©å®¶å°çº¢ç‚¹ä¿¡æ¯
 bool CRedisCommon::GetUserRedSpot(int userID, UserRedSpot &userRedSpot)
 {
 	if (userID <= 0)
@@ -1686,7 +1686,7 @@ bool CRedisCommon::GetUserRedSpot(int userID, UserRedSpot &userRedSpot)
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;
@@ -1720,7 +1720,7 @@ bool CRedisCommon::GetUserRedSpot(int userID, UserRedSpot &userRedSpot)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// ±³°üÏµÍ³
+// èƒŒåŒ…ç³»ç»Ÿ
 bool CRedisCommon::GetUserBag(int userID, UserBag& userBagInfo)
 {
 	if (userID <= 0)
@@ -1828,7 +1828,7 @@ bool CRedisCommon::SetUserBag(int userID, const char * resName, int changeResNum
 {
 	if (userID <= 0 || !resName)
 	{
-		ERROR_LOG("ÉèÖÃ±³°üÊ§°Ü£¬userID=%d", userID);
+		ERROR_LOG("è®¾ç½®èƒŒåŒ…å¤±è´¥ï¼ŒuserID=%d", userID);
 		return false;
 	}
 
@@ -1847,7 +1847,7 @@ bool CRedisCommon::SetUserBag(int userID, const char * resName, int changeResNum
 
 		if (llRet < 0)
 		{
-			ERROR_LOG("######  ĞŞ¸Ä×ÊÔ´ÊıÁ¿³¬¹ıÏŞÖÆ userID=%d,resName=%s,changeResNums=%d  #######", userID, resName, changeResNums);
+			ERROR_LOG("######  ä¿®æ”¹èµ„æºæ•°é‡è¶…è¿‡é™åˆ¶ userID=%d,resName=%s,changeResNums=%d  #######", userID, resName, changeResNums);
 			return false;
 		}
 	}
@@ -1884,7 +1884,7 @@ bool CRedisCommon::GetFullPeopleMatchPeople(int gameID, int matchID, int peopleC
 	if (elements == 0 || elements % 2 != 0 || elements / 2 != peopleCount)
 	{
 		freeReplyObject(pReply);
-		ERROR_LOG("ÈËÊı´íÎó£º%d", elements / 2);
+		ERROR_LOG("äººæ•°é”™è¯¯ï¼š%d", elements / 2);
 		return false;
 	}
 

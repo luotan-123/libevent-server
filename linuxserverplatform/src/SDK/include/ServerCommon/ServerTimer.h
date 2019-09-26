@@ -5,15 +5,15 @@
 
 enum SERVERTIMER_TYPE
 {
-	SERVERTIMER_TYPE_PERISIST = 0,		// ³Ö¾Ã¶¨Ê±Æ÷
-	SERVERTIMER_TYPE_SINGLE,			// Ò»´ÎĞÔ¶¨Ê±Æ÷
+	SERVERTIMER_TYPE_PERISIST = 0,		// æŒä¹…å®šæ—¶å™¨
+	SERVERTIMER_TYPE_SINGLE,			// ä¸€æ¬¡æ€§å®šæ—¶å™¨
 };
 
 struct ServerTimerInfo
 {
-	unsigned int elapse;	// ¶¨Ê±Æ÷¼ä¸ô£¨µ¥Î»ºÁÃë£©
-	long long starttime;	// ÆğÊ¼Ê±¼ä£¨µ¥Î»ºÁÃë£©
-	BYTE timertype;			// ¶¨Ê±Æ÷ÀàĞÍ SERVERTIMER_TYPE
+	unsigned int elapse;	// å®šæ—¶å™¨é—´éš”ï¼ˆå•ä½æ¯«ç§’ï¼‰
+	long long starttime;	// èµ·å§‹æ—¶é—´ï¼ˆå•ä½æ¯«ç§’ï¼‰
+	BYTE timertype;			// å®šæ—¶å™¨ç±»å‹ SERVERTIMER_TYPE
 	ServerTimerInfo()
 	{
 		elapse = 10;
@@ -31,18 +31,18 @@ public:
 	~CServerTimer();
 	bool Start(CDataLine* pDataLine);
 	bool Stop();
-	bool SetTimer(unsigned int uTimerID, unsigned int uElapse, BYTE timerType = SERVERTIMER_TYPE_PERISIST); //uElapseÊÇºÁÃëµ¥Î»£¬´óÓÚ100ms
+	bool SetTimer(unsigned int uTimerID, unsigned int uElapse, BYTE timerType = SERVERTIMER_TYPE_PERISIST); //uElapseæ˜¯æ¯«ç§’å•ä½ï¼Œå¤§äº100ms
 	bool KillTimer(unsigned int uTimerID);
 	bool ExistsTimer(unsigned int uTimerID);
 
 private:
-	// ¶¨Ê±Æ÷Ö´ĞĞº¯Êı
+	// å®šæ—¶å™¨æ‰§è¡Œå‡½æ•°
 	static void TimeoutCB(evutil_socket_t fd, short event, void* arg);
-	// ¶¨Ê±Æ÷Ïß³Ìº¯Êı
+	// å®šæ—¶å™¨çº¿ç¨‹å‡½æ•°
 	static void* ThreadCheckTimer(void* pThreadData);
 private:
 	volatile bool m_bRun;
 	std::unordered_map<unsigned int, ServerTimerInfo> m_timerMap;
-	CDataLine* m_pDataLine;	// ¹²ÏíµÄdataline¶ÔÏó
-	CSignedLock* m_pLock; // Ïß³ÌËø
+	CDataLine* m_pDataLine;	// å…±äº«çš„datalineå¯¹è±¡
+	CSignedLock* m_pLock; // çº¿ç¨‹é”
 };

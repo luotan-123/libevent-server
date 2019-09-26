@@ -8,10 +8,10 @@
 #include "BillManage.h"
 #include "Util.h"
 
-// redisÃüÁîµ¥´ÊÊıÁ¿£¬Êµ¼ÊÉÏredis¿ÉÒÔ´æ´¢2^32-1¸ökey-value
+// rediså‘½ä»¤å•è¯æ•°é‡ï¼Œå®é™…ä¸Šrediså¯ä»¥å­˜å‚¨2^32-1ä¸ªkey-value
 #define MAX_REDIS_CMD_WORD_COUNT	512		
 
-//redis hash±íÀ©Õ¹×Ö¶ÎÄ£Ê½£¨¶¨Ê±É¨ÃèÊÇ¸ù¾İ¶ÔÓ¦µÄ×Ö¶Î×öÏàÓ¦µÄ²Ù×÷£©
+//redis hashè¡¨æ‰©å±•å­—æ®µæ¨¡å¼ï¼ˆå®šæ—¶æ‰«ææ˜¯æ ¹æ®å¯¹åº”çš„å­—æ®µåšç›¸åº”çš„æ“ä½œï¼‰
 enum RedisExtendMode
 {
 	REDIS_EXTEND_MODE_DEFAULT = 0,
@@ -21,15 +21,15 @@ enum RedisExtendMode
 	REDIS_EXTEND_MODE_END,
 };
 
-//redis ¶ÔÓ¦µÄkeyµÄÀàĞÍ
+//redis å¯¹åº”çš„keyçš„ç±»å‹
 enum RedisKeyType
 {
-	REDIS_KEY_TYPE_NONE = 0,	// ÎŞÀàĞÍ(´íÎó)
-	REDIS_KEY_TYPE_HASH,		// ¹şÏ£
+	REDIS_KEY_TYPE_NONE = 0,	// æ— ç±»å‹(é”™è¯¯)
+	REDIS_KEY_TYPE_HASH,		// å“ˆå¸Œ
 };
 
 class CDataBaseManage;
-// CRedisBase Ğé»ùÀà
+// CRedisBase è™šåŸºç±»
 class CRedisBase
 {
 public:
@@ -37,67 +37,67 @@ public:
 	virtual ~CRedisBase();
 
 public:
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	virtual bool Init() = 0;
 	virtual bool Stop() = 0;
 
 public:
 	static std::string MakeKey(const char* tableName, long long id);
-	// ºÏ³ÉredisÖĞµÄkey"tableName|id"ĞÎÊ½
+	// åˆæˆredisä¸­çš„key"tableName|id"å½¢å¼
 	static std::string MakeKey(const char* tableName, int id);
-	// ºÏ³ÉredisÖĞµÄkey"tableName|id"ĞÎÊ½
+	// åˆæˆredisä¸­çš„key"tableName|id"å½¢å¼
 	static std::string MakeKey(const char* tableName, const char* id);
-	// ½âÎöredisÖĞµÄkey, "tableName|id"ĞÎÊ½
+	// è§£æredisä¸­çš„key, "tableName|id"å½¢å¼
 	static bool ParseKey(const char* key, char* tableName, int& id);
-	// ½âÎöredisÖĞµÄkey, "tableName|id"ĞÎÊ½
+	// è§£æredisä¸­çš„key, "tableName|id"å½¢å¼
 	static bool ParseKey(const char* key, char* tableName, long long& id);
 
 public:
-	// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+	// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 	bool IsKeyExists(const char* key);
-	// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+	// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 	bool IsKeyExists(const char* mainKey, int mainID, int assID);
-	// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+	// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 	bool IsKeyExists(const char* mainKey, int mainID);
-	// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+	// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 	bool IsKeyExists(const char* mainKey, const char* assKey);
-	// É¾³ıÖ¸¶¨µÄkey
+	// åˆ é™¤æŒ‡å®šçš„key
 	bool DelKey(const char* key);
-	// »ñÈ¡keyµÄÀàĞÍ
+	// è·å–keyçš„ç±»å‹
 	int GetKeyType(const char* key);
-	// É¾³ı¼¯ºÏ£¨ÎŞĞò¼¯ºÏ£©µÄÔªËØ
+	// åˆ é™¤é›†åˆï¼ˆæ— åºé›†åˆï¼‰çš„å…ƒç´ 
 	bool SremMember(const char* key, const char* member);
-	// É¾³ı¼¯ºÏ£¨ÓĞĞò¼¯ºÏ£©ÔªËØ
+	// åˆ é™¤é›†åˆï¼ˆæœ‰åºé›†åˆï¼‰å…ƒç´ 
 	bool ZremMember(const char* key, const std::vector<long long>& memberVec);
-	// É¾³ı¼¯ºÏ£¨ÓĞĞò¼¯ºÏ£©ÔªËØ(intÀàĞÍ)
+	// åˆ é™¤é›†åˆï¼ˆæœ‰åºé›†åˆï¼‰å…ƒç´ (intç±»å‹)
 	bool ZremMember(const char* key, const std::vector<int>& memberVec);
-	// »ñÈ¡ÓĞĞò¼¯ºÏµÄ´óĞ¡
+	// è·å–æœ‰åºé›†åˆçš„å¤§å°
 	int GetZSetSize(const char* key);
-	// Éè¶¨³¬Ê±Ê±¼ä
+	// è®¾å®šè¶…æ—¶æ—¶é—´
 	bool SetExpire(const char* key, int secs);
-	// ¼ì²éÁ¬½ÓĞÔ
+	// æ£€æŸ¥è¿æ¥æ€§
 	void CheckConnection(const RedisConfig& redisConfig);
-	// ²âÊÔredis¶ÁĞ´ĞÔÄÜ
+	// æµ‹è¯•redisè¯»å†™æ€§èƒ½
 	void TestRedis(const char* name);
-	// »ñÈ¡Ä³¸ö¼üÖµË÷Òı
+	// è·å–æŸä¸ªé”®å€¼ç´¢å¼•
 	long long GetKeyIndex(const char* key);
-	// ÉèÖÃÄ³¸ö¼üÖµË÷Òı
+	// è®¾ç½®æŸä¸ªé”®å€¼ç´¢å¼•
 	bool SetKeyIndex(const char* key, long long llIndex);
-	// »ñÈ¡×ÔÔö×Ö·û´®
+	// è·å–è‡ªå¢å­—ç¬¦ä¸²
 	long long GetIncrKeyIndex(const char* key);
-	// Êı¾İ¿â
+	// æ•°æ®åº“
 	void SetDBManage(CDataBaseManage* pDBManage);
 protected:
-	// »ñÈ¡×Ö¶ÎÀ©Õ¹Ä£Ê½
+	// è·å–å­—æ®µæ‰©å±•æ¨¡å¼
 	int  GetExtendMode(const char* key);
-	// ÉèÖÃÀ©Õ¹Ä£Ê½
+	// è®¾ç½®æ‰©å±•æ¨¡å¼
 	bool SetExtendMode(const char* key, int mode);
-	// ÖØÁ¬
+	// é‡è¿
 	bool ReConnect(const RedisConfig& redisConfig);
-	// ÈÏÖ¤
+	// è®¤è¯
 	bool Auth(const char* passwd);
 public:
-	// ÉèÖÃ¹şÏ£±íÊı¾İ
+	// è®¾ç½®å“ˆå¸Œè¡¨æ•°æ®
 	bool hmset(const char* table, int id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
 	bool hmset(const char* table, long long id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
 	bool hmset(const char* table, const char* id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
@@ -105,11 +105,11 @@ public:
 	int m_sleepTime;
 protected:
 	redisContext* m_pContext;
-protected: //Êı¾İ¿âÏà¹Ø
+protected: //æ•°æ®åº“ç›¸å…³
 	CDataBaseManage* m_pDBManage;
 };
 
-// redis Ëø
+// redis é”
 class CRedisLock
 {
 public:
@@ -126,7 +126,7 @@ private:
 	int m_sleepTime;
 };
 
-// redis´íÎó´¦Àí
+// redisé”™è¯¯å¤„ç†
 #define REDIS_CHECKF(pReply, redisCmd)	{if (!pReply){ERROR_LOG("redisCommand return NULL redisCmd=%s context err=%d errstr=%s", redisCmd, m_pContext->err, m_pContext->errstr);return 0;}}
 #define REDIS_CHECK(pReply, redisCmd)	{if (!pReply){ERROR_LOG("redisCommand return NULL redisCmd=%s context err=%d errstr=%s", redisCmd, m_pContext->err, m_pContext->errstr);return;}}
 #define ASSERT_REDIS_REPLY_ERRORF(pReply, redisCmd)	{if (pReply->type==REDIS_REPLY_ERROR){ERROR_LOG("redisCommand return Error redisCmd=%s errstr=%s", redisCmd, pReply->str);freeReplyObject(pReply); return 0;}}

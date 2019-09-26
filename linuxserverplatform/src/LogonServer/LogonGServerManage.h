@@ -3,7 +3,7 @@
 #include <map>
 #include <unordered_map>
 
-// ´óÌügserver½á¹¹
+// å¤§å…gserverç»“æ„
 struct LogonGServerInfo
 {
 	int roomID;
@@ -16,7 +16,7 @@ struct LogonGServerInfo
 	}
 };
 
-// ´óÌügserver¹ÜÀíÆ÷
+// å¤§å…gserverç®¡ç†å™¨
 class CLogonGServerManage
 {
 public:

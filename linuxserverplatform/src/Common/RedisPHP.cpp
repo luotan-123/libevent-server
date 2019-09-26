@@ -54,13 +54,13 @@ bool CRedisPHP::Stop()
 	return true;
 }
 
-// »ñÈ¡redis Context
+// è·å–redis Context
 redisContext* CRedisPHP::GetRedisContext()
 {
 	return m_pContext;
 }
 
-// »ñÈ¡¾ãÀÖ²¿³ÉÔ±
+// è·å–ä¿±ä¹éƒ¨æˆå‘˜
 bool CRedisPHP::GetFGMember(int friendsGroupID, std::vector<int> &memberUserIDVec)
 {
 	memberUserIDVec.clear();
@@ -70,11 +70,11 @@ bool CRedisPHP::GetFGMember(int friendsGroupID, std::vector<int> &memberUserIDVe
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "ZRANGE %s 0 -1", key.c_str());
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿³ÉÔ±Ê§°Ü,friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨æˆå‘˜å¤±è´¥,friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
-	// Èç¹ûÄ³¸ö¼ÇÂ¼²»´æÔÚÁË£¬ÄÇÃ´¾ÍÊÇ±»É¾ÁË
+	// å¦‚æœæŸä¸ªè®°å½•ä¸å­˜åœ¨äº†ï¼Œé‚£ä¹ˆå°±æ˜¯è¢«åˆ äº†
 	for (size_t i = 0; i < pReply->elements; i++)
 	{
 		const char* value = pReply->element[i]->str;
@@ -86,12 +86,12 @@ bool CRedisPHP::GetFGMember(int friendsGroupID, std::vector<int> &memberUserIDVe
 	return true;
 }
 
-// »ñÈ¡Íæ¼Ò¾ãÀÖ²¿½ğ±Ò
+// è·å–ç©å®¶ä¿±ä¹éƒ¨é‡‘å¸
 bool CRedisPHP::GetUserFriendsGroupMoney(int friendsGroupID, int userID, long long &money)
 {
 	if (friendsGroupID <= 0 || userID <= 0)
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼Ò»ğ±ÒÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ç©å®¶ç«å¸å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -100,7 +100,7 @@ bool CRedisPHP::GetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HGET %s|%d,%d carryFireCoin", TBL_FRIENDSGROUPTOUSER, friendsGroupID, userID);
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼Ò»ğ±ÒÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ç©å®¶ç«å¸å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -110,7 +110,7 @@ bool CRedisPHP::GetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 	}
 	else
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼Ò»ğ±ÒÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ç©å®¶ç«å¸å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		freeReplyObject(pReply);
 		return false;
 	}
@@ -120,12 +120,12 @@ bool CRedisPHP::GetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 	return true;
 }
 
-// ÉèÖÃÍæ¼Ò¾ãÀÖ²¿½ğ±Ò
+// è®¾ç½®ç©å®¶ä¿±ä¹éƒ¨é‡‘å¸
 bool CRedisPHP::SetUserFriendsGroupMoney(int friendsGroupID, int userID, long long money, bool bAdd/* = true*/, int reason/* = 0*/, int roomID/* = 0*/, int rateFireCoin/* = 0*/)
 {
 	if (friendsGroupID <= 0 || userID <= 0)
 	{
-		ERROR_LOG("ÉèÖÃÍæ¼Ò»ğ±ÒÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è®¾ç½®ç©å®¶ç«å¸å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -134,7 +134,7 @@ bool CRedisPHP::SetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 
 	if (!IsKeyExists(combinationKey))
 	{
-		ERROR_LOG("ÉèÖÃÍæ¼Ò»ğ±ÒÊ§°Ü,key=%s", combinationKey);
+		ERROR_LOG("è®¾ç½®ç©å®¶ç«å¸å¤±è´¥,key=%s", combinationKey);
 		return false;
 	}
 
@@ -143,7 +143,7 @@ bool CRedisPHP::SetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 
 	if (bAdd)
 	{
-		if (money == 0) //²»Ôö²»¼õ
+		if (money == 0) //ä¸å¢ä¸å‡
 		{
 			return true;
 		}
@@ -166,26 +166,26 @@ bool CRedisPHP::SetUserFriendsGroupMoney(int friendsGroupID, int userID, long lo
 
 	freeReplyObject(pReply);
 
-	// ÕËµ¥ µ±Ç°½ğ±Ò|´Ë´Î±ä»¯|Ô­Òò
+	// è´¦å• å½“å‰é‡‘å¸|æ­¤æ¬¡å˜åŒ–|åŸå› 
 	BillManage()->WriteBill(m_pDBManage, "INSERT INTO %s (userID,time,fireCoin,changeFireCoin,reason,roomID,friendsGroupID,rateFireCoin) VALUES(%d,%d,%lld,%lld,%d,%d,%d,%d)",
 		TBL_STATI_USER_FIRECOIN_CHANGE, userID, (int)time(NULL), afterValue, changeValue, reason, roomID, friendsGroupID, rateFireCoin);
 
 	return true;
 }
 
-// »ñÈ¡Íæ¼ÒÈ¨ÏŞ
+// è·å–ç©å®¶æƒé™
 int CRedisPHP::GetUserPower(int friendsGroupID, int userID)
 {
 	if (friendsGroupID <= 0 || userID <= 0)
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼ÒÈ¨ÏŞÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ç©å®¶æƒé™å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HGET %s|%d,%d power", TBL_USERTOFRIENDSGROUP, userID, friendsGroupID);
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼ÒÈ¨ÏŞÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ç©å®¶æƒé™å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -197,7 +197,7 @@ int CRedisPHP::GetUserPower(int friendsGroupID, int userID)
 	}
 	else
 	{
-		ERROR_LOG("»ñÈ¡Íæ¼ÒÈ¨ÏŞÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ç©å®¶æƒé™å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 	}
 
 	freeReplyObject(pReply);
@@ -205,19 +205,19 @@ int CRedisPHP::GetUserPower(int friendsGroupID, int userID)
 	return ret;
 }
 
-// »ñÈ¡¾ãÀÖ²¿ÈºÖ÷
+// è·å–ä¿±ä¹éƒ¨ç¾¤ä¸»
 int CRedisPHP::GetFriendsGroupMasterID(int friendsGroupID)
 {
 	if (friendsGroupID <= 0)
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿ÈºÖ÷Ê§°Ü,friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç¾¤ä¸»å¤±è´¥,friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HGET %s|%d masterID", TBL_FRIENDSGROUP, friendsGroupID);
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿ÈºÖ÷Ê§°Ü,friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç¾¤ä¸»å¤±è´¥,friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
@@ -229,7 +229,7 @@ int CRedisPHP::GetFriendsGroupMasterID(int friendsGroupID)
 	}
 	else
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿ÈºÖ÷Ê§°Ü,friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç¾¤ä¸»å¤±è´¥,friendsGroupID=%d", friendsGroupID);
 	}
 
 	freeReplyObject(pReply);
@@ -237,10 +237,10 @@ int CRedisPHP::GetFriendsGroupMasterID(int friendsGroupID)
 	return ret;
 }
 
-// ÅĞ¶ÏÊÇ·ñ¿ÉÒÔ¼ÓÈë¾ãÀÖ²¿
+// åˆ¤æ–­æ˜¯å¦å¯ä»¥åŠ å…¥ä¿±ä¹éƒ¨
 bool CRedisPHP::IsCanJoinFriendsGroupRoom(int userID, int friendsGroupID)
 {
-	// ÅĞ¶Ï¾ãÀÖ²¿ÊÇ·ñ´æÔÚ
+	// åˆ¤æ–­ä¿±ä¹éƒ¨æ˜¯å¦å­˜åœ¨
 	if (IsKeyExists(TBL_FRIENDSGROUP, friendsGroupID) && IsKeyExists(TBL_FRIENDSGROUPTOUSER, friendsGroupID, userID))
 	{
 		return true;
@@ -249,12 +249,12 @@ bool CRedisPHP::IsCanJoinFriendsGroupRoom(int userID, int friendsGroupID)
 	return false;
 }
 
-//  ÉèÖÃÍæ¼Ò¾ãÀÖ²¿×ÊÔ´ÊıÁ¿
+//  è®¾ç½®ç©å®¶ä¿±ä¹éƒ¨èµ„æºæ•°é‡
 bool CRedisPHP::SetUserFriendsGroupResNums(int friendsGroupID, int userID, const char * resName, long long resNums, bool bAdd/* = false*/)
 {
 	if (friendsGroupID <= 0 || userID <= 0 || !resName)
 	{
-		ERROR_LOG("ÉèÖÃÍæ¼Ò»ğ±ÒÊ§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è®¾ç½®ç©å®¶ç«å¸å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -265,7 +265,7 @@ bool CRedisPHP::SetUserFriendsGroupResNums(int friendsGroupID, int userID, const
 
 	if (bAdd)
 	{
-		if (resNums == 0) //²»Ôö²»¼õ
+		if (resNums == 0) //ä¸å¢ä¸å‡
 		{
 			return true;
 		}
@@ -284,7 +284,7 @@ bool CRedisPHP::SetUserFriendsGroupResNums(int friendsGroupID, int userID, const
 	return true;
 }
 
-// »ñÈ¡Í¨ÖªÊ±¼ä
+// è·å–é€šçŸ¥æ—¶é—´
 bool CRedisPHP::GetFGNotifySendTime(long long llIndex, time_t &sendTime)
 {
 	if (llIndex <= 0)
@@ -313,7 +313,7 @@ bool CRedisPHP::GetFGNotifySendTime(long long llIndex, time_t &sendTime)
 	return true;
 }
 
-// ÇåÀíÍæ¼Ò¾ãÀÖ²¿Í¨Öª
+// æ¸…ç†ç©å®¶ä¿±ä¹éƒ¨é€šçŸ¥
 void CRedisPHP::ClearUserFGNotifySet(int userID)
 {
 	std::string key = MakeKey(TBL_USER_FG_NOTIFY_SET, userID);
@@ -326,7 +326,7 @@ void CRedisPHP::ClearUserFGNotifySet(int userID)
 
 	std::vector<long long> expireVec;
 
-	// Èç¹ûÄ³¸ö¼ÇÂ¼²»´æÔÚÁË£¬ÄÇÃ´¾ÍÊÇ±»É¾ÁË
+	// å¦‚æœæŸä¸ªè®°å½•ä¸å­˜åœ¨äº†ï¼Œé‚£ä¹ˆå°±æ˜¯è¢«åˆ äº†
 	for (size_t i = 0; i < pReply->elements; i++)
 	{
 		const char* value = pReply->element[i]->str;
@@ -344,7 +344,7 @@ void CRedisPHP::ClearUserFGNotifySet(int userID)
 	ZremMember(key.c_str(), expireVec);
 }
 
-//  ÇåÀíËùÓĞÍ¨Öª
+//  æ¸…ç†æ‰€æœ‰é€šçŸ¥
 void CRedisPHP::ClearAllFGNotifyInfo()
 {
 	long long minIndex = GetKeyIndex(TBL_FG_NOTIFY_CLEAR_ID);
@@ -374,12 +374,12 @@ void CRedisPHP::ClearAllFGNotifyInfo()
 	SetKeyIndex(TBL_FG_NOTIFY_CLEAR_ID, minIndex <= maxIndex ? minIndex : maxIndex);
 }
 
-//»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±ID
+//è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜ID
 bool CRedisPHP::GetfriendsGroupToUser(int friendsGroupID, int userID, int &ChouShui, int&ManagerId)
 {
 	if (friendsGroupID <= 0 || userID <= 0)
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±ID,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜ID,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -387,7 +387,7 @@ bool CRedisPHP::GetfriendsGroupToUser(int friendsGroupID, int userID, int &ChouS
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HGET %s|%d,%d inviter_userid", TBL_FRIENDSGROUPTOUSER, friendsGroupID, userID);
 	if (!pReply)
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±ID,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜ID,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
@@ -397,7 +397,7 @@ bool CRedisPHP::GetfriendsGroupToUser(int friendsGroupID, int userID, int &ChouS
 	}
 	else
 	{
-		ERROR_LOG("»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±ID,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜ID,friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		freeReplyObject(pReply);
 		return false;
 	}
@@ -408,7 +408,7 @@ bool CRedisPHP::GetfriendsGroupToUser(int friendsGroupID, int userID, int &ChouS
 		pReply = (redisReply*)redisCommand(m_pContext, "HGET %s|%d,%d ratio", TBL_FRIENDSGROUPTOUSER, friendsGroupID, ManagerId);
 		if (!pReply)
 		{
-			ERROR_LOG("»ñÈ¡¾ãÀÖ²¿³éË®Ê§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, ManagerId);
+			ERROR_LOG("è·å–ä¿±ä¹éƒ¨æŠ½æ°´å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, ManagerId);
 			return false;
 		}
 
@@ -418,7 +418,7 @@ bool CRedisPHP::GetfriendsGroupToUser(int friendsGroupID, int userID, int &ChouS
 		}
 		else
 		{
-			ERROR_LOG("»ñÈ¡¾ãÀÖ²¿³éË®Ê§°Ü,friendsGroupID=%d,userID=%d", friendsGroupID, ManagerId);
+			ERROR_LOG("è·å–ä¿±ä¹éƒ¨æŠ½æ°´å¤±è´¥,friendsGroupID=%d,userID=%d", friendsGroupID, ManagerId);
 			freeReplyObject(pReply);
 			return false;
 		}
@@ -458,7 +458,7 @@ bool CRedisPHP::GetEmailSendTime(long long llIndex, int &sendTime)
 	return true;
 }
 
-//»ñÈ¡ÓÃ»§ËùÓĞÓÊ¼şid
+//è·å–ç”¨æˆ·æ‰€æœ‰é‚®ä»¶id
 bool CRedisPHP::GetUserAllEmailID(int userID, std::vector<EmailSimpleInfo> &simpleEmailID, bool Asc/* = true*/)
 {
 	if (userID <= 0)
@@ -485,13 +485,13 @@ bool CRedisPHP::GetUserAllEmailID(int userID, std::vector<EmailSimpleInfo> &simp
 	int elements = pReply->elements;
 	if (elements == 0)
 	{
-		// Ã»ÓĞÈÎºÎÓÊ¼şÕı³£
+		// æ²¡æœ‰ä»»ä½•é‚®ä»¶æ­£å¸¸
 		freeReplyObject(pReply);
 		return true;
 	}
 	if (elements % 2 != 0)
 	{
-		ERROR_LOG("»ñÈ¡ÓÃ»§ËùÓĞÓÊ¼şIDinvalid elements elements=%d, userID=%s", elements, userID);
+		ERROR_LOG("è·å–ç”¨æˆ·æ‰€æœ‰é‚®ä»¶IDinvalid elements elements=%d, userID=%s", elements, userID);
 		freeReplyObject(pReply);
 		return false;
 	}
@@ -514,7 +514,7 @@ bool CRedisPHP::GetUserAllEmailID(int userID, std::vector<EmailSimpleInfo> &simp
 	return true;
 }
 
-//É¾³ıÓÃ»§µÄÒ»·âÓÊ¼ş
+//åˆ é™¤ç”¨æˆ·çš„ä¸€å°é‚®ä»¶
 bool CRedisPHP::DelUserEmailInfo(int userID, long long emailID)
 {
 	if (emailID <= 0 || userID <= 0)
@@ -523,7 +523,7 @@ bool CRedisPHP::DelUserEmailInfo(int userID, long long emailID)
 		return false;
 	}
 
-	//ÒÆ³ı¼¯ºÏ
+	//ç§»é™¤é›†åˆ
 	std::string key = MakeKey(TBL_USER_EMAIL_SET, userID);
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 	sprintf(redisCmd, "ZREM %s %lld", key.c_str(), emailID);
@@ -533,7 +533,7 @@ bool CRedisPHP::DelUserEmailInfo(int userID, long long emailID)
 
 	freeReplyObject(pReply);
 
-	//ÏÈÉ¾ĞÅÏ¢
+	//å…ˆåˆ ä¿¡æ¯
 	char assistantKey[48] = "";
 	sprintf(assistantKey, "%d,%lld", userID, emailID);
 	key = MakeKey(TBL_USER_EMAIL_DETAIL, assistantKey);
@@ -542,7 +542,7 @@ bool CRedisPHP::DelUserEmailInfo(int userID, long long emailID)
 	return true;
 }
 
-//ÇåÀíÄ³¸öÓÃ»§µÄÓÊ¼ş¼¯ºÏ
+//æ¸…ç†æŸä¸ªç”¨æˆ·çš„é‚®ä»¶é›†åˆ
 void CRedisPHP::ClearUserEmailSet(int userID)
 {
 	int currTime = (int)time(NULL);
@@ -567,7 +567,7 @@ void CRedisPHP::ClearUserEmailSet(int userID)
 	}
 }
 
-//ÇåÀí¹ıÆÚÓÊ¼ş
+//æ¸…ç†è¿‡æœŸé‚®ä»¶
 void CRedisPHP::ClearAllEmailInfo()
 {
 	long long minIndex = GetKeyIndex(TBL_EMAIL_INFO_MIN_ID);
@@ -598,7 +598,7 @@ void CRedisPHP::ClearAllEmailInfo()
 }
 
 //////////////////////////////////////////////////////////////////////////
-// Ôö¼Ó×ÊÔ´Öµ£¬Ö»ÄÜÉèÖÃÊıÖµÀàĞÍ
+// å¢åŠ èµ„æºå€¼ï¼Œåªèƒ½è®¾ç½®æ•°å€¼ç±»å‹
 long long CRedisPHP::AddUserResNums(int userID, const char * resName, long long changeResNums)
 {
 	if (userID <= 0 || !resName)
@@ -629,7 +629,7 @@ bool CRedisPHP::LoadAllMatchInfo(std::map<long long, MatchInfo> & matchInfoMap)
 {
 	matchInfoMap.clear();
 
-	// Çå³ı¶ÔÓ¦·¿¼äµÄÍæ¼ÒÊı¾İ
+	// æ¸…é™¤å¯¹åº”æˆ¿é—´çš„ç©å®¶æ•°æ®
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
 	sprintf(redisCmd, "KEYS %s|*", TBL_TIME_MATCH_INFO);
@@ -649,7 +649,7 @@ bool CRedisPHP::LoadAllMatchInfo(std::map<long long, MatchInfo> & matchInfoMap)
 		int matchID = 0;
 		if (!ParseKey(key, tableName, matchID))
 		{
-			ERROR_LOG("½âÎö±ÈÈüĞÅÏ¢Ê§°Ü£ºkey=%s", key);
+			ERROR_LOG("è§£ææ¯”èµ›ä¿¡æ¯å¤±è´¥ï¼škey=%s", key);
 			DelKey(key);
 			continue;
 		}
@@ -657,14 +657,14 @@ bool CRedisPHP::LoadAllMatchInfo(std::map<long long, MatchInfo> & matchInfoMap)
 		MatchInfo matchInfo;
 		if (!GetMatchInfo(matchID, matchInfo))
 		{
-			ERROR_LOG("»ñÈ¡±ÈÈüĞÅÏ¢Ê§°Ü£ºkey=%s", key);
+			ERROR_LOG("è·å–æ¯”èµ›ä¿¡æ¯å¤±è´¥ï¼škey=%s", key);
 			DelKey(key);
 			continue;
 		}
 
 		if (matchInfo.matchStatus == MATCH_STATUS_SIGN_UP)
 		{
-			//¼ÓÈëµ½ÄÚ´æ
+			//åŠ å…¥åˆ°å†…å­˜
 			matchInfoMap.insert(std::make_pair(matchInfo.startTime, matchInfo));
 		}
 	}
@@ -698,7 +698,7 @@ bool CRedisPHP::GetMatchInfo(int matchID, MatchInfo& matchInfo)
 		return false;
 	}
 
-	// ¿É·ñ×ö³ÉÅäÖÃ£¬Ì«·³ÁË TODO
+	// å¯å¦åšæˆé…ç½®ï¼Œå¤ªçƒ¦äº† TODO
 	for (int i = 0; i < elements; i += 2)
 	{
 		const char* field = pReply->element[i]->str;

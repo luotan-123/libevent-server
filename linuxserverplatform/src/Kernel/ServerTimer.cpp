@@ -5,10 +5,10 @@
 #include "ServerTimer.h"
 
 
-// ¶¨Ê±Æ÷¾«¶È£¬µ¥Î»ºÁÃë¡£
+// å®šæ—¶å™¨ç²¾åº¦ï¼Œå•ä½æ¯«ç§’ã€‚
 #define SERVER_TIME_ONCE	100
 
-// ¶¨Ê±Æ÷²âÊÔ´úÂëºê
+// å®šæ—¶å™¨æµ‹è¯•ä»£ç å®
 //#define TEST_TIMER_CODE
 
 #ifdef TEST_TIMER_CODE
@@ -48,7 +48,7 @@ bool CServerTimer::Start(CDataLine* pDataLine)
 	m_pDataLine = pDataLine;
 	m_bRun = true;
 
-	// ¿ª±ÙÏß³Ì
+	// å¼€è¾Ÿçº¿ç¨‹
 	pthread_t threadID = 0;
 	int err = pthread_create(&threadID, NULL, ThreadCheckTimer, (void*)this);
 	if (err != 0)
@@ -125,7 +125,7 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 {
 	struct TimerParam* param = (struct TimerParam*)arg;
 
-	// Ïß³ÌÖÕÖ¹ÔËĞĞ
+	// çº¿ç¨‹ç»ˆæ­¢è¿è¡Œ
 	if (!param->pCServerTimer->m_bRun)
 	{
 		event_base_loopbreak(param->base);

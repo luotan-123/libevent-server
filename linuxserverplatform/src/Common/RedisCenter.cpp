@@ -12,7 +12,7 @@ CRedisCenter::~CRedisCenter()
 
 bool CRedisCenter::Init()
 {
-	AUTOCOST("CRedisCenter::Init() ºÄÊ±");
+	AUTOCOST("CRedisCenter::Init() è€—æ—¶");
 
 	timeval tv = { 3, 0 };
 
@@ -45,7 +45,7 @@ bool CRedisCenter::Init()
 	int iRetCode = NeedLoadAllUserData();
 	if (iRetCode == 1)
 	{
-		INFO_LOG("¼ÓÔØÈ«²¿ÓÃ»§Êı¾İ¡£¡£¡£");
+		INFO_LOG("åŠ è½½å…¨éƒ¨ç”¨æˆ·æ•°æ®ã€‚ã€‚ã€‚");
 		ret = LoadAllUserData();
 		if (!ret)
 		{
@@ -53,7 +53,7 @@ bool CRedisCenter::Init()
 			return false;
 		}
 
-		INFO_LOG("¼ÓÔØËùÓĞ´úÀí¡£¡£¡£");
+		INFO_LOG("åŠ è½½æ‰€æœ‰ä»£ç†ã€‚ã€‚ã€‚");
 		ret = LoadAllAgentUser();
 		if (!ret)
 		{
@@ -61,7 +61,7 @@ bool CRedisCenter::Init()
 			return false;
 		}
 
-		INFO_LOG("¼ÓÔØÈ«²¿±³°üÊı¾İ¡£¡£¡£");
+		INFO_LOG("åŠ è½½å…¨éƒ¨èƒŒåŒ…æ•°æ®ã€‚ã€‚ã€‚");
 		ret = LoadAllUserBag();
 		if (!ret)
 		{
@@ -76,7 +76,7 @@ bool CRedisCenter::Init()
 	}
 	else
 	{
-		INFO_LOG("===µ±Ç°ÏµÍ³²»ĞèÒª¼ÓÔØ£¬È«²¿ÓÃ»§Êı¾İºÍ´úÀíÊı¾İ===");
+		INFO_LOG("===å½“å‰ç³»ç»Ÿä¸éœ€è¦åŠ è½½ï¼Œå…¨éƒ¨ç”¨æˆ·æ•°æ®å’Œä»£ç†æ•°æ®===");
 	}
 
 	ret = LoadAllRewardsPoolData();
@@ -107,11 +107,11 @@ bool CRedisCenter::Stop()
 	return true;
 }
 
-int CRedisCenter::NeedLoadAllUserData()	//ÅĞ¶ÏÊÇ·ñĞèÒª¼ÓÔØÊı¾İ¿âÖĞËùÓĞÓÃ»§Êı¾İµ½redis
+int CRedisCenter::NeedLoadAllUserData()	//åˆ¤æ–­æ˜¯å¦éœ€è¦åŠ è½½æ•°æ®åº“ä¸­æ‰€æœ‰ç”¨æˆ·æ•°æ®åˆ°redis
 {
 	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
 
-	//³õÊ¼»¯mysql¶ÔÏó²¢½¨Á¢Á¬½Ó
+	//åˆå§‹åŒ–mysqlå¯¹è±¡å¹¶å»ºç«‹è¿æ¥
 	CMysqlHelper mysqlHelper;
 	mysqlHelper.init(dbConfig.ip, dbConfig.user, dbConfig.passwd, dbConfig.dbName, "", dbConfig.port);
 	try
@@ -120,13 +120,13 @@ int CRedisCenter::NeedLoadAllUserData()	//ÅĞ¶ÏÊÇ·ñĞèÒª¼ÓÔØÊı¾İ¿âÖĞËùÓĞÓÃ»§Êı¾İµ½
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return 2;
 	}
 
 	char buf[128] = "";
 
-	// ¼ÓÔØËùÓĞµÄÍæ¼ÒÊı¾İ
+	// åŠ è½½æ‰€æœ‰çš„ç©å®¶æ•°æ®
 	sprintf(buf, "select * from %s limit 5", TBL_USER);
 
 	CMysqlHelper::MysqlData dataSet;
@@ -136,7 +136,7 @@ int CRedisCenter::NeedLoadAllUserData()	//ÅĞ¶ÏÊÇ·ñĞèÒª¼ÓÔØÊı¾İ¿âÖĞËùÓĞÓÃ»§Êı¾İµ½
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return 2;
 	}
 
@@ -146,10 +146,10 @@ int CRedisCenter::NeedLoadAllUserData()	//ÅĞ¶ÏÊÇ·ñĞèÒª¼ÓÔØÊı¾İ¿âÖĞËùÓĞÓÃ»§Êı¾İµ½
 
 		CConfigManage::sqlGetValue(dataSet[i], "userID", userData.userID);
 
-		// ±£´æµ½redis
+		// ä¿å­˜åˆ°redis
 		std::string key = MakeKey(TBL_USER, userData.userID);
 
-		// redisÖĞÒÑ¾­´æÔÚÁË¾Í²»¼ÓÔØ
+		// redisä¸­å·²ç»å­˜åœ¨äº†å°±ä¸åŠ è½½
 		if (!IsKeyExists(key.c_str()))
 		{
 			return 1;
@@ -161,12 +161,12 @@ int CRedisCenter::NeedLoadAllUserData()	//ÅĞ¶ÏÊÇ·ñĞèÒª¼ÓÔØÊı¾İ¿âÖĞËùÓĞÓÃ»§Êı¾İµ½
 
 bool CRedisCenter::LoadAllUserData()
 {
-	AUTOCOST("LoadAllUserData ºÄÊ±");
+	AUTOCOST("LoadAllUserData è€—æ—¶");
 
 	int currMaxUserID = -1;
 	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
 
-	//³õÊ¼»¯mysql¶ÔÏó²¢½¨Á¢Á¬½Ó
+	//åˆå§‹åŒ–mysqlå¯¹è±¡å¹¶å»ºç«‹è¿æ¥
 	CMysqlHelper mysqlHelper;
 	mysqlHelper.init(dbConfig.ip, dbConfig.user, dbConfig.passwd, dbConfig.dbName, "", dbConfig.port);
 	try
@@ -175,13 +175,13 @@ bool CRedisCenter::LoadAllUserData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
 	char buf[MAX_SQL_STATEMENT_SIZE] = "";
 
-	// ¼ÓÔØËùÓĞµÄÍæ¼ÒÊı¾İ
+	// åŠ è½½æ‰€æœ‰çš„ç©å®¶æ•°æ®
 	sprintf(buf, "select * from %s", TBL_USER);
 
 	CMysqlHelper::MysqlData dataSet;
@@ -191,7 +191,7 @@ bool CRedisCenter::LoadAllUserData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -247,18 +247,18 @@ bool CRedisCenter::LoadAllUserData()
 		CConfigManage::sqlGetValue(dataSet[i], "matchStatus", userData.matchStatus);
 		CConfigManage::sqlGetValue(dataSet[i], "curMatchRank", userData.curMatchRank);
 
-		// ±£´æµ½redis
+		// ä¿å­˜åˆ°redis
 		std::string key = MakeKey(TBL_USER, userData.userID);
 
 		FixAccountIndexInfo(userData.account, userData.passwd, userData.userID, userData.registerType);
 
-		//°ó¶¨ÊÖ»úºÅ£¬°ó¶¨ÊÖ»úºÅ²ÅĞèÒª´Ë¹¦ÄÜ£¬ÊÖ»ú×¢²á¹¦ÄÜ²»ĞèÒª
+		//ç»‘å®šæ‰‹æœºå·ï¼Œç»‘å®šæ‰‹æœºå·æ‰éœ€è¦æ­¤åŠŸèƒ½ï¼Œæ‰‹æœºæ³¨å†ŒåŠŸèƒ½ä¸éœ€è¦
 		if (!userData.isVirtual)
 		{
 			SetUserPhone(userData.userID, userData.phone);
 		}
 
-		//°ó¶¨ÏĞÁÄºÅ
+		//ç»‘å®šé—²èŠå·
 		if (!userData.isVirtual)
 		{
 			SetUserXianLiao(userData.userID, userData.xianliao);
@@ -269,7 +269,7 @@ bool CRedisCenter::LoadAllUserData()
 			AddKeyToZSet(TBL_RANKING_WINCOUNT, userData.winCount, userData.userID);
 		}
 
-		// redisÖĞÒÑ¾­´æÔÚÁË¾Í²»¼ÓÔØ
+		// redisä¸­å·²ç»å­˜åœ¨äº†å°±ä¸åŠ è½½
 		if (IsKeyExists(key.c_str()))
 		{
 			continue;
@@ -327,7 +327,7 @@ bool CRedisCenter::LoadAllUserData()
 
 		if (hmset(TBL_USER, userData.userID, umap) == false)
 		{
-			ERROR_LOG("³õÊ¼»¯Ê§°Ü hmset userinfo to redis failed user(%d)", userData.userID);
+			ERROR_LOG("åˆå§‹åŒ–å¤±è´¥ hmset userinfo to redis failed user(%d)", userData.userID);
 			return false;
 		}
 
@@ -353,7 +353,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 {
 	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
 
-	//³õÊ¼»¯mysql¶ÔÏó²¢½¨Á¢Á¬½Ó
+	//åˆå§‹åŒ–mysqlå¯¹è±¡å¹¶å»ºç«‹è¿æ¥
 	CMysqlHelper mysqlHelper;
 	mysqlHelper.init(dbConfig.ip, dbConfig.user, dbConfig.passwd, dbConfig.dbName, "", dbConfig.port);
 	try
@@ -362,7 +362,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -378,12 +378,12 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+			ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 			continue;
 		}
 	}
 
-	// ¼ÓÔØËùÓĞµÄÍæ¼ÒÊı¾İ
+	// åŠ è½½æ‰€æœ‰çš„ç©å®¶æ•°æ®
 	sprintf(buf, "select * from %s", TBL_REWARDS_POOL);
 
 	CMysqlHelper::MysqlData dataSet;
@@ -393,7 +393,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -415,7 +415,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 		CConfigManage::sqlGetValue(dataSet[i], "realPeopleWinPercent", poolData.realPeopleWinPercent);
 		CConfigManage::sqlGetValue(dataSet[i], "detailInfo", poolData.detailInfo, sizeof(poolData.detailInfo));
 
-		// redisÖĞÒÑ¾­´æÔÚÁË¾Í²»¼ÓÔØ
+		// redisä¸­å·²ç»å­˜åœ¨äº†å°±ä¸åŠ è½½
 		if (IsKeyExists(TBL_REWARDS_POOL, poolData.roomID))
 		{
 			continue;
@@ -439,18 +439,18 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 
 		if (!hmset(TBL_REWARDS_POOL, poolData.roomID, umap))
 		{
-			ERROR_LOG("¼ÓÔØ½±³ØÊ§°Ü:roomID=%d", poolData.roomID);
+			ERROR_LOG("åŠ è½½å¥–æ± å¤±è´¥:roomID=%d", poolData.roomID);
 		}
 	}
 
 	return true;
 }
 
-bool CRedisCenter::LoadAllAgentUser()		//¼ÓÔØËùÓĞ´úÀí
+bool CRedisCenter::LoadAllAgentUser()		//åŠ è½½æ‰€æœ‰ä»£ç†
 {
 	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
 
-	//³õÊ¼»¯mysql¶ÔÏó²¢½¨Á¢Á¬½Ó
+	//åˆå§‹åŒ–mysqlå¯¹è±¡å¹¶å»ºç«‹è¿æ¥
 	CMysqlHelper mysqlHelper;
 	mysqlHelper.init(dbConfig.ip, dbConfig.user, dbConfig.passwd, dbConfig.dbName, "", dbConfig.port);
 	try
@@ -459,7 +459,7 @@ bool CRedisCenter::LoadAllAgentUser()		//¼ÓÔØËùÓĞ´úÀí
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -473,7 +473,7 @@ bool CRedisCenter::LoadAllAgentUser()		//¼ÓÔØËùÓĞ´úÀí
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -485,7 +485,7 @@ bool CRedisCenter::LoadAllAgentUser()		//¼ÓÔØËùÓĞ´úÀí
 
 		if (userID > 0)
 		{
-			// Ğ´ÈëredisÖĞ
+			// å†™å…¥redisä¸­
 			AddKeyToSet(TBL_WEB_AGENTMEMBER, CUtil::Tostring(userID).c_str());
 		}
 	}
@@ -493,9 +493,9 @@ bool CRedisCenter::LoadAllAgentUser()		//¼ÓÔØËùÓĞ´úÀí
 	return true;
 }
 
-bool CRedisCenter::LoadAllConfig()		//¼ÓÔØËùÓĞÅäÖÃ
+bool CRedisCenter::LoadAllConfig()		//åŠ è½½æ‰€æœ‰é…ç½®
 {
-	// °ÑlogonBaseInfo¼ÓÔØµ½redis
+	// æŠŠlogonBaseInfoåŠ è½½åˆ°redis
 	for (auto itr = ConfigManage()->m_logonBaseInfoMap.begin(); itr != ConfigManage()->m_logonBaseInfoMap.end(); itr++)
 	{
 		std::unordered_map<std::string, std::string> umap;
@@ -510,7 +510,7 @@ bool CRedisCenter::LoadAllConfig()		//¼ÓÔØËùÓĞÅäÖÃ
 		hmset(TBL_BASE_LOGON, itr->first, umap);
 	}
 
-	// SystemConfig±í¼ÓÔØµ½redis
+	// SystemConfigè¡¨åŠ è½½åˆ°redis
 	const OtherConfig& otherConfig = ConfigManage()->GetOtherConfig();
 	const BankConfig& bankConfig = ConfigManage()->GetBankConfig();
 	const SendGiftConfig& sendGiftConfig = ConfigManage()->GetSendGiftConfig();
@@ -568,7 +568,7 @@ bool CRedisCenter::LoadAllConfig()		//¼ÓÔØËùÓĞÅäÖÃ
 	umapFriendsGroupConfig["groupTransferCount"] = CUtil::Tostring(fgConfig.groupTransferCount);
 	hmset(TBL_BASE_OTHER_CONFIG, SYSTEM_CONFIG_TYPE_FG, umapFriendsGroupConfig);
 
-	// °ÑgameBaseInfo ¼ÓÔØµ½ÄÚ´æ
+	// æŠŠgameBaseInfo åŠ è½½åˆ°å†…å­˜
 	for (auto itr = ConfigManage()->m_gameBaseInfoMap.begin(); itr != ConfigManage()->m_gameBaseInfoMap.end(); itr++)
 	{
 		std::unordered_map<std::string, std::string> umap;
@@ -585,7 +585,7 @@ bool CRedisCenter::LoadAllConfig()		//¼ÓÔØËùÓĞÅäÖÃ
 		hmset(TBL_BASE_GAME, itr->first, umap);
 	}
 
-	// °ÑprivateDeskConfig ¼ÓÔØµ½ÄÚ´æ
+	// æŠŠprivateDeskConfig åŠ è½½åˆ°å†…å­˜
 	for (auto itr = ConfigManage()->m_buyGameDeskInfoMap.begin(); itr != ConfigManage()->m_buyGameDeskInfoMap.end(); itr++)
 	{
 		std::unordered_map<std::string, std::string> umap;
@@ -599,13 +599,13 @@ bool CRedisCenter::LoadAllConfig()		//¼ÓÔØËùÓĞÅäÖÃ
 		umap["otherCostNums"] = CUtil::Tostring(itr->second.otherCostNums);
 		umap["peopleCount"] = CUtil::Tostring(itr->second.peopleCount);
 
-		// ×éºÏ¼üÖµ
+		// ç»„åˆé”®å€¼
 		char key[64] = "";
 		sprintf(key, "%d,%d,%d", itr->first.gameID, itr->first.count, itr->first.roomType);
 		hmset(TBL_BASE_BUY_DESK, key, umap);
 	}
 
-	// °ÑroomBaseInfo ¼ÓÔØµ½ÄÚ´æ
+	// æŠŠroomBaseInfo åŠ è½½åˆ°å†…å­˜
 	for (auto itr = ConfigManage()->m_roomBaseInfoMap.begin(); itr != ConfigManage()->m_roomBaseInfoMap.end(); itr++)
 	{
 		std::unordered_map<std::string, std::string> umap;
@@ -667,7 +667,7 @@ bool CRedisCenter::SetUserPhone(int userID, const char* phone, bool bUnBind /*= 
 	return true;
 }
 
-// ÏĞÁÄ°ó¶¨
+// é—²èŠç»‘å®š
 bool CRedisCenter::SetUserXianLiao(int userID, const char* xianliao)
 {
 	if (!xianliao || userID <= 0)
@@ -692,7 +692,7 @@ bool CRedisCenter::SetUserXianLiao(int userID, const char* xianliao)
 	return true;
 }
 
-// ÉèÖÃÓÎÏ··ş×´Ì¬
+// è®¾ç½®æ¸¸æˆæœçŠ¶æ€
 bool CRedisCenter::SetRoomServerStatus(int roomID, int status)
 {
 	if (roomID <= 0)
@@ -713,7 +713,7 @@ bool CRedisCenter::SetRoomServerStatus(int roomID, int status)
 	return true;
 }
 
-// ÉèÖÃµÇÂ½·ş×´Ì¬
+// è®¾ç½®ç™»é™†æœçŠ¶æ€
 bool CRedisCenter::SetLogonServerStatus(int logonID, int status)
 {
 	if (logonID <= 0)
@@ -753,7 +753,7 @@ bool CRedisCenter::LoadAllUserBag()
 {
 	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
 
-	//³õÊ¼»¯mysql¶ÔÏó²¢½¨Á¢Á¬½Ó
+	//åˆå§‹åŒ–mysqlå¯¹è±¡å¹¶å»ºç«‹è¿æ¥
 	CMysqlHelper mysqlHelper;
 	mysqlHelper.init(dbConfig.ip, dbConfig.user, dbConfig.passwd, dbConfig.dbName, "", dbConfig.port);
 	try
@@ -762,14 +762,14 @@ bool CRedisCenter::LoadAllUserBag()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
 	char buf[MAX_SQL_STATEMENT_SIZE] = "";
 
 
-	// ¼ÓÔØËùÓĞµÄÍæ¼ÒÊı¾İ
+	// åŠ è½½æ‰€æœ‰çš„ç©å®¶æ•°æ®
 	sprintf(buf, "select * from %s", TBL_USER_BAG);
 
 	CMysqlHelper::MysqlData dataSet;
@@ -779,7 +779,7 @@ bool CRedisCenter::LoadAllUserBag()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -800,7 +800,7 @@ bool CRedisCenter::LoadAllUserBag()
 		CConfigManage::sqlGetValue(dataSet[i], "goldenDragon", userbag.goldenDragon);
 		CConfigManage::sqlGetValue(dataSet[i], "lavaArmor", userbag.lavaArmor);
 
-		// redisÖĞÒÑ¾­´æÔÚÁË¾Í²»¼ÓÔØ
+		// redisä¸­å·²ç»å­˜åœ¨äº†å°±ä¸åŠ è½½
 		if (IsKeyExists(TBL_REWARDS_POOL, userbag.userID))
 		{
 			continue;
@@ -823,7 +823,7 @@ bool CRedisCenter::LoadAllUserBag()
 
 		if (!hmset(TBL_REWARDS_POOL, userbag.userID, umap))
 		{
-			ERROR_LOG("¼ÓÔØ±³°üÊ§°Ü:userID=%d", userbag.userID);
+			ERROR_LOG("åŠ è½½èƒŒåŒ…å¤±è´¥:userID=%d", userbag.userID);
 		}
 	}
 

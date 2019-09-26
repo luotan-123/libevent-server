@@ -3,7 +3,7 @@
 #include <map>
 #include <unordered_map>
 
-// ´óÌüÍæ¼Ò½á¹¹
+// å¤§å…ç©å®¶ç»“æ„
 struct LogonUserInfo
 {
 	int userID;
@@ -20,7 +20,7 @@ struct LogonUserInfo
 	}
 };
 
-// ´óÌüÍæ¼Ò¹ÜÀíÆ÷
+// å¤§å…ç©å®¶ç®¡ç†å™¨
 class CLogonUserManage
 {
 public:
@@ -36,5 +36,5 @@ public:
 	UINT GetUserCount() { return m_logonUserInfoMap.size(); }
 
 private:
-	std::map<int, LogonUserInfo*> m_logonUserInfoMap;			// ´óÌüÍæ¼Ò¹ÜÀíÆ÷ÖĞÖ»±£´æÔÚÏßµÄÍæ¼Ò
+	std::map<int, LogonUserInfo*> m_logonUserInfoMap;			// å¤§å…ç©å®¶ç®¡ç†å™¨ä¸­åªä¿å­˜åœ¨çº¿çš„ç©å®¶
 };

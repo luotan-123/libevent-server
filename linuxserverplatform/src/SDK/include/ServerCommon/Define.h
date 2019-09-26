@@ -2,10 +2,10 @@
 
 #include "KernelDefine.h"
 
-/***********************************************************************È«¾Ö¶¨Òå********************************************************************************/
+/***********************************************************************å…¨å±€å®šä¹‰********************************************************************************/
 
 //////////////////////////////////////////////////////////////////////////
-#define TMLcopyright  "¿ª·¢:ÉîÛÚÊÐ¿Æ¼¼ÓÐÏÞ¹«Ë¾"	///°æÈ¨
+#define TMLcopyright  "å¼€å‘:æ·±åœ³å¸‚ç§‘æŠ€æœ‰é™å…¬å¸"	///ç‰ˆæƒ
 
 //////////////////////////////////////////////////////////////////////////
 #define SAFECHECK_MESSAGE(pMessage,MessageType,pData,iSize) \
@@ -16,196 +16,196 @@ if(!pMessage)\
 	return false;
 
 //////////////////////////////////////////////////////////
-// ÓÎÏ·×é¼þÏà¹Ø
-#define INVALID_DESKIDX						(-1)			// ÎÞÐ§µÄ×ÀºÅID
-#define INVALID_DESKSTATION					0xFF			// ÎÞÐ§µÄ×ùÎ»ºÅ
-#define MAX_PLAYER_GRADE					9				// Õ½¼¨ÏÔÊ¾µÄ×î´óÈËÊý
-#define MAX_ROOM_HAVE_DESK_COUNT			100000			// Ã¿¸ö·¿¼ä×î¶à×À×ÓÊýÁ¿
-#define MAX_PEOPLE							180				// ×î´óÓÎÏ·ÈËÊý
-#define MAX_BUY_DESK_JSON_LEN				256				// ¹ºÂò×À×Ójson×î´ó³¤¶È
+// æ¸¸æˆç»„ä»¶ç›¸å…³
+#define INVALID_DESKIDX						(-1)			// æ— æ•ˆçš„æ¡Œå·ID
+#define INVALID_DESKSTATION					0xFF			// æ— æ•ˆçš„åº§ä½å·
+#define MAX_PLAYER_GRADE					9				// æˆ˜ç»©æ˜¾ç¤ºçš„æœ€å¤§äººæ•°
+#define MAX_ROOM_HAVE_DESK_COUNT			100000			// æ¯ä¸ªæˆ¿é—´æœ€å¤šæ¡Œå­æ•°é‡
+#define MAX_PEOPLE							180				// æœ€å¤§æ¸¸æˆäººæ•°
+#define MAX_BUY_DESK_JSON_LEN				256				// è´­ä¹°æ¡Œå­jsonæœ€å¤§é•¿åº¦
 
-#define MAKE_DESKMIXID(roomID, deskIdx)		(roomID * MAX_ROOM_HAVE_DESK_COUNT + deskIdx)	// ¼ÆËãredisÖÐ£¬×À×ÓË÷Òý
+#define MAKE_DESKMIXID(roomID, deskIdx)		(roomID * MAX_ROOM_HAVE_DESK_COUNT + deskIdx)	// è®¡ç®—redisä¸­ï¼Œæ¡Œå­ç´¢å¼•
 
-#define PRIVATE_DESK_TIMEOUT_SECS			(10 * 60)		// ·¿¿¨³¡×À×Ó³¬Ê±Ê±¼ä(s) TODOs
+#define PRIVATE_DESK_TIMEOUT_SECS			(10 * 60)		// æˆ¿å¡åœºæ¡Œå­è¶…æ—¶æ—¶é—´(s) TODOs
 
-#define MAX_ROOM_GRADE_COUNT				10000000		// Ã¿¸öroomID×î¶àÕ½¼¨ÊýÁ¿
+#define MAX_ROOM_GRADE_COUNT				10000000		// æ¯ä¸ªroomIDæœ€å¤šæˆ˜ç»©æ•°é‡
 
-#define GRADE_SIMPLE_EXPIRE_TIME			(7*24*60*60)	// ´ó½áËãÕ½¼¨¹ýÆÚÊ±¼ä
-#define GRADE_EXPIRE_TIME					(GRADE_SIMPLE_EXPIRE_TIME + (1*24*60*60))		// µ¥¾ÖÕ½¼¨Ê§Ð§Ê±¼ä
+#define GRADE_SIMPLE_EXPIRE_TIME			(7*24*60*60)	// å¤§ç»“ç®—æˆ˜ç»©è¿‡æœŸæ—¶é—´
+#define GRADE_EXPIRE_TIME					(GRADE_SIMPLE_EXPIRE_TIME + (1*24*60*60))		// å•å±€æˆ˜ç»©å¤±æ•ˆæ—¶é—´
 
-#define SAVE_JSON_PATH						"json/"	// ±£´æjsonµÄÄ¿Â¼
+#define SAVE_JSON_PATH						"json/"	// ä¿å­˜jsonçš„ç›®å½•
 
 ////////////////////////////////////////////////////////////
-// ¾ãÀÖ²¿Ïà¹Ø
-#define GROUP_NOTIY_MSG_EXPIRE_TIME			(7*24*60*60)	// ¾ãÀÖ²¿Í¨ÖªÏûÏ¢¹ýÆÚÊ±¼ä
-#define MAX_FRIENDSGROUP_DESK_LIST_COUNT	20				// ×î´óÅÆ×ÀÊýÁ¿
-#define MAX_FRIENDSGROUP_VIP_ROOM_COUNT		20				// ×î´óVIP·¿¼äÊýÁ¿
+// ä¿±ä¹éƒ¨ç›¸å…³
+#define GROUP_NOTIY_MSG_EXPIRE_TIME			(7*24*60*60)	// ä¿±ä¹éƒ¨é€šçŸ¥æ¶ˆæ¯è¿‡æœŸæ—¶é—´
+#define MAX_FRIENDSGROUP_DESK_LIST_COUNT	20				// æœ€å¤§ç‰Œæ¡Œæ•°é‡
+#define MAX_FRIENDSGROUP_VIP_ROOM_COUNT		20				// æœ€å¤§VIPæˆ¿é—´æ•°é‡
 
 //////////////////////////////////////////////////////////////////////////
-// ÓÊ¼þÏµÍ³
-#define EMAIL_SIMPLE_EXPIRE_TIME			(10*24*60*60)	// Ã¿¸öÓÃ»§µÄÓÊ¼þid¹ýÆÚÊ±¼ä
-#define EMAIL_EXPIRE_TIME					(11*24*60*60)	// ÓÊ¼þÏêÇé¹ýÆÚÊ±¼ä
+// é‚®ä»¶ç³»ç»Ÿ
+#define EMAIL_SIMPLE_EXPIRE_TIME			(10*24*60*60)	// æ¯ä¸ªç”¨æˆ·çš„é‚®ä»¶idè¿‡æœŸæ—¶é—´
+#define EMAIL_EXPIRE_TIME					(11*24*60*60)	// é‚®ä»¶è¯¦æƒ…è¿‡æœŸæ—¶é—´
 
 //////////////////////////////////////////////////////////////////////////
-// ÅÅÐÐ°ñ
-#define MAX_RANK_COUNT						10				// ÅÅÐÐ°ñ×î¶àÏÔÊ¾ÊýÁ¿
+// æŽ’è¡Œæ¦œ
+#define MAX_RANK_COUNT						10				// æŽ’è¡Œæ¦œæœ€å¤šæ˜¾ç¤ºæ•°é‡
 
 //////////////////////////////////////////////////////////////////////////
-// ±ÈÈü³¡Ïà¹Ø
-#define MAX_MATCH_ROUND							10						// ±ÈÈü×î´ó½øÐÐÂÖÊý
-#define MAX_GAME_MATCH_ID						10000000				// ×î¶à¾ÙÐÐµÄ±ÈÈüÊýÁ¿
-#define MAX_MATCH_PEOPLE_COUNT					512						// ×î´ó²ÎÈüÈËÊý
-#define MIN_ROBOT_USERID						117700					// »úÆ÷ÈË×îÐ¡id
-#define MAX_ROBOT_USERID						117999					// »úÆ÷ÈË×î´óid
-#define MATCH_START_NOTIFY_TIME					180						// ¿ªÈüÍ¨ÖªÊ±¼ä
+// æ¯”èµ›åœºç›¸å…³
+#define MAX_MATCH_ROUND							10						// æ¯”èµ›æœ€å¤§è¿›è¡Œè½®æ•°
+#define MAX_GAME_MATCH_ID						10000000				// æœ€å¤šä¸¾è¡Œçš„æ¯”èµ›æ•°é‡
+#define MAX_MATCH_PEOPLE_COUNT					512						// æœ€å¤§å‚èµ›äººæ•°
+#define MIN_ROBOT_USERID						117700					// æœºå™¨äººæœ€å°id
+#define MAX_ROBOT_USERID						117999					// æœºå™¨äººæœ€å¤§id
+#define MATCH_START_NOTIFY_TIME					180						// å¼€èµ›é€šçŸ¥æ—¶é—´
 
-// ±ÈÈüÀàÐÍ
+// æ¯”èµ›ç±»åž‹
 enum MatchType
 {
-	MATCH_TYPE_NORMAL = 0,		//0Ä¬ÈÏÖµ£¬Ã»ÓÐ±¨Ãû±ÈÈü
-	MATCH_TYPE_PEOPLE = 1,		//ÊµÊ±Èü
-	MATCH_TYPE_TIME = 2,		//¶¨Ê±Èü
+	MATCH_TYPE_NORMAL = 0,		//0é»˜è®¤å€¼ï¼Œæ²¡æœ‰æŠ¥åæ¯”èµ›
+	MATCH_TYPE_PEOPLE = 1,		//å®žæ—¶èµ›
+	MATCH_TYPE_TIME = 2,		//å®šæ—¶èµ›
 };
 
-// Íæ¼Ò±ÈÈü×´Ì¬
+// çŽ©å®¶æ¯”èµ›çŠ¶æ€
 enum UserMatchStatus
 {
-	USER_MATCH_STATUS_NORMAL = 0,		//Ã»ÓÐ±¨Ãû£¬»òÕß±ÈÈü½áÊø
-	USER_MATCH_STATUS_SIGN_UP = 1,		//ÒÑ¾­±¨Ãû£¬ÓÎÏ·Î´¿ªÊ¼
-	USER_MATCH_STATUS_AFTER_BEGIN = 2,	//ÒÑ¾­±¨Ãû£¬±ÈÈü¼´½«¿ªÊ¼
-	USER_MATCH_STATUS_PLAYING = 3,		//±ÈÈü½øÐÐÖÐ
+	USER_MATCH_STATUS_NORMAL = 0,		//æ²¡æœ‰æŠ¥åï¼Œæˆ–è€…æ¯”èµ›ç»“æŸ
+	USER_MATCH_STATUS_SIGN_UP = 1,		//å·²ç»æŠ¥åï¼Œæ¸¸æˆæœªå¼€å§‹
+	USER_MATCH_STATUS_AFTER_BEGIN = 2,	//å·²ç»æŠ¥åï¼Œæ¯”èµ›å³å°†å¼€å§‹
+	USER_MATCH_STATUS_PLAYING = 3,		//æ¯”èµ›è¿›è¡Œä¸­
 };
 
-// Íæ¼Ò±ÈÈü×À×Ó×´Ì¬
+// çŽ©å®¶æ¯”èµ›æ¡Œå­çŠ¶æ€
 enum DeskMatchStatus
 {
-	DESK_MATCH_STATUS_NORMAL = 0,	//µÈ´ý¿ªÈü£¬»òÕß½ú¼¶
-	DESK_MATCH_STATUS_FAIL = 1,		//ÒÑ¾­±»ÌÔÌ­
+	DESK_MATCH_STATUS_NORMAL = 0,	//ç­‰å¾…å¼€èµ›ï¼Œæˆ–è€…æ™‹çº§
+	DESK_MATCH_STATUS_FAIL = 1,		//å·²ç»è¢«æ·˜æ±°
 };
 
-// ±ÈÈüÊ§°ÜÔ­Òò
+// æ¯”èµ›å¤±è´¥åŽŸå› 
 enum MatchFailReason
 {
-	MATCH_FAIL_REASON_NOT_ENOUGH_PEOPLE = 1,	//ÈËÊý²»¹»
-	MATCH_FAIL_REASON_PLAYING = 2,				//ÓÎÏ·ÖÐ
-	MATCH_FAIL_REASON_SYSTEM_ERROR = 3			//ÏµÍ³Òì³£
+	MATCH_FAIL_REASON_NOT_ENOUGH_PEOPLE = 1,	//äººæ•°ä¸å¤Ÿ
+	MATCH_FAIL_REASON_PLAYING = 2,				//æ¸¸æˆä¸­
+	MATCH_FAIL_REASON_SYSTEM_ERROR = 3			//ç³»ç»Ÿå¼‚å¸¸
 };
 
-//±ÈÈü×´Ì¬  0£º±¨ÃûÖÐ£¬1£º±ÈÈüÖÐ£¬2£º±ÈÈü½áÊø
+//æ¯”èµ›çŠ¶æ€  0ï¼šæŠ¥åä¸­ï¼Œ1ï¼šæ¯”èµ›ä¸­ï¼Œ2ï¼šæ¯”èµ›ç»“æŸ
 enum MatchStatus
 {
-	MATCH_STATUS_SIGN_UP = 0,	//±¨ÃûÖÐ
-	MATCH_STATUS_PLAYING = 1,	//±ÈÈüÖÐ
-	MATCH_STATUS_GAME_OVER = 2,	//±ÈÈü½áÊø
+	MATCH_STATUS_SIGN_UP = 0,	//æŠ¥åä¸­
+	MATCH_STATUS_PLAYING = 1,	//æ¯”èµ›ä¸­
+	MATCH_STATUS_GAME_OVER = 2,	//æ¯”èµ›ç»“æŸ
 };
 
 //////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////Ã¶¾ÙÄ£¿é/////////////////////////////////////////
+/////////////////////////////////æžšä¸¾æ¨¡å—/////////////////////////////////////////
 
-// Ìßµô(ÇëÀë)Ô­Òò
+// è¸¢æŽ‰(è¯·ç¦»)åŽŸå› 
 enum ReasonKickout
 {
-	REASON_KICKOUT_DEFAULT = 0,		// Ä¬ÈÏ
-	REASON_KICKOUT_STAND,			// Õ¾ÆðÀ´
-	REASON_KICKOUT_STAND_MINLIMIT,	// ½ð±ÒÐ¡ÓÚ×îµÍÏÞÖÆ
-	REASON_KICKOUT_STAND_MAXLIMIT,  // ½ð±Ò´óÓÚ×î¸ßÏÞÖÆ
-	REASON_KICKOUT_NOTAGREE,		// ³¤Ê±¼äÎ´×¼±¸
-	REASON_KICKOUT_STAND_FIRECOIN_MINLIMIT,		 // »ð±ÒÐ¡ÓÚ×îµÍÏÞÖÆ
-	REASON_KICKOUT_STAND_FIRECOIN_MAXLIMIT,		 // »ð±Ò´óÓÚ×î¸ßÏÞÖÆ
-	REASON_KICKOUT_LONG_TIME_NOOPERATION,		//³¤Ê±¼äÎ´²Ù×÷
+	REASON_KICKOUT_DEFAULT = 0,		// é»˜è®¤
+	REASON_KICKOUT_STAND,			// ç«™èµ·æ¥
+	REASON_KICKOUT_STAND_MINLIMIT,	// é‡‘å¸å°äºŽæœ€ä½Žé™åˆ¶
+	REASON_KICKOUT_STAND_MAXLIMIT,  // é‡‘å¸å¤§äºŽæœ€é«˜é™åˆ¶
+	REASON_KICKOUT_NOTAGREE,		// é•¿æ—¶é—´æœªå‡†å¤‡
+	REASON_KICKOUT_STAND_FIRECOIN_MINLIMIT,		 // ç«å¸å°äºŽæœ€ä½Žé™åˆ¶
+	REASON_KICKOUT_STAND_FIRECOIN_MAXLIMIT,		 // ç«å¸å¤§äºŽæœ€é«˜é™åˆ¶
+	REASON_KICKOUT_LONG_TIME_NOOPERATION,		//é•¿æ—¶é—´æœªæ“ä½œ
 };
 
-// ×ÊÔ´ÀàÐÍ
+// èµ„æºç±»åž‹
 enum ResourceType
 {
 	RESOURCE_TYPE_NONE = 0,
-	RESOURCE_TYPE_MONEY,		// ½ð±Ò
-	RESOURCE_TYPE_JEWEL,		// ·¿¿¨
-	RESOURCE_TYPE_BANKMONEY,	// ÒøÐÐ½ð±Ò
-	RESOURCE_TYPE_FIRECOIN,		// ¾ãÀÖ²¿»ð±Ò
+	RESOURCE_TYPE_MONEY,		// é‡‘å¸
+	RESOURCE_TYPE_JEWEL,		// æˆ¿å¡
+	RESOURCE_TYPE_BANKMONEY,	// é“¶è¡Œé‡‘å¸
+	RESOURCE_TYPE_FIRECOIN,		// ä¿±ä¹éƒ¨ç«å¸
 	RESOURCE_TYPE_END,
 };
 
-// µÇÂ½×¢²áÀàÐÍ
+// ç™»é™†æ³¨å†Œç±»åž‹
 enum LogonType
 {
-	LOGON_QUICK,	// ¿ìËÙµÇÂ¼
-	LOGON_NORMAL,	// ÆÕÍ¨µÇÂ¼
-	LOGON_WEICHAT,	// Î¢ÐÅµÇÂ¼
-	LOGON_QQ,		// QQµÇÂ¼
-	LOGON_TEL_PHONE,// ÊÖ»úµÇÂ¼
-	LOGON_TEL_XIANLIAO,// ÏÐÁÄµÇÂ¼
-	LOGON_VISITOR,	// ÓÎ¿ÍµÇÂ¼
-	LOGON_NR		// ×î´óÏÂ±ê
+	LOGON_QUICK,	// å¿«é€Ÿç™»å½•
+	LOGON_NORMAL,	// æ™®é€šç™»å½•
+	LOGON_WEICHAT,	// å¾®ä¿¡ç™»å½•
+	LOGON_QQ,		// QQç™»å½•
+	LOGON_TEL_PHONE,// æ‰‹æœºç™»å½•
+	LOGON_TEL_XIANLIAO,// é—²èŠç™»å½•
+	LOGON_VISITOR,	// æ¸¸å®¢ç™»å½•
+	LOGON_NR		// æœ€å¤§ä¸‹æ ‡
 };
 
-// ²Ù×÷×´Ì¬
+// æ“ä½œçŠ¶æ€
 enum LogonStatus
 {
-	LOGON_REGISTER,  //×¢²á
-	LOGON_LOGIN,     //µÇÂ¼
+	LOGON_REGISTER,  //æ³¨å†Œ
+	LOGON_LOGIN,     //ç™»å½•
 };
 
-// Ö§¸¶·½Ê½
+// æ”¯ä»˜æ–¹å¼
 enum PayType
 {
-	PAY_TYPE_NORMAL = 1,	// ÆÕÍ¨Ö§¸¶
-	PAY_TYPE_AA = 2,		// AAÖ§¸¶
+	PAY_TYPE_NORMAL = 1,	// æ™®é€šæ”¯ä»˜
+	PAY_TYPE_AA = 2,		// AAæ”¯ä»˜
 };
 
-// ·þÎñ·ÑÀàÐÍ
+// æœåŠ¡è´¹ç±»åž‹
 enum RoomTipType
 {
-	ROOM_TIP_TYPE_NO = 0,		//²»ÊÕÐ¡·Ñ
-	ROOM_TIP_TYPE_ALL_WIN = 1,	//ÊÕÈ¡ËùÓÐµÄÓ®¼Ò
-	ROOM_TIP_TYPE_MAX_WIN = 2,	//ÊÕÈ¡×î´óµÄ´óÓ®¼Ò
+	ROOM_TIP_TYPE_NO = 0,		//ä¸æ”¶å°è´¹
+	ROOM_TIP_TYPE_ALL_WIN = 1,	//æ”¶å–æ‰€æœ‰çš„èµ¢å®¶
+	ROOM_TIP_TYPE_MAX_WIN = 2,	//æ”¶å–æœ€å¤§çš„å¤§èµ¢å®¶
 };
 
-// redis·ÖÇøÀàÐÍ
+// redisåˆ†åŒºç±»åž‹
 enum RedisDataType
 {
-	REDIS_DATA_TYPE_GAME = 1,	// ±£´æÓÎÏ·Êý¾Ý
-	REDIS_DATA_TYPE_PHP = 2,	// ±£´æPHPÊý¾Ý
+	REDIS_DATA_TYPE_GAME = 1,	// ä¿å­˜æ¸¸æˆæ•°æ®
+	REDIS_DATA_TYPE_PHP = 2,	// ä¿å­˜PHPæ•°æ®
 };
 
-// redisÖÐ´æÈ¡µÄÅäÖÃÀàÐÍ
+// redisä¸­å­˜å–çš„é…ç½®ç±»åž‹
 enum SystemConfigType
 {
-	SYSTEM_CONFIG_TYPE_OTHER = 1,	// ÆäËüÅäÖÃ
-	SYSTEM_CONFIG_TYPE_BANK = 2,	// ÒøÐÐ
-	SYSTEM_CONFIG_TYPE_SENDGIFT = 3,// ×ªÔö
-	SYSTEM_CONFIG_TYPE_FG = 4,		// ¾ãÀÖ²¿
+	SYSTEM_CONFIG_TYPE_OTHER = 1,	// å…¶å®ƒé…ç½®
+	SYSTEM_CONFIG_TYPE_BANK = 2,	// é“¶è¡Œ
+	SYSTEM_CONFIG_TYPE_SENDGIFT = 3,// è½¬å¢ž
+	SYSTEM_CONFIG_TYPE_FG = 4,		// ä¿±ä¹éƒ¨
 	SYSTEM_CONFIG_TYPE_FTP = 5,		// ftp
 };
 
-// µÇÂ½·þsocketÀàÐÍ
+// ç™»é™†æœsocketç±»åž‹
 enum LogonServerSocketType
 {
-	LOGON_SERVER_SOCKET_TYPE_NO = 0,			//ÎÞÀàÐÍ
-	LOGON_SERVER_SOCKET_TYPE_USER = 1,			//Íæ¼Ò
-	LOGON_SERVER_SOCKET_TYPE_GAME_SERVER = 2,	//ÓÎÏ··þ
+	LOGON_SERVER_SOCKET_TYPE_NO = 0,			//æ— ç±»åž‹
+	LOGON_SERVER_SOCKET_TYPE_USER = 1,			//çŽ©å®¶
+	LOGON_SERVER_SOCKET_TYPE_GAME_SERVER = 2,	//æ¸¸æˆæœ
 };
 
-// Òì²½Ïß³Ì´¦Àí½á¹ûÀàÐÍ
+// å¼‚æ­¥çº¿ç¨‹å¤„ç†ç»“æžœç±»åž‹
 enum AnsyThreadResultType
 {
-	ANSY_THREAD_RESULT_TYPE_NO = 0,			//ÎÞÀàÐÍ
-	ANSY_THREAD_RESULT_TYPE_DATABASE = 1,	//Êý¾Ý¿â
-	ANSY_THREAD_RESULT_TYPE_HTTP = 2,		//http£¨https£©ÇëÇó
-	ANSY_THREAD_RESULT_TYPE_LOG = 3,		//ÈÕÖ¾
+	ANSY_THREAD_RESULT_TYPE_NO = 0,			//æ— ç±»åž‹
+	ANSY_THREAD_RESULT_TYPE_DATABASE = 1,	//æ•°æ®åº“
+	ANSY_THREAD_RESULT_TYPE_HTTP = 2,		//httpï¼ˆhttpsï¼‰è¯·æ±‚
+	ANSY_THREAD_RESULT_TYPE_LOG = 3,		//æ—¥å¿—
 };
 
-// HTTPÇëÇóÀàÐÍ
+// HTTPè¯·æ±‚ç±»åž‹
 enum HTTP_POST_TYPE
 {
-	HTTP_POST_TYPE_NO = 0,			//ÎÞÀàÐÍ
-	HTTP_POST_TYPE_REGISTER = 1,	//×¢²á
-	HTTP_POST_TYPE_LOGON = 2,		//µÇÂ½
-	HTTP_POST_TYPE_LOGOUT = 3,		//µÇ³ö
-	HTTP_POST_TYPE_REQ_DATA = 4,	//»ñÈ¡Ò³ÃæÊý¾Ý
-	HTTP_POST_TYPE_MATCH_GIFT = 5,	//±ÈÈü½±Àø
-	HTTP_POST_TYPE_MATCH_FAIL = 6,	//±ÈÈüÊ§°Ü
+	HTTP_POST_TYPE_NO = 0,			//æ— ç±»åž‹
+	HTTP_POST_TYPE_REGISTER = 1,	//æ³¨å†Œ
+	HTTP_POST_TYPE_LOGON = 2,		//ç™»é™†
+	HTTP_POST_TYPE_LOGOUT = 3,		//ç™»å‡º
+	HTTP_POST_TYPE_REQ_DATA = 4,	//èŽ·å–é¡µé¢æ•°æ®
+	HTTP_POST_TYPE_MATCH_GIFT = 5,	//æ¯”èµ›å¥–åŠ±
+	HTTP_POST_TYPE_MATCH_FAIL = 6,	//æ¯”èµ›å¤±è´¥
 };
 
 //////////////////////////////////////////////////////////////////////////

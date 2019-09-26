@@ -4,72 +4,72 @@
 #include "basemessage.h"
 #include "KernelDefine.h"
 
-//´¦ÀíÀàĞÍ¶¨Òå
-#define HD_SOCKET_READ					1							//SOCKET ¶ÁÈ¡ÊÂ¼ş´¦Àí			
-#define HD_SOCKET_CLOSE					2							//SOCKET ¹Ø±ÕÊÂ¼ş´¦Àí			
-#define HD_ASYN_THREAD_RESULT			3							//Òì²½Ïß³Ì½á¹û´¦Àí
-#define HD_TIMER_MESSAGE				4							//¶¨Ê±Æ÷ÏûÏ¢´¦Àí
-#define HD_PLATFORM_SOCKET_READ			5							//ÖĞĞÄ·ş¶ÁÈ¡ÊÂ¼ş´¦Àí
+//å¤„ç†ç±»å‹å®šä¹‰
+#define HD_SOCKET_READ					1							//SOCKET è¯»å–äº‹ä»¶å¤„ç†			
+#define HD_SOCKET_CLOSE					2							//SOCKET å…³é—­äº‹ä»¶å¤„ç†			
+#define HD_ASYN_THREAD_RESULT			3							//å¼‚æ­¥çº¿ç¨‹ç»“æœå¤„ç†
+#define HD_TIMER_MESSAGE				4							//å®šæ—¶å™¨æ¶ˆæ¯å¤„ç†
+#define HD_PLATFORM_SOCKET_READ			5							//ä¸­å¿ƒæœè¯»å–äº‹ä»¶å¤„ç†
 
-//Êı¾İ¶ÓÁĞĞÅÏ¢Í·
+//æ•°æ®é˜Ÿåˆ—ä¿¡æ¯å¤´
 struct DataLineHead
 {
-	UINT						uSize;								//Êı¾İ´óĞ¡
-	UINT						uDataKind;							//Êı¾İÀàĞÍ
+	UINT						uSize;								//æ•°æ®å¤§å°
+	UINT						uDataKind;							//æ•°æ®ç±»å‹
 };
 
-///Òì²½Ïß³Ì½á¹ûÏûÏ¢½á¹¹¶¨Òå
+///å¼‚æ­¥çº¿ç¨‹ç»“æœæ¶ˆæ¯ç»“æ„å®šä¹‰
 struct AsynThreadResultLine
 {
-	DataLineHead						LineHead;					///¶ÓÁĞÍ·
-	UINT								uHandleResult;				///½á¹û½á¹û
-	UINT								uHandleKind;				///´¦ÀíÀàĞÍ
-	UINT								uHandleID;					///¶ÔÏó±êÊ¶
+	DataLineHead						LineHead;					///é˜Ÿåˆ—å¤´
+	UINT								uHandleResult;				///ç»“æœç»“æœ
+	UINT								uHandleKind;				///å¤„ç†ç±»å‹
+	UINT								uHandleID;					///å¯¹è±¡æ ‡è¯†
 };
 
-//SOCKET¹Ø±ÕÍ¨Öª½á¹¹¶¨Òå
+//SOCKETå…³é—­é€šçŸ¥ç»“æ„å®šä¹‰
 struct SocketCloseLine
 {
-	DataLineHead						LineHead;					//¶ÓÁĞÍ·
-	UINT								uIndex;						//SOCKT Ë÷Òı
+	DataLineHead						LineHead;					//é˜Ÿåˆ—å¤´
+	UINT								uIndex;						//SOCKT ç´¢å¼•
 	ULONG								uAccessIP;					//SOCKET IP
-	UINT								uConnectTime;				//Á¬½ÓÊ±¼ä
+	UINT								uConnectTime;				//è¿æ¥æ—¶é—´
 };
 
-//SOCKET¶ÁÈ¡Í¨Öª½á¹¹¶¨Òå
+//SOCKETè¯»å–é€šçŸ¥ç»“æ„å®šä¹‰
 struct SocketReadLine
 {
-	DataLineHead						LineHead;					//¶ÓÁĞÍ·
-	NetMessageHead						netMessageHead;				//Êı¾İ°üÍ·
-	UINT								uHandleSize;				//Êı¾İ°ü´¦Àí´óĞ¡
-	UINT								uIndex;						//SOCKET Ë÷Òı
+	DataLineHead						LineHead;					//é˜Ÿåˆ—å¤´
+	NetMessageHead						netMessageHead;				//æ•°æ®åŒ…å¤´
+	UINT								uHandleSize;				//æ•°æ®åŒ…å¤„ç†å¤§å°
+	UINT								uIndex;						//SOCKET ç´¢å¼•
 	ULONG								uAccessIP;					//SOCKET IP
-	UINT								dwHandleID;					//SOCKET ´¦Àí ID
+	UINT								dwHandleID;					//SOCKET å¤„ç† ID
 };
 
-//¶¨Ê±Æ÷ÏûÏ¢½á¹¹¶¨Òå
+//å®šæ—¶å™¨æ¶ˆæ¯ç»“æ„å®šä¹‰
 struct ServerTimerLine
 {
-	DataLineHead						LineHead;					//¶ÓÁĞÍ·
-	UINT								uTimerID;					//¶¨Ê±Æ÷ ID
+	DataLineHead						LineHead;					//é˜Ÿåˆ—å¤´
+	UINT								uTimerID;					//å®šæ—¶å™¨ ID
 };
 
-//Êı¾İ¿âÊı¾İ°üÍ·½á¹¹
+//æ•°æ®åº“æ•°æ®åŒ…å¤´ç»“æ„
 struct DataBaseLineHead
 {
-	DataLineHead					dataLineHead;							///¶ÓÁĞÍ·
-	UINT							uHandleKind;							///´¦ÀíÀàĞÍ
-	UINT							uIndex;									///¶ÔÏóË÷Òı
-	UINT							dwHandleID;								///¶ÔÏó±êÊ¶
+	DataLineHead					dataLineHead;							///é˜Ÿåˆ—å¤´
+	UINT							uHandleKind;							///å¤„ç†ç±»å‹
+	UINT							uIndex;									///å¯¹è±¡ç´¢å¼•
+	UINT							dwHandleID;								///å¯¹è±¡æ ‡è¯†
 };
 
 //////////////////////////////////////////////////////////////////////////
-// ÄÚ²¿Í¨ĞÅÏà¹Ø
+// å†…éƒ¨é€šä¿¡ç›¸å…³
 
-// ÄÚ²¿Í¨ĞÅÑéÖ¤Ğ­Òé
+// å†…éƒ¨é€šä¿¡éªŒè¯åè®®
 const int COMMON_VERIFY_MESSAGE = 20190601;
 
-// dataline Æ½Ì¨Êı¾İÍ·
+// dataline å¹³å°æ•°æ®å¤´
 struct PlatformDataLineHead
 {
 	DataLineHead lineHead;
@@ -77,11 +77,11 @@ struct PlatformDataLineHead
 	int	socketIdx;
 };
 
-// ÖĞĞÄ·şÈÏÖ¤
+// ä¸­å¿ƒæœè®¤è¯
 struct PlatformCenterServerVerify
 {
-	int serverType; // ·şÎñÆ÷ÀàĞÍ   SERVICE_TYPE_LOGON//´óÌü    SERVICE_TYPE_LOADER//ÓÎÏ·
-	int serverID;	// ´óÌü·şÊÇlogonID£¬ÓÎÏ··şÊÇroomID
+	int serverType; // æœåŠ¡å™¨ç±»å‹   SERVICE_TYPE_LOGON//å¤§å…    SERVICE_TYPE_LOADER//æ¸¸æˆ
+	int serverID;	// å¤§å…æœæ˜¯logonIDï¼Œæ¸¸æˆæœæ˜¯roomID
 
 	PlatformCenterServerVerify()
 	{
@@ -89,7 +89,7 @@ struct PlatformCenterServerVerify
 	}
 };
 
-// µÇÂ½·şÈÏÖ¤
+// ç™»é™†æœè®¤è¯
 struct PlatformLogonServerVerify
 {
 	int roomID;
@@ -101,13 +101,13 @@ struct PlatformLogonServerVerify
 	}
 };
 
-///Á¬½Ó³É¹¦ÏûÏ¢ 
+///è¿æ¥æˆåŠŸæ¶ˆæ¯ 
 struct MSG_S_ConnectSuccess
 {
-	BYTE						bMaxVer;							///×îĞÂ°æ±¾ºÅÂë
-	BYTE						bLessVer;							///×îµÍ°æ±¾ºÅÂë
-	BYTE						bReserve[2];						///±£Áô×Ö¶Î
-	UINT						iCheckCode;							///¼ÓÃÜºóµÄĞ£ÑéÂë£¬ÓÉ¿Í»§¶Ë½âÃÜÔÚ°üÍ·ÖĞ·µ»Ø
+	BYTE						bMaxVer;							///æœ€æ–°ç‰ˆæœ¬å·ç 
+	BYTE						bLessVer;							///æœ€ä½ç‰ˆæœ¬å·ç 
+	BYTE						bReserve[2];						///ä¿ç•™å­—æ®µ
+	UINT						iCheckCode;							///åŠ å¯†åçš„æ ¡éªŒç ï¼Œç”±å®¢æˆ·ç«¯è§£å¯†åœ¨åŒ…å¤´ä¸­è¿”å›
 
 	MSG_S_ConnectSuccess()
 	{
@@ -118,8 +118,8 @@ struct MSG_S_ConnectSuccess
 //////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-#define DTK_GP_CHECK_DB_CONNECTION		487						// ¼ì²éÊı¾İ¿âÁ¬½ÓĞÔ
-#define DTK_GP_SQL_STATEMENT			488						// SQLÓï¾ä
+#define DTK_GP_CHECK_DB_CONNECTION		487						// æ£€æŸ¥æ•°æ®åº“è¿æ¥æ€§
+#define DTK_GP_SQL_STATEMENT			488						// SQLè¯­å¥
 #define DTK_GP_REGISTR_SEND             489                     // send uid to web
 //////////////////////////////////////////////////////////////////////////////
 

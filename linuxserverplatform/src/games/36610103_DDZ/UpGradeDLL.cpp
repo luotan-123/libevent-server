@@ -1,4 +1,4 @@
-// UpGradeDLL.cpp : ¶¨Òå DLL µÄ³õÊ¼»¯Àı³Ì¡£
+// UpGradeDLL.cpp : å®šä¹‰ DLL çš„åˆå§‹åŒ–ä¾‹ç¨‹ã€‚
 //
 
 #include "stdafx.h"
@@ -11,28 +11,28 @@
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-	// Èç¹ûÊ¹ÓÃ lpReserved£¬Çë½«´ËÒÆ³ı
+	// å¦‚æœä½¿ç”¨ lpReservedï¼Œè¯·å°†æ­¤ç§»é™¤
 	UNREFERENCED_PARAMETER(lpReserved);
 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		ERROR_LOG("UpGradeDLL.DLL ÕıÔÚ³õÊ¼»¯£¡\n");
+		ERROR_LOG("UpGradeDLL.DLL æ­£åœ¨åˆå§‹åŒ–ï¼\n");
 
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-		ERROR_LOG("UpGradeDLL.DLL ÕıÔÚÖÕÖ¹£¡\n");
+		ERROR_LOG("UpGradeDLL.DLL æ­£åœ¨ç»ˆæ­¢ï¼\n");
 	}
-	return 1;   // È·¶¨
+	return 1;   // ç¡®å®š
 }
 
-//»ñÈ¡ÓÎÏ·×é¼şĞÅÏ¢
+//è·å–æ¸¸æˆç»„ä»¶ä¿¡æ¯
 extern "C" __declspec(dllexport) BOOL GetServiceInfo(ServerDllInfoStruct * pServiceInfo, UINT uVer)
 {
-	//Ğ§ÑéĞÅÏ¢
+	//æ•ˆéªŒä¿¡æ¯
 	if ((uVer!=DEV_LIB_VER)||(pServiceInfo==NULL)) return FALSE;
 
-	//Ğ´ÈëĞÅÏ¢
+	//å†™å…¥ä¿¡æ¯
 	memset(pServiceInfo,0,sizeof(ServerDllInfoStruct));
 	pServiceInfo->uServiceVer=GAME_MAX_VER;
 	pServiceInfo->uNameID=NAME_ID;
@@ -41,12 +41,12 @@ extern "C" __declspec(dllexport) BOOL GetServiceInfo(ServerDllInfoStruct * pServ
 	lstrcpy(pServiceInfo->szGameName,GAMENAME);
 	///lstrcpy(pServiceInfo->szGameTable,GAME_TABLE_NAME);
 	///lstrcpy(pServiceInfo->szDLLFileName,SERVER_DLL_NAME);
-	lstrcpy(pServiceInfo->szWriter,TEXT("  "));//ÁúºÆÌì"));
-	lstrcpy(pServiceInfo->szDllNote,TEXT("ÅÆÀà -- ¶·µØÖ÷ÓÎÏ·×é¼ş"));
+	lstrcpy(pServiceInfo->szWriter,TEXT("  "));//é¾™æµ©å¤©"));
+	lstrcpy(pServiceInfo->szDllNote,TEXT("ç‰Œç±» -- æ–—åœ°ä¸»æ¸¸æˆç»„ä»¶"));
 	return TRUE;
 }
 
-//»ñÈ¡ÓÎÏ·¹ÜÀí½Ó¿Úº¯Êı
+//è·å–æ¸¸æˆç®¡ç†æ¥å£å‡½æ•°
 extern "C" __declspec(dllexport) IModuleManageService * CreateServiceInterface(UINT uVer)
 {
 	if (uVer==DEV_LIB_VER) 

@@ -1,41 +1,41 @@
 #pragma once
 
-/***********************************************************************ÄÚºË¶¨Òå********************************************************************************/
+/***********************************************************************å†…æ ¸å®šä¹‰********************************************************************************/
 
-const int MIN_USER_ACCOUNT_LEN = 4;			// Íæ¼ÒÕËºÅ×îÐ¡³¤¶È
-const int MAX_USER_ACCOUNT_LEN = 48;		// Íæ¼ÒÕËºÅ×î´ó³¤¶È
+const int MIN_USER_ACCOUNT_LEN = 4;			// çŽ©å®¶è´¦å·æœ€å°é•¿åº¦
+const int MAX_USER_ACCOUNT_LEN = 48;		// çŽ©å®¶è´¦å·æœ€å¤§é•¿åº¦
 
-const int MAX_USER_NAME_LEN = 64;			// Íæ¼ÒêÇ³Æ×î´ó³¤¶È
-const int MAX_USER_HEADURL_LEN = 256;		// Íæ¼ÒÍ·Ïñ×î´ó³¤¶È
+const int MAX_USER_NAME_LEN = 64;			// çŽ©å®¶æ˜µç§°æœ€å¤§é•¿åº¦
+const int MAX_USER_HEADURL_LEN = 256;		// çŽ©å®¶å¤´åƒæœ€å¤§é•¿åº¦
 
-const int USER_MD5_PASSWD_LEN = 32;				// ÃÜÂë³¤¶È(¶¼ÊÇMD5)
-const int MAX_USER_MAD_PASSWD_SIZE = 48;		// ×î´óÃÜÂë»º³åÇø´óÐ¡
+const int USER_MD5_PASSWD_LEN = 32;				// å¯†ç é•¿åº¦(éƒ½æ˜¯MD5)
+const int MAX_USER_MAD_PASSWD_SIZE = 48;		// æœ€å¤§å¯†ç ç¼“å†²åŒºå¤§å°
 
-const int MAX_PRIVATE_DESK_PASSWD_LEN = 20;		// Ë½ÓÐ·¿×î´óÃÜÂë³¤¶È
-const int PRIVATE_DESK_PASSWD_LEN = 6;			// Ë½ÓÐ·¿ÃÜÂë³¤¶È
+const int MAX_PRIVATE_DESK_PASSWD_LEN = 20;		// ç§æœ‰æˆ¿æœ€å¤§å¯†ç é•¿åº¦
+const int PRIVATE_DESK_PASSWD_LEN = 6;			// ç§æœ‰æˆ¿å¯†ç é•¿åº¦
 
-const int MAX_TEMP_SENDBUF_SIZE = 8192;			// ÁÙÊ±·¢ËÍ»º³åÇø´óÐ¡
-const int MAX_REDIS_COMMAND_SIZE = 2048;		// redisÃüÁî»º³åÇø´óÐ¡
-const int MAX_SQL_STATEMENT_SIZE = 2048;		// sqlÓï¾ä»º³åÇø´óÐ¡
+const int MAX_TEMP_SENDBUF_SIZE = 8192;			// ä¸´æ—¶å‘é€ç¼“å†²åŒºå¤§å°
+const int MAX_REDIS_COMMAND_SIZE = 2048;		// rediså‘½ä»¤ç¼“å†²åŒºå¤§å°
+const int MAX_SQL_STATEMENT_SIZE = 2048;		// sqlè¯­å¥ç¼“å†²åŒºå¤§å°
 
-const int MAX_IP_ADDR_SIZE = 128;		// ×î´óIPµØÖ·³¤¶È
-const int MAX_DB_USER_SIZE = 48;		// ×î´ódb_user»º³åÇø´óÐ¡
-const int MAX_DB_PASSWD_SIZE = 48;		// ×î´ódb_passwd»º³åÇø´óÐ¡
-const int MAX_DB_NAME_SIZE = 48;		// ×î´ódb_name»º³åÇø´óÐ¡
+const int MAX_IP_ADDR_SIZE = 128;		// æœ€å¤§IPåœ°å€é•¿åº¦
+const int MAX_DB_USER_SIZE = 48;		// æœ€å¤§db_userç¼“å†²åŒºå¤§å°
+const int MAX_DB_PASSWD_SIZE = 48;		// æœ€å¤§db_passwdç¼“å†²åŒºå¤§å°
+const int MAX_DB_NAME_SIZE = 48;		// æœ€å¤§db_nameç¼“å†²åŒºå¤§å°
 
-const int MAX_LOG_BUF_SIZE = 2048;		// log»º³åÇø´óÐ¡
-const int MAX_FILE_NAME_SIZE = 256;		// ×î´óÎÄ¼þÃû³¤¶È
-const int MAX_FUNC_NAME_SIZE = 128;		// ×î´óº¯ÊýÃû³¤¶È
-const int MAX_LOG_FILE_SIZE = 1024 * 1024 * 32;  //ÈÕ×ÓÎÄ¼þµÄ×î´óµÄ³¤¶È£¬³¬¹ý³¤¶È»áÉú³ÉÐÂµÄÎÄ¼þ
+const int MAX_LOG_BUF_SIZE = 2048;		// logç¼“å†²åŒºå¤§å°
+const int MAX_FILE_NAME_SIZE = 256;		// æœ€å¤§æ–‡ä»¶åé•¿åº¦
+const int MAX_FUNC_NAME_SIZE = 128;		// æœ€å¤§å‡½æ•°åé•¿åº¦
+const int MAX_LOG_FILE_SIZE = 1024 * 1024 * 32;  //æ—¥å­æ–‡ä»¶çš„æœ€å¤§çš„é•¿åº¦ï¼Œè¶…è¿‡é•¿åº¦ä¼šç”Ÿæˆæ–°çš„æ–‡ä»¶
 
-const int MAX_BANK_PASSWD_MIN_LEN = 6;	// ÒøÐÐÃÜÂë×îÐ¡³¤¶È
+const int MAX_BANK_PASSWD_MIN_LEN = 6;	// é“¶è¡Œå¯†ç æœ€å°é•¿åº¦
 
 //////////////////////////////////////////////////////////////////////////
-//Êý¾Ý¶ÓÁÐ×î´ó³¤¶È£¨°üÀ¨¶ÓÁÐÍ·²¿£©£¬Òª´óÓÚ MAX_TEMP_SENDBUF_SIZE=8192
+//æ•°æ®é˜Ÿåˆ—æœ€å¤§é•¿åº¦ï¼ˆåŒ…æ‹¬é˜Ÿåˆ—å¤´éƒ¨ï¼‰ï¼Œè¦å¤§äºŽ MAX_TEMP_SENDBUF_SIZE=8192
 #define LD_MAX_PART						8320
 
 /////////////////////////////////////////////////////////
-//web Ïà¹Ø
+//web ç›¸å…³
 #define  WEB_ADDRESS	"headimgqn.szysx8.cn"
 const int MIN_MAN_HEADURL_ID = 1001;
 const int MAX_MAN_HEADURL_ID = 3287;
@@ -43,53 +43,53 @@ const int MIN_WOMAN_HEADURL_ID = 1000001;
 const int MAX_WOMAN_HEADURL_ID = 1003803;
 
 /////////////////////////////////////////////////////////
-// ÐÄÌø¡¢socketÏà¹Ø
-#define KEEP_ACTIVE_HEARTBEAT_COUNT				3		// Ç°¶ËºÍ·þÎñÆ÷µÄÐÄÌø
-#define BINDID_SOCKET_USERID_TIME				30		// Ã¿¸öÁ¬½Ósocket£¬°ó¶¨Íæ¼ÒÊ±¼ä£¬µ¥Î»Ãë
-#define MAX_LOGON_SERVER_COUNT					48		// ×î¶àµÇÂ½·þÊýÁ¿
-#define INVALID_SOCKET							-1		// ÎÞÐ§µÄsocketÖµ
+// å¿ƒè·³ã€socketç›¸å…³
+#define KEEP_ACTIVE_HEARTBEAT_COUNT				3		// å‰ç«¯å’ŒæœåŠ¡å™¨çš„å¿ƒè·³
+#define BINDID_SOCKET_USERID_TIME				30		// æ¯ä¸ªè¿žæŽ¥socketï¼Œç»‘å®šçŽ©å®¶æ—¶é—´ï¼Œå•ä½ç§’
+#define MAX_LOGON_SERVER_COUNT					48		// æœ€å¤šç™»é™†æœæ•°é‡
+#define INVALID_SOCKET							-1		// æ— æ•ˆçš„socketå€¼
 
 /////////////////////////////////////////////////////////
-// ºÄÊ±Í³¼Æ
-#define MIN_STATISTICS_FUNC_COST_TIME			20000	// º¯ÊýºÄÊ±×îÐ¡Í³¼ÆÊ±¼ä(us)
+// è€—æ—¶ç»Ÿè®¡
+#define MIN_STATISTICS_FUNC_COST_TIME			20000	// å‡½æ•°è€—æ—¶æœ€å°ç»Ÿè®¡æ—¶é—´(us)
 
 /////////////////////////////////////////////////////////
-// Ïß³Ì´¦ÀíÊ±¼ä¼ä¸ô µ¥Î»Î¢Ãî
-#define THREAD_ONCE_DATABASE					50000   // Êý¾Ý´¦ÀíÏß³Ì¼ä¸ô
-#define THREAD_ONCE_HANDLE_MSG					20000   // ÏûÏ¢´¦ÀíÏß³Ì¼ä¸ô
-#define MAX_TIMER_THRED_NUMS					4		// ¶¨Ê±Æ÷×î´óÏß³ÌÊýÁ¿
+// çº¿ç¨‹å¤„ç†æ—¶é—´é—´éš” å•ä½å¾®å¦™
+#define THREAD_ONCE_DATABASE					50000   // æ•°æ®å¤„ç†çº¿ç¨‹é—´éš”
+#define THREAD_ONCE_HANDLE_MSG					20000   // æ¶ˆæ¯å¤„ç†çº¿ç¨‹é—´éš”
+#define MAX_TIMER_THRED_NUMS					4		// å®šæ—¶å™¨æœ€å¤§çº¿ç¨‹æ•°é‡
 
-/////////////////////////////////Ã¶¾ÙÄ£¿é/////////////////////////////////////////
+/////////////////////////////////æžšä¸¾æ¨¡å—/////////////////////////////////////////
 
-// Íæ¼ÒÐÔ±ð
+// çŽ©å®¶æ€§åˆ«
 enum UserSex
 {
-	USER_DEX_FEMALE = 0,//Å®ÐÔ
-	USER_SEX_MALE = 1,  //ÄÐÐÔ
+	USER_DEX_FEMALE = 0,//å¥³æ€§
+	USER_SEX_MALE = 1,  //ç”·æ€§
 };
 
-// ·þÎñÆ÷ÀàÐÍ
+// æœåŠ¡å™¨ç±»åž‹
 enum ServiceType
 {
 	SERVICE_TYPE_BEGIN = 0,
-	SERVICE_TYPE_LOGON,		// ´óÌü
-	SERVICE_TYPE_LOADER,	// ÓÎÏ·
-	SERVICE_TYPE_CENTER,	// ÖÐÐÄ·þ
-	SERVICE_TYPE_PHP,		// PHP·þÎñÆ÷
+	SERVICE_TYPE_LOGON,		// å¤§åŽ…
+	SERVICE_TYPE_LOADER,	// æ¸¸æˆ
+	SERVICE_TYPE_CENTER,	// ä¸­å¿ƒæœ
+	SERVICE_TYPE_PHP,		// PHPæœåŠ¡å™¨
 	SERVICE_TYPE_END,
 };
 
-// Ïß³ÌÀàÐÍ
+// çº¿ç¨‹ç±»åž‹
 enum ThreadType
 {
-	THREAD_TYPE_MAIN = 1,	// Ö÷Ïß³Ì
-	THREAD_TYPE_LOGIC = 2,	// Âß¼­Ïß³Ì
-	THREAD_TYPE_ASYNC = 3,	// Òì²½Ïß³Ì
-	THREAD_TYPE_ACCEPT = 4,	// Á¬½ÓÏß³Ì
-	THREAD_TYPE_RECV = 5,	// ½ÓÊÕÏß³Ì
+	THREAD_TYPE_MAIN = 1,	// ä¸»çº¿ç¨‹
+	THREAD_TYPE_LOGIC = 2,	// é€»è¾‘çº¿ç¨‹
+	THREAD_TYPE_ASYNC = 3,	// å¼‚æ­¥çº¿ç¨‹
+	THREAD_TYPE_ACCEPT = 4,	// è¿žæŽ¥çº¿ç¨‹
+	THREAD_TYPE_RECV = 5,	// æŽ¥æ”¶çº¿ç¨‹
 };
 
-// ÈÕÖ¾µÈ¼¶
+// æ—¥å¿—ç­‰çº§
 enum LogLevel
 {
 	LOG_LEVEL_INFO = 0,						//info
@@ -103,7 +103,7 @@ enum LogLevel
 
 //////////////////////////////////////////////////////////////////////////
 
-//Ê±¼ä²ÎÊý
+//æ—¶é—´å‚æ•°
 typedef struct _SYSTEMTIME {
 	int wYear;
 	int wMonth;

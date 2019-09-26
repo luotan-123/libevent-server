@@ -2,25 +2,25 @@
 
 #include "GameMainManage.h"
 
-//·¿¼äÆô¶¯ĞÅÏ¢½á¹¹
+//æˆ¿é—´å¯åŠ¨ä¿¡æ¯ç»“æ„
 struct GameRoomInitStruct
 {
-	//½ø³ÌÄ£Ê½
-	UINT					uRunStation;					//ÔËĞĞ×´Ì¬
-	HANDLE					hProcessHandle;				//½ø³Ì¾ä±ú
+	//è¿›ç¨‹æ¨¡å¼
+	UINT					uRunStation;					//è¿è¡ŒçŠ¶æ€
+	HANDLE					hProcessHandle;				//è¿›ç¨‹å¥æŸ„
 
-	//¶¯Ì¬¿â Ä£Ê½
-	void*					hDllInstance;					//×é¼ş¾ä±ú
-	IModuleManageService*	pIManageService;				//·şÎñ½Ó¿Ú
+	//åŠ¨æ€åº“ æ¨¡å¼
+	void*					hDllInstance;					//ç»„ä»¶å¥æŸ„
+	IModuleManageService*	pIManageService;				//æœåŠ¡æ¥å£
 
-	//ÉèÖÃĞÅÏ¢
-	bool					bEnable;						//ÊÇ·ñÆôÓÃ
-	UINT					uKindID;						//ÀàĞÍ ID
-	UINT					uSortID;						//ÅÅÁĞ ID
-	UINT					uServiceID;					//×é¼ş ID
-	char					szRoomNote[50];				//·¿¼ä±¸×¢
-	ManageInfoStruct		InitInfo;						//³õÊ¼»¯ĞÅÏ¢
-	ServerDllInfoStruct		ServiceInfo;					//×é¼şĞÅÏ¢
+	//è®¾ç½®ä¿¡æ¯
+	bool					bEnable;						//æ˜¯å¦å¯ç”¨
+	UINT					uKindID;						//ç±»å‹ ID
+	UINT					uSortID;						//æ’åˆ— ID
+	UINT					uServiceID;					//ç»„ä»¶ ID
+	char					szRoomNote[50];				//æˆ¿é—´å¤‡æ³¨
+	ManageInfoStruct		InitInfo;						//åˆå§‹åŒ–ä¿¡æ¯
+	ServerDllInfoStruct		ServiceInfo;					//ç»„ä»¶ä¿¡æ¯
 
 	GameRoomInitStruct()
 	{
@@ -28,7 +28,7 @@ struct GameRoomInitStruct
 	}
 };
 
-// ·¿¼ä¹ÜÀíÄ£¿é
+// æˆ¿é—´ç®¡ç†æ¨¡å—
 class CLoaderServerModule
 {
 public:
@@ -43,11 +43,11 @@ public:
 	void UpdateRoomByRoomID(int roomID);
 
 private:
-	bool LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo); // »ñÈ¡¶¯Ì¬¿âĞÅÏ¢
-	void MakeInitData(GameRoomInitStruct* pGameRoomInfo, int roomID); //³õÊ¼»¯Êı¾İ
-	bool StartGameRoom(GameRoomInitStruct* pGameRoomInfo); //Æô¶¯ÓÎÏ··¿¼ä
-	bool StopGameRoom(GameRoomInitStruct* pGameRoomInfo); //Í£Ö¹ÓÎÏ··¿¼ä
+	bool LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo); // è·å–åŠ¨æ€åº“ä¿¡æ¯
+	void MakeInitData(GameRoomInitStruct* pGameRoomInfo, int roomID); //åˆå§‹åŒ–æ•°æ®
+	bool StartGameRoom(GameRoomInitStruct* pGameRoomInfo); //å¯åŠ¨æ¸¸æˆæˆ¿é—´
+	bool StopGameRoom(GameRoomInitStruct* pGameRoomInfo); //åœæ­¢æ¸¸æˆæˆ¿é—´
 private:
 	std::map<int, GameRoomInitStruct> m_allRoomInfoMap;
-	char m_szError[255]; //´íÎóĞÅÏ¢
+	char m_szError[255]; //é”™è¯¯ä¿¡æ¯
 };

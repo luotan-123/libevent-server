@@ -3,254 +3,254 @@
 #include "Define.h"
 
 //////////////////////////////////////////////////////////////////////////
-const unsigned int MSG_MAIN_TEST = 1;					// ²âÊÔÏûÏ¢
+const unsigned int MSG_MAIN_TEST = 1;					// æµ‹è¯•æ¶ˆæ¯
 
-const unsigned int 	MSG_ASS_TEST = 1;					// ²âÊÔÏûÏ¢
-
-//////////////////////////////////////////////////////////////////////////
-const unsigned int MSG_MAIN_CONECT = 2;					// Á¬½Ó²âÊÔ
+const unsigned int 	MSG_ASS_TEST = 1;					// æµ‹è¯•æ¶ˆæ¯
 
 //////////////////////////////////////////////////////////////////////////
+const unsigned int MSG_MAIN_CONECT = 2;					// è¿æ¥æµ‹è¯•
 
-const unsigned int MSG_MAIN_USER_SOCKET_CLOSE = 4;		// Íæ¼ÒµôÏßÍ¨ÖªÓÎÏ··ş
+//////////////////////////////////////////////////////////////////////////
 
-// ÏûÏ¢¶¨ÒåÎÄ¼ş
-// ´óÌüÏûÏ¢´óID·¶Î§			100-499
-// ÓÎÏ·ÏûÏ¢´óID·¶Î§			500-999
+const unsigned int MSG_MAIN_USER_SOCKET_CLOSE = 4;		// ç©å®¶æ‰çº¿é€šçŸ¥æ¸¸æˆæœ
+
+// æ¶ˆæ¯å®šä¹‰æ–‡ä»¶
+// å¤§å…æ¶ˆæ¯å¤§IDèŒƒå›´			100-499
+// æ¸¸æˆæ¶ˆæ¯å¤§IDèŒƒå›´			500-999
 
 
 //////////////////////////////////////////////////////////////////////
-// ´óÌüÏûÏ¢¶¨Òå
+// å¤§å…æ¶ˆæ¯å®šä¹‰
 //////////////////////////////////////////////////////////////////////
 
-// ×¢²áÏà¹Ø
+// æ³¨å†Œç›¸å…³
 const unsigned int MSG_MAIN_LOGON_REGISTER = 100;
 
 
-// µÇÂ¼Ïà¹Ø
+// ç™»å½•ç›¸å…³
 const unsigned int MSG_MAIN_LOGON_LOGON = 101;
 
-const unsigned int MSG_ASS_LOGON_LOGON = 1; //ÕËºÅµÇÂ¼
-// ×À×ÓÏà¹Ø
+const unsigned int MSG_ASS_LOGON_LOGON = 1; //è´¦å·ç™»å½•
+// æ¡Œå­ç›¸å…³
 const unsigned int MSG_ASS_LOGON_DESK = 102;
 
-const unsigned int MSG_ASS_LOGON_BUY_DESK = 1;			// ¹ºÂò×À×Ó
-const unsigned int MSG_ASS_LOGON_ENTER_DESK = 2;		// ½øÈë×À×Ó
+const unsigned int MSG_ASS_LOGON_BUY_DESK = 1;			// è´­ä¹°æ¡Œå­
+const unsigned int MSG_ASS_LOGON_ENTER_DESK = 2;		// è¿›å…¥æ¡Œå­
 
 
-// Í¨ÖªÏà¹Ø
+// é€šçŸ¥ç›¸å…³
 const unsigned int MSG_MAIN_LOGON_NOTIFY = 103;
 
-const unsigned int MSG_NTF_LOGON_USER_SQUEEZE = 1;			// Íæ¼Ò±»¶¥ºÅ£¨¼·µô£©
-const unsigned int MSG_NTF_LOGON_NOTICE = 2;				// ¹«¸æ
-const unsigned int MSG_NTF_LOGON_HORN = 3;					// À®°È
-const unsigned int MSG_NTF_LOGON_USER_EXIST = 4;			// Íæ¼ÒÒÑµÇÂ¼
-const unsigned int MSG_NTF_LOGON_RESOURCE_CHANGE = 5;		// ×ÊÔ´±ä»¯
-const unsigned int MSG_NTF_LOGON_SUPPORT_INFO = 6;			// ÆÆ²ú²¹ÖúĞÅÏ¢£¨µÇÂ¼³É¹¦Ö®ºó¶îÍâÍÆËÍ£©
-const unsigned int MSG_NTF_LOGON_BUYDESKINFO_CHANGE = 7;	// Í¨Öª¿ª·¿ÁĞ±íĞÅÏ¢±ä»¯
-const unsigned int MSG_NTF_LOGON_FRIEND_NOTIFY = 8;			// ºÃÓÑÍ¨Öª
-const unsigned int MSG_NTF_LOGON_FRIEND_ADDOK = 9;			// Ìí¼ÓºÃÓÑ³É¹¦
-const unsigned int MSG_NTF_LOGON_FRIEND_DELOK = 10;			// É¾³ıºÃÓÑ³É¹¦
-const unsigned int MSG_NTF_LOGON_FIREND_DELNOTIFY = 11;		// É¾³ıºÃÓÑÍ¨Öª
-const unsigned int MSG_NTF_LOGON_RIEND_LOGINOROUT = 12;		// Í¨ÖªºÃÓÑµÇÂ¼»òÕßµÇ³ö
-const unsigned int MSG_NTF_LOGON_FRIEND_REDSPOT = 13;		// Í¨ÖªºÃÓÑĞ¡ºìµã
-const unsigned int MSG_NTF_LOGON_CLOSE_SERVER = 14;			// ¹Ø·ş¸üĞÂÍ¨Öª
-const unsigned int MSG_NTF_LOGON_EMAIL_REDSPOT = 15;		// ÓÊ¼şĞ¡ºìµã
-const unsigned int MSG_NTF_LOGON_NEW_EMAIL = 16;			// ĞÂÓÊ¼şÍ¨Öª
-const unsigned int MSG_NTF_LOGON_REWARD_ACTIVITY = 17;		// »î¶¯´ó½±¹«¸æÍ¨Öª
+const unsigned int MSG_NTF_LOGON_USER_SQUEEZE = 1;			// ç©å®¶è¢«é¡¶å·ï¼ˆæŒ¤æ‰ï¼‰
+const unsigned int MSG_NTF_LOGON_NOTICE = 2;				// å…¬å‘Š
+const unsigned int MSG_NTF_LOGON_HORN = 3;					// å–‡å­
+const unsigned int MSG_NTF_LOGON_USER_EXIST = 4;			// ç©å®¶å·²ç™»å½•
+const unsigned int MSG_NTF_LOGON_RESOURCE_CHANGE = 5;		// èµ„æºå˜åŒ–
+const unsigned int MSG_NTF_LOGON_SUPPORT_INFO = 6;			// ç ´äº§è¡¥åŠ©ä¿¡æ¯ï¼ˆç™»å½•æˆåŠŸä¹‹åé¢å¤–æ¨é€ï¼‰
+const unsigned int MSG_NTF_LOGON_BUYDESKINFO_CHANGE = 7;	// é€šçŸ¥å¼€æˆ¿åˆ—è¡¨ä¿¡æ¯å˜åŒ–
+const unsigned int MSG_NTF_LOGON_FRIEND_NOTIFY = 8;			// å¥½å‹é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIEND_ADDOK = 9;			// æ·»åŠ å¥½å‹æˆåŠŸ
+const unsigned int MSG_NTF_LOGON_FRIEND_DELOK = 10;			// åˆ é™¤å¥½å‹æˆåŠŸ
+const unsigned int MSG_NTF_LOGON_FIREND_DELNOTIFY = 11;		// åˆ é™¤å¥½å‹é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_RIEND_LOGINOROUT = 12;		// é€šçŸ¥å¥½å‹ç™»å½•æˆ–è€…ç™»å‡º
+const unsigned int MSG_NTF_LOGON_FRIEND_REDSPOT = 13;		// é€šçŸ¥å¥½å‹å°çº¢ç‚¹
+const unsigned int MSG_NTF_LOGON_CLOSE_SERVER = 14;			// å…³æœæ›´æ–°é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_EMAIL_REDSPOT = 15;		// é‚®ä»¶å°çº¢ç‚¹
+const unsigned int MSG_NTF_LOGON_NEW_EMAIL = 16;			// æ–°é‚®ä»¶é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_REWARD_ACTIVITY = 17;		// æ´»åŠ¨å¤§å¥–å…¬å‘Šé€šçŸ¥
 
-// ÆäËû
+// å…¶ä»–
 const unsigned int MSG_MAIN_LOGON_OTHER = 104;
 
-const unsigned int MSG_ASS_LOGON_OTHER_SEND_HORN = 1;				// ÇëÇó·¢ËÍÀ®°È
-const unsigned int MSG_ASS_LOGON_OTHER_SEND_GIFT = 2;				// ÇëÇó×ªÔù
-const unsigned int MSG_ASS_LOGON_OTHER_SEND_GRADE = 3;				// ÇëÇóÕ½¼¨
-const unsigned int MSG_ASS_LOGON_OTHER_SEND_ROOMOPENED = 4;			// ÇëÇó·¿Ö÷ÌæËûÈË¿ª·¿ĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_OTHER_USERINFO_FLUSH = 5;			// Ë¢ĞÂ¸öÈËĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_OTHER_EMAIL_LIST = 6;				// ÓÊ¼şÁĞ±íĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_OTHER_EMAIL_INFO = 7;				// ÓÊ¼şÄÚÈİĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_OTHER_EMAIL_DELETE = 8;			// É¾³ıÓÊ¼ş
-const unsigned int MSG_ADD_LOGON_OTHER_REQ_SUPPORT = 9;				// ÇëÇóÆÆ²ú²¹Öú
-const unsigned int MSG_ASS_LOGON_OTHER_ROBOT_TAKEMONEY = 10;		// »úÆ÷ÈËÈ¡Ç®
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_SIMPLE_GRADELIST = 11;	// ÇëÇóÕ½¼¨ÁĞ±í(´ó½áËã)
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_SIMPLE_GRADEINFO = 12;	// ÇëÇóÕ½¼¨ĞÅÏ¢(´ó½áËã)
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_GRADELIST = 13;			// ÇëÇóµ¥¾ÖÓÎÏ·Õ½¼¨ÁĞ±í
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_GRADEINFO = 14;			// ÇëÇóµ¥¾ÖÓÎÏ·ĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_USERINFO = 15;			// ²éÑ¯Íæ¼ÒĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_DISSMISS_DESK = 16;		// ÇëÇó½âÉ¢·¿¼ä
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_SAVE_POSITION = 17;		// ÇëÇó±£´æÎ»ÖÃ
-const unsigned int MSG_ASS_LOGON_OTHER_REQ_ENTER_OR_LEAVE_THE_GAMERO = 18;	// ÇëÇó½øÈë·¿¼ä
-const unsigned int MSG_ASS_LOGON_OTHER_JOIN_MATCH_SCENE = 19;		// ¼ÓÈë±ÈÈü³¡³¡¾°
-const unsigned int MSG_ASS_LOGON_OTHER_EXIT_MATCH_SCENE = 20;		// ÍË³ö±ÈÈü³¡³¡¾°
+const unsigned int MSG_ASS_LOGON_OTHER_SEND_HORN = 1;				// è¯·æ±‚å‘é€å–‡å­
+const unsigned int MSG_ASS_LOGON_OTHER_SEND_GIFT = 2;				// è¯·æ±‚è½¬èµ 
+const unsigned int MSG_ASS_LOGON_OTHER_SEND_GRADE = 3;				// è¯·æ±‚æˆ˜ç»©
+const unsigned int MSG_ASS_LOGON_OTHER_SEND_ROOMOPENED = 4;			// è¯·æ±‚æˆ¿ä¸»æ›¿ä»–äººå¼€æˆ¿ä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_OTHER_USERINFO_FLUSH = 5;			// åˆ·æ–°ä¸ªäººä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_OTHER_EMAIL_LIST = 6;				// é‚®ä»¶åˆ—è¡¨ä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_OTHER_EMAIL_INFO = 7;				// é‚®ä»¶å†…å®¹ä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_OTHER_EMAIL_DELETE = 8;			// åˆ é™¤é‚®ä»¶
+const unsigned int MSG_ADD_LOGON_OTHER_REQ_SUPPORT = 9;				// è¯·æ±‚ç ´äº§è¡¥åŠ©
+const unsigned int MSG_ASS_LOGON_OTHER_ROBOT_TAKEMONEY = 10;		// æœºå™¨äººå–é’±
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_SIMPLE_GRADELIST = 11;	// è¯·æ±‚æˆ˜ç»©åˆ—è¡¨(å¤§ç»“ç®—)
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_SIMPLE_GRADEINFO = 12;	// è¯·æ±‚æˆ˜ç»©ä¿¡æ¯(å¤§ç»“ç®—)
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_GRADELIST = 13;			// è¯·æ±‚å•å±€æ¸¸æˆæˆ˜ç»©åˆ—è¡¨
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_GRADEINFO = 14;			// è¯·æ±‚å•å±€æ¸¸æˆä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_USERINFO = 15;			// æŸ¥è¯¢ç©å®¶ä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_DISSMISS_DESK = 16;		// è¯·æ±‚è§£æ•£æˆ¿é—´
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_SAVE_POSITION = 17;		// è¯·æ±‚ä¿å­˜ä½ç½®
+const unsigned int MSG_ASS_LOGON_OTHER_REQ_ENTER_OR_LEAVE_THE_GAMERO = 18;	// è¯·æ±‚è¿›å…¥æˆ¿é—´
+const unsigned int MSG_ASS_LOGON_OTHER_JOIN_MATCH_SCENE = 19;		// åŠ å…¥æ¯”èµ›åœºåœºæ™¯
+const unsigned int MSG_ASS_LOGON_OTHER_EXIT_MATCH_SCENE = 20;		// é€€å‡ºæ¯”èµ›åœºåœºæ™¯
 
-// ÒøĞĞ
+// é“¶è¡Œ
 const unsigned int MSG_MAIN_LOGON_BANK = 105;
 
-const unsigned int MSG_ASS_LOGON_BANK_SAVE_MONEY = 1;				// ´æÇ®
-const unsigned int MSG_ASS_LOGON_BANK_TAKE_MONEY = 2;				// È¡Ç®
-const unsigned int MSG_ASS_LOGON_BANK_TRANSFER = 3;					// ×ªÕË
-const unsigned int MSG_ASS_LOGON_BANK_SETPASSWD = 4;				// ÉèÖÃÃÜÂë
-const unsigned int MSG_ASS_LOGON_BANK_RESETPASSWD = 5;				// ĞŞ¸ÄÃÜÂë
-const unsigned int MSG_ASS_LOGON_BANK_RECORD = 6;					// ÒøĞĞ¼ÇÂ¼
+const unsigned int MSG_ASS_LOGON_BANK_SAVE_MONEY = 1;				// å­˜é’±
+const unsigned int MSG_ASS_LOGON_BANK_TAKE_MONEY = 2;				// å–é’±
+const unsigned int MSG_ASS_LOGON_BANK_TRANSFER = 3;					// è½¬è´¦
+const unsigned int MSG_ASS_LOGON_BANK_SETPASSWD = 4;				// è®¾ç½®å¯†ç 
+const unsigned int MSG_ASS_LOGON_BANK_RESETPASSWD = 5;				// ä¿®æ”¹å¯†ç 
+const unsigned int MSG_ASS_LOGON_BANK_RECORD = 6;					// é“¶è¡Œè®°å½•
 
-// ºÃÓÑ
+// å¥½å‹
 const unsigned int MSG_MAIN_LOGON_FRIEND = 106;
 
-const unsigned int MSG_ASS_LOGON_FRIEND_LIST = 1;				// ºÃÓÑĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_FRIEND_ADD = 2;				// Ìí¼ÓºÃÓÑ
-const unsigned int MSG_ASS_LOGON_FRIEND_ANSWER_ADD = 3;			// »ØÓ¦Ìí¼ÓºÃÓÑ
-const unsigned int MSG_ASS_LOGON_FRIEND_DEL = 4;				// É¾³ıºÃÓÑ
-const unsigned int MSG_ASS_LOGON_FRIEND_REWARD = 5;				// ´òÉÍ
-const unsigned int MSG_ASS_LOGON_FRIEND_TAKEREWARD = 6;			// ÁìÈ¡´òÉÍ
-const unsigned int MSG_ASS_LOGON_FRIEND_SERACH = 7;				// ËÑË÷Íæ¼Ò
-const unsigned int MSG_ASS_LOGON_FRIEND_CHANGEBATCH = 8;		// »»Ò»Åú
-const unsigned int MSG_ASS_LOGON_FRIEND_NOTIFYLIST = 9;			// ²éÑ¯Í¨ÖªÁĞ±í
-const unsigned int MSG_ASS_LOGON_FRIEND_DELNOTIFY = 10;			// É¾³ıÍ¨Öª
-const unsigned int MSG_ASS_LOGON_FRIEND_INVITEPLAY = 11;		// ÑûÇëÔÚÏßºÃÓÑ(ÍæÓÎÏ·)
-const unsigned int MSG_ASS_LOGON_FRIEND_DEL_REDSPOT = 12;		// ÇëÇóÉ¾³ıĞ¡ºìµã
+const unsigned int MSG_ASS_LOGON_FRIEND_LIST = 1;				// å¥½å‹ä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_FRIEND_ADD = 2;				// æ·»åŠ å¥½å‹
+const unsigned int MSG_ASS_LOGON_FRIEND_ANSWER_ADD = 3;			// å›åº”æ·»åŠ å¥½å‹
+const unsigned int MSG_ASS_LOGON_FRIEND_DEL = 4;				// åˆ é™¤å¥½å‹
+const unsigned int MSG_ASS_LOGON_FRIEND_REWARD = 5;				// æ‰“èµ
+const unsigned int MSG_ASS_LOGON_FRIEND_TAKEREWARD = 6;			// é¢†å–æ‰“èµ
+const unsigned int MSG_ASS_LOGON_FRIEND_SERACH = 7;				// æœç´¢ç©å®¶
+const unsigned int MSG_ASS_LOGON_FRIEND_CHANGEBATCH = 8;		// æ¢ä¸€æ‰¹
+const unsigned int MSG_ASS_LOGON_FRIEND_NOTIFYLIST = 9;			// æŸ¥è¯¢é€šçŸ¥åˆ—è¡¨
+const unsigned int MSG_ASS_LOGON_FRIEND_DELNOTIFY = 10;			// åˆ é™¤é€šçŸ¥
+const unsigned int MSG_ASS_LOGON_FRIEND_INVITEPLAY = 11;		// é‚€è¯·åœ¨çº¿å¥½å‹(ç©æ¸¸æˆ)
+const unsigned int MSG_ASS_LOGON_FRIEND_DEL_REDSPOT = 12;		// è¯·æ±‚åˆ é™¤å°çº¢ç‚¹
 
-// ¾ãÀÖ²¿
+// ä¿±ä¹éƒ¨
 const unsigned int MSG_MAIN_LOGON_FRIENDSGROUP = 107;
 
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_LIST = 1;				// ¾ãÀÖ²¿ÁĞ±í
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_MEMBER = 2;			// ¾ãÀÖ²¿³ÉÔ±
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ALL_NOTIFY_MSG = 3;	// Íæ¼ÒËùÓĞÍ¨ÖªÏûÏ¢£¨Ä³¸öÊ±¼äÒÔÇ°µÄ8kÏûÏ¢£©
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ALL_ROOM_MSG = 4;		// ¾ãÀÖ²¿ËùÓĞ¿ª·¿ÏûÏ¢£¨Ä³¸öÊ±¼äÒÔÇ°µÄ8kÏûÏ¢£©
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ALL_ACCO_MSG = 5;		// ¾ãÀÖ²¿ËùÓĞÕ½¼¨ÏûÏ¢£¨Ä³¸öÊ±¼äÒÔÇ°µÄ8kÏûÏ¢£©
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_CREATE = 6;			// ´´½¨¾ãÀÖ²¿
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_REQ_JOIN = 7;			// ÉêÇë¼ÓÈë¾ãÀÖ²¿
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_INVITE = 8;			// ÑûÇëºÃÓÑ¼ÓÈë¾ãÀÖ²¿
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ANSWER_OPER = 9;      // »ØÓ¦Í¨ÖªÏûÏ¢
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DEL_MEMBER = 10;		// ÈºÖ÷É¾³ı¾ãÀÖ²¿³ÉÔ±
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_QUIT = 11;			// ÍË³ö¾ãÀÖ²¿
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DISMISS = 12;			// ½âÉ¢¾ãÀÖ²¿
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_CHANGE_NAME = 13;		// ¸Ä±ä¾ãÀÖ²¿Ãû×Ö
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DEL_NOTIFY_MSG = 14;	// É¾³ıÒ»ÌõÍ¨ÖªÏûÏ¢
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_SIMPLE_INFO = 15;		// ²éÑ¯¾ãÀÖ²¿¼òµ¥ĞÅÏ¢
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DEL_REDSPOT = 16;		// ÇëÇóÉ¾³ıĞ¡ºìµã
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_SEND_NOTICE = 17;		// ÇëÇó·¢²¼¹«¸æ
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_QUERY_ACCO = 18;		// ²éÑ¯Õ½¼¨Í³¼Æ
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DESK_LIST_MSG = 19;	// ¾ãÀÖ²¿×À×ÓÁĞ±í
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DELETE_DESK_INFO = 20;// É¾³ı¾ãÀÖ²¿Ò»¸ö·¿¼ä
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_COST_STATISTICS = 21; // ²éÑ¯ÏûºÄÍ³¼Æ
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_REQ_TRANSFER = 22;	// ÇëÇó×ªÈÃ¾ãÀÖ²¿
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_REQ_AUTH_MEM = 23;	// ÇëÇóÊÚÈ¨¾ãÀÖ²¿³ÉÔ±»òÕßÈ¡ÏûÓÃ»§Éí·İ
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_MODIFY_WECHAT = 24;	// ÇëÇóĞŞ¸ÄÎ¢ĞÅ
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_MODIFY_POWER = 25;	// ÇëÇóĞŞ¸Ä¹ÜÀíÔ±È¨ÏŞ
-const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_CHANGE_FIRECOIN = 26;	// ÇëÇó³äÖµ»òÕß¶Ò»»Íæ¼Ò»ğ±Ò
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_LIST = 1;				// ä¿±ä¹éƒ¨åˆ—è¡¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_MEMBER = 2;			// ä¿±ä¹éƒ¨æˆå‘˜
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ALL_NOTIFY_MSG = 3;	// ç©å®¶æ‰€æœ‰é€šçŸ¥æ¶ˆæ¯ï¼ˆæŸä¸ªæ—¶é—´ä»¥å‰çš„8kæ¶ˆæ¯ï¼‰
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ALL_ROOM_MSG = 4;		// ä¿±ä¹éƒ¨æ‰€æœ‰å¼€æˆ¿æ¶ˆæ¯ï¼ˆæŸä¸ªæ—¶é—´ä»¥å‰çš„8kæ¶ˆæ¯ï¼‰
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ALL_ACCO_MSG = 5;		// ä¿±ä¹éƒ¨æ‰€æœ‰æˆ˜ç»©æ¶ˆæ¯ï¼ˆæŸä¸ªæ—¶é—´ä»¥å‰çš„8kæ¶ˆæ¯ï¼‰
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_CREATE = 6;			// åˆ›å»ºä¿±ä¹éƒ¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_REQ_JOIN = 7;			// ç”³è¯·åŠ å…¥ä¿±ä¹éƒ¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_INVITE = 8;			// é‚€è¯·å¥½å‹åŠ å…¥ä¿±ä¹éƒ¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_ANSWER_OPER = 9;      // å›åº”é€šçŸ¥æ¶ˆæ¯
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DEL_MEMBER = 10;		// ç¾¤ä¸»åˆ é™¤ä¿±ä¹éƒ¨æˆå‘˜
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_QUIT = 11;			// é€€å‡ºä¿±ä¹éƒ¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DISMISS = 12;			// è§£æ•£ä¿±ä¹éƒ¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_CHANGE_NAME = 13;		// æ”¹å˜ä¿±ä¹éƒ¨åå­—
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DEL_NOTIFY_MSG = 14;	// åˆ é™¤ä¸€æ¡é€šçŸ¥æ¶ˆæ¯
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_SIMPLE_INFO = 15;		// æŸ¥è¯¢ä¿±ä¹éƒ¨ç®€å•ä¿¡æ¯
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DEL_REDSPOT = 16;		// è¯·æ±‚åˆ é™¤å°çº¢ç‚¹
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_SEND_NOTICE = 17;		// è¯·æ±‚å‘å¸ƒå…¬å‘Š
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_QUERY_ACCO = 18;		// æŸ¥è¯¢æˆ˜ç»©ç»Ÿè®¡
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DESK_LIST_MSG = 19;	// ä¿±ä¹éƒ¨æ¡Œå­åˆ—è¡¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_DELETE_DESK_INFO = 20;// åˆ é™¤ä¿±ä¹éƒ¨ä¸€ä¸ªæˆ¿é—´
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_COST_STATISTICS = 21; // æŸ¥è¯¢æ¶ˆè€—ç»Ÿè®¡
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_REQ_TRANSFER = 22;	// è¯·æ±‚è½¬è®©ä¿±ä¹éƒ¨
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_REQ_AUTH_MEM = 23;	// è¯·æ±‚æˆæƒä¿±ä¹éƒ¨æˆå‘˜æˆ–è€…å–æ¶ˆç”¨æˆ·èº«ä»½
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_MODIFY_WECHAT = 24;	// è¯·æ±‚ä¿®æ”¹å¾®ä¿¡
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_MODIFY_POWER = 25;	// è¯·æ±‚ä¿®æ”¹ç®¡ç†å‘˜æƒé™
+const unsigned int MSG_ASS_LOGON_FRIENDSGROUP_CHANGE_FIRECOIN = 26;	// è¯·æ±‚å……å€¼æˆ–è€…å…‘æ¢ç©å®¶ç«å¸
 
-// ¾ãÀÖ²¿Í¨Öª
+// ä¿±ä¹éƒ¨é€šçŸ¥
 const unsigned int MSG_MAIN_FRIENDSGROUP_NOTIFY = 108;
 
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NOTIFY_MSG = 1;		// ·şÎñÆ÷Ö÷¶¯ÍÆËÍµÄÒ»ÌõÍ¨ÖªÏûÏ¢
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_ROOM_MSG = 2;			// ·şÎñÆ÷Ö÷¶¯ÍÆËÍµÄ¾ãÀÖ²¿¿ª·¿ÏûÏ¢
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_ACCO_MSG = 3;			// ·şÎñÆ÷Ö÷¶¯ÍÆËÍµÄ¾ãÀÖ²¿Õ½¼¨ÏûÏ¢
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_REDSPOT = 4;			// Í¨Öª¾ãÀÖ²¿Ğ¡ºìµã
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_MSG_HAVE_CHANGE = 5;	// ¾ãÀÖ²¿ÁÄÌìÏûÏ¢±ä»¯Í¨Öª
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_CREATE_FG = 6;		// ·şÎñÆ÷Ö÷¶¯ÍÆËÍÒ»¸ö¾ãÀÖ²¿
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NAME_CHANGE = 7;		// ¾ãÀÖ²¿Ãû×Ö±ä»¯Í¨Öª
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_PEOPLE_CHANGE = 8;	// ¾ãÀÖ²¿ÈË±ä»¯Í¨Öª
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_DISMISS = 9;			// ¾ãÀÖ²¿±»½âÉ¢
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NOTICE_CHANGE = 10;	// ¾ãÀÖ²¿¹«¸æ±ä»¯Í¨Öª
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NEW_DESK_MSG = 11;	// ÅÆ×ÀÏûÏ¢(Ôö¼Ó)
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_DESK_INFO_CHANGE = 12;// ÅÆ×À±ä»¯Í¨Öª£¨¸üĞÂºÍÉ¾³ı£©
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_STATUS_CHANGE = 13;	// ¾ãÀÖ²¿Éí·İ±ä»¯Í¨Öª
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_WECHAT_CHANGE = 14;	// ¾ãÀÖ²¿Î¢ĞÅ±ä»¯Í¨Öª
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_POWER_CHANGE = 15;	// ¾ãÀÖ²¿Íæ¼ÒÈ¨ÏŞ±ä¸ü
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NEW_VIPROOM_MSG = 16;	// ÍÆËÍµÄ¾ãÀÖ²¿VIP·¿¼ä(Ôö¼Ó)
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_VIPROOM_CHANGE = 17;  // vip·¿¼ä±ä»¯Í¨Öª£¨¸üĞÂºÍÉ¾³ı£©
-const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_FIRECOIN_CHANGE = 18; // Íæ¼Ò»ğ±Ò±ä»¯Í¨Öª
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NOTIFY_MSG = 1;		// æœåŠ¡å™¨ä¸»åŠ¨æ¨é€çš„ä¸€æ¡é€šçŸ¥æ¶ˆæ¯
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_ROOM_MSG = 2;			// æœåŠ¡å™¨ä¸»åŠ¨æ¨é€çš„ä¿±ä¹éƒ¨å¼€æˆ¿æ¶ˆæ¯
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_ACCO_MSG = 3;			// æœåŠ¡å™¨ä¸»åŠ¨æ¨é€çš„ä¿±ä¹éƒ¨æˆ˜ç»©æ¶ˆæ¯
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_REDSPOT = 4;			// é€šçŸ¥ä¿±ä¹éƒ¨å°çº¢ç‚¹
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_MSG_HAVE_CHANGE = 5;	// ä¿±ä¹éƒ¨èŠå¤©æ¶ˆæ¯å˜åŒ–é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_CREATE_FG = 6;		// æœåŠ¡å™¨ä¸»åŠ¨æ¨é€ä¸€ä¸ªä¿±ä¹éƒ¨
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NAME_CHANGE = 7;		// ä¿±ä¹éƒ¨åå­—å˜åŒ–é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_PEOPLE_CHANGE = 8;	// ä¿±ä¹éƒ¨äººå˜åŒ–é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_DISMISS = 9;			// ä¿±ä¹éƒ¨è¢«è§£æ•£
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NOTICE_CHANGE = 10;	// ä¿±ä¹éƒ¨å…¬å‘Šå˜åŒ–é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NEW_DESK_MSG = 11;	// ç‰Œæ¡Œæ¶ˆæ¯(å¢åŠ )
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_DESK_INFO_CHANGE = 12;// ç‰Œæ¡Œå˜åŒ–é€šçŸ¥ï¼ˆæ›´æ–°å’Œåˆ é™¤ï¼‰
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_STATUS_CHANGE = 13;	// ä¿±ä¹éƒ¨èº«ä»½å˜åŒ–é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_WECHAT_CHANGE = 14;	// ä¿±ä¹éƒ¨å¾®ä¿¡å˜åŒ–é€šçŸ¥
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_POWER_CHANGE = 15;	// ä¿±ä¹éƒ¨ç©å®¶æƒé™å˜æ›´
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_NEW_VIPROOM_MSG = 16;	// æ¨é€çš„ä¿±ä¹éƒ¨VIPæˆ¿é—´(å¢åŠ )
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_VIPROOM_CHANGE = 17;  // vipæˆ¿é—´å˜åŒ–é€šçŸ¥ï¼ˆæ›´æ–°å’Œåˆ é™¤ï¼‰
+const unsigned int MSG_NTF_LOGON_FRIENDSGROUP_FIRECOIN_CHANGE = 18; // ç©å®¶ç«å¸å˜åŒ–é€šçŸ¥
 
-// ±ÈÈü³¡Í¨Öª
+// æ¯”èµ›åœºé€šçŸ¥
 const unsigned int MSG_MAIN_MATCH_NOTIFY = 109;
 
-const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_PEOPLE = 1;	// ±¨ÃûÈËÊı±ä»¯(ÊµÊ±Èü)
-const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH = 2;			// Í¨Öª¿ªÈü±ÈÈü
-const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_TIME = 3;	// ±¨ÃûÈËÊı±ä»¯(¶¨Ê±Èü)
-const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH_FAIL = 4;		// Í¨Öª¿ªÈüÊ§°Ü
-const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH_RIGHTAWAY = 5;// Í¨Öª±ÈÈü¼´½«¿ªÊ¼
+const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_PEOPLE = 1;	// æŠ¥åäººæ•°å˜åŒ–(å®æ—¶èµ›)
+const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH = 2;			// é€šçŸ¥å¼€èµ›æ¯”èµ›
+const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_TIME = 3;	// æŠ¥åäººæ•°å˜åŒ–(å®šæ—¶èµ›)
+const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH_FAIL = 4;		// é€šçŸ¥å¼€èµ›å¤±è´¥
+const unsigned int MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH_RIGHTAWAY = 5;// é€šçŸ¥æ¯”èµ›å³å°†å¼€å§‹
 
 //////////////////////////////////////////////////////////////////////////
 #pragma pack(1)
 
-//Ã¶¾Ù¶¨Òå
+//æšä¸¾å®šä¹‰
 
-// ×ÊÔ´±ä»¯Ô­Òò
+// èµ„æºå˜åŒ–åŸå› 
 enum ResourceChangeReason
 {
-	// ÓÎÏ··ş¼¯ÈºÊ¹ÓÃ
+	// æ¸¸æˆæœé›†ç¾¤ä½¿ç”¨
 	RESOURCE_CHANGE_REASON_DEFAULT = 0,
-	RESOURCE_CHANGE_REASON_CREATE_ROOM,				// ´´½¨·¿¼äÏûºÄ
-	RESOURCE_CHANGE_REASON_GAME_BEGIN,				// ÓÎÏ·¿ªÊ¼
-	RESOURCE_CHANGE_REASON_GAME_FINISHED,			// ÓÎÏ·½áÊø
-	RESOURCE_CHANGE_REASON_GAME_SELLETE_ROLLBACK,	// ´ó½áËãÃ»ÓĞÉú³ÉÕ½¼¨·µ»¹
-	RESOURCE_CHANGE_REASON_GAME_SELLETE_NORAML,		// ´ó½áËãÆÕÍ¨Ö§¸¶
-	RESOURCE_CHANGE_REASON_GAME_SELLETE_AA,			// ÓÎÏ·´ó½áËãAAÖ§¸¶
-	RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP,			// ½ğ±Ò·¿³éË®·µ»¹
-	RESOURCE_CHANGE_REASON_ROOM_PUMP_CONSUME,		// ·¿¼ä³éË®¿Û³ı
-	RESOURCE_CHANGE_REASON_SYSTEM_SUBSIDY,			// ÏµÍ³²¹Ìù½ğ±Ò(Ô­ÒòÊÇÓÎÏ·¿Û³ı½ğ±Ò¿Û³ÉÁË¸ºÊı)
-	RESOURCE_CHANGE_REASON_REGISTER,				// ×¢²á
-	RESOURCE_CHANGE_REASON_MAGIC_EXPRESS,			// Ä§·¨±íÇé
+	RESOURCE_CHANGE_REASON_CREATE_ROOM,				// åˆ›å»ºæˆ¿é—´æ¶ˆè€—
+	RESOURCE_CHANGE_REASON_GAME_BEGIN,				// æ¸¸æˆå¼€å§‹
+	RESOURCE_CHANGE_REASON_GAME_FINISHED,			// æ¸¸æˆç»“æŸ
+	RESOURCE_CHANGE_REASON_GAME_SELLETE_ROLLBACK,	// å¤§ç»“ç®—æ²¡æœ‰ç”Ÿæˆæˆ˜ç»©è¿”è¿˜
+	RESOURCE_CHANGE_REASON_GAME_SELLETE_NORAML,		// å¤§ç»“ç®—æ™®é€šæ”¯ä»˜
+	RESOURCE_CHANGE_REASON_GAME_SELLETE_AA,			// æ¸¸æˆå¤§ç»“ç®—AAæ”¯ä»˜
+	RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP,			// é‡‘å¸æˆ¿æŠ½æ°´è¿”è¿˜
+	RESOURCE_CHANGE_REASON_ROOM_PUMP_CONSUME,		// æˆ¿é—´æŠ½æ°´æ‰£é™¤
+	RESOURCE_CHANGE_REASON_SYSTEM_SUBSIDY,			// ç³»ç»Ÿè¡¥è´´é‡‘å¸(åŸå› æ˜¯æ¸¸æˆæ‰£é™¤é‡‘å¸æ‰£æˆäº†è´Ÿæ•°)
+	RESOURCE_CHANGE_REASON_REGISTER,				// æ³¨å†Œ
+	RESOURCE_CHANGE_REASON_MAGIC_EXPRESS,			// é­”æ³•è¡¨æƒ…
 
-	// PHP·şÊ¹ÓÃ
-	RESOURCE_CHANGE_REASON_BANK_SAVE = 1000, 		// ÒøĞĞ´æÇ®
-	RESOURCE_CHANGE_REASON_BANK_TAKE,           	// ÒøĞĞÈ¡Ç®
-	RESOURCE_CHANGE_REASON_BANK_TRAN,				// ÒøĞĞ×ªÕË
-	RESOURCE_CHANGE_REASON_GIVE,		 			// ×ªÔù
-	RESOURCE_CHANGE_REASON_SUPPORT,			 		// ¾È¼Ã½ğ
-	RESOURCE_CHANGE_REASON_SIGN,			 		// Ç©µ½
-	RESOURCE_CHANGE_REASON_BACK_RECHARE,			// ºóÌ¨³äÖµ»òÕßÌáÏÖ
-	RESOURCE_CHANGE_REASON_PAY_RECHARE,			 	// ÉÌ³ÇÖ§¸¶³äÖµ
-	RESOURCE_CHANGE_REASON_AGENT_RECHARE,			// ´úÀí³äÖµ
-	RESOURCE_CHANGE_REASON_TURNTABLE,				// ×ªÅÌ
-	RESOURCE_CHANGE_REASON_SHARE,					// ·ÖÏí
-	RESOURCE_CHANGE_REASON_FRIEND_REWARD,			// ºÃÓÑ´òÉÍ
-	RESOURCE_CHANGE_REASON_BIND_PHONE,				// °ó¶¨ÊÖ»ú
-	RESOURCE_CHANGE_REASON_SEND_HORN,				// ÊÀ½ç¹ã²¥
-	RESOURCE_CHANGE_REASON_MAIL_REWARD,				// ÓÊ¼ş½±Àø
-	RESOURCE_CHANGE_REASON_BIND_AGENT,				// °ó¶¨´úÀí
-	RESOURCE_CHANGE_REASON_INVITE_ENTER,			// ÑûÇë½øÈëÓÎÏ·
+	// PHPæœä½¿ç”¨
+	RESOURCE_CHANGE_REASON_BANK_SAVE = 1000, 		// é“¶è¡Œå­˜é’±
+	RESOURCE_CHANGE_REASON_BANK_TAKE,           	// é“¶è¡Œå–é’±
+	RESOURCE_CHANGE_REASON_BANK_TRAN,				// é“¶è¡Œè½¬è´¦
+	RESOURCE_CHANGE_REASON_GIVE,		 			// è½¬èµ 
+	RESOURCE_CHANGE_REASON_SUPPORT,			 		// æ•‘æµé‡‘
+	RESOURCE_CHANGE_REASON_SIGN,			 		// ç­¾åˆ°
+	RESOURCE_CHANGE_REASON_BACK_RECHARE,			// åå°å……å€¼æˆ–è€…æç°
+	RESOURCE_CHANGE_REASON_PAY_RECHARE,			 	// å•†åŸæ”¯ä»˜å……å€¼
+	RESOURCE_CHANGE_REASON_AGENT_RECHARE,			// ä»£ç†å……å€¼
+	RESOURCE_CHANGE_REASON_TURNTABLE,				// è½¬ç›˜
+	RESOURCE_CHANGE_REASON_SHARE,					// åˆ†äº«
+	RESOURCE_CHANGE_REASON_FRIEND_REWARD,			// å¥½å‹æ‰“èµ
+	RESOURCE_CHANGE_REASON_BIND_PHONE,				// ç»‘å®šæ‰‹æœº
+	RESOURCE_CHANGE_REASON_SEND_HORN,				// ä¸–ç•Œå¹¿æ’­
+	RESOURCE_CHANGE_REASON_MAIL_REWARD,				// é‚®ä»¶å¥–åŠ±
+	RESOURCE_CHANGE_REASON_BIND_AGENT,				// ç»‘å®šä»£ç†
+	RESOURCE_CHANGE_REASON_INVITE_ENTER,			// é‚€è¯·è¿›å…¥æ¸¸æˆ
 };
 
 enum NOTIFY_MSG_TYPE
 {
-	SMT_CHAT = 1,				//ÁÄÌìÏûÏ¢
-	SMT_EJECT = 2,				//µ¯³öÏûÏ¢
-	SMT_GLOBAL = 4,				//È«¾ÖÏûÏ¢
-	SMT_PROMPT = 8,				//ÌáÊ¾ÏûÏ¢
-	SMT_TABLE_ROLL = 16,		//¹ö¶¯ÏûÏ¢
+	SMT_CHAT = 1,				//èŠå¤©æ¶ˆæ¯
+	SMT_EJECT = 2,				//å¼¹å‡ºæ¶ˆæ¯
+	SMT_GLOBAL = 4,				//å…¨å±€æ¶ˆæ¯
+	SMT_PROMPT = 8,				//æç¤ºæ¶ˆæ¯
+	SMT_TABLE_ROLL = 16,		//æ»šåŠ¨æ¶ˆæ¯
 };
 
 ///////////////////////////////////////////
-// ½á¹¹Ìå¶¨Òå
+// ç»“æ„ä½“å®šä¹‰
 
-// ÇëÇó×¢²á
+// è¯·æ±‚æ³¨å†Œ
 struct LogonRequestRegister
 {
-	BYTE		byFromPhone;			//0-´ÓPC×¢²á£¬1-´ÓÒÆ¶¯¶Ë×¢²á
-	BYTE		byFastRegister;			//0-¿ìËÙ×¢²á£¬1-ÆÕÍ¨×¢²á,2-Î¢ĞÅ×¢²á£¬3-QQ×¢²á£¬4-ÊÖ»ú×¢²á
-	char		szAccount[64];			//ÓÃ»§Ãû Î¢ĞÅêÇ³Æ ÊÖ»úºÅÂë
-	char		szPswd[64];				//ÃÜÂë Î¢ĞÅ¡¢QQµÇÂ¼±êÊ¶
-	BYTE		byStatus;			    //0 ×¢²á 1 µÇÂ¼ Õë¶ÔÕËºÅµÇÂ¼	
-	BYTE		bySex;					//ĞÔ±ğ
-	char		szHeadUrl[256];			//Í·ÏñURL
-	char		szAccountInfo[64];		//Î¨Ò»±êÊ¶
+	BYTE		byFromPhone;			//0-ä»PCæ³¨å†Œï¼Œ1-ä»ç§»åŠ¨ç«¯æ³¨å†Œ
+	BYTE		byFastRegister;			//0-å¿«é€Ÿæ³¨å†Œï¼Œ1-æ™®é€šæ³¨å†Œ,2-å¾®ä¿¡æ³¨å†Œï¼Œ3-QQæ³¨å†Œï¼Œ4-æ‰‹æœºæ³¨å†Œ
+	char		szAccount[64];			//ç”¨æˆ·å å¾®ä¿¡æ˜µç§° æ‰‹æœºå·ç 
+	char		szPswd[64];				//å¯†ç  å¾®ä¿¡ã€QQç™»å½•æ ‡è¯†
+	BYTE		byStatus;			    //0 æ³¨å†Œ 1 ç™»å½• é’ˆå¯¹è´¦å·ç™»å½•	
+	BYTE		bySex;					//æ€§åˆ«
+	char		szHeadUrl[256];			//å¤´åƒURL
+	char		szAccountInfo[64];		//å”¯ä¸€æ ‡è¯†
 
-	// Ñ¡ÔñĞÔ·¢ËÍ
-	BYTE		byPlatformType;			//Ä¬ÈÏ0   1ÊÇios  2°²×¿   3¡¢win32
+	// é€‰æ‹©æ€§å‘é€
+	BYTE		byPlatformType;			//é»˜è®¤0   1æ˜¯ios  2å®‰å“   3ã€win32
 	LogonRequestRegister()
 	{
 		memset(this, 0, sizeof(LogonRequestRegister));
 	}
 };
 
-// »ØÓ¦×¢²á
+// å›åº”æ³¨å†Œ
 struct LogonResponseRegister
 {
-	int  userID;			//ÓÃ»§ID
-	char szToken[64];		//ÓÃ»§Token£¨sessioncode£©
-	char szAccountInfo[64];	//Î¨Ò»±êÊ¶
-	BYTE byFastRegister;	//1-ÆÕÍ¨×¢²á,2-Î¢ĞÅ×¢²á£¬3-QQ×¢²á
+	int  userID;			//ç”¨æˆ·ID
+	char szToken[64];		//ç”¨æˆ·Tokenï¼ˆsessioncodeï¼‰
+	char szAccountInfo[64];	//å”¯ä¸€æ ‡è¯†
+	BYTE byFastRegister;	//1-æ™®é€šæ³¨å†Œ,2-å¾®ä¿¡æ³¨å†Œï¼Œ3-QQæ³¨å†Œ
 
 	LogonResponseRegister()
 	{
@@ -258,43 +258,43 @@ struct LogonResponseRegister
 	}
 };
 
-// ÇëÇóµÇÂ¼´óÌü
+// è¯·æ±‚ç™»å½•å¤§å…
 struct LogonRequestLogon
 {
-	char		szMacAddr[64];						//macµØÖ·
-	int		    iUserID;							//ÓÃ»§IDµÇÂ¼£¬Èç¹ûID>0ÓÃIDµÇÂ¼
-	char        szToken[64];                        //ÓÃ»§Token£¨sessioncode£©
-	char        szVersions[24];                     //°æ±¾ºÅ
+	char		szMacAddr[64];						//macåœ°å€
+	int		    iUserID;							//ç”¨æˆ·IDç™»å½•ï¼Œå¦‚æœID>0ç”¨IDç™»å½•
+	char        szToken[64];                        //ç”¨æˆ·Tokenï¼ˆsessioncodeï¼‰
+	char        szVersions[24];                     //ç‰ˆæœ¬å·
 
-	// Ñ¡ÔñĞÔ·¢ËÍ
-	BYTE		byPlatformType;						//Ä¬ÈÏ0   1ÊÇios  2°²×¿   3¡¢win32
+	// é€‰æ‹©æ€§å‘é€
+	BYTE		byPlatformType;						//é»˜è®¤0   1æ˜¯ios  2å®‰å“   3ã€win32
 	LogonRequestLogon()
 	{
 		memset(this, 0, sizeof(LogonRequestLogon));
 	}
 };
 
-// µÇÂ¼´óÌü·µ»Ø
+// ç™»å½•å¤§å…è¿”å›
 struct LogonResponseLogon
 {
 	char	name[64];
 	char	phone[24];
 	BYTE	sex;
 	long long money;
-	int		jewels;					// ·¿¿¨Êı(×êÊ¯)
-	int		roomID;					// Íæ¼ÒËùÔÚµÄroomID
-	int		deskIdx;				// Íæ¼ÒËùÔÚµÄ×À×ÓË÷Òı
-	char	logonIP[24];			// Íæ¼ÒµÄµÇÂ¼IP
-	char	headURL[256];			// Íæ¼ÒÍ·Ïñ
-	long long bankMoney;			// ÒøĞĞ½ğ±Ò
-	char	bankPasswd[20];			// ÒøĞĞÃÜÂë
-	char	longitude[12];			// ¾­¶È
-	char	latitude[12];			// Î³¶È
-	char	address[64];			// µØÖ·
-	char	motto[128];				// ¸öĞÔÇ©Ãû
-	BYTE	visitor;				// ÊÇ·ñÊÇÓÎ¿Í
-	long long combineMatchID;		// ±¨ÃûµÄ±ÈÈüid£¬gameID*MAX_GAME_MATCH_ID + id
-	BYTE	matchStatus;			// ±ÈÈü×´Ì¬ ÖµÎªUserMatchStatus
+	int		jewels;					// æˆ¿å¡æ•°(é’»çŸ³)
+	int		roomID;					// ç©å®¶æ‰€åœ¨çš„roomID
+	int		deskIdx;				// ç©å®¶æ‰€åœ¨çš„æ¡Œå­ç´¢å¼•
+	char	logonIP[24];			// ç©å®¶çš„ç™»å½•IP
+	char	headURL[256];			// ç©å®¶å¤´åƒ
+	long long bankMoney;			// é“¶è¡Œé‡‘å¸
+	char	bankPasswd[20];			// é“¶è¡Œå¯†ç 
+	char	longitude[12];			// ç»åº¦
+	char	latitude[12];			// çº¬åº¦
+	char	address[64];			// åœ°å€
+	char	motto[128];				// ä¸ªæ€§ç­¾å
+	BYTE	visitor;				// æ˜¯å¦æ˜¯æ¸¸å®¢
+	long long combineMatchID;		// æŠ¥åçš„æ¯”èµ›idï¼ŒgameID*MAX_GAME_MATCH_ID + id
+	BYTE	matchStatus;			// æ¯”èµ›çŠ¶æ€ å€¼ä¸ºUserMatchStatus
 
 	LogonResponseLogon()
 	{
@@ -304,26 +304,26 @@ struct LogonResponseLogon
 
 struct LogonResponseFail
 {
-	BYTE byType; //0 ÕËºÅ±»·â
-	int iRemainTime;//Ê£ÓàÊ±¼ä £¬-1ÓÀ¾Ã·âºÅ
+	BYTE byType; //0 è´¦å·è¢«å°
+	int iRemainTime;//å‰©ä½™æ—¶é—´ ï¼Œ-1æ°¸ä¹…å°å·
 	LogonResponseFail()
 	{
 		memset(this, 0, sizeof(LogonResponseFail));
 	}
 };
 
-// ÇëÇó¹ºÂò×À×Ó
+// è¯·æ±‚è´­ä¹°æ¡Œå­
 struct LogonRequestBuyDesk
 {
-	int		userID;				// ÓÃ»§ID
-	int		roomType;			// ·¿¼äÀàĞÍ£¬1£º»ı·Ö£¬2£º½ğ±Ò·¿£¬3£ºvip·¿¼ä
-	int		gameID;				// ÓÎÏ·ID
-	int		count;				// ¹ºÂò¾ÖÊı
-	BYTE	needExt;			// ÊÇ·ñ×Ô¶¯À©Õ¹£¨0:²»×Ô¶¯À©Õ¹£¬Âú¾Ö¾Í½âÉ¢ 1:ÊÇ£©
-	char	gameRules[256];		// ÓÎÏ·¹æÔò¡£ json ¸ñÊ½£¬ÓÎÏ·¶¯Ì¬¿â¶ËºÍ¿Í»§¶Ë×ÔĞĞ¶¨Òå {"zhuang":"0"}
-	BYTE	masterNotPlay;		// ÊÇ·ñÌæËûÈË¿ª·¿(1:Yes 0:No)
-	int		friendsGroupID;     // ×À×ÓµÄ¾ãÀÖ²¿ID
-	int		friendsGroupDeskNumber;	// ºÅÂë£¬0£ºvip·¿¼ä(vip·¿¼äµÄºÅÂëÓÉÏµÍ³×Ô¶¯·ÖÅä)£¬´óÓÚ0£ºÅÆ×À
+	int		userID;				// ç”¨æˆ·ID
+	int		roomType;			// æˆ¿é—´ç±»å‹ï¼Œ1ï¼šç§¯åˆ†ï¼Œ2ï¼šé‡‘å¸æˆ¿ï¼Œ3ï¼švipæˆ¿é—´
+	int		gameID;				// æ¸¸æˆID
+	int		count;				// è´­ä¹°å±€æ•°
+	BYTE	needExt;			// æ˜¯å¦è‡ªåŠ¨æ‰©å±•ï¼ˆ0:ä¸è‡ªåŠ¨æ‰©å±•ï¼Œæ»¡å±€å°±è§£æ•£ 1:æ˜¯ï¼‰
+	char	gameRules[256];		// æ¸¸æˆè§„åˆ™ã€‚ json æ ¼å¼ï¼Œæ¸¸æˆåŠ¨æ€åº“ç«¯å’Œå®¢æˆ·ç«¯è‡ªè¡Œå®šä¹‰ {"zhuang":"0"}
+	BYTE	masterNotPlay;		// æ˜¯å¦æ›¿ä»–äººå¼€æˆ¿(1:Yes 0:No)
+	int		friendsGroupID;     // æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int		friendsGroupDeskNumber;	// å·ç ï¼Œ0ï¼švipæˆ¿é—´(vipæˆ¿é—´çš„å·ç ç”±ç³»ç»Ÿè‡ªåŠ¨åˆ†é…)ï¼Œå¤§äº0ï¼šç‰Œæ¡Œ
 
 	LogonRequestBuyDesk()
 	{
@@ -331,16 +331,16 @@ struct LogonRequestBuyDesk
 	}
 };
 
-// ¹ºÂò×À×Ó½á¹û
+// è´­ä¹°æ¡Œå­ç»“æœ
 struct LogonResponseBuyDesk
 {
-	int		userID;					// ÓÃ»§ID
-	int		roomID;					// ·¿¼äºÅ
-	int		deskIdx;				// ×À×ÓºÅ
-	char	passwd[20];				// ×À×ÓÃÜÂë
-	int		passwdLen;				// ÃÜÂë³¤¶È
-	int		jewels;					// ËùÏûºÄ×êÊ¯
-	BYTE	byMasterNotPlay;		// ÊÇ·ñÌæËûÈË¿ª·¿(1:Yes 0:No)
+	int		userID;					// ç”¨æˆ·ID
+	int		roomID;					// æˆ¿é—´å·
+	int		deskIdx;				// æ¡Œå­å·
+	char	passwd[20];				// æ¡Œå­å¯†ç 
+	int		passwdLen;				// å¯†ç é•¿åº¦
+	int		jewels;					// æ‰€æ¶ˆè€—é’»çŸ³
+	BYTE	byMasterNotPlay;		// æ˜¯å¦æ›¿ä»–äººå¼€æˆ¿(1:Yes 0:No)
 
 	LogonResponseBuyDesk()
 	{
@@ -348,7 +348,7 @@ struct LogonResponseBuyDesk
 	}
 };
 
-//½øÈëVIP×À×Ó
+//è¿›å…¥VIPæ¡Œå­
 struct LogonRequestEnterDesk
 {
 	int		userID;
@@ -361,7 +361,7 @@ struct LogonRequestEnterDesk
 	}
 };
 
-//½øÈëVIP×À×Ó½á¹û
+//è¿›å…¥VIPæ¡Œå­ç»“æœ
 struct LogonResponseEnterDesk
 {
 	int		userID;
@@ -374,15 +374,15 @@ struct LogonResponseEnterDesk
 	}
 };
 
-// Í¨Öª¹«¸æ
+// é€šçŸ¥å…¬å‘Š
 struct LogonNotifyNotice
 {
-	int		interval;		// ¼ä¸ô
-	int		times;			// ´ÎÊı
-	int		type;			// ÀàĞÍ(1:ÆÕÍ¨ 2:ÌØÊâ)
-	char	tile[24];		// ±êÌâ
-	int		sizeCount;		// ÄÚÈİ×Ö½ÚÊıÁ¿
-	char	content[1024];	// ÄÚÈİ
+	int		interval;		// é—´éš”
+	int		times;			// æ¬¡æ•°
+	int		type;			// ç±»å‹(1:æ™®é€š 2:ç‰¹æ®Š)
+	char	tile[24];		// æ ‡é¢˜
+	int		sizeCount;		// å†…å®¹å­—èŠ‚æ•°é‡
+	char	content[1024];	// å†…å®¹
 
 	LogonNotifyNotice()
 	{
@@ -390,12 +390,12 @@ struct LogonNotifyNotice
 	}
 };
 
-// Í¨ÖªÀ®°È
+// é€šçŸ¥å–‡å­
 struct LogonNotifyHorn
 {
 	int userID;
 	char userName[64];
-	int sizeCount;     //content×Ö½ÚÊıÁ¿
+	int sizeCount;     //contentå­—èŠ‚æ•°é‡
 	char content[1024];
 
 	LogonNotifyHorn()
@@ -404,11 +404,11 @@ struct LogonNotifyHorn
 	}
 };
 
-// ±¬½±»ñµÃ
+// çˆ†å¥–è·å¾—
 struct LogonNotifyActivity
 {
-	int		sizeCount;		// ÄÚÈİ×Ö½ÚÊıÁ¿
-	char	content[1024];	// ÄÚÈİ
+	int		sizeCount;		// å†…å®¹å­—èŠ‚æ•°é‡
+	char	content[1024];	// å†…å®¹
 
 	LogonNotifyActivity()
 	{
@@ -420,9 +420,9 @@ struct LogonNotifyResourceChange
 {
 	int resourceType;
 	long long value;
-	int reason;				// Ô­Òò
-	int param1;				// ²ÎÊı
-	long long changeValue;  // ±ä»¯Á¿
+	int reason;				// åŸå› 
+	int param1;				// å‚æ•°
+	long long changeValue;  // å˜åŒ–é‡
 
 	LogonNotifyResourceChange()
 	{
@@ -430,11 +430,11 @@ struct LogonNotifyResourceChange
 	}
 };
 
-//¸öÈËĞÅÏ¢Ë¢ĞÂ
+//ä¸ªäººä¿¡æ¯åˆ·æ–°
 struct LogonUserInfoFlush
 {
-	int iJewels;//·¿¿¨
-	long long money; //½ğ±Ò
+	int iJewels;//æˆ¿å¡
+	long long money; //é‡‘å¸
 
 	LogonUserInfoFlush()
 	{
@@ -442,17 +442,17 @@ struct LogonUserInfoFlush
 	}
 };
 
-// Í¨Öª¿ª·¿ÁĞ±íĞÅÏ¢±ä»¯
+// é€šçŸ¥å¼€æˆ¿åˆ—è¡¨ä¿¡æ¯å˜åŒ–
 struct LogonNotifyBuyDeskInfoChange
 {
 	enum ChangeType
 	{
-		CHANGE_REASON_USERCOUNT_CHANGE = 1,		// ÈËÊı±ä»¯
-		CHANGE_REASON_DEL = 2,					// É¾³ı×À×Ó£¨´ó½áËã£©
-		CHANGE_REASON_BEGIN = 3,				// ÓÎÏ·¿ªÊ¼£¨¾ÖÊı±ä»¯£©
+		CHANGE_REASON_USERCOUNT_CHANGE = 1,		// äººæ•°å˜åŒ–
+		CHANGE_REASON_DEL = 2,					// åˆ é™¤æ¡Œå­ï¼ˆå¤§ç»“ç®—ï¼‰
+		CHANGE_REASON_BEGIN = 3,				// æ¸¸æˆå¼€å§‹ï¼ˆå±€æ•°å˜åŒ–ï¼‰
 	};
 
-	int changeType;		//¶ÔÓ¦ChangeType
+	int changeType;		//å¯¹åº”ChangeType
 	char passwd[20];
 	int currUserCount;
 
@@ -462,7 +462,7 @@ struct LogonNotifyBuyDeskInfoChange
 	}
 };
 
-//»úÆ÷ÈËÈ¡Ç®
+//æœºå™¨äººå–é’±
 struct _LogonResponseRobotTakeMoney
 {
 	int iMoney;
@@ -506,7 +506,7 @@ struct LogonResponseUserInfo
 	int jewels;
 	long long money;
 	char ip[24];
-	char motto[128];// ¸öĞÔÇ©Ãû
+	char motto[128];// ä¸ªæ€§ç­¾å
 
 	LogonResponseUserInfo()
 	{
@@ -514,22 +514,22 @@ struct LogonResponseUserInfo
 	}
 };
 
-// ÓÊ¼şĞ¡ºìµãÍ¨Öª
+// é‚®ä»¶å°çº¢ç‚¹é€šçŸ¥
 struct LogonNotifyEmailRedSpot
 {
-	int notReadCount;	 //Î´¶ÁÓÊ¼şÊıÁ¿
-	int notReceivedCount;//Î´ÁìÈ¡ÓÊ¼şÊıÁ¿
+	int notReadCount;	 //æœªè¯»é‚®ä»¶æ•°é‡
+	int notReceivedCount;//æœªé¢†å–é‚®ä»¶æ•°é‡
 	LogonNotifyEmailRedSpot()
 	{
 		memset(this, 0, sizeof(LogonNotifyEmailRedSpot));
 	}
 };
 
-// Í¨ÖªºÃÓÑĞ¡ºìµã
+// é€šçŸ¥å¥½å‹å°çº¢ç‚¹
 struct LogonNotifyFriendRedSpot
 {
-	int friendListRedSpotCount;		// ºÃÓÑÁĞ±íºìµãÊıÁ¿
-	int notifyListRedSpotCount;		// Í¨ÖªÁĞ±íºìµãÊıÁ¿
+	int friendListRedSpotCount;		// å¥½å‹åˆ—è¡¨çº¢ç‚¹æ•°é‡
+	int notifyListRedSpotCount;		// é€šçŸ¥åˆ—è¡¨çº¢ç‚¹æ•°é‡
 	LogonNotifyFriendRedSpot()
 	{
 		memset(this, 0, sizeof(LogonNotifyFriendRedSpot));
@@ -538,48 +538,48 @@ struct LogonNotifyFriendRedSpot
 
 
 //////////////////////////////////////////////////////////////////////////
-//¾ãÀÖ²¿Ïà¹ØĞ­Òé
+//ä¿±ä¹éƒ¨ç›¸å…³åè®®
 
-//Íæ¼ÒµÄ¾ãÀÖ²¿ÁĞ±í
+//ç©å®¶çš„ä¿±ä¹éƒ¨åˆ—è¡¨
 struct OneFriendsGroupInfo
 {
 	int friendsGroupID;
-	BYTE status;		//¾ãÀÖ²¿µÄÉí·İ£¬1ÈºÖ÷£¬0ÆÕÍ¨ÈËÔ±£¬2¹ÜÀíÔ±
-	int currOnlineCount;//µ±Ç°ÔÚÏßÈËÊı
-	int peopleCount;	//¾ãÀÖ²¿ÈËÊı
-	int deskCount;		//ÒÑ¿ªÅÆ×ÀÊıÁ¿
-	int VIPRoomCount;	//ÒÑ¿ªVIP·¿¼äÊıÁ¿
-	int frontMember[9];	//Ç°Ãæ¼¸¸öÍæ¼ÒuserID
+	BYTE status;		//ä¿±ä¹éƒ¨çš„èº«ä»½ï¼Œ1ç¾¤ä¸»ï¼Œ0æ™®é€šäººå‘˜ï¼Œ2ç®¡ç†å‘˜
+	int currOnlineCount;//å½“å‰åœ¨çº¿äººæ•°
+	int peopleCount;	//ä¿±ä¹éƒ¨äººæ•°
+	int deskCount;		//å·²å¼€ç‰Œæ¡Œæ•°é‡
+	int VIPRoomCount;	//å·²å¼€VIPæˆ¿é—´æ•°é‡
+	int frontMember[9];	//å‰é¢å‡ ä¸ªç©å®¶userID
 	int createTime;
 	int masterID;
-	char name[24];		//¾ãÀÖ²¿Ãû×Ö
-	char notice[128];	//¾ãÀÖ²¿¹«¸æ
-	char wechat[48];	//Î¢ĞÅÈº
-	BYTE power;			//Õâ¸ö¾ãÀÖ²¿µÄÈ¨ÏŞ
-	int carryFireCoin;	//ÔÚÕâ¸ö¾ãÀÖ²¿Ğ¯´øµÄ»ğ±Ò
+	char name[24];		//ä¿±ä¹éƒ¨åå­—
+	char notice[128];	//ä¿±ä¹éƒ¨å…¬å‘Š
+	char wechat[48];	//å¾®ä¿¡ç¾¤
+	BYTE power;			//è¿™ä¸ªä¿±ä¹éƒ¨çš„æƒé™
+	int carryFireCoin;	//åœ¨è¿™ä¸ªä¿±ä¹éƒ¨æºå¸¦çš„ç«å¸
 	OneFriendsGroupInfo()
 	{
 		memset(this, 0, sizeof(OneFriendsGroupInfo));
 	}
 };
 
-//ÇëÇó¾ãÀÖ²¿³ÉÔ±ÒÔ¼°ÇëÇó¾ãÀÖ²¿¼òµ¥ĞÅÏ¢
+//è¯·æ±‚ä¿±ä¹éƒ¨æˆå‘˜ä»¥åŠè¯·æ±‚ä¿±ä¹éƒ¨ç®€å•ä¿¡æ¯
 struct LogonRequestFriendsInfo
 {
-	int friendsGroupID;		// ¾ãÀÖ²¿id
-	int page;				// µÚ¼¸Ò³£¬µÚÒ»´ÎÄ¬ÈÏ0
+	int friendsGroupID;		// ä¿±ä¹éƒ¨id
+	int page;				// ç¬¬å‡ é¡µï¼Œç¬¬ä¸€æ¬¡é»˜è®¤0
 };
 struct OneFriendsGroupUserInfo
 {
 	int userID;
 	int joinTime;
-	BYTE onlineStatus;		//ÔÚÏß×´Ì¬ 0:²»ÔÚÏß 1£ºÔÚÏß
+	BYTE onlineStatus;		//åœ¨çº¿çŠ¶æ€ 0:ä¸åœ¨çº¿ 1ï¼šåœ¨çº¿
 	int score;
 	long long money;
-	int fireCoin;			//ÀÛ¼ÆÊäÓ®µÄ»ğ±Ò
-	BYTE status;			//¾ãÀÖ²¿µÄÉí·İ£¬1ÈºÖ÷£¬0ÆÕÍ¨ÈËÔ±£¬2¹ÜÀíÔ±
-	int carryFireCoin;		//ÉíÉÏĞ¯´ø»ğ±Ò
-	BYTE power;				//Íæ¼ÒµÄÈ¨ÏŞ
+	int fireCoin;			//ç´¯è®¡è¾“èµ¢çš„ç«å¸
+	BYTE status;			//ä¿±ä¹éƒ¨çš„èº«ä»½ï¼Œ1ç¾¤ä¸»ï¼Œ0æ™®é€šäººå‘˜ï¼Œ2ç®¡ç†å‘˜
+	int carryFireCoin;		//èº«ä¸Šæºå¸¦ç«å¸
+	BYTE power;				//ç©å®¶çš„æƒé™
 	OneFriendsGroupUserInfo()
 	{
 		memset(this, 0, sizeof(OneFriendsGroupUserInfo));
@@ -587,9 +587,9 @@ struct OneFriendsGroupUserInfo
 };
 struct LogonResponseFriendsGroupMember
 {
-	int allPage;							//×Ü¹²Ò³
-	int curPage;							//µ±Ç°Ò³
-	int pageDataCount;						//µ±Ç°Ò³Êı¾İÁ¿
+	int allPage;							//æ€»å…±é¡µ
+	int curPage;							//å½“å‰é¡µ
+	int pageDataCount;						//å½“å‰é¡µæ•°æ®é‡
 	OneFriendsGroupUserInfo userInfo[200];
 	LogonResponseFriendsGroupMember()
 	{
@@ -599,113 +599,113 @@ struct LogonResponseFriendsGroupMember
 struct LogonResponseFriendsGroupSimple
 {
 	int friendsGroupID;
-	char name[24];//¾ãÀÖ²¿Ãû×Ö
-	int masterID; //ÈºÖ÷ID
-	char notice[128]; //¾ãÀÖ²¿¹«¸æ
+	char name[24];//ä¿±ä¹éƒ¨åå­—
+	int masterID; //ç¾¤ä¸»ID
+	char notice[128]; //ä¿±ä¹éƒ¨å…¬å‘Š
 	LogonResponseFriendsGroupSimple()
 	{
 		memset(this, 0, sizeof(LogonResponseFriendsGroupSimple));
 	}
 };
 
-//ÇëÇó¾ãÀÖ²¿µÄËùÓĞÍ¨ÖªÏûÏ¢
+//è¯·æ±‚ä¿±ä¹éƒ¨çš„æ‰€æœ‰é€šçŸ¥æ¶ˆæ¯
 struct LogonRequestFriendsGroupAllNotify
 {
-	int time; //Ê±¼äµã£¬time=0:ÇëÇó×îĞÂµÄÊı¾İ
+	int time; //æ—¶é—´ç‚¹ï¼Œtime=0:è¯·æ±‚æœ€æ–°çš„æ•°æ®
 };
 struct OneFriendsGroupNotify
 {
-	int id; //ÏûÏ¢id£¬Î¨Ò»±êÊ¶
+	int id; //æ¶ˆæ¯idï¼Œå”¯ä¸€æ ‡è¯†
 	int userID;
 	int targetFriendsGroupID;
 	char name[24];
-	BYTE type;//ÏûÏ¢ÀàĞÍ
-	int time; //ÏûÏ¢²úÉúÊ±¼ä
+	BYTE type;//æ¶ˆæ¯ç±»å‹
+	int time; //æ¶ˆæ¯äº§ç”Ÿæ—¶é—´
 	int param1;
 	int param2;
-	BYTE alreadyOper; //ÊÇ·ñ±»ÆäËüÍæ¼Ò²Ù×÷,0:·ñ£¬1£ºÊÇ
+	BYTE alreadyOper; //æ˜¯å¦è¢«å…¶å®ƒç©å®¶æ“ä½œ,0:å¦ï¼Œ1ï¼šæ˜¯
 	OneFriendsGroupNotify()
 	{
 		memset(this, 0, sizeof(OneFriendsGroupNotify));
 	}
 };
 
-//ÇëÇó¾ãÀÖ²¿¿ª·¿ÁĞ±íÏûÏ¢
+//è¯·æ±‚ä¿±ä¹éƒ¨å¼€æˆ¿åˆ—è¡¨æ¶ˆæ¯
 struct LogonRequestFriendsGroupRoomMsg
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int time; //Ê±¼äµã£¬time=0:ÇëÇó×îĞÂµÄÊı¾İ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int time; //æ—¶é—´ç‚¹ï¼Œtime=0:è¯·æ±‚æœ€æ–°çš„æ•°æ®
 };
-struct OneFriendsGroupRoomMsg //Ò»Ìõ¾ãÀÖ²¿¿ª·¿ÏûÏ¢
+struct OneFriendsGroupRoomMsg //ä¸€æ¡ä¿±ä¹éƒ¨å¼€æˆ¿æ¶ˆæ¯
 {
-	int friendsGroupID;//¾ãÀÖ²¿id
-	int userID;		   //ÕâÌõÏûÏ¢ÊÇË­·¢ËÍµÄ
-	int id;            //ÏûÏ¢ID,Ã¿¸ö¾ãÀÖ²¿ÏûÏ¢idÎ¨Ò»
-	int time;          //ÏûÏ¢²úÉúÊ±¼ä
-	int roomID;		   //·¿¼äID
-	int roomCount;	   //¸üĞÂ¿ª·¿ÊıÁ¿£¬µ±Ç°¾ãÀÖ²¿ËùÓĞµÄ¿ª·¿ÊıÁ¿£¬Ìá¹©¸ø¿Í»§¶Ë¸üĞÂ¿ª·¿ÊıÁ¿
-	int curPeopleCount;//µ±Ç°ÈËÊı
-	int allPeopleCount;//×ÜÈËÊı
-	int playCount;     //ÓÎÏ·¾ÖÊı
-	char passwd[20];   //×À×ÓÃÜÂë
-	char gameRules[256];//ÓÎÏ·¹æÔò
+	int friendsGroupID;//ä¿±ä¹éƒ¨id
+	int userID;		   //è¿™æ¡æ¶ˆæ¯æ˜¯è°å‘é€çš„
+	int id;            //æ¶ˆæ¯ID,æ¯ä¸ªä¿±ä¹éƒ¨æ¶ˆæ¯idå”¯ä¸€
+	int time;          //æ¶ˆæ¯äº§ç”Ÿæ—¶é—´
+	int roomID;		   //æˆ¿é—´ID
+	int roomCount;	   //æ›´æ–°å¼€æˆ¿æ•°é‡ï¼Œå½“å‰ä¿±ä¹éƒ¨æ‰€æœ‰çš„å¼€æˆ¿æ•°é‡ï¼Œæä¾›ç»™å®¢æˆ·ç«¯æ›´æ–°å¼€æˆ¿æ•°é‡
+	int curPeopleCount;//å½“å‰äººæ•°
+	int allPeopleCount;//æ€»äººæ•°
+	int playCount;     //æ¸¸æˆå±€æ•°
+	char passwd[20];   //æ¡Œå­å¯†ç 
+	char gameRules[256];//æ¸¸æˆè§„åˆ™
 	OneFriendsGroupRoomMsg()
 	{
 		memset(this, 0, sizeof(OneFriendsGroupRoomMsg));
 	}
 };
 
-//ÇëÇó¾ãÀÖ²¿µÄÕ½¼¨ÏûÏ¢
+//è¯·æ±‚ä¿±ä¹éƒ¨çš„æˆ˜ç»©æ¶ˆæ¯
 struct LogonRequestFriendsGroupAccoMsg
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int firstTime;		//ÆğÊ¼Ê±¼ä
-	int endTime;		//½ØÖ¹Ê±¼ä¡£½ØÖ¹Ê±¼äÎª0£º±íÊ¾ÖÁ½ñ
-	BYTE roomType;		//0ËùÓĞ£¬1:»ı·Ö·¿£¬2£º½ğ±Ò·¿£¬3£ºVIP·¿
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int firstTime;		//èµ·å§‹æ—¶é—´
+	int endTime;		//æˆªæ­¢æ—¶é—´ã€‚æˆªæ­¢æ—¶é—´ä¸º0ï¼šè¡¨ç¤ºè‡³ä»Š
+	BYTE roomType;		//0æ‰€æœ‰ï¼Œ1:ç§¯åˆ†æˆ¿ï¼Œ2ï¼šé‡‘å¸æˆ¿ï¼Œ3ï¼šVIPæˆ¿
 };
-struct OneFriendsGroupAccountMsg //Ò»Ìõ¾ãÀÖ²¿½áËãÏûÏ¢
+struct OneFriendsGroupAccountMsg //ä¸€æ¡ä¿±ä¹éƒ¨ç»“ç®—æ¶ˆæ¯
 {
-	int friendsGroupID;		//¾ãÀÖ²¿id
-	int userID;				//ÕâÌõÏûÏ¢ÊÇË­·¢ËÍµÄ£¬userID=0£¬Õ½¼¨Ä¬ÈÏuserID=0
-	int time;				//ÏûÏ¢²úÉúÊ±¼ä
-	int roomID;				//·¿¼äID
-	int realPlayCount;		//ÕæÕıÓÎÏ·¾ÖÊı
-	int playCount;			//×î´óÓÎÏ·¾ÖÊı
-	BYTE playMode;			//ÓÎÏ·Ä£Ê½£¬¶ÔÓ¦json["gameIdx"]£¬ËùÓĞÓÎÏ·±ØĞëÍ³Ò»
-	char passwd[20];		//×À×ÓÃÜÂë
-	char userInfoList[192];	//Õ½¼¨ÁĞ±í
-	BYTE roomType;			//·¿¼äÀàĞÍ
-	BYTE srcType;			//×ÀºÅ
+	int friendsGroupID;		//ä¿±ä¹éƒ¨id
+	int userID;				//è¿™æ¡æ¶ˆæ¯æ˜¯è°å‘é€çš„ï¼ŒuserID=0ï¼Œæˆ˜ç»©é»˜è®¤userID=0
+	int time;				//æ¶ˆæ¯äº§ç”Ÿæ—¶é—´
+	int roomID;				//æˆ¿é—´ID
+	int realPlayCount;		//çœŸæ­£æ¸¸æˆå±€æ•°
+	int playCount;			//æœ€å¤§æ¸¸æˆå±€æ•°
+	BYTE playMode;			//æ¸¸æˆæ¨¡å¼ï¼Œå¯¹åº”json["gameIdx"]ï¼Œæ‰€æœ‰æ¸¸æˆå¿…é¡»ç»Ÿä¸€
+	char passwd[20];		//æ¡Œå­å¯†ç 
+	char userInfoList[192];	//æˆ˜ç»©åˆ—è¡¨
+	BYTE roomType;			//æˆ¿é—´ç±»å‹
+	BYTE srcType;			//æ¡Œå·
 	OneFriendsGroupAccountMsg()
 	{
 		memset(this, 0, sizeof(OneFriendsGroupAccountMsg));
 	}
 };
 
-//ÇëÇó´´½¨¾ãÀÖ²¿
+//è¯·æ±‚åˆ›å»ºä¿±ä¹éƒ¨
 struct LogonRequestCreateFriendsGroup
 {
-	char name[24];//¾ãÀÖ²¿Ãû×Ö
+	char name[24];//ä¿±ä¹éƒ¨åå­—
 };
 
-//ÉêÇë¼ÓÈë¾ãÀÖ²¿
+//ç”³è¯·åŠ å…¥ä¿±ä¹éƒ¨
 struct LogonRequestJoinFriendsGroup
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 };
 
-//ÑûÇëºÃÓÑ¼ÓÈë¾ãÀÖ²¿
+//é‚€è¯·å¥½å‹åŠ å…¥ä¿±ä¹éƒ¨
 struct LogonRequestAddFriendJoin
 {
-	int friendID;       //±»ÑûÇëµÄºÃÓÑid
-	int friendsGroupID; //Òª¼ÓÈëµÄ¾ãÀÖ²¿id
+	int friendID;       //è¢«é‚€è¯·çš„å¥½å‹id
+	int friendsGroupID; //è¦åŠ å…¥çš„ä¿±ä¹éƒ¨id
 };
 
-//ÇëÇó»ØÓ¦Í¨ÖªÏûÏ¢
+//è¯·æ±‚å›åº”é€šçŸ¥æ¶ˆæ¯
 struct LogonRequestAnswerOper
 {
-	int id;				//²Ù×÷µÄÏûÏ¢µÄÎ¨Ò»id
-	BYTE operType;		//²Ù×÷ÀàĞÍ,1Í¬Òâ£¬2¾Ü¾ø
+	int id;				//æ“ä½œçš„æ¶ˆæ¯çš„å”¯ä¸€id
+	BYTE operType;		//æ“ä½œç±»å‹,1åŒæ„ï¼Œ2æ‹’ç»
 	LogonRequestAnswerOper()
 	{
 		memset(this, 0, sizeof(LogonRequestAnswerOper));
@@ -713,68 +713,68 @@ struct LogonRequestAnswerOper
 	}
 };
 
-//É¾³ı¾ãÀÖ²¿³ÉÔ±
+//åˆ é™¤ä¿±ä¹éƒ¨æˆå‘˜
 struct LogonRequestDelMember
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int targetID;		//ÒªÉ¾³ı³ÉÔ±ID
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int targetID;		//è¦åˆ é™¤æˆå‘˜ID
 };
 
-//ÍË³ö¾ãÀÖ²¿
+//é€€å‡ºä¿±ä¹éƒ¨
 struct LogonRequestQuit
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 };
 
-//½âÉ¢¾ãÀÖ²¿
+//è§£æ•£ä¿±ä¹éƒ¨
 struct LogonRequestDismiss
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 };
 
-//¸Ä±ä¾ãÀÖ²¿Ãû×Ö
+//æ”¹å˜ä¿±ä¹éƒ¨åå­—
 struct LogonRequestChangeName
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	char newName[24];//¾ãÀÖ²¿Ãû×Ö
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	char newName[24];//ä¿±ä¹éƒ¨åå­—
 };
 
-//É¾³ıÒ»ÌõÏûÏ¢Í¨Öª
+//åˆ é™¤ä¸€æ¡æ¶ˆæ¯é€šçŸ¥
 struct LogonRequestDelNotiy
 {
 	int id;
-	BYTE reply;//ÊÇ·ñĞèÒª»Ø¸´£¬0£º²»»Ø¸´£¬1£º»Ø¸´
+	BYTE reply;//æ˜¯å¦éœ€è¦å›å¤ï¼Œ0ï¼šä¸å›å¤ï¼Œ1ï¼šå›å¤
 };
 
-// ÇëÇóÉ¾³ıĞ¡ºìµã
+// è¯·æ±‚åˆ é™¤å°çº¢ç‚¹
 struct LogonFriendsGroupRequestDelRedSpot
 {
 	enum RedSpotType
 	{
-		REDSPOT_TYPE_NOTIFYLIST = 1,	// Í¨ÖªÁĞ±í
-		REDSPOT_TYPE_ROOM_MSG = 2,		// ¿ª·¿ÏûÏ¢
-		REDSPOT_TYPE_ACCO_MSG = 3,		// Õ½¼¨ÏûÏ¢
-		REDSPOT_TYPE_DESK_MSG = 4,		// ÅÆ×ÀÏûÏ¢
-		REDSPOT_TYPE_VIP_ROOM_MSG = 5,	// VIP·¿¼äÏûÏ¢
+		REDSPOT_TYPE_NOTIFYLIST = 1,	// é€šçŸ¥åˆ—è¡¨
+		REDSPOT_TYPE_ROOM_MSG = 2,		// å¼€æˆ¿æ¶ˆæ¯
+		REDSPOT_TYPE_ACCO_MSG = 3,		// æˆ˜ç»©æ¶ˆæ¯
+		REDSPOT_TYPE_DESK_MSG = 4,		// ç‰Œæ¡Œæ¶ˆæ¯
+		REDSPOT_TYPE_VIP_ROOM_MSG = 5,	// VIPæˆ¿é—´æ¶ˆæ¯
 	};
 
 	int redSpotType;
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 };
 
-// ÇëÇó·¢²¼¾ãÀÖ²¿¹«¸æ
+// è¯·æ±‚å‘å¸ƒä¿±ä¹éƒ¨å…¬å‘Š
 struct LogonFriendsGroupRequestSendNotice
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	char notice[128];   //Í¨Öª
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	char notice[128];   //é€šçŸ¥
 };
 
-// Õ½¼¨Í³¼Æ
+// æˆ˜ç»©ç»Ÿè®¡
 struct LogonFriendsGroupRequestQueryAcco
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int firstTime;		//ÆğÊ¼Ê±¼ä
-	int endTime;		//½ØÖ¹Ê±¼ä¡£½ØÖ¹Ê±¼äÎª0£º±íÊ¾ÖÁ½ñ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int firstTime;		//èµ·å§‹æ—¶é—´
+	int endTime;		//æˆªæ­¢æ—¶é—´ã€‚æˆªæ­¢æ—¶é—´ä¸º0ï¼šè¡¨ç¤ºè‡³ä»Š
 };
 struct OneSimlpeFriendsGroupAcco
 {
@@ -785,8 +785,8 @@ struct OneSimlpeFriendsGroupAcco
 };
 struct LogonFriendsGroupRequestQueryAccoRsp
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int peopleCount;    //ÈËÊı
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int peopleCount;    //äººæ•°
 	OneSimlpeFriendsGroupAcco accos[200];
 	LogonFriendsGroupRequestQueryAccoRsp()
 	{
@@ -794,27 +794,27 @@ struct LogonFriendsGroupRequestQueryAccoRsp
 	}
 };
 
-//ÇëÇó¾ãÀÖ²¿·¿¼äÁĞ±í(°üÀ¨VIP·¿¼ä)
+//è¯·æ±‚ä¿±ä¹éƒ¨æˆ¿é—´åˆ—è¡¨(åŒ…æ‹¬VIPæˆ¿é—´)
 struct LogonFriendsGroupRequestDeskList
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	BYTE type;			//0£ºÇëÇóÅÆ×À£¬·Ç0£ºÇëÇóvip·¿¼äÁĞ±í
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	BYTE type;			//0ï¼šè¯·æ±‚ç‰Œæ¡Œï¼Œé0ï¼šè¯·æ±‚vipæˆ¿é—´åˆ—è¡¨
 };
-struct OneFriendsGroupDeskInfo //Ò»Ìõ¾ãÀÖ²¿ÅÆ×À£¨°üÀ¨vip·¿¼ä£©
+struct OneFriendsGroupDeskInfo //ä¸€æ¡ä¿±ä¹éƒ¨ç‰Œæ¡Œï¼ˆåŒ…æ‹¬vipæˆ¿é—´ï¼‰
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int friendsGroupDeskNumber; //×À×Óid ,È¡Öµ·¶Î§{1-(MAX_FRIENDSGROUP_DESK_LIST_COUNT+MAX_FRIENDSGROUP_VIP_ROOM_COUNT)}
-	int time;          //×À×Ó´´½¨Ê±¼ä
-	int roomID;		   //·¿¼äID
-	int gameID;		   //ÓÎÏ·ID
-	int	roomType;	   //·¿¼äÀàĞÍ
-	int curPeopleCount;//µ±Ç°ÈËÊı
-	int allPeopleCount;//×ÜÈËÊı
-	int playCount;     //ÓÎÏ·¾ÖÊı
-	BYTE gameStatus;   //ÓÎÏ·×´Ì¬£¬0£ºÎ´¿ªÊ¼£¬1ÕıÔÚÓÎÏ·ÖĞ
-	char passwd[20];   //×À×ÓÃÜÂë
-	char gameRules[256];//ÓÎÏ·¹æÔò
-	int userID[MAX_PLAYER_GRADE]; //Íæ¼ÒÁĞ±í
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int friendsGroupDeskNumber; //æ¡Œå­id ,å–å€¼èŒƒå›´{1-(MAX_FRIENDSGROUP_DESK_LIST_COUNT+MAX_FRIENDSGROUP_VIP_ROOM_COUNT)}
+	int time;          //æ¡Œå­åˆ›å»ºæ—¶é—´
+	int roomID;		   //æˆ¿é—´ID
+	int gameID;		   //æ¸¸æˆID
+	int	roomType;	   //æˆ¿é—´ç±»å‹
+	int curPeopleCount;//å½“å‰äººæ•°
+	int allPeopleCount;//æ€»äººæ•°
+	int playCount;     //æ¸¸æˆå±€æ•°
+	BYTE gameStatus;   //æ¸¸æˆçŠ¶æ€ï¼Œ0ï¼šæœªå¼€å§‹ï¼Œ1æ­£åœ¨æ¸¸æˆä¸­
+	char passwd[20];   //æ¡Œå­å¯†ç 
+	char gameRules[256];//æ¸¸æˆè§„åˆ™
+	int userID[MAX_PLAYER_GRADE]; //ç©å®¶åˆ—è¡¨
 	OneFriendsGroupDeskInfo()
 	{
 		Init();
@@ -825,28 +825,28 @@ struct OneFriendsGroupDeskInfo //Ò»Ìõ¾ãÀÖ²¿ÅÆ×À£¨°üÀ¨vip·¿¼ä£©
 	}
 };
 
-//ÇëÇó½âÉ¢¾ãÀÖ²¿Ò»¸öÅÆ×À£¨°üÀ¨vip·¿¼ä£©
+//è¯·æ±‚è§£æ•£ä¿±ä¹éƒ¨ä¸€ä¸ªç‰Œæ¡Œï¼ˆåŒ…æ‹¬vipæˆ¿é—´ï¼‰
 struct LogonFriendsGroupRequestDeleteDeskInfo
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int friendsGroupDeskNumber; //×À×ÓºÅ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int friendsGroupDeskNumber; //æ¡Œå­å·
 };
 
-// ÏûºÄÍ³¼Æ
+// æ¶ˆè€—ç»Ÿè®¡
 struct LogonFriendsGroupRequestQueryDeskAcco
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	int firstTime; //ÆğÊ¼Ê±¼ä
-	int endTime;   //½ØÖ¹Ê±¼ä¡£½ØÖ¹Ê±¼äÎª0£º±íÊ¾ÖÁ½ñ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	int firstTime; //èµ·å§‹æ—¶é—´
+	int endTime;   //æˆªæ­¢æ—¶é—´ã€‚æˆªæ­¢æ—¶é—´ä¸º0ï¼šè¡¨ç¤ºè‡³ä»Š
 };
 struct OneSimlpeFriendsGroupDeskAcco
 {
-	long long costMoney;			//ÏûºÄ½ğ±ÒÊıÁ¿
-	int costJewels;					//ÏûºÄ×êÊ¯
-	long long fireCoinRecharge;		//»ğ±Ò³äÖµ
-	long long fireCoinExchange;		//»ğ±Ò¶Ò»»
-	long long moneyPump;			//½ğ±Ò³éË®
-	long long fireCoinPump;			//»ğ±Ò³éË®
+	long long costMoney;			//æ¶ˆè€—é‡‘å¸æ•°é‡
+	int costJewels;					//æ¶ˆè€—é’»çŸ³
+	long long fireCoinRecharge;		//ç«å¸å……å€¼
+	long long fireCoinExchange;		//ç«å¸å…‘æ¢
+	long long moneyPump;			//é‡‘å¸æŠ½æ°´
+	long long fireCoinPump;			//ç«å¸æŠ½æ°´
 	OneSimlpeFriendsGroupDeskAcco()
 	{
 		memset(this, 0, sizeof(OneSimlpeFriendsGroupDeskAcco));
@@ -854,7 +854,7 @@ struct OneSimlpeFriendsGroupDeskAcco
 };
 struct LogonFriendsGroupRequestQueryDeskAccoRsp
 {
-	int friendsGroupID;  //¾ãÀÖ²¿id
+	int friendsGroupID;  //ä¿±ä¹éƒ¨id
 	OneSimlpeFriendsGroupDeskAcco accos[1];
 	LogonFriendsGroupRequestQueryDeskAccoRsp()
 	{
@@ -862,77 +862,77 @@ struct LogonFriendsGroupRequestQueryDeskAccoRsp
 	}
 };
 
-// ÇëÇó×ªÈÃ¾ãÀÖ²¿
+// è¯·æ±‚è½¬è®©ä¿±ä¹éƒ¨
 struct LogonFriendsGroupRequestTransfer
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	int tarUserID;
 };
 
-// ÇëÇóÊÚÈ¨¾ãÀÖ²¿³ÉÔ±
+// è¯·æ±‚æˆæƒä¿±ä¹éƒ¨æˆå‘˜
 struct LogonFriendsGroupRequestAuthMembers
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	int tarUserID;
-	BYTE status; //0ÆÕÍ¨ÈËÔ±£¬2¹ÜÀíÔ±
+	BYTE status; //0æ™®é€šäººå‘˜ï¼Œ2ç®¡ç†å‘˜
 };
 
-// ÇëÇóĞŞ¸Ä¾ãÀÖ²¿Î¢ĞÅ
+// è¯·æ±‚ä¿®æ”¹ä¿±ä¹éƒ¨å¾®ä¿¡
 struct LogonFriendsGroupRequestModifyWechat
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	char wechat[48];    //Î¢ĞÅ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	char wechat[48];    //å¾®ä¿¡
 };
 
-// ÇëÇóĞŞ¸ÄÄ³¸öÍæ¼ÒµÄÈ¨ÏŞ
+// è¯·æ±‚ä¿®æ”¹æŸä¸ªç©å®¶çš„æƒé™
 struct LogonFriendsGroupRequestModifyUserPower
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	int targetUserID;
-	BYTE newPower;		//ĞÂµÄÈ¨ÏŞ
+	BYTE newPower;		//æ–°çš„æƒé™
 };
 
-// ¸øÍæ¼Ò³äÖµ»òÕß¶Ò»»»ğ±Ò
+// ç»™ç©å®¶å……å€¼æˆ–è€…å…‘æ¢ç«å¸
 struct LogonFriendsGroupRequestModifyUserFireCoin
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	int targetUserID;
-	int changeFireCoint;//±ä»¯Öµ£º´óÓÚ0Ôö¼Ó»ğ±Ò£¬Ğ¡ÓÚ0¼õÉÙ»ğ±Ò
+	int changeFireCoint;//å˜åŒ–å€¼ï¼šå¤§äº0å¢åŠ ç«å¸ï¼Œå°äº0å‡å°‘ç«å¸
 };
 
 
-//////////////Í¨ÖªÏûÏ¢//////////////////////////////
-//¾ãÀÖ²¿ÁÄÌìÏûÏ¢±ä»¯Í¨Öª
+//////////////é€šçŸ¥æ¶ˆæ¯//////////////////////////////
+//ä¿±ä¹éƒ¨èŠå¤©æ¶ˆæ¯å˜åŒ–é€šçŸ¥
 struct LogonChatMsgChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	BYTE operType; //0£º¸üĞÂ£¬1£ºÉ¾³ı
-	BYTE msgType; // 0¿ª·¿ÏûÏ¢£¬1£ºÕ½¼¨ÏûÏ¢
-	int id; //ÏûÏ¢ID,Ã¿¸ö¾ãÀÖ²¿ÏûÏ¢idÎ¨Ò»
-	int roomCount;	   //¸üĞÂ¿ª·¿ÊıÁ¿
-	int curPeopleCount;//µ±Ç°ÈËÊı
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	BYTE operType; //0ï¼šæ›´æ–°ï¼Œ1ï¼šåˆ é™¤
+	BYTE msgType; // 0å¼€æˆ¿æ¶ˆæ¯ï¼Œ1ï¼šæˆ˜ç»©æ¶ˆæ¯
+	int id; //æ¶ˆæ¯ID,æ¯ä¸ªä¿±ä¹éƒ¨æ¶ˆæ¯idå”¯ä¸€
+	int roomCount;	   //æ›´æ–°å¼€æˆ¿æ•°é‡
+	int curPeopleCount;//å½“å‰äººæ•°
 	LogonChatMsgChange()
 	{
 		memset(this, 0, sizeof(LogonChatMsgChange));
 	}
 };
 
-//¾ãÀÖ²¿Ãû×Ö±ä»¯Í¨Öª
+//ä¿±ä¹éƒ¨åå­—å˜åŒ–é€šçŸ¥
 struct LogonFriendsGroupNameChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	char name[24];		//ĞÂµÄ¾ãÀÖ²¿Ãû×Ö
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	char name[24];		//æ–°çš„ä¿±ä¹éƒ¨åå­—
 	LogonFriendsGroupNameChange()
 	{
 		memset(this, 0, sizeof(LogonFriendsGroupNameChange));
 	}
 };
 
-//¾ãÀÖ²¿ÈË±ä»¯Í¨Öª
+//ä¿±ä¹éƒ¨äººå˜åŒ–é€šçŸ¥
 struct LogonFriendsGroupPeopleChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	BYTE type;  //0¸üĞÂ£¬1Ôö¼Ó£¬2É¾³ı
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	BYTE type;  //0æ›´æ–°ï¼Œ1å¢åŠ ï¼Œ2åˆ é™¤
 	OneFriendsGroupUserInfo userInfo;
 	LogonFriendsGroupPeopleChange()
 	{
@@ -940,49 +940,49 @@ struct LogonFriendsGroupPeopleChange
 	}
 };
 
-//·şÎñÆ÷ÍÆËÍµÄÒ»Ìõ¾ãÀÖ²¿Í¨Öª
+//æœåŠ¡å™¨æ¨é€çš„ä¸€æ¡ä¿±ä¹éƒ¨é€šçŸ¥
 struct LogonFriendsGroupPushNotify
 {
 	OneFriendsGroupNotify notify;
 };
 
-//·şÎñÆ÷ÍÆËÍµÄÒ»Ìõ¾ãÀÖ²¿¿ª·¿ÏûÏ¢
+//æœåŠ¡å™¨æ¨é€çš„ä¸€æ¡ä¿±ä¹éƒ¨å¼€æˆ¿æ¶ˆæ¯
 struct LogonFriendsGroupPushRoomMsg
 {
 	OneFriendsGroupRoomMsg notify;
 
 };
-//·şÎñÆ÷ÍÆËÍµÄÒ»Ìõ¾ãÀÖ²¿Õ½¼¨ÏûÏ¢
+//æœåŠ¡å™¨æ¨é€çš„ä¸€æ¡ä¿±ä¹éƒ¨æˆ˜ç»©æ¶ˆæ¯
 struct LogonFriendsGroupPushAccoMsg
 {
 	OneFriendsGroupAccountMsg notify;
 };
 
-//·şÎñÆ÷ÍÆËÍµÄÒ»¸ö¾ãÀÖ²¿ÁĞ±íÏûÏ¢
+//æœåŠ¡å™¨æ¨é€çš„ä¸€ä¸ªä¿±ä¹éƒ¨åˆ—è¡¨æ¶ˆæ¯
 struct LogonFriendsGroupPushFGMsg
 {
 	OneFriendsGroupInfo notify;
 };
 
-//·şÎñÆ÷Ö÷¶¯ÍÆËÍµÄ¾ãÀÖ²¿½âÉ¢ÏûÏ¢
+//æœåŠ¡å™¨ä¸»åŠ¨æ¨é€çš„ä¿±ä¹éƒ¨è§£æ•£æ¶ˆæ¯
 struct LogonFriendsGroupPushDismiss
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	LogonFriendsGroupPushDismiss()
 	{
 		memset(this, 0, sizeof(LogonFriendsGroupPushDismiss));
 	}
 };
 
-//·şÎñÆ÷ÍÆËÍµÄĞ¡ºìµãÊıÁ¿
+//æœåŠ¡å™¨æ¨é€çš„å°çº¢ç‚¹æ•°é‡
 struct LogonFriendsGroupPushRedSpot
 {
-	int notifyListRedSpotCount;		//Í¨ÖªÁĞ±íÊıÁ¿
+	int notifyListRedSpotCount;		//é€šçŸ¥åˆ—è¡¨æ•°é‡
 	struct MsgRedSpot
 	{
-		int friendsGroupID;			//¾ãÀÖ²¿id
-		int deskMsgRedSpotCount;    //ÅÆ×ÀÏûÏ¢ÊıÁ¿
-		int VIPRoomMsgRedSpotCount;	//VIP·¿¼äÏûÏ¢ÊıÁ¿
+		int friendsGroupID;			//ä¿±ä¹éƒ¨id
+		int deskMsgRedSpotCount;    //ç‰Œæ¡Œæ¶ˆæ¯æ•°é‡
+		int VIPRoomMsgRedSpotCount;	//VIPæˆ¿é—´æ¶ˆæ¯æ•°é‡
 	};
 	int friendsGroupCount;
 	MsgRedSpot msgRedSpot[20];
@@ -992,50 +992,50 @@ struct LogonFriendsGroupPushRedSpot
 	}
 };
 
-//¾ãÀÖ²¿¹«¸æ±ä»¯Í¨Öª
+//ä¿±ä¹éƒ¨å…¬å‘Šå˜åŒ–é€šçŸ¥
 struct LogonFriendsGroupNoticeChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	char notice[128];	//ĞÂµÄ¾ãÀÖ²¿¹«¸æ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	char notice[128];	//æ–°çš„ä¿±ä¹éƒ¨å…¬å‘Š
 	LogonFriendsGroupNoticeChange()
 	{
 		memset(this, 0, sizeof(LogonFriendsGroupNoticeChange));
 	}
 };
 
-/////ÅÆ×À£¨°üÀ¨vip·¿¼ä£©
-//ÅÆ×ÀÔö¼Ó
+/////ç‰Œæ¡Œï¼ˆåŒ…æ‹¬vipæˆ¿é—´ï¼‰
+//ç‰Œæ¡Œå¢åŠ 
 struct LogonFriendsGroupAddDeskInfo
 {
 	OneFriendsGroupDeskInfo desk;
 };
-//ÅÆ×À±ä»¯
+//ç‰Œæ¡Œå˜åŒ–
 struct LogonFriendsGroupDeskInfoChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	BYTE operType;		//0£º¸üĞÂ£¬1£ºÉ¾³ı
-	int friendsGroupDeskNumber; //×À×ÓºÅÂë£¬´óÓÚMAX_FRIENDSGROUP_DESK_LIST_COUNTÊÇvip·¿¼ä
-	int curPeopleCount;//µ±Ç°ÈËÊı
-	BYTE gameStatus;   //ÓÎÏ·×´Ì¬£¬0£ºÎ´¿ªÊ¼£¬1ÕıÔÚÓÎÏ·ÖĞ
-	BYTE updateType;   //0£ºÔö¼Ó£¬1£º¼õÉÙ£¬2£ºgameStatus×´Ì¬±ä»¯
-	int userID;		   //Ôö¼Ó»ò¼õÉÙÍæ¼ÒµÄID
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	BYTE operType;		//0ï¼šæ›´æ–°ï¼Œ1ï¼šåˆ é™¤
+	int friendsGroupDeskNumber; //æ¡Œå­å·ç ï¼Œå¤§äºMAX_FRIENDSGROUP_DESK_LIST_COUNTæ˜¯vipæˆ¿é—´
+	int curPeopleCount;//å½“å‰äººæ•°
+	BYTE gameStatus;   //æ¸¸æˆçŠ¶æ€ï¼Œ0ï¼šæœªå¼€å§‹ï¼Œ1æ­£åœ¨æ¸¸æˆä¸­
+	BYTE updateType;   //0ï¼šå¢åŠ ï¼Œ1ï¼šå‡å°‘ï¼Œ2ï¼šgameStatusçŠ¶æ€å˜åŒ–
+	int userID;		   //å¢åŠ æˆ–å‡å°‘ç©å®¶çš„ID
 	LogonFriendsGroupDeskInfoChange()
 	{
 		memset(this, 0, sizeof(LogonFriendsGroupDeskInfoChange));
 	}
 };
 
-//¾ãÀÖ²¿Íæ¼ÒÉí·İ±ä»¯Í¨Öª
+//ä¿±ä¹éƒ¨ç©å®¶èº«ä»½å˜åŒ–é€šçŸ¥
 struct LogonFriendsGroupUserStatusChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	int peopleCount;
 
 	struct FriendsGroupUserStatusChangeStruct
 	{
 		int userID;
-		BYTE status; //¾ãÀÖ²¿µÄÉí·İ£¬0ÆÕÍ¨ÈËÔ± ,1ÈºÖ÷£¬2¹ÜÀíÔ±
-		BYTE power;  //¾ãÀÖ²¿È¨ÏŞ
+		BYTE status; //ä¿±ä¹éƒ¨çš„èº«ä»½ï¼Œ0æ™®é€šäººå‘˜ ,1ç¾¤ä¸»ï¼Œ2ç®¡ç†å‘˜
+		BYTE power;  //ä¿±ä¹éƒ¨æƒé™
 	};
 
 	FriendsGroupUserStatusChangeStruct user[10];
@@ -1046,30 +1046,30 @@ struct LogonFriendsGroupUserStatusChange
 	}
 };
 
-//¾ãÀÖ²¿Î¢ĞÅ±ä»¯Í¨Öª
+//ä¿±ä¹éƒ¨å¾®ä¿¡å˜åŒ–é€šçŸ¥
 struct LogonFriendsGroupWechatChange
 {
-	int friendsGroupID; //¾ãÀÖ²¿id
-	char wechat[48];	//ĞÂµÄ¾ãÀÖ²¿Î¢ĞÅ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	char wechat[48];	//æ–°çš„ä¿±ä¹éƒ¨å¾®ä¿¡
 	LogonFriendsGroupWechatChange()
 	{
 		memset(this, 0, sizeof(LogonFriendsGroupWechatChange));
 	}
 };
 
-//¾ãÀÖ²¿Íæ¼ÒµÄÈ¨ÏŞ±ä»¯
+//ä¿±ä¹éƒ¨ç©å®¶çš„æƒé™å˜åŒ–
 struct LogonFriendsGroupUserPowerChange
 {
 	int userID;
-	int friendsGroupID; //¾ãÀÖ²¿id
-	BYTE newPower;		//ĞÂµÄÈ¨ÏŞ
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
+	BYTE newPower;		//æ–°çš„æƒé™
 	LogonFriendsGroupUserPowerChange()
 	{
 		memset(this, 0, sizeof(LogonFriendsGroupUserPowerChange));
 	}
 };
 
-//¾ãÀÖ²¿»ğ±Ò±ä»¯Í¨Öª
+//ä¿±ä¹éƒ¨ç«å¸å˜åŒ–é€šçŸ¥
 struct LogonFriendsGroupUserFireCoinChange
 {
 	struct LogonFriendsGroupUserFireCoinChangeInfo
@@ -1077,7 +1077,7 @@ struct LogonFriendsGroupUserFireCoinChange
 		int userID;
 		int newFireCoin;
 	};
-	int friendsGroupID; //¾ãÀÖ²¿id
+	int friendsGroupID; //ä¿±ä¹éƒ¨id
 	LogonFriendsGroupUserFireCoinChangeInfo user[MAX_PLAYER_GRADE];
 	LogonFriendsGroupUserFireCoinChange()
 	{
@@ -1086,14 +1086,14 @@ struct LogonFriendsGroupUserFireCoinChange
 };
 
 //////////////////////////////////////////////////////////////////////////
-//±ÈÈü³¡ÍÆËÍ£¨ÊµÊ±Èü£©
+//æ¯”èµ›åœºæ¨é€ï¼ˆå®æ—¶èµ›ï¼‰
 struct LogonPeopleMatchSignUpPeopleChange
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int curSignUpCount;	//µ±Ç°±¨ÃûÈËÊı
-	int peopleCount;	//Âú¶àÉÙÈË¿ªÈü
-	int allSignUpCount;	//ÀÛ¼Æ±¨ÃûÈËÊı
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int curSignUpCount;	//å½“å‰æŠ¥åäººæ•°
+	int peopleCount;	//æ»¡å¤šå°‘äººå¼€èµ›
+	int allSignUpCount;	//ç´¯è®¡æŠ¥åäººæ•°
 
 	LogonPeopleMatchSignUpPeopleChange()
 	{
@@ -1103,9 +1103,9 @@ struct LogonPeopleMatchSignUpPeopleChange
 
 struct LogonMatchJoinRoom
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	BYTE matchType;		//±ÈÈüÀàĞÍ
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	BYTE matchType;		//æ¯”èµ›ç±»å‹
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
 	int roomID;
 
 	LogonMatchJoinRoom()
@@ -1114,11 +1114,11 @@ struct LogonMatchJoinRoom
 	}
 };
 
-//±ÈÈü³¡ÍÆËÍ£¨¶¨Ê±Èü£©
+//æ¯”èµ›åœºæ¨é€ï¼ˆå®šæ—¶èµ›ï¼‰
 struct LogonTimeMatchSignUpPeopleChange
 {
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int curSignUpCount;	//µ±Ç°±¨ÃûÈËÊı
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int curSignUpCount;	//å½“å‰æŠ¥åäººæ•°
 
 	LogonTimeMatchSignUpPeopleChange()
 	{
@@ -1126,20 +1126,20 @@ struct LogonTimeMatchSignUpPeopleChange
 	}
 };
 
-//// ±ÈÈüÊ§°ÜÔ­Òò
+//// æ¯”èµ›å¤±è´¥åŸå› 
 //enum MatchFailReason
 //{
-//	MATCH_FAIL_REASON_NOT_ENOUGH_PEOPLE = 1,	//ÈËÊı²»¹»
-//	MATCH_FAIL_REASON_PLAYING = 2,				//ÓÎÏ·ÖĞ
-//	MATCH_FAIL_REASON_SYSTEM_ERROR = 3			//ÏµÍ³Òì³£
+//	MATCH_FAIL_REASON_NOT_ENOUGH_PEOPLE = 1,	//äººæ•°ä¸å¤Ÿ
+//	MATCH_FAIL_REASON_PLAYING = 2,				//æ¸¸æˆä¸­
+//	MATCH_FAIL_REASON_SYSTEM_ERROR = 3			//ç³»ç»Ÿå¼‚å¸¸
 //};
-//Í¨Öª±ÈÈüÊ§°Ü
+//é€šçŸ¥æ¯”èµ›å¤±è´¥
 struct LogonStartMatchFail
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	BYTE matchType;		//±ÈÈüÀàĞÍ
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	BYTE reason;		//±ÈÈüÊ§°ÜÔ­Òò
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	BYTE matchType;		//æ¯”èµ›ç±»å‹
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	BYTE reason;		//æ¯”èµ›å¤±è´¥åŸå› 
 
 	LogonStartMatchFail()
 	{
@@ -1147,12 +1147,12 @@ struct LogonStartMatchFail
 	}
 };
 
-//Í¨Öª±ÈÈü¼´½«¿ªÊ¼
+//é€šçŸ¥æ¯”èµ›å³å°†å¼€å§‹
 struct LogonNotifyStartMatchRightAway
 {
-	int gameID;			//±ÈÈüµÄÓÎÏ·
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	long long startTime;//¿ªÊ¼Ê±¼ä
+	int gameID;			//æ¯”èµ›çš„æ¸¸æˆ
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	long long startTime;//å¼€å§‹æ—¶é—´
 
 	LogonNotifyStartMatchRightAway()
 	{
@@ -1164,118 +1164,118 @@ struct LogonNotifyStartMatchRightAway
 #pragma pack()
 
 //////////////////////////////////////////////////////////////////////
-// ÓÎÏ·ÏûÏ¢¶¨Òå
+// æ¸¸æˆæ¶ˆæ¯å®šä¹‰
 //////////////////////////////////////////////////////////////////////
-// µÇÂ¼Ïà¹Ø
+// ç™»å½•ç›¸å…³
 const unsigned int MSG_MAIN_LOADER_LOGON = 500;
 
-const unsigned int MSG_ASS_LOADER_LOGON = 1;	// µÇÂ¼
-const unsigned int MSG_ADD_LOADER_LOGOUT = 2;	// µÇ³ö
+const unsigned int MSG_ASS_LOADER_LOGON = 1;	// ç™»å½•
+const unsigned int MSG_ADD_LOADER_LOGOUT = 2;	// ç™»å‡º
 
-// ¶¯×÷Ïà¹Ø
+// åŠ¨ä½œç›¸å…³
 const unsigned int MSG_MAIN_LOADER_ACTION = 501;
 
-const unsigned int MSG_ASS_LOADER_ACTION_SIT = 1;			// ×øÏÂ
-const unsigned int MSG_ASS_LOADER_ACTION_STAND = 2;			// Õ¾ÆğÀ´
-const unsigned int MSG_ASS_LOADER_ACTION_MATCH_SIT = 3;		// ´ê×À×øÏÂ
-const unsigned int MSG_ASS_LOADER_ROBOT_TAKEMONEY = 4;		// »úÆ÷ÈË±»Ìß£¬ÖØĞÂÈ¡Ç®½ø×À
-const unsigned int MSG_ASS_LOADER_GAME_BEGIN = 5;			// ÇëÇóÓÎÏ·¿ªÊ¼
-const unsigned int MSG_ASS_LOADER_ACTION_COMBINE_SIT = 6;	// ÇëÇó×é×À×øÏÂ
-const unsigned int MSG_ASS_LOADER_ACTION_CANCEL_SIT = 7;	// È¡Ïû×é×À×øÏÂ
+const unsigned int MSG_ASS_LOADER_ACTION_SIT = 1;			// åä¸‹
+const unsigned int MSG_ASS_LOADER_ACTION_STAND = 2;			// ç«™èµ·æ¥
+const unsigned int MSG_ASS_LOADER_ACTION_MATCH_SIT = 3;		// æ“æ¡Œåä¸‹
+const unsigned int MSG_ASS_LOADER_ROBOT_TAKEMONEY = 4;		// æœºå™¨äººè¢«è¸¢ï¼Œé‡æ–°å–é’±è¿›æ¡Œ
+const unsigned int MSG_ASS_LOADER_GAME_BEGIN = 5;			// è¯·æ±‚æ¸¸æˆå¼€å§‹
+const unsigned int MSG_ASS_LOADER_ACTION_COMBINE_SIT = 6;	// è¯·æ±‚ç»„æ¡Œåä¸‹
+const unsigned int MSG_ASS_LOADER_ACTION_CANCEL_SIT = 7;	// å–æ¶ˆç»„æ¡Œåä¸‹
 
-// ¿ò¼ÜÀàÏûÏ¢
+// æ¡†æ¶ç±»æ¶ˆæ¯
 const unsigned int MSG_MAIN_LOADER_FRAME = 502;
 
-const unsigned int MSG_ASS_LOADER_DESK_INFO = 1;	// ÇëÇó×À×ÓĞÅÏ¢(×À×ÓµÄ»ù±¾ĞÅÏ¢£¬Íæ¼ÒĞÅÏ¢)
-const unsigned int MSG_ASS_LOADER_GAME_INFO = 2;	// ÓÎÏ·ĞÅÏ¢(¾ßÌåÓÎÏ·)
-const unsigned int MSG_ASS_LOADER_GAME_STATION = 3; // ÓÎÏ·×´Ì¬
-const unsigned int MSG_ASS_LOADER_DESK_USERINFO = 4;// ×À×ÓÍæ¼ÒĞÅÏ¢
-const unsigned int MSG_ASS_LOADER_DESK_ONE_USERINFO = 5;// ÇëÇóµ¥¸ö×À×ÓÍæ¼ÒĞÅÏ¢
+const unsigned int MSG_ASS_LOADER_DESK_INFO = 1;	// è¯·æ±‚æ¡Œå­ä¿¡æ¯(æ¡Œå­çš„åŸºæœ¬ä¿¡æ¯ï¼Œç©å®¶ä¿¡æ¯)
+const unsigned int MSG_ASS_LOADER_GAME_INFO = 2;	// æ¸¸æˆä¿¡æ¯(å…·ä½“æ¸¸æˆ)
+const unsigned int MSG_ASS_LOADER_GAME_STATION = 3; // æ¸¸æˆçŠ¶æ€
+const unsigned int MSG_ASS_LOADER_DESK_USERINFO = 4;// æ¡Œå­ç©å®¶ä¿¡æ¯
+const unsigned int MSG_ASS_LOADER_DESK_ONE_USERINFO = 5;// è¯·æ±‚å•ä¸ªæ¡Œå­ç©å®¶ä¿¡æ¯
 
-// ÓÎÏ·ÏûÏ¢
+// æ¸¸æˆæ¶ˆæ¯
 const unsigned int MSG_MAIN_LOADER_GAME = 503;
 
-const unsigned int MSG_ASS_LOADER_GAME_AGREE = 1;			// Íæ¼Ò×¼±¸
-const unsigned int MSG_ASS_LOADER_GAME_AUTO = 2;			// ÍĞ¹Ü
-const unsigned int MSG_ASS_LOADER_GAME_CANCEL_AUTO = 3;		// È¡ÏûÍĞ¹Ü
-const unsigned int MSG_ASS_LOADER_GAME_MAGICEXPRESS = 4;	// Ä§·¨±íÇé
+const unsigned int MSG_ASS_LOADER_GAME_AGREE = 1;			// ç©å®¶å‡†å¤‡
+const unsigned int MSG_ASS_LOADER_GAME_AUTO = 2;			// æ‰˜ç®¡
+const unsigned int MSG_ASS_LOADER_GAME_CANCEL_AUTO = 3;		// å–æ¶ˆæ‰˜ç®¡
+const unsigned int MSG_ASS_LOADER_GAME_MAGICEXPRESS = 4;	// é­”æ³•è¡¨æƒ…
 
 
-//×À×Ó½âÉ¢ÏûÏ¢
+//æ¡Œå­è§£æ•£æ¶ˆæ¯
 const unsigned int MSG_MAIN_LOADER_DESKDISSMISS = 504;
 
-const unsigned int MSG_ASS_LOADER_REQ_DESKDISSMISS = 1;			// ÇëÇó½âÉ¢×À×Ó
-const unsigned int MSG_ASS_LOADER_ANSWER_DESKDISMISS = 2;		// Í¬Òâ½âÉ¢×À×Ó
+const unsigned int MSG_ASS_LOADER_REQ_DESKDISSMISS = 1;			// è¯·æ±‚è§£æ•£æ¡Œå­
+const unsigned int MSG_ASS_LOADER_ANSWER_DESKDISMISS = 2;		// åŒæ„è§£æ•£æ¡Œå­
 
-// Í¨ÖªÀàÏûÏ¢£¨×À×Ó£©
+// é€šçŸ¥ç±»æ¶ˆæ¯ï¼ˆæ¡Œå­ï¼‰
 const unsigned int MSG_MAIN_LOADER_NOTIFY = 505;
 
-const unsigned int MSG_NTF_LOADER_DESK_GAMEBEGIN = 1;			// Í¨ÖªÓÎÏ·¿ªÊ¼
-const unsigned int MSG_NTF_LOADER_DESK_BASEINFO = 2;			// Í¨Öª×À×ÓĞÅÏ¢
-const unsigned int MSG_NTF_LOADER_DESK_DISMISS_OK = 3;			// Í¨Öª×À×Ó³É¹¦½âÉ¢
-const unsigned int MSG_NTF_LOADER_DESK_DISMISS_FAILED = 4;		// Í¨Öª×À×Ó½âÉ¢Ê§°Ü
-const unsigned int MSG_NTF_LOADER_DESK_ALL_USERINFO = 5;		// ·¢ËÍËùÓĞÍæ¼ÒĞÅÏ¢(Ä³¸ö×À×Ó)
-const unsigned int MSG_NTF_LOADER_DESK_DISMISS_INFO = 6;		// Í¨ÖªÍ¬Òâ×À×Ó½âÉ¢
-const unsigned int MSG_NTF_LOADER_DESK_TALK = 7;				// Í¨Öª×À×ÓÁÄÌì
-const unsigned int MSG_NTF_LOADER_DESK_VOICE = 8;				// Í¨Öª×À×ÓÓïÒô
-const unsigned int MSG_NTF_LOADER_DESK_GAMEFINISH = 9;			// Í¨ÖªÓÎÏ·½áÊø
-const unsigned int MSG_NTF_LOADER_DESK_GRADE = 10;              // Í¨Öªµ±¾ÖÓÎÏ·Õ½¼¨
-const unsigned int MSG_NTF_LOADER_DESK_MONEY = 11;				// Í¨Öªµ±¾ÖÓÎÏ·½ğ±Ò½áËã
-const unsigned int MSG_NTF_LOADER_DESK_LEFT_WAITAGREE_TIME = 12;// Í¨ÖªÊ£ÓàµÈ´ı×¼±¸Ê±¼ä
-const unsigned int MSG_NTF_LOADER_DESK_ISAUTO = 13;				// Í¨ÖªÍæ¼ÒÊÇ·ñÍĞ¹Ü
-const unsigned int MSG_NTF_LOADER_DESK_MAGICEXPRESS = 14;		// Í¨ÖªÄ§·¨±íÇé
-const unsigned int MSG_NTF_LOADER_DESK_SITFULL = 15;			// Í¨Öª×À×ÓÍæ¼Ò×øÂúÁË
-const unsigned int MSG_NTF_LOADER_DESK_CANBEGIN = 16;			// Í¨Öª·¿Ö÷×À×ÓÄÜ¿ªÊ¼ÁË
-const unsigned int MSG_NTF_LOADER_DESK_STOP_JOIN = 17;			// ÓÎÏ·ÒÑ¾­¿ªÊ¼£¬½ûÖ¹¼ÓÈë
-const unsigned int MSG_NTF_LOADER_RECHARGE = 18;				// ³äÖµµ¹¼ÆÊ±
-const unsigned int MSG_NTF_LOADER_DESK_HUNDRED_ALL_USER = 19;	// °ÙÈËÀàÓÎÏ·£¬·¢ËÍÍæ¼Ò¼òµ¥ĞÅÏ¢
-const unsigned int MSG_NTF_LOADER_DESK_DISMISS_USERID = 20;		// ×À×Ó³É¹¦½âÉ¢£¬·¢ËÍÏàÓ¦µÄ×ùÎ»ºÅÍæ¼Òid
-const unsigned int MSG_NTF_LOADER_ERR_MSG = 21;					// ÓÎÏ·¹ı³ÌÖĞÌáÊ¾ĞÅÏ¢
-const unsigned int MSG_NTF_LOADER_DESK_JEWELS = 22;				// Í¨Öªµ±¾ÖÓÎÏ·×êÊ¯½áËã
-const unsigned int MSG_NTF_LOADER_NO_USER = 23;					// ÄÚ´æÖĞ²»´æÔÚ¸ÃÍæ¼Ò£¬Ç°¶ËÖ±½Ó·µ»Ø´óÌü															
-const unsigned int MSG_NTF_LOADER_DESK_MATCH_STATUS = 24;		// Í¨Öª±ÈÈü³¡×À×Ó×´Ì¬
-const unsigned int MSG_NTF_LOADER_DESK_FINISH_MATCH = 25;		// Í¨Öª×À×ÓÍê³É±ÈÈü
-const unsigned int MSG_NTF_LOADER_MATCH_RANK = 26;				// Í¨ÖªÍæ¼ÒÅÅÃû
-const unsigned int MSG_NTF_LOADER_DESK_MATCH_GRADE = 27;        // Í¨Öªµ±¾Ö±ÈÈü³¡»ı·Ö±ä»¯
+const unsigned int MSG_NTF_LOADER_DESK_GAMEBEGIN = 1;			// é€šçŸ¥æ¸¸æˆå¼€å§‹
+const unsigned int MSG_NTF_LOADER_DESK_BASEINFO = 2;			// é€šçŸ¥æ¡Œå­ä¿¡æ¯
+const unsigned int MSG_NTF_LOADER_DESK_DISMISS_OK = 3;			// é€šçŸ¥æ¡Œå­æˆåŠŸè§£æ•£
+const unsigned int MSG_NTF_LOADER_DESK_DISMISS_FAILED = 4;		// é€šçŸ¥æ¡Œå­è§£æ•£å¤±è´¥
+const unsigned int MSG_NTF_LOADER_DESK_ALL_USERINFO = 5;		// å‘é€æ‰€æœ‰ç©å®¶ä¿¡æ¯(æŸä¸ªæ¡Œå­)
+const unsigned int MSG_NTF_LOADER_DESK_DISMISS_INFO = 6;		// é€šçŸ¥åŒæ„æ¡Œå­è§£æ•£
+const unsigned int MSG_NTF_LOADER_DESK_TALK = 7;				// é€šçŸ¥æ¡Œå­èŠå¤©
+const unsigned int MSG_NTF_LOADER_DESK_VOICE = 8;				// é€šçŸ¥æ¡Œå­è¯­éŸ³
+const unsigned int MSG_NTF_LOADER_DESK_GAMEFINISH = 9;			// é€šçŸ¥æ¸¸æˆç»“æŸ
+const unsigned int MSG_NTF_LOADER_DESK_GRADE = 10;              // é€šçŸ¥å½“å±€æ¸¸æˆæˆ˜ç»©
+const unsigned int MSG_NTF_LOADER_DESK_MONEY = 11;				// é€šçŸ¥å½“å±€æ¸¸æˆé‡‘å¸ç»“ç®—
+const unsigned int MSG_NTF_LOADER_DESK_LEFT_WAITAGREE_TIME = 12;// é€šçŸ¥å‰©ä½™ç­‰å¾…å‡†å¤‡æ—¶é—´
+const unsigned int MSG_NTF_LOADER_DESK_ISAUTO = 13;				// é€šçŸ¥ç©å®¶æ˜¯å¦æ‰˜ç®¡
+const unsigned int MSG_NTF_LOADER_DESK_MAGICEXPRESS = 14;		// é€šçŸ¥é­”æ³•è¡¨æƒ…
+const unsigned int MSG_NTF_LOADER_DESK_SITFULL = 15;			// é€šçŸ¥æ¡Œå­ç©å®¶åæ»¡äº†
+const unsigned int MSG_NTF_LOADER_DESK_CANBEGIN = 16;			// é€šçŸ¥æˆ¿ä¸»æ¡Œå­èƒ½å¼€å§‹äº†
+const unsigned int MSG_NTF_LOADER_DESK_STOP_JOIN = 17;			// æ¸¸æˆå·²ç»å¼€å§‹ï¼Œç¦æ­¢åŠ å…¥
+const unsigned int MSG_NTF_LOADER_RECHARGE = 18;				// å……å€¼å€’è®¡æ—¶
+const unsigned int MSG_NTF_LOADER_DESK_HUNDRED_ALL_USER = 19;	// ç™¾äººç±»æ¸¸æˆï¼Œå‘é€ç©å®¶ç®€å•ä¿¡æ¯
+const unsigned int MSG_NTF_LOADER_DESK_DISMISS_USERID = 20;		// æ¡Œå­æˆåŠŸè§£æ•£ï¼Œå‘é€ç›¸åº”çš„åº§ä½å·ç©å®¶id
+const unsigned int MSG_NTF_LOADER_ERR_MSG = 21;					// æ¸¸æˆè¿‡ç¨‹ä¸­æç¤ºä¿¡æ¯
+const unsigned int MSG_NTF_LOADER_DESK_JEWELS = 22;				// é€šçŸ¥å½“å±€æ¸¸æˆé’»çŸ³ç»“ç®—
+const unsigned int MSG_NTF_LOADER_NO_USER = 23;					// å†…å­˜ä¸­ä¸å­˜åœ¨è¯¥ç©å®¶ï¼Œå‰ç«¯ç›´æ¥è¿”å›å¤§å…															
+const unsigned int MSG_NTF_LOADER_DESK_MATCH_STATUS = 24;		// é€šçŸ¥æ¯”èµ›åœºæ¡Œå­çŠ¶æ€
+const unsigned int MSG_NTF_LOADER_DESK_FINISH_MATCH = 25;		// é€šçŸ¥æ¡Œå­å®Œæˆæ¯”èµ›
+const unsigned int MSG_NTF_LOADER_MATCH_RANK = 26;				// é€šçŸ¥ç©å®¶æ’å
+const unsigned int MSG_NTF_LOADER_DESK_MATCH_GRADE = 27;        // é€šçŸ¥å½“å±€æ¯”èµ›åœºç§¯åˆ†å˜åŒ–
 
-// Í¨ÖªÄ³¸öÍæ¼ÒĞÅÏ¢ 
+// é€šçŸ¥æŸä¸ªç©å®¶ä¿¡æ¯ 
 const unsigned int MSG_MAIN_LOADER_NOTIFY_USER = 506;
 
-const unsigned int MSG_NTF_LOADER_DESK_USER_INFO = 1;			// Í¨Öª×À×Ó(Ä³¸ö)Íæ¼ÒĞÅÏ¢
-const unsigned int MSG_NTF_LOADER_DESK_USER_SIT = 2;			// ×øÏÂ
-const unsigned int MSG_NTF_LOADER_DESK_USER_AGREE = 3;			// Í¨ÖªÒÑ¾­×¼±¸
-const unsigned int MSG_NTF_LOADER_DESK_USER_LEFT = 4;			// Í¨ÖªÍæ¼ÒÀë¿ª
-const unsigned int MSG_NTF_LOADER_DESK_USER_OFFLINE = 5;		// Í¨ÖªÍæ¼Ò¶ÏÏß
-const unsigned int MSG_NTF_LOADER_DESK_USER_BE_KICKOUT = 6;		// Í¨ÖªÍæ¼Ò±»Tµô
-const unsigned int MSG_NTF_LOADER_DESK_USER_NOFIND_DESK = 7;	// Ã»ÕÒµ½×À×Ó
+const unsigned int MSG_NTF_LOADER_DESK_USER_INFO = 1;			// é€šçŸ¥æ¡Œå­(æŸä¸ª)ç©å®¶ä¿¡æ¯
+const unsigned int MSG_NTF_LOADER_DESK_USER_SIT = 2;			// åä¸‹
+const unsigned int MSG_NTF_LOADER_DESK_USER_AGREE = 3;			// é€šçŸ¥å·²ç»å‡†å¤‡
+const unsigned int MSG_NTF_LOADER_DESK_USER_LEFT = 4;			// é€šçŸ¥ç©å®¶ç¦»å¼€
+const unsigned int MSG_NTF_LOADER_DESK_USER_OFFLINE = 5;		// é€šçŸ¥ç©å®¶æ–­çº¿
+const unsigned int MSG_NTF_LOADER_DESK_USER_BE_KICKOUT = 6;		// é€šçŸ¥ç©å®¶è¢«Tæ‰
+const unsigned int MSG_NTF_LOADER_DESK_USER_NOFIND_DESK = 7;	// æ²¡æ‰¾åˆ°æ¡Œå­
 
-// ÓïÒô¡¢ÁÄÌìĞÅÏ¢
+// è¯­éŸ³ã€èŠå¤©ä¿¡æ¯
 const unsigned int MSG_MAIN_LOADER_VOICEANDTALK = 507;
 
-const unsigned int MSG_ASS_LOADER_TALK = 1;			// ÁÄÌì
-const unsigned int MSG_ASS_LOADER_VOICE = 2;		// ÓïÒô
+const unsigned int MSG_ASS_LOADER_TALK = 1;			// èŠå¤©
+const unsigned int MSG_ASS_LOADER_VOICE = 2;		// è¯­éŸ³
 
-// ×ÊÔ´±ä»¯Ïà¹Ø
-const unsigned int MSG_MAIN_LOADER_RESOURCE_CHANGE = 508; // (ÔİÊ±Ã»ÓĞĞ¡ID)
+// èµ„æºå˜åŒ–ç›¸å…³
+const unsigned int MSG_MAIN_LOADER_RESOURCE_CHANGE = 508; // (æš‚æ—¶æ²¡æœ‰å°ID)
 
-// ±ÈÈü³¡Ïà¹Ø
+// æ¯”èµ›åœºç›¸å…³
 const unsigned int MSG_MAIN_LOADER_MATCH = 509;
 
-const unsigned int MSG_ASS_LOADER_MATCH_ALL_DESK_DATA = 1;		// ÇëÇóËùÓĞ×À×Ó×´Ì¬
-const unsigned int MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK = 2;	// ÅÔ¹ÛÆäËü×À×Ó
-const unsigned int MSG_ASS_LOADER_MATCH_QUIT_WATCH_DESK = 3;	// ÍË³öÅÔ¹Û
+const unsigned int MSG_ASS_LOADER_MATCH_ALL_DESK_DATA = 1;		// è¯·æ±‚æ‰€æœ‰æ¡Œå­çŠ¶æ€
+const unsigned int MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK = 2;	// æ—è§‚å…¶å®ƒæ¡Œå­
+const unsigned int MSG_ASS_LOADER_MATCH_QUIT_WATCH_DESK = 3;	// é€€å‡ºæ—è§‚
 
 
-// Ğ­Òé×î´óÖ÷ID
+// åè®®æœ€å¤§ä¸»ID
 const unsigned int MSG_MAIN_LOADER_MAX = 520;
 
-// ½á¹¹Ìå¶¨Òå
+// ç»“æ„ä½“å®šä¹‰
 #pragma pack(1)
 
-//ÓÎÏ··¿¼äµÇÂ½
+//æ¸¸æˆæˆ¿é—´ç™»é™†
 struct LoaderRequestLogon
 {
-	int			roomID;					// ·¿¼äID
+	int			roomID;					// æˆ¿é—´ID
 
 	LoaderRequestLogon()
 	{
@@ -1290,7 +1290,7 @@ struct LoaderResponseLogon
 	char deskPasswd[20];
 	bool isInDesk;
 	int iRoomID;
-	int playStatus;	// Íæ¼Ò×´Ì¬
+	int playStatus;	// ç©å®¶çŠ¶æ€
 
 	LoaderResponseLogon()
 	{
@@ -1298,10 +1298,10 @@ struct LoaderResponseLogon
 	}
 };
 
-//ÓÃ»§ÇëÇó×øÏÂ£¨½ğ±Ò³¡£¬×ø×À£©
+//ç”¨æˆ·è¯·æ±‚åä¸‹ï¼ˆé‡‘å¸åœºï¼Œåæ¡Œï¼‰
 struct LoaderRequestMatchSit
 {
-	int		deskIdx;			// ¶ÔÓÚ·¿¿¨³¡À´Ëµ£¬·¢Õâ¸öÒÑ¾­Ã»ÓĞÊ²Ã´ÒâÒåÁË
+	int		deskIdx;			// å¯¹äºæˆ¿å¡åœºæ¥è¯´ï¼Œå‘è¿™ä¸ªå·²ç»æ²¡æœ‰ä»€ä¹ˆæ„ä¹‰äº†
 
 	LoaderRequestMatchSit()
 	{
@@ -1309,10 +1309,10 @@ struct LoaderRequestMatchSit
 	}
 };
 
-//ÓÃ»§ÇëÇó×øÏÂ(»ı·Ö·¿ºÍ½ğ±Ò·¿)
+//ç”¨æˆ·è¯·æ±‚åä¸‹(ç§¯åˆ†æˆ¿å’Œé‡‘å¸æˆ¿)
 struct LoaderRequestSit
 {
-	BYTE deskStation;   // Ñ¡ÔñµÄ×ùÎ»ºÅ
+	BYTE deskStation;   // é€‰æ‹©çš„åº§ä½å·
 
 	LoaderRequestSit()
 	{
@@ -1322,8 +1322,8 @@ struct LoaderRequestSit
 
 struct LoaderNotifyWaitAgree
 {
-	int leftWaitAgreeSecs;		// Ê£Óà×¼±¸Ê±¼ä
-	int cfgWaitAgreeSecs;		// ÅäÖÃµÄÊ£Óà×¼±¸Ê±¼ä
+	int leftWaitAgreeSecs;		// å‰©ä½™å‡†å¤‡æ—¶é—´
+	int cfgWaitAgreeSecs;		// é…ç½®çš„å‰©ä½™å‡†å¤‡æ—¶é—´
 
 	LoaderNotifyWaitAgree()
 	{
@@ -1331,10 +1331,10 @@ struct LoaderNotifyWaitAgree
 	}
 };
 
-///ÓÎÏ·ĞÅÏ¢
+///æ¸¸æˆä¿¡æ¯
 struct LoaderGameInfo
 {
-	BYTE bGameStation;	//ÓÎÏ·×´Ì¬
+	BYTE bGameStation;	//æ¸¸æˆçŠ¶æ€
 	char gameRules[256];
 
 	LoaderGameInfo()
@@ -1343,7 +1343,7 @@ struct LoaderGameInfo
 	}
 };
 
-//»úÆ÷ÈË½ğ±Ò²»×ã±»Ìß£¬ÇëÇóÈ¡Ç®
+//æœºå™¨äººé‡‘å¸ä¸è¶³è¢«è¸¢ï¼Œè¯·æ±‚å–é’±
 struct _LoaderRobotTakeMoney
 {
 	int iMoney;
@@ -1354,10 +1354,10 @@ struct _LoaderRobotTakeMoney
 	}
 };
 
-//»Ø¸´»úÆ÷ÈË
+//å›å¤æœºå™¨äºº
 struct _LoaderRobotTakeMoneyRes
 {
-	BYTE byCode; //0³É¹¦
+	BYTE byCode; //0æˆåŠŸ
 	int iMoney;
 	_LoaderRobotTakeMoneyRes()
 	{
@@ -1366,7 +1366,7 @@ struct _LoaderRobotTakeMoneyRes
 };
 
 //============================================================================================
-// Íæ¼Ò¼òµ¥ĞÅÏ¢
+// ç©å®¶ç®€å•ä¿¡æ¯
 struct UserSimpleInfo
 {
 	int		userID;
@@ -1385,7 +1385,7 @@ struct UserSimpleInfo
 	BYTE	sex;
 	bool	isAuto;
 	int		jewels;
-	char	motto[128];// ¸öĞÔÇ©Ãû
+	char	motto[128];// ä¸ªæ€§ç­¾å
 
 	UserSimpleInfo()
 	{
@@ -1399,7 +1399,7 @@ struct UserSimpleInfo
 	}
 };
 
-// Í¨Öª·¿¼äĞÅÏ¢(·¿¼ä»ù±¾ĞÅÏ¢)
+// é€šçŸ¥æˆ¿é—´ä¿¡æ¯(æˆ¿é—´åŸºæœ¬ä¿¡æ¯)
 struct LoaderNotifyDeskInfo
 {
 	int		deskIdx;
@@ -1409,7 +1409,7 @@ struct LoaderNotifyDeskInfo
 	char	masterName[64];
 	int		runGameCount;
 	int		totalGameCount;
-	bool	isDismissStatus;		// ÊÇ·ñ´¦ÓÚ½âÉ¢×´Ì¬
+	bool	isDismissStatus;		// æ˜¯å¦å¤„äºè§£æ•£çŠ¶æ€
 
 	LoaderNotifyDeskInfo()
 	{
@@ -1417,7 +1417,7 @@ struct LoaderNotifyDeskInfo
 	}
 };
 
-// Í¨Öª×À×ÓÍæ¼ÒĞÅÏ¢
+// é€šçŸ¥æ¡Œå­ç©å®¶ä¿¡æ¯
 struct LoaderNotifyDeskUserInfo
 {
 	int		userCount;
@@ -1452,13 +1452,13 @@ struct DeskDismissType
 	}
 };
 
-// Í¨Öª½âÉ¢
+// é€šçŸ¥è§£æ•£
 struct LoaderNotifyDismiss
 {
-	BYTE	deskStation;			// ÉêÇë½âÉ¢Õß
-	int		leftDismissTime;		// ÇëÇó½âÉ¢µÄÊ±¼ä
-	int		cfgWaitDismissTime;		// µÈ´ı½âÉ¢Ê±¼ä
-	int		deskUserCount;			// ·¿¼äÍæ¼ÒÊıÁ¿
+	BYTE	deskStation;			// ç”³è¯·è§£æ•£è€…
+	int		leftDismissTime;		// è¯·æ±‚è§£æ•£çš„æ—¶é—´
+	int		cfgWaitDismissTime;		// ç­‰å¾…è§£æ•£æ—¶é—´
+	int		deskUserCount;			// æˆ¿é—´ç©å®¶æ•°é‡
 
 	DeskDismissType dismissType[1];
 
@@ -1468,7 +1468,7 @@ struct LoaderNotifyDismiss
 	}
 };
 
-// Í¨ÖªÊÇ·ñÍĞ¹Ü
+// é€šçŸ¥æ˜¯å¦æ‰˜ç®¡
 struct LoaderNotifyIsAuto
 {
 	int userID;
@@ -1490,10 +1490,10 @@ struct LoaderRequestAnswerDismiss
 	}
 };
 
-// ÇëÇóÁÄÌì
+// è¯·æ±‚èŠå¤©
 struct LoaderRequestTalk
 {
-	int sizeCount;		//×Ö½ÚÊıÁ¿
+	int sizeCount;		//å­—èŠ‚æ•°é‡
 	char words[1024];
 
 	LoaderRequestTalk()
@@ -1502,11 +1502,11 @@ struct LoaderRequestTalk
 	}
 };
 
-// Í¨ÖªÁÄÌì
+// é€šçŸ¥èŠå¤©
 struct LoaderNotifyTalk
 {
 	int userID;
-	int sizeCount;		//×Ö½ÚÊıÁ¿
+	int sizeCount;		//å­—èŠ‚æ•°é‡
 	char words[1024];
 
 	LoaderNotifyTalk()
@@ -1515,7 +1515,7 @@ struct LoaderNotifyTalk
 	}
 };
 
-// ÇëÇóÓïÒô
+// è¯·æ±‚è¯­éŸ³
 struct LoaderRequestVoice
 {
 	int voiceID;
@@ -1550,7 +1550,7 @@ struct LoaderNotifyUserLeft
 
 struct LoaderNotifyDismissSuccess
 {
-	bool isDismissMidway;			// ÊÇ·ñÖĞÍ¾½âÉ¢
+	bool isDismissMidway;			// æ˜¯å¦ä¸­é€”è§£æ•£
 
 	LoaderNotifyDismissSuccess()
 	{
@@ -1560,7 +1560,7 @@ struct LoaderNotifyDismissSuccess
 
 struct LoaderNotifyDismissSuccessData
 {
-	int	userID[MAX_PLAYER_GRADE];   // Ã¿¸ö×ùÎ»ºÅÍæ¼Òid
+	int	userID[MAX_PLAYER_GRADE];   // æ¯ä¸ªåº§ä½å·ç©å®¶id
 	char name[MAX_PLAYER_GRADE][64];
 	char headURL[MAX_PLAYER_GRADE][256];
 
@@ -1572,7 +1572,7 @@ struct LoaderNotifyDismissSuccessData
 
 struct LoaderNotifyUserGrade
 {
-	int grade[MAX_PLAYER_GRADE];               //Íæ¼ÒÕ½¼¨
+	int grade[MAX_PLAYER_GRADE];               //ç©å®¶æˆ˜ç»©
 
 	LoaderNotifyUserGrade()
 	{
@@ -1608,8 +1608,8 @@ struct LoaderNotifyResourceChange
 {
 	int userID;
 	int resourceType;
-	long long value;			// ×ÜÁ¿
-	long long changeValue;		// ±ä»¯Á¿
+	long long value;			// æ€»é‡
+	long long changeValue;		// å˜åŒ–é‡
 
 	LoaderNotifyResourceChange()
 	{
@@ -1617,7 +1617,7 @@ struct LoaderNotifyResourceChange
 	}
 };
 
-// Íæ¼Ò¼òµ¥ĞÅÏ¢
+// ç©å®¶ç®€å•ä¿¡æ¯
 struct HundredGameUserSimpleInfo
 {
 	int  userID;
@@ -1651,7 +1651,7 @@ struct LoaderRequestOneUserSimpleInfo
 
 struct LoaderNotifyGameFinish
 {
-	int rechargeUserID[MAX_PLAYER_GRADE]; //½ğ±Ò²»×ã£¬ĞèÒª³äÖµµÄÍæ¼Òid
+	int rechargeUserID[MAX_PLAYER_GRADE]; //é‡‘å¸ä¸è¶³ï¼Œéœ€è¦å……å€¼çš„ç©å®¶id
 
 	LoaderNotifyGameFinish()
 	{
@@ -1661,8 +1661,8 @@ struct LoaderNotifyGameFinish
 
 struct LoaderNotifyRecharge
 {
-	int leftSecs;					// Ê£ÓàÊ±¼ä
-	long long needRechargeMoney;	// ĞèÒª³åµÄÇ®
+	int leftSecs;					// å‰©ä½™æ—¶é—´
+	long long needRechargeMoney;	// éœ€è¦å†²çš„é’±
 
 	LoaderNotifyRecharge()
 	{
@@ -1684,14 +1684,14 @@ struct LoaderNotifyERRMsg
 };
 
 //////////////////////////////////////////////////////////////////////////
-// ±ÈÈü³¡Ïà¹ØĞ­Òé
+// æ¯”èµ›åœºç›¸å…³åè®®
 struct LoaderNotifyDeskMatchStatus
 {
-	long long llPartOfMatchID;	//×À×ÓÊôÓÚµÄ±ÈÈüid£¨Ğ¡£©
-	int	iCurMatchRound;			//±ÈÈü½øĞĞµÄÂÖÊı
-	int	iMaxMatchRound;			//×î´ó±ÈÈüÂÖÊı
-	BYTE status;				//0£º±ÈÈüÖĞ£¬1£º±¾×À±ÈÈüÒÑ¾­½áÊø£¬2£º±¾×ÀÂíÉÏÒª¿ªÊ¼±ÈÈü£¬remainTimeÊÇÊ£ÓàÊ±¼ä
-	int remainTime;				//Ê£Óà¿ªÊ¼Ê±¼ä
+	long long llPartOfMatchID;	//æ¡Œå­å±äºçš„æ¯”èµ›idï¼ˆå°ï¼‰
+	int	iCurMatchRound;			//æ¯”èµ›è¿›è¡Œçš„è½®æ•°
+	int	iMaxMatchRound;			//æœ€å¤§æ¯”èµ›è½®æ•°
+	BYTE status;				//0ï¼šæ¯”èµ›ä¸­ï¼Œ1ï¼šæœ¬æ¡Œæ¯”èµ›å·²ç»ç»“æŸï¼Œ2ï¼šæœ¬æ¡Œé©¬ä¸Šè¦å¼€å§‹æ¯”èµ›ï¼ŒremainTimeæ˜¯å‰©ä½™æ—¶é—´
+	int remainTime;				//å‰©ä½™å¼€å§‹æ—¶é—´
 
 	LoaderNotifyDeskMatchStatus()
 	{
@@ -1701,7 +1701,7 @@ struct LoaderNotifyDeskMatchStatus
 
 struct LoaderNotifyDeskFinishMatch
 {
-	int deskIdx; //×À×Ó±àºÅ
+	int deskIdx; //æ¡Œå­ç¼–å·
 
 	LoaderNotifyDeskFinishMatch()
 	{
@@ -1724,13 +1724,13 @@ struct LoaderNotifyMatchRank
 
 	int gameID;
 	int gameMatchID;
-	int	iCurMatchRound;		//±ÈÈü½øĞĞµÄÂÖÊı
-	int	iMaxMatchRound;		//×î´ó±ÈÈüÂÖÊı
-	BYTE type;				//0£ºÌÔÌ­£¬1£º½ú¼¶£¬2£º×îÖÕ¾öÈü
-	int rankMatch;			//ÅÅÃû
+	int	iCurMatchRound;		//æ¯”èµ›è¿›è¡Œçš„è½®æ•°
+	int	iMaxMatchRound;		//æœ€å¤§æ¯”èµ›è½®æ•°
+	BYTE type;				//0ï¼šæ·˜æ±°ï¼Œ1ï¼šæ™‹çº§ï¼Œ2ï¼šæœ€ç»ˆå†³èµ›
+	int rankMatch;			//æ’å
 
 	int peopleCount;
-	LoaderNotifyMatchRankUser user[MAX_MATCH_PEOPLE_COUNT];  //Ğ­Òé¸ù¾İpeopleCountÊıÁ¿½âÎö
+	LoaderNotifyMatchRankUser user[MAX_MATCH_PEOPLE_COUNT];  //åè®®æ ¹æ®peopleCountæ•°é‡è§£æ
 
 	LoaderNotifyMatchRank()
 	{
@@ -1738,7 +1738,7 @@ struct LoaderNotifyMatchRank
 	}
 };
 
-//ÇëÇó±ÈÈü³¡ËùÓĞ×À×ÓÕ½¿ö
+//è¯·æ±‚æ¯”èµ›åœºæ‰€æœ‰æ¡Œå­æˆ˜å†µ
 struct LoaderRequestMatchAllDeskDataInfo
 {
 	long long llPartOfMatchID;
@@ -1753,16 +1753,16 @@ struct LoaderResponseMatchAllDeskDataInfo
 {
 	struct DeskInfo
 	{
-		int deskIdx;		//×À×Ó±àºÅ
-		BYTE status;		//0£º±ÈÈüÖĞ£¬1£º±¾×À±ÈÈüÒÑ¾­½áÊø£¬2£º±¾×ÀÂíÉÏÒª¿ªÊ¼±ÈÈü
+		int deskIdx;		//æ¡Œå­ç¼–å·
+		BYTE status;		//0ï¼šæ¯”èµ›ä¸­ï¼Œ1ï¼šæœ¬æ¡Œæ¯”èµ›å·²ç»ç»“æŸï¼Œ2ï¼šæœ¬æ¡Œé©¬ä¸Šè¦å¼€å§‹æ¯”èµ›
 	};
 
 	int iCurPeopleCount;
 	int iMaxPeopleCount;
-	int	iCurMatchRound;		//±ÈÈü½øĞĞµÄÂÖÊı
-	int	iMaxMatchRound;		//×î´ó±ÈÈüÂÖÊı
+	int	iCurMatchRound;		//æ¯”èµ›è¿›è¡Œçš„è½®æ•°
+	int	iMaxMatchRound;		//æœ€å¤§æ¯”èµ›è½®æ•°
 	int deskCount;
-	DeskInfo desk[256];		//×î¸ß256ÕÅ×À×ÓÍ¬Ê±±ÈÈü
+	DeskInfo desk[256];		//æœ€é«˜256å¼ æ¡Œå­åŒæ—¶æ¯”èµ›
 
 	LoaderResponseMatchAllDeskDataInfo()
 	{
@@ -1770,10 +1770,10 @@ struct LoaderResponseMatchAllDeskDataInfo
 	}
 };
 
-// ÅÔ¹ÛÆäËü×À×Ó
+// æ—è§‚å…¶å®ƒæ¡Œå­
 struct LoaderRequestMatchEnterWatch
 {
-	long long llPartOfMatchID;	//×À×ÓÊôÓÚµÄ±ÈÈüid£¨Ğ¡£©
+	long long llPartOfMatchID;	//æ¡Œå­å±äºçš„æ¯”èµ›idï¼ˆå°ï¼‰
 	int deskIdx;
 
 	LoaderRequestMatchEnterWatch()
@@ -1783,7 +1783,7 @@ struct LoaderRequestMatchEnterWatch
 };
 struct LoaderResponseMatchEnterWatch
 {
-	BYTE result;		//0£º³É¹¦£¬1£º¿ÕÏĞ×´Ì¬²»ÄÜÅÔ¹Û£¬2£ºÒÑ¾­ÕıÔÚÅÔ¹Û£¬3£º±¾×ÀÓÎÏ·Î´½áÊø£¬4£ºÒì³£´íÎó
+	BYTE result;		//0ï¼šæˆåŠŸï¼Œ1ï¼šç©ºé—²çŠ¶æ€ä¸èƒ½æ—è§‚ï¼Œ2ï¼šå·²ç»æ­£åœ¨æ—è§‚ï¼Œ3ï¼šæœ¬æ¡Œæ¸¸æˆæœªç»“æŸï¼Œ4ï¼šå¼‚å¸¸é”™è¯¯
 	int peopleCount;
 	UserSimpleInfo user[MAX_PLAYER_GRADE];
 
@@ -1793,10 +1793,10 @@ struct LoaderResponseMatchEnterWatch
 	}
 };
 
-// ÍË³öÅÔ¹Û
+// é€€å‡ºæ—è§‚
 struct LoaderMatchQuitWatch
 {
-	BYTE result;		//½á¹û£¬0£ºÄ¬ÈÏ  1£ºÖ÷¶¯ÍË³ö   2£ºÓÎÏ·½áÊøÍË³ö
+	BYTE result;		//ç»“æœï¼Œ0ï¼šé»˜è®¤  1ï¼šä¸»åŠ¨é€€å‡º   2ï¼šæ¸¸æˆç»“æŸé€€å‡º
 
 	LoaderMatchQuitWatch()
 	{
@@ -1806,8 +1806,8 @@ struct LoaderMatchQuitWatch
 
 struct LoaderNotifyUserMatchRoomGrade
 {
-	int changeGrade[MAX_PLAYER_GRADE];	//±ä»¯Öµ
-	int grade[MAX_PLAYER_GRADE];		//±ä»¯Ö®ºóµÄ±ÈÈü»ı·Ö
+	int changeGrade[MAX_PLAYER_GRADE];	//å˜åŒ–å€¼
+	int grade[MAX_PLAYER_GRADE];		//å˜åŒ–ä¹‹åçš„æ¯”èµ›ç§¯åˆ†
 
 	LoaderNotifyUserMatchRoomGrade()
 	{

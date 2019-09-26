@@ -7,9 +7,9 @@ CGameDesk::CGameDesk(BYTE byBeginMode) : m_byBeginMode(byBeginMode)
 	m_byGameStation = 0;
 	m_pDataManage = NULL;
 	m_deskIdx = INVALID_DESKIDX;
-	m_iVipGameCount = 0;		//¹ºÂò×À×Ó¾ÖÊı
+	m_iVipGameCount = 0;		//è´­ä¹°æ¡Œå­å±€æ•°
 	m_iBuyGameCount = 0;
-	m_iRunGameCount = 0;		//ÓÎÏ·ÔËĞĞµÄ¾ÖÊı
+	m_iRunGameCount = 0;		//æ¸¸æˆè¿è¡Œçš„å±€æ•°
 	m_masterID = 0;
 	m_isMasterNotPlay = false;
 	m_needLoadConfig = false;
@@ -54,7 +54,7 @@ bool CGameDesk::Init(int deskIdx, BYTE byMaxPeople, CGameMainManage * pDataManag
 	InitDeskGameStation();
 	ReSetGameState(0);
 
-	// ³õÊ¼»¯×À×ÓÍæ¼ÒÊı×é´óĞ¡
+	// åˆå§‹åŒ–æ¡Œå­ç©å®¶æ•°ç»„å¤§å°
 	m_deskUserInfoVec.resize(byMaxPeople);
 	m_iConfigCount = byMaxPeople;
 
@@ -137,7 +137,7 @@ bool CGameDesk::CanBeginGame()
 {
 	if (GetRoomSort() == ROOM_SORT_SCENE)
 	{
-		//³¡¾°ÀàµÄÓÎÏ·¿ªÊ¼£¬½»¸øÓÎÏ·×Ô¼º¿ØÖÆ
+		//åœºæ™¯ç±»çš„æ¸¸æˆå¼€å§‹ï¼Œäº¤ç»™æ¸¸æˆè‡ªå·±æ§åˆ¶
 		return false;
 	}
 
@@ -220,13 +220,13 @@ bool CGameDesk::UserAgreeGame(BYTE deskStation)
 {
 	if (GetRoomSort() == ROOM_SORT_HUNDRED || GetRoomSort() == ROOM_SORT_SCENE)
 	{
-		// °ÙÈËÀàÓÎÏ·ºÍ³¡¾°ÀàÓÎÏ·Ã»ÓĞ×¼±¸
+		// ç™¾äººç±»æ¸¸æˆå’Œåœºæ™¯ç±»æ¸¸æˆæ²¡æœ‰å‡†å¤‡
 		return false;
 	}
 
 	if (GetRoomType() == ROOM_TYPE_MATCH)
 	{
-		// ±ÈÈü³¡²»ĞèÒª×¼±¸
+		// æ¯”èµ›åœºä¸éœ€è¦å‡†å¤‡
 		return false;
 	}
 
@@ -244,7 +244,7 @@ bool CGameDesk::UserAgreeGame(BYTE deskStation)
 		return false;
 	}
 
-	// ÓÎÏ·×´Ì¬ÊÇ·ñÕıÈ·
+	// æ¸¸æˆçŠ¶æ€æ˜¯å¦æ­£ç¡®
 	if (m_bPlayGame)
 	{
 		return false;
@@ -252,27 +252,27 @@ bool CGameDesk::UserAgreeGame(BYTE deskStation)
 
 	int roomType = GetRoomType();
 
-	// Íæ¼Ò×´Ì¬ÊÇ·ñÕıÈ·
+	// ç©å®¶çŠ¶æ€æ˜¯å¦æ­£ç¡®
 	if (pUser->playStatus != USER_STATUS_SITING && (roomType == ROOM_TYPE_GOLD || m_iRunGameCount > 0))
 	{
 		return false;
 	}
 
-	//£¨½ğ±Ò·¿ºÍ¾ãÀÖ²¿VIP·¿£©ÅĞ¶Ï¸ÃÍæ¼Ò½ğ±ÒÊÇ·ñÂú×ãÌõ¼ş
+	//ï¼ˆé‡‘å¸æˆ¿å’Œä¿±ä¹éƒ¨VIPæˆ¿ï¼‰åˆ¤æ–­è¯¥ç©å®¶é‡‘å¸æ˜¯å¦æ»¡è¶³æ¡ä»¶
 	if (m_pDataManage->m_uNameID != 37550102 && (roomType == ROOM_TYPE_FRIEND && pUser->money < m_RemoveMinPoint || roomType == ROOM_TYPE_FG_VIP && pUser->fireCoin < m_RemoveMinPoint))
 	{
-		ERROR_LOG("user(%d) money(%lld)½ğ±Ò²»¹»£¬ÎŞ·¨×¼±¸", pUser->userID, pUser->money);
+		ERROR_LOG("user(%d) money(%lld)é‡‘å¸ä¸å¤Ÿï¼Œæ— æ³•å‡†å¤‡", pUser->userID, pUser->money);
 		return true;
 	}
 
 	pUser->playStatus = USER_STATUS_AGREE;
 
-	// Í¨ÖªÕâ¸öÍæ¼ÒÒÑ×¼±¸
+	// é€šçŸ¥è¿™ä¸ªç©å®¶å·²å‡†å¤‡
 	BroadcastUserAgreeData(deskStation);
 
 	if ((roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_PRIVATE || roomType == ROOM_TYPE_FG_VIP) && m_pDataManage->IsCanWatch() && m_autoBeginMode == 0)
 	{
-		// µÚÒ»¾Ö
+		// ç¬¬ä¸€å±€
 		if (m_iRunGameCount == 0 && CanBeginGame())
 		{
 			SetBeginUser();
@@ -281,7 +281,7 @@ bool CGameDesk::UserAgreeGame(BYTE deskStation)
 
 		if (m_iRunGameCount >= 1 && CanBeginGame())
 		{
-			// µÚÒ»¾ÖÖ®ºóµÄÓÎÏ·²»ÊÜ·¿Ö÷¿ØÖÆ
+			// ç¬¬ä¸€å±€ä¹‹åçš„æ¸¸æˆä¸å—æˆ¿ä¸»æ§åˆ¶
 			GameBegin(0);
 		}
 	}
@@ -312,7 +312,7 @@ bool CGameDesk::SendGameStation(BYTE deskStation, UINT socketID, bool bWatchUser
 			m_pDataManage->SendData(m_beginUserID, NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_CANBEGIN, 0);
 		}
 	}
-	else if (roomType == ROOM_TYPE_MATCH) //±ÈÈü³¡ÌØÊâ´¦Àí
+	else if (roomType == ROOM_TYPE_MATCH) //æ¯”èµ›åœºç‰¹æ®Šå¤„ç†
 	{
 		int iSocketIndex = -1;
 		int userID = GetUserIDByDeskStation(deskStation);
@@ -330,20 +330,20 @@ bool CGameDesk::SendGameStation(BYTE deskStation, UINT socketID, bool bWatchUser
 			}
 			else
 			{
-				ERROR_LOG("ÄÚ´æÃ»ÓĞÍæ¼ÒÊı¾İ£ºuserID=%d", userID);
+				ERROR_LOG("å†…å­˜æ²¡æœ‰ç©å®¶æ•°æ®ï¼šuserID=%d", userID);
 			}
 		}
 
 		m_pDataManage->m_pGServerConnect->SendData(iSocketIndex, &gameInfo, sizeof(gameInfo), MSG_MAIN_LOADER_FRAME, MSG_ASS_LOADER_GAME_INFO, 0, userID);
 		m_pDataManage->m_pGServerConnect->SendData(iSocketIndex, pData, size, MSG_MAIN_LOADER_FRAME, MSG_ASS_LOADER_GAME_STATION, 0, userID);
 
-		// ·¢ËÍµ±Ç°×À×Ó×´Ì¬
+		// å‘é€å½“å‰æ¡Œå­çŠ¶æ€
 		SendMatchDeskStatus(userID);
 
 		return true;
 	}
 
-	//·¢ËÍÓÎÏ·ĞÅÏ¢
+	//å‘é€æ¸¸æˆä¿¡æ¯
 	SendGameData(deskStation, &gameInfo, sizeof(gameInfo), MSG_MAIN_LOADER_FRAME, MSG_ASS_LOADER_GAME_INFO, 0);
 	SendGameData(deskStation, pData, size, MSG_MAIN_LOADER_FRAME, MSG_ASS_LOADER_GAME_STATION, 0);
 
@@ -362,7 +362,7 @@ bool CGameDesk::GameBegin(BYTE bBeginFlag)
 		return MatchRoomGameBegin();
 	}
 
-	// ¼ÇÂ¼Íæ¼Ò×´Ì¬£¬ÓÎÏ·¿ªÊ¼×îºóÑéÖ¤Êı¾İ
+	// è®°å½•ç©å®¶çŠ¶æ€ï¼Œæ¸¸æˆå¼€å§‹æœ€åéªŒè¯æ•°æ®
 	int iDeskErrorCount = 0, iMemErrorCount = 0;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -373,14 +373,14 @@ bool CGameDesk::GameBegin(BYTE bBeginFlag)
 			if (!pUser)
 			{
 				iMemErrorCount++;
-				ERROR_LOG("###  ÓÎÏ·¿ªÊ¼£¬ÄÚ´æÖĞÃ»ÓĞÍæ¼ÒÊı¾İ  userID=%d ###", userID);
+				ERROR_LOG("###  æ¸¸æˆå¼€å§‹ï¼Œå†…å­˜ä¸­æ²¡æœ‰ç©å®¶æ•°æ®  userID=%d ###", userID);
 				m_deskUserInfoVec[i].clear();
 				continue;
 			}
 
 			if (pUser->deskStation != i)
 			{
-				//Êı¾İÒì³£
+				//æ•°æ®å¼‚å¸¸
 				ERROR_LOG("user deskStation is not match userID:%d deskStation=%d i=%d", pUser->userID, pUser->deskStation, i);
 				return false;
 			}
@@ -394,16 +394,16 @@ bool CGameDesk::GameBegin(BYTE bBeginFlag)
 	}
 	if (m_byBeginMode == FULL_BEGIN && (iDeskErrorCount + iMemErrorCount) > 0)
 	{
-		ERROR_LOG("###  ÓÎÏ·ÎŞ·¨¿ªÊ¼£¬iDeskErrorCount=%d,iMemErrorCount=%d  ###", iDeskErrorCount, iMemErrorCount);
+		ERROR_LOG("###  æ¸¸æˆæ— æ³•å¼€å§‹ï¼ŒiDeskErrorCount=%d,iMemErrorCount=%d  ###", iDeskErrorCount, iMemErrorCount);
 		return false;
 	}
 
-	//¼ÇÂ¼ÓÎÏ·¿ªÊ¼ĞèÒªµÄÊı¾İ
+	//è®°å½•æ¸¸æˆå¼€å§‹éœ€è¦çš„æ•°æ®
 	m_bPlayGame = true;
 	m_beginTime = time(NULL);
 	int roomType = GetRoomType();
 
-	// ½ğ±Ò³¡¿ª¾Ö¿Û³ıÍæ¼Ò½ğ±Ò
+	// é‡‘å¸åœºå¼€å±€æ‰£é™¤ç©å®¶é‡‘å¸
 	if (roomType == ROOM_TYPE_GOLD)
 	{
 		ProcessDeduceMoneyWhenGameBegin();
@@ -418,7 +418,7 @@ bool CGameDesk::GameBegin(BYTE bBeginFlag)
 		KillTimer(IDT_FRIEND_ROOM_GAMEBEGIN);
 	}
 
-	// ¾ÖÊı
+	// å±€æ•°
 	m_iRunGameCount++;
 
 	if (roomType != ROOM_TYPE_GOLD)
@@ -433,17 +433,17 @@ bool CGameDesk::GameBegin(BYTE bBeginFlag)
 		}
 	}
 
-	// ¸æËß×À×ÓµÄÍæ¼ÒÓÎÏ·¿ªÊ¼ÁË
+	// å‘Šè¯‰æ¡Œå­çš„ç©å®¶æ¸¸æˆå¼€å§‹äº†
 	BroadcastDeskData(NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_GAMEBEGIN);
 
-	// ·¿¿¨³¡µÚÒ»¾Ö
+	// æˆ¿å¡åœºç¬¬ä¸€å±€
 	if ((roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_PRIVATE || roomType == ROOM_TYPE_FG_VIP) && m_iRunGameCount == 1)
 	{
 		if (m_isBegin == false)
 		{
 			m_isBegin = true;
 
-			// Í¨Öª´óÌü
+			// é€šçŸ¥å¤§å…
 			if (m_friendsGroupMsg.friendsGroupDeskNumber > 0)
 			{
 				NotifyLogonDeskStatusChange();
@@ -476,7 +476,7 @@ bool CGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 
 	if (!m_bPlayGame)
 	{
-		// Ã»ÓĞ¿ªÊ¼µÄÓÎÏ·ÔõÃ´»á½áÊø
+		// æ²¡æœ‰å¼€å§‹çš„æ¸¸æˆæ€ä¹ˆä¼šç»“æŸ
 		ERROR_LOG("m_bPlayGame error m_bPlayGame:%d", m_bPlayGame);
 		return false;
 	}
@@ -495,7 +495,7 @@ bool CGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			otherConfig = ConfigManage()->GetOtherConfig();
 		}
 
-		// ²»ÊÇ×îºóÒ»¾Ö
+		// ä¸æ˜¯æœ€åä¸€å±€
 		bool bNeedKickOutUser = false;
 		for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 		{
@@ -523,7 +523,7 @@ bool CGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		}
 	}
 
-	char userIDList[2048] = "";		// ÕËµ¥Ê¹ÓÃ
+	char userIDList[2048] = "";		// è´¦å•ä½¿ç”¨
 
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -586,7 +586,7 @@ bool CGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 
 			if (pUser->deskStation != i)
 			{
-				// ×ßµ½ÕâÀïÊı¾İÒÑ¾­Òì³£ÁË
+				// èµ°åˆ°è¿™é‡Œæ•°æ®å·²ç»å¼‚å¸¸äº†
 				ERROR_LOG("user deskStation is not match userID:%d deskStation=%d i=%d", pUser->userID, pUser->deskStation, i);
 				bKickOut = true;
 				bDelUser = true;
@@ -607,23 +607,23 @@ bool CGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 
 			if (bKickOut)
 			{
-				// Íæ¼Ò±»Ìß
+				// ç©å®¶è¢«è¸¢
 				UserBeKicked((BYTE)i);
 
-				// Í¨ÖªËùÓĞÍæ¼Ò
+				// é€šçŸ¥æ‰€æœ‰ç©å®¶
 				BroadcastUserLeftData((BYTE)i, kickReason);
 
-				// ÇåÀí×À×ÓÍæ¼ÒÊı¾İ
+				// æ¸…ç†æ¡Œå­ç©å®¶æ•°æ®
 				deskUserInfo.clear();
 
-				// ÉèÖÃÍæ¼ÒÎªÕ¾Æğ×´Ì¬
+				// è®¾ç½®ç©å®¶ä¸ºç«™èµ·çŠ¶æ€
 				pUser->playStatus = USER_STATUS_STAND;
 				pUser->deskIdx = INVALID_DESKIDX;
 				pUser->deskStation = INVALID_DESKSTATION;
 
 				if (bDelUser)
 				{
-					// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+					// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 					m_pDataManage->DelUser(userID);
 				}
 			}
@@ -635,14 +635,14 @@ bool CGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		char tableName[128] = "";
 		ConfigManage()->GetTableNameByDate(TBL_STATI_GAME_RECORD_INFO, tableName, sizeof(tableName));
 
-		// Éú³ÉÓÎÏ·¼ÇÂ¼
+		// ç”Ÿæˆæ¸¸æˆè®°å½•
 		BillManage()->WriteBill(&m_pDataManage->m_SQLDataManage,
 			"INSERT INTO %s (passwd,deskIdx,roomID,createTime,beginTime,finishedTime,userIDList) VALUES('%s',%d,%d,%d,%d,%d,'%s')",
 			tableName, privateDeskInfo.passwd, m_deskIdx, m_pDataManage->GetRoomID(),
 			(int)privateDeskInfo.createTime, (int)m_beginTime, (int)m_finishedTime, userIDList);
 	}
 
-	// ¼ÓÔØÅäÖÃ
+	// åŠ è½½é…ç½®
 	if (m_needLoadConfig)
 	{
 		m_needLoadConfig = false;
@@ -673,7 +673,7 @@ bool CGameDesk::HandleNotifyMessage(BYTE deskStation, unsigned int assistID, voi
 {
 	switch (assistID)
 	{
-	case MSG_ASS_LOADER_GAME_AGREE:		//ÓÃ»§Í¬Òâ
+	case MSG_ASS_LOADER_GAME_AGREE:		//ç”¨æˆ·åŒæ„
 	{
 		return UserAgreeGame(deskStation);
 	}
@@ -745,10 +745,10 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 		return;
 	}
 
-	// ÍË»¹·¿¿¨
+	// é€€è¿˜æˆ¿å¡
 	BuyGameDeskInfo buyDeskInfo = ProcessCostJewels();
 
-	// Çå³ıËùÓĞ¶¨Ê±Æ÷
+	// æ¸…é™¤æ‰€æœ‰å®šæ—¶å™¨
 	KillTimer(IDT_AGREE_DISMISS_DESK);
 	KillTimer(IDT_FRIEND_ROOM_GAMEBEGIN);
 
@@ -762,14 +762,14 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 	int currTime = (int)time(NULL);
 	int deskRemainPeopleCount = 0;
 
-	// Í¨ÖªÇ°¶Ë³É¹¦½âÉ¢TODO
+	// é€šçŸ¥å‰ç«¯æˆåŠŸè§£æ•£TODO
 	LoaderNotifyDismissSuccess msg;
 	msg.isDismissMidway = isDismissMidway;
 	BroadcastDeskData(&msg, sizeof(msg), MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_DISMISS_OK);
 
 	if (m_finishedGameCount > 0)
 	{
-		//ÏÈÕÒµ½×î´óµÄ´óÓ®¼Ò
+		//å…ˆæ‰¾åˆ°æœ€å¤§çš„å¤§èµ¢å®¶
 		long long llMaxWinMoney = 0;
 		if (m_roomTipType == ROOM_TIP_TYPE_MAX_WIN)
 		{
@@ -804,7 +804,7 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 			}
 		}
 
-		// ±£´æ´ó½áËãÕ½¼¨TODO
+		// ä¿å­˜å¤§ç»“ç®—æˆ˜ç»©TODO
 		PrivateDeskGradeSimpleInfo simpleGradeInfo;
 
 		simpleGradeInfo.roomID = roomID;
@@ -838,7 +838,7 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 
 			userIDVec.push_back(userID);
 
-			// ¼ÆËã³éË®
+			// è®¡ç®—æŠ½æ°´
 			long long taxValue = 0;
 			long long AllScore[MAX_PLAYER_GRADE];
 			memcpy(AllScore, m_uScore, sizeof(m_uScore));
@@ -853,26 +853,26 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 
 					if (m_friendsGroupMsg.friendsGroupID > 0)
 					{
-						//½«³éË®·µ¸ø¹ÜÀíÔ±
+						//å°†æŠ½æ°´è¿”ç»™ç®¡ç†å‘˜
 						UserData MuserData;
 						int ChouShui = 0;
 						int ManagerId = 0;
 						if (!pRedisPHP->GetfriendsGroupToUser(m_friendsGroupMsg.friendsGroupID, userID, ChouShui, ManagerId))
 						{
-							ERROR_LOG("»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±IDÊ§°Ü£ºuserId=%d,friendsGroupID=%d", userID, m_friendsGroupMsg.friendsGroupID);
+							ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜IDå¤±è´¥ï¼šuserId=%d,friendsGroupID=%d", userID, m_friendsGroupMsg.friendsGroupID);
 						}
 						if (ChouShui > 0 && ChouShui < 100 && ManagerId > 0 && taxValue > 0)
 						{
 							long long taxValueEx = 0;
 							double drate = double(ChouShui) / 100.0;
 							taxValueEx = (long long)floor(drate * taxValue);
-							//½«½ğ±Ò³éË®·µÏÖ¸ø·¿Ö÷
+							//å°†é‡‘å¸æŠ½æ°´è¿”ç°ç»™æˆ¿ä¸»
 							if (taxValueEx > 0 && pRedis->GetUserData(ManagerId, MuserData))
 							{
 								MuserData.money += taxValueEx;
 								pRedis->SetUserMoneyEx(ManagerId, taxValueEx, true, RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP, roomID, 0, 0, m_friendsGroupMsg.friendsGroupID);
 
-								// Í¨Öª½ğ±Ò±ä»¯
+								// é€šçŸ¥é‡‘å¸å˜åŒ–
 								m_pDataManage->SendResourcesChangeToLogonServer(ManagerId, RESOURCE_TYPE_MONEY, MuserData.money, RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP, taxValueEx);
 							}
 							llReturnMoney += taxValueEx;
@@ -885,26 +885,26 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 
 					if (m_friendsGroupMsg.friendsGroupID > 0)
 					{
-						//½«³éË®·µ¸ø¹ÜÀíÔ±
+						//å°†æŠ½æ°´è¿”ç»™ç®¡ç†å‘˜
 						int ChouShui = 0;
 						int ManagerId = 0;
 						long long FirMoney = 0;
 						if (!pRedisPHP->GetfriendsGroupToUser(m_friendsGroupMsg.friendsGroupID, userID, ChouShui, ManagerId))
 						{
-							ERROR_LOG("»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±IDÊ§°Ü£ºuserId=%d,friendsGroupID=%d", userID, m_friendsGroupMsg.friendsGroupID);
+							ERROR_LOG("è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜IDå¤±è´¥ï¼šuserId=%d,friendsGroupID=%d", userID, m_friendsGroupMsg.friendsGroupID);
 						}
 						if (ChouShui > 0 && ChouShui < 100 && ManagerId > 0 && taxValue > 0)
 						{
 							long long taxValueEx = 0;
 							double drate = double(ChouShui) / 100.0;
 							taxValueEx = (long long)floor(drate * taxValue);
-							//½«½ğ±Ò³éË®·µÏÖ¸ø·¿Ö÷
+							//å°†é‡‘å¸æŠ½æ°´è¿”ç°ç»™æˆ¿ä¸»
 							if (taxValueEx > 0 && pRedisPHP->GetUserFriendsGroupMoney(m_friendsGroupMsg.friendsGroupID, ManagerId, FirMoney))
 							{
 								FirMoney += taxValueEx;
 								pRedisPHP->SetUserFriendsGroupMoney(m_friendsGroupMsg.friendsGroupID, ManagerId, taxValueEx, true, RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP, roomID);
 
-								// Í¨Öª»ğ±Ò±ä»¯
+								// é€šçŸ¥ç«å¸å˜åŒ–
 								m_pDataManage->SendFireCoinChangeToLogonServer(m_friendsGroupMsg.friendsGroupID, ManagerId, FirMoney, RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP, taxValueEx);
 							}
 							llReturnMoney += taxValueEx;
@@ -913,19 +913,19 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 				}
 			}
 
-			// Éú³ÉÕ½¼¨
+			// ç”Ÿæˆæˆ˜ç»©
 			sprintf(userInfoList + strlen(userInfoList), "%d,%lld|", userID, m_uScore[i]);
 
-			//Éú³É³éË®
+			//ç”ŸæˆæŠ½æ°´
 			sprintf(pumpInfoList + strlen(pumpInfoList), "%d,%lld|", userID, taxValue);
 
-			//Éú³ÉÊ¤¾ÖÊı
+			//ç”Ÿæˆèƒœå±€æ•°
 			sprintf(winCountInfoList + strlen(winCountInfoList), "%d,%d|", userID, m_gameWinCount[i]);
 
-			//ÀÛ¼Æ³éË®
+			//ç´¯è®¡æŠ½æ°´
 			llAllPumpScore += taxValue;
 
-			//ÉèÖÃ¾ãÀÖ²¿Íæ¼ÒÊäÓ®·ÖÊı
+			//è®¾ç½®ä¿±ä¹éƒ¨ç©å®¶è¾“èµ¢åˆ†æ•°
 			if (m_friendsGroupMsg.friendsGroupID > 0)
 			{
 				if (roomType == ROOM_TYPE_PRIVATE)
@@ -942,7 +942,7 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 				}
 			}
 
-			//Éú³É½ğ±ÒÒµ¼¨
+			//ç”Ÿæˆé‡‘å¸ä¸šç»©
 			if (roomType == ROOM_TYPE_FRIEND && m_pDataManage->m_uNameID != 37550102)
 			{
 				char tableName[128] = "";
@@ -952,30 +952,30 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 			}
 		}
 
-		// ÈËÊı¹ı´ó»áÒç³ö
+		// äººæ•°è¿‡å¤§ä¼šæº¢å‡º
 		memcpy(simpleGradeInfo.userInfoList, userInfoList, sizeof(simpleGradeInfo.userInfoList));
 
-		// Õ½¼¨
+		// æˆ˜ç»©
 		if (m_gradeIDVec.size() > 0)
 		{
 			pRedis->SetPrivateDeskSimpleInfo(userIDVec, simpleGradeInfo, m_gradeIDVec);
 		}
 
-		// ²»ÄÜ³¬¹ı512¸ö×Ö½Ú
-		// Æ´½Ó
+		// ä¸èƒ½è¶…è¿‡512ä¸ªå­—èŠ‚
+		// æ‹¼æ¥
 		sprintf(userInfoList + strlen(userInfoList), "#%s#%s#", pumpInfoList, winCountInfoList);
 
-		// ¾ãÀÖ²¿Ïà¹Ø
+		// ä¿±ä¹éƒ¨ç›¸å…³
 		if (m_friendsGroupMsg.friendsGroupID > 0)
 		{
-			// Éú³É¾ãÀÖ²¿Õ½¼¨
+			// ç”Ÿæˆä¿±ä¹éƒ¨æˆ˜ç»©
 			BillManage()->WriteBill(&m_pDataManage->m_SQLDataManage,
 				"INSERT INTO %s (friendsGroupID,userID,msgID,time,roomID,realPlayCount,playCount,playMode,passwd,userInfoList,roomType,srcType,roomTipType,roomTipTypeNums) \
 				VALUES(%d,%d,%d,%d,%d,%d,%d,%d,'%s','%s',%d,%d,%d,%d)",
 				TBL_FG_RECORD_ACCOUNTS, m_friendsGroupMsg.friendsGroupID, m_masterID, 0, currTime, roomID, m_finishedGameCount, m_iBuyGameCount, m_playMode
 				, m_szDeskPassWord, userInfoList, roomType, m_friendsGroupMsg.friendsGroupDeskNumber, m_roomTipType, m_roomTipTypeNums);
 
-			// Éú³É¾ãÀÖ²¿ÏûºÄ
+			// ç”Ÿæˆä¿±ä¹éƒ¨æ¶ˆè€—
 			int costMoney = 0, costJewels = 0, moneyPump = 0, fireCoinPump = 0;
 			if (buyDeskInfo.gameID > 0 && m_payType == PAY_TYPE_NORMAL)
 			{
@@ -997,14 +997,14 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 				moneyPump = (int)llAllPumpScore;
 			}
 
-			// Éú³É¾ãÀÖ²¿ÏûºÄ
+			// ç”Ÿæˆä¿±ä¹éƒ¨æ¶ˆè€—
 			BillManage()->WriteBill(&m_pDataManage->m_SQLDataManage,
 				"INSERT INTO %s (friendsGroupID,time,userID,costMoney,costJewels,fireCoinRecharge,fireCoinExchange,moneyPump,fireCoinPump,passwd) \
 				VALUES(%d,%d,%d,%d,%d,%d,%d,%d,%d,'%s')",
 				TBL_FG_COST_ACCOUNTS, m_friendsGroupMsg.friendsGroupID, currTime, m_masterID, costMoney, costJewels, 0, 0, moneyPump, fireCoinPump, m_szDeskPassWord);
 		}
 
-		//°ÑÊ£Óà½ğ±Ò·µ»Ø¸øÈºÖ÷
+		//æŠŠå‰©ä½™é‡‘å¸è¿”å›ç»™ç¾¤ä¸»
 		UserData userData;
 		llAllPumpScore -= llReturnMoney;
 		if (llAllPumpScore > 0 && roomType == ROOM_TYPE_FRIEND && m_friendsGroupMsg.friendsGroupID > 0 && pRedis->GetUserData(m_masterID, userData))
@@ -1012,21 +1012,21 @@ void CGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway /*= true*/)
 			userData.money += llAllPumpScore;
 			pRedis->SetUserMoneyEx(m_masterID, llAllPumpScore, true, RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP, roomID, 0, 0, m_friendsGroupMsg.friendsGroupID);
 
-			// Í¨Öª½ğ±Ò±ä»¯
+			// é€šçŸ¥é‡‘å¸å˜åŒ–
 			m_pDataManage->SendResourcesChangeToLogonServer(m_masterID, RESOURCE_TYPE_MONEY, userData.money, RESOURCE_CHANGE_REASON_GOLD_ROOM_PUMP, llAllPumpScore);
 		}
 
 		char tableName[128] = "";
 		ConfigManage()->GetTableNameByDate(TBL_STATI_GAME_RECORD_INFO, tableName, sizeof(tableName));
 
-		// Éú³ÉÓÎÏ·¼ÇÂ¼
+		// ç”Ÿæˆæ¸¸æˆè®°å½•
 		BillManage()->WriteBill(&m_pDataManage->m_SQLDataManage,
 			"INSERT INTO %s (passwd,deskIdx,roomID,createTime,beginTime,finishedTime,userIDList) VALUES('%s',%d,%d,%d,%d,%d,'%s')",
 			tableName, m_szDeskPassWord, m_deskIdx, roomID,
 			(int)privateDeskInfo.createTime, (int)m_beginTime, currTime, userInfoList);
 	}
 
-	// ÇåÀí·¿¼äÊı¾İ
+	// æ¸…ç†æˆ¿é—´æ•°æ®
 	ClearAllData(privateDeskInfo);
 }
 
@@ -1126,7 +1126,7 @@ bool CGameDesk::ChangeUserPoint(long long *arPoint, bool *bCut, long long * rate
 		return false;
 	}
 
-	//×¨ÃÅ¼ÆËãÊäÓ®ºÍ³éË®
+	//ä¸“é—¨è®¡ç®—è¾“èµ¢å’ŒæŠ½æ°´
 	long long currSystemTaxMoney = 0;
 	long long currSystemTaxRobotMoney = 0;
 	long long i64RealPeopleWinMoney = 0;
@@ -1145,11 +1145,11 @@ bool CGameDesk::ChangeUserPoint(long long *arPoint, bool *bCut, long long * rate
 			continue;
 		}
 
-		//¸üĞÂÄÚ´æ½ğ±Ò
+		//æ›´æ–°å†…å­˜é‡‘å¸
 		long long llRedisMoney = pRedis->GetUserResNums(userID, "money");
 		if (llRedisMoney != pUser->money)
 		{
-			ERROR_LOG("ÄÚ´æ½ğ±ÒºÍredis½ğ±Ò²»Ò»ÖÂ£¬userID=%d,redisMoney=%lld,memMoney=%lld", userID, llRedisMoney, pUser->money);
+			ERROR_LOG("å†…å­˜é‡‘å¸å’Œredisé‡‘å¸ä¸ä¸€è‡´ï¼ŒuserID=%d,redisMoney=%lld,memMoney=%lld", userID, llRedisMoney, pUser->money);
 			pUser->money = llRedisMoney;
 		}
 
@@ -1205,20 +1205,20 @@ bool CGameDesk::ChangeUserPoint(long long *arPoint, bool *bCut, long long * rate
 
 	m_finishedTime = time(NULL);
 
-	// Í³¼ÆÏµÍ³ÊäÓ®
+	// ç»Ÿè®¡ç³»ç»Ÿè¾“èµ¢
 	long long llGameWinMoney = i64RealPeopleWinMoney + (currSystemTaxMoney - currSystemTaxRobotMoney);
 	if (llGameWinMoney != 0)
 	{
 		pRedis->SetRoomGameWinMoney(m_pDataManage->GetRoomID(), -llGameWinMoney, true);
 	}
 
-	// ÏµÍ³³éË®
+	// ç³»ç»ŸæŠ½æ°´
 	if (currSystemTaxMoney - currSystemTaxRobotMoney > 0)
 	{
 		pRedis->SetRoomPercentageWinMoney(m_pDataManage->GetRoomID(), currSystemTaxMoney - currSystemTaxRobotMoney, true);
 	}
 
-	// Í³¼ÆÊäÓ®³¡´Î£¬Ö±½ÓĞ´µ½Êı¾İ¿âÖĞ
+	// ç»Ÿè®¡è¾“èµ¢åœºæ¬¡ï¼Œç›´æ¥å†™åˆ°æ•°æ®åº“ä¸­
 	if (llGameWinMoney != 0)
 	{
 		char tableName[128] = "";
@@ -1239,7 +1239,7 @@ bool CGameDesk::ChangeUserBage(BYTE deskStation, char * gameData, int changeNum,
 		return false;
 	}
 
-	//»úÆ÷ÈË²»ÓÃ±³°ü
+	//æœºå™¨äººä¸ç”¨èƒŒåŒ…
 	if (IsVirtual(deskStation))
 	{
 		return false;
@@ -1324,13 +1324,13 @@ bool CGameDesk::ChangeUserPoint(BYTE deskStation, long long point, long long rat
 		}
 	}
 
-	//Í³¼ÆÏµÍ³ÊäÓ®
+	//ç»Ÿè®¡ç³»ç»Ÿè¾“èµ¢
 	if (!pUser->isVirtual)
 	{
 		pRedis->SetRoomGameWinMoney(m_pDataManage->GetRoomID(), -point, true);
 	}
 
-	// ÏµÍ³³éË®
+	// ç³»ç»ŸæŠ½æ°´
 	if (!pUser->isVirtual && rateMoney > 0)
 	{
 		pRedis->SetRoomPercentageWinMoney(m_pDataManage->GetRoomID(), rateMoney, true);
@@ -1357,7 +1357,7 @@ bool CGameDesk::ChangeUserFireCoin(long long *arPoint, char *pVideoCode/* = NULL
 {
 	if (m_friendsGroupMsg.friendsGroupID <= 0)
 	{
-		ERROR_LOG("·Ç¾ãÀÖ²¿·¿¼ä½ûÖ¹¸ü¸Ä»ğ±Ò");
+		ERROR_LOG("éä¿±ä¹éƒ¨æˆ¿é—´ç¦æ­¢æ›´æ”¹ç«å¸");
 		return false;
 	}
 
@@ -1413,7 +1413,7 @@ bool CGameDesk::ChangeUserFireCoin(long long *arPoint, char *pVideoCode/* = NULL
 			m_gameWinCount[i] ++;
 		}
 
-		// ĞŞ¸ÄredisºÍÄÚ´æµÄÖµ
+		// ä¿®æ”¹rediså’Œå†…å­˜çš„å€¼
 		m_uScore[i] += userWinMoney;
 		pUser->fireCoin += (int)userWinMoney;
 		pRedisPHP->SetUserFriendsGroupMoney(m_friendsGroupMsg.friendsGroupID, userID, userWinMoney, true, RESOURCE_CHANGE_REASON_GAME_FINISHED, m_pDataManage->GetRoomID());
@@ -1462,7 +1462,7 @@ bool CGameDesk::ChangeUserPointGoldRoom(long long *arPoint, char *pVideoCode /*=
 		return false;
 	}
 
-	//×¨ÃÅ¼ÆËãÊäÓ®ºÍ³éË®
+	//ä¸“é—¨è®¡ç®—è¾“èµ¢å’ŒæŠ½æ°´
 	long long currSystemTaxMoney = 0;
 	long long currSystemTaxRobotMoney = 0;
 	long long i64RealPeopleWinMoney = 0;
@@ -1487,11 +1487,11 @@ bool CGameDesk::ChangeUserPointGoldRoom(long long *arPoint, char *pVideoCode /*=
 			continue;
 		}
 
-		//¸üĞÂÄÚ´æ½ğ±Ò
+		//æ›´æ–°å†…å­˜é‡‘å¸
 		long long llRedisMoney = pRedis->GetUserResNums(userID, "money");
 		if (llRedisMoney != pUser->money)
 		{
-			ERROR_LOG("ÄÚ´æ½ğ±ÒºÍredis½ğ±Ò²»Ò»ÖÂ£¬userID=%d,redisMoney=%lld,memMoney=%lld", userID, llRedisMoney, pUser->money);
+			ERROR_LOG("å†…å­˜é‡‘å¸å’Œredisé‡‘å¸ä¸ä¸€è‡´ï¼ŒuserID=%d,redisMoney=%lld,memMoney=%lld", userID, llRedisMoney, pUser->money);
 			pUser->money = llRedisMoney;
 		}
 
@@ -1530,7 +1530,7 @@ bool CGameDesk::ChangeUserPointGoldRoom(long long *arPoint, char *pVideoCode /*=
 		m_uScore[i] += userWinMoney;
 		sprintf(userInfoList + strlen(userInfoList), "%d,%lld|", userID, userWinMoney);
 
-		if (userWinMoney == 0) //Ã»ÓĞÊäÓ®£¬²»ÓÃ·¢ËÍÊı¾İ
+		if (userWinMoney == 0) //æ²¡æœ‰è¾“èµ¢ï¼Œä¸ç”¨å‘é€æ•°æ®
 		{
 			continue;
 		}
@@ -1551,14 +1551,14 @@ bool CGameDesk::ChangeUserPointGoldRoom(long long *arPoint, char *pVideoCode /*=
 		return false;
 	}
 
-	//Í³¼ÆÏµÍ³ÊäÓ®
+	//ç»Ÿè®¡ç³»ç»Ÿè¾“èµ¢
 	long long llGameWinMoney = i64RealPeopleWinMoney + (currSystemTaxMoney - currSystemTaxRobotMoney);
 	if (llGameWinMoney != 0)
 	{
 		pRedis->SetRoomGameWinMoney(m_pDataManage->GetRoomID(), -llGameWinMoney, true);
 	}
 
-	// ÏµÍ³³éË®
+	// ç³»ç»ŸæŠ½æ°´
 	if (currSystemTaxMoney - currSystemTaxRobotMoney > 0)
 	{
 		pRedis->SetRoomPercentageWinMoney(m_pDataManage->GetRoomID(), currSystemTaxMoney - currSystemTaxRobotMoney, true);
@@ -1596,11 +1596,11 @@ bool CGameDesk::ChangeUserPointJewelsRoom(long long *arPoint, char *pVideoCode /
 			continue;
 		}
 
-		//¸üĞÂÄÚ´æ×êÊ¯
+		//æ›´æ–°å†…å­˜é’»çŸ³
 		int iRedisJewels = (int)pRedis->GetUserResNums(userID, "jewels");
 		if (iRedisJewels != pUser->jewels)
 		{
-			ERROR_LOG("ÄÚ´æ×êÊ¯ºÍredis×êÊ¯²»Ò»ÖÂ£¬userID=%d,redis=%d,mem=%d", userID, iRedisJewels, pUser->jewels);
+			ERROR_LOG("å†…å­˜é’»çŸ³å’Œredisé’»çŸ³ä¸ä¸€è‡´ï¼ŒuserID=%d,redis=%d,mem=%d", userID, iRedisJewels, pUser->jewels);
 			pUser->jewels = iRedisJewels;
 		}
 
@@ -1630,7 +1630,7 @@ bool CGameDesk::ChangeUserPointJewelsRoom(long long *arPoint, char *pVideoCode /
 			sprintf(userInfoList + strlen(userInfoList), "%d,%d|", userID, userWinJewels);
 		}
 
-		if (userWinJewels == 0) //Ã»ÓĞÊäÓ®£¬²»ÓÃ·¢ËÍÊı¾İ
+		if (userWinJewels == 0) //æ²¡æœ‰è¾“èµ¢ï¼Œä¸ç”¨å‘é€æ•°æ®
 		{
 			continue;
 		}
@@ -1726,7 +1726,7 @@ bool CGameDesk::SendGameMessage(BYTE deskStation, const char * lpszMessage, int 
 	return true;
 }
 
-// ¹ã²¥ÏûÏ¢£¬Éè¶¨²»¹ã²¥ÌØ¶¨Íæ¼Ò
+// å¹¿æ’­æ¶ˆæ¯ï¼Œè®¾å®šä¸å¹¿æ’­ç‰¹å®šç©å®¶
 void CGameDesk::BroadcastGameMessageExcept(BYTE deskStation, const char * lpszMessage, int wType/* = SMT_EJECT*/)
 {
 	if (!lpszMessage)
@@ -1802,12 +1802,12 @@ bool CGameDesk::HandleFrameMessage(BYTE deskStation, unsigned int assistID, void
 {
 	switch (assistID)
 	{
-		// ·¿¼äĞÅÏ¢
+		// æˆ¿é—´ä¿¡æ¯
 	case MSG_ASS_LOADER_DESK_INFO:
 	{
 		return OnHandleUserRequestDeskInfo(deskStation);
 	}
-	//ÓÎÏ·×´Ì¬
+	//æ¸¸æˆçŠ¶æ€
 	case MSG_ASS_LOADER_GAME_INFO:
 	{
 		return OnHandleUserRequestGameInfo(deskStation);
@@ -1834,7 +1834,7 @@ bool CGameDesk::UserLeftDesk(GameUserInfo * pUser)
 		return false;
 	}
 
-	// Ôö¼Ó°ÙÈËÀàÏà¹ØÂß¼­ TODO
+	// å¢åŠ ç™¾äººç±»ç›¸å…³é€»è¾‘ TODO
 	int roomSort = GetRoomSort();
 	int roomType = GetRoomType();
 	if (roomSort == ROOM_SORT_NORMAL || roomSort == ROOM_SORT_SCENE)
@@ -1868,10 +1868,10 @@ bool CGameDesk::OnHandleUserRequestDeskInfo(BYTE deskStation)
 		return false;
 	}
 
-	// ·¢ËÍ×À×Ó»ù±¾ĞÅÏ¢
+	// å‘é€æ¡Œå­åŸºæœ¬ä¿¡æ¯
 	SendDeskBaseInfo(deskStation);
 
-	// ·¢ËÍ½âÉ¢ĞÅÏ¢
+	// å‘é€è§£æ•£ä¿¡æ¯
 	SendDismissData();
 
 	return true;
@@ -1885,7 +1885,7 @@ bool CGameDesk::OnHandleUserRequestGameInfo(BYTE deskStation)
 		isWatcher = true;
 	}
 
-	//·¢ËÍÓÃ»§ÓÎÏ·×´Ì¬(ÓÎÏ·ÊµÏÖ)
+	//å‘é€ç”¨æˆ·æ¸¸æˆçŠ¶æ€(æ¸¸æˆå®ç°)
 	return OnGetGameStation(deskStation, -1, isWatcher);
 }
 
@@ -1928,14 +1928,14 @@ bool CGameDesk::OnHandleUserRequestDissmiss(BYTE deskStation)
 		return false;
 	}
 
-	// ×À×ÓÊÇ·ñÓĞĞ§
+	// æ¡Œå­æ˜¯å¦æœ‰æ•ˆ
 	if (!m_enable)
 	{
 		ERROR_LOG("invalid desk status m_enable=%d", m_enable);
 		return false;
 	}
 
-	// ÒÑ¾­ÓĞÈËÉêÇë½âÉ¢ÁË
+	// å·²ç»æœ‰äººç”³è¯·è§£æ•£äº†
 	if (m_reqDismissDeskStation != INVALID_DESKSTATION)
 	{
 		ERROR_LOG("deskStation: %d already request dismiss", m_reqDismissDeskStation);
@@ -1944,7 +1944,7 @@ bool CGameDesk::OnHandleUserRequestDissmiss(BYTE deskStation)
 
 	if (!m_isBegin)
 	{
-		// »¹Î´¿ªÊ¼Ö®Ç°Ö»ÄÜ·¿Ö÷½âÉ¢
+		// è¿˜æœªå¼€å§‹ä¹‹å‰åªèƒ½æˆ¿ä¸»è§£æ•£
 		if (userID != m_masterID)
 		{
 			ERROR_LOG("user request dismiss before playing game but is not master deskStation:%d userID:%d m_masterID:%d", deskStation, userID, m_masterID);
@@ -1952,7 +1952,7 @@ bool CGameDesk::OnHandleUserRequestDissmiss(BYTE deskStation)
 		}
 	}
 
-	//ÅĞ¶Ïµ±Ç°ÈËÊı
+	//åˆ¤æ–­å½“å‰äººæ•°
 	int currUserCount = 0;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -1962,10 +1962,10 @@ bool CGameDesk::OnHandleUserRequestDissmiss(BYTE deskStation)
 		}
 	}
 
-	// Èç¹û×À×Ó»¹Î´¿ªÊ¼ÓÎÏ·£¬ÄÇÃ´Ö±½Ó½âÉ¢
+	// å¦‚æœæ¡Œå­è¿˜æœªå¼€å§‹æ¸¸æˆï¼Œé‚£ä¹ˆç›´æ¥è§£æ•£
 	if (!m_isBegin || currUserCount <= 1)
 	{
-		// Ö±½Ó½âÉ¢(²»ÓÃ½øÈë½âÉ¢×´Ì¬)
+		// ç›´æ¥è§£æ•£(ä¸ç”¨è¿›å…¥è§£æ•£çŠ¶æ€)
 		OnDeskDissmissFinishSendData();
 		OnDeskSuccessfulDissmiss(true);
 		return true;
@@ -1975,15 +1975,15 @@ bool CGameDesk::OnHandleUserRequestDissmiss(BYTE deskStation)
 
 	deskUserInfo.dismissType = DISMISS_TYPE_AGREE;
 
-	// ¼ÇÂ¼Ïà¹ØĞÅÏ¢
+	// è®°å½•ç›¸å…³ä¿¡æ¯
 	m_isDismissStatus = true;
 	m_reqDismissDeskStation = deskStation;
 	m_reqDismissTime = time(NULL);
 
-	// ¹ã²¥Õâ¼şÊÂ
+	// å¹¿æ’­è¿™ä»¶äº‹
 	BroadcastDismissData();
 
-	// Æô¶¯½âÉ¢¶¨Ê±Æ÷
+	// å¯åŠ¨è§£æ•£å®šæ—¶å™¨
 	SetTimer(IDT_AGREE_DISMISS_DESK, CFG_DISMISS_DESK_WAIT_TIME * 1000);
 
 	return true;
@@ -2014,7 +2014,7 @@ bool CGameDesk::OnHandleUserAnswerDissmiss(BYTE deskStation, void* pData, int si
 		return false;
 	}
 
-	// ÊÇ·ñ´¦ÓÚ´ı½âÉ¢×´Ì¬
+	// æ˜¯å¦å¤„äºå¾…è§£æ•£çŠ¶æ€
 	if (!m_isDismissStatus)
 	{
 		SendGameData(deskStation, NULL, 0, MSG_MAIN_LOADER_DESKDISSMISS, MSG_ASS_LOADER_ANSWER_DESKDISMISS, ERROR_DESK_NOT_INDISMISSS);
@@ -2026,7 +2026,7 @@ bool CGameDesk::OnHandleUserAnswerDissmiss(BYTE deskStation, void* pData, int si
 		return false;
 	}
 
-	// ÊÇ·ñÒÑ¾­²Ù×÷¹ıÁË
+	// æ˜¯å¦å·²ç»æ“ä½œè¿‡äº†
 	DeskUserInfo& deskUserInfo = m_deskUserInfoVec[deskStation];
 
 	if (deskUserInfo.dismissType != DISMISS_TYPE_DEFAULT)
@@ -2138,7 +2138,7 @@ bool CGameDesk::OnHandleTalkMessage(BYTE deskStation, void * pData, int size)
 
 	if (pMessage->sizeCount + 4 != size || pMessage->sizeCount >= 1024)
 	{
-		ERROR_LOG("ÁÄÌì×Ö½ÚÊıÁ¿·¢ËÍ´íÎó,userID=%d,pMessage->sizeCount=%d", userID, pMessage->sizeCount);
+		ERROR_LOG("èŠå¤©å­—èŠ‚æ•°é‡å‘é€é”™è¯¯,userID=%d,pMessage->sizeCount=%d", userID, pMessage->sizeCount);
 		return true;
 	}
 
@@ -2156,7 +2156,7 @@ bool CGameDesk::OnHandleTalkMessage(BYTE deskStation, void * pData, int size)
 	msg.userID = userID;
 	memcpy(msg.words, words, sizeof(words));
 
-	// ¼ÆËã·¢ËÍ×Ö½ÚÊıÁ¿
+	// è®¡ç®—å‘é€å­—èŠ‚æ•°é‡
 	msg.sizeCount = min(strlen(msg.words) + 1, sizeof(msg.words));
 	int iSendSize = 8 + msg.sizeCount;
 
@@ -2261,38 +2261,38 @@ bool CGameDesk::OnHandleUserRequestMagicExpress(BYTE deskStation, void* pData, i
 			}
 			if (pRoomBaseInfo && pRoomBaseInfo->minPoint > 0 && pUser->money - otherConfig.useMagicExpressCostMoney < pRoomBaseInfo->minPoint)
 			{
-				SendGameMessage(deskStation, "×ÊÔ´²»×ã£¬ÎŞ·¨·¢Ä§·¨±íÇé");
+				SendGameMessage(deskStation, "èµ„æºä¸è¶³ï¼Œæ— æ³•å‘é­”æ³•è¡¨æƒ…");
 				return true;
 			}
 		}
 
 		if (pUser->money < otherConfig.useMagicExpressCostMoney)
 		{
-			SendGameMessage(deskStation, "×ÊÔ´²»×ã£¬ÎŞ·¨·¢Ä§·¨±íÇé");
+			SendGameMessage(deskStation, "èµ„æºä¸è¶³ï¼Œæ— æ³•å‘é­”æ³•è¡¨æƒ…");
 			return true;
 		}
 
-		// ¿ÛÇ®
+		// æ‰£é’±
 		long long newMoney = pUser->money - otherConfig.useMagicExpressCostMoney;
 		pUser->money = newMoney;
 		pRedis->SetUserMoneyEx(userID, -otherConfig.useMagicExpressCostMoney, true, RESOURCE_CHANGE_REASON_MAGIC_EXPRESS, m_pDataManage->GetRoomID(), 0, pUser->isVirtual, m_friendsGroupMsg.friendsGroupID);
 
 		if (pUser->isVirtual)
 		{
-			//½«½ğ±Ò»ØÊÕµ½½±³Ø		
+			//å°†é‡‘å¸å›æ”¶åˆ°å¥–æ± 		
 			//pRedis->SetRoomPoolMoney(m_pDataManage->GetRoomID(), otherConfig.useMagicExpressCostMoney, true);
 		}
 		else
 		{
-			//½«½ğ±Ò·ÅÈëÆäËü·½Ê½Ó®Ç®
+			//å°†é‡‘å¸æ”¾å…¥å…¶å®ƒæ–¹å¼èµ¢é’±
 			pRedis->SetRoomPoolData(m_pDataManage->GetRoomID(), "otherWinMoney", otherConfig.useMagicExpressCostMoney, true);
 		}
 
-		// Í¨ÖªÇ®±ä»¯
+		// é€šçŸ¥é’±å˜åŒ–
 		NotifyUserResourceChange(userID, RESOURCE_TYPE_MONEY, newMoney, -otherConfig.useMagicExpressCostMoney);
 	}
 
-	// ¹ã²¥Ê¹ÓÃÄ§·¨±íÇéµÄÍ¨Öª
+	// å¹¿æ’­ä½¿ç”¨é­”æ³•è¡¨æƒ…çš„é€šçŸ¥
 	LoaderNotifyMagicExpress msg;
 	msg.magicType = pMessage->magicType;
 	msg.srcUserID = userID;
@@ -2354,7 +2354,7 @@ void CGameDesk::MakeAllUserInfo(char* buf, int size, int& realSize)
 {
 	int roomType = GetRoomType();
 
-	// ±éÀúÑ°ÕÒËùÓĞÍæ¼ÒµÄĞÅÏ¢
+	// éå†å¯»æ‰¾æ‰€æœ‰ç©å®¶çš„ä¿¡æ¯
 	std::vector<int> temp;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -2437,7 +2437,7 @@ void CGameDesk::HundredMakeAllUserInfo(char* buf, int size, int& realSize)
 		return;
 	}
 
-	// ±éÀúÑ°ÕÒËùÓĞÍæ¼ÒµÄĞÅÏ¢
+	// éå†å¯»æ‰¾æ‰€æœ‰ç©å®¶çš„ä¿¡æ¯
 	std::vector<long> temp;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -2490,7 +2490,7 @@ void CGameDesk::HundredMakeAllUserInfo(char* buf, int size, int& realSize)
 
 bool CGameDesk::OnUserRequsetGameBegin(int userID)
 {
-	//// Ö»ÒªÊÇ·¿Ö÷,¾ÍÄÜ¿ªÊ¼(·¿Ö÷ÄÜ·ñÔÚÍâÃæ(±ÈÈç´óÌü)¿ØÖÆ¿ªÊ¼todo)
+	//// åªè¦æ˜¯æˆ¿ä¸»,å°±èƒ½å¼€å§‹(æˆ¿ä¸»èƒ½å¦åœ¨å¤–é¢(æ¯”å¦‚å¤§å…)æ§åˆ¶å¼€å§‹todo)
 	//if (userID != m_masterID)
 	//{
 	//	ERROR_LOG("user request gamebegin but is not master userID(%d) m_masterID(%d)", userID, m_masterID);
@@ -2548,10 +2548,10 @@ bool CGameDesk::OnWatcherLeftDesk(GameUserInfo* pUser, const PrivateDeskInfo & d
 		return false;
 	}
 
-	// ÅÔ¹ÛÕßÁĞ±íÖĞÒÆ³ıÍæ¼Ò
+	// æ—è§‚è€…åˆ—è¡¨ä¸­ç§»é™¤ç©å®¶
 	m_watchUserInfoSet.erase(iter);
 
-	// ĞŞ¸Ä»º´æÈËÊı
+	// ä¿®æ”¹ç¼“å­˜äººæ•°
 	int deskMixID = m_pDataManage->GetRoomID() * MAX_ROOM_HAVE_DESK_COUNT + m_deskIdx;
 	pRedis->SetPrivateDeskCurrWatchUserCount(deskMixID, m_watchUserInfoSet.size());
 
@@ -2577,14 +2577,14 @@ bool CGameDesk::OnDeskUserLeftDesk(GameUserInfo* pUser, const PrivateDeskInfo& d
 
 	if (pUser->playStatus == USER_STATUS_STAND)
 	{
-		ERROR_LOG("Íæ¼ÒÒÑ¾­ÊÇÕ¾Æğ×´Ì¬ pUser->playStatus=%d,deskStation=%d,userID=%d", pUser->playStatus, pUser->deskStation, pUser->userID);
+		ERROR_LOG("ç©å®¶å·²ç»æ˜¯ç«™èµ·çŠ¶æ€ pUser->playStatus=%d,deskStation=%d,userID=%d", pUser->playStatus, pUser->deskStation, pUser->userID);
 		return false;
 	}
 
 	if (m_bPlayGame)
 	{
-		ERROR_LOG("ÓÎÏ·ÖĞ²»ÄÜÀë¿ª¡£deskStation=%d,userID=%d", pUser->deskStation, pUser->userID);
-		SendGameMessage(pUser->deskStation, "ÓÎÏ·ÖĞ²»ÄÜÀë¿ª");
+		ERROR_LOG("æ¸¸æˆä¸­ä¸èƒ½ç¦»å¼€ã€‚deskStation=%d,userID=%d", pUser->deskStation, pUser->userID);
+		SendGameMessage(pUser->deskStation, "æ¸¸æˆä¸­ä¸èƒ½ç¦»å¼€");
 		return false;
 	}
 
@@ -2598,42 +2598,42 @@ bool CGameDesk::OnDeskUserLeftDesk(GameUserInfo* pUser, const PrivateDeskInfo& d
 	}
 	else
 	{
-		// Èç¹ûÊÇÓÎÏ·ÖĞÔòÎŞ·¨Àë¿ª
+		// å¦‚æœæ˜¯æ¸¸æˆä¸­åˆ™æ— æ³•ç¦»å¼€
 		if (m_isBegin)
 		{
 			ERROR_LOG("game is begin but user want left desk userID=%d", pUser->userID);
-			SendGameMessage(pUser->deskStation, "ÓÎÏ·ÖĞ²»ÄÜÀë¿ª");
+			SendGameMessage(pUser->deskStation, "æ¸¸æˆä¸­ä¸èƒ½ç¦»å¼€");
 			return false;
 		}
 	}
 
-	// Í¨ÖªËùÓĞÍæ¼Ò
+	// é€šçŸ¥æ‰€æœ‰ç©å®¶
 	BroadcastUserLeftData(pUser->deskStation, REASON_KICKOUT_STAND);
 
-	// ÇåÀíÍæ¼Ò×À×ÓÊı¾İ
+	// æ¸…ç†ç©å®¶æ¡Œå­æ•°æ®
 	m_deskUserInfoVec[pUser->deskStation].clear();
 	if (bIsRecord)
 	{
-		// ¼ÇÂ¼±»ÇåÀíµÄÍæ¼ÒÊı¾İ
+		// è®°å½•è¢«æ¸…ç†çš„ç©å®¶æ•°æ®
 		m_deskUserInfoVec[pUser->deskStation].leftRoomUser = pUser->userID;
 	}
 
-	// ÇåÀíÍæ¼ÒÓÎÏ·Êı¾İ
+	// æ¸…ç†ç©å®¶æ¸¸æˆæ•°æ®
 	pUser->playStatus = USER_STATUS_STAND;
 	pUser->deskIdx = INVALID_DESKIDX;
 	pUser->deskStation = INVALID_DESKSTATION;
 
-	// Çå³ı»º´æÖĞÍæ¼ÒÊıÁ¿
+	// æ¸…é™¤ç¼“å­˜ä¸­ç©å®¶æ•°é‡
 	int deskMixID = MAKE_DESKMIXID(m_pDataManage->GetRoomID(), m_deskIdx);
 	int currDeskUserCount = deskInfo.currDeskUserCount - 1;
 	pRedis->SetPrivateDeskCurrUserCount(deskMixID, currDeskUserCount);
 
-	// Í¨Öª×À×ÓÈËÊı±ä»¯
+	// é€šçŸ¥æ¡Œå­äººæ•°å˜åŒ–
 	NotifyLogonBuyDeskInfoChange(m_masterID, currDeskUserCount, pUser->userID, 1, deskMixID);
 
 	if ((roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_PRIVATE || roomType == ROOM_TYPE_FG_VIP) && m_pDataManage->IsCanWatch() && m_autoBeginMode == 0)
 	{
-		// µÚÒ»¾Ö
+		// ç¬¬ä¸€å±€
 		if (m_iRunGameCount == 0 && CanBeginGame())
 		{
 			SetBeginUser();
@@ -2642,7 +2642,7 @@ bool CGameDesk::OnDeskUserLeftDesk(GameUserInfo* pUser, const PrivateDeskInfo& d
 
 		if (m_iRunGameCount >= 1 && CanBeginGame())
 		{
-			// µÚÒ»¾ÖÖ®ºóµÄÓÎÏ·²»ÊÜ·¿Ö÷¿ØÖÆ
+			// ç¬¬ä¸€å±€ä¹‹åçš„æ¸¸æˆä¸å—æˆ¿ä¸»æ§åˆ¶
 			GameBegin(0);
 		}
 	}
@@ -2678,7 +2678,7 @@ void CGameDesk::BroadcastDeskData(void * pData, int size, unsigned int mainID, u
 
 void CGameDesk::SendAllDeskUserInfo(BYTE deskStation)
 {
-	char buf[MAX_TEMP_SENDBUF_SIZE] = "";		// ¼ÓÈë¶ÔÆ´½ÓÊı¾İ°ü³¤¶ÈµÄ¼ì²é
+	char buf[MAX_TEMP_SENDBUF_SIZE] = "";		// åŠ å…¥å¯¹æ‹¼æ¥æ•°æ®åŒ…é•¿åº¦çš„æ£€æŸ¥
 	int realSize = 0;
 
 	if (GetRoomSort() == ROOM_SORT_NORMAL || GetRoomSort() == ROOM_SORT_SCENE)
@@ -2733,7 +2733,7 @@ void CGameDesk::SendDeskBaseInfo(BYTE deskStation)
 
 	SendGameData(deskStation, &msg, sizeof(msg), MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_BASEINFO, 0);
 
-	// ´¦ÓÚ½âÉ¢×´Ì¬µÄ»°£¬¶îÍâÍÆËÍ½âÉ¢Ãæ°åĞÅÏ¢
+	// å¤„äºè§£æ•£çŠ¶æ€çš„è¯ï¼Œé¢å¤–æ¨é€è§£æ•£é¢æ¿ä¿¡æ¯
 	if (m_isDismissStatus)
 	{
 		if (IsWatcher(userID) == false)
@@ -2764,7 +2764,7 @@ int CGameDesk::GetUserIDByDeskStation(BYTE deskStation)
 
 	if (deskStation < MAX_PEOPLE)
 	{
-		// Íæ¼Ò
+		// ç©å®¶
 		if (deskStation < m_deskUserInfoVec.size())
 		{
 			return m_deskUserInfoVec[deskStation].userID;
@@ -2772,7 +2772,7 @@ int CGameDesk::GetUserIDByDeskStation(BYTE deskStation)
 	}
 	else
 	{
-		// ÅÔ¹ÛÕß
+		// æ—è§‚è€…
 		for (auto iter = m_watchUserInfoSet.begin(); iter != m_watchUserInfoSet.end(); ++iter)
 		{
 			const WatchUserInfo& info = *iter;
@@ -2858,7 +2858,7 @@ int CGameDesk::GetRoomType()
 		return m_pDataManage->m_InitData.iRoomType;
 	}
 
-	return ROOM_TYPE_PRIVATE;		// Ä¬ÈÏ·¿¿¨³¡
+	return ROOM_TYPE_PRIVATE;		// é»˜è®¤æˆ¿å¡åœº
 }
 
 int CGameDesk::GetRoomSort()
@@ -2941,7 +2941,7 @@ bool CGameDesk::BroadcastUserLeftData(BYTE deskStation, int reason)
 
 	if (IsGoldRoom() && m_pDataManage->IsCanCombineDesk() && !IsPlayGame(deskStation))
 	{
-		BroadcastGameMessageExcept(deskStation, "ÓĞÍæ¼ÒÀë¿ªÓÎÏ·£¬ÇëÖØĞÂ»»×À");
+		BroadcastGameMessageExcept(deskStation, "æœ‰ç©å®¶ç¦»å¼€æ¸¸æˆï¼Œè¯·é‡æ–°æ¢æ¡Œ");
 	}
 
 	return true;
@@ -3006,14 +3006,14 @@ void CGameDesk::ClearAllData(const PrivateDeskInfo& privateDeskInfo)
 	int masterID = privateDeskInfo.masterID;
 	if (masterID <= 0)
 	{
-		ERROR_LOG("ÎŞĞ§µÄ·¿Ö÷ masterID=%d£¬ÇåÀí×À×ÓÊ§°Ü", masterID);
+		ERROR_LOG("æ— æ•ˆçš„æˆ¿ä¸» masterID=%dï¼Œæ¸…ç†æ¡Œå­å¤±è´¥", masterID);
 		return;
 	}
 
 	int roomID = m_pDataManage->GetRoomID();
 	int deskMixID = roomID * MAX_ROOM_HAVE_DESK_COUNT + m_deskIdx;
 
-	// ÇåÀíÍæ¼ÒÊı¾İ
+	// æ¸…ç†ç©å®¶æ•°æ®
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		int userID = m_deskUserInfoVec[i].userID;
@@ -3029,12 +3029,12 @@ void CGameDesk::ClearAllData(const PrivateDeskInfo& privateDeskInfo)
 			continue;
 		}
 
-		// ÉèÖÃÎªÕ¾Æğ×´Ì¬
+		// è®¾ç½®ä¸ºç«™èµ·çŠ¶æ€
 		pUser->deskIdx = INVALID_DESKIDX;
 		pUser->deskStation = INVALID_DESKSTATION;
 		pUser->playStatus = USER_STATUS_STAND;
 
-		// ³¹µ×Çå³ı¶ÏÏßÍæ¼ÒµÄÏà¹ØĞÅÏ¢(ÔÚÏßµÄÍæ¼ÒĞèÒª·¢ËÍµÇ³ö)
+		// å½»åº•æ¸…é™¤æ–­çº¿ç©å®¶çš„ç›¸å…³ä¿¡æ¯(åœ¨çº¿çš„ç©å®¶éœ€è¦å‘é€ç™»å‡º)
 		if (pUser->IsOnline == false)
 		{
 			m_pDataManage->RemoveOfflineUser(userID);
@@ -3046,65 +3046,65 @@ void CGameDesk::ClearAllData(const PrivateDeskInfo& privateDeskInfo)
 		}
 	}
 
-	// ÇåÀí×À×ÓÍæ¼Ò
+	// æ¸…ç†æ¡Œå­ç©å®¶
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		m_deskUserInfoVec[i].clear();
 	}
 
-	// ÇåÀíÅÔ¹ÛÕßÊı¾İ
+	// æ¸…ç†æ—è§‚è€…æ•°æ®
 	for (auto iter = m_watchUserInfoSet.begin(); iter != m_watchUserInfoSet.end(); ++iter)
 	{
 		m_pDataManage->RemoveWatchUser(iter->userID);
 	}
 	m_watchUserInfoSet.clear();
 
-	//Ìî³ä¾ãÀÖ²¿ĞÅÏ¢
+	//å¡«å……ä¿±ä¹éƒ¨ä¿¡æ¯
 	m_friendsGroupMsg.friendsGroupID = privateDeskInfo.friendsGroupID;
 	if (m_friendsGroupMsg.friendsGroupID != 0)
 	{
 		m_friendsGroupMsg.friendsGroupDeskNumber = privateDeskInfo.friendsGroupDeskNumber;
 	}
 
-	// Çå³ıcacheÖĞ×À×ÓÊı¾İ
+	// æ¸…é™¤cacheä¸­æ¡Œå­æ•°æ®
 	pRedis->DelPrivateDeskRecord(deskMixID);
 
-	// Çå³ı·¿Ö÷µÄ¿ª·¿¼ÇÂ¼
+	// æ¸…é™¤æˆ¿ä¸»çš„å¼€æˆ¿è®°å½•
 	pRedis->DelUserBuyDeskInfoInSet(masterID, privateDeskInfo.passwd);
 
-	// ¿Û³ı·¿Ö÷¹ºÂò×À×Ó´ÎÊı
+	// æ‰£é™¤æˆ¿ä¸»è´­ä¹°æ¡Œå­æ¬¡æ•°
 	if (privateDeskInfo.friendsGroupID == 0)
 	{
 		pRedis->SetUserBuyingDeskCount(masterID, -1, true);
 	}
 
-	// ÇåÀíÁÙÊ±Õ½¼¨Êı¾İ
+	// æ¸…ç†ä¸´æ—¶æˆ˜ç»©æ•°æ®
 	m_gradeIDVec.clear();
 
-	// Í¨Öª´óÌü
+	// é€šçŸ¥å¤§å…
 	NotifyLogonDeskDissmiss(privateDeskInfo);
 
-	// ÇåÀí¹ºÂò×À×ÓÊı¾İ
+	// æ¸…ç†è´­ä¹°æ¡Œå­æ•°æ®
 	InitBuyDeskData();
 
-	// ÇåÀí½âÉ¢Êı¾İ
+	// æ¸…ç†è§£æ•£æ•°æ®
 	InitDismissData();
 
 	m_finishedGameCount = 0;
 	m_autoBeginMode = 0;
 	m_bGameStopJoin = 0;
-	// ÖÃÎªÎŞĞ§£¬¿ÉÒÔ¸´ÓÃ
+	// ç½®ä¸ºæ— æ•ˆï¼Œå¯ä»¥å¤ç”¨
 	m_enable = false;
-	//ÇåÀí¾ãÀÖ²¿Êı¾İ
+	//æ¸…ç†ä¿±ä¹éƒ¨æ•°æ®
 	m_friendsGroupMsg.Init();
 }
 
 bool CGameDesk::OnDeskDismissFailed()
 {
-	// Çå³ı¶¨Ê±Æ÷
+	// æ¸…é™¤å®šæ—¶å™¨
 	KillTimer(IDT_AGREE_DISMISS_DESK);
 
-	// Çå³ı×´Ì¬
+	// æ¸…é™¤çŠ¶æ€
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		m_deskUserInfoVec[i].dismissType = DISMISS_TYPE_DEFAULT;
@@ -3112,7 +3112,7 @@ bool CGameDesk::OnDeskDismissFailed()
 
 	InitDismissData();
 
-	// Í¨ÖªÇ°¶Ë
+	// é€šçŸ¥å‰ç«¯
 	BroadcastDeskData(NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_DISMISS_FAILED);
 
 	return true;
@@ -3131,10 +3131,10 @@ bool CGameDesk::OnUserAgreeDismiss(BYTE deskStation)
 
 	deskUserInfo.dismissType = DISMISS_TYPE_AGREE;
 
-	// ¹ã²¥Õâ¼şÊÂ
+	// å¹¿æ’­è¿™ä»¶äº‹
 	BroadcastDismissData();
 
-	// ÔÚÏßÍæ¼ÒÊıÁ¿
+	// åœ¨çº¿ç©å®¶æ•°é‡
 	int onLineCount = 0;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -3151,7 +3151,7 @@ bool CGameDesk::OnUserAgreeDismiss(BYTE deskStation)
 		}
 	}
 
-	// Í¬Òâ½âÉ¢Íæ¼ÒÊıÁ¿(ÔÚÏß)
+	// åŒæ„è§£æ•£ç©å®¶æ•°é‡(åœ¨çº¿)
 	int agreeDismissCount = 0;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -3169,11 +3169,11 @@ bool CGameDesk::OnUserAgreeDismiss(BYTE deskStation)
 			continue;
 		}
 
-		//ÌØÊâ·¿¼äÌØÊâ´¦Àí¡£½ğ±Ò·¿ºÍ»ğ±Ò·¿Èç¹ûÍæ¼Ò½ğ±Ò²»×ãÒ²ËãÊÇÍ¬Òâ½âÉ¢
+		//ç‰¹æ®Šæˆ¿é—´ç‰¹æ®Šå¤„ç†ã€‚é‡‘å¸æˆ¿å’Œç«å¸æˆ¿å¦‚æœç©å®¶é‡‘å¸ä¸è¶³ä¹Ÿç®—æ˜¯åŒæ„è§£æ•£
 		if (m_pDataManage->m_uNameID != 37550102 && (roomType == ROOM_TYPE_FRIEND && pUser->money < m_RemoveMinPoint || roomType == ROOM_TYPE_FG_VIP && pUser->fireCoin < m_RemoveMinPoint))
 		{
 			agreeDismissCount++;
-			INFO_LOG("Ä¬ÈÏÍ¬Òâ½âÉ¢£ºuserID=%d", userID);
+			INFO_LOG("é»˜è®¤åŒæ„è§£æ•£ï¼šuserID=%d", userID);
 			continue;
 		}
 
@@ -3185,7 +3185,7 @@ bool CGameDesk::OnUserAgreeDismiss(BYTE deskStation)
 
 	if (onLineCount > 0 && agreeDismissCount >= onLineCount)
 	{
-		// ½âÉ¢
+		// è§£æ•£
 		OnDeskDissmissFinishSendData();
 		OnDeskSuccessfulDissmiss(true);
 	}
@@ -3211,12 +3211,12 @@ void CGameDesk::MakeDismissData(char* buf, int& size)
 
 	int pos = 0;
 
-	// ÉêÇëÕß
+	// ç”³è¯·è€…
 	BYTE* pDeskStation = (BYTE*)buf;
 	*pDeskStation = m_reqDismissDeskStation;
 	pos += sizeof(BYTE);
 
-	// ½âÉ¢Ê£ÓàµÄÊ±¼ä
+	// è§£æ•£å‰©ä½™çš„æ—¶é—´
 	int* pLeftDismissTime = (int*)(buf + pos);
 	*pLeftDismissTime = (int)(m_reqDismissTime + CFG_DISMISS_DESK_WAIT_TIME - time(NULL));
 	pos += sizeof(int);
@@ -3225,12 +3225,12 @@ void CGameDesk::MakeDismissData(char* buf, int& size)
 	*pCfgWaitDismissTime = CFG_DISMISS_DESK_WAIT_TIME;
 	pos += sizeof(int);
 
-	// Íæ¼ÒÊıÁ¿
+	// ç©å®¶æ•°é‡
 	int*pdeskUserCount = (int*)(buf + pos);
 	*pdeskUserCount = userCount;
 	pos += sizeof(int);
 
-	// ÈËÊıÌ«¶à»º³åÇø²»¹»µÄÎÊÌâ TODO
+	// äººæ•°å¤ªå¤šç¼“å†²åŒºä¸å¤Ÿçš„é—®é¢˜ TODO
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		const DeskUserInfo& deskUserInfo = m_deskUserInfoVec[i];
@@ -3401,13 +3401,13 @@ void CGameDesk::LoadPrivateDeskInfo(const PrivateDeskInfo& privateDeskInfo)
 	m_iBuyGameCount = privateDeskInfo.buyGameCount;
 	m_isMasterNotPlay = privateDeskInfo.masterNotPlay == 0 ? false : true;
 	strcpy(m_szDeskPassWord, privateDeskInfo.passwd);
-	// ¹æÔò
+	// è§„åˆ™
 	if (strcmp(privateDeskInfo.gameRules, REDIS_STR_DEFAULT))
 	{
 		memcpy(m_szGameRules, privateDeskInfo.gameRules, sizeof(m_szGameRules));
 	}
 
-	//¾ãÀÖ²¿ĞÅÏ¢
+	//ä¿±ä¹éƒ¨ä¿¡æ¯
 	m_friendsGroupMsg.Init();
 	m_friendsGroupMsg.friendsGroupID = privateDeskInfo.friendsGroupID;
 	if (m_friendsGroupMsg.friendsGroupID != 0)
@@ -3431,7 +3431,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 		return false;
 	}
 
-	// Ö»ÓĞÅÔ¹Û×´Ì¬²ÅÄÜ×øÏÂ
+	// åªæœ‰æ—è§‚çŠ¶æ€æ‰èƒ½åä¸‹
 	if (pUser->playStatus != USER_STATUS_WATCH)
 	{
 		ERROR_LOG("user(%d) status is invalid(%d)", pUser->userID, pUser->playStatus);
@@ -3462,28 +3462,28 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 		return false;
 	}
 
-	//ÅĞ¶ÏÖĞÍ¾ÊÇ·ñ½ûÖ¹¼ÓÈë
+	//åˆ¤æ–­ä¸­é€”æ˜¯å¦ç¦æ­¢åŠ å…¥
 	if (m_bGameStopJoin == 1 && m_isBegin)
 	{
 		m_pDataManage->SendData(pUser->userID, NULL, 0, MSG_MAIN_LOADER_ACTION, MSG_ASS_LOADER_ACTION_SIT, ERROR_STOP_JOIN);
 		return true;
 	}
 
-	//ÓÎÏ·ÖĞ½ûÖ¹×øÏÂ
+	//æ¸¸æˆä¸­ç¦æ­¢åä¸‹
 	if (m_bPlayGame)
 	{
 		m_pDataManage->SendData(pUser->userID, NULL, 0, MSG_MAIN_LOADER_ACTION, MSG_ASS_LOADER_ACTION_SIT, ERROR_GAME_PLAYING_ERR_SIT);
 		return true;
 	}
 
-	// ×À×ÓÊÇ²»ÊÇÂúÁË
+	// æ¡Œå­æ˜¯ä¸æ˜¯æ»¡äº†
 	if (privateDeskInfo.currDeskUserCount >= privateDeskInfo.maxDeskUserCount)
 	{
 		m_pDataManage->SendData(pUser->userID, NULL, 0, MSG_MAIN_LOADER_ACTION, MSG_ASS_LOADER_ACTION_SIT, ERROR_DESK_FULL);
 		return true;
 	}
 
-	// ÊÇ·ñ¿ÉÒÔ×ø×À
+	// æ˜¯å¦å¯ä»¥åæ¡Œ
 	if (!WatchCanSit(pUser))
 	{
 		return true;
@@ -3491,7 +3491,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 
 	int roomType = GetRoomType();
 
-	// ÅĞ¶ÏÍæ¼Ò¾ãÀÖ²¿»ğ±Ò
+	// åˆ¤æ–­ç©å®¶ä¿±ä¹éƒ¨ç«å¸
 	if (roomType == ROOM_TYPE_FG_VIP)
 	{
 		if (pUser->fireCoin < m_MinPoint)
@@ -3501,7 +3501,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 		}
 	}
 
-	// ·¿¼äÀïÃæÊÇ²»ÊÇÓĞÕâ¸öÈËÁË
+	// æˆ¿é—´é‡Œé¢æ˜¯ä¸æ˜¯æœ‰è¿™ä¸ªäººäº†
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		if (pUser->userID == m_deskUserInfoVec[i].userID)
@@ -3513,7 +3513,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 	BYTE deskStation = INVALID_DESKSTATION;
 	int deskUserInfoVecSize = m_deskUserInfoVec.size();
 
-	if (pUser->choiceDeskStation == INVALID_DESKSTATION) //ÏµÍ³·ÖÅä×ùÎ»
+	if (pUser->choiceDeskStation == INVALID_DESKSTATION) //ç³»ç»Ÿåˆ†é…åº§ä½
 	{
 		if (roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_FG_VIP)
 		{
@@ -3546,7 +3546,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 			if (deskStation == INVALID_DESKSTATION)
 			{
 				m_pDataManage->SendData(pUser->userID, NULL, 0, MSG_MAIN_LOADER_ACTION, MSG_ASS_LOADER_ACTION_SIT, ERROR_FRIEND_ROOM_DESK_FULL);
-				ERROR_LOG("Ë½ÈË·¿ deskIdx=%d userID=%d m_deskUserInfoVec size=%d", m_deskIdx, pUser->userID, deskUserInfoVecSize);
+				ERROR_LOG("ç§äººæˆ¿ deskIdx=%d userID=%d m_deskUserInfoVec size=%d", m_deskIdx, pUser->userID, deskUserInfoVecSize);
 				return true;
 			}
 		}
@@ -3570,7 +3570,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 			}
 		}
 	}
-	else // Íæ¼Ò×Ô¼ºÑ¡Ôñ×ùÎ»
+	else // ç©å®¶è‡ªå·±é€‰æ‹©åº§ä½
 	{
 		if (pUser->choiceDeskStation >= deskUserInfoVecSize)
 		{
@@ -3578,7 +3578,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 			return true;
 		}
 
-		if (roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_FG_VIP) // ½ğ±Ò·¿
+		if (roomType == ROOM_TYPE_FRIEND || roomType == ROOM_TYPE_FG_VIP) // é‡‘å¸æˆ¿
 		{
 			DeskUserInfo& deskUserInfo = m_deskUserInfoVec[pUser->choiceDeskStation];
 			if (deskUserInfo.userID == 0 && deskUserInfo.leftRoomUser == pUser->userID)
@@ -3598,7 +3598,7 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 				return true;
 			}
 		}
-		else //»ı·Ö·¿
+		else //ç§¯åˆ†æˆ¿
 		{
 			if (m_deskUserInfoVec[pUser->choiceDeskStation].userID == 0)
 			{
@@ -3613,10 +3613,10 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 		}
 	}
 
-	// ÅÔ¹ÛÁĞ±íÖĞÒÆ³ıÍæ¼Ò
+	// æ—è§‚åˆ—è¡¨ä¸­ç§»é™¤ç©å®¶
 	m_watchUserInfoSet.erase(iter);
 
-	// ÉèÖÃÍæ¼ÒµÄ×À×ÓºÅ£¬×ùÎ»ºÅ£¬×´Ì¬µÈ
+	// è®¾ç½®ç©å®¶çš„æ¡Œå­å·ï¼Œåº§ä½å·ï¼ŒçŠ¶æ€ç­‰
 	pUser->deskIdx = m_deskIdx;
 	pUser->deskStation = deskStation;
 	pUser->playStatus = USER_STATUS_SITING;
@@ -3626,24 +3626,24 @@ bool CGameDesk::PrivateSitDeskLogic(GameUserInfo* pUser)
 	m_deskUserInfoVec[deskStation].lastWaitAgreeTime = time(NULL);
 	m_deskUserInfoVec[deskStation].isVirtual = pUser->isVirtual;
 
-	// ×øÏÂÈËÊıºÍÅÔ¹ÛÈËÊı
+	// åä¸‹äººæ•°å’Œæ—è§‚äººæ•°
 	int currDeskUserCount = privateDeskInfo.currDeskUserCount + 1;
 	int currWatchUserCount = privateDeskInfo.currWatchUserCount - 1;
 	pRedis->SetPrivateDeskCurrUserCount(deskMixID, currDeskUserCount);
 	pRedis->SetPrivateDeskCurrWatchUserCount(deskMixID, currWatchUserCount);
 
-	// ¹ã²¥×øÏÂµÄĞÅÏ¢
+	// å¹¿æ’­åä¸‹çš„ä¿¡æ¯
 	BroadcastUserSitData(pUser->deskStation);
 
-	// Í¨ÖªÌØÊâÓÎÏ·Ê×´Î×ø×À
+	// é€šçŸ¥ç‰¹æ®Šæ¸¸æˆé¦–æ¬¡åæ¡Œ
 	UserSitDeskActionNotify(pUser->deskStation);
 
-	// Í¨Öª´óÌü¿ª·¿ĞÅÏ¢·¢Éú±ä»¯
+	// é€šçŸ¥å¤§å…å¼€æˆ¿ä¿¡æ¯å‘ç”Ÿå˜åŒ–
 	NotifyLogonBuyDeskInfoChange(m_masterID, currDeskUserCount, pUser->userID, 0, deskMixID);
 
 	if (currDeskUserCount >= privateDeskInfo.maxDeskUserCount)
 	{
-		// ×À×ÓÈËÊıÂúÁË£¬Í¨ÖªÅÔ¹ÛÕß
+		// æ¡Œå­äººæ•°æ»¡äº†ï¼Œé€šçŸ¥æ—è§‚è€…
 		SendWatchData(NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_SITFULL, 0);
 	}
 
@@ -3675,7 +3675,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 
 	if (pUser->deskStation == INVALID_DESKSTATION)
 	{
-		// µÚÒ»´Î×øÏÂ
+		// ç¬¬ä¸€æ¬¡åä¸‹
 		for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 		{
 			if (m_deskUserInfoVec[i].userID == userID)
@@ -3688,7 +3688,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 
 		if (pUser->deskStation == INVALID_DESKSTATION)
 		{
-			// ·ÖÅäÒ»¸ö×ùÎ»
+			// åˆ†é…ä¸€ä¸ªåº§ä½
 			for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 			{
 				DeskUserInfo& deskUserInfo = m_deskUserInfoVec[i];
@@ -3702,7 +3702,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 		}
 	}
 
-	// ÕâÀïÍæ¼Ò²»¿ÉÄÜÃ»ÓĞ×ùÎ»ÁË
+	// è¿™é‡Œç©å®¶ä¸å¯èƒ½æ²¡æœ‰åº§ä½äº†
 	if (pUser->deskStation >= m_deskUserInfoVec.size())
 	{
 		ERROR_LOG("user deskStation is invalid userID = %d deskStation = %d", userID, pUser->deskStation);
@@ -3723,7 +3723,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 
 	pRedis->SetUserRoomID(pUser->userID, m_pDataManage->GetRoomID());
 
-	// ÉèÖÃÍæ¼ÒµÄ×À×ÓºÅ£¬×ùÎ»ºÅ£¬×´Ì¬µÈ
+	// è®¾ç½®ç©å®¶çš„æ¡Œå­å·ï¼Œåº§ä½å·ï¼ŒçŠ¶æ€ç­‰
 	pUser->lastOperateTime = currTime;
 	pUser->deskIdx = m_deskIdx;
 	if (USER_STATUS_PLAYING != pUser->playStatus)
@@ -3748,7 +3748,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 		strcpy(pUser->address, positionInfo.address.c_str());
 		strcpy(pUser->ip, positionInfo.ip.c_str());
 
-		//ĞŞ¸ÄredisÖĞ»úÆ÷ÈËµÄÊı¾İ
+		//ä¿®æ”¹redisä¸­æœºå™¨äººçš„æ•°æ®
 		std::unordered_map<std::string, std::string> umap;
 		umap["name"] = pUser->name;
 		umap["headURL"] = pUser->headURL;
@@ -3759,8 +3759,8 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 		umap["Lat"] = pUser->latitude;
 		pRedis->hmset(TBL_USER, pUser->userID, umap);
 
-		//¼ÈÈ»»»Ãû×Ö£¬½ğ±ÒÊıÁ¿Ò²»»
-		//»ØÊÕ»úÆ÷ÈË½ğ±ÒÊıÁ¿
+		//æ—¢ç„¶æ¢åå­—ï¼Œé‡‘å¸æ•°é‡ä¹Ÿæ¢
+		//å›æ”¶æœºå™¨äººé‡‘å¸æ•°é‡
 		long long _i64PoolMoney = 0;
 		long long _i64MoneyChange = 0;
 
@@ -3797,7 +3797,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 				_i64MoneyChange = CUtil::GetRandRange(pRoomBaseInfo->minPoint, pRoomBaseInfo->maxPoint);
 			}
 
-			//Èç¹ûºóÌ¨ÉèÖÃÁË½ğ±Ò·¶Î§Ö±½Ó°´ÕÕºóÌ¨À´
+			//å¦‚æœåå°è®¾ç½®äº†é‡‘å¸èŒƒå›´ç›´æ¥æŒ‰ç…§åå°æ¥
 			int iMinRobotHaveMoney_ = m_pDataManage->GetPoolConfigInfo("minM");
 			int iMaxRobotHaveMoney_ = m_pDataManage->GetPoolConfigInfo("maxM");
 			if (iMaxRobotHaveMoney_ > iMinRobotHaveMoney_)
@@ -3812,13 +3812,13 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 		}
 	}
 
-	// Í¨ÖªµÈ´ıÊ£ÓàÊ±¼ä
+	// é€šçŸ¥ç­‰å¾…å‰©ä½™æ—¶é—´
 	SendLeftWaitAgreeData(pUser->deskStation);
 
-	// ¹ã²¥×øÏÂµÄĞÅÏ¢£¨²»¹ã²¥×Ô¼º£©
+	// å¹¿æ’­åä¸‹çš„ä¿¡æ¯ï¼ˆä¸å¹¿æ’­è‡ªå·±ï¼‰
 	BroadcastUserSitData(pUser->deskStation);
 
-	// Í¨ÖªÌØÊâÓÎÏ·Ê×´Î×ø×À
+	// é€šçŸ¥ç‰¹æ®Šæ¸¸æˆé¦–æ¬¡åæ¡Œ
 	UserSitDeskActionNotify(pUser->deskStation);
 
 	return true;
@@ -3849,7 +3849,7 @@ bool CGameDesk::PrivateUserLeftDeskLogic(GameUserInfo* pUser)
 
 	if (pUser->playStatus == USER_STATUS_WATCH)
 	{
-		// ÅÔ¹ÛÕß
+		// æ—è§‚è€…
 		return OnWatcherLeftDesk(pUser, deskInfo);
 	}
 	else
@@ -3872,18 +3872,18 @@ bool CGameDesk::MoneyUserLeftDeskLogic(GameUserInfo * pUser)
 		return false;
 	}
 
-	// ÏÈÍ¨Öª×À×ÓÖĞµÄËùÓĞÍæ¼Ò
+	// å…ˆé€šçŸ¥æ¡Œå­ä¸­çš„æ‰€æœ‰ç©å®¶
 	BroadcastUserLeftData(pUser->deskStation, REASON_KICKOUT_STAND);
 
-	// ÇåÀí×À×ÓÖĞÍæ¼ÒµÄÊı¾İ
+	// æ¸…ç†æ¡Œå­ä¸­ç©å®¶çš„æ•°æ®
 	m_deskUserInfoVec[pUser->deskStation].clear();
 
-	// ÇåÀíÍæ¼ÒÓÎÏ·Êı¾İ
+	// æ¸…ç†ç©å®¶æ¸¸æˆæ•°æ®
 	pUser->playStatus = USER_STATUS_STAND;
 	pUser->deskIdx = INVALID_DESKIDX;
 	pUser->deskStation = INVALID_DESKSTATION;
 
-	// Íæ¼ÒÀë¿ª¿ÉÄÜ»á´¥·¢ÓÎÏ·¿ªÊ¼
+	// ç©å®¶ç¦»å¼€å¯èƒ½ä¼šè§¦å‘æ¸¸æˆå¼€å§‹
 	if (m_bPlayGame == false && CanBeginGame())
 	{
 		GameBegin(0);
@@ -3906,13 +3906,13 @@ bool CGameDesk::HundredGameUserLeftLogic(GameUserInfo* pUser)
 		return false;
 	}
 
-	// ÏÈÍ¨Öª×À×ÓÖĞµÄËùÓĞÍæ¼Ò
+	// å…ˆé€šçŸ¥æ¡Œå­ä¸­çš„æ‰€æœ‰ç©å®¶
 	BroadcastUserLeftData(pUser->deskStation, REASON_KICKOUT_STAND);
 
-	// ÇåÀí×À×ÓÖĞÍæ¼ÒµÄÊı¾İ
+	// æ¸…ç†æ¡Œå­ä¸­ç©å®¶çš„æ•°æ®
 	m_deskUserInfoVec[pUser->deskStation].clear();
 
-	// ÇåÀíÍæ¼ÒÓÎÏ·Êı¾İ
+	// æ¸…ç†ç©å®¶æ¸¸æˆæ•°æ®
 	pUser->playStatus = USER_STATUS_STAND;
 	pUser->deskIdx = INVALID_DESKIDX;
 	pUser->deskStation = INVALID_DESKSTATION;
@@ -4024,7 +4024,7 @@ void CGameDesk::ProcessDeduceMoneyWhenGameBegin()
 		return;
 	}
 
-	// ½ğ±Ò³¡¿ª¾Ö¿Û³ıÍæ¼Ò½ğ±Ò
+	// é‡‘å¸åœºå¼€å±€æ‰£é™¤ç©å®¶é‡‘å¸
 	if (roomType == ROOM_TYPE_GOLD)
 	{
 		costMoney = pRoomBaseInfo->gameBeginCostMoney;
@@ -4049,7 +4049,7 @@ void CGameDesk::ProcessDeduceMoneyWhenGameBegin()
 		costMoney = pBuyGameDeskInfo->AAcostNums;
 	}
 
-	//²»¿Û½ğ±Ò
+	//ä¸æ‰£é‡‘å¸
 	if (costMoney <= 0)
 	{
 		return;
@@ -4081,11 +4081,11 @@ void CGameDesk::ProcessDeduceMoneyWhenGameBegin()
 		pUser->money = newMoney;
 		pRedis->SetUserMoneyEx(userID, -costMoney, true, RESOURCE_CHANGE_REASON_GAME_BEGIN, roomID, 0, pUser->isVirtual, m_friendsGroupMsg.friendsGroupID);
 
-		// Í¨Öª±ä»¯
+		// é€šçŸ¥å˜åŒ–
 		NotifyUserResourceChange(userID, RESOURCE_TYPE_MONEY, newMoney, -costMoney);
 	}
 
-	//»ØÊÕ½ğ±Òµ½½±³Ø
+	//å›æ”¶é‡‘å¸åˆ°å¥–æ± 
 	pRedis->SetRoomPercentageWinMoney(roomID, percentageWinMoney - recovMoney, true);
 	//pRedis->SetRoomPoolMoney(roomID, recovMoney, true);
 }
@@ -4142,10 +4142,10 @@ void CGameDesk::NotifyLogonDeskDissmiss(const PrivateDeskInfo& privateDeskInfo)
 		return;
 	}
 
-	// ÅĞ¶ÏÊÇ·ñĞèÒªÉ¾³ıredisÅÆ×ÀÊı¾İ
+	// åˆ¤æ–­æ˜¯å¦éœ€è¦åˆ é™¤redisç‰Œæ¡Œæ•°æ®
 	if (m_friendsGroupMsg.bDeleteDesk)
 	{
-		// É¾³ıredisÖĞµÄÅÆ×À
+		// åˆ é™¤redisä¸­çš„ç‰Œæ¡Œ
 		pRedis->DelFGDeskRoom(privateDeskInfo.friendsGroupID, privateDeskInfo.friendsGroupDeskNumber);
 	}
 }
@@ -4220,16 +4220,16 @@ BuyGameDeskInfo CGameDesk::ProcessCostJewels()
 	}
 	buyGameDeskInfo = *pBuyGameDeskInfo;
 
-	//ÍË»¹½ğ±Ò»òÕß·¿¿¨
+	//é€€è¿˜é‡‘å¸æˆ–è€…æˆ¿å¡
 	if (m_finishedGameCount <= 0)
 	{
-		if (privateDeskInfo.payType == PAY_TYPE_NORMAL && pBuyGameDeskInfo->costNums > 0)		// ÆÕÍ¨Ö§¸¶
+		if (privateDeskInfo.payType == PAY_TYPE_NORMAL && pBuyGameDeskInfo->costNums > 0)		// æ™®é€šæ”¯ä»˜
 		{
 			int masterID = privateDeskInfo.masterID;
 			UserData masterData;
 			if (!pRedis->GetUserData(masterID, masterData))
 			{
-				ERROR_LOG("·µ»¹½ğ±Ò»òÕß·¿¿¨Ê§°Ü:masterID=%d", masterID);
+				ERROR_LOG("è¿”è¿˜é‡‘å¸æˆ–è€…æˆ¿å¡å¤±è´¥:masterID=%d", masterID);
 				return buyGameDeskInfo;
 			}
 
@@ -4238,24 +4238,24 @@ BuyGameDeskInfo CGameDesk::ProcessCostJewels()
 				long long newJewels = masterData.jewels + pBuyGameDeskInfo->costNums;
 				pRedis->SetUserJewelsEx(masterID, pBuyGameDeskInfo->costNums, true, RESOURCE_CHANGE_REASON_GAME_SELLETE_ROLLBACK, roomID, 0, masterData.isVirtual, m_friendsGroupMsg.friendsGroupID);
 
-				// Í¨Öª·¿¿¨±ä»¯
+				// é€šçŸ¥æˆ¿å¡å˜åŒ–
 				m_pDataManage->SendResourcesChangeToLogonServer(masterID, RESOURCE_TYPE_JEWEL, newJewels, RESOURCE_CHANGE_REASON_GAME_SELLETE_ROLLBACK, pBuyGameDeskInfo->costNums);
 			}
 			else
 			{
 				long long newGolds = masterData.money + pBuyGameDeskInfo->costNums;
 				pRedis->SetUserMoneyEx(masterID, pBuyGameDeskInfo->costNums, true, RESOURCE_CHANGE_REASON_GAME_SELLETE_ROLLBACK, roomID, 0, 0, m_friendsGroupMsg.friendsGroupID);
-				//Ëã·¿¿¨³¡ÏµÍ³Ó®Ç®
+				//ç®—æˆ¿å¡åœºç³»ç»Ÿèµ¢é’±
 				pRedis->SetRoomGameWinMoney(roomID, -pBuyGameDeskInfo->costNums, true);
 
-				// Í¨Öª½ğ±Ò±ä»¯
+				// é€šçŸ¥é‡‘å¸å˜åŒ–
 				m_pDataManage->SendResourcesChangeToLogonServer(masterID, RESOURCE_TYPE_MONEY, newGolds, RESOURCE_CHANGE_REASON_GAME_SELLETE_ROLLBACK, pBuyGameDeskInfo->costNums);
 			}
 		}
 		return buyGameDeskInfo;
 	}
 
-	if (privateDeskInfo.payType != PAY_TYPE_NORMAL && pRoomBaseInfo->type != ROOM_TYPE_FRIEND)		// AAÖ§¸¶£¬½ğ±Ò·¿ÔİÊ±Ã»ÓĞAAÖ§¸¶£¬ÊÇ¿ª¾ÖÏûºÄ
+	if (privateDeskInfo.payType != PAY_TYPE_NORMAL && pRoomBaseInfo->type != ROOM_TYPE_FRIEND)		// AAæ”¯ä»˜ï¼Œé‡‘å¸æˆ¿æš‚æ—¶æ²¡æœ‰AAæ”¯ä»˜ï¼Œæ˜¯å¼€å±€æ¶ˆè€—
 	{
 		for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 		{
@@ -4336,12 +4336,12 @@ bool CGameDesk::ProcessPrivateUserSitDesk(GameUserInfo* pUser, const PrivateDesk
 		return false;
 	}
 
-	// ·¿¼äÀïÃæÊÇ²»ÊÇÓĞÕâ¸öÈËÁË
+	// æˆ¿é—´é‡Œé¢æ˜¯ä¸æ˜¯æœ‰è¿™ä¸ªäººäº†
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		if (pUser->userID == m_deskUserInfoVec[i].userID)
 		{
-			ERROR_LOG("ÓÃ»§ÒÑ¾­´æÔÚ userID = %d", pUser->userID);
+			ERROR_LOG("ç”¨æˆ·å·²ç»å­˜åœ¨ userID = %d", pUser->userID);
 			return true;
 		}
 	}
@@ -4349,7 +4349,7 @@ bool CGameDesk::ProcessPrivateUserSitDesk(GameUserInfo* pUser, const PrivateDesk
 	BYTE deskStation = AllocDeskStation(pUser->userID);
 	if (deskStation == INVALID_DESKSTATION)
 	{
-		ERROR_LOG("AllocDeskStation ·ÖÅä×ùÎ»ºÅÊ§°Ü,userID:%d", pUser->userID);
+		ERROR_LOG("AllocDeskStation åˆ†é…åº§ä½å·å¤±è´¥,userID:%d", pUser->userID);
 		return false;
 	}
 
@@ -4365,18 +4365,18 @@ bool CGameDesk::ProcessPrivateUserSitDesk(GameUserInfo* pUser, const PrivateDesk
 	pUser->deskStation = deskStation;
 	pUser->lastOperateTime = time(NULL);
 
-	// ×øÏÂÈËÊı
+	// åä¸‹äººæ•°
 	int currDeskUserCount = privateDeskInfo.currDeskUserCount + 1;
 	int deskMixID = MAKE_DESKMIXID(m_pDataManage->GetRoomID(), m_deskIdx);
 	pRedis->SetPrivateDeskCurrUserCount(deskMixID, currDeskUserCount);
 
-	// ¹ã²¥×øÏÂµÄĞÅÏ¢
+	// å¹¿æ’­åä¸‹çš„ä¿¡æ¯
 	BroadcastUserSitData(pUser->deskStation);
 
-	// Í¨ÖªÌØÊâÓÎÏ·Ê×´Î×ø×À
+	// é€šçŸ¥ç‰¹æ®Šæ¸¸æˆé¦–æ¬¡åæ¡Œ
 	UserSitDeskActionNotify(pUser->deskStation);
 
-	// Í¨Öª´óÌü¿ª·¿ĞÅÏ¢·¢Éú±ä»¯
+	// é€šçŸ¥å¤§å…å¼€æˆ¿ä¿¡æ¯å‘ç”Ÿå˜åŒ–
 	NotifyLogonBuyDeskInfoChange(m_masterID, currDeskUserCount, pUser->userID, 0, deskMixID);
 
 	return true;
@@ -4435,7 +4435,7 @@ bool CGameDesk::OnPrivateUserLogin(int userID, const PrivateDeskInfo& info)
 
 	int roomType = GetRoomType();
 
-	// ´Ó»º´æÖĞ¼ÓÔØ×À×ÓÊı¾İ
+	// ä»ç¼“å­˜ä¸­åŠ è½½æ¡Œå­æ•°æ®
 	if (!IsEnable())
 	{
 		LoadPrivateDeskInfo(info);
@@ -4451,20 +4451,20 @@ bool CGameDesk::OnPrivateUserLogin(int userID, const PrivateDeskInfo& info)
 			}
 		}
 
-		// ×Ô¶¯¿ªÊ¼Ä£Ê½
+		// è‡ªåŠ¨å¼€å§‹æ¨¡å¼
 		Json::Reader reader;
 		Json::Value value;
 		if (reader.parse(info.gameRules, value))
 		{
-			m_autoBeginMode = value["Start"].asInt();		//¿ªÊ¼·½Ê½£º0£ºÊÖ¶¯¿ªÊ¼£¬·Ç0Âú¼¸ÈË¿ªÊ¼
-			m_bGameStopJoin = value["Stopjoin"].asBool();	//ÖĞÍ¾½ûÖ¹¼ÓÈë
-			m_MinPoint = value["mPoint"].asInt();			//Èë³¡ÏŞÖÆ
-			m_RemoveMinPoint = value["lPoint"].asInt();		//ÌßÈËÏŞÖÆ
-			m_basePoint = value["bPoint"].asInt();			//µ××¢
-			m_roomTipType = value["cCSFS"].asInt();			//³éË®·½Ê½
-			m_roomTipTypeNums = value["cCSL"].asInt();		//³éË®ÊıÁ¿
-			m_payType = value["pay"].asInt();				//Ö§¸¶·½Ê½£º1£ºÆÕÍ¨Ö§¸¶£¬2£ºAAÖ§¸¶£¬3£º´óÓ®¼ÒÖ§¸¶
-			m_playMode = value["gameIdx"].asInt();			//ÓÎÏ·Íæ·¨
+			m_autoBeginMode = value["Start"].asInt();		//å¼€å§‹æ–¹å¼ï¼š0ï¼šæ‰‹åŠ¨å¼€å§‹ï¼Œé0æ»¡å‡ äººå¼€å§‹
+			m_bGameStopJoin = value["Stopjoin"].asBool();	//ä¸­é€”ç¦æ­¢åŠ å…¥
+			m_MinPoint = value["mPoint"].asInt();			//å…¥åœºé™åˆ¶
+			m_RemoveMinPoint = value["lPoint"].asInt();		//è¸¢äººé™åˆ¶
+			m_basePoint = value["bPoint"].asInt();			//åº•æ³¨
+			m_roomTipType = value["cCSFS"].asInt();			//æŠ½æ°´æ–¹å¼
+			m_roomTipTypeNums = value["cCSL"].asInt();		//æŠ½æ°´æ•°é‡
+			m_payType = value["pay"].asInt();				//æ”¯ä»˜æ–¹å¼ï¼š1ï¼šæ™®é€šæ”¯ä»˜ï¼Œ2ï¼šAAæ”¯ä»˜ï¼Œ3ï¼šå¤§èµ¢å®¶æ”¯ä»˜
+			m_playMode = value["gameIdx"].asInt();			//æ¸¸æˆç©æ³•
 		}
 
 		if (m_autoBeginMode <= 1)
@@ -4472,7 +4472,7 @@ bool CGameDesk::OnPrivateUserLogin(int userID, const PrivateDeskInfo& info)
 			m_autoBeginMode = 0;
 		}
 
-		if (roomType == ROOM_TYPE_FRIEND) //½ğ±Ò·¿
+		if (roomType == ROOM_TYPE_FRIEND) //é‡‘å¸æˆ¿
 		{
 			if (m_RemoveMinPoint < 1)
 			{
@@ -4494,7 +4494,7 @@ bool CGameDesk::OnPrivateUserLogin(int userID, const PrivateDeskInfo& info)
 		}
 	}
 
-	// µÃµ½Íæ¼Ò¾ãÀÖ²¿»ğ±Ò
+	// å¾—åˆ°ç©å®¶ä¿±ä¹éƒ¨ç«å¸
 	if (roomType == ROOM_TYPE_FG_VIP)
 	{
 		CRedisPHP* pRedisPHP = m_pDataManage->GetRedisPHP();
@@ -4507,31 +4507,31 @@ bool CGameDesk::OnPrivateUserLogin(int userID, const PrivateDeskInfo& info)
 		long long carryFireCoin = 0;
 		if (!pRedisPHP->GetUserFriendsGroupMoney(m_friendsGroupMsg.friendsGroupID, pUser->userID, carryFireCoin))
 		{
-			ERROR_LOG("»ñÈ¡Íæ¼Ò¾ãÀÖ²¿»ğ±ÒÊ§°Ü£ºuserId=%d,friendsGroupID=%d", pUser->userID, m_friendsGroupMsg.friendsGroupID);
+			ERROR_LOG("è·å–ç©å®¶ä¿±ä¹éƒ¨ç«å¸å¤±è´¥ï¼šuserId=%d,friendsGroupID=%d", pUser->userID, m_friendsGroupMsg.friendsGroupID);
 		}
 
 		pUser->fireCoin = (int)carryFireCoin;
 	}
 
-#ifdef OFFLINE_CHANGE_AGREE_STATUS  //¶ÏÏßÈ¡Ïû×¼±¸×´Ì¬
+#ifdef OFFLINE_CHANGE_AGREE_STATUS  //æ–­çº¿å–æ¶ˆå‡†å¤‡çŠ¶æ€
 	if (pUser->playStatus == USER_STATUS_AGREE)
 	{
 		pUser->playStatus = USER_STATUS_SITING;
 		return true;
 	}
 
-	// ÒÑ¾­×øÏÂ»òÕßÓÎÏ·ÖĞµÄÍæ¼Ò
+	// å·²ç»åä¸‹æˆ–è€…æ¸¸æˆä¸­çš„ç©å®¶
 	if (pUser->playStatus == USER_STATUS_SITING || pUser->playStatus == USER_STATUS_PLAYING)
 	{
-		// ¶ÏÏßÖØÁ¬¹ã²¥×øÏÂ£¬²»¹ã²¥×Ô¼º
+		// æ–­çº¿é‡è¿å¹¿æ’­åä¸‹ï¼Œä¸å¹¿æ’­è‡ªå·±
 		BroadcastUserSitDataExceptMyself(pUser->deskStation);
 		return true;
 	}
-#else  //¶ÏÏß²»È¡Ïû×¼±¸×´Ì¬
-	// ÒÑ¾­×øÏÂ»òÕßÓÎÏ·ÖĞµÄÍæ¼Ò
+#else  //æ–­çº¿ä¸å–æ¶ˆå‡†å¤‡çŠ¶æ€
+	// å·²ç»åä¸‹æˆ–è€…æ¸¸æˆä¸­çš„ç©å®¶
 	if (pUser->playStatus == USER_STATUS_SITING || pUser->playStatus == USER_STATUS_PLAYING || pUser->playStatus == USER_STATUS_AGREE)
 	{
-		// ¶ÏÏßÖØÁ¬¹ã²¥×øÏÂ£¬²»¹ã²¥×Ô¼º
+		// æ–­çº¿é‡è¿å¹¿æ’­åä¸‹ï¼Œä¸å¹¿æ’­è‡ªå·±
 		BroadcastUserSitDataExceptMyself(pUser->deskStation);
 		return true;
 	}
@@ -4545,12 +4545,12 @@ bool CGameDesk::OnPrivateUserLogin(int userID, const PrivateDeskInfo& info)
 	bool canWatch = m_pDataManage->IsCanWatch();
 	if (canWatch == true)
 	{
-		// ¿ÉÅÔ¹Û²¢ÇÒÍæ¼ÒÎªÄ¬ÈÏ×´Ì¬
+		// å¯æ—è§‚å¹¶ä¸”ç©å®¶ä¸ºé»˜è®¤çŠ¶æ€
 		return ProcessUserWatch(pUser, info);
 	}
 	else
 	{
-		// ²»¿ÉÅÔ¹ÛÁ¢¼´×øÏÂ
+		// ä¸å¯æ—è§‚ç«‹å³åä¸‹
 		return ProcessPrivateUserSitDesk(pUser, info);
 	}
 }
@@ -4701,7 +4701,7 @@ void CGameDesk::CheckTimeoutNotAgreeUser(time_t currTime)
 {
 	if (m_bPlayGame)
 	{
-		// ÓÎÏ·¿ªÊ¼ÁËÔò²»¹Ü
+		// æ¸¸æˆå¼€å§‹äº†åˆ™ä¸ç®¡
 		return;
 	}
 
@@ -4729,13 +4729,13 @@ void CGameDesk::CheckTimeoutNotAgreeUser(time_t currTime)
 
 		if (pUser->deskStation != i)
 		{
-			// ×ßµ½ÕâÀïÊı¾İÒÑ¾­Òì³£ÁË
+			// èµ°åˆ°è¿™é‡Œæ•°æ®å·²ç»å¼‚å¸¸äº†
 			ERROR_LOG("user deskStation is not match userID:%d deskStation=%d i=%d", pUser->userID, pUser->deskStation, i);
 			bKickOut = true;
 		}
 		else if (pUser->playStatus == USER_STATUS_SITING)
 		{
-			// Íæ¼Ò³¬Ê±Ã»×¼±¸
+			// ç©å®¶è¶…æ—¶æ²¡å‡†å¤‡
 			if (currTime - deskUserInfo.lastWaitAgreeTime > GOLD_DESK_TIMEOUT_UNAGREE_KICKOUT_SECS)
 			{
 				bKickOut = true;
@@ -4745,7 +4745,7 @@ void CGameDesk::CheckTimeoutNotAgreeUser(time_t currTime)
 
 		if (bKickOut)
 		{
-			//Íæ¼Ò±»Ìß
+			//ç©å®¶è¢«è¸¢
 			UserBeKicked((BYTE)i);
 
 			if (!BroadcastUserLeftData((BYTE)i, kickReason))
@@ -4761,7 +4761,7 @@ void CGameDesk::CheckTimeoutNotAgreeUser(time_t currTime)
 		}
 	}
 
-	// Íæ¼ÒÀë¿ª¿ÉÄÜ»á´¥·¢ÓÎÏ·¿ªÊ¼
+	// ç©å®¶ç¦»å¼€å¯èƒ½ä¼šè§¦å‘æ¸¸æˆå¼€å§‹
 	if (bIsKickedUser && m_bPlayGame == false && CanBeginGame())
 	{
 		GameBegin(0);
@@ -4790,7 +4790,7 @@ void CGameDesk::CheckTimeoutNotOperateUser(time_t currTime)
 		if (pUser->lastOperateTime > 0 && !IsPlayGame((BYTE)i) && HundredGameIsInfoChange((BYTE)i)
 			&& currTime - pUser->lastOperateTime > HUUNDRED_GAME_TIMEOUT_OPERATE_KICKOUT_SECS)
 		{
-			//Íæ¼Ò±»Ìß
+			//ç©å®¶è¢«è¸¢
 			UserBeKicked((BYTE)i);
 
 			BroadcastUserLeftData((BYTE)i, REASON_KICKOUT_LONG_TIME_NOOPERATION);
@@ -4885,14 +4885,14 @@ bool CGameDesk::HundredGameBegin()
 		}
 	}
 
-	//¼ÇÂ¼ÓÎÏ·¿ªÊ¼ĞèÒªµÄÊı¾İ
+	//è®°å½•æ¸¸æˆå¼€å§‹éœ€è¦çš„æ•°æ®
 	m_beginTime = time(NULL);
 	m_bPlayGame = true;
 
-	// ¾ÖÊı
+	// å±€æ•°
 	m_iRunGameCount++;
 
-	// ¸æËß×À×ÓµÄÍæ¼ÒÓÎÏ·¿ªÊ¼ÁË
+	// å‘Šè¯‰æ¡Œå­çš„ç©å®¶æ¸¸æˆå¼€å§‹äº†
 	BroadcastDeskData(NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_GAMEBEGIN);
 
 	return true;
@@ -4902,7 +4902,7 @@ bool CGameDesk::HundredGameFinish()
 {
 	m_bPlayGame = false;
 
-	// ÈÃËùÓĞµôÏßµÄÍæ¼ÒÀë¿ª
+	// è®©æ‰€æœ‰æ‰çº¿çš„ç©å®¶ç¦»å¼€
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		DeskUserInfo& deskUserInfo = m_deskUserInfoVec[i];
@@ -4926,7 +4926,7 @@ bool CGameDesk::HundredGameFinish()
 
 		if (pUser->deskStation != i)
 		{
-			// ×ßµ½ÕâÀïÊı¾İÒÑ¾­Òì³£ÁË
+			// èµ°åˆ°è¿™é‡Œæ•°æ®å·²ç»å¼‚å¸¸äº†
 			ERROR_LOG("user deskStation is not match userID:%d deskStation=%d i=%d", pUser->userID, pUser->deskStation, i);
 			bKickOut = true;
 			bDelUser = true;
@@ -4936,7 +4936,7 @@ bool CGameDesk::HundredGameFinish()
 			bKickOut = true;
 			bDelUser = true;
 		}
-		else if (pUser->isVirtual && IsKickOutVirtual((BYTE)i)) // Ò»²¿·Ö»úÆ÷ÈË³öÈ¥
+		else if (pUser->isVirtual && IsKickOutVirtual((BYTE)i)) // ä¸€éƒ¨åˆ†æœºå™¨äººå‡ºå»
 		{
 			bKickOut = true;
 			bDelUser = false;
@@ -4953,29 +4953,29 @@ bool CGameDesk::HundredGameFinish()
 
 		if (bKickOut)
 		{
-			// Íæ¼Ò±»Ìß
+			// ç©å®¶è¢«è¸¢
 			UserBeKicked((BYTE)i);
 
-			// Í¨ÖªËùÓĞÍæ¼Ò
+			// é€šçŸ¥æ‰€æœ‰ç©å®¶
 			BroadcastUserLeftData((BYTE)i, kickReason);
 
-			// ÇåÀí×À×ÓÍæ¼ÒÊı¾İ
+			// æ¸…ç†æ¡Œå­ç©å®¶æ•°æ®
 			deskUserInfo.clear();
 
-			// ÉèÖÃÍæ¼ÒÎªÕ¾Æğ×´Ì¬
+			// è®¾ç½®ç©å®¶ä¸ºç«™èµ·çŠ¶æ€
 			pUser->playStatus = USER_STATUS_STAND;
 			pUser->deskIdx = INVALID_DESKIDX;
 			pUser->deskStation = INVALID_DESKSTATION;
 
 			if (bDelUser)
 			{
-				// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+				// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 				m_pDataManage->DelUser(userID);
 			}
 		}
 	}
 
-	// ¼ÓÔØÅäÖÃ
+	// åŠ è½½é…ç½®
 	if (m_needLoadConfig)
 	{
 		m_needLoadConfig = false;
@@ -5131,7 +5131,7 @@ bool CGameDesk::SetServerRoomPoolData(const char * fieldName, const char * field
 
 	if (!pRedis->hmset(TBL_REWARDS_POOL, roomID, umap, REDIS_EXTEND_MODE_UPDATE))
 	{
-		ERROR_LOG("ÉèÖÃ½±³ØĞÅÏ¢Ê§°Ü:roomID=%d", roomID);
+		ERROR_LOG("è®¾ç½®å¥–æ± ä¿¡æ¯å¤±è´¥:roomID=%d", roomID);
 		return false;
 	}
 
@@ -5191,7 +5191,7 @@ bool CGameDesk::OnTimerFriendRoomGameBegin()
 		return false;
 	}
 
-	//ÏÈ¼ÆËãµ±Ç°ÈËÊı
+	//å…ˆè®¡ç®—å½“å‰äººæ•°
 	int currUserCount = 0;
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
@@ -5212,7 +5212,7 @@ bool CGameDesk::OnTimerFriendRoomGameBegin()
 		currUserCount++;
 	}
 
-	// Ìßµô½ğÇ®²»×ãµÄÍæ¼Ò
+	// è¸¢æ‰é‡‘é’±ä¸è¶³çš„ç©å®¶
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		DeskUserInfo& deskUserInfo = m_deskUserInfoVec[i];
@@ -5232,33 +5232,33 @@ bool CGameDesk::OnTimerFriendRoomGameBegin()
 
 		if (roomType == ROOM_TYPE_FRIEND && pUser->money < m_RemoveMinPoint || roomType == ROOM_TYPE_FG_VIP && pUser->fireCoin < m_RemoveMinPoint)
 		{
-			// Í¨Öª×À×ÓËùÓĞÍæ¼Ò
+			// é€šçŸ¥æ¡Œå­æ‰€æœ‰ç©å®¶
 			BroadcastUserLeftData((BYTE)i, roomType == ROOM_TYPE_FRIEND ? REASON_KICKOUT_STAND_MINLIMIT : REASON_KICKOUT_STAND_FIRECOIN_MINLIMIT);
 
-			//ÇåÀíÍæ¼ÒÓÎÏ·Êı¾İ
+			//æ¸…ç†ç©å®¶æ¸¸æˆæ•°æ®
 			pUser->playStatus = USER_STATUS_STAND;
 			pUser->deskIdx = INVALID_DESKIDX;
 			pUser->deskStation = INVALID_DESKSTATION;
 
-			// ÇåÀí×À×ÓÍæ¼ÒÊı¾İ
+			// æ¸…ç†æ¡Œå­ç©å®¶æ•°æ®
 			deskUserInfo.clear();
 
-			//±£´æÕâ¸öÎ»ÖÃÍæ¼Ò±»ÇåÀí
+			//ä¿å­˜è¿™ä¸ªä½ç½®ç©å®¶è¢«æ¸…ç†
 			deskUserInfo.leftRoomUser = userID;
 
-			// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+			// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 			m_pDataManage->DelUser(pUser->userID);
 
-			// Í¨Öª×À×ÓÈËÊı±ä»¯
+			// é€šçŸ¥æ¡Œå­äººæ•°å˜åŒ–
 			--currUserCount;
 			NotifyLogonBuyDeskInfoChange(m_masterID, currUserCount, userID, 1, deskMixID);
 		}
 	}
 
-	// Çå³ı»º´æÖĞÍæ¼ÒÊıÁ¿
+	// æ¸…é™¤ç¼“å­˜ä¸­ç©å®¶æ•°é‡
 	pRedis->SetPrivateDeskCurrUserCount(deskMixID, currUserCount);
 
-	///////////////////////////////×Ô¶¯¿ªÊ¼ÓÎÏ·¹¦ÄÜ£¬¿ÉÒÔ×¢ÊÍ²»Òª///////////////////////////////////////////
+	///////////////////////////////è‡ªåŠ¨å¼€å§‹æ¸¸æˆåŠŸèƒ½ï¼Œå¯ä»¥æ³¨é‡Šä¸è¦///////////////////////////////////////////
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		DeskUserInfo& deskUserInfo = m_deskUserInfoVec[i];
@@ -5271,13 +5271,13 @@ bool CGameDesk::OnTimerFriendRoomGameBegin()
 		GameUserInfo* pUser = m_pDataManage->GetUser(userID);
 		if (!pUser)
 		{
-			ERROR_LOG("½ğ±Ò·¿ÌßÈË³ö´í£¬GetUser failed userID(%d)", userID);
+			ERROR_LOG("é‡‘å¸æˆ¿è¸¢äººå‡ºé”™ï¼ŒGetUser failed userID(%d)", userID);
 			continue;
 		}
 		pUser->playStatus = USER_STATUS_AGREE;
 	}
 
-	//////////////////////////ÌßÈËĞèÒªÅĞ¶Ï£¬ÊÇ·ñ¿ÉÒÔ¿ªÊ¼ÓÎÏ·////////////////////////////////////////////////
+	//////////////////////////è¸¢äººéœ€è¦åˆ¤æ–­ï¼Œæ˜¯å¦å¯ä»¥å¼€å§‹æ¸¸æˆ////////////////////////////////////////////////
 	if (CanBeginGame())
 	{
 		GameBegin(0);
@@ -5291,18 +5291,18 @@ void CGameDesk::LogonDissmissDesk(int userID, bool bDelete)
 	int roomType = GetRoomType();
 	if (roomType == ROOM_TYPE_GOLD || roomType == ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("½ğ±Ò³¡²»ÄÜ½âÉ¢×À×Ó");
+		ERROR_LOG("é‡‘å¸åœºä¸èƒ½è§£æ•£æ¡Œå­");
 		return;
 	}
 
 	m_friendsGroupMsg.bDeleteDesk = bDelete;
 	if (m_isBegin)
 	{
-		ERROR_LOG("ÓÎÏ·ÒÑ¾­¿ªÊ¼½âÉ¢¾ãÀÖ²¿ÅÆ×ÀÊ§°Ü ,userID = %d", userID);
+		ERROR_LOG("æ¸¸æˆå·²ç»å¼€å§‹è§£æ•£ä¿±ä¹éƒ¨ç‰Œæ¡Œå¤±è´¥ ,userID = %d", userID);
 		return;
 	}
 
-	//Ö±½Ó½âÉ¢×À×Ó
+	//ç›´æ¥è§£æ•£æ¡Œå­
 	OnDeskDissmissFinishSendData();
 	OnDeskSuccessfulDissmiss(true);
 }
@@ -5312,13 +5312,13 @@ void CGameDesk::LogonDissmissDesk()
 	int roomType = GetRoomType();
 	if (roomType == ROOM_TYPE_GOLD || roomType == ROOM_TYPE_MATCH)
 	{
-		ERROR_LOG("½ğ±Ò³¡²»ÄÜ½âÉ¢×À×Ó");
+		ERROR_LOG("é‡‘å¸åœºä¸èƒ½è§£æ•£æ¡Œå­");
 		return;
 	}
 
 	m_friendsGroupMsg.bDeleteDesk = true;
 
-	//Ö±½Ó½âÉ¢×À×Ó
+	//ç›´æ¥è§£æ•£æ¡Œå­
 	OnDeskDissmissFinishSendData();
 	OnDeskSuccessfulDissmiss(true);
 }
@@ -5405,7 +5405,7 @@ long long CGameDesk::GetUserScore(BYTE deskStation)
 
 bool CGameDesk::KickOutUser(BYTE deskStation, int ReaSon)
 {
-	// ÓÎÏ·ÖĞ²»ÄÜÌßÈË
+	// æ¸¸æˆä¸­ä¸èƒ½è¸¢äºº
 	if (IsPlayGame(deskStation))
 	{
 		return false;
@@ -5422,7 +5422,7 @@ bool CGameDesk::KickOutUser(BYTE deskStation, int ReaSon)
 		return false;
 	}
 
-	// ÌßµôÍæ¼Ò
+	// è¸¢æ‰ç©å®¶
 	DeskUserInfo& deskUserInfo = m_deskUserInfoVec[deskStation];
 	int userID = deskUserInfo.userID;
 	if (userID <= 0)
@@ -5437,27 +5437,27 @@ bool CGameDesk::KickOutUser(BYTE deskStation, int ReaSon)
 		return false;
 	}
 
-	//Íæ¼Ò±»Ìß
+	//ç©å®¶è¢«è¸¢
 	UserBeKicked(deskStation);
 
-	// Í¨Öª×À×ÓËùÓĞÍæ¼Ò
+	// é€šçŸ¥æ¡Œå­æ‰€æœ‰ç©å®¶
 	BroadcastUserLeftData(deskStation, ReaSon);
 
-	// ÇåÀí×À×ÓÍæ¼ÒÊı¾İ
+	// æ¸…ç†æ¡Œå­ç©å®¶æ•°æ®
 	deskUserInfo.clear();
 
-	// ÉèÖÃÍæ¼ÒÎªÕ¾Æğ×´Ì¬
+	// è®¾ç½®ç©å®¶ä¸ºç«™èµ·çŠ¶æ€
 	pUser->playStatus = USER_STATUS_STAND;
 	pUser->deskIdx = INVALID_DESKIDX;
 	pUser->deskStation = INVALID_DESKSTATION;
 
-	// ÄÚ´æºÍ»º´æÖĞÒÆ³ıÍæ¼ÒÊı¾İ
+	// å†…å­˜å’Œç¼“å­˜ä¸­ç§»é™¤ç©å®¶æ•°æ®
 	if (!pUser->isVirtual)
 	{
 		m_pDataManage->DelUser(pUser->userID);
 	}
 
-	///////////////////Èç¹ûÊÇ·Ç½ğ±Ò³¡ºÍ±ÈÈü³¡£¬ĞèÒªĞŞ¸ÄredisÊı¾İ//////////////////////
+	///////////////////å¦‚æœæ˜¯éé‡‘å¸åœºå’Œæ¯”èµ›åœºï¼Œéœ€è¦ä¿®æ”¹redisæ•°æ®//////////////////////
 	int deskMixID = MAKE_DESKMIXID(m_pDataManage->GetRoomID(), m_deskIdx);
 	if (pRedis->IsKeyExists(TBL_CACHE_DESK, deskMixID))
 	{
@@ -5478,10 +5478,10 @@ bool CGameDesk::KickOutUser(BYTE deskStation, int ReaSon)
 			currUserCount++;
 		}
 
-		// Çå³ı»º´æÖĞÍæ¼ÒÊıÁ¿
+		// æ¸…é™¤ç¼“å­˜ä¸­ç©å®¶æ•°é‡
 		pRedis->SetPrivateDeskCurrUserCount(deskMixID, currUserCount);
 
-		// Í¨Öª×À×ÓÈËÊı±ä»¯
+		// é€šçŸ¥æ¡Œå­äººæ•°å˜åŒ–
 		NotifyLogonBuyDeskInfoChange(m_masterID, currUserCount, userID, 1, deskMixID);
 	}
 
@@ -5526,11 +5526,11 @@ void CGameDesk::OnDeskDissmissFinishSendData()
 		UserData userData;
 		if (!pRedis->GetUserData(userID, userData))
 		{
-			ERROR_LOG("´ó½áËã·¢ËÍÍæ¼ÒĞÅÏ¢Ê§°Ü£ºuserID=%d", userID);
+			ERROR_LOG("å¤§ç»“ç®—å‘é€ç©å®¶ä¿¡æ¯å¤±è´¥ï¼šuserID=%d", userID);
 			continue;
 		}
 
-		//Ìî³äÍæ¼Òid
+		//å¡«å……ç©å®¶id
 		msg.userID[i] = userID;
 		memcpy(msg.name[i], userData.name, sizeof(userData.name));
 		memcpy(msg.headURL[i], userData.headURL, sizeof(userData.headURL));
@@ -5712,7 +5712,7 @@ bool CGameDesk::SetDeskPercentageScore(long long * arPoint, long long * ratePoin
 		return true;
 	}
 
-	//ÏÈÕÒµ½×î´óµÄ´óÓ®¼Ò
+	//å…ˆæ‰¾åˆ°æœ€å¤§çš„å¤§èµ¢å®¶
 	long long llMaxWinMoney = 0;
 	if (m_roomTipType == ROOM_TIP_TYPE_MAX_WIN)
 	{
@@ -5839,7 +5839,7 @@ void CGameDesk::SetBeginUser()
 		m_beginUserID = firstUserID;
 	}
 
-	// Èç¹û·¿Ö÷ÔÚ£¬ÓÉ·¿Ö÷¿ªÊ¼ÓÎÏ·
+	// å¦‚æœæˆ¿ä¸»åœ¨ï¼Œç”±æˆ¿ä¸»å¼€å§‹æ¸¸æˆ
 	/*GameUserInfo* pUserMaster = m_pDataManage->GetUser(m_masterID);
 	if (pUserMaster && pUserMaster->IsOnline && pUserMaster->deskIdx == m_deskIdx)
 	{
@@ -5876,7 +5876,7 @@ bool CGameDesk::IsKickOutVirtual(BYTE deskStation)
 		return false;
 	}
 
-	// ×ø×ÀÊıÁ¿
+	// åæ¡Œæ•°é‡
 	int iMinRobotCount = m_pDataManage->GetPoolConfigInfo("minC");
 	int iMaxRobotCount = m_pDataManage->GetPoolConfigInfo("maxC");
 	iMinRobotCount = iMinRobotCount <= 0 ? 3 : iMinRobotCount;
@@ -5893,7 +5893,7 @@ bool CGameDesk::IsKickOutVirtual(BYTE deskStation)
 		return true;
 	}
 
-	// »ñÈ¡»úÆ÷ÈË×î´óºÍ×îĞ¡Ğ¯´ø½ğ±Ò£¬½«½ğ±Ò³¬¹ıÏŞÖÆµÄ»úÆ÷ÈËÌß³öÈ¥
+	// è·å–æœºå™¨äººæœ€å¤§å’Œæœ€å°æºå¸¦é‡‘å¸ï¼Œå°†é‡‘å¸è¶…è¿‡é™åˆ¶çš„æœºå™¨äººè¸¢å‡ºå»
 	int iMinRobotHaveMoney_ = m_pDataManage->GetPoolConfigInfo("minM");
 	int iMaxRobotHaveMoney_ = m_pDataManage->GetPoolConfigInfo("maxM");
 	long long llResNums = 0;
@@ -5923,9 +5923,9 @@ int CGameDesk::GetPlatformMultiple()
 }
 
 //////////////////////////////////////////////////////////////////////////
-// ±ÈÈü³¡
+// æ¯”èµ›åœº
 
-// ³õÊ¼»¯±ÈÈü³¡Êı¾İ
+// åˆå§‹åŒ–æ¯”èµ›åœºæ•°æ®
 void CGameDesk::InitDeskMatchData()
 {
 	m_llPartOfMatchID = 0;
@@ -5934,7 +5934,7 @@ void CGameDesk::InitDeskMatchData()
 	m_llStartMatchTime = 0;
 	m_bFinishMatch = false;
 
-	// ÇåÀí×À×ÓÍæ¼Ò
+	// æ¸…ç†æ¡Œå­ç©å®¶
 	for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 	{
 		m_deskUserInfoVec[i].clear();
@@ -5944,10 +5944,10 @@ void CGameDesk::InitDeskMatchData()
 	InitBuyDeskData();
 }
 
-// ±ÈÈü³¡ÓÎÏ·½áÊø
+// æ¯”èµ›åœºæ¸¸æˆç»“æŸ
 bool CGameDesk::MatchRoomGameBegin()
 {
-	//¼ÇÂ¼±ÈÈü³¡Ïà¹ØĞÅÏ¢
+	//è®°å½•æ¯”èµ›åœºç›¸å…³ä¿¡æ¯
 	m_llStartMatchTime = 0;
 	m_bFinishMatch = false;
 
@@ -5961,20 +5961,20 @@ bool CGameDesk::MatchRoomGameBegin()
 		m_pDataManage->SetUserPlayStatus(userID, USER_STATUS_PLAYING);
 	}
 
-	//¼ÇÂ¼ÓÎÏ·¿ªÊ¼ĞèÒªµÄÊı¾İ
+	//è®°å½•æ¸¸æˆå¼€å§‹éœ€è¦çš„æ•°æ®
 	m_bPlayGame = true;
 	m_beginTime = time(NULL);
 
-	// ¾ÖÊı
+	// å±€æ•°
 	m_iRunGameCount++;
 
-	// ¸æËß×À×ÓµÄÍæ¼ÒÓÎÏ·¿ªÊ¼ÁË
+	// å‘Šè¯‰æ¡Œå­çš„ç©å®¶æ¸¸æˆå¼€å§‹äº†
 	BroadcastDeskData(NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_GAMEBEGIN);
 
 	return true;
 }
 
-// ±ÈÈü³¡ÓÎÏ·½áÊø
+// æ¯”èµ›åœºæ¸¸æˆç»“æŸ
 bool CGameDesk::MatchRoomGameFinish()
 {
 	m_bFinishMatch = true;
@@ -5982,7 +5982,7 @@ bool CGameDesk::MatchRoomGameFinish()
 	m_bPlayGame = false;
 	BroadcastDeskData(NULL, 0, MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_GAMEFINISH);
 
-	// ½«ÅÔ¹ÛÍæ¼ÒÌß³öÈ¥
+	// å°†æ—è§‚ç©å®¶è¸¢å‡ºå»
 	if (m_matchWatchUserID.size() > 0)
 	{
 		for (auto iter = m_matchWatchUserID.begin(); iter != m_matchWatchUserID.end(); ++iter)
@@ -6003,27 +6003,27 @@ bool CGameDesk::MatchRoomGameFinish()
 		m_matchWatchUserID.clear();
 	}
 
-	if (m_pDataManage->IsAllDeskFinishMatch(m_llPartOfMatchID)) //±¾ÂÖÓÎÏ·½áÊø
+	if (m_pDataManage->IsAllDeskFinishMatch(m_llPartOfMatchID)) //æœ¬è½®æ¸¸æˆç»“æŸ
 	{
-		if (m_iCurMatchRound >= m_iMaxMatchRound) //¾öÈüÂÖ£¬Õû¸ö±ÈÈü½áÊø
+		if (m_iCurMatchRound >= m_iMaxMatchRound) //å†³èµ›è½®ï¼Œæ•´ä¸ªæ¯”èµ›ç»“æŸ
 		{
 			m_pDataManage->MatchEnd(m_llPartOfMatchID, m_iCurMatchRound, m_iMaxMatchRound);
 		}
-		else //ÌÔÌ­²¿Íæ¼Ò£¬½øÈëÏÂÒ»ÂÖ
+		else //æ·˜æ±°éƒ¨ç©å®¶ï¼Œè¿›å…¥ä¸‹ä¸€è½®
 		{
 			m_pDataManage->MatchNextRound(m_llPartOfMatchID, m_iCurMatchRound, m_iMaxMatchRound);
 		}
 	}
 	else
 	{
-		// ¸ù¾İÒµÎñĞèÇó£¬ÕâÀïÒ²¿ÉÒÔÌÔÌ­Íæ¼Ò
+		// æ ¹æ®ä¸šåŠ¡éœ€æ±‚ï¼Œè¿™é‡Œä¹Ÿå¯ä»¥æ·˜æ±°ç©å®¶
 		m_pDataManage->MatchDeskFinish(m_llPartOfMatchID, m_deskIdx);
 	}
 
 	return true;
 }
 
-// ·¢ËÍµ±Ç°×À×ÓµÄ±ÈÈü×´Ì¬
+// å‘é€å½“å‰æ¡Œå­çš„æ¯”èµ›çŠ¶æ€
 void CGameDesk::SendMatchDeskStatus(int userID)
 {
 	if (userID <= 0)
@@ -6053,7 +6053,7 @@ void CGameDesk::SendMatchDeskStatus(int userID)
 	m_pDataManage->SendData(userID, &msg, sizeof(msg), MSG_MAIN_LOADER_NOTIFY, MSG_NTF_LOADER_DESK_MATCH_STATUS, 0);
 }
 
-// ±ÈÈü³¡×ø×ÀÂß¼­
+// æ¯”èµ›åœºåæ¡Œé€»è¾‘
 bool CGameDesk::MatchRoomSitDeskLogic(GameUserInfo* pUser)
 {
 	if (!pUser)
@@ -6079,7 +6079,7 @@ bool CGameDesk::MatchRoomSitDeskLogic(GameUserInfo* pUser)
 
 	if (pUser->deskStation == INVALID_DESKSTATION)
 	{
-		// µÚÒ»´Î×øÏÂ
+		// ç¬¬ä¸€æ¬¡åä¸‹
 		for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 		{
 			if (m_deskUserInfoVec[i].userID == userID)
@@ -6089,7 +6089,7 @@ bool CGameDesk::MatchRoomSitDeskLogic(GameUserInfo* pUser)
 			}
 		}
 
-		// ·ÖÅäÒ»¸ö×ùÎ»
+		// åˆ†é…ä¸€ä¸ªåº§ä½
 		for (size_t i = 0; i < m_deskUserInfoVec.size(); i++)
 		{
 			DeskUserInfo& deskUserInfo = m_deskUserInfoVec[i];
@@ -6102,20 +6102,20 @@ bool CGameDesk::MatchRoomSitDeskLogic(GameUserInfo* pUser)
 		}
 	}
 
-	// ÕâÀïÍæ¼Ò²»¿ÉÄÜÃ»ÓĞ×ùÎ»ÁË
+	// è¿™é‡Œç©å®¶ä¸å¯èƒ½æ²¡æœ‰åº§ä½äº†
 	if (pUser->deskStation >= m_deskUserInfoVec.size())
 	{
 		ERROR_LOG("user deskStation is invalid userID = %d deskStation = %d", userID, pUser->deskStation);
 		return false;
 	}
 
-	// ÉèÖÃ·¿¼äid
+	// è®¾ç½®æˆ¿é—´id
 	pRedis->SetUserRoomID(pUser->userID, m_pDataManage->GetRoomID());
 
-	// ÉèÖÃ±ÈÈü×´Ì¬
+	// è®¾ç½®æ¯”èµ›çŠ¶æ€
 	pRedis->SetUserMatchStatus(pUser->userID, m_pDataManage->m_matchTypeMap[m_llPartOfMatchID], USER_MATCH_STATUS_PLAYING);
 
-	// ÉèÖÃÍæ¼ÒµÄ×À×ÓºÅ£¬×ùÎ»ºÅ£¬×´Ì¬µÈ
+	// è®¾ç½®ç©å®¶çš„æ¡Œå­å·ï¼Œåº§ä½å·ï¼ŒçŠ¶æ€ç­‰
 	pUser->deskIdx = m_deskIdx;
 	if (USER_STATUS_PLAYING != pUser->playStatus)
 	{
@@ -6126,21 +6126,21 @@ bool CGameDesk::MatchRoomSitDeskLogic(GameUserInfo* pUser)
 	m_deskUserInfoVec[pUser->deskStation].lastWaitAgreeTime = currTime;
 	m_deskUserInfoVec[pUser->deskStation].isVirtual = pUser->isVirtual;
 
-	// ¹ã²¥×øÏÂµÄĞÅÏ¢
+	// å¹¿æ’­åä¸‹çš„ä¿¡æ¯
 	BroadcastUserSitData(pUser->deskStation);
 
-	// ·¢ËÍµ±Ç°×À×Ó×´Ì¬
+	// å‘é€å½“å‰æ¡Œå­çŠ¶æ€
 	SendMatchDeskStatus(userID);
 
 	return true;
 }
 
-// ±ÈÈü³¡Íæ¼ÒÀë¿ª×À×Ó
+// æ¯”èµ›åœºç©å®¶ç¦»å¼€æ¡Œå­
 bool CGameDesk::MatchRoomUserLeftDeskLogic(GameUserInfo * pUser)
 {
 	if (!pUser)
 	{
-		ERROR_LOG("±ÈÈü³¡¿ª¿ª´íÎó::pUser is NULL");
+		ERROR_LOG("æ¯”èµ›åœºå¼€å¼€é”™è¯¯::pUser is NULL");
 		return false;
 	}
 
@@ -6150,10 +6150,10 @@ bool CGameDesk::MatchRoomUserLeftDeskLogic(GameUserInfo * pUser)
 		return false;
 	}
 
-	// ÇåÀí×À×ÓÖĞÍæ¼ÒµÄÊı¾İ
+	// æ¸…ç†æ¡Œå­ä¸­ç©å®¶çš„æ•°æ®
 	m_deskUserInfoVec[pUser->deskStation].clear();
 
-	// ÇåÀíÍæ¼ÒÓÎÏ·Êı¾İ
+	// æ¸…ç†ç©å®¶æ¸¸æˆæ•°æ®
 	pUser->playStatus = USER_STATUS_STAND;
 	pUser->deskIdx = INVALID_DESKIDX;
 	pUser->deskStation = INVALID_DESKSTATION;
@@ -6161,7 +6161,7 @@ bool CGameDesk::MatchRoomUserLeftDeskLogic(GameUserInfo * pUser)
 	return true;
 }
 
-// ±ÈÈü³¡»ñÈ¡Ò»¸ö×À×ÓËùÓĞÍæ¼Òid
+// æ¯”èµ›åœºè·å–ä¸€ä¸ªæ¡Œå­æ‰€æœ‰ç©å®¶id
 int CGameDesk::MatchGetDeskUserID(int arrUserID[MAX_PLAYER_GRADE])
 {
 	if (arrUserID == NULL)
@@ -6182,7 +6182,7 @@ int CGameDesk::MatchGetDeskUserID(int arrUserID[MAX_PLAYER_GRADE])
 	return peopleCount;
 }
 
-// ±ÈÈü³¡½øÈë±¾×ÀÅÔ¹Û
+// æ¯”èµ›åœºè¿›å…¥æœ¬æ¡Œæ—è§‚
 bool CGameDesk::MatchEnterMyDeskWatch(GameUserInfo * pUser, long long partOfMatchID)
 {
 	if (!pUser)
@@ -6195,7 +6195,7 @@ bool CGameDesk::MatchEnterMyDeskWatch(GameUserInfo * pUser, long long partOfMatc
 
 	if (m_llPartOfMatchID == 0 || partOfMatchID != m_llPartOfMatchID)
 	{
-		ERROR_LOG("Òì³£´íÎó £ºdeskIdx=%d,partOfMatchID=%lld", m_deskIdx, partOfMatchID);
+		ERROR_LOG("å¼‚å¸¸é”™è¯¯ ï¼šdeskIdx=%d,partOfMatchID=%lld", m_deskIdx, partOfMatchID);
 		msg.result = 4;
 		m_pDataManage->m_pGServerConnect->SendData(pUser->socketIdx, &msg, iSendSize, MSG_MAIN_LOADER_MATCH, MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK, 0, pUser->userID);
 		return false;
@@ -6203,32 +6203,32 @@ bool CGameDesk::MatchEnterMyDeskWatch(GameUserInfo * pUser, long long partOfMatc
 
 	if (!IsPlayGame(0))
 	{
-		ERROR_LOG("±¾×ÀÓÎÏ·½áÊø £º%d", m_deskIdx);
+		ERROR_LOG("æœ¬æ¡Œæ¸¸æˆç»“æŸ ï¼š%d", m_deskIdx);
 		msg.result = 1;
 		m_pDataManage->m_pGServerConnect->SendData(pUser->socketIdx, &msg, iSendSize, MSG_MAIN_LOADER_MATCH, MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK, 0, pUser->userID);
 		return false;
 	}
 
-	// ²»ÄÜÍ¬Ê±ÅÔ¹ÛÁ½¸ö×À×Ó
+	// ä¸èƒ½åŒæ—¶æ—è§‚ä¸¤ä¸ªæ¡Œå­
 	if (pUser->watchDeskIdx != INVALID_DESKIDX)
 	{
-		ERROR_LOG("ÒÑ¾­ÓĞÅÔ¹Û×À×ÓÁË pUser->watchDeskIdx=%d", pUser->watchDeskIdx);
+		ERROR_LOG("å·²ç»æœ‰æ—è§‚æ¡Œå­äº† pUser->watchDeskIdx=%d", pUser->watchDeskIdx);
 		msg.result = 2;
 		m_pDataManage->m_pGServerConnect->SendData(pUser->socketIdx, &msg, iSendSize, MSG_MAIN_LOADER_MATCH, MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK, 0, pUser->userID);
 		return false;
 	}
 
-	// ÓÎÏ·ÖĞ²»ÄÜÈ¥ÅÔ¹ÛÆäËüÍæ¼Ò
+	// æ¸¸æˆä¸­ä¸èƒ½å»æ—è§‚å…¶å®ƒç©å®¶
 	CGameDesk* pDesk = m_pDataManage->GetDeskObject(pUser->deskIdx);
 	if (pDesk && pDesk->IsPlayGame(0))
 	{
-		ERROR_LOG("ÓÎÏ·ÖĞ²»ÄÜÅÔ¹Û,userID=%d", pUser->userID);
+		ERROR_LOG("æ¸¸æˆä¸­ä¸èƒ½æ—è§‚,userID=%d", pUser->userID);
 		msg.result = 3;
 		m_pDataManage->m_pGServerConnect->SendData(pUser->socketIdx, &msg, iSendSize, MSG_MAIN_LOADER_MATCH, MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK, 0, pUser->userID);
 		return false;
 	}
 
-	// ·¢ËÍÍæ¼Ò
+	// å‘é€ç©å®¶
 	char buf[MAX_TEMP_SENDBUF_SIZE] = "";
 	buf[0] = 0;
 	int realSize = 0;
@@ -6237,17 +6237,17 @@ bool CGameDesk::MatchEnterMyDeskWatch(GameUserInfo * pUser, long long partOfMatc
 	iSendSize = realSize + 1;
 	m_pDataManage->m_pGServerConnect->SendData(pUser->socketIdx, &msg, iSendSize, MSG_MAIN_LOADER_MATCH, MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK, 0, pUser->userID);
 
-	//·¢ËÍÓÃ»§ÓÎÏ·×´Ì¬(ÓÎÏ·ÊµÏÖ)
+	//å‘é€ç”¨æˆ·æ¸¸æˆçŠ¶æ€(æ¸¸æˆå®ç°)
 	OnGetGameStation(INVALID_DESKSTATION, pUser->socketIdx, true);
 
-	// ¼ÓÈëÅÔ¹Û
+	// åŠ å…¥æ—è§‚
 	pUser->watchDeskIdx = m_deskIdx;
 	m_matchWatchUserID.insert(pUser->userID);
 
 	return true;
 }
 
-// ±ÈÈü³¡ÍË³ö±¾×ÀÅÔ¹Û
+// æ¯”èµ›åœºé€€å‡ºæœ¬æ¡Œæ—è§‚
 bool CGameDesk::MatchQuitMyDeskWatch(GameUserInfo * pUser, int socketIdx, BYTE result)
 {
 	if (!pUser)

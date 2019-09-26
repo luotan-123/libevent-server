@@ -56,7 +56,7 @@ void CGameLogManage::AddCenterLogFile(pthread_t threadID, int threadType)
 	std::string errfileName;
 	std::string costFileName;
 
-	if (threadType == THREAD_TYPE_MAIN)		// Ö÷Ïß³Ì
+	if (threadType == THREAD_TYPE_MAIN)		// ä¸»çº¿ç¨‹
 	{
 		errfileName = "log/centerserver_sys";
 		costFileName = "log/centerserver_sys_cost";
@@ -109,7 +109,7 @@ void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
 	std::string errfileName;
 	std::string costFileName;
 
-	if (threadType == THREAD_TYPE_MAIN)		// Ö÷Ïß³Ì
+	if (threadType == THREAD_TYPE_MAIN)		// ä¸»çº¿ç¨‹
 	{
 		errfileName = "log/logonserver_sys";
 		costFileName = "log/logonserver_sys_cost";
@@ -161,12 +161,12 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 	std::string errfileName;
 	std::string costFileName;
 
-	if (threadType == THREAD_TYPE_MAIN)		// Ö÷Ïß³Ì
+	if (threadType == THREAD_TYPE_MAIN)		// ä¸»çº¿ç¨‹
 	{
 		errfileName = "log/loaderserver_sys";
 		costFileName = "log/loaderserver_sys_cost";
 	}
-	else if (threadType == THREAD_TYPE_LOGIC)	// Âß¼­Ïß³Ì(Ã¿¸öÓÎÏ·¶¼ÊÇµ¥¶ÀµÄ)
+	else if (threadType == THREAD_TYPE_LOGIC)	// é€»è¾‘çº¿ç¨‹(æ¯ä¸ªæ¸¸æˆéƒ½æ˜¯å•ç‹¬çš„)
 	{
 		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
 		if (!pRoomBaseInfo)
@@ -303,7 +303,7 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 		}
 	}
 
-	// ¸ù¾ÝÈÕÆÚÉú³É×îÖÕµÄÎÄ¼þ
+	// æ ¹æ®æ—¥æœŸç”Ÿæˆæœ€ç»ˆçš„æ–‡ä»¶
 	SYSTEMTIME sysTime;
 	GetLocalTime(&sysTime);
 
@@ -317,7 +317,7 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 
 	str += buf;
 
-	// ÅÐ¶Ïµ±Ç°ÎÄ¼þ´óÐ¡£¬³¬¹ýÖØÐÂÉú³ÉÎÄ¼þ
+	// åˆ¤æ–­å½“å‰æ–‡ä»¶å¤§å°ï¼Œè¶…è¿‡é‡æ–°ç”Ÿæˆæ–‡ä»¶
 	g_filelogCount++;
 	struct stat statbuf;
 	if (g_filelogCount % 5 == 2 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
@@ -368,7 +368,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 		}
 	}
 
-	// ¸ù¾ÝÈÕÆÚÉú³É×îÖÕµÄÎÄ¼þ
+	// æ ¹æ®æ—¥æœŸç”Ÿæˆæœ€ç»ˆçš„æ–‡ä»¶
 	SYSTEMTIME sysTime;
 	GetLocalTime(&sysTime);
 
@@ -382,7 +382,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 
 	str += buf;
 
-	// ÅÐ¶Ïµ±Ç°ÎÄ¼þ´óÐ¡£¬³¬¹ýÖØÐÂÉú³ÉÎÄ¼þ
+	// åˆ¤æ–­å½“å‰æ–‡ä»¶å¤§å°ï¼Œè¶…è¿‡é‡æ–°ç”Ÿæˆæ–‡ä»¶
 	g_filelogCount++;
 	struct stat statbuf;
 	if (g_filelogCount % 5 == 2 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)

@@ -32,11 +32,11 @@ void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, c
 
 	char buf[MAX_LOG_BUF_SIZE] = "";
 
-	// Ïß³ÌIDºÍlevel
+	// çº¿ç¨‹IDå’Œlevel
 	pthread_t threadID = GetCurrentSysThreadId();
 	sprintf(buf, "%lu %s ", threadID, levelName);
 
-	// Ê±¼ä
+	// æ—¶é—´
 	SYSTEMTIME sysTime;
 	GetLocalTime(&sysTime);
 
@@ -44,14 +44,14 @@ void CLog::Write(const char* pLogfile, int level, const char* pFile, int line, c
 
 	sprintf(buf + strlen(buf), "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
 
-	// ²ÎÊı
+	// å‚æ•°
 	va_list args;
 	va_start(args, pBuf);
 
 	vsprintf(buf + strlen(buf), pBuf, args);
 	va_end(args);
 
-	// Êä³öµ½¿ØÖÆÌ¨
+	// è¾“å‡ºåˆ°æ§åˆ¶å°
 	if (level == LOG_LEVEL_INFO_CONSOLE)
 	{
 		std::cout << buf << std::endl;
@@ -88,12 +88,12 @@ void CLog::Write(const char* pLogFile, const char* pFuncName, const char* pForma
 
 	char buf[MAX_LOG_BUF_SIZE] = "";
 
-	// Ïß³ÌIDºÍlevel
+	// çº¿ç¨‹IDå’Œlevel
 	pthread_t threadID = GetCurrentSysThreadId();
 	const char* levelName = levelNames[LOG_LEVEL_INFO];
 	sprintf(buf, "%lu %s ", threadID, levelName);
 
-	// Ê±¼ä
+	// æ—¶é—´
 	SYSTEMTIME sysTime;
 	GetLocalTime(&sysTime);
 
@@ -101,7 +101,7 @@ void CLog::Write(const char* pLogFile, const char* pFuncName, const char* pForma
 
 	sprintf(buf + strlen(buf), "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
 
-	// ²ÎÊı
+	// å‚æ•°
 	va_list args;
 	va_start(args, pFormat);
 
@@ -169,11 +169,11 @@ void CLog::WriteSysErr(const char* pLogfile, int level, const char* pFile, int l
 
 	char buf[MAX_LOG_BUF_SIZE] = "";
 
-	// Ïß³ÌIDºÍlevel
+	// çº¿ç¨‹IDå’Œlevel
 	pthread_t threadID = GetCurrentSysThreadId();
 	sprintf(buf, "%lu %s ", threadID, levelName);
 
-	// Ê±¼ä
+	// æ—¶é—´
 	SYSTEMTIME sysTime;
 	GetLocalTime(&sysTime);
 
@@ -181,14 +181,14 @@ void CLog::WriteSysErr(const char* pLogfile, int level, const char* pFile, int l
 
 	sprintf(buf + strlen(buf), "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
 
-	// ²ÎÊı
+	// å‚æ•°
 	va_list args;
 	va_start(args, pBuf);
 
 	vsprintf(buf + strlen(buf), pBuf, args);
 	va_end(args);
 
-	// Êä³öµ½¿ØÖÆÌ¨
+	// è¾“å‡ºåˆ°æ§åˆ¶å°
 	std::cout << buf << " {err=[" << err << "] func=" << pFuncName << " line=" << line << "}\n";
 
 	sprintf(buf + strlen(buf), " {%s} ", err);
@@ -226,13 +226,13 @@ CAutoLog::CAutoLog(const char* pLogFile, const char* pFileName, const char* pFun
 
 	m_line = line;
 
-	// ´òÓ¡¿ªÊ¼ĞÅÏ¢
+	// æ‰“å°å¼€å§‹ä¿¡æ¯
 	CLog::Write(m_logFile, LOG_LEVEL_INFO, pFileName, line, pFuncName, "AUTOLOG Begin:");
 }
 
 CAutoLog::~CAutoLog()
 {
-	CLog::Write(m_logFile, LOG_LEVEL_INFO, m_fileName, m_line, m_funcName, "AUTOLOG End¡£");
+	CLog::Write(m_logFile, LOG_LEVEL_INFO, m_fileName, m_line, m_funcName, "AUTOLOG Endã€‚");
 }
 
 CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int microSecs, const char* pFormat, ...)
@@ -246,10 +246,10 @@ CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int micr
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 
-	// ¼ÇÂ¼¿ªÊ¼Ê±¼ä
+	// è®°å½•å¼€å§‹æ—¶é—´
 	m_beginTime = tv.tv_sec * 1000000 + tv.tv_usec;
 
-	// Ñ¡ÔñlogÎÄ¼ş
+	// é€‰æ‹©logæ–‡ä»¶
 	if (plogFile)
 	{
 		strcpy(m_logFile, plogFile);
@@ -259,8 +259,8 @@ CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int micr
 		strcpy(m_logFile, "cost.log");
 	}
 
-	//////// ×é³Ébuf£¬»º´æÆğÀ´
-	// Ê±¼ä
+	//////// ç»„æˆbufï¼Œç¼“å­˜èµ·æ¥
+	// æ—¶é—´
 	SYSTEMTIME sysTime;
 	GetLocalTime(&sysTime);
 
@@ -268,14 +268,14 @@ CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int micr
 
 	sprintf(m_buf, "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
 
-	// ±ä³¤²ÎÊı
+	// å˜é•¿å‚æ•°
 	va_list args;
 	va_start(args, pFormat);
 
 	vsprintf(m_buf + strlen(m_buf), pFormat, args);
 	va_end(args);
 
-	// º¯ÊıÃû
+	// å‡½æ•°å
 	sprintf(m_buf + strlen(m_buf), " %s ", pFuncName);
 }
 
@@ -284,7 +284,7 @@ CAutoLogCost::~CAutoLogCost()
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 
-	// ¼ÇÂ¼½áÊøÊ±¼ä
+	// è®°å½•ç»“æŸæ—¶é—´
 	long long endTime = tv.tv_sec * 1000000 + tv.tv_usec;
 	long long costTime = endTime - m_beginTime;
 

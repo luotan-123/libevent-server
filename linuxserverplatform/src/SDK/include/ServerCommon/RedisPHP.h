@@ -9,52 +9,52 @@ public:
 	virtual ~CRedisPHP();
 
 public:
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	virtual bool Init();
-	// ¹Ø±Õ
+	// å…³é—­
 	virtual bool Stop();
-	// »ñÈ¡redis Context
+	// è·å–redis Context
 	redisContext* GetRedisContext();
 public:
-	/////////////////////////////////¾ãÀÖ²¿Ïà¹Ø/////////////////////////////////////////
+	/////////////////////////////////ä¿±ä¹éƒ¨ç›¸å…³/////////////////////////////////////////
 	bool GetFGMember(int friendsGroupID, std::vector<int> &memberUserIDVec);
-	// »ñÈ¡Íæ¼Ò¾ãÀÖ²¿½ğ±Ò
+	// è·å–ç©å®¶ä¿±ä¹éƒ¨é‡‘å¸
 	bool GetUserFriendsGroupMoney(int friendsGroupID, int userID, long long &money);
-	// ÉèÖÃÍæ¼Ò¾ãÀÖ²¿½ğ±Ò
+	// è®¾ç½®ç©å®¶ä¿±ä¹éƒ¨é‡‘å¸
 	bool SetUserFriendsGroupMoney(int friendsGroupID, int userID, long long money, bool bAdd = true, int reason = 0, int roomID = 0, int rateFireCoin = 0);
-	// »ñÈ¡Íæ¼ÒÈ¨ÏŞ
+	// è·å–ç©å®¶æƒé™
 	int GetUserPower(int friendsGroupID, int userID);
-	// »ñÈ¡¾ãÀÖ²¿ÈºÖ÷
+	// è·å–ä¿±ä¹éƒ¨ç¾¤ä¸»
 	int GetFriendsGroupMasterID(int friendsGroupID);
-	// ÊÇ·ñ¿ÉÒÔ¼ÓÈë¾ãÀÖ²¿·¿¼ä
+	// æ˜¯å¦å¯ä»¥åŠ å…¥ä¿±ä¹éƒ¨æˆ¿é—´
 	bool IsCanJoinFriendsGroupRoom(int userID, int friendsGroupID);
-	// ÉèÖÃÍæ¼Ò¾ãÀÖ²¿×ÊÔ´ÊıÁ¿
+	// è®¾ç½®ç©å®¶ä¿±ä¹éƒ¨èµ„æºæ•°é‡
 	bool SetUserFriendsGroupResNums(int friendsGroupID, int userID, const char * resName, long long resNums, bool bAdd = false);
-	// »ñÈ¡Í¨ÖªÊ±¼ä
+	// è·å–é€šçŸ¥æ—¶é—´
 	bool GetFGNotifySendTime(long long llIndex, time_t &sendTime);
-	// ÇåÀíÍæ¼Ò¾ãÀÖ²¿Í¨Öª
+	// æ¸…ç†ç©å®¶ä¿±ä¹éƒ¨é€šçŸ¥
 	void ClearUserFGNotifySet(int userID);
-	//  ÇåÀíËùÓĞÍ¨Öª
+	//  æ¸…ç†æ‰€æœ‰é€šçŸ¥
 	void ClearAllFGNotifyInfo();
-	//»ñÈ¡¾ãÀÖ²¿°ó¶¨µÄ¹ÜÀíÔ±ID
+	//è·å–ä¿±ä¹éƒ¨ç»‘å®šçš„ç®¡ç†å‘˜ID
 	bool GetfriendsGroupToUser(int friendsGroupID, int userID, int &ChouShui, int&ManagerId);
 
 
-	/////////////////////////////////ÓÊ¼şÄ£¿é/////////////////////////////////////////
+	/////////////////////////////////é‚®ä»¶æ¨¡å—/////////////////////////////////////////
 	bool GetEmailSendTime(long long llIndex, int &sendTime);
 	bool GetUserAllEmailID(int userID, std::vector<EmailSimpleInfo> &simpleEmailID, bool Asc = true);
 	bool DelUserEmailInfo(int userID, long long emailID);
 	void ClearUserEmailSet(int userID);
 	void ClearAllEmailInfo();
 
-	//////////////////////////////////Êı¾İÍ³¼Æ////////////////////////////////////////
+	//////////////////////////////////æ•°æ®ç»Ÿè®¡////////////////////////////////////////
 	long long AddUserResNums(int userID, const char * resName, long long changeResNums);
 
-	//////////////////////////////////±ÈÈü³¡////////////////////////////////////////
-	// ½«redis±ÈÈüĞÅÏ¢£¬¼ÓÔØµ½ÄÚ´æ
+	//////////////////////////////////æ¯”èµ›åœº////////////////////////////////////////
+	// å°†redisæ¯”èµ›ä¿¡æ¯ï¼ŒåŠ è½½åˆ°å†…å­˜
 	bool LoadAllMatchInfo(std::map<long long, MatchInfo> & matchInfoMap);
-	// »ñÈ¡±ÈÈüĞÅÏ¢
+	// è·å–æ¯”èµ›ä¿¡æ¯
 	bool GetMatchInfo(int matchID, MatchInfo& matchInfo);
-	// ÉèÖÃ±ÈÈü×´Ì¬
+	// è®¾ç½®æ¯”èµ›çŠ¶æ€
 	bool SetMatchStatus(int matchID, BYTE matchStatus);
 };

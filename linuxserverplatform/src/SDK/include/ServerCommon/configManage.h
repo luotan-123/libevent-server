@@ -10,7 +10,7 @@
 #include "Function.h"
 
 //////////////////////////////////////////////////////////
-// »ù´¡ÅäÖÃ±í(ÏÈ³¢ÊÔ¶ÁÈ¡redis£¬redisÖĞÃ»ÓĞ¶ÁÈ¡ÄÚ´æµÄ)
+// åŸºç¡€é…ç½®è¡¨(å…ˆå°è¯•è¯»å–redisï¼Œredisä¸­æ²¡æœ‰è¯»å–å†…å­˜çš„)
 #define TBL_BASE_GAME			"gameBaseInfo"
 #define TBL_BASE_ROOM			"roomBaseInfo"
 #define TBL_BASE_BUY_DESK		"privateDeskConfig"
@@ -19,7 +19,7 @@
 #define TBL_BASE_LOGON			"logonBaseInfo"
 
 /////////////////////////////////////////////////////////
-// ×Ô¶¯Éú³ÉsqlÓï¾ä£¬½«redisÊı¾İ±£´æµ½Êı¾İ¿â
+// è‡ªåŠ¨ç”Ÿæˆsqlè¯­å¥ï¼Œå°†redisæ•°æ®ä¿å­˜åˆ°æ•°æ®åº“
 const std::array<const char*, 3> dynamicTbls =
 {
 	"userInfo",
@@ -27,7 +27,7 @@ const std::array<const char*, 3> dynamicTbls =
 	"userBag",
 };
 
-// Êı¾İ¿âµÄ×Ö¶ÎÀàĞÍ¶¨Òå
+// æ•°æ®åº“çš„å­—æ®µç±»å‹å®šä¹‰
 enum FieldValueType
 {
 	FIELD_VALUE_TYPE_NONE = 0,
@@ -50,11 +50,11 @@ struct FieldDescriptor
 	}
 };
 
-// TODO, ¿ÉÒÔÉú³ÉÒ»·İÅäÖÃÎÄ¼ş
+// TODO, å¯ä»¥ç”Ÿæˆä¸€ä»½é…ç½®æ–‡ä»¶
 //////////////////////////////////////////////////////////////////////
-// »ù´¡ĞÅÏ¢±í½á¹¹
+// åŸºç¡€ä¿¡æ¯è¡¨ç»“æ„
 
-// ÓÎÏ·ĞÅÏ¢½á¹¹
+// æ¸¸æˆä¿¡æ¯ç»“æ„
 struct GameBaseInfo
 {
 	int	gameID;
@@ -63,59 +63,59 @@ struct GameBaseInfo
 	char dllName[24];
 	int	watcherCount;
 	int canWatch;
-	BYTE canCombineDesk;	//0£ºÆ¥Åä×À×ÓÄ£Ê½£¬1£º×é×ÀÄ£Ê½
-	BYTE multiPeopleGame;	//0£ºÄ¬ÈÏ£¬1£º±êÊ¶2,3,4ÈËÊÇ·ñ¹«ÓÃÍ¬Ò»¸öÓÎÏ·id
+	BYTE canCombineDesk;	//0ï¼šåŒ¹é…æ¡Œå­æ¨¡å¼ï¼Œ1ï¼šç»„æ¡Œæ¨¡å¼
+	BYTE multiPeopleGame;	//0ï¼šé»˜è®¤ï¼Œ1ï¼šæ ‡è¯†2,3,4äººæ˜¯å¦å…¬ç”¨åŒä¸€ä¸ªæ¸¸æˆid
 
 	GameBaseInfo()
 	{
 		memset(this, 0, sizeof(GameBaseInfo));
 	}
 };
-// ·¿¼ä»ù´¡ĞÅÏ¢±í roomBaseInfo
+// æˆ¿é—´åŸºç¡€ä¿¡æ¯è¡¨ roomBaseInfo
 enum RoomType
 {
-	ROOM_TYPE_GOLD = 0,	// ½ğ±Ò³¡
-	ROOM_TYPE_PRIVATE,	// »ı·Ö·¿
-	ROOM_TYPE_FRIEND,	// ½ğ±Ò·¿
-	ROOM_TYPE_FG_VIP,	// ¾ãÀÖ²¿vip·¿
-	ROOM_TYPE_MATCH,	// ±ÈÈü³¡
+	ROOM_TYPE_GOLD = 0,	// é‡‘å¸åœº
+	ROOM_TYPE_PRIVATE,	// ç§¯åˆ†æˆ¿
+	ROOM_TYPE_FRIEND,	// é‡‘å¸æˆ¿
+	ROOM_TYPE_FG_VIP,	// ä¿±ä¹éƒ¨vipæˆ¿
+	ROOM_TYPE_MATCH,	// æ¯”èµ›åœº
 };
 
 enum RoomSort
 {
-	ROOM_SORT_NORMAL = 0,	// ÆÕÍ¨
-	ROOM_SORT_HUNDRED,		// °ÙÈËÀà
-	ROOM_SORT_SCENE,		// ³¡¾°Àà
+	ROOM_SORT_NORMAL = 0,	// æ™®é€š
+	ROOM_SORT_HUNDRED,		// ç™¾äººç±»
+	ROOM_SORT_SCENE,		// åœºæ™¯ç±»
 };
 
 enum ServerPlatfromStatus
 {
-	SERVER_PLATFROM_STATUS_NORMAL = 0,	//Õı³£×´Ì¬	
-	SERVER_PLATFROM_STATUS_CLOSE = 1,	//¹Ø·ş
-	SERVER_PLATFROM_STATUS_TEST = 2,	//²âÊÔ
+	SERVER_PLATFROM_STATUS_NORMAL = 0,	//æ­£å¸¸çŠ¶æ€	
+	SERVER_PLATFROM_STATUS_CLOSE = 1,	//å…³æœ
+	SERVER_PLATFROM_STATUS_TEST = 2,	//æµ‹è¯•
 };
 
-// ÓÎÏ··şÅäÖÃ±í
+// æ¸¸æˆæœé…ç½®è¡¨
 struct RoomBaseInfo
 {
 	int		roomID;
 	int		gameID;
 	char	name[48];
-	char	serviceName[48];	// ·şÎñÆ÷Ãû£¬×¢Òâ³¤¶È³¬³ö£¡
-	int		type;				// ·¿¼äÀàĞÍ(0: ½ğ±Ò³¡ 1: ·¿¿¨³¡)
-	int		sort;				// ·¿¼äÖÖÀà(0: ÆÕÍ¨ 1: °ÙÈËÀà)
-	int		deskCount;			// ×À×ÓÊıÁ¿
-	int		minPoint;			// ×îĞ¡»ı·Ö(Ö»ÊÊÓÃÓÚ½ğ±Ò³¡)
-	int		maxPoint;			// ×î´ó»ı·Ö(Ö»ÊÊÓÃÓÚ½ğ±Ò³¡)
-	int		basePoint;			// µ×·Ö
-	int		gameBeginCostMoney; // ½ğ±Ò³¡¿ª¾ÖÏûºÄ½ğ±Ò
-	char	describe[64];		// ÃèÊö
-	int     roomSign;           // ·¿¼äÀàĞÍ±ê¼Ç
-	UINT	robotCount;			// Ã¿×À»úÆ÷ÈËÊıÁ¿
-	BYTE	status;				// Æô¶¯×´Ì¬
-	int		currPeopleCount;	// µ±Ç°·¿¼äÈËÊı
-	BYTE	level;				// µÈ¼¶£¬³õÖĞ¸ßÌØ
-	char	configInfo[2048];	// ·¿¼äÅäÖÃĞÅÏ¢£¨json¸ñÊ½£©£¬°üÀ¨Íæ·¨£¬¿ÉÓëiniÎÄ¼şÍ¬Ê±²¢´æ
+	char	serviceName[48];	// æœåŠ¡å™¨åï¼Œæ³¨æ„é•¿åº¦è¶…å‡ºï¼
+	int		type;				// æˆ¿é—´ç±»å‹(0: é‡‘å¸åœº 1: æˆ¿å¡åœº)
+	int		sort;				// æˆ¿é—´ç§ç±»(0: æ™®é€š 1: ç™¾äººç±»)
+	int		deskCount;			// æ¡Œå­æ•°é‡
+	int		minPoint;			// æœ€å°ç§¯åˆ†(åªé€‚ç”¨äºé‡‘å¸åœº)
+	int		maxPoint;			// æœ€å¤§ç§¯åˆ†(åªé€‚ç”¨äºé‡‘å¸åœº)
+	int		basePoint;			// åº•åˆ†
+	int		gameBeginCostMoney; // é‡‘å¸åœºå¼€å±€æ¶ˆè€—é‡‘å¸
+	char	describe[64];		// æè¿°
+	int     roomSign;           // æˆ¿é—´ç±»å‹æ ‡è®°
+	UINT	robotCount;			// æ¯æ¡Œæœºå™¨äººæ•°é‡
+	BYTE	status;				// å¯åŠ¨çŠ¶æ€
+	int		currPeopleCount;	// å½“å‰æˆ¿é—´äººæ•°
+	BYTE	level;				// ç­‰çº§ï¼Œåˆä¸­é«˜ç‰¹
+	char	configInfo[2048];	// æˆ¿é—´é…ç½®ä¿¡æ¯ï¼ˆjsonæ ¼å¼ï¼‰ï¼ŒåŒ…æ‹¬ç©æ³•ï¼Œå¯ä¸iniæ–‡ä»¶åŒæ—¶å¹¶å­˜
 
 	RoomBaseInfo()
 	{
@@ -123,7 +123,7 @@ struct RoomBaseInfo
 	}
 };
 
-// Íø¹Ø·şÅäÖÃ±í
+// ç½‘å…³æœé…ç½®è¡¨
 struct LogonBaseInfo
 {
 	int		logonID;
@@ -140,7 +140,7 @@ struct LogonBaseInfo
 	}
 };
 
-// Êı¾İ¿âÅäÖÃ½á¹¹
+// æ•°æ®åº“é…ç½®ç»“æ„
 struct DBConfig
 {
 	char ip[MAX_IP_ADDR_SIZE];
@@ -155,7 +155,7 @@ struct DBConfig
 	}
 };
 
-// redisÅäÖÃ½á¹¹
+// redisé…ç½®ç»“æ„
 struct RedisConfig
 {
 	int redisTypeID;
@@ -169,7 +169,7 @@ struct RedisConfig
 	}
 };
 
-// ÖĞĞÄ·şÎñÆ÷ÅäÖÃ
+// ä¸­å¿ƒæœåŠ¡å™¨é…ç½®
 struct CenterServerConfig
 {
 	char ip[MAX_IP_ADDR_SIZE];
@@ -182,7 +182,7 @@ struct CenterServerConfig
 	}
 };
 
-// ´óÌü·şÎñÆ÷ÅäÖÃ
+// å¤§å…æœåŠ¡å™¨é…ç½®
 struct LogonServerConfig
 {
 	int logonID;
@@ -193,7 +193,7 @@ struct LogonServerConfig
 	}
 };
 
-// ÓÎÏ··şÎñÆ÷ÅäÖÃ
+// æ¸¸æˆæœåŠ¡å™¨é…ç½®
 struct LoaderServerConfig
 {
 	char serviceName[64];
@@ -206,7 +206,7 @@ struct LoaderServerConfig
 	}
 };
 
-// Í¨ÓÃÅäÖÃ
+// é€šç”¨é…ç½®
 struct CommonConfig
 {
 	int logLevel;
@@ -221,9 +221,9 @@ struct CommonConfig
 
 struct BuyGameDeskInfoKey
 {
-	int gameID;			//	ÓÎÏ·ID
-	int count;			//	¾ÖÊı
-	int roomType;		//  ·¿¼äÀàĞÍ
+	int gameID;			//	æ¸¸æˆID
+	int count;			//	å±€æ•°
+	int roomType;		//  æˆ¿é—´ç±»å‹
 	BuyGameDeskInfoKey(int gameID, int count, int roomType)
 	{
 		this->gameID = gameID;
@@ -254,8 +254,8 @@ struct BuyGameDeskInfoKey
 
 struct BuyRoomInfoKey
 {
-	int gameID;			//	ÓÎÏ·ID
-	int roomType;		//  ·¿¼äÀàĞÍ
+	int gameID;			//	æ¸¸æˆID
+	int roomType;		//  æˆ¿é—´ç±»å‹
 	BuyRoomInfoKey(int gameID, int roomType)
 	{
 		this->gameID = gameID;
@@ -280,14 +280,14 @@ struct BuyRoomInfoKey
 
 struct BuyGameDeskInfo
 {
-	int gameID;			//	ÓÎÏ·ID
-	int count;			//	¾ÖÊı
-	int roomType;		//  ·¿¼äÀàĞÍ
-	int costResType;	//  RESOURCE_TYPE_MONEY=1:½ğ±Ò   RESOURCE_TYPE_JEWEL=2:·¿¿¨
-	int costNums;		//	ÆÕÍ¨Ö§¸¶¿ÛÊıÁ¿
-	int AAcostNums;		//  AAÖ§¸¶ÊıÁ¿
-	int otherCostNums;	//  ÆäËüÖ§¸¶¿ÛÊıÁ¿
-	int peopleCount;	//	ÈËÊı
+	int gameID;			//	æ¸¸æˆID
+	int count;			//	å±€æ•°
+	int roomType;		//  æˆ¿é—´ç±»å‹
+	int costResType;	//  RESOURCE_TYPE_MONEY=1:é‡‘å¸   RESOURCE_TYPE_JEWEL=2:æˆ¿å¡
+	int costNums;		//	æ™®é€šæ”¯ä»˜æ‰£æ•°é‡
+	int AAcostNums;		//  AAæ”¯ä»˜æ•°é‡
+	int otherCostNums;	//  å…¶å®ƒæ”¯ä»˜æ‰£æ•°é‡
+	int peopleCount;	//	äººæ•°
 
 	BuyGameDeskInfo()
 	{
@@ -304,24 +304,24 @@ struct OtherConfig
 	int registerGiveJewels;
 	int logonGiveMoneyEveryDay;
 
-	int sendHornCostJewels;			// ·¢ËÍÊÀ½ç¹ã²¥ÏûºÄµÄ·¿¿¨
+	int sendHornCostJewels;			// å‘é€ä¸–ç•Œå¹¿æ’­æ¶ˆè€—çš„æˆ¿å¡
 
-	int useMagicExpressCostMoney;	// Ê¹ÓÃÄ§·¨±íÇé»¨·Ñ
+	int useMagicExpressCostMoney;	// ä½¿ç”¨é­”æ³•è¡¨æƒ…èŠ±è´¹
 
 	int buyingDeskCount;
 
-	int friendRewardMoney;			// ºÃÓÑ´òÉÍ»ñµÃ½ğ±Ò
-	int friendRewardMoneyCount;     // Ã¿ÌìÄÜÁìÈ¡µÄ´ÎÊı
-	int friendTakeRewardMoneyCount; // Ã¿ÌìÄÜÁìÈ¡µÄ´ÎÊı
+	int friendRewardMoney;			// å¥½å‹æ‰“èµè·å¾—é‡‘å¸
+	int friendRewardMoneyCount;     // æ¯å¤©èƒ½é¢†å–çš„æ¬¡æ•°
+	int friendTakeRewardMoneyCount; // æ¯å¤©èƒ½é¢†å–çš„æ¬¡æ•°
 
-	BYTE byIsIPRegisterLimit;		// ×¢²áipÏŞÖÆ
-	int IPRegisterLimitCount;		// Ã¿¸öip×¢²áÊıÁ¿
+	BYTE byIsIPRegisterLimit;		// æ³¨å†Œipé™åˆ¶
+	int IPRegisterLimitCount;		// æ¯ä¸ªipæ³¨å†Œæ•°é‡
 
-	BYTE byIsDistributedTable;		// ÊÇ·ñ·Ö²¼Ê½¼ÇÂ¼±í
+	BYTE byIsDistributedTable;		// æ˜¯å¦åˆ†å¸ƒå¼è®°å½•è¡¨
 
-	char http[128];					// httpÇëÇóµÄÓòÃû»òÕßip
+	char http[128];					// httpè¯·æ±‚çš„åŸŸåæˆ–è€…ip
 
-	BYTE byIsOneToOne;				// ÊÇ·ñÊÇ1:1Æ½Ì¨
+	BYTE byIsOneToOne;				// æ˜¯å¦æ˜¯1:1å¹³å°
 
 	OtherConfig()
 	{
@@ -369,7 +369,7 @@ struct BankConfig
 	}
 };
 
-//  ×ªÔùÏà¹ØÅäÖÃ
+//  è½¬èµ ç›¸å…³é…ç½®
 struct SendGiftConfig
 {
 	long long myLimitMoney;
@@ -378,7 +378,7 @@ struct SendGiftConfig
 	long long sendMinMoney;
 	int sendMinJewels;
 
-	double rate;		//Ë°ÂÊ 
+	double rate;		//ç¨ç‡ 
 
 	SendGiftConfig()
 	{
@@ -392,17 +392,17 @@ struct SendGiftConfig
 	}
 };
 
-//  ¾ãÀÖ²¿Ïà¹ØÅäÖÃ
+//  ä¿±ä¹éƒ¨ç›¸å…³é…ç½®
 struct FriendsGroupConfig
 {
-	int groupCreateCount; //Ã¿¸öÈË×î¶à´´½¨¾ãÀÖ²¿Ê±¼ä
-	int groupMemberCount; //Ã¿¸ö¾ãÀÖ²¿³ÉÔ±×î¶àÊıÁ¿
-	int groupJoinCount;   //Ã¿¸öÈË×î¶à¼ÓÈë¾ãÀÖ²¿ÊıÁ¿£¨°üÀ¨×Ô¼º´´½¨ºÍ¼ÓÈëµÄ£©
-	int groupManageRoomCount;//ÔÚ¾ãÀÖ²¿ÖĞ£¬ÈºÖ÷×î¶à´´½¨·¿¼äÊıÁ¿
-	int groupRoomCount;		//ÔÚ¾ãÀÖ²¿ÖĞ£¬ÆÕÍ¨³ÉÔ±×î¶à´´½¨·¿¼äÊıÁ¿
-	int groupAllAlterNameCount; //¾ãÀÖ²¿×Ü¹²×î¶à¸ÄÃûÊıÁ¿
-	int groupEveAlterNameCount; //¾ãÀÖ²¿Ã¿ÈÕ×î¶à¸ÄÃûÊıÁ¿
-	int groupTransferCount;		//¾ãÀÖ²¿×î¶àÄÜÊÚÈ¨µÄ¹ÜÀíÔ±ÊıÁ¿
+	int groupCreateCount; //æ¯ä¸ªäººæœ€å¤šåˆ›å»ºä¿±ä¹éƒ¨æ—¶é—´
+	int groupMemberCount; //æ¯ä¸ªä¿±ä¹éƒ¨æˆå‘˜æœ€å¤šæ•°é‡
+	int groupJoinCount;   //æ¯ä¸ªäººæœ€å¤šåŠ å…¥ä¿±ä¹éƒ¨æ•°é‡ï¼ˆåŒ…æ‹¬è‡ªå·±åˆ›å»ºå’ŒåŠ å…¥çš„ï¼‰
+	int groupManageRoomCount;//åœ¨ä¿±ä¹éƒ¨ä¸­ï¼Œç¾¤ä¸»æœ€å¤šåˆ›å»ºæˆ¿é—´æ•°é‡
+	int groupRoomCount;		//åœ¨ä¿±ä¹éƒ¨ä¸­ï¼Œæ™®é€šæˆå‘˜æœ€å¤šåˆ›å»ºæˆ¿é—´æ•°é‡
+	int groupAllAlterNameCount; //ä¿±ä¹éƒ¨æ€»å…±æœ€å¤šæ”¹åæ•°é‡
+	int groupEveAlterNameCount; //ä¿±ä¹éƒ¨æ¯æ—¥æœ€å¤šæ”¹åæ•°é‡
+	int groupTransferCount;		//ä¿±ä¹éƒ¨æœ€å¤šèƒ½æˆæƒçš„ç®¡ç†å‘˜æ•°é‡
 
 	FriendsGroupConfig()
 	{
@@ -417,7 +417,7 @@ struct FriendsGroupConfig
 	}
 };
 
-// ftpÅäÖÃ
+// ftpé…ç½®
 struct FtpConfig
 {
 	char ftpIP[24];
@@ -480,7 +480,7 @@ struct ServerConfigInfo
 };
 
 class CMysqlHelper;
-// ÅäÖÃ¹ÜÀí, ¹ÜÀíÊı¾İÖĞ»òÕßÊÇÍ¨ÓÃÅäÖÃÎÄ¼şµÄÅäÖÃ
+// é…ç½®ç®¡ç†, ç®¡ç†æ•°æ®ä¸­æˆ–è€…æ˜¯é€šç”¨é…ç½®æ–‡ä»¶çš„é…ç½®
 class CConfigManage
 {
 private:
@@ -493,91 +493,91 @@ public:
 
 public:
 	bool Init();
-	// ¼ÓÔØDBÅäÖÃ
+	// åŠ è½½DBé…ç½®
 	bool LoadDBConfig();
-	// ¼ÓÔØÖĞĞÄ·şÎñÆ÷ÅäÖÃ
+	// åŠ è½½ä¸­å¿ƒæœåŠ¡å™¨é…ç½®
 	bool LoadCenterServerConfig();
-	// ¼ÓÔØ±¾µØÍø¹Ø·şÎñÆ÷ÅäÖÃ
+	// åŠ è½½æœ¬åœ°ç½‘å…³æœåŠ¡å™¨é…ç½®
 	bool LoadLogonServerConfig();
-	// ¼ÓÔØÓÎÏ··şÎñÆ÷ÅäÖÃ
+	// åŠ è½½æ¸¸æˆæœåŠ¡å™¨é…ç½®
 	bool LoadLoaderServerConfig();
-	// ¼ÓÔØÍ¨ÓÃÅäÖÃ
+	// åŠ è½½é€šç”¨é…ç½®
 	bool LoadCommonConfig();
-	// ¼ÓÔØDB±í×Ö¶ÎÃèÊöÅäÖÃ
+	// åŠ è½½DBè¡¨å­—æ®µæè¿°é…ç½®
 	bool LoadTableFiledConfig();
-	// ¼ÓÔØ»ù´¡ÅäÖÃ
+	// åŠ è½½åŸºç¡€é…ç½®
 	bool LoadBaseConfig();
-	// ¼ÓÔØÆäËûÅäÖÃ
+	// åŠ è½½å…¶ä»–é…ç½®
 	bool LoadOtherConfig();
-	// ÉèÖÃ·şÎñÆ÷ÀàĞÍ
+	// è®¾ç½®æœåŠ¡å™¨ç±»å‹
 	void SetServiceType(int type);
-	// ½âÎöjsonÊı¾İ
+	// è§£æjsonæ•°æ®
 	static std::string ParseJsonValue(const std::string& src, const char* key);
 private:
-	// ²âÊÔÊı¾İ¿âÁ¬½Ó
+	// æµ‹è¯•æ•°æ®åº“è¿æ¥
 	bool ConnectToDatabase();
-	// ¼ÓÔØÓÎÏ·»ù´¡ÅäÖÃ
+	// åŠ è½½æ¸¸æˆåŸºç¡€é…ç½®
 	bool LoadGameBaseConfig();
-	// ¼ÓÔØ¹ºÂò×À×ÓÅäÖÃ
+	// åŠ è½½è´­ä¹°æ¡Œå­é…ç½®
 	bool LoadBuyGameDeskConfig();
-	// ¼ÓÔØ·¿¼ä»ù±¾ÅäÖÃ
+	// åŠ è½½æˆ¿é—´åŸºæœ¬é…ç½®
 	bool LoadRoomBaseConfig();
-	// ¼ÓÔØ»úÆ÷ÈËÎ»ÖÃÅäÖÃ
+	// åŠ è½½æœºå™¨äººä½ç½®é…ç½®
 	bool LoadRobotPositionConfig();
-	// ¼ÓÔØÔà×Ö¿â
+	// åŠ è½½è„å­—åº“
 	bool LoadDirtyWordsConfig();
-	// ¼ÓÔØdb±íµÄÖ÷¼ü
+	// åŠ è½½dbè¡¨çš„ä¸»é”®
 	bool LoadTablesPrimaryKey();
-	// ´óÌü·ş»ù±¾ÅäÖÃ
+	// å¤§å…æœåŸºæœ¬é…ç½®
 	bool LoadLogonBaseConfig();
-	// ¼ÓÔØredis»ù±¾ÅäÖÃ
+	// åŠ è½½redisåŸºæœ¬é…ç½®
 	bool LoadRedisConfig();
 public:
-	// »ñÈ¡DBÅäÖÃ
+	// è·å–DBé…ç½®
 	const DBConfig& GetDBConfig();
-	// »ñÈ¡centerserverÅäÖÃ
+	// è·å–centerserveré…ç½®
 	const CenterServerConfig& GetCenterServerConfig();
-	// »ñÈ¡logonserverÅäÖÃ
+	// è·å–logonserveré…ç½®
 	const LogonServerConfig& GetLogonServerConfig();
-	// »ñÈ¡Í¨ÓÃÅäÖÃ
+	// è·å–é€šç”¨é…ç½®
 	const CommonConfig& GetCommonConfig();
-	// »ñÈ¡ftpÅäÖÃ
+	// è·å–ftpé…ç½®
 	const FtpConfig& GetFtpConfig();
-	// »ñÈ¡±íÖĞÄ³¸ö×Ö¶ÎµÄÀàĞÍ
+	// è·å–è¡¨ä¸­æŸä¸ªå­—æ®µçš„ç±»å‹
 	int GetFieldType(const char* tableName, const char* filedName);
-	// »ñÈ¡dllÎÄ¼şÃû
+	// è·å–dllæ–‡ä»¶å
 	const char* GetDllFileName(int gameID);
-	// »ñÈ¡·¿¼ä»ù±¾ÅäÖÃ
+	// è·å–æˆ¿é—´åŸºæœ¬é…ç½®
 	RoomBaseInfo* GetRoomBaseInfo(int roomID);
-	// Í¨¹ıgameID»ñÈ¡Ë½ÓĞ·¿µÄroomID
+	// é€šè¿‡gameIDè·å–ç§æœ‰æˆ¿çš„roomID
 	bool GetPrivateRoomIDByGameID(int gameID, std::vector<int>& roomID);
-	// »ñÈ¡ÓÎÏ·»ù±¾ÅäÖÃ
+	// è·å–æ¸¸æˆåŸºæœ¬é…ç½®
 	GameBaseInfo* GetGameBaseInfo(int GameID);
-	// »ñÈ¡¹ºÂò×À×ÓÅäÖÃ
+	// è·å–è´­ä¹°æ¡Œå­é…ç½®
 	BuyGameDeskInfo* GetBuyGameDeskInfo(const BuyGameDeskInfoKey& buyKey);
-	// »ñÈ¡ÆäËûÅäÖÃĞÅÏ¢
+	// è·å–å…¶ä»–é…ç½®ä¿¡æ¯
 	const OtherConfig& GetOtherConfig();
-	// »ñÈ¡×ªÔùÅäÖÃ
+	// è·å–è½¬èµ é…ç½®
 	const SendGiftConfig& GetSendGiftConfig();
-	// »ñÈ¡ÒøĞĞÅäÖÃ
+	// è·å–é“¶è¡Œé…ç½®
 	const BankConfig& GetBankConfig();
-	// »ñÈ¡¾ãÀÖ²¿ÅäÖÃ
+	// è·å–ä¿±ä¹éƒ¨é…ç½®
 	const FriendsGroupConfig& GetFriendsGroupConfig();
-	// »ñÈ¡´óÌü»ù±¾ÅäÖÃ
+	// è·å–å¤§å…åŸºæœ¬é…ç½®
 	LogonBaseInfo* GetLogonBaseInfo(int logonID);
-	// »ñÈ¡redisÅäÖÃ
+	// è·å–redisé…ç½®
 	const RedisConfig& GetRedisConfig(int redisTypeID);
-	// »ñÈ¡¹ºÂòroomIDĞÅÏ¢
+	// è·å–è´­ä¹°roomIDä¿¡æ¯
 	void GetBuyRoomInfo(int gameID, int roomType, std::vector<int>& roomIDVec);
-	// »ñµÃ·Ö±íµÄ±íÃû
+	// è·å¾—åˆ†è¡¨çš„è¡¨å
 	bool GetTableNameByDate(const char* name, char* dateName, size_t size);
 
 public:
-	// Í¨¹ı»úÆ÷ÈËµÄID»ñÈ¡ĞÅÏ¢
+	// é€šè¿‡æœºå™¨äººçš„IDè·å–ä¿¡æ¯
 	bool GetRobotPositionInfo(int robotID, RobotPositionInfo& info);
-	// »ñÈ¡Êı¾İ±í×Ö¶ÎÒÔ¼°ÀàĞÍĞÅÏ¢
+	// è·å–æ•°æ®è¡¨å­—æ®µä»¥åŠç±»å‹ä¿¡æ¯
 	const std::vector<FieldDescriptor>& GetTableFiledDescVec(const std::string& tableName);
-	// »ñÈ¡±íµÄÖ÷¼ü×Ö¶ÎÃû
+	// è·å–è¡¨çš„ä¸»é”®å­—æ®µå
 	const char* GetTablePriamryKey(const std::string& tableName);
 public:
 	static bool sqlGetValue(std::map<std::string, std::string>& data, const char* szFieldName, int& iValue);
@@ -589,43 +589,43 @@ public:
 	static bool sqlGetValue(std::map<std::string, std::string>& data, const char* szFieldName, BYTE& dValue);
 	static bool sqlGetValue(std::map<std::string, std::string>& data, const char* szFieldName, char szBuffer[], UINT uSize);
 public:
-	// DBÅäÖÃ
+	// DBé…ç½®
 	DBConfig m_dbConfig;
-	// ÖĞĞÄ·şÎñÆ÷ÅäÖÃ
+	// ä¸­å¿ƒæœåŠ¡å™¨é…ç½®
 	CenterServerConfig m_centerServerConfig;
-	// ´óÌü·şÎñÆ÷ÅäÖÃ
+	// å¤§å…æœåŠ¡å™¨é…ç½®
 	LogonServerConfig m_logonServerConfig;
-	// ÓÎÏ··şÎñÆ÷ÅäÖÃ
+	// æ¸¸æˆæœåŠ¡å™¨é…ç½®
 	LoaderServerConfig m_loaderServerConfig;
-	// Í¨ÓÃÅäÖÃ
+	// é€šç”¨é…ç½®
 	CommonConfig m_commonConfig;
-	// ftpÅäÖÃ
+	// ftpé…ç½®
 	FtpConfig m_ftpConfig;
-	// ÆäËûÅäÖÃ
+	// å…¶ä»–é…ç½®
 	OtherConfig m_otherConfig;
-	// ×ªÔùÅäÖÃ
+	// è½¬èµ é…ç½®
 	SendGiftConfig m_sendGiftConfig;
-	// ÒøĞĞÅäÖÃ
+	// é“¶è¡Œé…ç½®
 	BankConfig m_bankConfig;
-	// ¾ãÀÖ²¿Ïà¹ØÅäÖÃ
+	// ä¿±ä¹éƒ¨ç›¸å…³é…ç½®
 	FriendsGroupConfig m_friendsGroupConfig;
-	// ·şÎñÆ÷ÀàĞÍ
+	// æœåŠ¡å™¨ç±»å‹
 	int m_serviceType;
 
 public:
-	// ÓÎÏ·»ù´¡ĞÅÏ¢																	
+	// æ¸¸æˆåŸºç¡€ä¿¡æ¯																	
 	std::map<int, GameBaseInfo> m_gameBaseInfoMap;
-	// ·¿¼äÅäÖÃ
+	// æˆ¿é—´é…ç½®
 	std::map<int, RoomBaseInfo> m_roomBaseInfoMap;
-	// ¹ºÂòÓÎÏ·×À×ÓÏûºÄĞÅÏ¢(·¿¿¨ÅäÖÃ)
+	// è´­ä¹°æ¸¸æˆæ¡Œå­æ¶ˆè€—ä¿¡æ¯(æˆ¿å¡é…ç½®)
 	std::map<BuyGameDeskInfoKey, BuyGameDeskInfo> m_buyGameDeskInfoMap;
-	// ¹ºÂòÓÎÏ·×À×ÓroomIDĞÅÏ¢(roomIDÅäÖÃ)
+	// è´­ä¹°æ¸¸æˆæ¡Œå­roomIDä¿¡æ¯(roomIDé…ç½®)
 	std::map<BuyRoomInfoKey, std::vector<int> > m_buyRoomInfoMap;
-	// redisÊı¾İ·ÖÇø
+	// redisæ•°æ®åˆ†åŒº
 	std::map<int, RedisConfig> m_redisConfigMap;
-	// ´óÌü·şÅäÖÃ
+	// å¤§å…æœé…ç½®
 	std::map<int, LogonBaseInfo> m_logonBaseInfoMap;
-	// Êı¾İ±í×Ö¶ÎÏà¹ØĞÅÏ¢(»ù´¡ÅäÖÃ±í²»ĞèÒª)
+	// æ•°æ®è¡¨å­—æ®µç›¸å…³ä¿¡æ¯(åŸºç¡€é…ç½®è¡¨ä¸éœ€è¦)
 	std::map<std::string, std::vector<FieldDescriptor> > m_tableFieldDescMap;
 
 public:
@@ -634,7 +634,7 @@ public:
 	std::map<std::string, std::string> m_tablePrimaryKeyMap;
 	std::map<std::string, int> m_nickName;
 private:
-	CMysqlHelper* m_pMysqlHelper;		// Êı¾İ¿âÄ£¿é
+	CMysqlHelper* m_pMysqlHelper;		// æ•°æ®åº“æ¨¡å—
 private:
 	std::set<ServerConfigInfo>  m_logonPortSet;
 public:

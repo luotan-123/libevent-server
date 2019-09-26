@@ -1,25 +1,25 @@
 #pragma once
 
-//MD5 ¼ÓÃÜÀà
+//MD5 åŠ å¯†ç±»
 class MD5_CTX 
 {
-	//±äÁ¿¶¨Òå
+	//å˜é‡å®šä¹‰
 private:
 	unsigned int					state[4];
 	unsigned int					count[2];
 	unsigned char					buffer[64];  
 	unsigned char					PADDING[64];
 
-	//º¯Êı¶¨Òå
+	//å‡½æ•°å®šä¹‰
 public:
-	//¹¹Ôìº¯Êı
+	//æ„é€ å‡½æ•°
 	MD5_CTX();
-	//Îö¹¹º¯Êı
+	//ææ„å‡½æ•°
 	virtual ~MD5_CTX();
 	void MD5Update ( unsigned char *input, unsigned int inputLen);
 	void MD5Final (unsigned char digest[16]);
 
-	//Ë½ÓĞº¯Êı
+	//ç§æœ‰å‡½æ•°
 private:
 	void MD5Init();
 	void MD5Transform (unsigned int state[4], unsigned char block[64]);

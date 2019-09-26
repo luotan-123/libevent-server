@@ -29,7 +29,7 @@ void CGameTaskLogic::InitGameTask()
 	m_bySpecifyShape = 0;
 	m_bySpecifyCard = 0 ; 
 }
-///»ñÈ¡µ×ÅÆÅÆĞÍ
+///è·å–åº•ç‰Œç‰Œå‹
 bool  CGameTaskLogic::GetBackCardType(BYTE bbackCardList[] , int  cbCardCount) 
 {
 	if(3 != cbCardCount)
@@ -81,7 +81,7 @@ bool  CGameTaskLogic::GetBackCardType(BYTE bbackCardList[] , int  cbCardCount)
 
 	return (m_byBackCardType >0) ; 
 }
-///µ×ÅÆÊÇ·ñÎªË³×Ó
+///åº•ç‰Œæ˜¯å¦ä¸ºé¡ºå­
 bool  CGameTaskLogic::IsBackCardStraight(BYTE iCardList[],int iCardCount) 
 {
 	if(iCardCount != 3)
@@ -98,7 +98,7 @@ bool  CGameTaskLogic::IsBackCardStraight(BYTE iCardList[],int iCardCount)
 
 	for(int i=0;i<15;i++)
 	{
-		if(temp[i] != 0)//ÓĞÖµ
+		if(temp[i] != 0)//æœ‰å€¼
 		{
 			for(int j = i;j < i +iCardCount ;j ++)
 			{
@@ -110,7 +110,7 @@ bool  CGameTaskLogic::IsBackCardStraight(BYTE iCardList[],int iCardCount)
 	}
 	return false;
 }
-//ÌáÈ¡1,2,3 or 4ÕÅÏàÍ¬Êı×ÖµÄÅÆ
+//æå–1,2,3 or 4å¼ ç›¸åŒæ•°å­—çš„ç‰Œ
 int CGameTaskLogic::GetCardNumCount(BYTE iCardList[], int iCardCount, BYTE bCardNum)
 {
 	if(bCardNum >MAX_CARD_TYPE + 2 ||bCardNum <3 )
@@ -128,7 +128,7 @@ int CGameTaskLogic::GetCardNumCount(BYTE iCardList[], int iCardCount, BYTE bCard
 
 	return temp[bCardNum] ; 
 }
-///»ñÈ¡Ëæ»úÈÎÎñ
+///è·å–éšæœºä»»åŠ¡
 void CGameTaskLogic::GetRandTask(int inDex) 
 {
 	if(TYPE_NONE  != m_byBackCardType)
@@ -147,7 +147,7 @@ void CGameTaskLogic::GetRandTask(int inDex)
 		m_bySpecifyCard = rand()%MAX_CARD_SHAPE + 3  ; 
 	}
 }
-///ÉèÖÃÓÎÏ·ÖĞµÄÈÎÎñ
+///è®¾ç½®æ¸¸æˆä¸­çš„ä»»åŠ¡
 void CGameTaskLogic::SetGameTask(GameTaskStruct &gameTask) 
 {
 	gameTask.byBackCardType = m_byBackCardType ; 
@@ -155,7 +155,7 @@ void CGameTaskLogic::SetGameTask(GameTaskStruct &gameTask)
 	gameTask.bySpecifyShape = m_bySpecifyShape ;
 	gameTask.bySpecifyCard = m_bySpecifyCard ; 
 }
-///ÉèÖÃµ×ÅÆÊı¾İ
+///è®¾ç½®åº•ç‰Œæ•°æ®
 void CGameTaskLogic::SetLastCardData(BYTE iCardList[] , BYTE iCardCount) 
 {
 	if(NULL == iCardList)
@@ -167,7 +167,7 @@ void CGameTaskLogic::SetLastCardData(BYTE iCardList[] , BYTE iCardCount)
 		return ; 
 	}
 
-	if(TYPE_NONE != m_byBackCardType)  ///ÒÑ¾­ÓĞµ×ÅÆ·­±¶ÁË
+	if(TYPE_NONE != m_byBackCardType)  ///å·²ç»æœ‰åº•ç‰Œç¿»å€äº†
 	{
 		return ; 
 	}
@@ -179,15 +179,15 @@ void CGameTaskLogic::SetLastCardData(BYTE iCardList[] , BYTE iCardCount)
 	return ; 
 
 }
-///ÅĞ¶ÏÊÇ·ñÍê³ÉÈÎÎñÁË
+///åˆ¤æ–­æ˜¯å¦å®Œæˆä»»åŠ¡äº†
 bool CGameTaskLogic::IsFinishTask(void) 
 {
-	if(TYPE_NONE != m_byBackCardType) ///µ×ÅÆÓĞ·­±¶
+	if(TYPE_NONE != m_byBackCardType) ///åº•ç‰Œæœ‰ç¿»å€
 	{
 		return  false; 
 	}
 	
-	if(TYPE_LAST_NONE ==  m_byTaskType)  ///Ã»ÓĞÈÎÎñ
+	if(TYPE_LAST_NONE ==  m_byTaskType)  ///æ²¡æœ‰ä»»åŠ¡
 	{
 		return false ; 
 	}
@@ -260,7 +260,7 @@ bool CGameTaskLogic::IsFinishTask(void)
 
 	return false ; 
 }
-///»ñÈ¡µ×ÅÆ±¶Êı
+///è·å–åº•ç‰Œå€æ•°
 int  CGameTaskLogic:: GetBackCardMytiple(void) 
 {
 	int  sGamePoint = 1;
@@ -279,7 +279,7 @@ int  CGameTaskLogic:: GetBackCardMytiple(void)
 		}
 		else
 		{
-			sGamePoint = 3 ;  //Èı±¶
+			sGamePoint = 3 ;  //ä¸‰å€
 		}
 	}
 	else
@@ -290,7 +290,7 @@ int  CGameTaskLogic:: GetBackCardMytiple(void)
 	return sGamePoint ; 
 }
 
-///°Ù·Ö±È¼ÆËã
+///ç™¾åˆ†æ¯”è®¡ç®—
 int  CGameTaskLogic::GetTaskMutiple(bool bFinish) 
 {
 	if(false == bFinish)

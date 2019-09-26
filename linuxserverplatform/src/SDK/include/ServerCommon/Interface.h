@@ -1,67 +1,67 @@
 #pragma once
 
 /********************************************************************************************/
-///·şÎñ½Ó¿Ú¶¨Òå
+///æœåŠ¡æ¥å£å®šä¹‰
 /********************************************************************************************/
 
-class CTCPSocket;					///<SOCKET Àà
-class CDataBaseManage;				///<Êı¾İ¿âÄ£¿éÀà
-struct NetMessageHead;				///<ÍøÂçÊı¾İ°üÍ·
-struct ManageInfoStruct;			///<³õÊ¼»¯ĞÅÏ¢½á¹¹
-struct KernelInfoStruct;			///<ÄÚºËĞÅÏ¢½á¹¹
-struct DataBaseLineHead;			///<Êı¾İ¿â¶ÓÁĞÍ·½á¹¹
-struct AsynThreadResultLine;		///<Òì²½Ïß³Ì½á¹ûÍ·½á¹¹
+class CTCPSocket;					///<SOCKET ç±»
+class CDataBaseManage;				///<æ•°æ®åº“æ¨¡å—ç±»
+struct NetMessageHead;				///<ç½‘ç»œæ•°æ®åŒ…å¤´
+struct ManageInfoStruct;			///<åˆå§‹åŒ–ä¿¡æ¯ç»“æ„
+struct KernelInfoStruct;			///<å†…æ ¸ä¿¡æ¯ç»“æ„
+struct DataBaseLineHead;			///<æ•°æ®åº“é˜Ÿåˆ—å¤´ç»“æ„
+struct AsynThreadResultLine;		///<å¼‚æ­¥çº¿ç¨‹ç»“æœå¤´ç»“æ„
 class CDataLine;
 
-//·şÎñÆ÷ÍøÂç·şÎñ½Ó¿Ú 
+//æœåŠ¡å™¨ç½‘ç»œæœåŠ¡æ¥å£ 
 class IServerSocketService
 {
-	///½Ó¿Úº¯Êı
+	///æ¥å£å‡½æ•°
 public:
-	//ÍøÂç¹Ø±Õ´¦Àí
+	//ç½‘ç»œå…³é—­å¤„ç†
 	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime) = 0;
-	//ÍøÂçÏûÏ¢´¦Àí
+	//ç½‘ç»œæ¶ˆæ¯å¤„ç†
 	virtual bool OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex, UINT dwHandleID) = 0;
-	// »ñÈ¡dataline
+	// è·å–dataline
 	virtual CDataLine* GetDataLine() = 0;
 };
 
-///Òì²½Ïß³Ì½á¹û·şÎñ½Ó¿Ú
+///å¼‚æ­¥çº¿ç¨‹ç»“æœæœåŠ¡æ¥å£
 class IAsynThreadResultService
 {
-	///½Ó¿Úº¯Êı
+	///æ¥å£å‡½æ•°
 public:
-	///Òì²½Ïß³Ì½á¹û´¦Àí
+	///å¼‚æ­¥çº¿ç¨‹ç»“æœå¤„ç†
 	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID) = 0;
 };
 
-///Êı¾İ¿â´¦Àí·şÎñ½Ó¿Ú
+///æ•°æ®åº“å¤„ç†æœåŠ¡æ¥å£
 class IDataBaseHandleService
 {
-	///½Ó¿Úº¯Êı
+	///æ¥å£å‡½æ•°
 public:
-	///ÉèÖÃ²ÎÊı
+	///è®¾ç½®å‚æ•°
 	virtual bool SetParameter(IAsynThreadResultService* pRusultService, CDataBaseManage* pDataBaseManage, ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData) = 0;
-	///Êı¾İ¿â´¦Àí½Ó¿Ú
+	///æ•°æ®åº“å¤„ç†æ¥å£
 	virtual UINT HandleDataBase(DataBaseLineHead* pSourceData) = 0;
 };
 
-///×é¼ş¹ÜÀí½Ó¿Ú
+///ç»„ä»¶ç®¡ç†æ¥å£
 class IModuleManageService
 {
-	///½Ó¿Úº¯Êı
+	///æ¥å£å‡½æ•°
 public:
-	///³õÊ¼»¯º¯Êı 
+	///åˆå§‹åŒ–å‡½æ•° 
 	virtual bool InitService(ManageInfoStruct* pInitData) = 0;
-	///È¡Ïû³õÊ¼»¯º¯Êı 
+	///å–æ¶ˆåˆå§‹åŒ–å‡½æ•° 
 	virtual bool UnInitService() = 0;
-	///³õÊ¼»¯º¯Êı 
+	///åˆå§‹åŒ–å‡½æ•° 
 	virtual bool StartService(UINT& errCode) = 0;
-	///³õÊ¼»¯º¯Êı 
+	///åˆå§‹åŒ–å‡½æ•° 
 	virtual bool StoptService() = 0;
-	///É¾³ıº¯Êı
+	///åˆ é™¤å‡½æ•°
 	virtual bool DeleteService() = 0;
-	///¸üĞÂº¯Êı
+	///æ›´æ–°å‡½æ•°
 	virtual bool UpdateService() = 0;
 };
 /********************************************************************************************/

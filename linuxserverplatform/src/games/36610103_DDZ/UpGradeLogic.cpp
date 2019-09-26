@@ -2,22 +2,22 @@
 #include "UpGradeLogic.h"
 #include "Util.h"
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 CUpGradeGameLogic::CUpGradeGameLogic(void)
 {
-	m_bSortCardStyle = 0; //0 ÅÆ°´´óĞ¡ÅÅĞò;1 °´ÅÆĞÍÅÅĞò
-	m_iCondition = 0;			//ÎŞ³öÅÆÏŞÖÆÌõ¼ş
+	m_bSortCardStyle = 0; //0 ç‰ŒæŒ‰å¤§å°æ’åº;1 æŒ‰ç‰Œå‹æ’åº
+	m_iCondition = 0;			//æ— å‡ºç‰Œé™åˆ¶æ¡ä»¶
 	m_bKingCanReplace = false;
 	m_iLaiZiSize = 0;
 	//	m_iStation[4] = 500;
 	//	for (int i=0; i<4; i++)
 	//		m_iStation[i] = 100*i;
 }
-//ÎöÔìº¯Êı
+//æé€ å‡½æ•°
 CUpGradeGameLogic::~CUpGradeGameLogic()
 {
 }
-//»ñÈ¡ÆË¿Ë»¨É«
+//è·å–æ‰‘å…‹èŠ±è‰²
 BYTE CUpGradeGameLogic::GetCardHuaKind(BYTE iCard, BOOL bTrueHua)
 {
 	int iHuaKind = (iCard&UG_HUA_MASK);
@@ -28,24 +28,24 @@ BYTE CUpGradeGameLogic::GetCardHuaKind(BYTE iCard, BOOL bTrueHua)
 	return iHuaKind;
 }
 
-//»ñÈ¡ÆË¿Ë´óĞ¡ £¨2 - 18 £¬ 15 ÒÔÉÏÊÇÖ÷ÅÆ £º 2 - 21 £¬ 15 ÒÔÉÏÊÇÖ÷£©
+//è·å–æ‰‘å…‹å¤§å° ï¼ˆ2 - 18 ï¼Œ 15 ä»¥ä¸Šæ˜¯ä¸»ç‰Œ ï¼š 2 - 21 ï¼Œ 15 ä»¥ä¸Šæ˜¯ä¸»ï¼‰
 int CUpGradeGameLogic::GetCardBulk(BYTE iCard, bool bExtVal)
 {
 	if ((iCard == 0x4E) || (iCard == 0x4F))
 	{
-		return bExtVal ? (iCard - 14) : (iCard - 62); //´óĞ¡¹í64+14-62=16	Ö»·µ»Ø´óĞ¡Ã¨µÄÖµ
+		return bExtVal ? (iCard - 14) : (iCard - 62); //å¤§å°é¬¼64+14-62=16	åªè¿”å›å¤§å°çŒ«çš„å€¼
 	}
 
 	int iCardNum = GetCardNum(iCard);
 	int iHuaKind = GetCardHuaKind(iCard, TRUE);
 
-	if (iCardNum == 2) //2Íõ
+	if (iCardNum == 2) //2ç‹
 	{
-		if (bExtVal) //ÓĞ¹í
+		if (bExtVal) //æœ‰é¬¼
 		{
 			return ((iHuaKind >> 4) + (15 * 4));
 		}
-		else //Ã»ÓĞ¹í£¬·µ»Ø2Íõ
+		else //æ²¡æœ‰é¬¼ï¼Œè¿”å›2ç‹
 		{
 			return 15;
 		}
@@ -54,7 +54,7 @@ int CUpGradeGameLogic::GetCardBulk(BYTE iCard, bool bExtVal)
 	return ((bExtVal) ? ((iHuaKind >> 4) + (iCardNum * 4)) : (iCardNum));
 }
 
-//´ÓÖµµÃµ½ÅÆ
+//ä»å€¼å¾—åˆ°ç‰Œ
 BYTE CUpGradeGameLogic::GetCardByValue(int Value)
 {
 	BYTE CardArray[55] = {
@@ -78,7 +78,7 @@ BYTE CUpGradeGameLogic::GetCardByValue(int Value)
 }
 
 
-//°´ÅÆÃæÊı×Ö´Ó´óµ½Ğ¡ÅÅÁĞÆË¿Ë
+//æŒ‰ç‰Œé¢æ•°å­—ä»å¤§åˆ°å°æ’åˆ—æ‰‘å…‹
 BOOL CUpGradeGameLogic::SortCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount, BOOL bSysSort)
 {
 	BOOL bSorted = TRUE, bTempUp;
@@ -89,7 +89,7 @@ BOOL CUpGradeGameLogic::SortCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount, 
 		iCardCount = 45;
 	}
 	iLast = iCardCount - 1;
-	//»ñÈ¡Î»ÖÃÊıÖµ
+	//è·å–ä½ç½®æ•°å€¼
 	for (int i = 0;i < iCardCount;i++)
 	{
 		iStationVol[i] = GetCardBulk(iCardList[i], true);
@@ -97,7 +97,7 @@ BOOL CUpGradeGameLogic::SortCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount, 
 		//else iStationVol[i]+=m_iStation[GetCardHuaKind(iCardList[i],FALSE)>>4];
 	}
 
-	//ÅÅĞò²Ù×÷(°´´Ó´óµ½Ğ¡ÅÅĞò)
+	//æ’åºæ“ä½œ(æŒ‰ä»å¤§åˆ°å°æ’åº)
 	do
 	{
 		bSorted = TRUE;
@@ -105,7 +105,7 @@ BOOL CUpGradeGameLogic::SortCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount, 
 		{
 			if (iStationVol[i] < iStationVol[i + 1])
 			{
-				//½»»»Î»ÖÃ				//==Ã°ÅİÅÅĞò
+				//äº¤æ¢ä½ç½®				//==å†’æ³¡æ’åº
 				iTemp = iCardList[i];
 				iCardList[i] = iCardList[i + 1];
 				iCardList[i + 1] = iTemp;
@@ -126,13 +126,13 @@ BOOL CUpGradeGameLogic::SortCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount, 
 		iLast--;
 	} while (!bSorted);
 
-	//ÏµÍ³ĞòÁĞ²»¿¼ÂÇ»¨É«ÅÆĞÍÎÊÌâ
+	//ç³»ç»Ÿåºåˆ—ä¸è€ƒè™‘èŠ±è‰²ç‰Œå‹é—®é¢˜
 	if (bSysSort)
 	{
 		ReverseCard(iCardList, bUp, iCardCount);
 		return TRUE;
 	}
-	if (GetSortCardStyle() == 1) //°´ÅÆĞÍÅÅĞò
+	if (GetSortCardStyle() == 1) //æŒ‰ç‰Œå‹æ’åº
 		SortCardByStyle(iCardList, iCardCount);
 
 	if (GetSortCardStyle() == 2)
@@ -153,10 +153,10 @@ BOOL CUpGradeGameLogic::ReverseCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCoun
 	}
 	return TRUE;
 }
-//°´ÅÆĞÍÅÅĞò
+//æŒ‰ç‰Œå‹æ’åº
 BOOL CUpGradeGameLogic::SortCardByStyle(BYTE iCardList[], BYTE iCardCount)
 {
-	//Èç¹ûÅÅĞòÉèÖÃÊÇÒªÇó°´´óĞ¡ÅÅĞò
+	//å¦‚æœæ’åºè®¾ç½®æ˜¯è¦æ±‚æŒ‰å¤§å°æ’åº
 	if (m_bSortCardStyle == 0)
 	{
 		SortCard(iCardList, NULL, iCardCount);
@@ -164,7 +164,7 @@ BOOL CUpGradeGameLogic::SortCardByStyle(BYTE iCardList[], BYTE iCardCount)
 		return TRUE;
 	}
 
-	//ÏÂÃæµÄ´úÂë==°´ÅÆĞÎÅÅ´óĞ¡
+	//ä¸‹é¢çš„ä»£ç ==æŒ‰ç‰Œå½¢æ’å¤§å°
 	int iStationVol[45];
 	for (int i = 0;i < iCardCount;i++)
 	{
@@ -173,38 +173,38 @@ BOOL CUpGradeGameLogic::SortCardByStyle(BYTE iCardList[], BYTE iCardCount)
 
 	int Start = 0;
 	int j, step;
-	BYTE CardTemp[8];					//ÓÃÀ´±£´æÒªÒÆÎ»µÄÅÆĞÎ
-	int CardTempVal[8];					//ÓÃÀ´±£´æÒÆÎ»µÄÅÆÃæÖµ
-	for (int i = 8;i > 1;i--)				//ÔÚÊı×éÖĞÕÒÒ»¸öÁ¬ĞøiÕÅÏàÍ¬µÄÖµ
+	BYTE CardTemp[8];					//ç”¨æ¥ä¿å­˜è¦ç§»ä½çš„ç‰Œå½¢
+	int CardTempVal[8];					//ç”¨æ¥ä¿å­˜ç§»ä½çš„ç‰Œé¢å€¼
+	for (int i = 8;i > 1;i--)				//åœ¨æ•°ç»„ä¸­æ‰¾ä¸€ä¸ªè¿ç»­iå¼ ç›¸åŒçš„å€¼
 	{
 		for (j = Start;j < iCardCount;j++)
 		{
-			CardTemp[0] = iCardList[j];			//±£´æµ±Ç°i¸öÊı×éÏàÍ¬µÄÖµ
+			CardTemp[0] = iCardList[j];			//ä¿å­˜å½“å‰iä¸ªæ•°ç»„ç›¸åŒçš„å€¼
 			CardTempVal[0] = iStationVol[j];
-			for (step = 1;step < i&&j + step < iCardCount;)			//ÕÒÒ»¸öÁ¬Ğøi¸öÖµÏàµÈµÄÊı×é(²¢±£´æÓÚÁÙÊ±Êı×éÖĞ)
+			for (step = 1;step < i&&j + step < iCardCount;)			//æ‰¾ä¸€ä¸ªè¿ç»­iä¸ªå€¼ç›¸ç­‰çš„æ•°ç»„(å¹¶ä¿å­˜äºä¸´æ—¶æ•°ç»„ä¸­)
 			{
 				if (iStationVol[j] == iStationVol[j + step])
 				{
-					CardTemp[step] = iCardList[j + step];			//ÓÃÀ´±£´æÅÆĞÎ
-					CardTempVal[step] = iStationVol[j + step];		//ÃæÖµ
+					CardTemp[step] = iCardList[j + step];			//ç”¨æ¥ä¿å­˜ç‰Œå½¢
+					CardTempVal[step] = iStationVol[j + step];		//é¢å€¼
 					step++;
 				}
 				else
 					break;
 			}
 
-			if (step >= i)	//ÕÒµ½Ò»¸öÁ¬Ğøi¸öÏàµÈµÄÊı×é´®ÆğÊ¼Î»ÖÃÎªj,½áÊøÎ»ÖÃÎªj+setp-1
-			{			//½«´ÓStart¿ªÊ¼µ½j¸öÊı×éºóÒÆsetp¸ö
-				if (j != Start) //ÅÅ³ı¿ªÊ¼¾ÍÊÇÓĞĞò
+			if (step >= i)	//æ‰¾åˆ°ä¸€ä¸ªè¿ç»­iä¸ªç›¸ç­‰çš„æ•°ç»„ä¸²èµ·å§‹ä½ç½®ä¸ºj,ç»“æŸä½ç½®ä¸ºj+setp-1
+			{			//å°†ä»Startå¼€å§‹åˆ°jä¸ªæ•°ç»„åç§»setpä¸ª
+				if (j != Start) //æ’é™¤å¼€å§‹å°±æ˜¯æœ‰åº
 				{
-					for (;j >= Start;j--) //´ÓStartÕÅÖÁjÕÅºóÒÆ¶¯iÕÅ
+					for (;j >= Start;j--) //ä»Startå¼ è‡³jå¼ åç§»åŠ¨iå¼ 
 					{
 						iCardList[j + i - 1] = iCardList[j - 1];
 						iStationVol[j + i - 1] = iStationVol[j - 1];
 					}
 					for (int k = 0;k < i;k++)
 					{
-						iCardList[Start + k] = CardTemp[k];	//´ÓStart¿ªÊ¼ÉèÖÃ³ÉCardSave
+						iCardList[Start + k] = CardTemp[k];	//ä»Startå¼€å§‹è®¾ç½®æˆCardSave
 						iStationVol[Start + k] = CardTempVal[k];
 					}
 				}
@@ -216,22 +216,22 @@ BOOL CUpGradeGameLogic::SortCardByStyle(BYTE iCardList[], BYTE iCardCount)
 	return TRUE;
 }
 
-//°´»¨É«ÅÅĞò
+//æŒ‰èŠ±è‰²æ’åº
 BOOL CUpGradeGameLogic::SortCardByKind(BYTE iCardList[], BYTE iCardCount)
 {
 	return TRUE;
 }
 
-//»ìÂÒÆË¿Ë,·şÎñÆ÷Ê¹ÓÃ
+//æ··ä¹±æ‰‘å…‹,æœåŠ¡å™¨ä½¿ç”¨
 BYTE CUpGradeGameLogic::RandCard(BYTE iCard[], int iCardCount, int iRoomId, bool bHaveKing)
 {
 	static const BYTE gCardArray[54] =
 	{
-		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //·½¿é 2 - A
-		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //Ã·»¨ 2 - A
-		0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //ºìÌÒ 2 - A
-		0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //ºÚÌÒ 2 - A
-		0x4E, 0x4F //Ğ¡¹í£¬´ó¹í
+		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //æ–¹å— 2 - A
+		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //æ¢…èŠ± 2 - A
+		0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //çº¢æ¡ƒ 2 - A
+		0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //é»‘æ¡ƒ 2 - A
+		0x4E, 0x4F //å°é¬¼ï¼Œå¤§é¬¼
 	};
 
 	BYTE iSend = 0, iStation = 0, iCardList[216], step = (bHaveKing ? 54 : 52);
@@ -269,11 +269,11 @@ bool CUpGradeGameLogic::IsLegalCard(BYTE iCard)
 {
 	static const BYTE m_Cards[54] =
 	{
-		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //·½¿é 2 - A
-		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //Ã·»¨ 2 - A
-		0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //ºìÌÒ 2 - A
-		0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //ºÚÌÒ 2 - A
-		0x4E, 0x4F //Ğ¡¹í£¬´ó¹í
+		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //æ–¹å— 2 - A
+		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //æ¢…èŠ± 2 - A
+		0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //çº¢æ¡ƒ 2 - A
+		0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //é»‘æ¡ƒ 2 - A
+		0x4E, 0x4F //å°é¬¼ï¼Œå¤§é¬¼
 	};
 	for (int i = 0;i < 54;i++)
 	{
@@ -298,17 +298,17 @@ int CUpGradeGameLogic::GetCardCount(BYTE iCard[], int iCardCount)
 	return iCount;
 }
 
-//É¾³ıÆË¿Ë
-int CUpGradeGameLogic::RemoveCard(BYTE iRemoveCard[],   //ÒªÉ¾³ıµÄÅÆÃæ
-	int iRemoveCount,		//ÒªÉ¾³ıµÄÅÆ×ÜÊı
-	BYTE iCardList[],		//Òª´¦ÀíµÄÊı×é
-	int iCardCount)		//´¦ÀíÊı×éµÄÉÏÏŞ
+//åˆ é™¤æ‰‘å…‹
+int CUpGradeGameLogic::RemoveCard(BYTE iRemoveCard[],   //è¦åˆ é™¤çš„ç‰Œé¢
+	int iRemoveCount,		//è¦åˆ é™¤çš„ç‰Œæ€»æ•°
+	BYTE iCardList[],		//è¦å¤„ç†çš„æ•°ç»„
+	int iCardCount)		//å¤„ç†æ•°ç»„çš„ä¸Šé™
 {
-	//¼ìÑéÊı¾İ
+	//æ£€éªŒæ•°æ®
 	if (iRemoveCount > iCardCount) return 0;
 
 	int iRecount;
-	int iDeleteCount = 0; //°ÑÒªÉ¾³ıµÄÅÆÖÃÁã
+	int iDeleteCount = 0; //æŠŠè¦åˆ é™¤çš„ç‰Œç½®é›¶
 
 	for (int i = 0; i < iRemoveCount; i++)
 	{
@@ -322,7 +322,7 @@ int CUpGradeGameLogic::RemoveCard(BYTE iRemoveCard[],   //ÒªÉ¾³ıµÄÅÆÃæ
 			}
 		}
 	}
-	iRecount = RemoveNummCard(iCardList, iCardCount); //É¾³ı×öÁË±ê¼ÇµÄÅÆ
+	iRecount = RemoveNummCard(iCardList, iCardCount); //åˆ é™¤åšäº†æ ‡è®°çš„ç‰Œ
 
 	if (iDeleteCount != iRecount)
 		return 0;
@@ -331,7 +331,7 @@ int CUpGradeGameLogic::RemoveCard(BYTE iRemoveCard[],   //ÒªÉ¾³ıµÄÅÆÃæ
 }
 
 
-//Çå³ı 0 Î»ÆË¿Ë
+//æ¸…é™¤ 0 ä½æ‰‘å…‹
 int CUpGradeGameLogic::RemoveNummCard(BYTE iCardList[], int iCardCount)
 {
 	int iRemoveCount = 0;
@@ -364,22 +364,22 @@ int CUpGradeGameLogic::RemoveNummCard(BYTE iCardList[], int iCardCount)
 
 
 
-//¸¨Öúº¯Êı
+//è¾…åŠ©å‡½æ•°
 
-//±È½Ïµ¥ÕÅ
+//æ¯”è¾ƒå•å¼ 
 BOOL CUpGradeGameLogic::CompareOnlyOne(BYTE iFirstCard, BYTE iNextCard)
 {
-	//µÚÒ»¸ö±íÊ¾×ÀÃæÉÏ×î´óÅÆ, µÚ¶ş¸ö±íÊ¾Òª³öµÄÅÆ
+	//ç¬¬ä¸€ä¸ªè¡¨ç¤ºæ¡Œé¢ä¸Šæœ€å¤§ç‰Œ, ç¬¬äºŒä¸ªè¡¨ç¤ºè¦å‡ºçš„ç‰Œ
 	return GetCardBulk(iFirstCard) < GetCardBulk(iNextCard);
 }
 
-//¼ÆËãÅÆÀïµÄ·ÖÊı(5,10,K)
+//è®¡ç®—ç‰Œé‡Œçš„åˆ†æ•°(5,10,K)
 int CUpGradeGameLogic::FindPoint(BYTE iCardList[], int iCardCount)
 {
-	int iPoint = 0; //·ÖÊı
+	int iPoint = 0; //åˆ†æ•°
 	for (int i = 0; i < iCardCount; i++)
 	{
-		int iNum = GetCardNum(iCardList[i]); //ÅÆÃæµãÊı
+		int iNum = GetCardNum(iCardList[i]); //ç‰Œé¢ç‚¹æ•°
 		switch (iNum)
 		{
 		case 5:
@@ -394,7 +394,7 @@ int CUpGradeGameLogic::FindPoint(BYTE iCardList[], int iCardCount)
 	return iPoint;
 }
 
-//¼¸ÕÅÅÆÊÇ·ñÊÇÏàÍ¬Êı×Ö
+//å‡ å¼ ç‰Œæ˜¯å¦æ˜¯ç›¸åŒæ•°å­—
 BOOL CUpGradeGameLogic::IsSameNumCard(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	int i, temp[18] = { 0 };
@@ -410,9 +410,9 @@ BOOL CUpGradeGameLogic::IsSameNumCard(BYTE iCardList[], int iCardCount, bool bEx
 	}
 	if (m_bKingCanReplace)
 	{
-		if (i < 16)//Íõ´øÆäËûÅÆ
+		if (i < 16)//ç‹å¸¦å…¶ä»–ç‰Œ
 			return (temp[i] + temp[16] + temp[17] == iCardCount);
-		//else//Ö»ÓĞÍõ
+		//else//åªæœ‰ç‹
 		if (i < 17)
 			return (temp[16] + temp[17] == iCardCount);
 	}
@@ -421,14 +421,14 @@ BOOL CUpGradeGameLogic::IsSameNumCard(BYTE iCardList[], int iCardCount, bool bEx
 	return 0;
 }
 
-//ÊÇ·ñÎªÍ¬»¨
+//æ˜¯å¦ä¸ºåŒèŠ±
 BOOL CUpGradeGameLogic::IsSameHuaKind(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount <= 0) return FALSE;
 
-	BYTE iFirstHua = GetCardHuaKind(iCardList[0], TRUE); //È¡µÃµÚÒ»ÕÅÅÆµÄ»¨É«
+	BYTE iFirstHua = GetCardHuaKind(iCardList[0], TRUE); //å–å¾—ç¬¬ä¸€å¼ ç‰Œçš„èŠ±è‰²
 
-	for (int i = 1; i < iCardCount; i++) //ºóÃæµÄ¶¼ºÍµÚÒ»ÕÅµÄ»¨É«±È
+	for (int i = 1; i < iCardCount; i++) //åé¢çš„éƒ½å’Œç¬¬ä¸€å¼ çš„èŠ±è‰²æ¯”
 	{
 		if (GetCardHuaKind(iCardList[i], TRUE) != iFirstHua)
 		{
@@ -442,13 +442,13 @@ BOOL CUpGradeGameLogic::IsSameHuaKind(BYTE iCardList[], int iCardCount, bool bEx
 
 	for(int i = 0; i < iCardCount; i++)
 	{
-	Kind[GetCardHuaKind(iCardList[i], TRUE)/16] = 1; //ÏàÓ¦»¨É«µÄÖµÖÃ1
+	Kind[GetCardHuaKind(iCardList[i], TRUE)/16] = 1; //ç›¸åº”èŠ±è‰²çš„å€¼ç½®1
 	}
 
 	BYTE iPos = 0;
 	for(int i = 0; i < 4; i++)
 	{
-	if(Kind[i] == 1) iPos++; //¼ÆËãÓĞ¼¸¸ö»¨É«
+	if(Kind[i] == 1) iPos++; //è®¡ç®—æœ‰å‡ ä¸ªèŠ±è‰²
 	}
 
 	if(iPos != 1) return FALSE;
@@ -457,7 +457,7 @@ BOOL CUpGradeGameLogic::IsSameHuaKind(BYTE iCardList[], int iCardCount, bool bEx
 	//*/
 }
 
-//²éÕÒÓÃ»§ÊÖÖĞÕ¨µ¯Êı
+//æŸ¥æ‰¾ç”¨æˆ·æ‰‹ä¸­ç‚¸å¼¹æ•°
 BYTE CUpGradeGameLogic::GetBombCount(BYTE iCardList[], int iCardCount, int iNumCount, bool bExtVal)
 {
 	int iCount = 0,
@@ -474,7 +474,7 @@ BYTE CUpGradeGameLogic::GetBombCount(BYTE iCardList[], int iCardCount, int iNumC
 	return iCount;
 }
 
-//»ñÈ¡Ö¸¶¨ÕÅÊıÅÆ¸öÊı
+//è·å–æŒ‡å®šå¼ æ•°ç‰Œä¸ªæ•°
 BYTE CUpGradeGameLogic::GetCountBySpecifyNumCount(BYTE iCardList[], int iCardCount, int Num)
 {
 	BYTE temp[18] = { 0 };
@@ -489,7 +489,7 @@ BYTE CUpGradeGameLogic::GetCountBySpecifyNumCount(BYTE iCardList[], int iCardCou
 	return count;
 }
 
-//»ñÈ¡Ö¸¶¨ÅÆ¸öÊı
+//è·å–æŒ‡å®šç‰Œä¸ªæ•°
 BYTE CUpGradeGameLogic::GetCountBySpecifyCard(BYTE iCardList[], int iCardCount, BYTE bCard)
 {
 	int count = 0;
@@ -499,7 +499,7 @@ BYTE CUpGradeGameLogic::GetCountBySpecifyCard(BYTE iCardList[], int iCardCount, 
 
 	return count;
 }
-//»ñÈ¡Ö¸¶¨ÅÆÕÅÊıÅÆ´óĞ¡
+//è·å–æŒ‡å®šç‰Œå¼ æ•°ç‰Œå¤§å°
 BYTE CUpGradeGameLogic::GetBulkBySpecifyCardCount(BYTE iCardList[], int iCardCount, int iCount)
 {
 	BYTE temp[18] = { 0 };
@@ -513,27 +513,27 @@ BYTE CUpGradeGameLogic::GetBulkBySpecifyCardCount(BYTE iCardList[], int iCardCou
 	return 0;
 }
 
-//ÊÇ·ñÎª±äÖÖË³×Ó
+//æ˜¯å¦ä¸ºå˜ç§é¡ºå­
 BOOL CUpGradeGameLogic::IsVariationSequence(BYTE iCardList[], int iCardCount, int iCount)
 {
 	int iValue = iCardCount / iCount;
-	if (iCardCount != iCount *iValue)						 //ÕÅÊı²»ÏàÅä
+	if (iCardCount != iCount *iValue)						 //å¼ æ•°ä¸ç›¸é…
 		return FALSE;
 
-	int iFirstMax = 0, iSecondMax = 0, iThirdMax = 0, iMin = 18;//ÕÒ³öµÚÒ»´ó,µÚ¶ş´ó,µÚÈı´óµÄÅÆ,ºÍ×îĞ¡ÅÆ
+	int iFirstMax = 0, iSecondMax = 0, iThirdMax = 0, iMin = 18;//æ‰¾å‡ºç¬¬ä¸€å¤§,ç¬¬äºŒå¤§,ç¬¬ä¸‰å¤§çš„ç‰Œ,å’Œæœ€å°ç‰Œ
 	BYTE temp[18] = { 0 };
-	for (int i = 0;i < iCardCount;i++)						//ÅÆ¶àÉÙ
+	for (int i = 0;i < iCardCount;i++)						//ç‰Œå¤šå°‘
 	{
 		temp[GetCardBulk(iCardList[i])]++;
 	}
 
 	for (int i = 0;i < 18;i++)
 	{
-		if (temp[i] != 0 && temp[i] != iCount)	//·ÇÕÒ¶¨Ë³×Ó
+		if (temp[i] != 0 && temp[i] != iCount)	//éæ‰¾å®šé¡ºå­
 			return false;
 	}
 
-	for (int i = 0;i < 18;i++)						//×îĞ¡ÅÆ×î´ó¿ÉÄÜµ½A
+	for (int i = 0;i < 18;i++)						//æœ€å°ç‰Œæœ€å¤§å¯èƒ½åˆ°A
 	{
 		if (temp[i] != 0)
 			iMin = i;
@@ -543,15 +543,15 @@ BOOL CUpGradeGameLogic::IsVariationSequence(BYTE iCardList[], int iCardCount, in
 	{
 		if (temp[i] != 0)
 		{
-			iFirstMax = i;						//¿ÉÄÜÊÇ2Ò²¿ÉÒÔÊÇA
+			iFirstMax = i;						//å¯èƒ½æ˜¯2ä¹Ÿå¯ä»¥æ˜¯A
 			for (int j = i - 1;j > 0;j--)
 			{
-				if (temp[j] != 0)//ÕÒµ½µÚ¶ş´óµÄÍË³öÑ­»·(ÎŞµÚÈı´óµÄ)//¿ÉÄÜÊÇAÒ²¿ÉÒÔ·ÇA
+				if (temp[j] != 0)//æ‰¾åˆ°ç¬¬äºŒå¤§çš„é€€å‡ºå¾ªç¯(æ— ç¬¬ä¸‰å¤§çš„)//å¯èƒ½æ˜¯Aä¹Ÿå¯ä»¥éA
 				{
 					iSecondMax = j;
 					for (int k = j - 1;j > 0;j--)
 					{
-						if (temp[k] != 0)//²éµÚµÚÈı´óµÄÍË³öÑ­»·	//¿ÉÊÇ´æÔÚÒ²¿ÉÒÔ²»´æÔÚ
+						if (temp[k] != 0)//æŸ¥ç¬¬ç¬¬ä¸‰å¤§çš„é€€å‡ºå¾ªç¯	//å¯æ˜¯å­˜åœ¨ä¹Ÿå¯ä»¥ä¸å­˜åœ¨
 						{
 							iThirdMax = k;
 							break;
@@ -564,19 +564,19 @@ BOOL CUpGradeGameLogic::IsVariationSequence(BYTE iCardList[], int iCardCount, in
 		}
 	}
 
-	if (iFirstMax < 15)	//²»´æÔÚ2µÄÇé¿ö,Õı³£Çé¿öÏÂ
+	if (iFirstMax < 15)	//ä¸å­˜åœ¨2çš„æƒ…å†µ,æ­£å¸¸æƒ…å†µä¸‹
 	{
 		return (iFirstMax - iMin + 1 == iValue);
 	}
 
-	if (iFirstMax == 15)	//´æÔÚ2,ÔÙ¿´ÊÇ·ñ´æÔÚA
+	if (iFirstMax == 15)	//å­˜åœ¨2,å†çœ‹æ˜¯å¦å­˜åœ¨A
 	{
-		if (iSecondMax == 14)		//´æÔÚA
+		if (iSecondMax == 14)		//å­˜åœ¨A
 		{
-			if (iThirdMax == 0)		//²»´æÔÚµÚÈı´ó,Ò²Ö»ÓĞA2Á½ÖÖÅÆ
+			if (iThirdMax == 0)		//ä¸å­˜åœ¨ç¬¬ä¸‰å¤§,ä¹Ÿåªæœ‰A2ä¸¤ç§ç‰Œ
 				return true;
 
-			return (iThirdMax - iMin + 1 == iValue - 2);		//´æÔÚ A2Çé¿ö°üÀ¨´¦ÀíAA2233
+			return (iThirdMax - iMin + 1 == iValue - 2);		//å­˜åœ¨ A2æƒ…å†µåŒ…æ‹¬å¤„ç†AA2233
 		}
 		return (iSecondMax - iMin + 1 == iValue - 1);
 	}
@@ -584,7 +584,7 @@ BOOL CUpGradeGameLogic::IsVariationSequence(BYTE iCardList[], int iCardCount, in
 	return false;
 }
 
-//ÊÇ·ñéí˜×Ó
+//æ˜¯å¦ç‚ºé †å­
 BOOL CUpGradeGameLogic::IsSequence(BYTE iCardList[], int iCardCount, int iCount)
 {
 	BYTE temp[18] = { 0 };
@@ -595,7 +595,7 @@ BOOL CUpGradeGameLogic::IsSequence(BYTE iCardList[], int iCardCount, int iCount)
 
 	for (int i = 0; i < 15; i++)
 	{
-		if (temp[i] != 0 && temp[i] != iCount)	//·ÇÖ¸¶¨Ë³
+		if (temp[i] != 0 && temp[i] != iCount)	//éæŒ‡å®šé¡º
 			return false;
 	}
 
@@ -605,7 +605,7 @@ BOOL CUpGradeGameLogic::IsSequence(BYTE iCardList[], int iCardCount, int iCount)
 	//WriteStr(sz);
 	for (int i = 0;i < 15;i++)
 	{
-		if (temp[i] != 0)//ÓĞÖµ
+		if (temp[i] != 0)//æœ‰å€¼
 		{
 			//if(temp[i] == iCount )
 			//{	
@@ -622,7 +622,7 @@ BOOL CUpGradeGameLogic::IsSequence(BYTE iCardList[], int iCardCount, int iCount)
 	return false;
 }
 
-//ÌáÈ¡Ö¸¶¨ÅÆ·µ»ØÕÒµ½ÅÆ‚€”µ
+//æå–æŒ‡å®šç‰Œè¿”å›æ‰¾åˆ°ç‰Œå€‹æ•¸
 BYTE  CUpGradeGameLogic::TackOutBySpecifyCard(BYTE iCardList[], int iCardCount, BYTE bCardBuffer[], int &iResultCardCount, BYTE bCard)
 {
 	iResultCardCount = 0;
@@ -635,7 +635,7 @@ BYTE  CUpGradeGameLogic::TackOutBySpecifyCard(BYTE iCardList[], int iCardCount, 
 }
 
 
-//ÌáÈ¡1,2,3 or 4ÕÅÏàÍ¬Êı×ÖµÄÅÆ
+//æå–1,2,3 or 4å¼ ç›¸åŒæ•°å­—çš„ç‰Œ
 int CUpGradeGameLogic::TackOutBySepcifyCardNumCount(BYTE iCardList[], int iCardCount,
 	BYTE iDoubleBuffer[], BYTE bCardNum,
 	bool bExtVal)
@@ -648,7 +648,7 @@ int CUpGradeGameLogic::TackOutBySepcifyCardNumCount(BYTE iCardList[], int iCardC
 
 	for (int i = 0; i < 18; i++)
 	{
-		if (temp[i] == bCardNum) //ÏÖÔÚÒª²éÕÒµÄÅÆĞÍ:one?double?three?four_bomb?
+		if (temp[i] == bCardNum) //ç°åœ¨è¦æŸ¥æ‰¾çš„ç‰Œå‹:one?double?three?four_bomb?
 		{
 			for (int j = 0; j < iCardCount; j++)
 			{
@@ -660,7 +660,7 @@ int CUpGradeGameLogic::TackOutBySepcifyCardNumCount(BYTE iCardList[], int iCardC
 	return iCount;
 }
 
-//ÌáÈ¡Ö¸¶¨»¨É«ÅÆ
+//æå–æŒ‡å®šèŠ±è‰²ç‰Œ
 int CUpGradeGameLogic::TackOutByCardKind(BYTE iCardList[], int iCardCount, BYTE iDoubleBuffer[], BYTE iCardKind)
 {
 	int count = 0;
@@ -678,7 +678,7 @@ int CUpGradeGameLogic::TackOutByCardKind(BYTE iCardList[], int iCardCount, BYTE 
 	return count;
 }
 
-//²ğ³ö(½«ÊÖÖĞÅÆ¶àµÄ²ğ³ÉÉÙµÄ)
+//æ‹†å‡º(å°†æ‰‹ä¸­ç‰Œå¤šçš„æ‹†æˆå°‘çš„)
 int CUpGradeGameLogic::TackOutMuchToFew(BYTE iCardList[], int iCardCount, BYTE iDoubleBuffer[], int &iBufferCardCount, BYTE iCardMuch, BYTE iCardFew)
 {
 	iBufferCardCount = 0;
@@ -696,14 +696,14 @@ int CUpGradeGameLogic::TackOutMuchToFew(BYTE iCardList[], int iCardCount, BYTE i
 	return count;
 }
 
-//ÌáÈ¡Ä³ÕÅÖ¸¶¨´óĞ¡µÄÅÆ
+//æå–æŸå¼ æŒ‡å®šå¤§å°çš„ç‰Œ
 BOOL CUpGradeGameLogic::TackOutCardBySpecifyCardNum(BYTE iCardList[], int iCardCount, BYTE iBuffer[], int &iBufferCardCount, BYTE iCard, BOOL bExtVal)
 {
 	iBufferCardCount = 0;
-	BYTE iCardNum = GetCardBulk(iCard); //µÃµ½ÅÆÃæµãÊı
+	BYTE iCardNum = GetCardBulk(iCard); //å¾—åˆ°ç‰Œé¢ç‚¹æ•°
 	for (int i = 0; i < iCardCount; i++)
 	{
-		if (GetCardBulk(iCardList[i]) == iCardNum) //ÏÖÔÚÒª²éÕÒµÄÅÆµãÊı×Ö
+		if (GetCardBulk(iCardList[i]) == iCardNum) //ç°åœ¨è¦æŸ¥æ‰¾çš„ç‰Œç‚¹æ•°å­—
 		{
 			iBuffer[iBufferCardCount++] = iCardList[i];
 		}
@@ -712,7 +712,7 @@ BOOL CUpGradeGameLogic::TackOutCardBySpecifyCardNum(BYTE iCardList[], int iCardC
 	return iBufferCardCount;
 }
 
-//²éÕÒ´óÓÚiCardµÄµ¥ÅÆËùÔÚiCardListÖĞµÄĞòºÅ
+//æŸ¥æ‰¾å¤§äºiCardçš„å•ç‰Œæ‰€åœ¨iCardListä¸­çš„åºå·
 BYTE  CUpGradeGameLogic::GetSerialByMoreThanSpecifyCard(BYTE iCardList[], int iCardCount,
 	BYTE iCard, BYTE iBaseCardCount,
 	bool bExtValue)
@@ -721,7 +721,7 @@ BYTE  CUpGradeGameLogic::GetSerialByMoreThanSpecifyCard(BYTE iCardList[], int iC
 	BYTE Serial = 0;
 	BYTE MaxCardNum = 255;
 
-	int BaseCardNum = GetCardBulk(iCard);	//µ±Ç°±È½ÏÖµ
+	int BaseCardNum = GetCardBulk(iCard);	//å½“å‰æ¯”è¾ƒå€¼
 
 	for (BYTE i = 0; i < iCardCount; i += iBaseCardCount)
 	{
@@ -730,7 +730,7 @@ BYTE  CUpGradeGameLogic::GetSerialByMoreThanSpecifyCard(BYTE iCardList[], int iC
 		if (temp<MaxCardNum && temp>BaseCardNum)
 		{
 			MaxCardNum = temp;
-			Serial = i; //µÃµ½ĞòºÅ
+			Serial = i; //å¾—åˆ°åºå·
 			break;
 		}
 	}
@@ -739,7 +739,7 @@ BYTE  CUpGradeGameLogic::GetSerialByMoreThanSpecifyCard(BYTE iCardList[], int iC
 }
 
 
-//²éÕÒ==iCardµÄµ¥ÅÆËùÔÚiCardListÖĞµÄĞòºÅ
+//æŸ¥æ‰¾==iCardçš„å•ç‰Œæ‰€åœ¨iCardListä¸­çš„åºå·
 int  CUpGradeGameLogic::GetSerialBySpecifyCard(BYTE iCardList[], int iStart, int iCardCount, BYTE iCard)
 {
 	for (int i = iStart;i < iCardCount;i++)
@@ -750,12 +750,12 @@ int  CUpGradeGameLogic::GetSerialBySpecifyCard(BYTE iCardList[], int iStart, int
 	return -1;
 }
 
-//±äÖÖË³×ÓÖĞ×î´óµÄ
+//å˜ç§é¡ºå­ä¸­æœ€å¤§çš„
 BYTE CUpGradeGameLogic::GetBulkBySpecifyVariationSequence(BYTE iCardList[], int iCardCount, int iSequence)
 {
-	int iFirstMax = 0, iSecondMax = 0, iThirdMax = 0;//ÕÒ³öµÚÒ»´ó,µÚ¶ş´ó,µÚÈı´óµÄÅÆ,ºÍ×îĞ¡ÅÆ
+	int iFirstMax = 0, iSecondMax = 0, iThirdMax = 0;//æ‰¾å‡ºç¬¬ä¸€å¤§,ç¬¬äºŒå¤§,ç¬¬ä¸‰å¤§çš„ç‰Œ,å’Œæœ€å°ç‰Œ
 	BYTE temp[18] = { 0 };
-	for (int i = 0;i < iCardCount;i++)						//ÅÆ¶àÉÙ
+	for (int i = 0;i < iCardCount;i++)						//ç‰Œå¤šå°‘
 	{
 		temp[GetCardBulk(iCardList[i])]++;
 	}
@@ -764,15 +764,15 @@ BYTE CUpGradeGameLogic::GetBulkBySpecifyVariationSequence(BYTE iCardList[], int 
 	{
 		if (temp[i] == iSequence)
 		{
-			iFirstMax = i;						//¿ÉÄÜÊÇ2Ò²¿ÉÒÔÊÇA
+			iFirstMax = i;						//å¯èƒ½æ˜¯2ä¹Ÿå¯ä»¥æ˜¯A
 			for (int j = i - 1;j > 0;j--)
 			{
-				if (temp[j] == iSequence)//ÕÒµ½µÚ¶ş´óµÄÍË³öÑ­»·(ÎŞµÚÈı´óµÄ)//¿ÉÄÜÊÇAÒ²¿ÉÒÔ·ÇA
+				if (temp[j] == iSequence)//æ‰¾åˆ°ç¬¬äºŒå¤§çš„é€€å‡ºå¾ªç¯(æ— ç¬¬ä¸‰å¤§çš„)//å¯èƒ½æ˜¯Aä¹Ÿå¯ä»¥éA
 				{
 					iSecondMax = j;
 					for (int k = j - 1;j > 0;j--)
 					{
-						if (temp[k] == iSequence)//²éµÚµÚÈı´óµÄÍË³öÑ­»·	//¿ÉÊÇ´æÔÚÒ²¿ÉÒÔ²»´æÔÚ
+						if (temp[k] == iSequence)//æŸ¥ç¬¬ç¬¬ä¸‰å¤§çš„é€€å‡ºå¾ªç¯	//å¯æ˜¯å­˜åœ¨ä¹Ÿå¯ä»¥ä¸å­˜åœ¨
 						{
 							iThirdMax = k;
 							break;
@@ -785,21 +785,21 @@ BYTE CUpGradeGameLogic::GetBulkBySpecifyVariationSequence(BYTE iCardList[], int 
 		}
 	}
 
-	if (iFirstMax == 15)	//´æÔÚ2,ÔÙ¿´ÊÇ·ñ´æÔÚA
+	if (iFirstMax == 15)	//å­˜åœ¨2,å†çœ‹æ˜¯å¦å­˜åœ¨A
 	{
-		if (iSecondMax == 14)		//´æÔÚA
+		if (iSecondMax == 14)		//å­˜åœ¨A
 		{
-			if (iThirdMax == 0)		//²»´æÔÚµÚÈı´ó,Ò²Ö»ÓĞA2Á½ÖÖÅÆ
+			if (iThirdMax == 0)		//ä¸å­˜åœ¨ç¬¬ä¸‰å¤§,ä¹Ÿåªæœ‰A2ä¸¤ç§ç‰Œ
 				return 2;
 
-			return iThirdMax;		//´æÔÚ A2Çé¿ö°üÀ¨´¦ÀíAA2233
+			return iThirdMax;		//å­˜åœ¨ A2æƒ…å†µåŒ…æ‹¬å¤„ç†AA2233
 		}
 		return iSecondMax;
 	}
 	return 0;
 }
 
-//»ñÈ¡Ö¸¶¨Ë³×ÓÖĞÅÆµã×îĞ¡Öµ(iSequence ´ú±íË³×ÓµÄÅÆÊı×î¶àÎª
+//è·å–æŒ‡å®šé¡ºå­ä¸­ç‰Œç‚¹æœ€å°å€¼(iSequence ä»£è¡¨é¡ºå­çš„ç‰Œæ•°æœ€å¤šä¸º
 BYTE  CUpGradeGameLogic::GetBulkBySpecifySequence(BYTE iCardList[], int iCardCount, int iSequence)
 {
 	int temp[18] = { 0 };
@@ -818,12 +818,12 @@ BYTE  CUpGradeGameLogic::GetBulkBySpecifySequence(BYTE iCardList[], int iCardCou
 	return 0;
 }
 
-//ÕÒ³öÒ»¸ö×îĞ¡»ò×î´óµÄÅÆ
+//æ‰¾å‡ºä¸€ä¸ªæœ€å°æˆ–æœ€å¤§çš„ç‰Œ
 int  CUpGradeGameLogic::GetBulkBySepcifyMinOrMax(BYTE iCardList[], int iCardCount, int MinOrMax/*1 or 255*/, bool bExtVal)
 {
 	int CardNum = GetCardBulk(iCardList[0], false);
 
-	if (MinOrMax == 1) //ÕÒ×îĞ¡µÄ
+	if (MinOrMax == 1) //æ‰¾æœ€å°çš„
 	{
 		for (int i = 1; i < iCardCount; i++)
 		{
@@ -840,85 +840,85 @@ int  CUpGradeGameLogic::GetBulkBySepcifyMinOrMax(BYTE iCardList[], int iCardCoun
 		}
 	}
 
-	//·µ»ØµÄÊÇ GetCardBulk() µÃµ½µÄÖµ
+	//è¿”å›çš„æ˜¯ GetCardBulk() å¾—åˆ°çš„å€¼
 	return CardNum;
 }
 
 /////////////////////////////////////////////////////////////////////////
 /**
-* @info »ñÈ¡ÅÆĞÍ
-* @param iCardList[] ÅÆ
-* @param iCardCount ÅÆµÄÊıÁ¿
+* @info è·å–ç‰Œå‹
+* @param iCardList[] ç‰Œ
+* @param iCardCount ç‰Œçš„æ•°é‡
 * @param bExlVol ?
 */
 BYTE CUpGradeGameLogic::GetCardShape(BYTE iCardList[], int iCardCount, bool bExlVol)
 {
-	if (IsOnlyOne(iCardList, iCardCount) && (m_iCardShape&(0x01))) return UG_ONLY_ONE; //µ¥ÅÆ
-	if (IsDouble(iCardList, iCardCount) && (m_iCardShape&(0x01 << 1))) return UG_DOUBLE;	 //¶ÔÅÆ
-	if (IsThreeX(iCardList, iCardCount, 0) && (m_iCardShape&(0x01 << 2))) return UG_THREE;	 //ÈıÕÅ
+	if (IsOnlyOne(iCardList, iCardCount) && (m_iCardShape&(0x01))) return UG_ONLY_ONE; //å•ç‰Œ
+	if (IsDouble(iCardList, iCardCount) && (m_iCardShape&(0x01 << 1))) return UG_DOUBLE;	 //å¯¹ç‰Œ
+	if (IsThreeX(iCardList, iCardCount, 0) && (m_iCardShape&(0x01 << 2))) return UG_THREE;	 //ä¸‰å¼ 
 
-	if (IsThreeX(iCardList, iCardCount, 1) && (m_iCardShape&(0x01 << 3))) return UG_THREE_ONE; //Èı´øÒ»
-	//if (IsThreeX(iCardList, iCardCount, 2)&&(m_iCardShape&(0x01<<4))) return UG_THREE_TWO; //Èı´ø¶ş
-	if (IsThreeX(iCardList, iCardCount, 3) && (m_iCardShape&(0x01 << 5)))	return UG_THREE_DOUBLE;	//Èı´ø¶Ô
+	if (IsThreeX(iCardList, iCardCount, 1) && (m_iCardShape&(0x01 << 3))) return UG_THREE_ONE; //ä¸‰å¸¦ä¸€
+	//if (IsThreeX(iCardList, iCardCount, 2)&&(m_iCardShape&(0x01<<4))) return UG_THREE_TWO; //ä¸‰å¸¦äºŒ
+	if (IsThreeX(iCardList, iCardCount, 3) && (m_iCardShape&(0x01 << 5)))	return UG_THREE_DOUBLE;	//ä¸‰å¸¦å¯¹
 
-	/* Ë³×ÓÖĞ°üÀ¨ Í¬»¨Ë³,ËùÒÔÏÈÅĞ¶ÏÊÇ·ñÍ¬»¨Ë³,Èç¹û²»ÊÇ£¬ÔÙÅĞ¶ÏÊÇ·ñÊÇË³×Ó£¬Èç¹ûÊÇË³×Ó£¬¾ÍÊÇÒ»°ãµÄË³×ÓÀ²*/
-	//if (IsStraightFlush(iCardList, iCardCount)&&(m_iCardShape&(0x01<<7))) return UG_STRAIGHT_FLUSH; //Í¬»¨Ë³
-	if (IsStraight(iCardList, iCardCount) && (m_iCardShape&(0x01 << 6))) return UG_STRAIGHT;            //Ë³×Ó	
-	if (IsDoubleSequence(iCardList, iCardCount) && (m_iCardShape&(0x01 << 8))) return UG_DOUBLE_SEQUENCE;  //Á¬¶Ô
+	/* é¡ºå­ä¸­åŒ…æ‹¬ åŒèŠ±é¡º,æ‰€ä»¥å…ˆåˆ¤æ–­æ˜¯å¦åŒèŠ±é¡º,å¦‚æœä¸æ˜¯ï¼Œå†åˆ¤æ–­æ˜¯å¦æ˜¯é¡ºå­ï¼Œå¦‚æœæ˜¯é¡ºå­ï¼Œå°±æ˜¯ä¸€èˆ¬çš„é¡ºå­å•¦*/
+	//if (IsStraightFlush(iCardList, iCardCount)&&(m_iCardShape&(0x01<<7))) return UG_STRAIGHT_FLUSH; //åŒèŠ±é¡º
+	if (IsStraight(iCardList, iCardCount) && (m_iCardShape&(0x01 << 6))) return UG_STRAIGHT;            //é¡ºå­	
+	if (IsDoubleSequence(iCardList, iCardCount) && (m_iCardShape&(0x01 << 8))) return UG_DOUBLE_SEQUENCE;  //è¿å¯¹
 
-	if (IsThreeXSequence(iCardList, iCardCount, 3) && (m_iCardShape&(0x01 << 12))) return UG_THREE_DOUBLE_SEQUENCE; //Á¬µÄÈı´ø¶Ô
-	//if (IsThreeXSequence(iCardList, iCardCount, 2)&&(m_iCardShape&(0x01<<11))) return UG_THREE_TWO_SEQUENCE; //Á¬µÄÈı´ø¶ş
-	if (IsThreeXSequence(iCardList, iCardCount, 1) && (m_iCardShape&(0x01 << 10))) return UG_THREE_ONE_SEQUENCE; //Á¬µÄÈı´øÒ»
-	if (IsThreeXSequence(iCardList, iCardCount, 0) && (m_iCardShape&(0x01 << 9))) return UG_THREE_SEQUENCE; //Á¬Èı
-	if (IsLianSanDaiYi(iCardList, iCardCount)) return UG_THREE_ONE_SEQUENCE; //ÌØÊâµÄÁ¬Èı´øÒ»
+	if (IsThreeXSequence(iCardList, iCardCount, 3) && (m_iCardShape&(0x01 << 12))) return UG_THREE_DOUBLE_SEQUENCE; //è¿çš„ä¸‰å¸¦å¯¹
+	//if (IsThreeXSequence(iCardList, iCardCount, 2)&&(m_iCardShape&(0x01<<11))) return UG_THREE_TWO_SEQUENCE; //è¿çš„ä¸‰å¸¦äºŒ
+	if (IsThreeXSequence(iCardList, iCardCount, 1) && (m_iCardShape&(0x01 << 10))) return UG_THREE_ONE_SEQUENCE; //è¿çš„ä¸‰å¸¦ä¸€
+	if (IsThreeXSequence(iCardList, iCardCount, 0) && (m_iCardShape&(0x01 << 9))) return UG_THREE_SEQUENCE; //è¿ä¸‰
+	if (IsLianSanDaiYi(iCardList, iCardCount)) return UG_THREE_ONE_SEQUENCE; //ç‰¹æ®Šçš„è¿ä¸‰å¸¦ä¸€
 
-	if (IsFourX(iCardList, iCardCount, 4) && (m_iCardShape&(0x01 << 16))) return UG_FOUR_TWO_DOUBLE;		//ËÄ´ø¶ş¶Ô(ÒªÇóÊÇ¶ş¶Ô)
-	if (IsFourX(iCardList, iCardCount, 3) && (m_iCardShape&(0x01 << 15))) return UG_FOUR_TWO;//UG_FOUR_ONE_DOUBLE;		//ËÄ´øÒ»¶Ô(ÒªÇó³É¶Ô)
-	if (IsFourX(iCardList, iCardCount, 2) && (m_iCardShape&(0x01 << 14))) return UG_FOUR_TWO;			//ËÄ´ø¶ş(²»ÒªÇó³É¶Ô)
-	//if	(IsFourX(iCardList,iCardCount,1)&&(m_iCardShape&(0x01<<13))) return UG_FOUR_ONE;			//ËÄ´øÒ»
+	if (IsFourX(iCardList, iCardCount, 4) && (m_iCardShape&(0x01 << 16))) return UG_FOUR_TWO_DOUBLE;		//å››å¸¦äºŒå¯¹(è¦æ±‚æ˜¯äºŒå¯¹)
+	if (IsFourX(iCardList, iCardCount, 3) && (m_iCardShape&(0x01 << 15))) return UG_FOUR_TWO;//UG_FOUR_ONE_DOUBLE;		//å››å¸¦ä¸€å¯¹(è¦æ±‚æˆå¯¹)
+	if (IsFourX(iCardList, iCardCount, 2) && (m_iCardShape&(0x01 << 14))) return UG_FOUR_TWO;			//å››å¸¦äºŒ(ä¸è¦æ±‚æˆå¯¹)
+	//if	(IsFourX(iCardList,iCardCount,1)&&(m_iCardShape&(0x01<<13))) return UG_FOUR_ONE;			//å››å¸¦ä¸€
 
-	//if (IsFourXSequence(iCardList,iCardCount,4)) return UG_FOUR_TWO_DOUBLE_SEQUENCE;	//ËÄË³´ø¶ş¶Ô
-	//if (IsFourXSequence(iCardList,iCardCount,2)) return UG_FOUR_TWO_SEQUENCE;	//ËÄË³´ø¶şµ¥ÕÅ
-	//if (IsFourXSequence(iCardList,iCardCount,0)) return UG_FOUR_SEQUENCE;	//ËÄË³
+	//if (IsFourXSequence(iCardList,iCardCount,4)) return UG_FOUR_TWO_DOUBLE_SEQUENCE;	//å››é¡ºå¸¦äºŒå¯¹
+	//if (IsFourXSequence(iCardList,iCardCount,2)) return UG_FOUR_TWO_SEQUENCE;	//å››é¡ºå¸¦äºŒå•å¼ 
+	//if (IsFourXSequence(iCardList,iCardCount,0)) return UG_FOUR_SEQUENCE;	//å››é¡º
 
-	if (IsKingBomb(iCardList, iCardCount) && (m_iCardShape&(0x01 << 20))) return UG_KING_BOMB;//ÍõÕ¨
-	if (IsBomb(iCardList, iCardCount) && (m_iCardShape&(0x01 << 19))) return UG_BOMB; //4ÕÅÒÔÉÏÍ¬µãÅÆ£¬Õ¨µ¯
+	if (IsKingBomb(iCardList, iCardCount) && (m_iCardShape&(0x01 << 20))) return UG_KING_BOMB;//ç‹ç‚¸
+	if (IsBomb(iCardList, iCardCount) && (m_iCardShape&(0x01 << 19))) return UG_BOMB; //4å¼ ä»¥ä¸ŠåŒç‚¹ç‰Œï¼Œç‚¸å¼¹
 
-////	if (IsVariationFourXSequence(iCardList,iCardCount,0)) return UG_VARIATION_FOUR_SEQUENCE;	//±äÖÖËÄË³
-////	if (IsVariationFourXSequence(iCardList,iCardCount,1)) return UG_VARIATION_FOUR_ONE_SEQUENCE;	//±äÖÖËÄË³´øµ¥ÕÅ
-////	if (IsVariationFourXSequence(iCardList,iCardCount,2)) return UG_VARIATION_FOUR_TWO_SEQUENCE;	//±äÖÖËÄË³´ø¶şµ¥ÕÅ
-////	if (IsVariationFourXSequence(iCardList,iCardCount,3)) return UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE;	//±äÖÖËÄË³´øÒ»¶Ô
-////	if (IsVariationFourXSequence(iCardList,iCardCount,4)) return UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE;	//±äÖÖËÄË³´ø¶ş¶Ô
+////	if (IsVariationFourXSequence(iCardList,iCardCount,0)) return UG_VARIATION_FOUR_SEQUENCE;	//å˜ç§å››é¡º
+////	if (IsVariationFourXSequence(iCardList,iCardCount,1)) return UG_VARIATION_FOUR_ONE_SEQUENCE;	//å˜ç§å››é¡ºå¸¦å•å¼ 
+////	if (IsVariationFourXSequence(iCardList,iCardCount,2)) return UG_VARIATION_FOUR_TWO_SEQUENCE;	//å˜ç§å››é¡ºå¸¦äºŒå•å¼ 
+////	if (IsVariationFourXSequence(iCardList,iCardCount,3)) return UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE;	//å˜ç§å››é¡ºå¸¦ä¸€å¯¹
+////	if (IsVariationFourXSequence(iCardList,iCardCount,4)) return UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE;	//å˜ç§å››é¡ºå¸¦äºŒå¯¹
 //
-//	/* Ë³×ÓÖĞ°üÀ¨ Í¬»¨Ë³,ËùÒÔÏÈÅĞ¶ÏÊÇ·ñÍ¬»¨Ë³,Èç¹û²»ÊÇ£¬ÔÙÅĞ¶ÏÊÇ·ñÊÇË³×Ó£¬Èç¹ûÊÇË³×Ó£¬¾ÍÊÇÒ»°ãµÄË³×ÓÀ²*/
-////	if (IsStraightFlush(iCardList, iCardCount)) return UG_STRAIGHT_FLUSH; //Í¬»¨Ë³
-//	//if	(IsFlush(iCardList,iCardCount)) return UG_FLUSH;					//Í¬»¨(·ÇË³×Ó)
-//	if  (IsStraight(iCardList, iCardCount)) return UG_STRAIGHT;            //Ë³×Ó	
-////	if	(IsVariationStraight(iCardList,iCardCount,1)) return UG_VARIATION_STRAIGHT;				//±äÖÖµ¥Ë³
+//	/* é¡ºå­ä¸­åŒ…æ‹¬ åŒèŠ±é¡º,æ‰€ä»¥å…ˆåˆ¤æ–­æ˜¯å¦åŒèŠ±é¡º,å¦‚æœä¸æ˜¯ï¼Œå†åˆ¤æ–­æ˜¯å¦æ˜¯é¡ºå­ï¼Œå¦‚æœæ˜¯é¡ºå­ï¼Œå°±æ˜¯ä¸€èˆ¬çš„é¡ºå­å•¦*/
+////	if (IsStraightFlush(iCardList, iCardCount)) return UG_STRAIGHT_FLUSH; //åŒèŠ±é¡º
+//	//if	(IsFlush(iCardList,iCardCount)) return UG_FLUSH;					//åŒèŠ±(éé¡ºå­)
+//	if  (IsStraight(iCardList, iCardCount)) return UG_STRAIGHT;            //é¡ºå­	
+////	if	(IsVariationStraight(iCardList,iCardCount,1)) return UG_VARIATION_STRAIGHT;				//å˜ç§å•é¡º
 //
-////	if	(IsVariationDoubleSequence(iCardList,iCardCount,2)) return UG_VARIATION_STRAIGHT;		//±äÖÖË«Ë³
-//	if (IsDoubleSequence(iCardList, iCardCount)) return UG_DOUBLE_SEQUENCE;  //Á¬¶Ô
+////	if	(IsVariationDoubleSequence(iCardList,iCardCount,2)) return UG_VARIATION_STRAIGHT;		//å˜ç§åŒé¡º
+//	if (IsDoubleSequence(iCardList, iCardCount)) return UG_DOUBLE_SEQUENCE;  //è¿å¯¹
 //
-////	if (IsThreeSequenceDoubleSequence(iCardList,iCardCount)) return UG_THREE_SEQUENCE_DOUBLE_SEQUENCE;//ºûµû
-////	if (IsVariationThreeSequenceDoubleSequence(iCardList,iCardCount)) return UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE;//±äÖÖºûµû
+////	if (IsThreeSequenceDoubleSequence(iCardList,iCardCount)) return UG_THREE_SEQUENCE_DOUBLE_SEQUENCE;//è´è¶
+////	if (IsVariationThreeSequenceDoubleSequence(iCardList,iCardCount)) return UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE;//å˜ç§è´è¶
 //
-//	if (IsThreeXSequence(iCardList, iCardCount, 3)) return UG_THREE_DOUBLE_SEQUENCE; //Á¬µÄÈı´ø¶Ô
-////	if (IsThreeXSequence(iCardList, iCardCount, 2)) return UG_THREE_TWO_SEQUENCE; //Á¬µÄÈı´ø¶ş
-//	if (IsThreeXSequence(iCardList, iCardCount, 1)) return UG_THREE_ONE_SEQUENCE; //Á¬µÄÈı´øÒ»
-//	if (IsThreeXSequence(iCardList, iCardCount, 0)) return UG_THREE_SEQUENCE; //Á¬Èı
+//	if (IsThreeXSequence(iCardList, iCardCount, 3)) return UG_THREE_DOUBLE_SEQUENCE; //è¿çš„ä¸‰å¸¦å¯¹
+////	if (IsThreeXSequence(iCardList, iCardCount, 2)) return UG_THREE_TWO_SEQUENCE; //è¿çš„ä¸‰å¸¦äºŒ
+//	if (IsThreeXSequence(iCardList, iCardCount, 1)) return UG_THREE_ONE_SEQUENCE; //è¿çš„ä¸‰å¸¦ä¸€
+//	if (IsThreeXSequence(iCardList, iCardCount, 0)) return UG_THREE_SEQUENCE; //è¿ä¸‰
 //
-////	if (IsVariationThreeXSequence(iCardList, iCardCount, 3)) return UG_THREE_DOUBLE_SEQUENCE; //±äÖÖÁ¬µÄÈı´ø¶ş
-////	if (IsVariationThreeXSequence(iCardList, iCardCount, 2)) return UG_THREE_TWO_SEQUENCE; //±äÖÖÁ¬µÄÈı´ø¶ş
-////	if (IsVariationThreeXSequence(iCardList, iCardCount, 1)) return UG_THREE_ONE_SEQUENCE; //±äÖÖÁ¬µÄÈı´øÒ»
-////	if (IsVariationThreeXSequence(iCardList, iCardCount, 0)) return UG_THREE_SEQUENCE; //±äÖÖÁ¬Èı
+////	if (IsVariationThreeXSequence(iCardList, iCardCount, 3)) return UG_THREE_DOUBLE_SEQUENCE; //å˜ç§è¿çš„ä¸‰å¸¦äºŒ
+////	if (IsVariationThreeXSequence(iCardList, iCardCount, 2)) return UG_THREE_TWO_SEQUENCE; //å˜ç§è¿çš„ä¸‰å¸¦äºŒ
+////	if (IsVariationThreeXSequence(iCardList, iCardCount, 1)) return UG_THREE_ONE_SEQUENCE; //å˜ç§è¿çš„ä¸‰å¸¦ä¸€
+////	if (IsVariationThreeXSequence(iCardList, iCardCount, 0)) return UG_THREE_SEQUENCE; //å˜ç§è¿ä¸‰
 //
-////	if (IsMaster510K(iCardList, iCardCount)) return UG_MASTER_510K; //510KÍ¬»¨Õ¨µ¯
-////	if (IsSlave510K(iCardList, iCardCount)) return UG_SLAVE_510K;            //510KÕ¨µ¯
+////	if (IsMaster510K(iCardList, iCardCount)) return UG_MASTER_510K; //510KåŒèŠ±ç‚¸å¼¹
+////	if (IsSlave510K(iCardList, iCardCount)) return UG_SLAVE_510K;            //510Kç‚¸å¼¹
 
 	return UG_ERROR_KIND;
 }
 
-//¶ÔÅÆ
+//å¯¹ç‰Œ
 BOOL CUpGradeGameLogic::IsDouble(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount != 2)
@@ -926,30 +926,30 @@ BOOL CUpGradeGameLogic::IsDouble(BYTE iCardList[], int iCardCount, bool bExtVal)
 	return IsSameNumCard(iCardList, iCardCount, bExtVal);
 }
 
-//3 ´ø 0,1or2,or3
+//3 å¸¦ 0,1or2,or3
 BOOL CUpGradeGameLogic::IsThreeX(BYTE iCardList[], int iCardCount, int iX, bool bExtVal)
 {
 	if (iCardCount > 5 || iCardCount < 3)
 	{
 		return FALSE;
 	}
-	if (GetCountBySpecifyNumCount(iCardList, iCardCount, 3) != 1)//ÊÇ·ñ´æÔÚÈıÕÅ
+	if (GetCountBySpecifyNumCount(iCardList, iCardCount, 3) != 1)//æ˜¯å¦å­˜åœ¨ä¸‰å¼ 
 	{
 		return FALSE;
 	}
 	switch (iX)
 	{
 	case 0:
-		return iCardCount == 3;//IsSameNumCard(iCardList, iCardCount, bExtVal);//²»´ø
+		return iCardCount == 3;//IsSameNumCard(iCardList, iCardCount, bExtVal);//ä¸å¸¦
 		break;
 	case 1:
-		return iCardCount == 4;//´øµ¥ÕÅ
+		return iCardCount == 4;//å¸¦å•å¼ 
 		break;
 	case 2:
-		return iCardCount == 5;//´ø¶şÕÅ£¨¿ÉÒÔ·Ç¶Ô×Ó£©
+		return iCardCount == 5;//å¸¦äºŒå¼ ï¼ˆå¯ä»¥éå¯¹å­ï¼‰
 		break;
-	case 3:					//´øÒ»¶Ô
-		return GetCountBySpecifyNumCount(iCardList, iCardCount, 2) == 1;//ÊÇ·ñ´æÔÚ¶ÔÅÆ
+	case 3:					//å¸¦ä¸€å¯¹
+		return GetCountBySpecifyNumCount(iCardList, iCardCount, 2) == 1;//æ˜¯å¦å­˜åœ¨å¯¹ç‰Œ
 		break;
 	default:
 		break;
@@ -957,34 +957,34 @@ BOOL CUpGradeGameLogic::IsThreeX(BYTE iCardList[], int iCardCount, int iX, bool 
 	return false;
 }
 
-//ËÄ´ø1or2
+//å››å¸¦1or2
 BOOL CUpGradeGameLogic::IsFourX(BYTE iCardList[], int iCardCount, int iX)
 {
 	if (iCardCount > 8 || iCardCount < 4)
 		return false;
 
-	if (GetCountBySpecifyNumCount(iCardList, iCardCount, 4) != 1)//ÊÇ·ñÓĞËÄ¸öÅÆĞÍ
+	if (GetCountBySpecifyNumCount(iCardList, iCardCount, 4) != 1)//æ˜¯å¦æœ‰å››ä¸ªç‰Œå‹
 		return false;
 
 	switch (iX)
 	{
 	case 0:
-		return iCardCount == 4;//ËÄÕÅ
+		return iCardCount == 4;//å››å¼ 
 	case 1:
-		return iCardCount == 5;//ËÄ´ø1ÕÅ
+		return iCardCount == 5;//å››å¸¦1å¼ 
 	case 2:
-		return iCardCount == 6;//ËÄ´ø2(²»ÒªÇó³É¶Ô)
+		return iCardCount == 6;//å››å¸¦2(ä¸è¦æ±‚æˆå¯¹)
 	case 3:
-		return (iCardCount == 6 && 1 == GetCountBySpecifyNumCount(iCardList, iCardCount, 2));//ÒªÇó³É¶Ô
+		return (iCardCount == 6 && 1 == GetCountBySpecifyNumCount(iCardList, iCardCount, 2));//è¦æ±‚æˆå¯¹
 	case 4:
-		return (iCardCount == 8 && 2 == GetCountBySpecifyNumCount(iCardList, iCardCount, 2));	//ËÄ´ø2¶Ô
+		return (iCardCount == 8 && 2 == GetCountBySpecifyNumCount(iCardList, iCardCount, 2));	//å››å¸¦2å¯¹
 	}
 
 	return FALSE;
 }
 
-//ÍõÕ¨
-BOOL CUpGradeGameLogic::IsKingBomb(BYTE iCardList[], int iCardCount)			//ÊÇ·ñÎªÍõÕ¨(×¥µ½ËùµÄÍõ)
+//ç‹ç‚¸
+BOOL CUpGradeGameLogic::IsKingBomb(BYTE iCardList[], int iCardCount)			//æ˜¯å¦ä¸ºç‹ç‚¸(æŠ“åˆ°æ‰€çš„ç‹)
 {
 	if (iCardCount != KING_COUNT)
 		return false;
@@ -995,16 +995,16 @@ BOOL CUpGradeGameLogic::IsKingBomb(BYTE iCardList[], int iCardCount)			//ÊÇ·ñÎªÍ
 	return true;
 }
 
-//4+ÕÅÅÆ Õ¨µ¯
+//4+å¼ ç‰Œ ç‚¸å¼¹
 BOOL CUpGradeGameLogic::IsBomb(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount < 4)
 		return FALSE;
 
-	return IsSameNumCard(iCardList, iCardCount, bExtVal); //ÊÇ·ñÊÇÏàÍ¬Êı×Ö
+	return IsSameNumCard(iCardList, iCardCount, bExtVal); //æ˜¯å¦æ˜¯ç›¸åŒæ•°å­—
 }
 
-//Í¬»¨Õ¨µ¯
+//åŒèŠ±ç‚¸å¼¹
 BOOL CUpGradeGameLogic::IsBombSameHua(BYTE iCardList[], int iCardCount)
 {
 	if (!IsBomb(iCardList, iCardCount)) return false;
@@ -1012,22 +1012,22 @@ BOOL CUpGradeGameLogic::IsBombSameHua(BYTE iCardList[], int iCardCount)
 	return TRUE;
 }
 
-//Í¬»¨(·ÇÍ¬»¨)
+//åŒèŠ±(éåŒèŠ±)
 BOOL CUpGradeGameLogic::IsFlush(BYTE iCardList[], int iCardCount)
 {
 	return IsSameHuaKind(iCardList, iCardCount);
 }
 
-//Í¬»¨Ë³ 5ÕÅÍ¬»¨Á¬ĞøÅÆ
+//åŒèŠ±é¡º 5å¼ åŒèŠ±è¿ç»­ç‰Œ
 BOOL CUpGradeGameLogic::IsStraightFlush(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
-	if (!IsSameHuaKind(iCardList, iCardCount, bExtVal)) return FALSE; //Í¬»¨£¿
+	if (!IsSameHuaKind(iCardList, iCardCount, bExtVal)) return FALSE; //åŒèŠ±ï¼Ÿ
 
-	if (!IsStraight(iCardList, iCardCount, bExtVal)) return FALSE; //Ë³×Ó£¿
+	if (!IsStraight(iCardList, iCardCount, bExtVal)) return FALSE; //é¡ºå­ï¼Ÿ
 	return TRUE;
 }
 
-//ÊÇ·ñÊÇ±äÖÖË³×Ó(A2345)»ò23456
+//æ˜¯å¦æ˜¯å˜ç§é¡ºå­(A2345)æˆ–23456
 BOOL CUpGradeGameLogic::IsVariationStraight(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount < 5)
@@ -1035,7 +1035,7 @@ BOOL CUpGradeGameLogic::IsVariationStraight(BYTE iCardList[], int iCardCount, bo
 	return IsVariationSequence(iCardList, iCardCount, 1);
 }
 
-//ÊÇ·ñÊÇË³×ÓÖ¸¶¨ÕÅÊı
+//æ˜¯å¦æ˜¯é¡ºå­æŒ‡å®šå¼ æ•°
 BOOL CUpGradeGameLogic::IsStraight(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount < 5)
@@ -1043,7 +1043,7 @@ BOOL CUpGradeGameLogic::IsStraight(BYTE iCardList[], int iCardCount, bool bExtVa
 	return IsSequence(iCardList, iCardCount, 1);
 }
 
-//ÊÇ·ñÊÇ±äÖÖÁ¬¶ÔAA22»ò2233µÈ
+//æ˜¯å¦æ˜¯å˜ç§è¿å¯¹AA22æˆ–2233ç­‰
 BOOL CUpGradeGameLogic::IsVariationDoubleSequence(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount % 2 != 0 || iCardCount < 4)
@@ -1052,7 +1052,7 @@ BOOL CUpGradeGameLogic::IsVariationDoubleSequence(BYTE iCardList[], int iCardCou
 	return IsVariationSequence(iCardList, iCardCount, 2);
 }
 
-//ÊÇ·ñÊÇÁ¬¶Ô
+//æ˜¯å¦æ˜¯è¿å¯¹
 BOOL CUpGradeGameLogic::IsDoubleSequence(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount % 2 != 0 || iCardCount < 6)
@@ -1061,18 +1061,18 @@ BOOL CUpGradeGameLogic::IsDoubleSequence(BYTE iCardList[], int iCardCount, bool 
 	return IsSequence(iCardList, iCardCount, 2);
 }
 
-//±äÖÖÈıË³´ø¶şË³
+//å˜ç§ä¸‰é¡ºå¸¦äºŒé¡º
 BOOL CUpGradeGameLogic::IsVariationThreeSequenceDoubleSequence(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
-	if (iCardCount < 10)		//ÈıË³ÖÁÉÙ2¶şË³Ò²ÖÁÉÙ¶ş
+	if (iCardCount < 10)		//ä¸‰é¡ºè‡³å°‘2äºŒé¡ºä¹Ÿè‡³å°‘äºŒ
 		return false;
 
 	BYTE iBuffer3[45], iBuffer2[45];
-	BOOL bValue3 = false, bValue2 = false;	//ÈıË³,¶şË³ÊÇ·ñÎªË³,
+	BOOL bValue3 = false, bValue2 = false;	//ä¸‰é¡º,äºŒé¡ºæ˜¯å¦ä¸ºé¡º,
 	int TackOutCount3 = 0, TackOutCount2 = 0;
 
-	TackOutCount3 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer3, 3);//Èı¶Ô
-	TackOutCount2 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer2, 2);//¶ş¶Ô
+	TackOutCount3 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer3, 3);//ä¸‰å¯¹
+	TackOutCount2 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer2, 2);//äºŒå¯¹
 
 	if (TackOutCount3 <= 0 || TackOutCount2 <= 0 || TackOutCount3 + TackOutCount2 != iCardCount || TackOutCount3 / 3 != TackOutCount2 / 2)
 		return FALSE;
@@ -1082,18 +1082,18 @@ BOOL CUpGradeGameLogic::IsVariationThreeSequenceDoubleSequence(BYTE iCardList[],
 	return bValue3&&bValue2;
 }
 
-//ÈıË³´ø¶şË³
+//ä¸‰é¡ºå¸¦äºŒé¡º
 BOOL CUpGradeGameLogic::IsThreeSequenceDoubleSequence(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
-	if (iCardCount < 10)		//ÈıË³ÖÁÉÙ2¶şË³Ò²ÖÁÉÙ¶ş
+	if (iCardCount < 10)		//ä¸‰é¡ºè‡³å°‘2äºŒé¡ºä¹Ÿè‡³å°‘äºŒ
 		return false;
 
 	BYTE iBuffer3[45], iBuffer2[45];
-	BOOL bValue3 = false, bValue2 = false;	//ÈıË³,¶şË³ÊÇ·ñÎªË³,
+	BOOL bValue3 = false, bValue2 = false;	//ä¸‰é¡º,äºŒé¡ºæ˜¯å¦ä¸ºé¡º,
 	int TackOutCount3 = 0, TackOutCount2 = 0;
 
-	TackOutCount3 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer3, 3);//Èı¶Ô
-	TackOutCount2 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer2, 2);//¶ş¶Ô
+	TackOutCount3 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer3, 3);//ä¸‰å¯¹
+	TackOutCount2 = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer2, 2);//äºŒå¯¹
 	if (TackOutCount3 <= 0 || TackOutCount2 <= 0 || TackOutCount3 + TackOutCount2 != iCardCount || TackOutCount3 / 3 != TackOutCount2 / 2)
 		return FALSE;
 	bValue3 = IsSequence(iBuffer3, TackOutCount3, 3);
@@ -1102,16 +1102,16 @@ BOOL CUpGradeGameLogic::IsThreeSequenceDoubleSequence(BYTE iCardList[], int iCar
 	//	WriteStr(sz);
 	bValue2 = (IsVariationSequence(iBuffer2, TackOutCount2, 2) || IsSequence(iBuffer2, TackOutCount2, 2));
 	//	TCHAR sz[200];
-	//	wsprintf(sz,"bValue3=%d,bValue2=%d==±äÖÖ2Ë³%d,±ê×¼¶şË³%d",bValue3,bValue2,IsVariationSequence(iBuffer2,TackOutCount2,2),IsSequence(iBuffer2,TackOutCount2,2));
+	//	wsprintf(sz,"bValue3=%d,bValue2=%d==å˜ç§2é¡º%d,æ ‡å‡†äºŒé¡º%d",bValue3,bValue2,IsVariationSequence(iBuffer2,TackOutCount2,2),IsSequence(iBuffer2,TackOutCount2,2));
 	//	WriteStr(sz);
 	return bValue3&&bValue2;
 }
 
 
-//±äÖÖÁ¬Èı´øx
+//å˜ç§è¿ä¸‰å¸¦x
 BOOL CUpGradeGameLogic::IsVariationThreeXSequence(BYTE iCardList[], int iCardCount, int iSeqX, bool bExtVal)
 {
-	if (iCardCount < 6)		//ÈıË³ÖÁÉÙ2
+	if (iCardCount < 6)		//ä¸‰é¡ºè‡³å°‘2
 		return false;
 
 	BYTE iBuffer[45];
@@ -1123,16 +1123,16 @@ BOOL CUpGradeGameLogic::IsVariationThreeXSequence(BYTE iCardList[], int iCardCou
 			return false;
 		return IsVariationSequence(iCardList, iCardCount, 3);
 		break;
-	case 1://´øµ¥
+	case 1://å¸¦å•
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 3);
 		if (TackOutCount > 0 && TackOutCount / 3 * 4 == iCardCount)
 			return IsVariationSequence(iBuffer, TackOutCount, 3);
 		break;
-	case 2://´ø¶şµ¥
+	case 2://å¸¦äºŒå•
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 3);
 		if (TackOutCount > 0 && TackOutCount / 3 * 5 == iCardCount)
 			return IsVariationSequence(iBuffer, TackOutCount, 3);
-	case 3://´øÒ»¶Ô
+	case 3://å¸¦ä¸€å¯¹
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 3);
 		if (TackOutCount > 0 && TackOutCount / 3 * 5 == iCardCount
 			&&GetCountBySpecifyNumCount(iCardList, iCardCount, 2))
@@ -1143,10 +1143,10 @@ BOOL CUpGradeGameLogic::IsVariationThreeXSequence(BYTE iCardList[], int iCardCou
 	return false;
 }
 
-//Á¬µÄÈı´ø 0,1 or 2
+//è¿çš„ä¸‰å¸¦ 0,1 or 2
 BOOL CUpGradeGameLogic::IsThreeXSequence(BYTE iCardList[], int iCardCount, int iSeqX, bool bExtVal)
 {
-	if (iCardCount < 6)		//ÈıË³ÖÁÉÙ2
+	if (iCardCount < 6)		//ä¸‰é¡ºè‡³å°‘2
 		return false;
 
 	BYTE iBuffer[45];
@@ -1158,17 +1158,17 @@ BOOL CUpGradeGameLogic::IsThreeXSequence(BYTE iCardList[], int iCardCount, int i
 			return false;
 		return IsSequence(iCardList, iCardCount, 3);
 		break;
-	case 1://´øµ¥
+	case 1://å¸¦å•
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 3);
 		if (TackOutCount > 0 && TackOutCount / 3 * 4 == iCardCount)
-			return IsSequence(iBuffer, TackOutCount, 3); //2011-6-28 ĞŞ¸Ä333444ÇëÔÊĞí´ø55
-			//&& (TackOutCount/3==GetCountBySpecifyNumCount(iCardList,iCardCount,1));//ÉòÑôÒªÇó333444²»ÄÜ´ø55;
+			return IsSequence(iBuffer, TackOutCount, 3); //2011-6-28 ä¿®æ”¹333444è¯·å…è®¸å¸¦55
+			//&& (TackOutCount/3==GetCountBySpecifyNumCount(iCardList,iCardCount,1));//æ²ˆé˜³è¦æ±‚333444ä¸èƒ½å¸¦55;
 		break;
-	case 2://´ø¶şµ¥
+	case 2://å¸¦äºŒå•
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 3);
 		if (TackOutCount > 0 && TackOutCount / 3 * 5 == iCardCount)
 			return IsSequence(iBuffer, TackOutCount, 3);
-	case 3://´ø¶Ô
+	case 3://å¸¦å¯¹
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 3);
 		if (TackOutCount > 0 && TackOutCount / 3 * 5 == iCardCount
 			&&GetCountBySpecifyNumCount(iCardList, iCardCount, 2) == TackOutCount / 3)
@@ -1179,10 +1179,10 @@ BOOL CUpGradeGameLogic::IsThreeXSequence(BYTE iCardList[], int iCardCount, int i
 	return false;
 }
 
-//±äÖÖËÄË³´ø¡¡
+//å˜ç§å››é¡ºå¸¦ã€€
 BOOL CUpGradeGameLogic::IsVariationFourXSequence(BYTE iCardList[], int iCardCount, int iSeqX)
 {
-	if (iCardCount < 8)		//ËÄË³ÖÁÉÙ2
+	if (iCardCount < 8)		//å››é¡ºè‡³å°‘2
 		return false;
 
 	BYTE iBuffer[45];
@@ -1195,24 +1195,24 @@ BOOL CUpGradeGameLogic::IsVariationFourXSequence(BYTE iCardList[], int iCardCoun
 		return IsVariationSequence(iCardList, iCardCount, 4);
 		break;
 
-	case 1://´øµ¥ÕÅ
+	case 1://å¸¦å•å¼ 
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 5 == iCardCount)
 			return IsVariationSequence(iBuffer, TackOutCount, 4);
 		break;
 
-	case 2://´ø¶şÕÅ(¿ÉÒÔ·Ç¶Ô×Ó£©
+	case 2://å¸¦äºŒå¼ (å¯ä»¥éå¯¹å­ï¼‰
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 6 == iCardCount)
 			return IsVariationSequence(iBuffer, TackOutCount, 4);
 
-	case 3://´øÒ»¶Ô
+	case 3://å¸¦ä¸€å¯¹
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 6 == iCardCount
 			&&TackOutCount / 4 == GetBulkBySpecifyCardCount(iCardList, iCardCount, 2))
 			return IsVariationSequence(iBuffer, TackOutCount, 4);
 
-	case 4://(´ø¶ş¶Ô£©
+	case 4://(å¸¦äºŒå¯¹ï¼‰
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 6 == iCardCount
 			&&TackOutCount / 2 == GetBulkBySpecifyCardCount(iCardList, iCardCount, 2))
@@ -1222,10 +1222,10 @@ BOOL CUpGradeGameLogic::IsVariationFourXSequence(BYTE iCardList[], int iCardCoun
 	return FALSE;
 }
 
-//ËÄË³´ø¡¡
+//å››é¡ºå¸¦ã€€
 BOOL CUpGradeGameLogic::IsFourXSequence(BYTE iCardList[], int iCardCount, int iSeqX)
 {
-	if (iCardCount < 8)		//ËÄË³ÖÁÉÙ2
+	if (iCardCount < 8)		//å››é¡ºè‡³å°‘2
 		return false;
 
 	BYTE iBuffer[45];
@@ -1238,24 +1238,24 @@ BOOL CUpGradeGameLogic::IsFourXSequence(BYTE iCardList[], int iCardCount, int iS
 		return IsSequence(iCardList, iCardCount, 4);
 		break;
 
-	case 1://´øµ¥ÕÅ
+	case 1://å¸¦å•å¼ 
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 5 == iCardCount)
 			return IsSequence(iBuffer, TackOutCount, 4);
 		break;
 
-	case 2://´ø¶şÕÅ(¿ÉÒÔ·Ç¶Ô×Ó£©
+	case 2://å¸¦äºŒå¼ (å¯ä»¥éå¯¹å­ï¼‰
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 6 == iCardCount)
 			return IsSequence(iBuffer, TackOutCount, 4);
 
-	case 3://´øÒ»¶Ô
+	case 3://å¸¦ä¸€å¯¹
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 6 == iCardCount
 			&&TackOutCount / 4 == GetBulkBySpecifyCardCount(iCardList, iCardCount, 2))
 			return IsSequence(iBuffer, TackOutCount, 4);
 
-	case 4://(´ø¶ş¶Ô£©
+	case 4://(å¸¦äºŒå¯¹ï¼‰
 		TackOutCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iBuffer, 4);
 		if (TackOutCount > 0 && TackOutCount / 4 * 6 == iCardCount
 			&&TackOutCount / 2 == GetBulkBySpecifyCardCount(iCardList, iCardCount, 2))
@@ -1265,7 +1265,7 @@ BOOL CUpGradeGameLogic::IsFourXSequence(BYTE iCardList[], int iCardCount, int iS
 	return FALSE;
 }
 
-//ÌØÊâµÄÁ¬3´ø1
+//ç‰¹æ®Šçš„è¿3å¸¦1
 bool CUpGradeGameLogic::IsLianSanDaiYi(BYTE iCardList[], int iCardCount)
 {
 	if (iCardList == NULL || iCardCount % 4 != 0 || iCardCount < 8)
@@ -1296,7 +1296,7 @@ bool CUpGradeGameLogic::IsLianSanDaiYi(BYTE iCardList[], int iCardCount)
 			iTemp[iIndex++] = i;
 		}
 	}
-	//ÓÉÓÚÊÇÌØÊâÅĞ¶Ï£¬ÕâÀïÕ¨µ¯Êı±ØĞë´óÓÚ0
+	//ç”±äºæ˜¯ç‰¹æ®Šåˆ¤æ–­ï¼Œè¿™é‡Œç‚¸å¼¹æ•°å¿…é¡»å¤§äº0
 	if (iNum4 > 0 && iNum1 > 0 && (iNum3 + iNum4) == (iCardCount / 4))
 	{
 		bool bSign = true;
@@ -1312,7 +1312,7 @@ bool CUpGradeGameLogic::IsLianSanDaiYi(BYTE iCardList[], int iCardCount)
 	return false;
 }
 
-//ÅĞ¶ÏÊÇ·ñÊÇ510K Õ¨µ¯
+//åˆ¤æ–­æ˜¯å¦æ˜¯510K ç‚¸å¼¹
 BOOL CUpGradeGameLogic::IsSlave510K(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	if (iCardCount != 3) return false;
@@ -1325,34 +1325,34 @@ BOOL CUpGradeGameLogic::IsSlave510K(BYTE iCardList[], int iCardCount, bool bExtV
 	return (Test[5] == Test[10] == Test[13] == 1);
 }
 
-//ÅĞ¶ÏÊÇ·ñÊÇ510K Í¬»¨
+//åˆ¤æ–­æ˜¯å¦æ˜¯510K åŒèŠ±
 BOOL CUpGradeGameLogic::IsMaster510K(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
-	if (iCardCount != 3) return false; //ÊıÁ¿²»¶Ô
+	if (iCardCount != 3) return false; //æ•°é‡ä¸å¯¹
 
-	if (!IsSameHuaKind(iCardList, iCardCount, bExtVal)) return false; //Í¬»¨ £¿
+	if (!IsSameHuaKind(iCardList, iCardCount, bExtVal)) return false; //åŒèŠ± ï¼Ÿ
 
-	if (!IsSlave510K(iCardList, iCardCount, bExtVal)) return false; //510K £¿	
+	if (!IsSlave510K(iCardList, iCardCount, bExtVal)) return false; //510K ï¼Ÿ	
 
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////
 
 
-//×Ô¶¯ÕÒ³ö¿ÉÒÔ³öµÄÅÆ
-BOOL CUpGradeGameLogic::AutoOutCard(BYTE iHandCard[], int iHandCardCount, //µ±Ç°Íæ¼ÒÊÖÖĞËùÓĞµÄÅÆÊı¾İ
-	BYTE iBaseCard[], int iBaseCardCount, //Ç°Ò»¸ö³öÅÆµÄÈË³öµÄÅÆÊı¾İ
-	BYTE iResultCard[], int & iResultCardCount, //ÕÒµ½µÄ½á¹û
-	BOOL bFirstOut) //µ±Ç°Íæ¼ÒÊÇ·ñÏÈÊÖ
+//è‡ªåŠ¨æ‰¾å‡ºå¯ä»¥å‡ºçš„ç‰Œ
+BOOL CUpGradeGameLogic::AutoOutCard(BYTE iHandCard[], int iHandCardCount, //å½“å‰ç©å®¶æ‰‹ä¸­æ‰€æœ‰çš„ç‰Œæ•°æ®
+	BYTE iBaseCard[], int iBaseCardCount, //å‰ä¸€ä¸ªå‡ºç‰Œçš„äººå‡ºçš„ç‰Œæ•°æ®
+	BYTE iResultCard[], int & iResultCardCount, //æ‰¾åˆ°çš„ç»“æœ
+	BOOL bFirstOut) //å½“å‰ç©å®¶æ˜¯å¦å…ˆæ‰‹
 {
 	iResultCardCount = 0;
-	if (bFirstOut) //ÏÈÊÖ³ö×îÓÒ±ßÒ»ÊÖÅÆ
+	if (bFirstOut) //å…ˆæ‰‹å‡ºæœ€å³è¾¹ä¸€æ‰‹ç‰Œ
 	{
 		TackOutCardBySpecifyCardNum(iHandCard, iHandCardCount, iResultCard, iResultCardCount, iHandCard[iHandCardCount - 1]);
 	}
-	else //¸úÅÆ
+	else //è·Ÿç‰Œ
 	{
-		//´ÓÊÖÖĞµÄÅÆÖĞÕÒ³ö±È×ÀÃæÉÏ´óµÄÅÆ
+		//ä»æ‰‹ä¸­çš„ç‰Œä¸­æ‰¾å‡ºæ¯”æ¡Œé¢ä¸Šå¤§çš„ç‰Œ
 		TackOutCardMoreThanLast(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, false);
 
 		if (!CanOutCard(iResultCard, iResultCardCount, iBaseCard, iBaseCardCount, iHandCard, iHandCardCount))
@@ -1365,7 +1365,7 @@ BOOL CUpGradeGameLogic::AutoOutCard(BYTE iHandCard[], int iHandCardCount, //µ±Ç°
 }
 
 
-//²éÕÒÒ»¸ö±Èµ±Ç°´óµÄ
+//æŸ¥æ‰¾ä¸€ä¸ªæ¯”å½“å‰å¤§çš„
 BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardCount,
 	BYTE iBaseCard[], int iBaseCardCount,
 	BYTE iResultCard[], int &iResultCardCount,
@@ -1373,19 +1373,19 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 {
 	BYTE iTempCard[45];
 	iResultCardCount = 0;
-	int iBaseShape = GetCardShape(iBaseCard, iBaseCardCount); //×ÀÃæÉÏÅÆµÄÅÆĞÍ
+	int iBaseShape = GetCardShape(iBaseCard, iBaseCardCount); //æ¡Œé¢ä¸Šç‰Œçš„ç‰Œå‹
 	//	TCHAR sz[200];
-	//	wsprintf(sz,"×ÀÃæÅÆĞÍiBaseShape=%d",iBaseShape);
+	//	wsprintf(sz,"æ¡Œé¢ç‰Œå‹iBaseShape=%d",iBaseShape);
 	//	WriteStr(sz);
 
 	switch (iBaseShape)
 	{
-	case UG_ONLY_ONE: //µ¥ÕÅ
-	case UG_DOUBLE:   //¶ÔÅÆ
-	case UG_THREE:    //ÈıÕÅ
-	case UG_BOMB:	//ËÄÕÅ Õ¨µ¯
+	case UG_ONLY_ONE: //å•å¼ 
+	case UG_DOUBLE:   //å¯¹ç‰Œ
+	case UG_THREE:    //ä¸‰å¼ 
+	case UG_BOMB:	//å››å¼  ç‚¸å¼¹
 	{
-		//²éÕÒ1,2,3,or4ÕÅÅÆ
+		//æŸ¥æ‰¾1,2,3,or4å¼ ç‰Œ
 		BYTE iCount = TackOutBySepcifyCardNumCount(iHandCard, iHandCardCount, iTempCard, iBaseCardCount);
 
 		if (iCount > 0)
@@ -1400,57 +1400,57 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 		}
 		break;
 	}
-	//case UG_THREE:    //ÈıÕÅÒ²¿ÉÒÔÓÃÏÂÃæµÄÀ´ÌáÈ¡
-	case UG_THREE_ONE: //Èı´øÒ»
+	//case UG_THREE:    //ä¸‰å¼ ä¹Ÿå¯ä»¥ç”¨ä¸‹é¢çš„æ¥æå–
+	case UG_THREE_ONE: //ä¸‰å¸¦ä¸€
 	{
 		if (TackOutThreeX(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 1))
 			return TRUE;
 		break;
 	}
-	case UG_THREE_TWO: //Èı´ø¶şÕÅ
+	case UG_THREE_TWO: //ä¸‰å¸¦äºŒå¼ 
 	{
 		if (TackOutThreeX(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 2))
 			return TRUE;
 		break;
 	}
-	case UG_THREE_DOUBLE:	//Èı´øÒ»¶Ô
+	case UG_THREE_DOUBLE:	//ä¸‰å¸¦ä¸€å¯¹
 	{
 		if (TackOutThreeX(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 3))
 			return TRUE;
 		break;
 	}
-	case UG_FLUSH:		//Í¬»¨
+	case UG_FLUSH:		//åŒèŠ±
 	{
 		//if(TackOutStraightFlush(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount))
 		//	return true;
 		break;
 	}
 
-	case UG_STRAIGHT: //Ë³×Ó
+	case UG_STRAIGHT: //é¡ºå­
 		/*if(TackOutStraightFlush(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount))
 		{
-		return TRUE; //ÏÈÕÒÏàÍ¬ÅÆµãµÄÍ¬»¨Ë³
+		return TRUE; //å…ˆæ‰¾ç›¸åŒç‰Œç‚¹çš„åŒèŠ±é¡º
 		}*/
 		if (TackOutSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 1))
 		{
-			return TRUE; //ÔÙÕÒÅÆµã´óµÄË³×Ó
+			return TRUE; //å†æ‰¾ç‰Œç‚¹å¤§çš„é¡ºå­
 		}
 		break;
-	case UG_STRAIGHT_FLUSH: //Í¬»¨Ë³
+	case UG_STRAIGHT_FLUSH: //åŒèŠ±é¡º
 	{
 		if (TackOutStraightFlush(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount))
 			return true;
 	}
 	break;
-	case UG_DOUBLE_SEQUENCE: //Á¬¶Ô
+	case UG_DOUBLE_SEQUENCE: //è¿å¯¹
 	{
 		if (TackOutSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 2))
 		{
-			return TRUE; //ÔÙÕÒÅÆµã´óµÄË³×Ó
+			return TRUE; //å†æ‰¾ç‰Œç‚¹å¤§çš„é¡ºå­
 		}
 		break;
 	}
-	case UG_THREE_SEQUENCE: //Á¬Èı
+	case UG_THREE_SEQUENCE: //è¿ä¸‰
 	{
 		if (TackOutSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 3))
 		{
@@ -1459,18 +1459,18 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 		break;
 	}
 
-	case UG_THREE_ONE_SEQUENCE: //Èı´øÒ»µÄÁ¬ÅÆ
+	case UG_THREE_ONE_SEQUENCE: //ä¸‰å¸¦ä¸€çš„è¿ç‰Œ
 	{
 		if (TrackOut3XSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 1))
 			break;
 	}
-	case UG_THREE_TWO_SEQUENCE: //Èı´ø¶şµÄÁ¬ÅÆ
+	case UG_THREE_TWO_SEQUENCE: //ä¸‰å¸¦äºŒçš„è¿ç‰Œ
 		if (TrackOut3XSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 2))
 			//if(TrackOut3XSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount))
 		{
 			return TRUE;
 		}
-	case UG_THREE_DOUBLE_SEQUENCE://Èı´ø¶ÔÁ¬ÅÆ
+	case UG_THREE_DOUBLE_SEQUENCE://ä¸‰å¸¦å¯¹è¿ç‰Œ
 	{
 		if (TrackOut3XSequence(iHandCard, iHandCardCount, iBaseCard, iBaseCardCount, iResultCard, iResultCardCount, 3))
 			return TRUE;
@@ -1484,11 +1484,11 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 	}
 	//case UG_FOUR_ONE_SEQUENCE:
 
-	case UG_SLAVE_510K: //Ö»ÄÜÓÃÍ¬»¨À´Ñ¹,ÊôÓÚÕÒ´óµÄÅÆĞÍ,ÓÃÏÂÃæµÄÀ´´¦Àí
+	case UG_SLAVE_510K: //åªèƒ½ç”¨åŒèŠ±æ¥å‹,å±äºæ‰¾å¤§çš„ç‰Œå‹,ç”¨ä¸‹é¢çš„æ¥å¤„ç†
 		//	break;
 	case UG_MASTER_510K:
-		TrackOut510K(iHandCard, iHandCardCount, iResultCard, iResultCardCount, true); //ÕÒ³öÍ¬»¨ 510K
-		if (GetCardHuaKind(iBaseCard[0], TRUE) >= GetCardHuaKind(iResultCard[0], TRUE)) //±È½Ï»¨É«
+		TrackOut510K(iHandCard, iHandCardCount, iResultCard, iResultCardCount, true); //æ‰¾å‡ºåŒèŠ± 510K
+		if (GetCardHuaKind(iBaseCard[0], TRUE) >= GetCardHuaKind(iResultCard[0], TRUE)) //æ¯”è¾ƒèŠ±è‰²
 		{
 			iResultCardCount = 0;
 		}
@@ -1497,12 +1497,12 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 		iResultCardCount = 0;
 	}
 
-	if (iResultCardCount == 0) //Ã»ÕÒµ½Í¬ÅÆĞÍµÄ´óÅÆ,¾ÍÕÒ´óÒ»µãµÄÅÆĞÍ
+	if (iResultCardCount == 0) //æ²¡æ‰¾åˆ°åŒç‰Œå‹çš„å¤§ç‰Œ,å°±æ‰¾å¤§ä¸€ç‚¹çš„ç‰Œå‹
 	{
 		memset(iResultCard, 0, sizeof(BYTE) * 45);
 		switch (iBaseShape)
 		{
-		case UG_ONLY_ONE: //¿ÉÒÔ²ğ¶Ô×Ó,²ğÈıÌõÀ´Ñ¹µ¥ÅÆ»òÕß¶Ô×Ó
+		case UG_ONLY_ONE: //å¯ä»¥æ‹†å¯¹å­,æ‹†ä¸‰æ¡æ¥å‹å•ç‰Œæˆ–è€…å¯¹å­
 		{
 			if (TackOutCardByNoSameShape(iHandCard, iHandCardCount, iResultCard, iResultCardCount, iBaseCard, iBaseCardCount))
 				return TRUE;
@@ -1516,12 +1516,12 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 		}
 		case UG_BOMB:
 		{
-			//ÉÏÃæÃ»ÕÒµ½ÏàÍ¬ÊıÁ¿µÄ´óÕ¨µ¯,ÕâÀïÕÒÊıÁ¿¸ü¶àµÄ
+			//ä¸Šé¢æ²¡æ‰¾åˆ°ç›¸åŒæ•°é‡çš„å¤§ç‚¸å¼¹,è¿™é‡Œæ‰¾æ•°é‡æ›´å¤šçš„
 			if (TackOutBomb(iHandCard, iHandCardCount, iResultCard, iResultCardCount, iBaseCardCount + 1))
 				return TRUE;
 		}
 		break;
-		default: //Èç¹ûÕÒ²»µ½´óµÄ¶Ô×Óµ¥ÅÆ¾ÍÕÒ´óµÄÅÆĞÍ,warning´Ë´¦²»ÓÃbreak;
+		default: //å¦‚æœæ‰¾ä¸åˆ°å¤§çš„å¯¹å­å•ç‰Œå°±æ‰¾å¤§çš„ç‰Œå‹,warningæ­¤å¤„ä¸ç”¨break;
 		{
 			return TRUE;
 		}
@@ -1540,7 +1540,7 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 	return TRUE;
 }
 
-//Ö±½ÓÌáÈ¡±È×ÀÃæÉÏ´óµÄÅÆĞÍ
+//ç›´æ¥æå–æ¯”æ¡Œé¢ä¸Šå¤§çš„ç‰Œå‹
 BOOL  CUpGradeGameLogic::TackOutMoreThanLastShape(BYTE iCardList[], int iCardCount,
 	BYTE iResultCard[], int &iResultCardCount,
 	BYTE iBaseCard[], int iBaseCardCount)
@@ -1549,39 +1549,39 @@ BOOL  CUpGradeGameLogic::TackOutMoreThanLastShape(BYTE iCardList[], int iCardCou
 	int ishape = GetCardShape(iBaseCard, iBaseCardCount);
 	switch (ishape)
 	{
-		/*	case UG_ONLY_ONE: //µ¥ÕÅ
-		case UG_DOUBLE:   //¶ÔÅÆ
-		case UG_THREE:    //ÈıÕÅ
+		/*	case UG_ONLY_ONE: //å•å¼ 
+		case UG_DOUBLE:   //å¯¹ç‰Œ
+		case UG_THREE:    //ä¸‰å¼ 
 
-		case UG_DOUBLE_SEQUENCE: //Á¬¶Ô
-		case UG_THREE_SEQUENCE:  //Á¬ÈıÕÅ
-		case UG_THREE_ONE:				//Èı´ø1
-		case UG_THREE_ONE_SEQUENCE:		//Èı´øË³
-		case UG_THREE_TWO:				//Èı´ø2
-		case UG_THREE_TWO_SEQUENCE:		//Èı´ø2Ë³
-		case UG_THREE_DOUBLE:			//Èı´ø¶Ô
-		case UG_THREE_DOUBLE_SEQUENCE:	//Èı´ø¶ÔË³
+		case UG_DOUBLE_SEQUENCE: //è¿å¯¹
+		case UG_THREE_SEQUENCE:  //è¿ä¸‰å¼ 
+		case UG_THREE_ONE:				//ä¸‰å¸¦1
+		case UG_THREE_ONE_SEQUENCE:		//ä¸‰å¸¦é¡º
+		case UG_THREE_TWO:				//ä¸‰å¸¦2
+		case UG_THREE_TWO_SEQUENCE:		//ä¸‰å¸¦2é¡º
+		case UG_THREE_DOUBLE:			//ä¸‰å¸¦å¯¹
+		case UG_THREE_DOUBLE_SEQUENCE:	//ä¸‰å¸¦å¯¹é¡º
 
-		case UG_FOUR_ONE:				//ËÄ´øÒ»
-		case UG_FOUR_TWO:				//ËÄ´ø¶ş
-		case UG_FOUR_TWO_DOUBLE:		//ËÄ´ø¶ş¶Ô
+		case UG_FOUR_ONE:				//å››å¸¦ä¸€
+		case UG_FOUR_TWO:				//å››å¸¦äºŒ
+		case UG_FOUR_TWO_DOUBLE:		//å››å¸¦äºŒå¯¹
 
-		case UG_STRAIGHT:				 //Ë³×Ó
-		case UG_STRAIGHT_FLUSH:			//Í¬»¨Ë³
-		if(TrackOut510K(iCardList, iCardCount, iResultCard, iResultCardCount)) //510K Õ¨µ¯
+		case UG_STRAIGHT:				 //é¡ºå­
+		case UG_STRAIGHT_FLUSH:			//åŒèŠ±é¡º
+		if(TrackOut510K(iCardList, iCardCount, iResultCard, iResultCardCount)) //510K ç‚¸å¼¹
 		{
 		break;
 		}
 
-		if(TrackOut510K(iCardList,iCardCount,iResultCard,iResultCardCount,true)) //Í¬»¨510K
+		if(TrackOut510K(iCardList,iCardCount,iResultCard,iResultCardCount,true)) //åŒèŠ±510K
 		{
 		break;
 		}
 
-		TackOutBomb(iCardList,iCardCount,iResultCard,iResultCardCount); //ÕÒÕ¨µ¯
+		TackOutBomb(iCardList,iCardCount,iResultCard,iResultCardCount); //æ‰¾ç‚¸å¼¹
 
 		break;*/
-	case UG_SLAVE_510K: //Ò»°ã510K
+	case UG_SLAVE_510K: //ä¸€èˆ¬510K
 	{
 		if (TrackOut510K(iCardList, iCardCount, iResultCard, iResultCardCount, true))
 			break;
@@ -1589,19 +1589,19 @@ BOOL  CUpGradeGameLogic::TackOutMoreThanLastShape(BYTE iCardList[], int iCardCou
 			TackOutBomb(iCardList, iCardCount, iResultCard, iResultCardCount);
 		break;
 	}
-	case UG_MASTER_510K: //510K Í¬»¨
+	case UG_MASTER_510K: //510K åŒèŠ±
 	{
 		TackOutBomb(iCardList, iCardCount, iResultCard, iResultCardCount);
 		break;
 	}
 	default:
-		TackOutBomb(iCardList, iCardCount, iResultCard, iResultCardCount); //ÕÒÕ¨µ¯
+		TackOutBomb(iCardList, iCardCount, iResultCard, iResultCardCount); //æ‰¾ç‚¸å¼¹
 		break;
 	}
 	return true;
 }
 
-//ÌáÈ¡µ¥¸öµÄÈı´ø0, 1 or 2 µ½µ×´øµÄÊÇ¼¸,ÓÉ iBaseCount-3 À´¾ö¶¨
+//æå–å•ä¸ªçš„ä¸‰å¸¦0, 1 or 2 åˆ°åº•å¸¦çš„æ˜¯å‡ ,ç”± iBaseCount-3 æ¥å†³å®š
 BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 	BYTE iBaseCard[], int iBaseCount,
 	BYTE iResultCard[], int &iResultCount, int iValue)
@@ -1610,11 +1610,11 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 	if (iCardCount < iBaseCount)
 		return FALSE;
 	BYTE iTempCard[45];
-	int threecard = GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 3);//×ÀÃæÅÆÈıÕÅµÄµãÊı
-	//3ÕÅÅÆ×Ü¸öÊı
+	int threecard = GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 3);//æ¡Œé¢ç‰Œä¸‰å¼ çš„ç‚¹æ•°
+	//3å¼ ç‰Œæ€»ä¸ªæ•°
 	BYTE iCount = TackOutBySepcifyCardNumCount(iCardList, iCardCount, iTempCard, 3);
 
-	if (iCount > 0)//ÌáÈ¡´óÓÚ×ÀÃæµÄÈıÌõ
+	if (iCount > 0)//æå–å¤§äºæ¡Œé¢çš„ä¸‰æ¡
 	{
 		BYTE byCardTemp = 0x00;
 		for (int i = 0; i < iBaseCount; ++i)
@@ -1630,7 +1630,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 			return FALSE;
 		}
 
-		BYTE Step = GetSerialByMoreThanSpecifyCard(iTempCard, iCount, byCardTemp, 3, true);//ÅÆÃæÖµ½øÈ¥
+		BYTE Step = GetSerialByMoreThanSpecifyCard(iTempCard, iCount, byCardTemp, 3, true);//ç‰Œé¢å€¼è¿›å»
 		//if(Step == 0)
 		//	return FALSE;
 		CopyMemory(iResultCard, &iTempCard[Step], sizeof(BYTE) * 3);
@@ -1638,7 +1638,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		//wsprintf(sz,"Step=%d,iBaseCount=%d",Step,iBaseCount);
 		//WriteStr(sz,7,7);
 
-		//if(CompareOnlyOne(iBaseCard[0], iResultCard[0]))			//ÓÉÓÚ´«¹ıÀ´µÄstep¿ÉÄÜÎª0µÃ½øĞĞÒ»´Î±È½Ï´¦Àí
+		//if(CompareOnlyOne(iBaseCard[0], iResultCard[0]))			//ç”±äºä¼ è¿‡æ¥çš„stepå¯èƒ½ä¸º0å¾—è¿›è¡Œä¸€æ¬¡æ¯”è¾ƒå¤„ç†
 		if (threecard >= GetBulkBySpecifyCardCount(iResultCard, 3, 3))
 			return FALSE;
 		//iResultCount = 3;
@@ -1647,7 +1647,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 	}
 	else
 		return FALSE;
-	//½«Ô­ÖµÒÆ×ß
+	//å°†åŸå€¼ç§»èµ°
 	BYTE Tmp[45];
 	int iTempCount = iCardCount;
 	::CopyMemory(Tmp, iCardList, sizeof(BYTE)*iCardCount);
@@ -1663,13 +1663,13 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 	case 2:
 	{
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 1);
-		if (iCount >= destCount)//²éÕÒµ½µ¥ÅÆ
+		if (iCount >= destCount)//æŸ¥æ‰¾åˆ°å•ç‰Œ
 		{
 			CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 			iResultCount = iBaseCount;
 			break;
 		}
-		//²ğ¶ÔÀ´²¹µ¥ÅÆ
+		//æ‹†å¯¹æ¥è¡¥å•ç‰Œ
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 2);
 		if (iCount >= destCount)
 		{
@@ -1678,9 +1678,9 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 			break;
 		}
 
-		//²ğÈıÕÅÀ´²¹µ¥ÅÆ
+		//æ‹†ä¸‰å¼ æ¥è¡¥å•ç‰Œ
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 3);
-		if (iCount < 3)//½öÒ»ÈıÕÅÎŞ·¨²ğ
+		if (iCount < 3)//ä»…ä¸€ä¸‰å¼ æ— æ³•æ‹†
 			break;
 		CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 		iResultCount = iBaseCount;
@@ -1695,9 +1695,9 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 			iResultCount = iBaseCount;
 			break;
 		}
-		//²ğÈıÕÅÀ´²¹µ¥ÅÆ
+		//æ‹†ä¸‰å¼ æ¥è¡¥å•ç‰Œ
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 3);
-		if (iCount < 3)//½öÒ»ÈıÕÅÎŞ·¨²ğ
+		if (iCount < 3)//ä»…ä¸€ä¸‰å¼ æ— æ³•æ‹†
 			break;
 		CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 		iResultCount = iBaseCount;
@@ -1716,32 +1716,32 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 	return FALSE;
 	//return (iResultCount == iBaseCount);
 }
-//ÌáÈ¡ºûµû
+//æå–è´è¶
 BOOL  CUpGradeGameLogic::TrackOut3Sequence2Sequence(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount)
 {
 	iResultCardCount = 0;
-	if (iCardCount < iBaseCount)	//ÕÅÊı²»¹»
+	if (iCardCount < iBaseCount)	//å¼ æ•°ä¸å¤Ÿ
 		return false;
 	BYTE tmpBaseCard[45];
 	int tmpbaseCardCount = 0, destCardCount = 0;
-	//½«×ÀÃæÅÆµÄÈıÌõ·ÖÀë³öÀ´
+	//å°†æ¡Œé¢ç‰Œçš„ä¸‰æ¡åˆ†ç¦»å‡ºæ¥
 	tmpbaseCardCount = TackOutBySepcifyCardNumCount(iBaseCard, iBaseCount, tmpBaseCard, 3);
-	if (tmpbaseCardCount < 6)	//ÖÁÉÙÁùÕÅÒÔÉÏ
+	if (tmpbaseCardCount < 6)	//è‡³å°‘å…­å¼ ä»¥ä¸Š
 		return FALSE;
-	//ÏÈÌáÈ¡±È×ÀÃæ´óµÄÈıË³
+	//å…ˆæå–æ¯”æ¡Œé¢å¤§çš„ä¸‰é¡º
 	if (!TackOutSequence(iCardList, iCardCount, tmpBaseCard, tmpbaseCardCount, iResultCard, iResultCardCount, 3))
 		return FALSE;
-	//½«ÊÖÅÆ¸´ÖÆÒ»·İ(ÒÆ³ıÈıË³ÅÆ)
+	//å°†æ‰‹ç‰Œå¤åˆ¶ä¸€ä»½(ç§»é™¤ä¸‰é¡ºç‰Œ)
 	BYTE TMP[45];
 	int TmpCount = iCardCount;
 	::CopyMemory(TMP, iCardList, sizeof(BYTE)*iCardCount);
 	RemoveCard(iResultCard, iResultCardCount, TMP, TmpCount);
 	TmpCount -= iResultCardCount;
-	destCardCount = iBaseCount - iResultCardCount;	//²¹ÅÆÊıÁ¿
+	destCardCount = iBaseCount - iResultCardCount;	//è¡¥ç‰Œæ•°é‡
 
 	BYTE twoList[45];
 	int twoCount;
-	//½«×ÀÃæÅÆµÄ¶şË³·ÖÀë³öÀ´
+	//å°†æ¡Œé¢ç‰Œçš„äºŒé¡ºåˆ†ç¦»å‡ºæ¥
 	tmpbaseCardCount = TackOutBySepcifyCardNumCount(iBaseCard, iBaseCount, tmpBaseCard, 2);
 	if (!TackOutSequence(TMP, TmpCount, tmpBaseCard, tmpbaseCardCount, twoList, twoCount, 2, true))
 		return false;
@@ -1751,44 +1751,44 @@ BOOL  CUpGradeGameLogic::TrackOut3Sequence2Sequence(BYTE iCardList[], int iCardC
 	iResultCardCount += twoCount;
 	return true;
 }
-//ÌáÈ¡Ö¸¶¨ÈıÌõ´øË³
+//æå–æŒ‡å®šä¸‰æ¡å¸¦é¡º
 BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount, int xValue)
 {
 	iResultCardCount = 0;
-	if (iCardCount < iBaseCount)	//ÕÅÊı²»¹»
+	if (iCardCount < iBaseCount)	//å¼ æ•°ä¸å¤Ÿ
 		return false;
 	BYTE tmpBaseCard[45];
 	int tmpbaseCardCount = 0, destCardCount = 0;
-	//½«×ÀÃæÅÆµÄÈıÌõ·ÖÀë³öÀ´
+	//å°†æ¡Œé¢ç‰Œçš„ä¸‰æ¡åˆ†ç¦»å‡ºæ¥
 	tmpbaseCardCount = TackOutBySepcifyCardNumCount(iBaseCard, iBaseCount, tmpBaseCard, 3);
-	if (tmpbaseCardCount < 6)	//ÖÁÉÙÁùÕÅÒÔÉÏ
+	if (tmpbaseCardCount < 6)	//è‡³å°‘å…­å¼ ä»¥ä¸Š
 		return FALSE;
 	//TCHAR sz[200];
-	//wsprintf(sz,"ÈıË³×ÓÌáÈ¡Ö®Ç°%d",iResultCardCount);
+	//wsprintf(sz,"ä¸‰é¡ºå­æå–ä¹‹å‰%d",iResultCardCount);
 	//WriteStr(sz);	
-	//ÏÈÌáÈ¡±È×ÀÃæ´óµÄÈıË³
+	//å…ˆæå–æ¯”æ¡Œé¢å¤§çš„ä¸‰é¡º
 	if (!TackOutSequence(iCardList, iCardCount, tmpBaseCard, tmpbaseCardCount, iResultCard, iResultCardCount, 3))
 		return FALSE;
 	//TCHAR sz[200];
-	//wsprintf(sz,"ÈıË³×ÓÌáÈ¡³É¹¦%d",iResultCardCount);
+	//wsprintf(sz,"ä¸‰é¡ºå­æå–æˆåŠŸ%d",iResultCardCount);
 	//WriteStr(sz);
-	//½«ÊÖÅÆ¸´ÖÆÒ»·İ
+	//å°†æ‰‹ç‰Œå¤åˆ¶ä¸€ä»½
 	BYTE TMP[45];
 	int TmpCount = iCardCount;
 	::CopyMemory(TMP, iCardList, sizeof(BYTE)*iCardCount);
 	RemoveCard(iResultCard, iResultCardCount, TMP, TmpCount);
 	TmpCount -= iResultCardCount;
-	destCardCount = iBaseCount - iResultCardCount;	//²¹ÅÆÊıÁ¿
+	destCardCount = iBaseCount - iResultCardCount;	//è¡¥ç‰Œæ•°é‡
 
 	switch (xValue)
 	{
 	case 1:
 	case 2:
 	{
-		tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 1);//´Õµ¥ÅÆ
+		tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 1);//å‡‘å•ç‰Œ
 		if (tmpbaseCardCount >= destCardCount)
 		{
-			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);//¹»µ¥
+			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);//å¤Ÿå•
 			iResultCardCount += destCardCount;
 		}
 		else
@@ -1796,7 +1796,7 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
 			iResultCardCount += tmpbaseCardCount;
 			destCardCount -= tmpbaseCardCount;
-			tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 2);//ÓÃ¶ÔÅÆ²¹
+			tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 2);//ç”¨å¯¹ç‰Œè¡¥
 			if (tmpbaseCardCount >= destCardCount)
 			{
 				::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
@@ -1807,7 +1807,7 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 				::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
 				iResultCardCount += tmpbaseCardCount;
 				destCardCount -= tmpbaseCardCount;
-				tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 3);//ÓÃÈıÌõ²¹
+				tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 3);//ç”¨ä¸‰æ¡è¡¥
 				//
 				if (tmpbaseCardCount >= destCardCount)
 				{
@@ -1820,7 +1820,7 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 	}
 	case 3:
 	{
-		tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 2);//´Õ¶ÔÅÆ
+		tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 2);//å‡‘å¯¹ç‰Œ
 		if (tmpbaseCardCount >= destCardCount)
 		{
 			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
@@ -1831,9 +1831,9 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
 			iResultCardCount += tmpbaseCardCount;
 			destCardCount -= tmpbaseCardCount;
-			//tmpbaseCardCount =TackOutBySepcifyCardNumCount(TMP,TmpCount,tmpBaseCard,3);//ÓÃÈıÌõ²¹¶Ô
-			TackOutMuchToFew(TMP, TmpCount, tmpBaseCard, tmpbaseCardCount, 3, 2);	//½«ÊÖÖĞÈıÌõ²ğ³É¶ÔÀ´Åä
-			if (tmpbaseCardCount >= destCardCount)//ÈıÌõ²ğ¶Ô¹»²¹
+			//tmpbaseCardCount =TackOutBySepcifyCardNumCount(TMP,TmpCount,tmpBaseCard,3);//ç”¨ä¸‰æ¡è¡¥å¯¹
+			TackOutMuchToFew(TMP, TmpCount, tmpBaseCard, tmpbaseCardCount, 3, 2);	//å°†æ‰‹ä¸­ä¸‰æ¡æ‹†æˆå¯¹æ¥é…
+			if (tmpbaseCardCount >= destCardCount)//ä¸‰æ¡æ‹†å¯¹å¤Ÿè¡¥
 			{
 				::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
 				iResultCardCount += destCardCount;
@@ -1855,16 +1855,16 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 }
 
 
-//ÖØĞ´ÌáÈ¡µ¥ÕÅµÄË³×Ó,Á¬¶Ô or Á¬Èı
-BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞµÄÅÆ
-	BYTE iBaseCard[], int iBaseCount,   //×ÀÃæÉÏ×î´óµÄÅÆ, ÅÆµÄ¸öÊı
-	BYTE iResultCard[], int &iResultCount, //ÕÒµ½µÄÅÆ
-	int xSequence, BOOL bNoComp)							//Ë³×ÓµÄ¸öÊı
+//é‡å†™æå–å•å¼ çš„é¡ºå­,è¿å¯¹ or è¿ä¸‰
+BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //æ‰‹ä¸­çš„ç‰Œ
+	BYTE iBaseCard[], int iBaseCount,   //æ¡Œé¢ä¸Šæœ€å¤§çš„ç‰Œ, ç‰Œçš„ä¸ªæ•°
+	BYTE iResultCard[], int &iResultCount, //æ‰¾åˆ°çš„ç‰Œ
+	int xSequence, BOOL bNoComp)							//é¡ºå­çš„ä¸ªæ•°
 {
 	iResultCount = 0;
 	BYTE iTack[45];
 	int iTackCount = iCardCount;
-	//¸´ÖÆÒ»·İ
+	//å¤åˆ¶ä¸€ä»½
 	::CopyMemory(iTack, iCardList, sizeof(BYTE)*iCardCount);
 	BYTE iBuffer[45];
 	int iBufferCount = 0;
@@ -1872,13 +1872,13 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 	int iSequenceLen = iBaseCount;
 	int temp[18] = { 0 };
 	int num = 0;
-	//ÌáÈ¡ËùÓĞÕ¨µ¯(´ÓÊÖÖĞÉ¾³ıËùÓĞÕ¨µ¯)
+	//æå–æ‰€æœ‰ç‚¸å¼¹(ä»æ‰‹ä¸­åˆ é™¤æ‰€æœ‰ç‚¸å¼¹)
 	TackOutAllBomb(iTack, iTackCount, iBuffer, iBufferCount);
 	RemoveCard(iBuffer, iBufferCount, iTack, iTackCount);
 	iTackCount -= iBufferCount;
-	//½øĞĞÒ»´ÎÏµÍ³ĞòÀı»¯´¦Àí(°´ÅÆĞÎÅÅĞò£¬Ğ¡->´ó²âÊÔ
+	//è¿›è¡Œä¸€æ¬¡ç³»ç»Ÿåºä¾‹åŒ–å¤„ç†(æŒ‰ç‰Œå½¢æ’åºï¼Œå°->å¤§æµ‹è¯•
 	SortCard(iTack, NULL, iTackCount, TRUE);
-	//ÓÃ»º³å¶ÓÀı±£´æ
+	//ç”¨ç¼“å†²é˜Ÿä¾‹ä¿å­˜
 	for (int i = 0;i < iTackCount;i++)
 	{
 		temp[GetCardBulk(iTack[i])]++;
@@ -1886,7 +1886,7 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 
 	switch (xSequence)
 	{
-		//µ¥Ë³
+		//å•é¡º
 	case 1:
 		iSequenceLen = iBaseCount;
 		if (!bNoComp)
@@ -1911,17 +1911,17 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 		}
 		if (iDestEnd != iSequenceLen)
 			return false;
-		//ÌáÈ¡¶ÓÁĞ
+		//æå–é˜Ÿåˆ—
 		for (int j = 0;j < iTackCount;j++)
 		{
-			if (GetCardBulk(iTack[j]) == iDestStart)//ÕÒµ½Ò»ÕÅÅÆ
+			if (GetCardBulk(iTack[j]) == iDestStart)//æ‰¾åˆ°ä¸€å¼ ç‰Œ
 			{
 				iResultCard[iResultCount++] = iTack[j];
 				iDestStart++;
 				iDestEnd--;
 				//break;
 			}
-			//ÒÑ¾­ÕÒÈ«
+			//å·²ç»æ‰¾å…¨
 			if (iDestEnd == 0)
 			{
 				return true;
@@ -1953,7 +1953,7 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 		if (iDestEnd != iSequenceLen)
 			return false;
 		num = 0;
-		//ÌáÈ¡¶ÓÁĞ
+		//æå–é˜Ÿåˆ—
 		for (int j = 0;j < iTackCount;j++)
 		{
 			if (GetCardBulk(iTack[j]) == iDestStart)
@@ -1962,12 +1962,12 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 				num++;
 			}
 
-			if (num == 2)//Ò»¶ÔÒÑ¾­ÕÒµ½
+			if (num == 2)//ä¸€å¯¹å·²ç»æ‰¾åˆ°
 			{
 				num = 0;
 				iDestStart++;
 				iDestEnd--;
-				//ÒÑ¾­ÕÒÈ«
+				//å·²ç»æ‰¾å…¨
 				if (iDestEnd == 0)
 					return true;
 				//break;
@@ -2001,7 +2001,7 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 		if (iDestEnd != iSequenceLen)
 			return false;
 		num = 0;
-		//ÌáÈ¡¶ÓÁĞ
+		//æå–é˜Ÿåˆ—
 		for (int j = 0;j < iTackCount;j++)
 		{
 			if (GetCardBulk(iTack[j]) == iDestStart)
@@ -2009,12 +2009,12 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 				iResultCard[iResultCount++] = iTack[j];
 				num++;
 
-				if (num == 3)//ÕÒµ½ÈıÕÅ
+				if (num == 3)//æ‰¾åˆ°ä¸‰å¼ 
 				{
 					num = 0;
 					iDestStart++;
 					iDestEnd--;
-					//ÒÑ¾­ÕÒÈ«
+					//å·²ç»æ‰¾å…¨
 					if (iDestEnd == 0)
 						return true;
 				}
@@ -2026,16 +2026,16 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //ÊÖÖĞ
 	return FALSE;
 }
 
-//ÌáÈ¡Í¬»¨í˜
+//æå–åŒèŠ±é †
 BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount)
 {
 	iResultCardCount = 0;
 	if (iCardCount < iBaseCount)
 		return false;
-	BYTE iBaseMinCard = GetBulkBySepcifyMinOrMax(iBaseCard, iBaseCount, 1);//×ÀÃæµÄË³×ÓÖĞ×îĞ¡µÄÅÆ
+	BYTE iBaseMinCard = GetBulkBySepcifyMinOrMax(iBaseCard, iBaseCount, 1);//æ¡Œé¢çš„é¡ºå­ä¸­æœ€å°çš„ç‰Œ
 	BYTE iTack[45];
 	int iTackCount = iCardCount;
-	//¸´ÖÆÒ»·İ
+	//å¤åˆ¶ä¸€ä»½
 	::CopyMemory(iTack, iCardList, sizeof(BYTE)*iCardCount);
 	BYTE iBuffer[45];
 	int iBufferCount = 0;
@@ -2043,7 +2043,7 @@ BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, B
 	int iSequenceLen = iBaseCount;
 	int temp[18] = { 0 };
 	int num = 0;
-	//ÌáÈ¡ËùÓĞÕ¨µ¯(´ÓÊÖÖĞÉ¾³ıËùÓĞÕ¨µ¯)
+	//æå–æ‰€æœ‰ç‚¸å¼¹(ä»æ‰‹ä¸­åˆ é™¤æ‰€æœ‰ç‚¸å¼¹)
 	TackOutAllBomb(iTack, iTackCount, iBuffer, iBufferCount);
 	RemoveCard(iBuffer, iBufferCount, iTack, iTackCount);
 	iTackCount -= iBufferCount;
@@ -2055,23 +2055,23 @@ BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, B
 	//TCHAR sz[200];
 	//wsprintf(sz,"iTackCount=%d,iBaseCount=%d",iTackCount,iBaseCount);
 	//WriteStr(sz);
-	//ÓÃ»º³å¶ÓÀı±£´æ
+	//ç”¨ç¼“å†²é˜Ÿä¾‹ä¿å­˜
 	for (int kind = 0;kind <= 48;kind += 16)
-	{	//ÌáÈ¡·½¿é
+	{	//æå–æ–¹å—
 		iResultCardCount = 0;
 		iTempKindCount = TackOutByCardKind(iTack, iTackCount, iTempKind, kind);
 		//wsprintf(sz,"kind=%d,iTempKindCount=%d",kind,iTempKindCount);
 		//WriteStr(sz);
-		if (iTempKindCount >= iBaseCount)					//´óÓÚ×ÀÃæ
+		if (iTempKindCount >= iBaseCount)					//å¤§äºæ¡Œé¢
 		{
 			for (int i = 0;i < iTempKindCount;i++)
 			{
 				temp[GetCardBulk(iTempKind[i])]++;
 			}
 
-			for (int i = iBaseMinCard + 1;i < 15;i++)//¶Ô¶ÓÀı½øĞĞ±éÀú
+			for (int i = iBaseMinCard + 1;i < 15;i++)//å¯¹é˜Ÿä¾‹è¿›è¡Œéå†
 			{
-				if (temp[i] >= 1)		//Ä³»¨É«ÓĞÅÆ
+				if (temp[i] >= 1)		//æŸèŠ±è‰²æœ‰ç‰Œ
 				{
 					if (iDestStart == 0)
 						iDestStart = i;
@@ -2088,9 +2088,9 @@ BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, B
 			//wsprintf(sz,"iDestEnd=%d,iCardCount=%d",iDestEnd,iCardCount);
 			//WriteStr(sz);
 
-			if (iDestEnd != iBaseCount)	//Ä³ÖÖ»¨É«²»·ûºÏ,»»ÁíÍâÒ»ÖÖ»¨É«
+			if (iDestEnd != iBaseCount)	//æŸç§èŠ±è‰²ä¸ç¬¦åˆ,æ¢å¦å¤–ä¸€ç§èŠ±è‰²
 				continue;
-			//ÌáÈ¡¶ÓÁĞ
+			//æå–é˜Ÿåˆ—
 			for (int j = 0;j < iTempKindCount;j++)
 			{
 				if (GetCardBulk(iTempKind[j]) == iDestStart)
@@ -2099,7 +2099,7 @@ BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, B
 					iDestStart++;
 					iDestEnd--;
 				}
-				//ÒÑ¾­ÕÒÈ«
+				//å·²ç»æ‰¾å…¨
 				if (iDestEnd == 0)
 					return true;
 			}
@@ -2110,7 +2110,7 @@ BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, B
 	return FALSE;
 }
 
-//µÃµ½Ë³×ÓµÄÆğÊ¼Î»ÖÃ
+//å¾—åˆ°é¡ºå­çš„èµ·å§‹ä½ç½®
 int CUpGradeGameLogic::GetSequenceStartPostion(BYTE iCardList[], int iCardCount, int xSequence)
 {
 	BYTE temp[18] = { 0 };
@@ -2128,14 +2128,14 @@ int CUpGradeGameLogic::GetSequenceStartPostion(BYTE iCardList[], int iCardCount,
 	return Postion;
 }
 
-//ÌáÈ¡510K
+//æå–510K
 BOOL CUpGradeGameLogic::TrackOut510K(BYTE iCardList[], int iCardCount, BYTE iResultCard[], int &iResultCardCount, bool bExtVal)
 {
 	iResultCardCount = 0;
 	BYTE temp[48] = { 0 };
 	BYTE huasei[4][16] = { 0 };
 	int k = 0, num[4] = { 0 };
-	//µÃµ½510KÊı¾İ
+	//å¾—åˆ°510Kæ•°æ®
 	for (int i = 0; i < iCardCount; i++)
 	{
 		int n = GetCardNum(iCardList[i]);
@@ -2147,24 +2147,24 @@ BOOL CUpGradeGameLogic::TrackOut510K(BYTE iCardList[], int iCardCount, BYTE iRes
 			huasei[kind][num[kind]++] = iCardList[i];
 		}
 	}
-	//5,10,kÊıÄ¿ÉÙÓÚ3¸ö
+	//5,10,kæ•°ç›®å°‘äº3ä¸ª
 	if (num[0] + num[1] + num[2] + num[3] < 3)
 		return false;
-	//ÒªÇóÖ÷510KÊıÁ¿ÉÙÓÚ3¸ö
+	//è¦æ±‚ä¸»510Kæ•°é‡å°‘äº3ä¸ª
 	if (bExtVal && num[0] < 3 && num[1] < 3 && num[2] < 3 && num[3] < 3)
 		return false;
 	for (int i = 0;i < 4;i++)
 	{
-		if (Test510K(huasei[i], num[i]))//Ä³Ò»»¨É«ÊÇ·ñÎªÖ÷510K
+		if (Test510K(huasei[i], num[i]))//æŸä¸€èŠ±è‰²æ˜¯å¦ä¸ºä¸»510K
 		{
 			Copy510K(huasei[i], num[i], iResultCard, iResultCardCount);
 
-			if (bExtVal) //ÊÇ·ñĞèÒªÌáÈ¡Ö÷510K
+			if (bExtVal) //æ˜¯å¦éœ€è¦æå–ä¸»510K
 				return true;
 			else
 			{
-				RemoveCard(iResultCard, iResultCardCount, huasei[i], num[i]);//½«Ö÷510KÒÆ³öÑ¡¶¨»¨É«¶ÓÎé
-				RemoveCard(iResultCard, iResultCardCount, temp, k);	//½«Ö÷510KÒÆ³ö510K¶ÓÎé
+				RemoveCard(iResultCard, iResultCardCount, huasei[i], num[i]);//å°†ä¸»510Kç§»å‡ºé€‰å®šèŠ±è‰²é˜Ÿä¼
+				RemoveCard(iResultCard, iResultCardCount, temp, k);	//å°†ä¸»510Kç§»å‡º510Ké˜Ÿä¼
 				num[i] -= iResultCardCount;
 				k -= iResultCardCount;
 			}
@@ -2172,7 +2172,7 @@ BOOL CUpGradeGameLogic::TrackOut510K(BYTE iCardList[], int iCardCount, BYTE iRes
 		}
 	}
 
-	if (bExtVal) return false; //ĞèÒªÍ¬»¨510K
+	if (bExtVal) return false; //éœ€è¦åŒèŠ±510K
 
 	if (Test510K(temp, k))
 	{
@@ -2182,7 +2182,7 @@ BOOL CUpGradeGameLogic::TrackOut510K(BYTE iCardList[], int iCardCount, BYTE iRes
 	return FALSE;
 }
 
-//¸´ÖÆ510K
+//å¤åˆ¶510K
 BOOL CUpGradeGameLogic::Copy510K(BYTE iCardList[], int iCardCount, BYTE iResultCard[], int &iResultCardCount)
 {
 	iResultCardCount = 0;
@@ -2202,7 +2202,7 @@ BOOL CUpGradeGameLogic::Copy510K(BYTE iCardList[], int iCardCount, BYTE iResultC
 	return  TRUE;
 }
 
-//²âÊÔÊÇ·ñÎª5,10k
+//æµ‹è¯•æ˜¯å¦ä¸º5,10k
 BOOL CUpGradeGameLogic::Test510K(BYTE iCardList[], int iCardCount, bool bExtVal)
 {
 	BOOL five = false, ten = false, k = false;
@@ -2215,14 +2215,14 @@ BOOL CUpGradeGameLogic::Test510K(BYTE iCardList[], int iCardCount, bool bExtVal)
 		else
 			k = true;
 	}
-	//ÓĞ5,10,k
+	//æœ‰5,10,k
 	if (five&&ten&&k)
 		return true;
 	return false;
 }
 
 
-//²ğ´ó
+//æ‹†å¤§
 BOOL CUpGradeGameLogic::TackOutCardByNoSameShape(BYTE iCardList[], int iCardCount, BYTE iResultCard[], int &iResultCardCount, BYTE iBaseCard[], int iBaseCardCount)
 {
 	if (iCardCount < 1)
@@ -2231,20 +2231,20 @@ BOOL CUpGradeGameLogic::TackOutCardByNoSameShape(BYTE iCardList[], int iCardCoun
 	}
 	iResultCardCount = 0;
 	BYTE temp[18] = { 0 };
-	int t = GetCardBulk(iBaseCard[0], false); //µÃµ½×ÀÃæÉÏÄÇ¸öÅÆµÄÖµ
+	int t = GetCardBulk(iBaseCard[0], false); //å¾—åˆ°æ¡Œé¢ä¸Šé‚£ä¸ªç‰Œçš„å€¼
 	for (int i = 0; i < iCardCount; i++)
 	{
 		temp[GetCardBulk(iCardList[i], false)]++;
 	}
 
-	//²ğ(Õ¨ÅÆ²»²ğ)
+	//æ‹†(ç‚¸ç‰Œä¸æ‹†)
 	for (int i = 0; i < 18; i++)
 	{
-		if (temp[i] < 4 &&               //·ÇÕ¨µ¯ÅÆ
-			temp[i] > iBaseCardCount &&  //ÕÅÊı±È×ÀÃæÅÆ¶à
-			i > t)                      //ÇÒÊı×Ö´ó
+		if (temp[i] < 4 &&               //éç‚¸å¼¹ç‰Œ
+			temp[i] > iBaseCardCount &&  //å¼ æ•°æ¯”æ¡Œé¢ç‰Œå¤š
+			i > t)                      //ä¸”æ•°å­—å¤§
 		{
-			for (int j = 0; j < iCardCount; j++)  ///´ÓĞ¡µ½´ï¿½±´(¿¼ÂÇµ½ÅÆµÄÌáÈ¡)
+			for (int j = 0; j < iCardCount; j++)  ///ä»å°åˆ°è¾¾æ‹·è´(è€ƒè™‘åˆ°ç‰Œçš„æå–)
 			{
 				if (GetCardBulk(iCardList[j], false) == i)
 				{
@@ -2261,7 +2261,7 @@ BOOL CUpGradeGameLogic::TackOutCardByNoSameShape(BYTE iCardList[], int iCardCoun
 	return false;
 }
 
-///¸ù¾İÖ¸¶¨µÄÅÆÌáÈ¡
+///æ ¹æ®æŒ‡å®šçš„ç‰Œæå–
 BOOL CUpGradeGameLogic::TackOutCardBySpecifyCard(BYTE iCardList[], int iCardCount, BYTE iResultCard[], int &iResultCardCount, BYTE iBaseCard[], int iBaseCardCount, BYTE iSepcifyCard)
 {
 	if (iCardCount < 1)
@@ -2278,7 +2278,7 @@ BOOL CUpGradeGameLogic::TackOutCardBySpecifyCard(BYTE iCardList[], int iCardCoun
 
 	BYTE temp[18] = { 0 };
 
-	int t = GetCardBulk(iBaseCard[0], false); //µÃµ½×ÀÃæÉÏÄÇ¸öÅÆµÄÖµ
+	int t = GetCardBulk(iBaseCard[0], false); //å¾—åˆ°æ¡Œé¢ä¸Šé‚£ä¸ªç‰Œçš„å€¼
 
 	for (int i = 0; i < iCardCount; i++)
 	{
@@ -2287,7 +2287,7 @@ BOOL CUpGradeGameLogic::TackOutCardBySpecifyCard(BYTE iCardList[], int iCardCoun
 
 	iResultCard[iResultCardCount++] = iSepcifyCard;
 
-	for (int j = iCardCount - 1; j >= 0; j--)  ///´ÓĞ¡µ½´ï¿½±´(¿¼ÂÇµ½ÅÆµÄÌáÈ¡)
+	for (int j = iCardCount - 1; j >= 0; j--)  ///ä»å°åˆ°è¾¾æ‹·è´(è€ƒè™‘åˆ°ç‰Œçš„æå–)
 	{
 		if (GetCardBulk(iCardList[j], false) == GetCardBulk(iSepcifyCard, false)
 			&& iCardList[j] != iSepcifyCard)
@@ -2315,14 +2315,14 @@ BOOL CUpGradeGameLogic::TackOutCardBySpecifyCard(BYTE iCardList[], int iCardCoun
 }
 
 
-//ÊÇ·ñ¿ÉÒÔ³öÅÆ
-BOOL CUpGradeGameLogic::CanOutCard(BYTE iOutCard[], int iOutCount,  //Òª³öµÄÅÆ
-	BYTE iBaseCard[], int iBaseCount,//ÒªÑ¹µÄÅÆ
-	BYTE iHandCard[], int iHandCount,//ÊÖÖĞµÄÅÆ
+//æ˜¯å¦å¯ä»¥å‡ºç‰Œ
+BOOL CUpGradeGameLogic::CanOutCard(BYTE iOutCard[], int iOutCount,  //è¦å‡ºçš„ç‰Œ
+	BYTE iBaseCard[], int iBaseCount,//è¦å‹çš„ç‰Œ
+	BYTE iHandCard[], int iHandCount,//æ‰‹ä¸­çš„ç‰Œ
 	bool bFirstOut)
 {
 	BYTE iOutCardShape = GetCardShape(iOutCard, iOutCount);
-	if (iOutCardShape == UG_ERROR_KIND) //ÅÆĞÍ²»¶Ô
+	if (iOutCardShape == UG_ERROR_KIND) //ç‰Œå‹ä¸å¯¹
 	{
 		return FALSE;
 	}
@@ -2331,87 +2331,87 @@ BOOL CUpGradeGameLogic::CanOutCard(BYTE iOutCard[], int iOutCount,  //Òª³öµÄÅÆ
 		return TRUE;
 	}
 
-	BYTE iBaseCardShape = GetCardShape(iBaseCard, iBaseCount); //×ÀÃæÉÏµÄÅÆĞÍ
-	if (iBaseCardShape > iOutCardShape)						//ÅÆĞÎ<
+	BYTE iBaseCardShape = GetCardShape(iBaseCard, iBaseCount); //æ¡Œé¢ä¸Šçš„ç‰Œå‹
+	if (iBaseCardShape > iOutCardShape)						//ç‰Œå½¢<
 	{
 		return FALSE;
 	}
-	if (iBaseCardShape < iOutCardShape)						//ÅÆĞÎ>
+	if (iBaseCardShape < iOutCardShape)						//ç‰Œå½¢>
 	{
-		if (UG_SLAVE_510K <= iOutCardShape)					//Õ¨µ¯
+		if (UG_SLAVE_510K <= iOutCardShape)					//ç‚¸å¼¹
 		{
 			return TRUE;
 		}
-		//´¦Àí²»Ò»ÑùµÄÅÆĞÎÒ²¿ÉÒÔ´ó±äÖÖË³×ÓºÍË³×Ó´óĞ¡±È½Ï
-		if (iBaseCount != iOutCount) //ÕÅÊıÏŞÖÆ
+		//å¤„ç†ä¸ä¸€æ ·çš„ç‰Œå½¢ä¹Ÿå¯ä»¥å¤§å˜ç§é¡ºå­å’Œé¡ºå­å¤§å°æ¯”è¾ƒ
+		if (iBaseCount != iOutCount) //å¼ æ•°é™åˆ¶
 			return FALSE;
 
 		switch (iBaseCardShape)
 		{
-		case UG_STRAIGHT:									//Í¬»¨í˜´óÓÚí˜×Ó
+		case UG_STRAIGHT:									//åŒèŠ±é †å¤§äºé †å­
 		{
 			if (iOutCardShape == UG_STRAIGHT_FLUSH)
 				return true;
 		}
-		case UG_VARIATION_STRAIGHT:							//×îĞ¡±äÖÖË³×Ó
+		case UG_VARIATION_STRAIGHT:							//æœ€å°å˜ç§é¡ºå­
 		{
-			if (iOutCardShape == UG_STRAIGHT)			//±äÔÛË³×ÓÖĞÓĞĞ§×î´óÖµĞ¡ÓÚÕı³£Ë³×ÓÖĞ×î´óÅÆ
+			if (iOutCardShape == UG_STRAIGHT)			//å˜å’±é¡ºå­ä¸­æœ‰æ•ˆæœ€å¤§å€¼å°äºæ­£å¸¸é¡ºå­ä¸­æœ€å¤§ç‰Œ
 				return GetBulkBySpecifyVariationSequence(iBaseCard, iBaseCount, 1) < GetBulkBySpecifySequence(iOutCard, iOutCount, 1);
 			return false;
 		}
 
-		case UG_VARIATION_DOUBLE_SEQUENCE://×îĞ¡±äÖÖË³×Ó
+		case UG_VARIATION_DOUBLE_SEQUENCE://æœ€å°å˜ç§é¡ºå­
 		{
-			if (iOutCardShape == UG_DOUBLE_SEQUENCE)	//±äÔÛË³×ÓÖĞÓĞĞ§×î´óÖµĞ¡ÓÚÕı³£Ë³×ÓÖĞ×î´óÅÆ
+			if (iOutCardShape == UG_DOUBLE_SEQUENCE)	//å˜å’±é¡ºå­ä¸­æœ‰æ•ˆæœ€å¤§å€¼å°äºæ­£å¸¸é¡ºå­ä¸­æœ€å¤§ç‰Œ
 				return GetBulkBySpecifyVariationSequence(iBaseCard, iBaseCount, 2) < GetBulkBySpecifySequence(iOutCard, iOutCount, 2);
 			return false;
 		}
 
-		case UG_VARIATION_THREE_SEQUENCE:		//±äÖÖÈıË³
-		case UG_VARIATION_THREE_ONE_SEQUENCE://±äÖÖÈıË³
-		case UG_VARIATION_THREE_TWO_SEQUENCE://±äÖÖÈı´ø¶şË³
-		case UG_VARIATION_THREE_DOUBLE_SEQUENCE://±äÖÖÈı´ø¶şË³
-		case UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE://±äÖÖÈıË³´ø¶şË³
+		case UG_VARIATION_THREE_SEQUENCE:		//å˜ç§ä¸‰é¡º
+		case UG_VARIATION_THREE_ONE_SEQUENCE://å˜ç§ä¸‰é¡º
+		case UG_VARIATION_THREE_TWO_SEQUENCE://å˜ç§ä¸‰å¸¦äºŒé¡º
+		case UG_VARIATION_THREE_DOUBLE_SEQUENCE://å˜ç§ä¸‰å¸¦äºŒé¡º
+		case UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE://å˜ç§ä¸‰é¡ºå¸¦äºŒé¡º
 		{
 			if (iOutCardShape == iBaseCardShape + 1)
 				return GetBulkBySpecifyVariationSequence(iBaseCard, iBaseCount, 3) < GetBulkBySpecifySequence(iOutCard, iOutCount, 3);
 			return false;
 		}
-		case UG_VARIATION_FOUR_SEQUENCE:		//±äÖÖËÄË³
-		case UG_VARIATION_FOUR_ONE_SEQUENCE:	//±äÖÖËÄ´øÒ»Ë³
-		case UG_VARIATION_FOUR_TWO_SEQUENCE:	//±äÖÖËÄ´ø¶şË³
-		case UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE://±äÖÖËÄ´øÒ»¶ÔË³
-		case UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE://±äÖÖËÄ´ø¶ş¶ÔË³
+		case UG_VARIATION_FOUR_SEQUENCE:		//å˜ç§å››é¡º
+		case UG_VARIATION_FOUR_ONE_SEQUENCE:	//å˜ç§å››å¸¦ä¸€é¡º
+		case UG_VARIATION_FOUR_TWO_SEQUENCE:	//å˜ç§å››å¸¦äºŒé¡º
+		case UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE://å˜ç§å››å¸¦ä¸€å¯¹é¡º
+		case UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE://å˜ç§å››å¸¦äºŒå¯¹é¡º
 		{
 			if (iOutCardShape == iBaseCardShape + 1)
 				return GetBulkBySpecifyVariationSequence(iBaseCard, iBaseCount, 4) < GetBulkBySpecifySequence(iOutCard, iOutCount, 4);
 			return false;
 		}
-		case UG_THREE_TWO://Èı§Ò»Œ¦£¾Èı§¶ş†Î
+		case UG_THREE_TWO://ä¸‰å¸¶ä¸€å°ï¼ä¸‰å¸¶äºŒå–®
 		{
 			if (iOutCardShape == UG_THREE_DOUBLE)
 				return GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 3) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 3);
 			return false;
 		}
-		case UG_THREE_TWO_SEQUENCE://Èı§Ò»Œ¦í˜(»òºûµû)>Èı§¶ş†Îí˜
+		case UG_THREE_TWO_SEQUENCE://ä¸‰å¸¶ä¸€å°é †(æˆ–è´è¶)>ä¸‰å¸¶äºŒå–®é †
 		{
 			if (iOutCardShape == UG_THREE_DOUBLE_SEQUENCE || iOutCardShape == UG_THREE_SEQUENCE_DOUBLE_SEQUENCE)
 				return GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 3) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 3);
 			return false;
 		}
-		case UG_FOUR_TWO://ËÄ§Ò»Œ¦£¾ËÄ§¶ş†Î
+		case UG_FOUR_TWO://å››å¸¶ä¸€å°ï¼å››å¸¶äºŒå–®
 		{
 			if (iOutCardShape == UG_FOUR_ONE_DOUBLE)
 				return GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 4) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 4);
 			return false;
 		}
-		case UG_FOUR_TWO_SEQUENCE://ËÄ§Ò»Œ¦í˜£¾ËÄ§¶ş†Îí˜
+		case UG_FOUR_TWO_SEQUENCE://å››å¸¶ä¸€å°é †ï¼å››å¸¶äºŒå–®é †
 		{
 			if (iOutCardShape == UG_FOUR_ONE_DOUBLE_SEQUENCE)
 				return GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 4) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 4);
 			return false;
 		}
-		case UG_THREE_DOUBLE_SEQUENCE:	//ºûµû´óÓÚÈıí˜§Œ¦
+		case UG_THREE_DOUBLE_SEQUENCE:	//è´è¶å¤§äºä¸‰é †å¸¶å°
 		{
 			if (iOutCardShape == UG_THREE_SEQUENCE_DOUBLE_SEQUENCE)
 				return GetBulkBySpecifySequence(iBaseCard, iBaseCount, 3) < GetBulkBySpecifySequence(iOutCard, iOutCount, 3);
@@ -2421,79 +2421,79 @@ BOOL CUpGradeGameLogic::CanOutCard(BYTE iOutCard[], int iOutCount,  //Òª³öµÄÅÆ
 		return false;
 	}
 
-	switch (iBaseCardShape)			//´¦ÀíÅÆĞÎÒ»ÖÂ
+	switch (iBaseCardShape)			//å¤„ç†ç‰Œå½¢ä¸€è‡´
 	{
-	case UG_ONLY_ONE:  //µ¥ÕÅ
-	case UG_DOUBLE:    //¶ÔÅÆ
-	case UG_THREE:     //ÈıÕÅ
+	case UG_ONLY_ONE:  //å•å¼ 
+	case UG_DOUBLE:    //å¯¹ç‰Œ
+	case UG_THREE:     //ä¸‰å¼ 
 	{
 		return GetBulkBySepcifyMinOrMax(iBaseCard, iBaseCount, 1) < GetBulkBySepcifyMinOrMax(iOutCard, iOutCount, 1);
 	}
-	case UG_BOMB: //4+ÕÅ Õ¨µ¯
+	case UG_BOMB: //4+å¼  ç‚¸å¼¹
 	{
-		if (iBaseCount > iOutCount) //ÕÅÊı´óµÄÕ¨µ¯´ó
+		if (iBaseCount > iOutCount) //å¼ æ•°å¤§çš„ç‚¸å¼¹å¤§
 			return FALSE;
-		if (iBaseCount == iOutCount) //ÕÅÊıÏàÍ¬,±ÈµãÊı
+		if (iBaseCount == iOutCount) //å¼ æ•°ç›¸åŒ,æ¯”ç‚¹æ•°
 			return GetBulkBySepcifyMinOrMax(iBaseCard, iBaseCount, 1) < GetBulkBySepcifyMinOrMax(iOutCard, iOutCount, 1);
 		return TRUE;
 	}
 
-	case UG_FLUSH:			//Í¬»¨(·ÇË³×Ó£©±È½ÏÍ¬»¨ÖĞ×î´óµÄÅÆ
+	case UG_FLUSH:			//åŒèŠ±(éé¡ºå­ï¼‰æ¯”è¾ƒåŒèŠ±ä¸­æœ€å¤§çš„ç‰Œ
 	{
 		return GetBulkBySepcifyMinOrMax(iBaseCard, iBaseCount, 255) < GetBulkBySepcifyMinOrMax(iOutCard, iOutCount, 255);
 	}
-	case UG_STRAIGHT_FLUSH: //Í¬»¨Ë³
-	case UG_STRAIGHT:		//Ë³×Ó
-	case UG_DOUBLE_SEQUENCE: //Á¬¶Ô
-	case UG_THREE_SEQUENCE:  //Á¬Èı  
-	case UG_FOUR_SEQUENCE:	//ËÄË³
+	case UG_STRAIGHT_FLUSH: //åŒèŠ±é¡º
+	case UG_STRAIGHT:		//é¡ºå­
+	case UG_DOUBLE_SEQUENCE: //è¿å¯¹
+	case UG_THREE_SEQUENCE:  //è¿ä¸‰  
+	case UG_FOUR_SEQUENCE:	//å››é¡º
 	{
 		if (iOutCount != iBaseCount)
 			return FALSE;
 		return GetBulkBySepcifyMinOrMax(iBaseCard, iBaseCount, 1) < GetBulkBySepcifyMinOrMax(iOutCard, iOutCount, 1);
 	}
-	case UG_THREE_ONE:		//Èı´øÒ»
-	case UG_THREE_TWO:		//Èı´ø¶ş
-	case UG_THREE_DOUBLE:	//Èı´ø¶Ô
-		//±ÈÒ»ÏÂÈıÕÅÅÆµÄÅÆµã´óĞ¡¾ÍĞĞÀ­
+	case UG_THREE_ONE:		//ä¸‰å¸¦ä¸€
+	case UG_THREE_TWO:		//ä¸‰å¸¦äºŒ
+	case UG_THREE_DOUBLE:	//ä¸‰å¸¦å¯¹
+		//æ¯”ä¸€ä¸‹ä¸‰å¼ ç‰Œçš„ç‰Œç‚¹å¤§å°å°±è¡Œæ‹‰
 		//return (SearchThreeCard(iBaseCard, iBaseCount) < SearchThreeCard(iOutCard, iOutCount));
 	{
 		return GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 3) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 3);
 	}
-	case UG_FOUR_ONE:						//ËÄ´øÒ»
-	case UG_FOUR_TWO:						//ËÄ´ø¶ş
-	case UG_FOUR_ONE_DOUBLE:				//ËÄ´øÒ»¶Ô
-	case UG_FOUR_TWO_DOUBLE:				//ËÄ´ø¶ş¶Ô
+	case UG_FOUR_ONE:						//å››å¸¦ä¸€
+	case UG_FOUR_TWO:						//å››å¸¦äºŒ
+	case UG_FOUR_ONE_DOUBLE:				//å››å¸¦ä¸€å¯¹
+	case UG_FOUR_TWO_DOUBLE:				//å››å¸¦äºŒå¯¹
 	{
 		return GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 4) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 4);
 	}
 
-	case UG_THREE_ONE_SEQUENCE: //2+¸öÈı´øÒ»
-	case UG_THREE_TWO_SEQUENCE: //2+¸öÈı´ø¶ş
-	case UG_THREE_DOUBLE_SEQUENCE://Èı´ø¶ÔË³
-	case UG_THREE_SEQUENCE_DOUBLE_SEQUENCE:		//ÈıË³´ø¶şË³(ºûµû)
+	case UG_THREE_ONE_SEQUENCE: //2+ä¸ªä¸‰å¸¦ä¸€
+	case UG_THREE_TWO_SEQUENCE: //2+ä¸ªä¸‰å¸¦äºŒ
+	case UG_THREE_DOUBLE_SEQUENCE://ä¸‰å¸¦å¯¹é¡º
+	case UG_THREE_SEQUENCE_DOUBLE_SEQUENCE:		//ä¸‰é¡ºå¸¦äºŒé¡º(è´è¶)
 	{
 		if (iOutCount != iBaseCount)
 			return FALSE;
 		return(GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 3) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 3));
 	}
-	case UG_FOUR_ONE_SEQUENCE:					//ËÄË³
+	case UG_FOUR_ONE_SEQUENCE:					//å››é¡º
 	case UG_FOUR_TWO_SEQUENCE:
 	case UG_FOUR_ONE_DOUBLE_SEQUENCE:
 	case UG_FOUR_TWO_DOUBLE_SEQUENCE:
 	{
 		return(GetBulkBySpecifyCardCount(iBaseCard, iBaseCount, 4) < GetBulkBySpecifyCardCount(iOutCard, iOutCount, 4));
 	}
-	case UG_MASTER_510K: //Í¬»¨510K£¬»¨É«:ºÚÌÒ > ºìÌÒ > Ã·»¨ > ·½Æ¬
+	case UG_MASTER_510K: //åŒèŠ±510Kï¼ŒèŠ±è‰²:é»‘æ¡ƒ > çº¢æ¡ƒ > æ¢…èŠ± > æ–¹ç‰‡
 	{
-		return (GetCardHuaKind(iBaseCard[0], true) < GetCardHuaKind(iOutCard[0], true)); //±È»¨É«
+		return (GetCardHuaKind(iBaseCard[0], true) < GetCardHuaKind(iOutCard[0], true)); //æ¯”èŠ±è‰²
 	}
-	case UG_SLAVE_510K: //¸±510K¶¼Ò»Ñù´ó
+	case UG_SLAVE_510K: //å‰¯510Kéƒ½ä¸€æ ·å¤§
 	{
 		return FALSE;
 	}
-	//±äÖÖÅÆĞÎ´¦Àí
-	case UG_VARIATION_STRAIGHT://µ¥Ë³
+	//å˜ç§ç‰Œå½¢å¤„ç†
+	case UG_VARIATION_STRAIGHT://å•é¡º
 	{
 		if (iOutCount != iBaseCount)
 			return FALSE;
@@ -2501,29 +2501,29 @@ BOOL CUpGradeGameLogic::CanOutCard(BYTE iOutCard[], int iOutCount,  //Òª³öµÄÅÆ
 
 		break;
 	}
-	case UG_VARIATION_DOUBLE_SEQUENCE://¶ÔË³
+	case UG_VARIATION_DOUBLE_SEQUENCE://å¯¹é¡º
 	{
 		if (iOutCount != iBaseCount)
 			return FALSE;
 		return(GetBulkBySpecifyVariationSequence(iBaseCard, iBaseCount, 2) < GetBulkBySpecifyVariationSequence(iOutCard, iOutCount, 2));
 		break;
 	}
-	case UG_VARIATION_THREE_SEQUENCE://ÈıË³
-	case UG_VARIATION_THREE_ONE_SEQUENCE://Èı´øÒ»Ë³
-	case UG_VARIATION_THREE_TWO_SEQUENCE://Èı´ø¶şË³
-	case UG_VARIATION_THREE_DOUBLE_SEQUENCE://Èı´ø¶ÔË³
-	case UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE://ÈıË³´ø¶şË³
+	case UG_VARIATION_THREE_SEQUENCE://ä¸‰é¡º
+	case UG_VARIATION_THREE_ONE_SEQUENCE://ä¸‰å¸¦ä¸€é¡º
+	case UG_VARIATION_THREE_TWO_SEQUENCE://ä¸‰å¸¦äºŒé¡º
+	case UG_VARIATION_THREE_DOUBLE_SEQUENCE://ä¸‰å¸¦å¯¹é¡º
+	case UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE://ä¸‰é¡ºå¸¦äºŒé¡º
 	{
 		if (iOutCount != iBaseCount)
 			return FALSE;
 		return(GetBulkBySpecifyVariationSequence(iBaseCard, iBaseCount, 3) < GetBulkBySpecifyVariationSequence(iOutCard, iOutCount, 3));
 		break;
 	}
-	case UG_VARIATION_FOUR_SEQUENCE:		//±äÖÖËÄË³
-	case UG_VARIATION_FOUR_ONE_SEQUENCE:	//±äÖÖËÄ´øÒ»Ë³
-	case UG_VARIATION_FOUR_TWO_SEQUENCE:	//±äÖÖËÄ´ø¶şË³
-	case UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE://±äÖÖËÄ´øÒ»¶ÔË³
-	case UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE://±äÖÖËÄ´ø¶ş¶ÔË³
+	case UG_VARIATION_FOUR_SEQUENCE:		//å˜ç§å››é¡º
+	case UG_VARIATION_FOUR_ONE_SEQUENCE:	//å˜ç§å››å¸¦ä¸€é¡º
+	case UG_VARIATION_FOUR_TWO_SEQUENCE:	//å˜ç§å››å¸¦äºŒé¡º
+	case UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE://å˜ç§å››å¸¦ä¸€å¯¹é¡º
+	case UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE://å˜ç§å››å¸¦äºŒå¯¹é¡º
 	{
 		if (iOutCount != iBaseCount)
 			return FALSE;
@@ -2535,7 +2535,7 @@ BOOL CUpGradeGameLogic::CanOutCard(BYTE iOutCard[], int iOutCount,  //Òª³öµÄÅÆ
 	return FALSE;
 }
 
-//ÌáÈ¡ËùÓĞÕ¨µ¯ÎªÌá·´µ¥Ë³,Ë«Ë³,ÈıË³×ö×¼±¸
+//æå–æ‰€æœ‰ç‚¸å¼¹ä¸ºæåå•é¡º,åŒé¡º,ä¸‰é¡ºåšå‡†å¤‡
 BOOL CUpGradeGameLogic::TackOutAllBomb(BYTE iCardList[], int iCardCount,
 	BYTE iResultCard[], int &iResultCardCount, int iNumCount)
 {
@@ -2557,7 +2557,7 @@ BOOL CUpGradeGameLogic::TackOutAllBomb(BYTE iCardList[], int iCardCount,
 	return true;
 }
 
-//ÌáÈ¡Õ¨µ¯
+//æå–ç‚¸å¼¹
 BOOL CUpGradeGameLogic::TackOutBomb(BYTE iCardList[], int iCardCount,
 	BYTE iResultCard[], int &iResultCardCount, int iNumCount)
 {
@@ -2581,7 +2581,7 @@ BOOL CUpGradeGameLogic::TackOutBomb(BYTE iCardList[], int iCardCount,
 	return true;
 }
 
-//ÌáÈ¡ÍõÕ¨
+//æå–ç‹ç‚¸
 BOOL CUpGradeGameLogic::TackOutKingBomb(BYTE iCardList[], int iCardCount, BYTE iResultCard[], int &iResultCardCount)
 {
 	iResultCardCount = 0;
@@ -2603,7 +2603,7 @@ BOOL CUpGradeGameLogic::TackOutKingBomb(BYTE iCardList[], int iCardCount, BYTE i
 	::CopyMemory(&(iResultCard[SingKing]), bCardBuf, sizeof(BYTE)*count);
 	return iResultCardCount = KING_COUNT;
 }
-///ÍÏ¶¯Ñ¡ÔñÅÆ
+///æ‹–åŠ¨é€‰æ‹©ç‰Œ
 void CUpGradeGameLogic::DragCardAutoSetValidCard(BYTE iUpCardList[], int iUpCardCount, BYTE bResult[], int & bResultCount)
 {
 	int iSingleResultCount = 0, iDoubleResultCount = 0;
@@ -2614,19 +2614,19 @@ void CUpGradeGameLogic::DragCardAutoSetValidCard(BYTE iUpCardList[], int iUpCard
 	memset(bSingleResult, 0, sizeof(bSingleResult));
 	memset(bDoubleResult, 0, sizeof(bDoubleResult));
 
-	BYTE bMinCard = GetCardMinOrMax(iUpCardList, iUpCardCount, 1, true); // »ñÈ¡×îĞ¡ÅÆ
-	BYTE bMaxCard = GetCardMinOrMax(iUpCardList, iUpCardCount, 255, true); // »ñÈ¡×î´óÅÆ
-	BYTE bLength = abs(GetCardNum(bMinCard) - GetCardNum(bMaxCard)) + 1; // ³¤¶È
+	BYTE bMinCard = GetCardMinOrMax(iUpCardList, iUpCardCount, 1, true); // è·å–æœ€å°ç‰Œ
+	BYTE bMaxCard = GetCardMinOrMax(iUpCardList, iUpCardCount, 255, true); // è·å–æœ€å¤§ç‰Œ
+	BYTE bLength = abs(GetCardNum(bMinCard) - GetCardNum(bMaxCard)) + 1; // é•¿åº¦
 
-	// ²»ÄÜÂú×ãË³×Ó¡¢Á¬¶ÔÒªÇó
+	// ä¸èƒ½æ»¡è¶³é¡ºå­ã€è¿å¯¹è¦æ±‚
 	if (255 == bMinCard || 255 == bMaxCard || 3 > bLength)
 		return;
 
-	for (char i = bLength; i >= 5; i--) //Ë³×Ó×îÉÙÎåÕÅ
+	for (char i = bLength; i >= 5; i--) //é¡ºå­æœ€å°‘äº”å¼ 
 		if (TackOutSequence(iUpCardList, iUpCardCount, NULL, i, bSingleResult, iSingleResultCount, 1, TRUE))
 			break;
 
-	for (char i = bLength * 2; i >= 6; i--) //¶Ô×Ó×îÉÙÈı¶Ô
+	for (char i = bLength * 2; i >= 6; i--) //å¯¹å­æœ€å°‘ä¸‰å¯¹
 		if (TackOutSequence(iUpCardList, iUpCardCount, NULL, i, bDoubleResult, iDoubleResultCount, 2, TRUE))
 			break;
 
@@ -2641,14 +2641,14 @@ void CUpGradeGameLogic::DragCardAutoSetValidCard(BYTE iUpCardList[], int iUpCard
 		bResultCount = iDoubleResultCount;
 	}
 }
-///Íæ¼Òµã»÷ÅÆÖ®ºóÖÇÄÜÌáÈ¡ÅÆ¿Ø¼ş
-void  CUpGradeGameLogic::AITrackOutCard(BYTE  iCardList[], int iCardCount,     //Íæ¼ÒµÄÊÖÅÆÊı¾İ
-	BYTE  iUpCardList[], int iUpCardCount,  //Íæ¼Òµã»÷µÄÅÆÊı¾İ
-	BYTE  iBaseCardList[], int iBaseCardCount, //Íæ¼ÒµÄ×ÀÃæÉÏµÄÅÆÊı¾İ
-	BYTE  bResult[], int & bResultCount)      ///ÌáÈ¡µ½µÄ½á¹û
+///ç©å®¶ç‚¹å‡»ç‰Œä¹‹åæ™ºèƒ½æå–ç‰Œæ§ä»¶
+void  CUpGradeGameLogic::AITrackOutCard(BYTE  iCardList[], int iCardCount,     //ç©å®¶çš„æ‰‹ç‰Œæ•°æ®
+	BYTE  iUpCardList[], int iUpCardCount,  //ç©å®¶ç‚¹å‡»çš„ç‰Œæ•°æ®
+	BYTE  iBaseCardList[], int iBaseCardCount, //ç©å®¶çš„æ¡Œé¢ä¸Šçš„ç‰Œæ•°æ®
+	BYTE  bResult[], int & bResultCount)      ///æå–åˆ°çš„ç»“æœ
 {
 
-	if (iUpCardCount <= 0 || 0 == iBaseCardCount)  //ÉıÆğµÄÅÆºÍ×ÀÃæÉÏµÄÅÆÈç¹ûÎª¿ÕµÄ¾Í²»ÓÃÌáÈ¡
+	if (iUpCardCount <= 0 || 0 == iBaseCardCount)  //å‡èµ·çš„ç‰Œå’Œæ¡Œé¢ä¸Šçš„ç‰Œå¦‚æœä¸ºç©ºçš„å°±ä¸ç”¨æå–
 	{
 		return;
 	}
@@ -2710,18 +2710,18 @@ void  CUpGradeGameLogic::AITrackOutCard(BYTE  iCardList[], int iCardCount,     /
 
 	return;
 }
-//ÕÒ³öÒ»¸ö×îĞ¡»ò×î´óµÄÅÆ
+//æ‰¾å‡ºä¸€ä¸ªæœ€å°æˆ–æœ€å¤§çš„ç‰Œ
 BYTE CUpGradeGameLogic::GetCardMinOrMax(BYTE iCardList[], int iCardCount, int MinOrMax/*1 or 255*/, bool bExtVal)
 {
 	int nIndex = 0;
 	int CardNum;
 
-	if (MinOrMax == 1) //ÕÒ×îĞ¡µÄ
+	if (MinOrMax == 1) //æ‰¾æœ€å°çš„
 	{
 		CardNum = 65536;
 		for (int i = 0; i < iCardCount; i++)
 		{
-			// ²»¿¼ÂÇ 2 ¡¢Íõ
+			// ä¸è€ƒè™‘ 2 ã€ç‹
 			if (bExtVal && (2 == GetCardNum(iCardList[i]) || 0x4E == iCardList[i] || 0x4F == iCardList[i]))
 				continue;
 
@@ -2754,16 +2754,16 @@ BYTE CUpGradeGameLogic::GetCardMinOrMax(BYTE iCardList[], int iCardCount, int Mi
 	return iCardList[nIndex];
 }
 
-//¶·µØÖ÷ÅäÅÆ
+//æ–—åœ°ä¸»é…ç‰Œ
 void CUpGradeGameLogic::MatchDDZ(BYTE iCardArray[], int iCardCount)
 {
 	BYTE _byCardArray[54] =
 	{
-		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //·½¿é 2 - A
-		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //Ã·»¨ 2 - A
-		0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //ºìÌÒ 2 - A
-		0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //ºÚÌÒ 2 - A
-		0x4E, 0x4F //Ğ¡¹í£¬´ó¹í
+		0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //æ–¹å— 2 - A
+		0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //æ¢…èŠ± 2 - A
+		0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //çº¢æ¡ƒ 2 - A
+		0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //é»‘æ¡ƒ 2 - A
+		0x4E, 0x4F //å°é¬¼ï¼Œå¤§é¬¼
 	};
 	int i = 0;
 	BYTE byCardList[216];
@@ -2811,7 +2811,7 @@ void CUpGradeGameLogic::MatchDDZ(BYTE iCardArray[], int iCardCount)
 			byCardList[iIndex2 - 1] = byTemp;
 		}
 	}
-	//½øĞĞÒ»´ÎÇĞÅÆ
+	//è¿›è¡Œä¸€æ¬¡åˆ‡ç‰Œ
 	int iQiePaiIndex = CUtil::GetRandNum() % iCardCount;
 	int iCardIndex = 0;
 	for (int i = iQiePaiIndex; i < iCardCount; i++)
@@ -2826,13 +2826,13 @@ void CUpGradeGameLogic::MatchDDZ(BYTE iCardArray[], int iCardCount)
 	/*
 static const BYTE m_CardArray[54] =
 {
-	0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //·½¿é 2 - A
-	0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //Ã·»¨ 2 - A
-	0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //ºìÌÒ 2 - A
-	0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //ºÚÌÒ 2 - A
-	0x4E, 0x4F //Ğ¡¹í£¬´ó¹í
+	0x01, 0x02 ,0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, //æ–¹å— 2 - A
+	0x11, 0x12 ,0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, //æ¢…èŠ± 2 - A
+	0x21, 0x22 ,0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, //çº¢æ¡ƒ 2 - A
+	0x31, 0x32 ,0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, //é»‘æ¡ƒ 2 - A
+	0x4E, 0x4F //å°é¬¼ï¼Œå¤§é¬¼
 };*/
-////ÅäÅÆ
+////é…ç‰Œ
 //iCardArray[0]=0x01;
 //iCardArray[1]=0x11;
 //iCardArray[2]=0x21;
@@ -2892,7 +2892,7 @@ static const BYTE m_CardArray[54] =
 //iCardArray[53]=0x4F;
 }
 
-//ºÏ²¢£¬²¢²ğ·ÖÊÖÅÆËã·¨
+//åˆå¹¶ï¼Œå¹¶æ‹†åˆ†æ‰‹ç‰Œç®—æ³•
 void CUpGradeGameLogic::MatchMergeDDZ(BYTE byCardArray1[], int iCount1, BYTE byCardArray2[], int iCount2, bool bNoXiPai)
 {
 	static unsigned long lAddTime = 0;
@@ -2948,7 +2948,7 @@ void CUpGradeGameLogic::MatchMergeDDZ(BYTE byCardArray1[], int iCount1, BYTE byC
 	{
 		iRandCount_ = CUtil::GetRandNum() % 6 + 3;
 	}
-	//ÔÙËæ»ú»ìÂÒ
+	//å†éšæœºæ··ä¹±
 	for (int i = 0; i < iRandCount_; i++)
 	{
 		srand((unsigned)GetCurrentTime() + (lAddTime++));

@@ -137,14 +137,14 @@ void CGameUserManage::CheckInvalidStatusUser(CGameMainManage* pManage)
 			continue;
 		}
 
-		// ±»ÒÆ³ýÇ°£¬Íæ¼Ò±ØÐë²»ÔÚ×À×ÓµÄÈÎÒâÎ»ÖÃÉÏ
+		// è¢«ç§»é™¤å‰ï¼ŒçŽ©å®¶å¿…é¡»ä¸åœ¨æ¡Œå­çš„ä»»æ„ä½ç½®ä¸Š
 		if (pUser->deskIdx != INVALID_DESKIDX && pUser->deskStation != INVALID_DESKSTATION)
 		{
 			++iter;
 			continue;
 		}
 
-		INFO_LOG("ÇåÀíÎÞÐ§Íæ¼ÒÄÚ´æÊý¾Ý userID=%d deskIdx=%d deskStation=%d", pUser->userID, pUser->deskIdx, pUser->deskStation);
+		INFO_LOG("æ¸…ç†æ— æ•ˆçŽ©å®¶å†…å­˜æ•°æ® userID=%d deskIdx=%d deskStation=%d", pUser->userID, pUser->deskIdx, pUser->deskStation);
 
 		SAFE_DELETE(pUser);
 		m_gameUserInfoMap.erase(iter++);

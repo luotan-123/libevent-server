@@ -7,7 +7,7 @@
 
 const std::array<const char*, LOG_LEVEL_END> levelNames = { "[INFO]", "[WARNNING]", "[ERROR]", "[INFO]","[ERROR]", "[SYS_ERR]", };
 
-//// ÈÕÖ¾Àà
+//// æ—¥å¿—ç±»
 class CLog
 {
 public:
@@ -19,13 +19,13 @@ public:
 
 	static void Write(const char* pLogFile, const char* pFuncName, const char* pFormat, ...);
 
-	// °ÑbufÖĞµÄÄÚÈİĞ´ÈëlogFile
+	// æŠŠbufä¸­çš„å†…å®¹å†™å…¥logFile
 	static void Write(const char* pLogFile, const char* buf);
 
 	static void WriteSysErr(const char* pLogFile, int level, const char* pFile, int line, const char* pFuncName, const char* err, const char* pFormat, ...);
 };
 
-// ¼ì²âº¯ÊıÔËĞĞ
+// æ£€æµ‹å‡½æ•°è¿è¡Œ
 class CAutoLog
 {
 public:
@@ -39,7 +39,7 @@ private:
 	int	 m_line;
 };
 
-// Í³¼Æº¯ÊıºÄÊ±
+// ç»Ÿè®¡å‡½æ•°è€—æ—¶
 class CAutoLogCost
 {
 public:
@@ -58,25 +58,25 @@ private:
 #define	AUTOLOG()		CAutoLog autolog(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), __FILE__, __FUNCTION__, __LINE__);
 #define AUTOCOST(...)	CAutoLogCost logCost(GameLogManage()->GetCostLog(GetCurrentThreadId()).c_str(), __FUNCTION__, MIN_STATISTICS_FUNC_COST_TIME, __VA_ARGS__);
 
-// Êä³ö´íÎóÏûÏ¢ ¡¾Ö»Êä³öµ½ÎÄ¼şÏµÍ³¡¿
+// è¾“å‡ºé”™è¯¯æ¶ˆæ¯ ã€åªè¾“å‡ºåˆ°æ–‡ä»¶ç³»ç»Ÿã€‘
 #define ERROR_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
 
-// Êä³ö³£¹æĞÅÏ¢ ¡¾Ö»Êä³öµ½ÎÄ¼şÏµÍ³¡¿
+// è¾“å‡ºå¸¸è§„ä¿¡æ¯ ã€åªè¾“å‡ºåˆ°æ–‡ä»¶ç³»ç»Ÿã€‘
 #define INFO_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_INFO, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
 
-// Êä³öÖØÒª¾¯¸æĞÅÏ¢ ¡¾Ö»Êä³öµ½ÎÄ¼şÏµÍ³¡¿
+// è¾“å‡ºé‡è¦è­¦å‘Šä¿¡æ¯ ã€åªè¾“å‡ºåˆ°æ–‡ä»¶ç³»ç»Ÿã€‘
 #define WARNNING_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_WARNNING, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
 
-// Êä³ö´íÎóÏûÏ¢ ¡¾Êä³öµ½ÎÄ¼şÏµÍ³ºÍ¿ØÖÆÌ¨¡¿
+// è¾“å‡ºé”™è¯¯æ¶ˆæ¯ ã€è¾“å‡ºåˆ°æ–‡ä»¶ç³»ç»Ÿå’Œæ§åˆ¶å°ã€‘
 #define CON_ERROR_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR_CONSOLE, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
 
-// Êä³ö³£¹æĞÅÏ¢ ¡¾Êä³öµ½ÎÄ¼şÏµÍ³ºÍ¿ØÖÆÌ¨¡¿
+// è¾“å‡ºå¸¸è§„ä¿¡æ¯ ã€è¾“å‡ºåˆ°æ–‡ä»¶ç³»ç»Ÿå’Œæ§åˆ¶å°ã€‘
 #define CON_INFO_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_INFO_CONSOLE, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
 
-// Êä³öÏµÍ³´íÎóĞÅÏ¢£¬strerror(errno)º¯ÊıÈ«¾ÖµÄ£¬µ÷ÓÃSYS_ERROR_LOGÖ®Ç°£¬²»ÄÜµ÷ÓÃÆäËüÏµÍ³º¯Êı
+// è¾“å‡ºç³»ç»Ÿé”™è¯¯ä¿¡æ¯ï¼Œstrerror(errno)å‡½æ•°å…¨å±€çš„ï¼Œè°ƒç”¨SYS_ERROR_LOGä¹‹å‰ï¼Œä¸èƒ½è°ƒç”¨å…¶å®ƒç³»ç»Ÿå‡½æ•°
 #define SYS_ERROR_LOG(...)	{ CLog::WriteSysErr(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR_SYS, __FILE__, __LINE__, __FUNCTION__,strerror(errno), __VA_ARGS__); }
 
-// ¼æÈİÒÔÇ°µÄ´úÂë
+// å…¼å®¹ä»¥å‰çš„ä»£ç 
 #define WAUTOLOG()		AUTOLOG()
 #define WAUTOCOST(...)	AUTOCOST(__VA_ARGS__)
 #define WERROR_LOG(...)	ERROR_LOG(__VA_ARGS__)

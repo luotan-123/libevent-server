@@ -2,99 +2,99 @@
 
 #include <vector>
 
-//²Ù×÷ÑÚÂë
+//æ“ä½œæ©ç 
 #define	UG_HUA_MASK					0xF0			//1111 0000
 #define	UG_VALUE_MASK				0x0F			//0000 1111
 
-//ÆË¿Ë»¨É«
-#define UG_FANG_KUAI				0x00			//·½¿é	0000 0000
-#define UG_MEI_HUA					0x10			//Ã·»¨	0001 0000
-#define UG_HONG_TAO					0x20			//ºìÌÒ	0010 0000
-#define UG_HEI_TAO					0x30			//ºÚÌÒ	0011 0000
-#define UG_NT_CARD					0x40			//Ö÷ÅÆ	0100 0000
-#define UG_ERROR_HUA				0xF0			//´íÎó  1111 0000
+//æ‰‘å…‹èŠ±è‰²
+#define UG_FANG_KUAI				0x00			//æ–¹å—	0000 0000
+#define UG_MEI_HUA					0x10			//æ¢…èŠ±	0001 0000
+#define UG_HONG_TAO					0x20			//çº¢æ¡ƒ	0010 0000
+#define UG_HEI_TAO					0x30			//é»‘æ¡ƒ	0011 0000
+#define UG_NT_CARD					0x40			//ä¸»ç‰Œ	0100 0000
+#define UG_ERROR_HUA				0xF0			//é”™è¯¯  1111 0000
 
-//ÆË¿Ë³öÅÆÀàĞÍ
-#define UG_ERROR_KIND							0				//´íÎó
+//æ‰‘å…‹å‡ºç‰Œç±»å‹
+#define UG_ERROR_KIND							0				//é”™è¯¯
 
-#define UG_ONLY_ONE								1				//µ¥ÕÅ
-#define UG_DOUBLE								2				//¶ÔÅÆ
+#define UG_ONLY_ONE								1				//å•å¼ 
+#define UG_DOUBLE								2				//å¯¹ç‰Œ
 
-#define UG_VARIATION_STRAIGHT					3				//±äÖÖË³×Ó(A2345)Ë³×ÓÖĞ×îĞ¡
-#define UG_STRAIGHT								4               //Ë³×Ó,5+ÕÅÁ¬ĞøÅÆ
-#define UG_FLUSH								5				//Í¬»¨(·ÇÁ¬)
-#define UG_STRAIGHT_FLUSH						6               //Í¬»¨Ë³,»¨É«ÏàÍ¬µÄË³×Ó
+#define UG_VARIATION_STRAIGHT					3				//å˜ç§é¡ºå­(A2345)é¡ºå­ä¸­æœ€å°
+#define UG_STRAIGHT								4               //é¡ºå­,5+å¼ è¿ç»­ç‰Œ
+#define UG_FLUSH								5				//åŒèŠ±(éè¿)
+#define UG_STRAIGHT_FLUSH						6               //åŒèŠ±é¡º,èŠ±è‰²ç›¸åŒçš„é¡ºå­
 
-#define UG_THREE								7				//ÈıÕÅ
-#define UG_THREE_ONE							8               //3 ´ø 1
-#define UG_THREE_TWO							9               //3 ´ø 2
-#define UG_THREE_DOUBLE							10				//3 ´ø1¶Ô
+#define UG_THREE								7				//ä¸‰å¼ 
+#define UG_THREE_ONE							8               //3 å¸¦ 1
+#define UG_THREE_TWO							9               //3 å¸¦ 2
+#define UG_THREE_DOUBLE							10				//3 å¸¦1å¯¹
 
-#define UG_VARIATION_DOUBLE_SEQUENCE			11				//±äÖÖË«Ë³(AA22)×îĞ¡
-#define UG_DOUBLE_SEQUENCE						12				//Á¬¶Ô,2+¸öÁ¬ĞøµÄ¶Ô×Ó
+#define UG_VARIATION_DOUBLE_SEQUENCE			11				//å˜ç§åŒé¡º(AA22)æœ€å°
+#define UG_DOUBLE_SEQUENCE						12				//è¿å¯¹,2+ä¸ªè¿ç»­çš„å¯¹å­
 
-#define UG_VARIATION_THREE_SEQUENCE				13				//±äÖÖÈıË³(AAA222×îĞ¡)
-#define UG_THREE_SEQUENCE						14				//Á¬ÈıÕÅ£¬2+¸öÁ¬ĞøµÄÈıÕÅ
+#define UG_VARIATION_THREE_SEQUENCE				13				//å˜ç§ä¸‰é¡º(AAA222æœ€å°)
+#define UG_THREE_SEQUENCE						14				//è¿ä¸‰å¼ ï¼Œ2+ä¸ªè¿ç»­çš„ä¸‰å¼ 
 
-#define UG_VARIATION_THREE_ONE_SEQUENCE			15				//±äÖÖÈıË³´øÒ»
-#define UG_THREE_ONE_SEQUENCE					16              //2+¸öÁ¬ĞøµÄÈı´øÒ»
+#define UG_VARIATION_THREE_ONE_SEQUENCE			15				//å˜ç§ä¸‰é¡ºå¸¦ä¸€
+#define UG_THREE_ONE_SEQUENCE					16              //2+ä¸ªè¿ç»­çš„ä¸‰å¸¦ä¸€
 
-#define UG_VARIATION_THREE_TWO_SEQUENCE			17				//±äÖÖÈıË³´ø¶ş
-#define UG_THREE_TWO_SEQUENCE					18				//2+¸öÁ¬ĞøµÄÈı´ø¶ş
+#define UG_VARIATION_THREE_TWO_SEQUENCE			17				//å˜ç§ä¸‰é¡ºå¸¦äºŒ
+#define UG_THREE_TWO_SEQUENCE					18				//2+ä¸ªè¿ç»­çš„ä¸‰å¸¦äºŒ
 
-#define UG_VARIATION_THREE_DOUBLE_SEQUENCE		19				//±äÖÖÈıÁ¬ÕÅ´ø¶Ô
-#define UG_THREE_DOUBLE_SEQUENCE				20				//ÈıÁ¬ÕÅ´ø¶Ô
+#define UG_VARIATION_THREE_DOUBLE_SEQUENCE		19				//å˜ç§ä¸‰è¿å¼ å¸¦å¯¹
+#define UG_THREE_DOUBLE_SEQUENCE				20				//ä¸‰è¿å¼ å¸¦å¯¹
 
-#define UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE		21		//±äÖÖºûµû(ÈıË³´ø¶şË³)
-#define UG_THREE_SEQUENCE_DOUBLE_SEQUENCE		22				//ºûµû(ÈıË³´ø¶şË³)
+#define UG_VARIATION_THREE_SEQUENCE_DOUBLE_SEQUENCE		21		//å˜ç§è´è¶(ä¸‰é¡ºå¸¦äºŒé¡º)
+#define UG_THREE_SEQUENCE_DOUBLE_SEQUENCE		22				//è´è¶(ä¸‰é¡ºå¸¦äºŒé¡º)
 
-#define UG_FOUR_ONE								23				//ËÄ´øÒ»
-#define UG_FOUR_TWO								24				//ËÄ´ø¶şÕÅ
-#define UG_FOUR_ONE_DOUBLE						25				//ËÄ´øÒ»¶Ô
-#define UG_FOUR_TWO_DOUBLE						26				//ËÄ´ø¶ş¶Ô
+#define UG_FOUR_ONE								23				//å››å¸¦ä¸€
+#define UG_FOUR_TWO								24				//å››å¸¦äºŒå¼ 
+#define UG_FOUR_ONE_DOUBLE						25				//å››å¸¦ä¸€å¯¹
+#define UG_FOUR_TWO_DOUBLE						26				//å››å¸¦äºŒå¯¹
 
-#define UG_VARIATION_FOUR_SEQUENCE				27				//ËÄË³
-#define UG_FOUR_SEQUENCE						28				//ËÄË³
+#define UG_VARIATION_FOUR_SEQUENCE				27				//å››é¡º
+#define UG_FOUR_SEQUENCE						28				//å››é¡º
 
-#define UG_VARIATION_FOUR_ONE_SEQUENCE			29				//ËÄ´øÒ»Ë³
-#define UG_FOUR_ONE_SEQUENCE					30				//ËÄ´øÒ»Ë³
+#define UG_VARIATION_FOUR_ONE_SEQUENCE			29				//å››å¸¦ä¸€é¡º
+#define UG_FOUR_ONE_SEQUENCE					30				//å››å¸¦ä¸€é¡º
 
-#define UG_VARIATION_FOUR_TWO_SEQUENCE			31				//ËÄ´ø¶şË³
-#define UG_FOUR_TWO_SEQUENCE					32				//ËÄ´ø¶şË³
+#define UG_VARIATION_FOUR_TWO_SEQUENCE			31				//å››å¸¦äºŒé¡º
+#define UG_FOUR_TWO_SEQUENCE					32				//å››å¸¦äºŒé¡º
 
-#define UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE	33				//ËÄ´ø¶ÔË³
-#define UG_FOUR_ONE_DOUBLE_SEQUENCE				34				//ËÄ´ø¶ÔË³
+#define UG_VARIATION_FOUR_ONE_DOUBLE_SEQUENCE	33				//å››å¸¦å¯¹é¡º
+#define UG_FOUR_ONE_DOUBLE_SEQUENCE				34				//å››å¸¦å¯¹é¡º
 
-#define UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE	35				//ËÄ´ø¶ş¶ÔË³
-#define UG_FOUR_TWO_DOUBLE_SEQUENCE				36				//ËÄ´ø¶ş¶ÔË³
-
-
-#define UG_SLAVE_510K							37              //510KÕ¨µ¯,»¨É«²»Í¬
-#define UG_MASTER_510K							38              //510KÍ¬»¨Õ¨µ¯
-
-#define UG_BOMB									39              //Õ¨µ¯>=4ˆ
-#define UG_BOMB_SAME_HUA						40				//Í¬»¨Õ¨µ¯(ÔÚËÄ¸±»òÒÔÉÏµÄÅÆÖĞ³öÏÖ)
-#define UG_KING_BOMB							41				//ÍõÕ¨(×î´óÕ¨µ¯)
+#define UG_VARIATION_FOUR_TWO_DOUBLE_SEQUENCE	35				//å››å¸¦äºŒå¯¹é¡º
+#define UG_FOUR_TWO_DOUBLE_SEQUENCE				36				//å››å¸¦äºŒå¯¹é¡º
 
 
-#define KING_COUNT								2				//ËùÓĞÍõµÄ¸öÊı
-//ÆË¿Ë·ÖÎö½á¹¹	£¨Ö»ÓÃÓÚ·şÎñÆ÷¶Ô±ÈÆË¿Ë£©
+#define UG_SLAVE_510K							37              //510Kç‚¸å¼¹,èŠ±è‰²ä¸åŒ
+#define UG_MASTER_510K							38              //510KåŒèŠ±ç‚¸å¼¹
+
+#define UG_BOMB									39              //ç‚¸å¼¹>=4å¼µ
+#define UG_BOMB_SAME_HUA						40				//åŒèŠ±ç‚¸å¼¹(åœ¨å››å‰¯æˆ–ä»¥ä¸Šçš„ç‰Œä¸­å‡ºç°)
+#define UG_KING_BOMB							41				//ç‹ç‚¸(æœ€å¤§ç‚¸å¼¹)
+
+
+#define KING_COUNT								2				//æ‰€æœ‰ç‹çš„ä¸ªæ•°
+//æ‰‘å…‹åˆ†æç»“æ„	ï¼ˆåªç”¨äºæœåŠ¡å™¨å¯¹æ¯”æ‰‘å…‹ï¼‰
 struct CardAnalyseStruct
 {
-	int		iSingleCount;	  //µ¥ÅÆÊıÄ¿
-	int		iDoubleCount;	  //¶ÔÅÆÊıÄ¿
-	int		iThreeCount;	  //ÈıÌõÊıÄ¿
-	int		iBombCount;		  //Õ¨µ¯Êı
-	int		i510KCount;		  //510KÊıÄ¿
-	int		i510KMastCount;	  //Ö÷510KÊıÄ¿
-//	BYTE	iBigsingleCard;	  //×î´óµ¥ÅÆ
-//	BYTE	iLesssingleCard;  //×îĞ¡µ¥ÅÆ
+	int		iSingleCount;	  //å•ç‰Œæ•°ç›®
+	int		iDoubleCount;	  //å¯¹ç‰Œæ•°ç›®
+	int		iThreeCount;	  //ä¸‰æ¡æ•°ç›®
+	int		iBombCount;		  //ç‚¸å¼¹æ•°
+	int		i510KCount;		  //510Kæ•°ç›®
+	int		i510KMastCount;	  //ä¸»510Kæ•°ç›®
+//	BYTE	iBigsingleCard;	  //æœ€å¤§å•ç‰Œ
+//	BYTE	iLesssingleCard;  //æœ€å°å•ç‰Œ
 
-	BYTE	iSingleArray[45]; //µ¥ÅÆ
-	BYTE	iDoubleArray[45]; //¶ÔÅÆÊı×é
-	BYTE	iThreeArray[45];  //ÈıÌõÊı×é
-	BYTE	iBombArray[45];	  //Á½¶ÔÍÏÀ­»úÊı×é £¨0 ·Ö¸î£¬³¤¶È£¬ÍÏÀ­»úÊı¾İ£©
-	BYTE	i510KArray[45];	  //Èı¶ÔÍÏÀ­»úÊı×é £¨0 ·Ö¸î£¬³¤¶È£¬ÍÏÀ­»úÊı¾İ£©
+	BYTE	iSingleArray[45]; //å•ç‰Œ
+	BYTE	iDoubleArray[45]; //å¯¹ç‰Œæ•°ç»„
+	BYTE	iThreeArray[45];  //ä¸‰æ¡æ•°ç»„
+	BYTE	iBombArray[45];	  //ä¸¤å¯¹æ‹–æ‹‰æœºæ•°ç»„ ï¼ˆ0 åˆ†å‰²ï¼Œé•¿åº¦ï¼Œæ‹–æ‹‰æœºæ•°æ®ï¼‰
+	BYTE	i510KArray[45];	  //ä¸‰å¯¹æ‹–æ‹‰æœºæ•°ç»„ ï¼ˆ0 åˆ†å‰²ï¼Œé•¿åº¦ï¼Œæ‹–æ‹‰æœºæ•°æ®ï¼‰
 };
 
 struct CardType
@@ -108,61 +108,61 @@ struct CardType
 	}
 };
 
-//510KÂß¼­Àà Ö§³Ö 2 ¸±ÆË¿Ë£©
+//510Ké€»è¾‘ç±» æ”¯æŒ 2 å‰¯æ‰‘å…‹ï¼‰
 class CUpGradeGameLogic
 {
-	//±äÁ¿¶¨Òå
+	//å˜é‡å®šä¹‰
 private:
-//	int				m_iStation[5];	   //Ïà¶ÔÎ»ÖÃ£¨·½¿é£¬Ã·»¨£¬ºìÌÒ£¬ºÚÌÒ£¬Ö÷ÅÆ£©
-	BYTE			m_bSortCardStyle;  //ÅÅĞò·½Ê½
-	int				m_iCondition;			//ÏŞÖÆÌõ¼ş
-	BOOL			m_bKingCanReplace;		//ÍõÊÇ·ñ¿Éµ±
+//	int				m_iStation[5];	   //ç›¸å¯¹ä½ç½®ï¼ˆæ–¹å—ï¼Œæ¢…èŠ±ï¼Œçº¢æ¡ƒï¼Œé»‘æ¡ƒï¼Œä¸»ç‰Œï¼‰
+	BYTE			m_bSortCardStyle;  //æ’åºæ–¹å¼
+	int				m_iCondition;			//é™åˆ¶æ¡ä»¶
+	BOOL			m_bKingCanReplace;		//ç‹æ˜¯å¦å¯å½“
 
-	DWORD           m_iCardShape;	//Ö§³ÖÅÆĞÍ
-	int             m_iLaiZiSize;   //ñ®×Ó´óĞ¡
+	DWORD           m_iCardShape;	//æ”¯æŒç‰Œå‹
+	int             m_iLaiZiSize;   //ç™å­å¤§å°
 	CardType		m_cdType[18];
-	//º¯Êı¶¨Òå
+	//å‡½æ•°å®šä¹‰
 public:
-	//¹¹Ôìº¯Êı		
+	//æ„é€ å‡½æ•°		
 	CUpGradeGameLogic(void);
-	//Îö¹¹º¯Êı
+	//ææ„å‡½æ•°
 	virtual ~CUpGradeGameLogic();
 
-	//¹¦ÄÜº¯Êı£¨¹«¹²º¯Êı£©
+	//åŠŸèƒ½å‡½æ•°ï¼ˆå…¬å…±å‡½æ•°ï¼‰
 public:
-	//[ÉèÖÃÏà¹Ø]
-	//»ñÈ¡ÆË¿ËÊı×Ö
+	//[è®¾ç½®ç›¸å…³]
+	//è·å–æ‰‘å…‹æ•°å­—
 	inline int GetCardNum(BYTE iCard) { return (iCard&UG_VALUE_MASK)+1; }
-	//»ñÈ¡ÆË¿Ë»¨É«(Ä¬ÈÏÎªÕæÊµ»¨É«)
+	//è·å–æ‰‘å…‹èŠ±è‰²(é»˜è®¤ä¸ºçœŸå®èŠ±è‰²)
 	BYTE GetCardHuaKind(BYTE iCard, BOOL bTrueHua=TRUE);
-	//»ñÈ¡ÆË¿ËÏà¶Ô´óĞ¡(Ä¬ÈÏÎªÅÆ´óĞ¡,·ÇÅÅĞò´óĞ¡)
+	//è·å–æ‰‘å…‹ç›¸å¯¹å¤§å°(é»˜è®¤ä¸ºç‰Œå¤§å°,éæ’åºå¤§å°)
 	int GetCardBulk(BYTE iCard, bool bExtVal=false);
-	//»ñÈ¡ÆË¿ËÅÆÍ¨¹ıÏà¶Ô´óĞ¡
+	//è·å–æ‰‘å…‹ç‰Œé€šè¿‡ç›¸å¯¹å¤§å°
 	BYTE GetCardByValue(int iCardValue);
-	//ÔOÖÃÍõ¿ÉÒÔ®”ÅÆ
+	//è¨­ç½®ç‹å¯ä»¥ç•¶ç‰Œ
 	void SetKingCanReplace(BOOL bKingCanReplace=false){m_bKingCanReplace=bKingCanReplace;}
-	//«CÈ¡ÍõÊÇ·ñ¿ÉÒÔ®”ÅÆ
+	//çµå–ç‹æ˜¯å¦å¯ä»¥ç•¶ç‰Œ
 	BOOL GetKingCanReplace(){return m_bKingCanReplace;}
-	//ÉèÖÃÅÅĞò·½Ê½
+	//è®¾ç½®æ’åºæ–¹å¼
 	void SetSortCardStyle(BYTE SortCardStyle){m_bSortCardStyle=SortCardStyle;}
-	//»ñÈ¡ÅÅĞò·½Ê½
+	//è·å–æ’åºæ–¹å¼
 	BYTE GetSortCardStyle(){return m_bSortCardStyle;}
-	//ÉèÖÃñ®×Ó
+	//è®¾ç½®ç™å­
 	void SetLaiZi(BYTE byCard){m_iLaiZiSize=GetCardBulk(byCard);}
-	//[ÅÅĞò]
+	//[æ’åº]
 public:
-	//ÅÅÁĞÆË¿Ë,°´´óĞ¡(±£ÁôÏµÍ³ĞòÀı)
+	//æ’åˆ—æ‰‘å…‹,æŒ‰å¤§å°(ä¿ç•™ç³»ç»Ÿåºä¾‹)
 	BOOL SortCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount,BOOL bSysSort = FALSE);
-	//·´×ªÅÆË³(´ÓµÍ->¸ß)
+	//åè½¬ç‰Œé¡º(ä»ä½->é«˜)
 	BOOL ReverseCard(BYTE iCardList[], BYTE bUp[], BYTE iCardCount);
-	//°´ÅÆĞÍÅÅĞò
+	//æŒ‰ç‰Œå‹æ’åº
 	BOOL SortCardByStyle(BYTE iCardList[],BYTE iCardCount);
-	//°´»¨É«ÅÅĞò
+	//æŒ‰èŠ±è‰²æ’åº
 	BOOL SortCardByKind(BYTE iCardList[],BYTE iCardCount);
 public:
-	//»ìÂÒÆË¿Ë
-	BYTE RandCard(BYTE iCard[], int iCardCount,int iRoomId,bool bHaveKing=false);		//bHaveKing±íÊ¾ÊÇ·ñÓĞ´óĞ¡Ã¨,falseÎŞ,tureÓĞ
-	//É¾³ıÆË¿Ë
+	//æ··ä¹±æ‰‘å…‹
+	BYTE RandCard(BYTE iCard[], int iCardCount,int iRoomId,bool bHaveKing=false);		//bHaveKingè¡¨ç¤ºæ˜¯å¦æœ‰å¤§å°çŒ«,falseæ— ,tureæœ‰
+	//åˆ é™¤æ‰‘å…‹
 	int RemoveCard(BYTE iRemoveCard[], int iRemoveCount, BYTE iCardList[], int iCardCount);
 
 
@@ -170,179 +170,179 @@ public:
 
 	bool IsLegalCard(BYTE iCard);
 private:
-	//Çå³ı 0 Î»ÆË¿Ë
+	//æ¸…é™¤ 0 ä½æ‰‘å…‹
 	int RemoveNummCard(BYTE iCardList[], int iCardCount);
 
-public://[¸¨Öúº¯Êı]
-	//¶Ô±Èµ¥ÅÆ
+public://[è¾…åŠ©å‡½æ•°]
+	//å¯¹æ¯”å•ç‰Œ
 	BOOL CompareOnlyOne(BYTE iFirstCard, BYTE iNextCard);
-	//²éÕÒ·ÖÊı
+	//æŸ¥æ‰¾åˆ†æ•°
 	int FindPoint(BYTE iCardList[], int iCardCount);
-	//ÊÇ·ñÎªÍ¬Ò»Êı×ÖÅÆ
+	//æ˜¯å¦ä¸ºåŒä¸€æ•°å­—ç‰Œ
 	BOOL IsSameNumCard(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//ÊÇ·ñÎªÍ¬Ò»»¨É«
+	//æ˜¯å¦ä¸ºåŒä¸€èŠ±è‰²
 	BOOL IsSameHuaKind(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//²éÕÒ >=4 Õ¨µ¯µÄÊıÁ¿Õ¨µ¯»ùÊı
+	//æŸ¥æ‰¾ >=4 ç‚¸å¼¹çš„æ•°é‡ç‚¸å¼¹åŸºæ•°
 	BYTE GetBombCount(BYTE iCardList[], int iCardCount,int iNumCount = 4, bool bExtVal=false);
-	//»ñÈ¡Ö¸¶¨´óĞ¡ÅÆ¸öÊı
+	//è·å–æŒ‡å®šå¤§å°ç‰Œä¸ªæ•°
 	BYTE GetCountBySpecifyNumCount(BYTE iCardList[],int iCardCount,int Num);
-	//»ñÈ¡Ö¸¶¨ÅÆ¸öÊı
+	//è·å–æŒ‡å®šç‰Œä¸ªæ•°
 	BYTE GetCountBySpecifyCard(BYTE iCardList[],int iCardCount,BYTE bCard);
-	//»ñÈ¡Ö¸¶¨ÅÆÕÅÊıÅÆ´óĞ¡(¶ÓÀıÖĞÖ»ÄÜ¹»ÓĞÒ»ÖÖÅÆµÄÕÅÊıÎªiCount,²»È»´«³öÈ¥µÄ½«ÊÇµÚÒ»¸öÖ¸¶¨ÕÅÊıµÄÖµ)
+	//è·å–æŒ‡å®šç‰Œå¼ æ•°ç‰Œå¤§å°(é˜Ÿä¾‹ä¸­åªèƒ½å¤Ÿæœ‰ä¸€ç§ç‰Œçš„å¼ æ•°ä¸ºiCount,ä¸ç„¶ä¼ å‡ºå»çš„å°†æ˜¯ç¬¬ä¸€ä¸ªæŒ‡å®šå¼ æ•°çš„å€¼)
 	BYTE GetBulkBySpecifyCardCount(BYTE iCardList[],int iCardCount,int iCount);
-	//ÊÇ·ñÎªÄ³Ö¸¶¨µÄË³×Ó(±äÖÖË³×Ó)
+	//æ˜¯å¦ä¸ºæŸæŒ‡å®šçš„é¡ºå­(å˜ç§é¡ºå­)
 	BOOL IsVariationSequence(BYTE iCardList[], int iCardCount, int iCount);
-	//ÊÇ·ñÎªÄ³Ö¸¶¨µÄË³×Ó
+	//æ˜¯å¦ä¸ºæŸæŒ‡å®šçš„é¡ºå­
 	BOOL IsSequence(BYTE iCardList[], int iCardCount, int iCount);
-	//ÌáÈ¡Ö¸¶¨µÄÅÆ
+	//æå–æŒ‡å®šçš„ç‰Œ
 	BYTE TackOutBySpecifyCard(BYTE iCardList[], int iCardCount,BYTE bCardBuffer[],int &iResultCardCount,BYTE bCard);
-	//ÌáÈ¡Ä³ÕÅÖ¸¶¨Êı×ÖµÄÅÆ
+	//æå–æŸå¼ æŒ‡å®šæ•°å­—çš„ç‰Œ
 	BOOL TackOutCardBySpecifyCardNum(BYTE iCardList[],int iCardCount,BYTE iBuffer[],int &iBufferCardCount,BYTE iCard,BOOL bExtVal=false);
-	//ÌáÈ¡ËùÓĞ·ûºÏÌõ¼şµÄÅÆ,µ¥ÕÅ,¶ÔÅÆ,ÈıÕÅ,4Õ¨µ¯ÅÆĞÍ
+	//æå–æ‰€æœ‰ç¬¦åˆæ¡ä»¶çš„ç‰Œ,å•å¼ ,å¯¹ç‰Œ,ä¸‰å¼ ,4ç‚¸å¼¹ç‰Œå‹
 	int TackOutBySepcifyCardNumCount(BYTE iCardList[], int iCardCount, BYTE iDoubleBuffer[],BYTE bCardNum, bool bExtVal=false);
-	//ÌáÈ¡Ö¸¶¨»¨É«ÅÆ
+	//æå–æŒ‡å®šèŠ±è‰²ç‰Œ
 	int TackOutByCardKind(BYTE iCardList[],int iCardCount,BYTE iDoubleBuffer[],BYTE iCardKind);
-	//²ğ³ö(½«ÊÖÖĞÅÆ¶àµÄ²ğ³ÉÉÙµÄ)
+	//æ‹†å‡º(å°†æ‰‹ä¸­ç‰Œå¤šçš„æ‹†æˆå°‘çš„)
 	int TackOutMuchToFew(BYTE iCardList[],int iCardCount,BYTE iDoubleBuffer[],int &iBufferCardCount,BYTE iCardMuch,BYTE iCardFew);
-	//²éÕÒ´óÓÚiCardµÄµ¥ÅÆËùÔÚiCardListÖĞµÄĞòºÅ
+	//æŸ¥æ‰¾å¤§äºiCardçš„å•ç‰Œæ‰€åœ¨iCardListä¸­çš„åºå·
 	BYTE GetSerialByMoreThanSpecifyCard(BYTE iCardList[],int iCardCount,BYTE iCard,BYTE iBaseCardCount, bool bExtValue=false);
-	//²éÕÒ==iCardµÄµ¥ÅÆËùÔÚiCardListÖĞµÄĞòºÅ(ÆğÊ¼Î»ÖÃ,µ½½KücÎ»ÖÃ)
+	//æŸ¥æ‰¾==iCardçš„å•ç‰Œæ‰€åœ¨iCardListä¸­çš„åºå·(èµ·å§‹ä½ç½®,åˆ°çµ‚é»ä½ç½®)
 	int GetSerialBySpecifyCard(BYTE iCardList[],int iStart,int iCardCount,BYTE iCard);
-	//»ñÈ¡Ö¸¶¨Ë³×ÓÖĞÅÆµã×îĞ¡Öµ(iSequence ´ú±íË³×ÓµÄÅÆÊı×î¶àÎª
+	//è·å–æŒ‡å®šé¡ºå­ä¸­ç‰Œç‚¹æœ€å°å€¼(iSequence ä»£è¡¨é¡ºå­çš„ç‰Œæ•°æœ€å¤šä¸º
 	BYTE GetBulkBySpecifySequence(BYTE iCardList[],int iCardCount ,int iSequence = 3);
-	//»ñÈ¡Ö¸¶¨Ë³×ÓÖĞÅÆµã×î´óÖµ±äÖÖË³×Ó
+	//è·å–æŒ‡å®šé¡ºå­ä¸­ç‰Œç‚¹æœ€å¤§å€¼å˜ç§é¡ºå­
 	BYTE GetBulkBySpecifyVariationSequence(BYTE iCardList[],int iCardCount ,int iSequence = 3);
-	//²éÕÒ×îĞ¡ (1) or ×î´ó (255) ÅÆ
+	//æŸ¥æ‰¾æœ€å° (1) or æœ€å¤§ (255) ç‰Œ
 	int	GetBulkBySepcifyMinOrMax(BYTE iCardList[], int iCardCount, int MinOrMax, bool bExtVal=false);
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	//[ÅÆĞÍÏà¹Ø]
+	//[ç‰Œå‹ç›¸å…³]
 public:
-    //»ñÈ¡ÅÆĞÍ
+    //è·å–ç‰Œå‹
 	BYTE GetCardShape(BYTE iCardList[], int iCardCount,bool bExlVal=false);
-	//ÊÇ·ñµ¥ÅÆ
+	//æ˜¯å¦å•ç‰Œ
 	inline BOOL IsOnlyOne(BYTE iCardList[], int iCardCount) { return iCardCount==1; };
-	//ÊÇ·ñ¶ÔÅÆ
+	//æ˜¯å¦å¯¹ç‰Œ
 	BOOL IsDouble(BYTE iCardList[], int iCardCount,bool bExtVal=false);
-	//3 ´ø 1or2(´øÒ»¶Ô´ø¶şµ¥ÕÅ»ò´øÒ»µ¥ÕÅ
+	//3 å¸¦ 1or2(å¸¦ä¸€å¯¹å¸¦äºŒå•å¼ æˆ–å¸¦ä¸€å•å¼ 
 	BOOL IsThreeX(BYTE iCardList[], int iCardCount, int iX/*1or2*/, bool bExtVal=false);
-	//ÍõÕ¨
+	//ç‹ç‚¸
 	BOOL IsKingBomb(BYTE iCardList[],int iCardCount);
-	//4+ÕÅÅÆ Õ¨µ¯
+	//4+å¼ ç‰Œ ç‚¸å¼¹
 	BOOL IsBomb(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//Í¬»¨Õ¨µ¯
+	//åŒèŠ±ç‚¸å¼¹
 	BOOL IsBombSameHua(BYTE iCardList[],int iCardCount);
-	//Í¬»¨(·ÇË³×Ó)
+	//åŒèŠ±(éé¡ºå­)
 	BOOL IsFlush(BYTE iCardList[],int iCardCount);
-	//ÊÇ·ñÊÇÍ¬»¨Ë³
+	//æ˜¯å¦æ˜¯åŒèŠ±é¡º
 	BOOL IsStraightFlush(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//±äÖÖµ¥Ë¦
+	//å˜ç§å•ç”©
 	BOOL IsVariationStraight(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//µ¥Ë¦
+	//å•ç”©
 	BOOL IsStraight(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//±äÖÖ¶ÔË¦
+	//å˜ç§å¯¹ç”©
 	BOOL IsVariationDoubleSequence(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//¶ÔË¦ //Á¬¶Ô?
+	//å¯¹ç”© //è¿å¯¹?
 	BOOL IsDoubleSequence(BYTE iCardList[],int iCardCount,bool bExtVal=false);
 
-	//ÊÇ·ñ±äÖÖÊÇÁ¬ĞøµÄÈı´øX(0,1,2,3)
+	//æ˜¯å¦å˜ç§æ˜¯è¿ç»­çš„ä¸‰å¸¦X(0,1,2,3)
 	BOOL IsVariationThreeXSequence(BYTE iCardList[], int iCardCount, int iSeqX/*0,1or2*/, bool bExtVal=false);
 
-	//ÊÇ·ñÊÇÁ¬ĞøµÄÈı´øX(0,1,2,3)
+	//æ˜¯å¦æ˜¯è¿ç»­çš„ä¸‰å¸¦X(0,1,2,3)
 	BOOL IsThreeXSequence(BYTE iCardList[], int iCardCount, int iSeqX/*0,1or2*/, bool bExtVal=false);
-	//ÊÇ·ñÈıË³´ø¶şË³(ºûµû)
+	//æ˜¯å¦ä¸‰é¡ºå¸¦äºŒé¡º(è´è¶)
 	BOOL IsThreeSequenceDoubleSequence(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//ÊÇ·ñÈıË³´ø¶şË³(ºûµû)
+	//æ˜¯å¦ä¸‰é¡ºå¸¦äºŒé¡º(è´è¶)
 	BOOL IsVariationThreeSequenceDoubleSequence(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//510K Õ¨µ¯
+	//510K ç‚¸å¼¹
 	BOOL IsSlave510K(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//510K Í¬»¨Õ¨µ¯
+	//510K åŒèŠ±ç‚¸å¼¹
 	BOOL IsMaster510K(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//ËÄ´øÒ»»òÕßËÄ´ø¶ş
-	BOOL IsFourX(BYTE iCardList[],int iCardCount,int iX/*1or 2*/);//µ¥ÕÅ1,ÈÎÒâÕÅ2,Ò»¶Ô×Ó,2¶Ô4
-	//ÊÇ·ñ±äÖÖËÄ´øXË³
+	//å››å¸¦ä¸€æˆ–è€…å››å¸¦äºŒ
+	BOOL IsFourX(BYTE iCardList[],int iCardCount,int iX/*1or 2*/);//å•å¼ 1,ä»»æ„å¼ 2,ä¸€å¯¹å­,2å¯¹4
+	//æ˜¯å¦å˜ç§å››å¸¦Xé¡º
 	BOOL IsVariationFourXSequence(BYTE iCardList[],int iCardCount,int iSeqX);
-	//ËÄ´øÒ»»òÕßËÄ´ø¶şµÄË³×Ó
+	//å››å¸¦ä¸€æˆ–è€…å››å¸¦äºŒçš„é¡ºå­
 	BOOL IsFourXSequence(BYTE iCardList[],int iCardCount,int iSeqX);
-	//ÌØÊâµÄÁ¬3´ø1
+	//ç‰¹æ®Šçš„è¿3å¸¦1
 	bool IsLianSanDaiYi(BYTE iCardList[],int iCardCount);
-	//[³öÅÆÏà¹Ø]
+	//[å‡ºç‰Œç›¸å…³]
 public:
-	//×Ô¶¯³öÅÆº¯Êı
+	//è‡ªåŠ¨å‡ºç‰Œå‡½æ•°
 	BOOL AutoOutCard(BYTE iHandCard[], int iHandCardCount, BYTE iBaseCard[], int iBaseCardCount, BYTE iResultCard[], int & iResultCardCount, BOOL bFirstOut);
-	//ÊÇ·ñ¿ÉÒÔ³öÅÆ
+	//æ˜¯å¦å¯ä»¥å‡ºç‰Œ
 	BOOL CanOutCard(BYTE iOutCard[], int iOutCount, BYTE iBaseCard[], int iBaseCount, BYTE iHandCard[], int iHandCount,bool bFirstOut = false);
-	//²éÕÒ±Èµ±Ç°³öÅÆ´óµÄ
+	//æŸ¥æ‰¾æ¯”å½“å‰å‡ºç‰Œå¤§çš„
 	BOOL TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardCount,BYTE iBaseCard[], int iBaseCardCount,
 									BYTE iResultCard[], int & iResultCardCount,bool bExtVal=false);
 	
-	//[ÌáÈ¡ÅÆ]
+	//[æå–ç‰Œ]
 public:	
-	//ÌáÈ¡µ¥¸öµÄÈı´ø1 or 2or 3(µ¥,Ò»¶Ô,»ò¶şµ¥ÕÅ)
+	//æå–å•ä¸ªçš„ä¸‰å¸¦1 or 2or 3(å•,ä¸€å¯¹,æˆ–äºŒå•å¼ )
 	BYTE TackOutThreeX(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount,int  xValue);
-	//ÌáÈ¡2¸öÒÔÉÏÁ¬ĞøµÄÈı´ø1,2
+	//æå–2ä¸ªä»¥ä¸Šè¿ç»­çš„ä¸‰å¸¦1,2
 	BOOL TrackOut3XSequence(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount, int xValue);
-	//ÌáÈ¡2¸öÒÔÉÏÁ¬ĞøµÄÈı´ø1,2
+	//æå–2ä¸ªä»¥ä¸Šè¿ç»­çš„ä¸‰å¸¦1,2
 	BOOL TrackOut3Sequence2Sequence(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount);
-	//ÌáÈ¡2¸öÒÔÉÏÁ¬ĞøµÄÈı´ø1,2
+	//æå–2ä¸ªä»¥ä¸Šè¿ç»­çš„ä¸‰å¸¦1,2
 	//BYTE TrackOut3XSequence(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount, bool bExtVal=false);
-	//ÌáÈ¡µ¥ÕÅµÄË³×Ó,Á¬¶Ô or Á¬Èı
+	//æå–å•å¼ çš„é¡ºå­,è¿å¯¹ or è¿ä¸‰
 	//BYTE TackOutSequence(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount);
-	//»ñÈ¡Ë³×ÓÖĞ×îĞ¡Î»ÖÃÖµ(xSequence±íÊ¾Ä¬ÈÏµ¥Ë³)
+	//è·å–é¡ºå­ä¸­æœ€å°ä½ç½®å€¼(xSequenceè¡¨ç¤ºé»˜è®¤å•é¡º)
 	int GetSequenceStartPostion(BYTE iCardList[],int iCardCount,int xSequence=1);
-	//ÌáÈ¡µ¥ÕÅµÄË³×Ó,Á¬¶ÔË³×Ó,Á¬ÈıË³×Ó
+	//æå–å•å¼ çš„é¡ºå­,è¿å¯¹é¡ºå­,è¿ä¸‰é¡ºå­
 	BOOL TackOutSequence(BYTE iCardList[],int iCardCount,BYTE iBaseCard[],int iBaseCount,BYTE iResultCard[],int &iResultCardCount,int xSequence,BOOL bNoComp = false);
-	//ÌáÈ¡Í¬»¨Ë³
+	//æå–åŒèŠ±é¡º
 	BOOL TackOutStraightFlush(BYTE iCardList[],int iCardCount,BYTE iBaseCard[],int iBaseCount,BYTE iResultCard[], int &iResultCardCount);
 	//BYTE TackOutStraightFlush(BYTE iCardList[], int iCardCount, BYTE iBaseCard[], int iBaseCount, BYTE iResultCard[], int &iResultCardCount, int bExtVal=false);
-	//ÌáÈ¡ËùµÄÕ¨µ¯
+	//æå–æ‰€çš„ç‚¸å¼¹
 	BOOL TackOutAllBomb(BYTE iCardList[],int iCardCount,
 									   BYTE iResultCard[],int &iResultCardCount,int iNumCount=4);
-	//ÌáÈ¡Õ¨µ¯(ÕÅÊıÄ¬ÈÏÎª4)
+	//æå–ç‚¸å¼¹(å¼ æ•°é»˜è®¤ä¸º4)
 	BOOL TackOutBomb(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount,int iNumCount=4);
-	//ÌáÈ¡ÍõÕ¨
+	//æå–ç‹ç‚¸
 	BOOL TackOutKingBomb(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount);
-	//ÌáÈ¡510K
+	//æå–510K
 	BOOL TrackOut510K(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount, bool bExtVal=false);
-	//²âÊÔ510K
+	//æµ‹è¯•510K
 	BOOL Test510K(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//¿½±³
+	//æ‹·èƒŒ
 	BOOL Copy510K(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount);
-	//²ğ´ó×ÀÃæÅÆ
+	//æ‹†å¤§æ¡Œé¢ç‰Œ
 	BOOL TackOutCardByNoSameShape(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount,BYTE iBaseCard[],int iBaseCardCount );
-   ///ÌáÈ¡Ö¸¶¨µÄÅÆ
+   ///æå–æŒ‡å®šçš„ç‰Œ
 	BOOL TackOutCardBySpecifyCard(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount,BYTE iBaseCard[],int iBaseCardCount ,BYTE iSepcifyCard);
-	//ÓÃ´óµÄÅÆÅÆ´ó×ÀÃæÉÏµÄÅÆ
+	//ç”¨å¤§çš„ç‰Œç‰Œå¤§æ¡Œé¢ä¸Šçš„ç‰Œ
 	BOOL TackOutMoreThanLastShape(BYTE iCardList[],int iCardCount,BYTE iResultCard[],int &iResultCardCount,BYTE iBaseCard[],int iBaseCardCount);
-	//·ÖÎöº¯Êı
+	//åˆ†æå‡½æ•°
 	//BOOL AnalyseCard(BYTE iCardList[], int iCardCount, CardAnalyseStruct & Analyse);
 
 public:
 
-	//²éÕÒÅÆĞÍÖĞÓĞ¼¸¸öÈıÕÅµÄÅÆ
+	//æŸ¥æ‰¾ç‰Œå‹ä¸­æœ‰å‡ ä¸ªä¸‰å¼ çš„ç‰Œ
 	//int SearchCountOfThree(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//²éÕÒÈıÕÅµÄÅÆµã
+	//æŸ¥æ‰¾ä¸‰å¼ çš„ç‰Œç‚¹
 	//int SearchThreeCard(BYTE iCardList[],int iCardCount,bool bExtVal=false);
-	//²éÕÒÈıÁ¬ÅÆÖĞ×îĞ¡µÄÄÇ¸öÈıÕÅµÄÅÆµã
+	//æŸ¥æ‰¾ä¸‰è¿ç‰Œä¸­æœ€å°çš„é‚£ä¸ªä¸‰å¼ çš„ç‰Œç‚¹
 	int SearchMinThreeSeq(BYTE iCardList[], int iCardCount, bool bExtVal=false);
-	//ÖØÖÃÏŞÖÆÌõ¼ş
+	//é‡ç½®é™åˆ¶æ¡ä»¶
 	void ResetCondition();
 
-	///ÉèÖÃÓÎÏ·ÅÆĞÍ
+	///è®¾ç½®æ¸¸æˆç‰Œå‹
 	void SetCardShape(DWORD iCardShape){m_iCardShape=iCardShape;}
 
-	/// ÍÏÅÆ×Ô¶¯¼ì²é
+	/// æ‹–ç‰Œè‡ªåŠ¨æ£€æŸ¥
 	void DragCardAutoSetValidCard(BYTE iUpCardList[], int iUpCardCount, BYTE bResult[], int & bResultCount);
 
-	///ÓÃ»§µã»÷ÅÆÖ®ºóÖÇÄÜÌáÈ¡ÅÆ
+	///ç”¨æˆ·ç‚¹å‡»ç‰Œä¹‹åæ™ºèƒ½æå–ç‰Œ
 	void AITrackOutCard(BYTE iCardList[] ,int iCardCount,BYTE iUpCardList[], int iUpCardCount,BYTE iBaseCardList[] ,int iBaseCardCount, BYTE bResult[], int & bResultCount);
-	///²éÕÒ×îĞ¡ (1) or ×î´ó (255) ÅÆÖµ
+	///æŸ¥æ‰¾æœ€å° (1) or æœ€å¤§ (255) ç‰Œå€¼
 	///
-	/// [@param in bExtVal] Õæ£¬²»¿¼ÂÇ2¡¢Íõ
+	/// [@param in bExtVal] çœŸï¼Œä¸è€ƒè™‘2ã€ç‹
 	BYTE GetCardMinOrMax(BYTE iCardList[], int iCardCount, int MinOrMax, bool bExtVal=false);
 	
-	//¶·µØÖ÷ÅäÅÆ
+	//æ–—åœ°ä¸»é…ç‰Œ
 	void MatchDDZ(BYTE byCardArray[], int iCount);
 
-	//ºÏ²¢£¬²¢²ğ·ÖÊÖÅÆËã·¨
+	//åˆå¹¶ï¼Œå¹¶æ‹†åˆ†æ‰‹ç‰Œç®—æ³•
 	void MatchMergeDDZ(BYTE byCardArray1[], int iCount1,BYTE byCardArray2[], int iCount2,bool bNoXiPai);
 };

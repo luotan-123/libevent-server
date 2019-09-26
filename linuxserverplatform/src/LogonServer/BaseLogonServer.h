@@ -10,96 +10,96 @@
 #include "DataBase.h"
 
 
-//»ù´¡Êı¾İ¹ÜÀíÀà
+//åŸºç¡€æ•°æ®ç®¡ç†ç±»
 class CBaseLogonServer : public IServerSocketService, public IAsynThreadResultService
 {
 protected:
-	bool			m_bRun;					//ÔËĞĞ±êÖ¾
-	bool			m_bInit;				//³õÊ¼»¯±êÖ¾
-	HWND			m_hWindow;				//´°¿Ú¾ä±ú
-	HANDLE			m_hWindowThread;		//´°¿ÚÏß³Ì
-	HANDLE			m_hHandleThread;		//´¦ÀíÏß³Ì
-	HANDLE			m_hCompletePort;		//´¦ÀíÍê³É¶Ë¿Ú
-	CDataLine		m_DataLine;				//Êı¾İ¶ÓÁĞ
-	HANDLE			m_connectCServerHandle;	//ÓëÖĞĞÄ·ş½»»¥Ïß³Ì¾ä±ú
+	bool			m_bRun;					//è¿è¡Œæ ‡å¿—
+	bool			m_bInit;				//åˆå§‹åŒ–æ ‡å¿—
+	HWND			m_hWindow;				//çª—å£å¥æŸ„
+	HANDLE			m_hWindowThread;		//çª—å£çº¿ç¨‹
+	HANDLE			m_hHandleThread;		//å¤„ç†çº¿ç¨‹
+	HANDLE			m_hCompletePort;		//å¤„ç†å®Œæˆç«¯å£
+	CDataLine		m_DataLine;				//æ•°æ®é˜Ÿåˆ—
+	HANDLE			m_connectCServerHandle;	//ä¸ä¸­å¿ƒæœäº¤äº’çº¿ç¨‹å¥æŸ„
 
 public:
-	ManageInfoStruct						m_InitData;					//³õÊ¼»¯Êı¾İ
-	KernelInfoStruct						m_KernelData;				//ÄÚºËÊı¾İ
-	ServerDllInfoStruct						m_DllInfo;					//DLLĞÅÏ¢
-	CTCPSocketManage						m_TCPSocket;				//ÍøÂçÄ£¿é
-	CDataBaseManage							m_SQLDataManage;			//Êı¾İ¿âÄ£¿é
+	ManageInfoStruct						m_InitData;					//åˆå§‹åŒ–æ•°æ®
+	KernelInfoStruct						m_KernelData;				//å†…æ ¸æ•°æ®
+	ServerDllInfoStruct						m_DllInfo;					//DLLä¿¡æ¯
+	CTCPSocketManage						m_TCPSocket;				//ç½‘ç»œæ¨¡å—
+	CDataBaseManage							m_SQLDataManage;			//æ•°æ®åº“æ¨¡å—
 	CRedisLogon* m_pRedis;					//redis
-	CRedisPHP* m_pRedisPHP;					//Á¬½ÓphpµÄredis server
-	CTcpConnect* m_pTcpConnect;				//ÓëÖĞĞÄ·şÎñÆ÷µÄÁ¬½Ó
+	CRedisPHP* m_pRedisPHP;					//è¿æ¥phpçš„redis server
+	CTcpConnect* m_pTcpConnect;				//ä¸ä¸­å¿ƒæœåŠ¡å™¨çš„è¿æ¥
 
 public:
 	CBaseLogonServer();
 	virtual ~CBaseLogonServer();
 
-	//¹«¹²Ê¹ÓÃ¹¦ÄÜº¯Êı £¨±¾´¦ÀíÏß³Ìµ÷ÓÃ£©
+	//å…¬å…±ä½¿ç”¨åŠŸèƒ½å‡½æ•° ï¼ˆæœ¬å¤„ç†çº¿ç¨‹è°ƒç”¨ï¼‰
 public:
 	bool SetTimer(UINT uTimerID, UINT uElapse);
 	bool KillTimer(UINT uTimerID);
 
-	//·şÎñ½Ó¿Úº¯Êı £¨Ö÷Ïß³Ìµ÷ÓÃ£©
+	//æœåŠ¡æ¥å£å‡½æ•° ï¼ˆä¸»çº¿ç¨‹è°ƒç”¨ï¼‰
 public:
 	virtual bool Init(ManageInfoStruct* pInitData, IDataBaseHandleService* pDataHandleService);
 	virtual bool UnInit();
 	virtual bool Start();
 	virtual bool Stop();
 
-	//·şÎñ½Ó¿Úº¯Êı £¨Ö÷Ïß³Ìµ÷ÓÃ£©
+	//æœåŠ¡æ¥å£å‡½æ•° ï¼ˆä¸»çº¿ç¨‹è°ƒç”¨ï¼‰
 private:
-	//»ñÈ¡ĞÅÏ¢º¯Êı £¨±ØĞëÖØÔØ£©
+	//è·å–ä¿¡æ¯å‡½æ•° ï¼ˆå¿…é¡»é‡è½½ï¼‰
 	virtual bool PreInitParameter(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData) = 0;
-	//Êı¾İ¹ÜÀíÄ£¿é³õÊ¼»¯
+	//æ•°æ®ç®¡ç†æ¨¡å—åˆå§‹åŒ–
 	virtual bool OnInit(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData) { return true; };
-	//Êı¾İ¹ÜÀíÄ£¿éĞ¶ÔØ
+	//æ•°æ®ç®¡ç†æ¨¡å—å¸è½½
 	virtual bool OnUnInit() { return true; }
-	//Êı¾İ¹ÜÀíÄ£¿éÆô¶¯
+	//æ•°æ®ç®¡ç†æ¨¡å—å¯åŠ¨
 	virtual bool OnStart() { return true; }
-	//Êı¾İ¹ÜÀíÄ£¿é¹Ø±Õ
+	//æ•°æ®ç®¡ç†æ¨¡å—å…³é—­
 	virtual bool OnStop() { return true; }
 
-	//·şÎñÀ©Õ¹½Ó¿Úº¯Êı £¨±¾´¦ÀíÏß³Ìµ÷ÓÃ£©
+	//æœåŠ¡æ‰©å±•æ¥å£å‡½æ•° ï¼ˆæœ¬å¤„ç†çº¿ç¨‹è°ƒç”¨ï¼‰
 private:
-	//SOCKET Êı¾İ¶ÁÈ¡ £¨±ØĞëÖØÔØ£©
+	//SOCKET æ•°æ®è¯»å– ï¼ˆå¿…é¡»é‡è½½ï¼‰
 	virtual bool OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID) = 0;
-	//SOCKET ¹Ø±Õ £¨±ØĞëÖØÔØ£©
+	//SOCKET å…³é—­ ï¼ˆå¿…é¡»é‡è½½ï¼‰
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime) = 0;
-	//Òì²½Ïß³Ì´¦Àí½á¹û £¨±ØĞëÖØÔØ£©
+	//å¼‚æ­¥çº¿ç¨‹å¤„ç†ç»“æœ ï¼ˆå¿…é¡»é‡è½½ï¼‰
 	virtual bool OnAsynThreadResult(AsynThreadResultLine* pResultData, void* pData, UINT uSize) = 0;
-	//¶¨Ê±Æ÷ÏûÏ¢ £¨±ØĞëÖØÔØ£©
+	//å®šæ—¶å™¨æ¶ˆæ¯ ï¼ˆå¿…é¡»é‡è½½ï¼‰
 	virtual bool OnTimerMessage(UINT uTimerID) = 0;
 
-	//·şÎñ½Ó¿Úº¯Êı £¨ÆäËû·şÎñÏß³Ìµ÷ÓÃ£©
+	//æœåŠ¡æ¥å£å‡½æ•° ï¼ˆå…¶ä»–æœåŠ¡çº¿ç¨‹è°ƒç”¨ï¼‰
 public:
-	//ÍøÂç¹Ø±Õ´¦Àí 
+	//ç½‘ç»œå…³é—­å¤„ç† 
 	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime);
-	//ÍøÂçÏûÏ¢´¦Àí 
+	//ç½‘ç»œæ¶ˆæ¯å¤„ç† 
 	virtual bool OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex, DWORD dwHandleID);
-	//Òì²½Ïß³Ì½á¹û´¦Àí
+	//å¼‚æ­¥çº¿ç¨‹ç»“æœå¤„ç†
 	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
 
 	virtual CDataLine* GetDataLine() { return &m_DataLine; }
 
-	//ÄÚ²¿º¯Êı£¨Ö÷Ïß³Ìµ÷ÓÃ£©
+	//å†…éƒ¨å‡½æ•°ï¼ˆä¸»çº¿ç¨‹è°ƒç”¨ï¼‰
 private:
-	//´´½¨´°¿ÚÎªÁËÉú³É¶¨Ê±Æ÷
+	//åˆ›å»ºçª—å£ä¸ºäº†ç”Ÿæˆå®šæ—¶å™¨
 	bool CreateWindowsForTimer();
-	//¶¨Ê±Æ÷Í¨ÖªÏûÏ¢
+	//å®šæ—¶å™¨é€šçŸ¥æ¶ˆæ¯
 	bool WindowTimerMessage(UINT uTimerID);
-	//¶ÓÁĞÊı¾İ´¦ÀíÏß³Ì
+	//é˜Ÿåˆ—æ•°æ®å¤„ç†çº¿ç¨‹
 	static unsigned __stdcall LineDataHandleThread(LPVOID pThreadData);
-	//WINDOW ÏûÏ¢Ñ­»·Ïß³Ì
+	//WINDOW æ¶ˆæ¯å¾ªç¯çº¿ç¨‹
 	static unsigned __stdcall WindowMsgThread(LPVOID pThreadData);
-	//´°¿Ú»Øµ÷º¯Êı
+	//çª—å£å›è°ƒå‡½æ•°
 	static LRESULT CALLBACK WindowProcFunc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	//ÓëÖĞĞÄ·şÎñÆ÷Á¬½ÓÏß³Ì
+	//ä¸ä¸­å¿ƒæœåŠ¡å™¨è¿æ¥çº¿ç¨‹
 	static unsigned __stdcall TcpConnectThread(LPVOID pThreadData);
 private:
 
-	//´¦ÀíÖĞĞÄ·şÏûÏ¢
+	//å¤„ç†ä¸­å¿ƒæœæ¶ˆæ¯
 	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID) = 0;
 };

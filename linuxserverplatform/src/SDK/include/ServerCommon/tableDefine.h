@@ -3,98 +3,98 @@
 #include "Define.h"
 #include "basemessage.h"
 
-////////////////////////redisºÍÊı¾İ¿â¶¼ÓĞµÄ±í//////////////////////////////////
-// ¶¯Ì¬±í(ÔËĞĞÖĞÊı¾İ»á·¢Éú¸Ä±ä£¬»á±¸·İµ½Êı¾İ¿â)
+////////////////////////rediså’Œæ•°æ®åº“éƒ½æœ‰çš„è¡¨//////////////////////////////////
+// åŠ¨æ€è¡¨(è¿è¡Œä¸­æ•°æ®ä¼šå‘ç”Ÿæ”¹å˜ï¼Œä¼šå¤‡ä»½åˆ°æ•°æ®åº“)
 #define TBL_USER				"userInfo"
 #define	TBL_REWARDS_POOL		"rewardsPool"
 #define TBL_USER_BAG			"userBag"
 
-//////////////////////////////////ÕËºÅÏà¹Øredis¼üÖµ(¶¼ÊÇstringÀàĞÍ,Ö»´æÔÚ»º´æ)////////////////////////////////////////
-//µÚÈı·½ÕËºÅÓëUIDµÄÓ³Éä±í
+//////////////////////////////////è´¦å·ç›¸å…³redisé”®å€¼(éƒ½æ˜¯stringç±»å‹,åªå­˜åœ¨ç¼“å­˜)////////////////////////////////////////
+//ç¬¬ä¸‰æ–¹è´¦å·ä¸UIDçš„æ˜ å°„è¡¨
 #define TBL_TRDUSERID			"trdUserID"                          
-//ÊÖ»úµÇÂ½Ó³Éä±í
+//æ‰‹æœºç™»é™†æ˜ å°„è¡¨
 #define TBL_PHONE_TOUSERID		"phoneToUserID"
-//ÏĞÁÄµÇÂ½Ó³Éä±í
+//é—²èŠç™»é™†æ˜ å°„è¡¨
 #define TBL_XIANLIAO_TOUSERID	"xianliaoToUserID"
-//ÓÎ¿ÍµÇÂ¼Ó³Éä±í
+//æ¸¸å®¢ç™»å½•æ˜ å°„è¡¨
 #define TBL_VISITOR_TOUSERID	"visitorToUserID"
 
 //////////////////////////////////////////////////////////
-// Ö»±£´æÔÚ»º´æÖĞµÄÊı¾İ±í£¬¸ù¾İ¹¦ÄÜÄ£¿é»®·Ö
+// åªä¿å­˜åœ¨ç¼“å­˜ä¸­çš„æ•°æ®è¡¨ï¼Œæ ¹æ®åŠŸèƒ½æ¨¡å—åˆ’åˆ†
 
-// ¹ºÂò×À×ÓÄ£¿é
-#define TBL_CACHE_DESK			"privateDeskInfo"			// ×Ö¶ÎĞÅÏ¢Ïê¼ûPrivateDeskInfo½á¹¹Ìå ¡¾hash¡¿
-#define TBL_FG_CLOSE_SAVE_DESK  "FGCloseSaveDesk"			// ÁÙÊ±±£´æÔÚÊı¾İ¿âÖĞµÄÅÆ×À ¡¾hash¡¿
-#define TBL_CACHE_DESK_PASSWD	"privateDeskPasswd"			// redis key£¬ stringÀàĞÍ ±£´æÁËdeskpasswdºÍdeskMixIDµÄÓ³Éä ¡¾string¡¿
-#define TBL_USER_BUY_DESK		"sameUserBuyDesk"			// Í¬²½¹ºÂò×À×ÓÊı¾İ ¡¾string¡¿
-#define TBL_FG_BUY_DESK			"sameFGBuyDesk"				// Í¬²½¾ãÀÖ²¿¹ºÂò×À×ÓÊı¾İ ¡¾string¡¿
-#define TBL_MARK_DESK_INDEX		"BuyDeskMarkIndex"			// ¹ºÂò×À×ÓĞèÒªÓÃµ½µÄË÷Òı ¡¾string¡¿
-#define CACHE_USER_BUYDESK_SET	"cacheUserBuyDeskSet"		// Íæ¼Ò¿ª·¿ÁĞ±í ¡¾set¡¿
+// è´­ä¹°æ¡Œå­æ¨¡å—
+#define TBL_CACHE_DESK			"privateDeskInfo"			// å­—æ®µä¿¡æ¯è¯¦è§PrivateDeskInfoç»“æ„ä½“ ã€hashã€‘
+#define TBL_FG_CLOSE_SAVE_DESK  "FGCloseSaveDesk"			// ä¸´æ—¶ä¿å­˜åœ¨æ•°æ®åº“ä¸­çš„ç‰Œæ¡Œ ã€hashã€‘
+#define TBL_CACHE_DESK_PASSWD	"privateDeskPasswd"			// redis keyï¼Œ stringç±»å‹ ä¿å­˜äº†deskpasswdå’ŒdeskMixIDçš„æ˜ å°„ ã€stringã€‘
+#define TBL_USER_BUY_DESK		"sameUserBuyDesk"			// åŒæ­¥è´­ä¹°æ¡Œå­æ•°æ® ã€stringã€‘
+#define TBL_FG_BUY_DESK			"sameFGBuyDesk"				// åŒæ­¥ä¿±ä¹éƒ¨è´­ä¹°æ¡Œå­æ•°æ® ã€stringã€‘
+#define TBL_MARK_DESK_INDEX		"BuyDeskMarkIndex"			// è´­ä¹°æ¡Œå­éœ€è¦ç”¨åˆ°çš„ç´¢å¼• ã€stringã€‘
+#define CACHE_USER_BUYDESK_SET	"cacheUserBuyDeskSet"		// ç©å®¶å¼€æˆ¿åˆ—è¡¨ ã€setã€‘
 
-// Õ½¼¨Ä£¿é
-#define TBL_GRADE_DETAIL		"gradeDetailInfo"			// µ¥¾ÖÕ½¼¨ÏêÇé ¡¾hash¡¿
-#define TBL_GRADE_SIMPLE		"gradeSimpleInfo"			// ´ó½áËãÕ½¼¨ĞÅÏ¢ ¡¾hash¡¿
-#define TBL_MAX_GRADEKEY		"roomMaxGradeKey"			// ·¿¼ä×î´óµÄÕ½¼¨ID(Õ½¼¨ÏêÇé µ¥¾ÖÕ½¼¨) ¡¾string¡¿
-#define TBL_MAX_GRADESIMPLEKEY	"roomMaxGradeSimpleKey"		// ·¿¼ä×î´óµÄÕ½¼¨ID(Õ½¼¨¼ò½é ´ó½áËã) ¡¾string¡¿
-#define TBL_GRADE_DETAIL_MIN_ID	"clearGradeDetailMinID"		// Î´ÇåÀíµÄµ¥¾ÖÕ½¼¨ÏêÇé×îĞ¡id ¡¾string¡¿
-#define TBL_GRADE_SIMPLE_MIN_ID	"clearGradeSimpleMinID"		// Î´ÇåÀíµÄ´ó½áËãÕ½¼¨ĞÅÏ¢×îĞ¡id ¡¾string¡¿
-#define TBL_GRADE_SIMPLE_SET	"gradeSimpleSet"			// ´ó½áËãÕ½¼¨¼¯ºÏ(°üº¬ÁËËùÓĞĞ¡½áËãµÄID) ¡¾set¡¿
-#define TBL_USER_GRADE_SET		"userGradeSet"				// Íæ¼ÒµÄ´ó½áËãÕ½¼¨¼¯ºÏ  ¡¾zSet¡¿
+// æˆ˜ç»©æ¨¡å—
+#define TBL_GRADE_DETAIL		"gradeDetailInfo"			// å•å±€æˆ˜ç»©è¯¦æƒ… ã€hashã€‘
+#define TBL_GRADE_SIMPLE		"gradeSimpleInfo"			// å¤§ç»“ç®—æˆ˜ç»©ä¿¡æ¯ ã€hashã€‘
+#define TBL_MAX_GRADEKEY		"roomMaxGradeKey"			// æˆ¿é—´æœ€å¤§çš„æˆ˜ç»©ID(æˆ˜ç»©è¯¦æƒ… å•å±€æˆ˜ç»©) ã€stringã€‘
+#define TBL_MAX_GRADESIMPLEKEY	"roomMaxGradeSimpleKey"		// æˆ¿é—´æœ€å¤§çš„æˆ˜ç»©ID(æˆ˜ç»©ç®€ä»‹ å¤§ç»“ç®—) ã€stringã€‘
+#define TBL_GRADE_DETAIL_MIN_ID	"clearGradeDetailMinID"		// æœªæ¸…ç†çš„å•å±€æˆ˜ç»©è¯¦æƒ…æœ€å°id ã€stringã€‘
+#define TBL_GRADE_SIMPLE_MIN_ID	"clearGradeSimpleMinID"		// æœªæ¸…ç†çš„å¤§ç»“ç®—æˆ˜ç»©ä¿¡æ¯æœ€å°id ã€stringã€‘
+#define TBL_GRADE_SIMPLE_SET	"gradeSimpleSet"			// å¤§ç»“ç®—æˆ˜ç»©é›†åˆ(åŒ…å«äº†æ‰€æœ‰å°ç»“ç®—çš„ID) ã€setã€‘
+#define TBL_USER_GRADE_SET		"userGradeSet"				// ç©å®¶çš„å¤§ç»“ç®—æˆ˜ç»©é›†åˆ  ã€zSetã€‘
 
-// ÓÃ»§Êı¾İÄ£¿é
-#define TBL_USER_REDSPOT		"userRedSpotCount"			// Íæ¼ÒĞ¡ºìµã¹şÏ£ ¡¾hash¡¿
-#define TBL_WEB_USER			"webUserInfo"				// phpÏà¹ØÓÃ»§Êı¾İ ¡¾hash¡¿¡¾php redis¡¿
-#define TBL_ONLINE_USER_SET		"allServerOnlineUserSet"	// Íæ¼ÒÔÚÏß¼¯ºÏ ¡¾set¡¿
-#define TBL_ONLINE_REALUSER_SET "allServerOnlineRealUserSet"// Íæ¼ÒÔÚÏß¼¯ºÏ(²»°üº¬»úÆ÷ÈË) ¡¾set¡¿
-#define TBL_WEB_AGENTMEMBER		"web_agent_member"			// ´æ·Å´úÀíµÄ¼¯ºÏ ¡¾set¡¿
-#define TBL_ROBOT_INFO_INDEX	"robotInfoIndex"			// »úÆ÷ÈËĞÅÏ¢Ë÷Òı ¡¾string¡¿
-#define TBL_CURMAX_USERID		"curSystemMaxUserID"		// µ±Ç°ÏµÍ³×î´óµÄuserID ¡¾string¡¿
+// ç”¨æˆ·æ•°æ®æ¨¡å—
+#define TBL_USER_REDSPOT		"userRedSpotCount"			// ç©å®¶å°çº¢ç‚¹å“ˆå¸Œ ã€hashã€‘
+#define TBL_WEB_USER			"webUserInfo"				// phpç›¸å…³ç”¨æˆ·æ•°æ® ã€hashã€‘ã€php redisã€‘
+#define TBL_ONLINE_USER_SET		"allServerOnlineUserSet"	// ç©å®¶åœ¨çº¿é›†åˆ ã€setã€‘
+#define TBL_ONLINE_REALUSER_SET "allServerOnlineRealUserSet"// ç©å®¶åœ¨çº¿é›†åˆ(ä¸åŒ…å«æœºå™¨äºº) ã€setã€‘
+#define TBL_WEB_AGENTMEMBER		"web_agent_member"			// å­˜æ”¾ä»£ç†çš„é›†åˆ ã€setã€‘
+#define TBL_ROBOT_INFO_INDEX	"robotInfoIndex"			// æœºå™¨äººä¿¡æ¯ç´¢å¼• ã€stringã€‘
+#define TBL_CURMAX_USERID		"curSystemMaxUserID"		// å½“å‰ç³»ç»Ÿæœ€å¤§çš„userID ã€stringã€‘
 
-// ¾ãÀÖ²¿Ä£¿é
-#define TBL_FG_ROOM_INFO		"FGRoomInfo"				// ¾ãÀÖ²¿·¿¼ä£¨ÅÆ×À£©						¡¾string¡¿
-#define TBL_FRIENDSGROUP		"friendsGroup"				// ¾ãÀÖ²¿ĞÅÏ¢								¡¾hash¡¿¡¾php redis¡¿
-#define TBL_FRIENDSGROUPTOUSER	"friendsGroupToUser"		// ¾ãÀÖ²¿³ÉÔ±£¨»ñÈ¡ÉèÖÃ»ğ±Ò£©				¡¾hash¡¿¡¾php redis¡¿
-#define TBL_USERTOFRIENDSGROUP	"userToFriendsGroup"		// Íæ¼Ò¶Ô¾ãÀÖ²¿¹şÏ£±í£¨»ñÈ¡Íæ¼ÒÈ¨ÏŞ£©		¡¾hash¡¿¡¾php redis¡¿
-#define TBL_FG_NOTIFY			"friendsGroupNotify"		// ¾ãÀÖ²¿Í¨Öª								¡¾hash¡¿¡¾php redis¡¿
-#define TBL_FG_TO_USER_SET		"friendsGroupToUserSet"		// ¾ãÀÖ²¿³ÉÔ±£¨»ñÈ¡¾ãÀÖ²¿Íæ¼Ò£©				¡¾zSet¡¿¡¾php redis¡¿
-#define	TBL_USER_FG_NOTIFY_SET	"userToFriendsGroupNotifySet"// ¾ãÀÖ²¿Í¨Öª¼¯ºÏ							¡¾zSet¡¿¡¾php redis¡¿
-#define	TBL_FG_NOTIFY_ID		"friendsGroupNotifyID"		// ¾ãÀÖ²¿×ÔÔöid								¡¾string¡¿¡¾php redis¡¿
-#define	TBL_FG_NOTIFY_CLEAR_ID	"friendsGroupNotifyClearID" // ¾ãÀÖ²¿ÇåÀíÍ¨Öªid							¡¾string¡¿¡¾php redis¡¿
+// ä¿±ä¹éƒ¨æ¨¡å—
+#define TBL_FG_ROOM_INFO		"FGRoomInfo"				// ä¿±ä¹éƒ¨æˆ¿é—´ï¼ˆç‰Œæ¡Œï¼‰						ã€stringã€‘
+#define TBL_FRIENDSGROUP		"friendsGroup"				// ä¿±ä¹éƒ¨ä¿¡æ¯								ã€hashã€‘ã€php redisã€‘
+#define TBL_FRIENDSGROUPTOUSER	"friendsGroupToUser"		// ä¿±ä¹éƒ¨æˆå‘˜ï¼ˆè·å–è®¾ç½®ç«å¸ï¼‰				ã€hashã€‘ã€php redisã€‘
+#define TBL_USERTOFRIENDSGROUP	"userToFriendsGroup"		// ç©å®¶å¯¹ä¿±ä¹éƒ¨å“ˆå¸Œè¡¨ï¼ˆè·å–ç©å®¶æƒé™ï¼‰		ã€hashã€‘ã€php redisã€‘
+#define TBL_FG_NOTIFY			"friendsGroupNotify"		// ä¿±ä¹éƒ¨é€šçŸ¥								ã€hashã€‘ã€php redisã€‘
+#define TBL_FG_TO_USER_SET		"friendsGroupToUserSet"		// ä¿±ä¹éƒ¨æˆå‘˜ï¼ˆè·å–ä¿±ä¹éƒ¨ç©å®¶ï¼‰				ã€zSetã€‘ã€php redisã€‘
+#define	TBL_USER_FG_NOTIFY_SET	"userToFriendsGroupNotifySet"// ä¿±ä¹éƒ¨é€šçŸ¥é›†åˆ							ã€zSetã€‘ã€php redisã€‘
+#define	TBL_FG_NOTIFY_ID		"friendsGroupNotifyID"		// ä¿±ä¹éƒ¨è‡ªå¢id								ã€stringã€‘ã€php redisã€‘
+#define	TBL_FG_NOTIFY_CLEAR_ID	"friendsGroupNotifyClearID" // ä¿±ä¹éƒ¨æ¸…ç†é€šçŸ¥id							ã€stringã€‘ã€php redisã€‘
 
-// ÓÊ¼şÄ£¿é 
-#define TBL_EMAIL_DETAIL		"emailDetailInfo"			// Ã¿·âÓÊ¼şÏêÇé								¡¾hash¡¿¡¾php redis¡¿
-#define TBL_USER_EMAIL_DETAIL	"userToEmailDetailInfo"		// Íæ¼ÒµÄÓÊ¼şÏêÇé(ÊÇ·ñÒÑ¶Á£¬ÊÇ·ñÒÑ¾­ÁìÈ¡)	¡¾hash¡¿¡¾php redis¡¿
-#define TBL_EMAIL_INFO_MIN_ID	"clearEmailInfoMinID"		// Î´ÇåÀíµÄÓÊ¼ş×îĞ¡id						¡¾string¡¿¡¾php redis¡¿
-#define TBL_EMAIL_INFO_MAX_ID	"emailInfoMaxIDSet"			// ÓÊ¼ş×î´óid								¡¾string¡¿¡¾php redis¡¿
-#define TBL_USER_EMAIL_SET		"userEmailSet"				// Íæ¼ÒµÄÓÊ¼ş¼¯ºÏ							¡¾zSet¡¿¡¾php redis¡¿
+// é‚®ä»¶æ¨¡å— 
+#define TBL_EMAIL_DETAIL		"emailDetailInfo"			// æ¯å°é‚®ä»¶è¯¦æƒ…								ã€hashã€‘ã€php redisã€‘
+#define TBL_USER_EMAIL_DETAIL	"userToEmailDetailInfo"		// ç©å®¶çš„é‚®ä»¶è¯¦æƒ…(æ˜¯å¦å·²è¯»ï¼Œæ˜¯å¦å·²ç»é¢†å–)	ã€hashã€‘ã€php redisã€‘
+#define TBL_EMAIL_INFO_MIN_ID	"clearEmailInfoMinID"		// æœªæ¸…ç†çš„é‚®ä»¶æœ€å°id						ã€stringã€‘ã€php redisã€‘
+#define TBL_EMAIL_INFO_MAX_ID	"emailInfoMaxIDSet"			// é‚®ä»¶æœ€å¤§id								ã€stringã€‘ã€php redisã€‘
+#define TBL_USER_EMAIL_SET		"userEmailSet"				// ç©å®¶çš„é‚®ä»¶é›†åˆ							ã€zSetã€‘ã€php redisã€‘
 
-// ÅÅĞĞ°ñÄ£¿é
-#define TBL_RANKING_MONEY		"rankingUserMoney"			// ½ğ±ÒÅÅĞĞ°ñ   ¡¾zSet¡¿  [ zadd  rankingUserMoney  money  userID ]
-#define TBL_RANKING_WINCOUNT	"rankingUserWinCount"		// Ê¤¾ÖÅÅĞĞ°ñ   ¡¾zSet¡¿  [ zadd  rankingUserWinCount  12  userID ]
-#define TBL_RANKING_JEWELS		"rankingUserJewels"			// ×êÊ¯ÅÅĞĞ°ñ   ¡¾zSet¡¿  [ zadd  rankingUserJewels  12  userID ]
+// æ’è¡Œæ¦œæ¨¡å—
+#define TBL_RANKING_MONEY		"rankingUserMoney"			// é‡‘å¸æ’è¡Œæ¦œ   ã€zSetã€‘  [ zadd  rankingUserMoney  money  userID ]
+#define TBL_RANKING_WINCOUNT	"rankingUserWinCount"		// èƒœå±€æ’è¡Œæ¦œ   ã€zSetã€‘  [ zadd  rankingUserWinCount  12  userID ]
+#define TBL_RANKING_JEWELS		"rankingUserJewels"			// é’»çŸ³æ’è¡Œæ¦œ   ã€zSetã€‘  [ zadd  rankingUserJewels  12  userID ]
 
-// Æ½Ì¨¹ÜÀíÄ£¿é
-#define TBL_SERVER_STATUS		"ServerPlatfromStatus"		// ·şÎñÆ÷×´Ì¬	¡¾string¡¿
-#define CACHE_UPDATE_SET		"cacheUpdateSet"			// ĞèÒª¸üĞÂµÄÊı¾İ¼¯ºÏ ¡¾set¡¿
+// å¹³å°ç®¡ç†æ¨¡å—
+#define TBL_SERVER_STATUS		"ServerPlatfromStatus"		// æœåŠ¡å™¨çŠ¶æ€	ã€stringã€‘
+#define CACHE_UPDATE_SET		"cacheUpdateSet"			// éœ€è¦æ›´æ–°çš„æ•°æ®é›†åˆ ã€setã€‘
 
-// ±ÈÈü³¡
-#define TBL_TIME_MATCH_INFO		"timeMatchInfo"				// ¶¨Ê±Èü±ÈÈüĞÅÏ¢ ¡¾hash¡¿¡¾php redis¡¿
-#define TBL_PART_OF_MATCH_INDEX	"partOfMatchIndex"			// ¾Ö²¿±ÈÈü×ÔÔöid ¡¾string¡¿
-#define TBL_MATCH_ROBOT_USERID_INDEX	"matchRobotUserIDIndex"		// ±ÈÈü³¡»úÆ÷ÈËIDË÷Òı¡¾string¡¿
-#define TBL_SIGN_UP_MATCH_PEOPLE		"curSignUpMatchPeople"		// £¨ÊµÊ±Èü£©µ±Ç°±¨ÃûÈËÊı	curSignUpMatchPeople|gameID,id	¡¾zSet¡¿  °´ÕÕ±¨ÃûÊ±¼äÅÅĞò
-#define TBL_SIGN_UP_TIME_MATCH_PEOPLE	"curSignUpTimeMatchPeople"	// £¨¶¨Ê±Èü£©µ±Ç°±¨ÃûÈËÊı	curSignUpTimeMatchPeople|id		¡¾zSet¡¿  °´ÕÕ±¨ÃûÊ±¼äÅÅĞò
+// æ¯”èµ›åœº
+#define TBL_TIME_MATCH_INFO		"timeMatchInfo"				// å®šæ—¶èµ›æ¯”èµ›ä¿¡æ¯ ã€hashã€‘ã€php redisã€‘
+#define TBL_PART_OF_MATCH_INDEX	"partOfMatchIndex"			// å±€éƒ¨æ¯”èµ›è‡ªå¢id ã€stringã€‘
+#define TBL_MATCH_ROBOT_USERID_INDEX	"matchRobotUserIDIndex"		// æ¯”èµ›åœºæœºå™¨äººIDç´¢å¼•ã€stringã€‘
+#define TBL_SIGN_UP_MATCH_PEOPLE		"curSignUpMatchPeople"		// ï¼ˆå®æ—¶èµ›ï¼‰å½“å‰æŠ¥åäººæ•°	curSignUpMatchPeople|gameID,id	ã€zSetã€‘  æŒ‰ç…§æŠ¥åæ—¶é—´æ’åº
+#define TBL_SIGN_UP_TIME_MATCH_PEOPLE	"curSignUpTimeMatchPeople"	// ï¼ˆå®šæ—¶èµ›ï¼‰å½“å‰æŠ¥åäººæ•°	curSignUpTimeMatchPeople|id		ã€zSetã€‘  æŒ‰ç…§æŠ¥åæ—¶é—´æ’åº
 
-////////////////////////////³£Á¿¶¨Òå//////////////////////////////////////////
-#define REDIS_STR_DEFAULT		"aa"	// redisÖĞ×Ö·û´®Ä¬ÈÏÖµ
-#define	USER_IDENTITY_TYPE_SUPER	1	// ³¬¶Ë
-#define	USER_IDENTITY_TYPE_WIN		2	// ÄÚ¶¨Ó®Ç®Íæ¼Ò
-#define	USER_IDENTITY_TYPE_FAIL		4	// ÄÚ¶¨ÊäÇ®Íæ¼Ò
-#define USER_IDENTITY_TYPE_SEAL		8	// ·âºÅ±êÊ¶
+////////////////////////////å¸¸é‡å®šä¹‰//////////////////////////////////////////
+#define REDIS_STR_DEFAULT		"aa"	// redisä¸­å­—ç¬¦ä¸²é»˜è®¤å€¼
+#define	USER_IDENTITY_TYPE_SUPER	1	// è¶…ç«¯
+#define	USER_IDENTITY_TYPE_WIN		2	// å†…å®šèµ¢é’±ç©å®¶
+#define	USER_IDENTITY_TYPE_FAIL		4	// å†…å®šè¾“é’±ç©å®¶
+#define USER_IDENTITY_TYPE_SEAL		8	// å°å·æ ‡è¯†
 
 /////////////////////////////////////////////////////////////////////////
-// ¶¯Ì¬±í
+// åŠ¨æ€è¡¨
 
-// Íæ¼Ò±í
+// ç©å®¶è¡¨
 struct UserData
 {
 	int		userID;
@@ -107,43 +107,43 @@ struct UserData
 	long long money;
 	long long bankMoney;
 	char	bankPasswd[20];
-	int		jewels;					// ·¿¿¨Êı(×êÊ¯)
-	int		roomID;					// Íæ¼ÒËùÔÚµÄroomID
-	int		deskIdx;				// Íæ¼ÒËùÔÚµÄ×À×ÓË÷Òı
-	char	logonIP[24];			// Íæ¼ÒµÄµÇÂ¼IP
+	int		jewels;					// æˆ¿å¡æ•°(é’»çŸ³)
+	int		roomID;					// ç©å®¶æ‰€åœ¨çš„roomID
+	int		deskIdx;				// ç©å®¶æ‰€åœ¨çš„æ¡Œå­ç´¢å¼•
+	char	logonIP[24];			// ç©å®¶çš„ç™»å½•IP
 	int		winCount;
-	char	headURL[256];			// Íæ¼ÒÍ·Ïñ
-	char	macAddr[64];			// macµØÖ·×Ö·û´®ĞÎÊ½ 
+	char	headURL[256];			// ç©å®¶å¤´åƒ
+	char	macAddr[64];			// macåœ°å€å­—ç¬¦ä¸²å½¢å¼ 
 	char    token[64];				// GUID
-	BYTE	isVirtual;				// ÊÇ·ñ»úÆ÷ÈË
-	int		status;					// ÓÃ»§Éí·İ
-	int		reqSupportTimes;		// ÇëÇóÆÆ²ú²¹ÖúµÄ´ÎÊı
-	int		lastReqSupportDate;		// ÉÏ´ÎÇëÇóÆÆ²ú²¹ÖúµÄÈÕÆÚ
-	int		registerTime;			// ×¢²áÊ±¼ä
-	char	registerIP[24];			// ×¢²áIP
-	BYTE	registerType;			// ×¢²áÀàĞÍ
-	int		buyingDeskCount;		// ÒÑ¾­ÂòÁËµ«ÊÇ»¹Î´½âÉ¢µÄ×À×ÓÊı
-	int		lastCrossDayTime;		// ÉÏ´ÎµÇÂ½Ê±¼äÊ±¼ä
-	int		totalGameCount;			// ×Ü¾ÖÊı
-	int		sealFinishTime;			// ·âºÅ½áÊøÊ±¼ä£¬-1 ÓÀ¾Ã·âºÅ£¬0ÎŞ·âºÅ£¬´óÓÚ0½ØÖ¹Ê±¼ä
-	char	wechat[24];				// Î¢ĞÅºÅ
-	char	phonePasswd[64];		// ÊÖ»úµÇÂ¼ÃÜÂë
-	char	accountInfo[64];		// Î¨Ò»±êÊ¶
-	int		totalGameWinCount;		// ×ÜÊ¤¾ÖÊı
-	char    Lng[12];				// ¾­¶È
-	char	Lat[12];				// Î³¶È
-	char	address[64];			// µØÖ·
-	long long lastCalcOnlineToTime; // ÉÏ´Î¼ÆËãÔÚÏßÊ±³¤Ê±¼ä
-	long long allOnlineToTime;		// ÀÛ¼ÆÔÚÏßÊ±³¤Ê±¼ä
-	BYTE	IsOnline;				// ÊÇ·ñÔÚÏß
-	char	motto[128];				// ¸öĞÔÇ©Ãû
-	char	xianliao[64];			// ÏĞÁÄÎ¨Ò»ĞÅÏ¢
-	int		controlParam;			// ¸öÈË¿ØÖÆÈ¨ÖØ£¬²¿·ÖÓÎÏ·Ê¹ÓÃ
-	int		ModifyInformationCount; // ĞŞ¸ÄĞÅÏ¢´ÎÊı
-	BYTE	matchType;				// ±ÈÈüÀàĞÍ£¬MatchTypeÀàĞÍ
-	long long combineMatchID;		// ±¨ÃûµÄ±ÈÈüid£¬gameID*MAX_GAME_MATCH_ID + id
-	BYTE	matchStatus;			// ±ÈÈü×´Ì¬ ÖµÎªUserMatchStatus
-	int		curMatchRank;			// µ±Ç°²Î¼ÓµÄ±ÈÈüÅÅÃû
+	BYTE	isVirtual;				// æ˜¯å¦æœºå™¨äºº
+	int		status;					// ç”¨æˆ·èº«ä»½
+	int		reqSupportTimes;		// è¯·æ±‚ç ´äº§è¡¥åŠ©çš„æ¬¡æ•°
+	int		lastReqSupportDate;		// ä¸Šæ¬¡è¯·æ±‚ç ´äº§è¡¥åŠ©çš„æ—¥æœŸ
+	int		registerTime;			// æ³¨å†Œæ—¶é—´
+	char	registerIP[24];			// æ³¨å†ŒIP
+	BYTE	registerType;			// æ³¨å†Œç±»å‹
+	int		buyingDeskCount;		// å·²ç»ä¹°äº†ä½†æ˜¯è¿˜æœªè§£æ•£çš„æ¡Œå­æ•°
+	int		lastCrossDayTime;		// ä¸Šæ¬¡ç™»é™†æ—¶é—´æ—¶é—´
+	int		totalGameCount;			// æ€»å±€æ•°
+	int		sealFinishTime;			// å°å·ç»“æŸæ—¶é—´ï¼Œ-1 æ°¸ä¹…å°å·ï¼Œ0æ— å°å·ï¼Œå¤§äº0æˆªæ­¢æ—¶é—´
+	char	wechat[24];				// å¾®ä¿¡å·
+	char	phonePasswd[64];		// æ‰‹æœºç™»å½•å¯†ç 
+	char	accountInfo[64];		// å”¯ä¸€æ ‡è¯†
+	int		totalGameWinCount;		// æ€»èƒœå±€æ•°
+	char    Lng[12];				// ç»åº¦
+	char	Lat[12];				// çº¬åº¦
+	char	address[64];			// åœ°å€
+	long long lastCalcOnlineToTime; // ä¸Šæ¬¡è®¡ç®—åœ¨çº¿æ—¶é•¿æ—¶é—´
+	long long allOnlineToTime;		// ç´¯è®¡åœ¨çº¿æ—¶é•¿æ—¶é—´
+	BYTE	IsOnline;				// æ˜¯å¦åœ¨çº¿
+	char	motto[128];				// ä¸ªæ€§ç­¾å
+	char	xianliao[64];			// é—²èŠå”¯ä¸€ä¿¡æ¯
+	int		controlParam;			// ä¸ªäººæ§åˆ¶æƒé‡ï¼Œéƒ¨åˆ†æ¸¸æˆä½¿ç”¨
+	int		ModifyInformationCount; // ä¿®æ”¹ä¿¡æ¯æ¬¡æ•°
+	BYTE	matchType;				// æ¯”èµ›ç±»å‹ï¼ŒMatchTypeç±»å‹
+	long long combineMatchID;		// æŠ¥åçš„æ¯”èµ›idï¼ŒgameID*MAX_GAME_MATCH_ID + id
+	BYTE	matchStatus;			// æ¯”èµ›çŠ¶æ€ å€¼ä¸ºUserMatchStatus
+	int		curMatchRank;			// å½“å‰å‚åŠ çš„æ¯”èµ›æ’å
 
 	UserData()
 	{
@@ -154,7 +154,7 @@ struct UserData
 };
 
 ////////////////////////////////////////////////////////////////////////
-// redis ÖĞ±£´æµÄĞÅÏ¢(²¿·Ö)
+// redis ä¸­ä¿å­˜çš„ä¿¡æ¯(éƒ¨åˆ†)
 struct PrivateDeskInfo
 {
 	int	roomID;
@@ -171,10 +171,10 @@ struct PrivateDeskInfo
 	int	maxDeskUserCount;
 	int	currWatchUserCount;
 	int	maxWatchUserCount;
-	int	friendsGroupID;				// ×À×ÓµÄ¾ãÀÖ²¿ID
-	int friendsGroupDeskNumber;		// ¾ãÀÖ²¿×À×ÓºÅÂë£¬<=0·Ç×À×ÓÁĞ±í£¬>0¾ãÀÖ²¿×À×Óid
-	char arrUserID[128];			// ×À×ÓÀïÃæµÄÍæ¼Ò
-	int curGameCount;				// µ±Ç°ÓÎÏ·¾ÖÊı 0£ºÎ´¿ªÊ¼£¬>=1ÕıÔÚÓÎÏ·ÖĞ
+	int	friendsGroupID;				// æ¡Œå­çš„ä¿±ä¹éƒ¨ID
+	int friendsGroupDeskNumber;		// ä¿±ä¹éƒ¨æ¡Œå­å·ç ï¼Œ<=0éæ¡Œå­åˆ—è¡¨ï¼Œ>0ä¿±ä¹éƒ¨æ¡Œå­id
+	char arrUserID[128];			// æ¡Œå­é‡Œé¢çš„ç©å®¶
+	int curGameCount;				// å½“å‰æ¸¸æˆå±€æ•° 0ï¼šæœªå¼€å§‹ï¼Œ>=1æ­£åœ¨æ¸¸æˆä¸­
 
 	PrivateDeskInfo()
 	{
@@ -184,7 +184,7 @@ struct PrivateDeskInfo
 	}
 };
 
-// Ò»¾ÖÓÎÏ·Õ½¼¨
+// ä¸€å±€æ¸¸æˆæˆ˜ç»©
 struct GameGradeInfo
 {
 	long long id;
@@ -204,7 +204,7 @@ struct GameGradeInfo
 	}
 };
 
-// Ò»¸ö·¿¼ä(×À×Ó)Õ½¼¨µÄ¼òµ¥ĞÅÏ¢(¶ÔÓ¦´ó½áËãµÄÊı¾İ)
+// ä¸€ä¸ªæˆ¿é—´(æ¡Œå­)æˆ˜ç»©çš„ç®€å•ä¿¡æ¯(å¯¹åº”å¤§ç»“ç®—çš„æ•°æ®)
 struct PrivateDeskGradeSimpleInfo
 {
 	long long id;
@@ -224,44 +224,44 @@ struct PrivateDeskGradeSimpleInfo
 };
 
 /*
-json×Ö¶Î¶¨Òå:
+jsonå­—æ®µå®šä¹‰:
 
-ÏÂ×¢ÏŞÖÆ
-noteRate        »úÆ÷ÈË×ÜÏÂ×¢Õ¼±È(Õ¼×¯¼ÒÉÏ×¯½ğ±Ò) 1-100Öµ
+ä¸‹æ³¨é™åˆ¶
+noteRate        æœºå™¨äººæ€»ä¸‹æ³¨å æ¯”(å åº„å®¶ä¸Šåº„é‡‘å¸) 1-100å€¼
 
-»úÆ÷ÈË¸üĞÂÆµÂÊ
-updateRate	»úÆ÷ÈË¸ü»»ÆµÂÊ 1-100µÄÖµ
+æœºå™¨äººæ›´æ–°é¢‘ç‡
+updateRate	æœºå™¨äººæ›´æ¢é¢‘ç‡ 1-100çš„å€¼
 
-ÉÏ×¯»úÆ÷ÈË
-zMinC   ÉÏ×¯»úÆ÷ÈË×îĞ¡ÊıÁ¿
-zMaxC   ÉÏ×¯»úÆ÷ÈË×î´óÊıÁ¿
+ä¸Šåº„æœºå™¨äºº
+zMinC   ä¸Šåº„æœºå™¨äººæœ€å°æ•°é‡
+zMaxC   ä¸Šåº„æœºå™¨äººæœ€å¤§æ•°é‡
 
-×ø×À»úÆ÷ÈË
-sMinC   ×ø×À»úÆ÷ÈË×îĞ¡ÊıÁ¿
-sMaxC   ×ø×À»úÆ÷ÈË×î´óÊıÁ¿
+åæ¡Œæœºå™¨äºº
+sMinC   åæ¡Œæœºå™¨äººæœ€å°æ•°é‡
+sMaxC   åæ¡Œæœºå™¨äººæœ€å¤§æ•°é‡
 
-»úÆ÷ÈË
-minC   »úÆ÷ÈË×îĞ¡ÊıÁ¿
-maxC   »úÆ÷ÈË×î´óÊıÁ¿
-minM   »úÆ÷ÈË×îĞ¡½ğ±Ò
-maxM   »úÆ÷ÈË×î´ó½ğ±Ò
+æœºå™¨äºº
+minC   æœºå™¨äººæœ€å°æ•°é‡
+maxC   æœºå™¨äººæœ€å¤§æ•°é‡
+minM   æœºå™¨äººæœ€å°é‡‘å¸
+maxM   æœºå™¨äººæœ€å¤§é‡‘å¸
 */
-//½±³Ø±í
+//å¥–æ± è¡¨
 struct RewardsPoolInfo
 {
-	int roomID;						//·¿¼äid
-	long long poolMoney;			//Ã¿¸ö·¿¼äµÄ½±³Ø
-	long long gameWinMoney;			//Ã¿¸ö·¿¼äÏµÍ³µÄÊäÓ®Ç®
-	long long percentageWinMoney;	//ÓÎÏ·³éË®»ñµÃµÄÇ®
-	long long otherWinMoney;		//ÆäËüÀàĞÍÓ®Ç®
-	long long allGameWinMoney;		//×Ü¹²£ºÃ¿¸ö·¿¼äÏµÍ³µÄÊäÓ®Ç®
-	long long allPercentageWinMoney;//×Ü¹²£ºÓÎÏ·³éË®»ñµÃµÄÇ®
-	long long allOtherWinMoney;		//×Ü¹²£ºÆäËüÀàĞÍÓ®Ç®
-	BYTE platformCtrlType;			//Æ½Ì¨¿ØÖÆÊäÓ®ÀàĞÍ£¬0£º¸ù¾İplatformCtrlPercent
-	int platformCtrlPercent;		//µãĞÍ¿ØÖÆÊäÓ®°Ù·Ö±È£¬·¶Î§0-1000
-	int realPeopleFailPercent;		//·ûºÏÌõ¼şµÄÕæÈËÊä¸ÅÂÊ£¬·¶Î§0-1000
-	int realPeopleWinPercent;		//·ûºÏÌõ¼şµÄÕæÈËÓ®¸ÅÂÊ£¬·¶Î§0-1000
-	char detailInfo[1024];          //ÓÎÏ·¸÷ÇøÓò¿ØÖÆ¸ÅÂÊ feng
+	int roomID;						//æˆ¿é—´id
+	long long poolMoney;			//æ¯ä¸ªæˆ¿é—´çš„å¥–æ± 
+	long long gameWinMoney;			//æ¯ä¸ªæˆ¿é—´ç³»ç»Ÿçš„è¾“èµ¢é’±
+	long long percentageWinMoney;	//æ¸¸æˆæŠ½æ°´è·å¾—çš„é’±
+	long long otherWinMoney;		//å…¶å®ƒç±»å‹èµ¢é’±
+	long long allGameWinMoney;		//æ€»å…±ï¼šæ¯ä¸ªæˆ¿é—´ç³»ç»Ÿçš„è¾“èµ¢é’±
+	long long allPercentageWinMoney;//æ€»å…±ï¼šæ¸¸æˆæŠ½æ°´è·å¾—çš„é’±
+	long long allOtherWinMoney;		//æ€»å…±ï¼šå…¶å®ƒç±»å‹èµ¢é’±
+	BYTE platformCtrlType;			//å¹³å°æ§åˆ¶è¾“èµ¢ç±»å‹ï¼Œ0ï¼šæ ¹æ®platformCtrlPercent
+	int platformCtrlPercent;		//ç‚¹å‹æ§åˆ¶è¾“èµ¢ç™¾åˆ†æ¯”ï¼ŒèŒƒå›´0-1000
+	int realPeopleFailPercent;		//ç¬¦åˆæ¡ä»¶çš„çœŸäººè¾“æ¦‚ç‡ï¼ŒèŒƒå›´0-1000
+	int realPeopleWinPercent;		//ç¬¦åˆæ¡ä»¶çš„çœŸäººèµ¢æ¦‚ç‡ï¼ŒèŒƒå›´0-1000
+	char detailInfo[1024];          //æ¸¸æˆå„åŒºåŸŸæ§åˆ¶æ¦‚ç‡ feng
 
 	RewardsPoolInfo()
 	{
@@ -269,16 +269,16 @@ struct RewardsPoolInfo
 	}
 };
 
-//Ğ¡ºìµã
+//å°çº¢ç‚¹
 struct UserRedSpot
 {
-	int notEMRead;			//Î´¶ÁÓÊ¼şÊıÁ¿
-	int notEMReceived;		//Î´ÁìÈ¡ÓÊ¼şÊıÁ¿
+	int notEMRead;			//æœªè¯»é‚®ä»¶æ•°é‡
+	int notEMReceived;		//æœªé¢†å–é‚®ä»¶æ•°é‡
 
-	int friendList;			//ºÃÓÑÁĞ±íºìµãÊıÁ¿
-	int friendNotifyList;	//Í¨ÖªÁĞ±íºìµãÊıÁ¿
+	int friendList;			//å¥½å‹åˆ—è¡¨çº¢ç‚¹æ•°é‡
+	int friendNotifyList;	//é€šçŸ¥åˆ—è¡¨çº¢ç‚¹æ•°é‡
 
-	int FGNotifyList;		//¾ãÀÖ²¿Í¨ÖªÁĞ±íÊıÁ¿
+	int FGNotifyList;		//ä¿±ä¹éƒ¨é€šçŸ¥åˆ—è¡¨æ•°é‡
 
 	UserRedSpot()
 	{
@@ -286,41 +286,41 @@ struct UserRedSpot
 	}
 };
 
-//ÅÆ×À
+//ç‰Œæ¡Œ
 struct SaveRedisFriendsGroupDesk
 {
-	int userID;			//ÈºÖ÷id
-	int friendsGroupID;	//¾ãÀÖ²¿id
-	int friendsGroupDeskNumber; //×À×Óid(1-9)
-	int roomType;		//·¿¼äÀàĞÍ
-	int gameID;			//ÓÎÏ·ID
-	int	maxCount;		//×î´óÓÎÏ·¾ÖÊı
-	char gameRules[256];//ÓÎÏ·¹æÔò
+	int userID;			//ç¾¤ä¸»id
+	int friendsGroupID;	//ä¿±ä¹éƒ¨id
+	int friendsGroupDeskNumber; //æ¡Œå­id(1-9)
+	int roomType;		//æˆ¿é—´ç±»å‹
+	int gameID;			//æ¸¸æˆID
+	int	maxCount;		//æœ€å¤§æ¸¸æˆå±€æ•°
+	char gameRules[256];//æ¸¸æˆè§„åˆ™
 	SaveRedisFriendsGroupDesk()
 	{
 		memset(this, 0, sizeof(SaveRedisFriendsGroupDesk));
 	}
 };
 
-//¾ãÀÖ²¿È¨ÏŞ
+//ä¿±ä¹éƒ¨æƒé™
 enum FriendsGroupPowerType
 {
-	FRIENDSGROUP_POWER_TYPE_NO = 0,			// ÎŞÈ¨ÏŞ
+	FRIENDSGROUP_POWER_TYPE_NO = 0,			// æ— æƒé™
 
-	FRIENDSGROUP_POWER_TYPE_DEL = 1,		// É¾³ı³ÉÔ±
-	FRIENDSGROUP_POWER_TYPE_DESK = 2,		// ´´½¨ºÍ½âÉ¢ÅÆ×À
-	FRIENDSGROUP_POWER_TYPE_VIPROOM = 4,	// ´´½¨ºÍ½âÉ¢VIP·¿
-	FRIENDSGROUP_POWER_TYPE_FIRE_COIN = 8,	// ¶Ò»»¼°³äÖµ»ğ±Ò
-	FRIENDSGROUP_POWER_TYPE_SET = 16,		// ÉèÖÃ¾ãÀÖ²¿Î¢ĞÅ»òÕß¹«¸æ»òÕß¸ÄÃû
+	FRIENDSGROUP_POWER_TYPE_DEL = 1,		// åˆ é™¤æˆå‘˜
+	FRIENDSGROUP_POWER_TYPE_DESK = 2,		// åˆ›å»ºå’Œè§£æ•£ç‰Œæ¡Œ
+	FRIENDSGROUP_POWER_TYPE_VIPROOM = 4,	// åˆ›å»ºå’Œè§£æ•£VIPæˆ¿
+	FRIENDSGROUP_POWER_TYPE_FIRE_COIN = 8,	// å…‘æ¢åŠå……å€¼ç«å¸
+	FRIENDSGROUP_POWER_TYPE_SET = 16,		// è®¾ç½®ä¿±ä¹éƒ¨å¾®ä¿¡æˆ–è€…å…¬å‘Šæˆ–è€…æ”¹å
 
-	FRIENDSGROUP_POWER_TYPE_ALL = 31,		// È«²¿È¨ÏŞ£¬ËùÓĞÈ¨ÏŞ»òÔËËãµÃµ½
+	FRIENDSGROUP_POWER_TYPE_ALL = 31,		// å…¨éƒ¨æƒé™ï¼Œæ‰€æœ‰æƒé™æˆ–è¿ç®—å¾—åˆ°
 };
 
-//¼òµ¥ÓÊ¼şÏêÇé
+//ç®€å•é‚®ä»¶è¯¦æƒ…
 struct EmailSimpleInfo
 {
-	long long emailID;	//ÓÊ¼şµÄÎ¨Ò»id
-	int sendtime;		//·¢ËÍÊ±¼ä
+	long long emailID;	//é‚®ä»¶çš„å”¯ä¸€id
+	int sendtime;		//å‘é€æ—¶é—´
 	EmailSimpleInfo()
 	{
 		memset(this, 0, sizeof(EmailSimpleInfo));
@@ -334,21 +334,21 @@ struct FieldRealInfo
 	int	type;
 };
 
-//ÓÃ»§±³°ü
+//ç”¨æˆ·èƒŒåŒ…
 struct UserBag
 {
-	int		userID;				//ÓÃ»§ID
-	int		skillFrozen;		//±ù¶³¼¼ÄÜÊıÁ¿
-	int		skillLocking;		//Ëø¶¨Ä¿±ê¼¼ÄÜ
-	int		redBag;				//ºì°üÊıÁ¿
-	int		phoneBillCard1;		//»°·Ñ¿¨1Ôª
-	int		phoneBillCard5;		//»°·Ñ¿¨5Ôª
-	int		goldenArmor;		//»Æ½ğÕ½¼×ÅÚÌ¨£¨ÂòÒ»´ÎÓÀ¾Ã£©
-	int		mechatroPioneer;	//»ú¼×ÏÈ·æ£¨ÂòÒ»´ÎÓÀ¾Ã£©
-	int		deepSeaArtillery;	//Éîº£´óÅÚ£¨ÂòÒ»´ÎÓÀ¾Ã£©
-	int		octopusCannon;		//ÕÂÓã´óÅÚ£¨ÂòÒ»´ÎÓÀ¾Ã£©
-	int		goldenDragon;		//»Æ½ğÊ¥Áú£¨ÂòÒ»´ÎÓÀ¾Ã£©
-	int		lavaArmor;			//ÈÛÑÒÕ½¼×£¨ÂòÒ»´ÎÓÀ¾Ã£©
+	int		userID;				//ç”¨æˆ·ID
+	int		skillFrozen;		//å†°å†»æŠ€èƒ½æ•°é‡
+	int		skillLocking;		//é”å®šç›®æ ‡æŠ€èƒ½
+	int		redBag;				//çº¢åŒ…æ•°é‡
+	int		phoneBillCard1;		//è¯è´¹å¡1å…ƒ
+	int		phoneBillCard5;		//è¯è´¹å¡5å…ƒ
+	int		goldenArmor;		//é»„é‡‘æˆ˜ç”²ç‚®å°ï¼ˆä¹°ä¸€æ¬¡æ°¸ä¹…ï¼‰
+	int		mechatroPioneer;	//æœºç”²å…ˆé”‹ï¼ˆä¹°ä¸€æ¬¡æ°¸ä¹…ï¼‰
+	int		deepSeaArtillery;	//æ·±æµ·å¤§ç‚®ï¼ˆä¹°ä¸€æ¬¡æ°¸ä¹…ï¼‰
+	int		octopusCannon;		//ç« é±¼å¤§ç‚®ï¼ˆä¹°ä¸€æ¬¡æ°¸ä¹…ï¼‰
+	int		goldenDragon;		//é»„é‡‘åœ£é¾™ï¼ˆä¹°ä¸€æ¬¡æ°¸ä¹…ï¼‰
+	int		lavaArmor;			//ç†”å²©æˆ˜ç”²ï¼ˆä¹°ä¸€æ¬¡æ°¸ä¹…ï¼‰
 
 	UserBag()
 	{
@@ -357,12 +357,12 @@ struct UserBag
 };
 
 
-//±ÈÈü³¡
+//æ¯”èµ›åœº
 struct MatchUserInfo
 {
 	int userID;
-	BYTE byMatchStatus;		//±ÈÈü×´Ì¬  Ã¶¾ÙDeskMatchStatus
-	time_t signUpTime;		//±¨Ãû±ÈÈüÊ±¼ä
+	BYTE byMatchStatus;		//æ¯”èµ›çŠ¶æ€  æšä¸¾DeskMatchStatus
+	time_t signUpTime;		//æŠ¥åæ¯”èµ›æ—¶é—´
 
 	MatchUserInfo()
 	{
@@ -370,17 +370,17 @@ struct MatchUserInfo
 	}
 };
 
-//±ÈÈüĞÅÏ¢
+//æ¯”èµ›ä¿¡æ¯
 struct MatchInfo
 {
-	int matchID;		//±ÈÈüÓÎÏ·µÄ±àºÅ
-	int gameID;			//ÓÎÏ·id
-	int minPeople;		//±ÈÈüËùĞè×îĞ¡ÈËÊı
-	BYTE costResType;	//ÏûºÄ×ÊÔ´ÀàĞÍ
-	int costResNums;	//ÏûÏ¢×ÊÔ´ÊıÁ¿
-	long long startTime;//±ÈÈü¿ªÊ¼Ê±¼ä
-	BYTE matchStatus;	//±ÈÈü×´Ì¬  MatchStatusÀàĞÍ £¨0£º±¨ÃûÖĞ£¬1£º±ÈÈüÖĞ£¬2£º±ÈÈü½áÊø£©
-	BYTE isNotified;	//ÊÇ·ñÍ¨Öª¹ı±ÈÈü¼´½«¿ªÊ¼
+	int matchID;		//æ¯”èµ›æ¸¸æˆçš„ç¼–å·
+	int gameID;			//æ¸¸æˆid
+	int minPeople;		//æ¯”èµ›æ‰€éœ€æœ€å°äººæ•°
+	BYTE costResType;	//æ¶ˆè€—èµ„æºç±»å‹
+	int costResNums;	//æ¶ˆæ¯èµ„æºæ•°é‡
+	long long startTime;//æ¯”èµ›å¼€å§‹æ—¶é—´
+	BYTE matchStatus;	//æ¯”èµ›çŠ¶æ€  MatchStatusç±»å‹ ï¼ˆ0ï¼šæŠ¥åä¸­ï¼Œ1ï¼šæ¯”èµ›ä¸­ï¼Œ2ï¼šæ¯”èµ›ç»“æŸï¼‰
+	BYTE isNotified;	//æ˜¯å¦é€šçŸ¥è¿‡æ¯”èµ›å³å°†å¼€å§‹
 
 	MatchInfo()
 	{

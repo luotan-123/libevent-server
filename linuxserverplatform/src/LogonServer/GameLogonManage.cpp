@@ -17,9 +17,9 @@
 #include "Function.h"
 #pragma comment(lib,"json_vc71_libmt.lib")
 
-// Ô¤±àÒëÑ¡Ïî
-#define FRIENDSGROUP_CRATE_ROOM_MODE	// ¾ãÀÖ²¿´´½¨·¿¼ä£¬·¿Ö÷ÏûºÄ×êÊ¯
-#define HAOTIAN							// ğ©ÌìÓÎÏ·£¬Ã»ÓĞ¶¨Òå¾ÍÊÇğ©ÍæÓÎÏ·
+// é¢„ç¼–è¯‘é€‰é¡¹
+#define FRIENDSGROUP_CRATE_ROOM_MODE	// ä¿±ä¹éƒ¨åˆ›å»ºæˆ¿é—´ï¼Œæˆ¿ä¸»æ¶ˆè€—é’»çŸ³
+#define HAOTIAN							// çš“å¤©æ¸¸æˆï¼Œæ²¡æœ‰å®šä¹‰å°±æ˜¯çš“ç©æ¸¸æˆ
 
 //////////////////////////////////////////////////////////////////////
 CGameLogonManage::CGameLogonManage() : CBaseLogonServer()
@@ -74,7 +74,7 @@ bool CGameLogonManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UIN
 	}
 	default:
 	{
-		// ÔÚÓÎÏ·ÏûÏ¢·¶Î§ÄÚ
+		// åœ¨æ¸¸æˆæ¶ˆæ¯èŒƒå›´å†…
 		if (pNetHead->uMainID >= MSG_MAIN_LOADER_LOGON && pNetHead->uMainID < MSG_MAIN_LOADER_MAX)
 		{
 			LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(uIndex);
@@ -100,7 +100,7 @@ bool CGameLogonManage::OnStart()
 {
 	INFO_LOG("GameLogonManage OnStart begin...");
 
-	//³õÊ¼»¯socket
+	//åˆå§‹åŒ–socket
 	m_socketInfoVec.clear();
 	m_socketInfoVec.resize(m_InitData.uMaxPeople);
 
@@ -108,7 +108,7 @@ bool CGameLogonManage::OnStart()
 	{
 		m_pRedis->SetDBManage(&m_SQLDataManage);
 
-		//ÇåÀíÔÚÏßÈËÊı
+		//æ¸…ç†åœ¨çº¿äººæ•°
 		std::unordered_map<std::string, std::string> umap;
 		umap["curPeople"] = "0";
 		m_pRedis->hmset(TBL_BASE_LOGON, ConfigManage()->m_logonServerConfig.logonID, umap);
@@ -158,7 +158,7 @@ bool CGameLogonManage::OnStart()
 //////////////////////////////////////////////////////////////////////
 bool CGameLogonManage::OnTimerMessage(UINT uTimerID)
 {
-	AUTOCOST("¶¨Ê±Æ÷ºÄÊ±timerID = %d", uTimerID);
+	AUTOCOST("å®šæ—¶å™¨è€—æ—¶timerID = %d", uTimerID);
 	switch (uTimerID)
 	{
 	case LOGON_TIMER_CHECK_REDIS_CONNECTION:
@@ -205,11 +205,11 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 		return;
 	}
 
-	// Í¨ÖªĞ¡ºìµã
+	// é€šçŸ¥å°çº¢ç‚¹
 
 	if (userRedspot.friendList > 0 || userRedspot.friendNotifyList > 0)
 	{
-		// Í¨ÖªºÃÓÑĞ¡ºìµã
+		// é€šçŸ¥å¥½å‹å°çº¢ç‚¹
 		LogonNotifyFriendRedSpot msgFriend;
 
 		msgFriend.friendListRedSpotCount = userRedspot.friendList;
@@ -220,7 +220,7 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 
 	if (userRedspot.FGNotifyList > 0)
 	{
-		// Í¨Öª¾ãÀÖ²¿Ğ¡ºìµã
+		// é€šçŸ¥ä¿±ä¹éƒ¨å°çº¢ç‚¹
 		LogonFriendsGroupPushRedSpot msgFG;
 
 		msgFG.notifyListRedSpotCount = userRedspot.FGNotifyList;
@@ -229,7 +229,7 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 		SendData(userID, &msgFG, iSendSize, MSG_MAIN_FRIENDSGROUP_NOTIFY, MSG_NTF_LOGON_FRIENDSGROUP_REDSPOT, 0);
 	}
 
-	// Í¨ÖªÓÊ¼şĞ¡ºìµã
+	// é€šçŸ¥é‚®ä»¶å°çº¢ç‚¹
 	LogonNotifyEmailRedSpot msgEmail;
 
 	msgEmail.notReadCount = userRedspot.notEMRead;
@@ -255,13 +255,13 @@ bool CGameLogonManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, vo
 		char * pBuffer = (char *)pData;
 		if (pBuffer == NULL)
 		{
-			ERROR_LOG("ÇëÇóphpÊ§°Ü£¬userID=%d,postType=%d", pResultData->uHandleID, pResultData->LineHead.uDataKind);
+			ERROR_LOG("è¯·æ±‚phpå¤±è´¥ï¼ŒuserID=%d,postType=%d", pResultData->uHandleID, pResultData->LineHead.uDataKind);
 			return false;
 		}
 
 		if (strcmp(pBuffer, "0"))
 		{
-			ERROR_LOG("ÇëÇóphpÊ§°Ü£¬userID=%d,postType=%d,result=%s", pResultData->uHandleID, pResultData->LineHead.uDataKind, pBuffer);
+			ERROR_LOG("è¯·æ±‚phpå¤±è´¥ï¼ŒuserID=%d,postType=%d,result=%s", pResultData->uHandleID, pResultData->LineHead.uDataKind, pBuffer);
 			return false;
 		}
 	}
@@ -276,7 +276,7 @@ bool CGameLogonManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, vo
 //////////////////////////////////////////////////////////////////////
 bool CGameLogonManage::OnStop()
 {
-	// ´¦ÀíÒ»Ğ©´óÌü¹ÜÀíÆ÷½áÊøÏà¹ØµÄÊÂ¼ş
+	// å¤„ç†ä¸€äº›å¤§å…ç®¡ç†å™¨ç»“æŸç›¸å…³çš„äº‹ä»¶
 	if (m_pUserManage)
 	{
 		m_pUserManage->Release();
@@ -320,12 +320,12 @@ bool CGameLogonManage::PreInitParameter(ManageInfoStruct * pInitData, KernelInfo
 }
 
 //////////////////////////////////////////////////////////////////////
-// ×ßµ½ÕâÀïµÄÒ»°ãÊÇµ×²ãÍ¨ÖªÒµÎñ²ã¹Ø±Õ(±ÈÈç¿Í»§¶Ë¶ÏÏß£¬»òÕßÖ÷¶¯¹Ø±ÕsocketÖ®Àà)
+// èµ°åˆ°è¿™é‡Œçš„ä¸€èˆ¬æ˜¯åº•å±‚é€šçŸ¥ä¸šåŠ¡å±‚å…³é—­(æ¯”å¦‚å®¢æˆ·ç«¯æ–­çº¿ï¼Œæˆ–è€…ä¸»åŠ¨å…³é—­socketä¹‹ç±»)
 bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime)
 {
 	AUTOCOST("socketIdx = %d", socketIdx);
 
-	// ÏÈ¹Ø±ÕÕâ¸öÁ¬½Ó
+	// å…ˆå…³é—­è¿™ä¸ªè¿æ¥
 	std::string ip = m_TCPSocket.GetSocketIP(socketIdx);
 
 	if (!m_TCPSocket.CloseSocket(socketIdx))
@@ -333,27 +333,27 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 		return false;
 	}
 
-	// È¡socketĞÅÏ¢
+	// å–socketä¿¡æ¯
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.identityID <= 0 || socketInfo.type <= LOGON_SERVER_SOCKET_TYPE_NO)
 	{
-		// È¡²»µ½ĞÅÏ¢IDÒ²Õı³££¬¿ÉÄÜ»áÓĞÁ¬½ÓÃ»ÓĞ°ó¶¨ID
+		// å–ä¸åˆ°ä¿¡æ¯IDä¹Ÿæ­£å¸¸ï¼Œå¯èƒ½ä¼šæœ‰è¿æ¥æ²¡æœ‰ç»‘å®šID
 		return true;
 	}
 
-	// É¾³ısocketIdx
+	// åˆ é™¤socketIdx
 	DelSocketIdx(socketIdx);
 
-	// ´¦ÀíÓÎÏ··şµôÏß
+	// å¤„ç†æ¸¸æˆæœæ‰çº¿
 	if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER)
 	{
 		m_pGServerManage->DelGServer(socketInfo.identityID);
 
-		INFO_LOG("ÓÎÏ··şµôÏß£ºroomID=%d", socketInfo.identityID);
+		INFO_LOG("æ¸¸æˆæœæ‰çº¿ï¼šroomID=%d", socketInfo.identityID);
 	}
 	else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER)
 	{
-		////////////////////////////////Íæ¼ÒµôÏß//////////////////////////////////////////
+		////////////////////////////////ç©å®¶æ‰çº¿//////////////////////////////////////////
 		int userID = socketInfo.identityID;
 
 		LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
@@ -365,14 +365,14 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 
 		OnUserLogout(userID);
 
-		// ÒÆ³ıÔÚÏßÍæ¼Ò£¬ÏòÖĞĞÄ·şÎñÆ÷·¢ËÍÏûÏ¢
+		// ç§»é™¤åœ¨çº¿ç©å®¶ï¼Œå‘ä¸­å¿ƒæœåŠ¡å™¨å‘é€æ¶ˆæ¯
 		PlatformUserLogonLogout logonToCenterUserStatus;
 		logonToCenterUserStatus.userID = userID;
 		logonToCenterUserStatus.type = 1;
 		logonToCenterUserStatus.isVirtual = pUser->isVirtual;
 		SendMessageToCenterServer(CENTER_MESSAGE_LOGON_USER_LOGON_OUT, &logonToCenterUserStatus, sizeof(logonToCenterUserStatus));
 
-		// Èç¹ûÍæ¼ÒÕıÔÚÓÎÏ·ÖĞ£¬ÏòÓÎÏ··ş·¢ËÍÍæ¼ÒµôÏßÏûÏ¢
+		// å¦‚æœç©å®¶æ­£åœ¨æ¸¸æˆä¸­ï¼Œå‘æ¸¸æˆæœå‘é€ç©å®¶æ‰çº¿æ¶ˆæ¯
 		int roomID = (int)m_pRedis->GetUserResNums(userID, "roomID");
 		if (roomID > 0)
 		{
@@ -383,13 +383,13 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 			}
 		}
 
-		// ¸øPHP·¢ËÍÏûÏ¢
+		// ç»™PHPå‘é€æ¶ˆæ¯
 		if (!pUser->isVirtual)
 		{
 			SendHTTPUserLogonLogout(userID, 1);
 		}
 
-		// Ğ´µÇ³ö¼ÇÂ¼
+		// å†™ç™»å‡ºè®°å½•
 		if (pUser->isVirtual == 0)
 		{
 			char tableName[128] = "";
@@ -409,10 +409,10 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 			m_pRedis->SetUserInfo(userID, " IsOnline 0 ");
 		}
 
-		// ÇåÀíÍæ¼ÒÄÚ´æ
+		// æ¸…ç†ç©å®¶å†…å­˜
 		m_pUserManage->DelUser(userID);
 
-		//ÍË³ö±ÈÈü³¡Ò³Ãæ
+		//é€€å‡ºæ¯”èµ›åœºé¡µé¢
 		m_scoketMatch.erase(socketIdx);
 	}
 
@@ -433,7 +433,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		return false;
 	}
 
-	BYTE byPlatformType = 0;//Ä¬ÈÏ0   1ÊÇios  2°²×¿   3¡¢win32
+	BYTE byPlatformType = 0;//é»˜è®¤0   1æ˜¯ios  2å®‰å“   3ã€win32
 	if (size == sizeof(LogonRequestRegister))
 	{
 		byPlatformType = pMessage->byPlatformType;
@@ -442,7 +442,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	const char* ip = m_TCPSocket.GetSocketIP(socketIdx);
 	if (byPlatformType != 1 && byPlatformType != 2 && CUtil::GetCertificateText())
 	{
-		ERROR_LOG("×¢²á²»Í¨¹ı£¬ip=%s", ip);
+		ERROR_LOG("æ³¨å†Œä¸é€šè¿‡ï¼Œip=%s", ip);
 		return false;
 	}
 
@@ -452,7 +452,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		return true;
 	}
 
-	// ÊÇ·ñµÚÈı·½µÇÂ¼£¬µÚÈı·½µÇÂ½ÑéÖ¤ÕËºÅÎ¨Ò»ĞÔ
+	// æ˜¯å¦ç¬¬ä¸‰æ–¹ç™»å½•ï¼Œç¬¬ä¸‰æ–¹ç™»é™†éªŒè¯è´¦å·å”¯ä¸€æ€§
 	bool isTrd = (pMessage->byFastRegister == LOGON_WEICHAT || pMessage->byFastRegister == LOGON_QQ) ? true : false;
 	if (isTrd)
 	{
@@ -460,12 +460,12 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		CUtil::MD5(accountMD5);
 		if (strcmp(accountMD5.c_str(), pMessage->szPswd))
 		{
-			ERROR_LOG("·Ç·¨ÕËºÅ£¬ÒòÎªszAccountInfo=%sºÍszPswd=%s²»Æ¥Åä", pMessage->szAccountInfo, pMessage->szPswd);
+			ERROR_LOG("éæ³•è´¦å·ï¼Œå› ä¸ºszAccountInfo=%så’ŒszPswd=%sä¸åŒ¹é…", pMessage->szAccountInfo, pMessage->szPswd);
 			return false;
 		}
 	}
 
-	// ¼ì²éÊÇ·ñÓĞ·Ç·¨×Ö·û
+	// æ£€æŸ¥æ˜¯å¦æœ‰éæ³•å­—ç¬¦
 	if (!CUtil::CheckString(pMessage->szAccount, sizeof(pMessage->szAccount)))
 	{
 		ERROR_LOG("invalid string account=%s passwd=%s", pMessage->szAccount, pMessage->szPswd);
@@ -475,19 +475,19 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	int accountLen = strlen(pMessage->szAccount);
 	if (accountLen < 1 || accountLen >= sizeof(pMessage->szAccount))
 	{
-		ERROR_LOG("ÕËºÅ³¤¶ÈÒì³£ pMessage->szAccount=%s,len=%d", pMessage->szAccount, accountLen);
+		ERROR_LOG("è´¦å·é•¿åº¦å¼‚å¸¸ pMessage->szAccount=%s,len=%d", pMessage->szAccount, accountLen);
 		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, handleID);
 		return false;
 	}
 
 	if (strlen(pMessage->szPswd) != USER_MD5_PASSWD_LEN)
 	{
-		ERROR_LOG("ÃÜÂë³¤¶È²»ÕıÈ·:pMessage->szPswd=%s", pMessage->szPswd);
+		ERROR_LOG("å¯†ç é•¿åº¦ä¸æ­£ç¡®:pMessage->szPswd=%s", pMessage->szPswd);
 		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_PASSWD_FALSE, handleID);
 		return false;
 	}
 
-	// ÏÈÉú³ÉÒ»¸ötoken
+	// å…ˆç”Ÿæˆä¸€ä¸ªtoken
 	const char* token = CUtil::GetGuid();
 	if (token == NULL)
 	{
@@ -497,11 +497,11 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 
 	int userID = 0;
 	BYTE byPhoneFastRegister = LOGON_TEL_PHONE;
-	char szPhoneAccountInfo[64] = "";//ÊÖ»ú°ó¶¨Î¢ĞÅ»òÕßqqµÄÎ¨Ò»±êÊ¶
+	char szPhoneAccountInfo[64] = "";//æ‰‹æœºç»‘å®šå¾®ä¿¡æˆ–è€…qqçš„å”¯ä¸€æ ‡è¯†
 
-	if (pMessage->byFastRegister == LOGON_NORMAL) //ÆÕÍ¨×¢²áµÇÂ¼
+	if (pMessage->byFastRegister == LOGON_NORMAL) //æ™®é€šæ³¨å†Œç™»å½•
 	{
-		if (pMessage->byStatus == LOGON_REGISTER) //×¢²á
+		if (pMessage->byStatus == LOGON_REGISTER) //æ³¨å†Œ
 		{
 			if (accountLen < MIN_USER_ACCOUNT_LEN || accountLen >= MAX_USER_ACCOUNT_LEN)
 			{
@@ -515,7 +515,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 				return true;
 			}
 
-			if (strstr(pMessage->szAccount, "Phone") != NULL)	//PhoneÆğÍ·µÄ×Ö·ûÓÃÓÚqqºÍÎ¢ĞÅ£¬²»ÔÊĞí×¢²á
+			if (strstr(pMessage->szAccount, "Phone") != NULL)	//Phoneèµ·å¤´çš„å­—ç¬¦ç”¨äºqqå’Œå¾®ä¿¡ï¼Œä¸å…è®¸æ³¨å†Œ
 			{
 				m_TCPSocket.SendData(socketIdx, pMessage, sizeof(*pMessage), MSG_MAIN_LOGON_REGISTER, assistID, ERROR_HAVE_DIRTYWORD, handleID);
 				return true;
@@ -527,7 +527,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 				return true;
 			}
 		}
-		else   // µÇÂ¼ÑéÖ¤
+		else   // ç™»å½•éªŒè¯
 		{
 			UserData userData;
 
@@ -557,9 +557,9 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 			}
 		}
 	}
-	else if (pMessage->byFastRegister == LOGON_TEL_PHONE) //ÊÖ»úµÇÂ½
+	else if (pMessage->byFastRegister == LOGON_TEL_PHONE) //æ‰‹æœºç™»é™†
 	{
-		if (pMessage->byStatus == LOGON_LOGIN) //µÇÂ½ÑéÖ¤
+		if (pMessage->byStatus == LOGON_LOGIN) //ç™»é™†éªŒè¯
 		{
 			UserData userData;
 
@@ -593,13 +593,13 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		}
 		else
 		{
-			ERROR_LOG("²»Ö§³ÖµÄµÇÂ½ÀàĞÍ::szAccount = %s", pMessage->szAccount);
+			ERROR_LOG("ä¸æ”¯æŒçš„ç™»é™†ç±»å‹::szAccount = %s", pMessage->szAccount);
 			return false;
 		}
 	}
 	else if (pMessage->byFastRegister == LOGON_TEL_XIANLIAO)
 	{
-		if (pMessage->byStatus == LOGON_LOGIN) //µÇÂ½ÑéÖ¤
+		if (pMessage->byStatus == LOGON_LOGIN) //ç™»é™†éªŒè¯
 		{
 			UserData userData;
 
@@ -627,12 +627,12 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		}
 		else
 		{
-			ERROR_LOG("²»Ö§³ÖµÄµÇÂ½ÀàĞÍ::szAccount = %s", pMessage->szAccount);
+			ERROR_LOG("ä¸æ”¯æŒçš„ç™»é™†ç±»å‹::szAccount = %s", pMessage->szAccount);
 			return false;
 		}
 	}
 
-	//// ×¢²á
+	//// æ³¨å†Œ
 	UserData newUserData;
 
 	newUserData.userID = userID;
@@ -647,7 +647,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	}
 	newUserData.sex = pMessage->bySex;
 
-	// ×¢²áÊ±¼äºÍip
+	// æ³¨å†Œæ—¶é—´å’Œip
 	newUserData.registerTime = (int)time(NULL);
 	if (ip)
 	{
@@ -655,11 +655,11 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	}
 	newUserData.registerType = pMessage->byFastRegister;
 
-	// ğ©ÍæÓÎÏ·ÓĞ×Ô¼ºµÄÓÎÏ·Ãû×Ö£¬ÎŞĞèÃ¿´Î×Ô¶¯¸üĞÂÎ¢ĞÅĞÅÏ¢
+	// çš“ç©æ¸¸æˆæœ‰è‡ªå·±çš„æ¸¸æˆåå­—ï¼Œæ— éœ€æ¯æ¬¡è‡ªåŠ¨æ›´æ–°å¾®ä¿¡ä¿¡æ¯
 	if (isTrd)
 	{
 		newUserData.userID = m_pRedis->GetRelevanceTrdUid(pMessage->szPswd);
-		if (newUserData.userID > 0) //¸üĞÂµÚÈı·½ĞÅÏ¢
+		if (newUserData.userID > 0) //æ›´æ–°ç¬¬ä¸‰æ–¹ä¿¡æ¯
 		{
 #ifdef HAOTIAN
 			std::unordered_map<std::string, std::string> umap;
@@ -672,13 +672,13 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		}
 	}
 
-	// ÓÎ¿Í×¢²á
+	// æ¸¸å®¢æ³¨å†Œ
 	if (pMessage->byFastRegister == LOGON_VISITOR)
 	{
 		newUserData.userID = m_pRedis->GetVisitorID(pMessage->szPswd);
 	}
 
-	// ÓÃ»§×¢²á
+	// ç”¨æˆ·æ³¨å†Œ
 	if (newUserData.userID == 0)
 	{
 		OtherConfig otherConfig;
@@ -689,7 +689,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 
 		if (!IsIpRegister(otherConfig, newUserData.registerIP))
 		{
-			ERROR_LOG("´ËipÒÑ¾­²»ÄÜ×¢²á,ip=%s,name=%s,iplimitCount=%d", newUserData.registerIP, newUserData.name, otherConfig.IPRegisterLimitCount);
+			ERROR_LOG("æ­¤ipå·²ç»ä¸èƒ½æ³¨å†Œ,ip=%s,name=%s,iplimitCount=%d", newUserData.registerIP, newUserData.name, otherConfig.IPRegisterLimitCount);
 			return false;
 		}
 
@@ -702,7 +702,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 			strcpy(newUserData.headURL, headURL.c_str());
 		}
 
-		// ±£´æµ½redis
+		// ä¿å­˜åˆ°redis
 		int ret = m_pRedis->Register(newUserData, newUserData.registerType);
 		if (ret < 0)
 		{
@@ -720,7 +720,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	LogonResponseRegister msg;
 	msg.userID = newUserData.userID;
 	memcpy(msg.szToken, token, strlen(token));
-	if (pMessage->byFastRegister == LOGON_TEL_PHONE || pMessage->byFastRegister == LOGON_TEL_XIANLIAO) //ÊÖ»úµÇÂ½»òÕßÏĞÁÄµÇÂ½
+	if (pMessage->byFastRegister == LOGON_TEL_PHONE || pMessage->byFastRegister == LOGON_TEL_XIANLIAO) //æ‰‹æœºç™»é™†æˆ–è€…é—²èŠç™»é™†
 	{
 		msg.byFastRegister = byPhoneFastRegister;
 		memcpy(msg.szAccountInfo, szPhoneAccountInfo, sizeof(msg.szAccountInfo));
@@ -761,11 +761,11 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		return false;
 	}
 
-	//±£Ö¤»º³åÇøÕı³£
+	//ä¿è¯ç¼“å†²åŒºæ­£å¸¸
 	pMessage->szMacAddr[sizeof(pMessage->szMacAddr) - 1] = '\0';
 	pMessage->szToken[sizeof(pMessage->szToken) - 1] = '\0';
 
-	BYTE byPlatformType = 0;//Ä¬ÈÏ0   1ÊÇios  2°²×¿   3¡¢win32
+	BYTE byPlatformType = 0;//é»˜è®¤0   1æ˜¯ios  2å®‰å“   3ã€win32
 	if (size == sizeof(LogonRequestLogon))
 	{
 		byPlatformType = pMessage->byPlatformType;
@@ -784,14 +784,14 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 
 	/*if (!userData.isVirtual && strlen(userData.macAddr) > 0 && strcmp(userData.macAddr, pMessage->szMacAddr))
 	{
-		ERROR_LOG("ÎïÀíµØÖ·²»Æ¥Åä:new=%s,old=%s,userID=%d,ip=%s", pMessage->szMacAddr, userData.macAddr, userID, ip);
+		ERROR_LOG("ç‰©ç†åœ°å€ä¸åŒ¹é…:new=%s,old=%s,userID=%d,ip=%s", pMessage->szMacAddr, userData.macAddr, userID, ip);
 		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_MAC_NOTMATCH, handleID);
 		return false;
 	}*/
 
 	if (!userData.isVirtual)
 	{
-		// »ñÈ¡·şÎñÆ÷×´Ì¬
+		// è·å–æœåŠ¡å™¨çŠ¶æ€
 		int serverStatus = 0;
 		m_pRedis->GetServerStatus(serverStatus);
 		if (serverStatus == SERVER_PLATFROM_STATUS_CLOSE)
@@ -801,7 +801,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		}
 	}
 
-	// ÇåÀíÍæ¼Ò×´Ì¬£¬±£Ö¤ÓÎÏ·ÕıÈ·
+	// æ¸…ç†ç©å®¶çŠ¶æ€ï¼Œä¿è¯æ¸¸æˆæ­£ç¡®
 	RoomBaseInfo roomBasekInfo;
 	RoomBaseInfo* pRoomBaseInfo = NULL;
 	if (m_pRedis->GetRoomBaseInfo(userData.roomID, roomBasekInfo))
@@ -826,7 +826,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	}
 	if (pRoomBaseInfo && pRoomBaseInfo->type == ROOM_TYPE_GOLD && userData.roomID != 0)
 	{
-		//ÅĞ¶Ï½ğ±ÒÊÇ·ñÂú×ã½øÈëÌõ¼ş
+		//åˆ¤æ–­é‡‘å¸æ˜¯å¦æ»¡è¶³è¿›å…¥æ¡ä»¶
 		bool bCanSit = true;
 		if (pRoomBaseInfo->minPoint > 0 && userData.money < pRoomBaseInfo->minPoint)
 		{
@@ -854,11 +854,11 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 
 	time_t currTime = time(NULL);
 
-	//¼ì²éÊÇ·ñ·âºÅ
+	//æ£€æŸ¥æ˜¯å¦å°å·
 	if (userData.sealFinishTime != 0)
 	{
 		int iCurTime = (int)currTime;
-		if (iCurTime >= userData.sealFinishTime && userData.sealFinishTime > 0) //½â·âÊ±¼äµ½ÁË£¬½â·âÕËºÅ
+		if (iCurTime >= userData.sealFinishTime && userData.sealFinishTime > 0) //è§£å°æ—¶é—´åˆ°äº†ï¼Œè§£å°è´¦å·
 		{
 			int iStatus = userData.status^USER_IDENTITY_TYPE_SEAL;
 			std::string cmdLine;
@@ -881,7 +881,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		}
 	}
 
-	// ¼ì²étoken
+	// æ£€æŸ¥token
 	if (!userData.isVirtual && strcmp(pMessage->szToken, userData.token))
 	{
 		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_ROOM_TOKEN_NOTMATCH, handleID);
@@ -889,14 +889,14 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		return false;
 	}
 
-	// Íæ¼ÒÊÇ·ñµÇÂ¼ÁË
+	// ç©å®¶æ˜¯å¦ç™»å½•äº†
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (pUser)
 	{
 		int oldSocketIdx = pUser->socketIdx;
 		if (strcmp(pMessage->szMacAddr, userData.macAddr))
 		{
-			// ²»Í¬Éè±¸
+			// ä¸åŒè®¾å¤‡
 			m_TCPSocket.SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0, handleID);
 		}
 		m_TCPSocket.CloseSocket(oldSocketIdx);
@@ -904,7 +904,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	}
 	else if (m_pRedis->IsUserOnline(userID))
 	{
-		//Íæ¼ÒÒÑ¾­ÔÚÆäËü·şÎñÆ÷µÇÂ¼£¬Ìßµô¾É·şÎñÆ÷µÄ
+		//ç©å®¶å·²ç»åœ¨å…¶å®ƒæœåŠ¡å™¨ç™»å½•ï¼Œè¸¢æ‰æ—§æœåŠ¡å™¨çš„
 		SendMessageToCenterServer(CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON, NULL, 0, userID);
 
 		pUser = new LogonUserInfo;
@@ -926,7 +926,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		strcpy(pMessage->szToken, REDIS_STR_DEFAULT);
 	}
 
-	// ±£´æÍæ¼ÒµÄmacµØÖ·¡¢ip¡¢token¡¢ÔÚÏß×´Ì¬
+	// ä¿å­˜ç©å®¶çš„macåœ°å€ã€ipã€tokenã€åœ¨çº¿çŠ¶æ€
 	std::string cmdLine = " macAddr ";
 	cmdLine += pMessage->szMacAddr;
 	cmdLine += " token ";
@@ -943,7 +943,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	}
 	m_pRedis->SetUserInfo(userID, cmdLine);
 
-	// ¼ì²éÊÇ·ñ¿çÌì
+	// æ£€æŸ¥æ˜¯å¦è·¨å¤©
 	int lastCrossDayTime = userData.lastCrossDayTime;
 	if (CUtil::GetDateFromTimeStamp(currTime) > CUtil::GetDateFromTimeStamp(lastCrossDayTime))
 	{
@@ -954,17 +954,17 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	pUser->socketIdx = socketIdx;
 	pUser->isVirtual = userData.isVirtual;
 
-	// ½«Íæ¼ÒµÄsocketIdxºÍuserID¹ØÁª
+	// å°†ç©å®¶çš„socketIdxå’ŒuserIDå…³è”
 	m_socketInfoVec[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_USER, userID);
 
-	// ÏòÖĞĞÄ·ş·¢ËÍÏûÏ¢
+	// å‘ä¸­å¿ƒæœå‘é€æ¶ˆæ¯
 	PlatformUserLogonLogout logonToCenterUserStatus;
 	logonToCenterUserStatus.userID = userID;
 	logonToCenterUserStatus.type = 0;
 	logonToCenterUserStatus.isVirtual = userData.isVirtual;
 	SendMessageToCenterServer(CENTER_MESSAGE_LOGON_USER_LOGON_OUT, &logonToCenterUserStatus, sizeof(logonToCenterUserStatus));
 
-	// ¸øPHP·¢ËÍÏûÏ¢
+	// ç»™PHPå‘é€æ¶ˆæ¯
 	if (!pUser->isVirtual)
 	{
 		SendHTTPUserLogonLogout(userID, 0);
@@ -990,17 +990,17 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	msg.combineMatchID = userData.combineMatchID;
 	msg.matchStatus = userData.matchType == MATCH_TYPE_PEOPLE ? userData.matchStatus : USER_MATCH_STATUS_NORMAL;
 
-	// µÇÂ¼³É¹¦
+	// ç™»å½•æˆåŠŸ
 	m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, 0, handleID);
 
-	// Ìí¼ÓÔÚÏßÍæ¼Ò£¬ÏòÖĞĞÄ·şÎñÆ÷·¢ËÍÏûÏ¢
+	// æ·»åŠ åœ¨çº¿ç©å®¶ï¼Œå‘ä¸­å¿ƒæœåŠ¡å™¨å‘é€æ¶ˆæ¯
 	m_pRedis->AddOnlineUser(userID, userData.isVirtual);
 	m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID, m_pUserManage->GetUserCount());
 
-	// Í¨ÖªÍæ¼ÒĞÅÏ¢
+	// é€šçŸ¥ç©å®¶ä¿¡æ¯
 	OnUserLogon(userData);
 
-	// Ğ´µÇÂ¼¼ÇÂ¼
+	// å†™ç™»å½•è®°å½•
 	if (userData.isVirtual == 0)
 	{
 		char tableName[128] = "";
@@ -1020,14 +1020,14 @@ bool CGameLogonManage::OnHandleGameDeskMessage(int assistID, void * pData, int s
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.type != LOGON_SERVER_SOCKET_TYPE_USER)
 	{
-		ERROR_LOG("·ÇÍæ¼Òsocket£¬½ûÖ¹·¢ËÍ´ËÏûÏ¢ socketIdx:%d", socketIdx);
+		ERROR_LOG("éç©å®¶socketï¼Œç¦æ­¢å‘é€æ­¤æ¶ˆæ¯ socketIdx:%d", socketIdx);
 		return false;
 	}
 
 	int userID = socketInfo.identityID;
 	if (userID <= 0)
 	{
-		ERROR_LOG("Ã»ÓĞ°ó¶¨Íæ¼ÒidµÄÒì³£ socketIdx:%d", socketIdx);
+		ERROR_LOG("æ²¡æœ‰ç»‘å®šç©å®¶idçš„å¼‚å¸¸ socketIdx:%d", socketIdx);
 		return false;
 	}
 
@@ -1060,7 +1060,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		return false;
 	}
 
-	// ±ÈÈü³¡ÅĞ¶Ï
+	// æ¯”èµ›åœºåˆ¤æ–­
 	if ((userData.matchType == MATCH_TYPE_TIME && userData.matchStatus == USER_MATCH_STATUS_AFTER_BEGIN
 		|| userData.matchType == MATCH_TYPE_PEOPLE && userData.matchStatus != USER_MATCH_STATUS_NORMAL) && pMessage->masterNotPlay == 0)
 	{
@@ -1068,14 +1068,14 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	// Íæ¼ÒÔÚÓÎÏ·ÖĞµÄ»°ÔòÎŞ·¨´´½¨·¿¼ä£¬µ«ÊÇ¿ÉÒÔ´ú¿ª
+	// ç©å®¶åœ¨æ¸¸æˆä¸­çš„è¯åˆ™æ— æ³•åˆ›å»ºæˆ¿é—´ï¼Œä½†æ˜¯å¯ä»¥ä»£å¼€
 	if (userData.roomID > 0 && pMessage->masterNotPlay == 0)
 	{
 		LogonResponseBuyDesk msg;
 		msg.roomID = userData.roomID;
 		SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CANNOT_BUYDESK_INROOM);
 
-		//¸æËßÕıÈ·µÄÎ»ÖÃ
+		//å‘Šè¯‰æ­£ç¡®çš„ä½ç½®
 		RoomBaseInfo* pUserRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(userData.roomID);
 		if (pUserRoomBaseInfo)
 		{
@@ -1087,7 +1087,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 				}
 				else
 				{
-					ERROR_LOG("ÓÃ»§ÒÑ¾­ÔÚ·¿¼äuserID = %d,roomID:%d,deskIdx=%d", userID, userData.roomID, userData.deskIdx);
+					ERROR_LOG("ç”¨æˆ·å·²ç»åœ¨æˆ¿é—´userID = %d,roomID:%d,deskIdx=%d", userID, userData.roomID, userData.deskIdx);
 				}
 			}
 		}
@@ -1118,7 +1118,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	if (!pRoomBaseInfo)
 	{
 		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG);
-		ERROR_LOG("¹ºÂò×À×ÓÊ§°ÜroomID=%d", iBuyRoomID);
+		ERROR_LOG("è´­ä¹°æ¡Œå­å¤±è´¥roomID=%d", iBuyRoomID);
 		return true;
 	}
 
@@ -1132,7 +1132,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	int friendsGroupDeskNumber = pMessage->friendsGroupDeskNumber;
 	int masterID = 0;
 
-	// ¼ì²é¹ºÂò×À×Ó´ÎÊı
+	// æ£€æŸ¥è´­ä¹°æ¡Œå­æ¬¡æ•°
 	OtherConfig otherConfig;
 	if (!m_pRedis->GetOtherConfig(otherConfig))
 	{
@@ -1144,14 +1144,14 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	// ¾ãÀÖ²¿vip·¿¼äÖ»ÄÜ¾ãÀÖ²¿´´½¨
+	// ä¿±ä¹éƒ¨vipæˆ¿é—´åªèƒ½ä¿±ä¹éƒ¨åˆ›å»º
 	if (friendsGroupID > 0 && friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT  && pRoomBaseInfo->type != ROOM_TYPE_FG_VIP)
 	{
 		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
 		return true;
 	}
 
-	//²éÕÒÊÇ·ñÓĞÕâ¸öÅäÖÃ
+	//æŸ¥æ‰¾æ˜¯å¦æœ‰è¿™ä¸ªé…ç½®
 	BuyGameDeskInfo buyGameDeskInfo;
 	BuyGameDeskInfo* pBuyGameDeskInfo = NULL;
 	BuyGameDeskInfoKey buyDekKey(pMessage->gameID, pMessage->count, pRoomBaseInfo->type);
@@ -1169,7 +1169,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		return false;
 	}
 
-	//½âÎö´´½¨·¿¼ä¹æÔò
+	//è§£æåˆ›å»ºæˆ¿é—´è§„åˆ™
 	int iJsonRS = 0;
 	int buyGameCount = pBuyGameDeskInfo->count;
 	int payType = PAY_TYPE_NORMAL;
@@ -1202,22 +1202,22 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		cqFriendsGroupID = value["FGID"].asInt();
 	}
 
-	////////////////////////////////Í¬²½Êı¾İ(¾ãÀÖ²¿²»ÄÜÍ¬Ê±¹ºÂòÅÆ×À)//////////////////////////////////////////
+	////////////////////////////////åŒæ­¥æ•°æ®(ä¿±ä¹éƒ¨ä¸èƒ½åŒæ—¶è´­ä¹°ç‰Œæ¡Œ)//////////////////////////////////////////
 	char redisLockKey[48] = "";
 	sprintf(redisLockKey, "%s|%d", TBL_FG_BUY_DESK, friendsGroupID);
 	CRedisLock redisLockFG(m_pRedisPHP->GetRedisContext(), redisLockKey, 5, false);
 
-	//´´½¨¾ãÀÖ²¿·¿¼ä£¬·µ»Ø¾ãÀÖ²¿ÈºÖ÷£¬´´½¨vip·¿¼ä»á×Ô¶¯·ÖÅäÅÆ×À
+	//åˆ›å»ºä¿±ä¹éƒ¨æˆ¿é—´ï¼Œè¿”å›ä¿±ä¹éƒ¨ç¾¤ä¸»ï¼Œåˆ›å»ºvipæˆ¿é—´ä¼šè‡ªåŠ¨åˆ†é…ç‰Œæ¡Œ
 	if (friendsGroupID != 0)
 	{
-		// ÅĞ¶Ï¾ãÀÖ²¿ÊÇ·ñ´æÔÚ
+		// åˆ¤æ–­ä¿±ä¹éƒ¨æ˜¯å¦å­˜åœ¨
 		if (!m_pRedisPHP->IsCanJoinFriendsGroupRoom(userID, friendsGroupID))
 		{
 			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_NOT_EXISTS);
 			return true;
 		}
 
-		// »ñÈ¡¾ãÀÖ²¿ĞÅÏ¢
+		// è·å–ä¿±ä¹éƒ¨ä¿¡æ¯
 		BYTE userPower = m_pRedisPHP->GetUserPower(friendsGroupID, userID);
 		masterID = m_pRedisPHP->GetFriendsGroupMasterID(friendsGroupID);
 
@@ -1236,7 +1236,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		}
 	}
 
-	//ÌØÊâÓÎÏ·ÅĞ¶Ï£¬²ÂÈ­
+	//ç‰¹æ®Šæ¸¸æˆåˆ¤æ–­ï¼ŒçŒœæ‹³
 	if (cqFriendsGroupID > 0 && pRoomBaseInfo->gameID == 37550102)
 	{
 		long long carryFireCoin = 0;
@@ -1253,7 +1253,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	{
 		if (!m_pRedis->GetUserData(masterID, masterData))
 		{
-			ERROR_LOG("´´½¨¾ãÀÖ²¿·¿¼ä£¬µ«ÊÇÈºÖ÷²»´æÔÚ,masterID = %d", masterID);
+			ERROR_LOG("åˆ›å»ºä¿±ä¹éƒ¨æˆ¿é—´ï¼Œä½†æ˜¯ç¾¤ä¸»ä¸å­˜åœ¨,masterID = %d", masterID);
 			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ERR_CREATE_ROOM);
 			return true;
 		}
@@ -1262,7 +1262,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	masterID = 0;
 #endif
 
-	//ÅĞ¶Ï·¿¼ä¹éÊôÈ¨
+	//åˆ¤æ–­æˆ¿é—´å½’å±æƒ
 	int buyUserID = masterID == 0 ? userID : masterID;
 	UserData buyUserData = masterID == 0 ? userData : masterData;
 
@@ -1271,19 +1271,19 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		pBuyGameDeskInfo->costResType = RESOURCE_TYPE_JEWEL;
 	}
 
-	////////////////////////////////Í¬²½Êı¾İ(Ò»¸öÈË²»ÄÜÍ¬Ê±¹ºÂò×À×Ó)//////////////////////////////////////////
+	////////////////////////////////åŒæ­¥æ•°æ®(ä¸€ä¸ªäººä¸èƒ½åŒæ—¶è´­ä¹°æ¡Œå­)//////////////////////////////////////////
 	memset(redisLockKey, 0, sizeof(redisLockKey));
 	sprintf(redisLockKey, "%s|%d", TBL_USER_BUY_DESK, buyUserID);
 	CRedisLock redisLock(m_pRedisPHP->GetRedisContext(), redisLockKey, 5);
 
-	if (pRoomBaseInfo->type == ROOM_TYPE_PRIVATE) //»ı·Ö·¿
+	if (pRoomBaseInfo->type == ROOM_TYPE_PRIVATE) //ç§¯åˆ†æˆ¿
 	{
 		if (payType != PAY_TYPE_AA)
 		{
 			payType = PAY_TYPE_NORMAL;
 		}
 
-		// ¼ì²é·¿¿¨
+		// æ£€æŸ¥æˆ¿å¡
 		if (payType == PAY_TYPE_NORMAL)
 		{
 			needCostNums = pBuyGameDeskInfo->costNums;
@@ -1295,7 +1295,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 
 		if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY)
 		{
-			if (buyUserData.money < needCostNums) //ÏûºÄ¾ãÀÖ²¿ÈºÖ÷µÄ
+			if (buyUserData.money < needCostNums) //æ¶ˆè€—ä¿±ä¹éƒ¨ç¾¤ä¸»çš„
 			{
 				UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_MONEY : ERROR_NOT_ENOUGH_MONEY;
 				SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
@@ -1312,13 +1312,13 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			}
 		}
 
-		//·¿Ö÷Ö§¸¶ÏÈ¿Û
+		//æˆ¿ä¸»æ”¯ä»˜å…ˆæ‰£
 		if (payType == PAY_TYPE_NORMAL)
 		{
 			bAlreadyCost = true;
 		}
 	}
-	else if (pRoomBaseInfo->type == ROOM_TYPE_FRIEND)//½ğ±Ò·¿
+	else if (pRoomBaseInfo->type == ROOM_TYPE_FRIEND)//é‡‘å¸æˆ¿
 	{
 		if (minPoint < kickPoint || minPoint < basePoint)
 		{
@@ -1333,7 +1333,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 
 			if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY)
 			{
-				if (buyUserData.money < needCostNums) //ÏûºÄ¾ãÀÖ²¿ÈºÖ÷µÄ
+				if (buyUserData.money < needCostNums) //æ¶ˆè€—ä¿±ä¹éƒ¨ç¾¤ä¸»çš„
 				{
 					UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_MONEY : ERROR_NOT_ENOUGH_MONEY;
 					SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
@@ -1351,7 +1351,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			}
 		}
 
-		// ½ğ±Ò·¿¼ì²éÍæ¼ÒµÄ½ğ±ÒÊıÁ¿£¬¹»²»¹»½øÈë
+		// é‡‘å¸æˆ¿æ£€æŸ¥ç©å®¶çš„é‡‘å¸æ•°é‡ï¼Œå¤Ÿä¸å¤Ÿè¿›å…¥
 		if (pMessage->masterNotPlay == 0 && pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY
 			&& userData.money < (minPoint + needCostNums))
 		{
@@ -1359,7 +1359,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			return true;
 		}
 
-		// ½ğ±Ò·¿¼ì²éÍæ¼ÒµÄ½ğ±ÒÊıÁ¿£¬¹»²»¹»½øÈë
+		// é‡‘å¸æˆ¿æ£€æŸ¥ç©å®¶çš„é‡‘å¸æ•°é‡ï¼Œå¤Ÿä¸å¤Ÿè¿›å…¥
 		if (pMessage->masterNotPlay == 0 && pBuyGameDeskInfo->costResType == RESOURCE_TYPE_JEWEL
 			&& userData.money < minPoint)
 		{
@@ -1367,7 +1367,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			return true;
 		}
 	}
-	else if (pRoomBaseInfo->type == ROOM_TYPE_FG_VIP)//¾ãÀÖ²¿VIP·¿
+	else if (pRoomBaseInfo->type == ROOM_TYPE_FG_VIP)//ä¿±ä¹éƒ¨VIPæˆ¿
 	{
 		if (minPoint < kickPoint || minPoint < basePoint)
 		{
@@ -1375,7 +1375,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			return true;
 		}
 
-		if (friendsGroupID <= 0) //vip·¿Ö»ÓĞ¾ãÀÖ²¿¿ÉÒÔ´´½¨
+		if (friendsGroupID <= 0) //vipæˆ¿åªæœ‰ä¿±ä¹éƒ¨å¯ä»¥åˆ›å»º
 		{
 			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
 			return true;
@@ -1388,7 +1388,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 
 			if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY)
 			{
-				if (buyUserData.money < needCostNums) //ÏûºÄ¾ãÀÖ²¿ÈºÖ÷µÄ
+				if (buyUserData.money < needCostNums) //æ¶ˆè€—ä¿±ä¹éƒ¨ç¾¤ä¸»çš„
 				{
 					UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_MONEY : ERROR_NOT_ENOUGH_MONEY;
 					SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
@@ -1413,7 +1413,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	}
 
 	int maxUserCount = pGameBaseInfo->deskPeople;
-	// ÌØÊâÓÎÏ·µÄ´¦Àí
+	// ç‰¹æ®Šæ¸¸æˆçš„å¤„ç†
 	if (pGameBaseInfo->multiPeopleGame)
 	{
 		maxUserCount = iJsonRS;
@@ -1426,7 +1426,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 
 	LogonResponseBuyDesk msg;
 
-	// ´´½¨·¿¼ä
+	// åˆ›å»ºæˆ¿é—´
 	std::string deskPasswd = m_pRedis->CreatePrivateDeskRecord(buyUserID, pRoomBaseInfo->roomID, pMessage->masterNotPlay, pRoomBaseInfo->deskCount,
 		buyGameCount, pMessage->gameRules, maxUserCount, payType, pGameBaseInfo->watcherCount, friendsGroupID, friendsGroupDeskNumber);
 	if (deskPasswd == "")
@@ -1436,7 +1436,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	//·¿Ö÷Ö§¸¶£¬ÏÈ¿Û
+	//æˆ¿ä¸»æ”¯ä»˜ï¼Œå…ˆæ‰£
 	if (bAlreadyCost && needCostNums > 0)
 	{
 		if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_JEWEL)
@@ -1444,10 +1444,10 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			long long newJewels = buyUserData.jewels - needCostNums;
 			m_pRedis->SetUserJewelsEx(buyUserID, -needCostNums, true, RESOURCE_CHANGE_REASON_CREATE_ROOM, iBuyRoomID, 0, buyUserData.isVirtual, friendsGroupID);
 
-			// ½âËø
+			// è§£é”
 			redisLock.Unlock();
 
-			// Í¨Öª×ÊÔ´±ä»¯
+			// é€šçŸ¥èµ„æºå˜åŒ–
 			NotifyResourceChange(buyUserID, RESOURCE_TYPE_JEWEL, newJewels, RESOURCE_CHANGE_REASON_CREATE_ROOM, -needCostNums);
 		}
 		else
@@ -1455,32 +1455,32 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			long long newGolds = buyUserData.money - needCostNums;
 			m_pRedis->SetUserMoneyEx(buyUserID, -needCostNums, true, RESOURCE_CHANGE_REASON_CREATE_ROOM, iBuyRoomID, 0, buyUserData.isVirtual, friendsGroupID);
 
-			// ½âËø
+			// è§£é”
 			redisLock.Unlock();
 
-			//Ëã·¿¿¨³¡ÏµÍ³Ó®Ç®
+			//ç®—æˆ¿å¡åœºç³»ç»Ÿèµ¢é’±
 			m_pRedis->SetRoomGameWinMoney(iBuyRoomID, needCostNums, true);
 
-			// Í¨Öª×ÊÔ´±ä»¯
+			// é€šçŸ¥èµ„æºå˜åŒ–
 			NotifyResourceChange(buyUserID, RESOURCE_TYPE_MONEY, newGolds, RESOURCE_CHANGE_REASON_CREATE_ROOM, -needCostNums);
 		}
 	}
 
-	// ½âËø
+	// è§£é”
 	redisLock.Unlock();
 
-	//Ìí¼Ó¾ãÀÖ²¿ÅÆ×ÀÏûÏ¢
+	//æ·»åŠ ä¿±ä¹éƒ¨ç‰Œæ¡Œæ¶ˆæ¯
 	if (friendsGroupID != 0)
 	{
 		OneFriendsGroupDeskInfo deskInfoMsg;
 		bool bHaveRedSpot = false;
 		if (m_pRedis->CreateFriendsGroupDeskInfo(friendsGroupID, friendsGroupDeskNumber, deskPasswd, pRoomBaseInfo->gameID, pRoomBaseInfo->type, deskInfoMsg, bHaveRedSpot))
 		{
-			// ½âËø
+			// è§£é”
 			redisLockFG.Unlock();
 
-			// ·¢¸øÖĞĞÄ·şÎñÆ÷£¬ÈÃÖĞĞÄ·şÎñÆ÷×ª·¢
-			//ÍÆËÍ¸øËùÓĞÔÚÏß³ÉÔ±
+			// å‘ç»™ä¸­å¿ƒæœåŠ¡å™¨ï¼Œè®©ä¸­å¿ƒæœåŠ¡å™¨è½¬å‘
+			//æ¨é€ç»™æ‰€æœ‰åœ¨çº¿æˆå‘˜
 			UINT iMessageID = friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT
 				? MSG_NTF_LOGON_FRIENDSGROUP_NEW_VIPROOM_MSG : MSG_NTF_LOGON_FRIENDSGROUP_NEW_DESK_MSG;
 			SendMessageToCenterServer(CENTER_MESSAGE_LOGON_RELAY_FG_MSG, &deskInfoMsg, sizeof(deskInfoMsg), friendsGroupID, MSG_MAIN_FRIENDSGROUP_NOTIFY, iMessageID, 0);
@@ -1503,14 +1503,14 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		}
 		else
 		{
-			// ½âËø
+			// è§£é”
 			redisLockFG.Unlock();
 
-			ERROR_LOG("´´½¨ÅÆ×ÀÊ§°Ü,friendsGroupID=%d,friendsGroupDeskNumber=%d", friendsGroupID, friendsGroupDeskNumber);
+			ERROR_LOG("åˆ›å»ºç‰Œæ¡Œå¤±è´¥,friendsGroupID=%d,friendsGroupDeskNumber=%d", friendsGroupID, friendsGroupDeskNumber);
 		}
 	}
 
-	// ¹ºÂò×À×Ó´ÎÊı
+	// è´­ä¹°æ¡Œå­æ¬¡æ•°
 	if (friendsGroupID == 0)
 	{
 		m_pRedis->SetUserBuyingDeskCount(userID, 1, true);
@@ -1538,7 +1538,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return false;
 	}
 
-	// ±ÈÈü³¡ÅĞ¶Ï
+	// æ¯”èµ›åœºåˆ¤æ–­
 	if (userData.matchType == MATCH_TYPE_TIME && userData.matchStatus == USER_MATCH_STATUS_AFTER_BEGIN
 		|| userData.matchType == MATCH_TYPE_PEOPLE && userData.matchStatus != USER_MATCH_STATUS_NORMAL)
 	{
@@ -1546,7 +1546,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	// ÒÑ¾­ÔÚÒ»¸ö·¿¼äÀïÃæÔòÎŞ·¨¼ÓÈë·¿¼ä
+	// å·²ç»åœ¨ä¸€ä¸ªæˆ¿é—´é‡Œé¢åˆ™æ— æ³•åŠ å…¥æˆ¿é—´
 	if (userData.roomID > 0)
 	{
 		LogonResponseEnterDesk msg;
@@ -1555,7 +1555,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		msg.deskIdx = userData.deskIdx;
 		SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_CANNOT_ENTERDESK_INROOM);
 
-		//¸æËßÕıÈ·µÄÎ»ÖÃ
+		//å‘Šè¯‰æ­£ç¡®çš„ä½ç½®
 		RoomBaseInfo* pUserRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(userData.roomID);
 		if (pUserRoomBaseInfo)
 		{
@@ -1567,7 +1567,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 				}
 				else
 				{
-					ERROR_LOG("ÓÃ»§ÒÑ¾­ÔÚ·¿¼äuserID = %d,roomID:%d,deskIdx=%d", userID, userData.roomID, userData.deskIdx);
+					ERROR_LOG("ç”¨æˆ·å·²ç»åœ¨æˆ¿é—´userID = %d,roomID:%d,deskIdx=%d", userID, userData.roomID, userData.deskIdx);
 				}
 			}
 		}
@@ -1579,7 +1579,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	// ¸ù¾İÎ¨Ò»µÄÃÜÂë²éÑ¯Ë½ÓĞ×À×Ó
+	// æ ¹æ®å”¯ä¸€çš„å¯†ç æŸ¥è¯¢ç§æœ‰æ¡Œå­
 	int deskMixID = m_pRedis->GetDeskMixIDByPasswd(pMessage->passwd);
 	if (deskMixID <= 0)
 	{
@@ -1587,7 +1587,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	// ¸ù¾İdeskMixIDÈ¡³ö×À×ÓµÄÊı¾İ
+	// æ ¹æ®deskMixIDå–å‡ºæ¡Œå­çš„æ•°æ®
 	PrivateDeskInfo privateDeskInfo;
 	if (!m_pRedis->GetPrivateDeskRecordInfo(deskMixID, privateDeskInfo))
 	{
@@ -1611,7 +1611,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	//·Ç¾ãÀÖ²¿²»ÄÜ¼ÓÈë¾ãÀÖ²¿·¿¼ä
+	//éä¿±ä¹éƒ¨ä¸èƒ½åŠ å…¥ä¿±ä¹éƒ¨æˆ¿é—´
 	int	friendsGroupID = privateDeskInfo.friendsGroupID;
 	if (friendsGroupID != 0 && !m_pRedisPHP->IsCanJoinFriendsGroupRoom(userID, friendsGroupID))
 	{
@@ -1626,9 +1626,9 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return false;
 	}
 
-	//ÅĞ¶ÏÓÎÏ·ÊÇ·ñ¿ªÊ¼ ERROR_STOP_JOIN
+	//åˆ¤æ–­æ¸¸æˆæ˜¯å¦å¼€å§‹ ERROR_STOP_JOIN
 	int iStopJoin = 0;
-	int minPoint = 0; //Èë³¡ÏŞÖÆ
+	int minPoint = 0; //å…¥åœºé™åˆ¶
 	int cqFriendsGroupID = 0;
 	if (privateDeskInfo.gameRules[0] != '\0')
 	{
@@ -1647,7 +1647,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	//ÌØÊâÓÎÏ·ÅĞ¶Ï£¬²ÂÈ­
+	//ç‰¹æ®Šæ¸¸æˆåˆ¤æ–­ï¼ŒçŒœæ‹³
 	if (cqFriendsGroupID > 0 && pRoomBaseInfo->gameID == 37550102)
 	{
 		long long carryFireCoin = 0;
@@ -1664,7 +1664,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	}
 	else if (pRoomBaseInfo->type == ROOM_TYPE_FRIEND)
 	{
-		// Ë½ÈË·¿¼ì²éÍæ¼ÒµÄ½ğ±ÒÊıÁ¿
+		// ç§äººæˆ¿æ£€æŸ¥ç©å®¶çš„é‡‘å¸æ•°é‡
 		if (minPoint > 0 && userData.money < minPoint)
 		{
 			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_ROOM_NO_MONEYREQUIRE);
@@ -1679,11 +1679,11 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 			return true;
 		}
 
-		//ÅĞ¶Ï»ğ±Ò¹»²»¹»
+		//åˆ¤æ–­ç«å¸å¤Ÿä¸å¤Ÿ
 		long long carryFireCoin = 0;
 		if (!m_pRedisPHP->GetUserFriendsGroupMoney(friendsGroupID, userID, carryFireCoin))
 		{
-			ERROR_LOG("»ñÈ¡Íæ¼Ò¾ãÀÖ²¿½ğ±ÒÊ§°Ü:userID = %d , friendsGroupID=%d", userID, friendsGroupID);
+			ERROR_LOG("è·å–ç©å®¶ä¿±ä¹éƒ¨é‡‘å¸å¤±è´¥:userID = %d , friendsGroupID=%d", userID, friendsGroupID);
 		}
 
 		if ((int)carryFireCoin < minPoint)
@@ -1698,7 +1698,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		return false;
 	}
 
-	//ÅĞ¶Ï×ÊÔ´ÊÇ·ñ×ã¹»¼ÙÈç·¿¼ä
+	//åˆ¤æ–­èµ„æºæ˜¯å¦è¶³å¤Ÿå‡å¦‚æˆ¿é—´
 	if (privateDeskInfo.payType == PAY_TYPE_AA && (pRoomBaseInfo->type == ROOM_TYPE_PRIVATE || pRoomBaseInfo->type == ROOM_TYPE_FG_VIP))
 	{
 		BuyGameDeskInfo buyGameDeskInfo;
@@ -1714,7 +1714,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		}
 		if (!pBuyGameDeskInfo)
 		{
-			ERROR_LOG("»ı·Ö·¿,GetBuyGameDeskInfo failed gameID(%d) gameCount(%d)", pRoomBaseInfo->gameID, privateDeskInfo.buyGameCount);
+			ERROR_LOG("ç§¯åˆ†æˆ¿,GetBuyGameDeskInfo failed gameID(%d) gameCount(%d)", pRoomBaseInfo->gameID, privateDeskInfo.buyGameCount);
 			return false;
 		}
 
@@ -1740,7 +1740,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 
 	if (pGameBaseInfo->canWatch)
 	{
-		// ÅÔ¹ÛÕßÈËÊıÊÇ·ñÒÑÂú
+		// æ—è§‚è€…äººæ•°æ˜¯å¦å·²æ»¡
 		if (privateDeskInfo.currWatchUserCount >= privateDeskInfo.maxWatchUserCount)
 		{
 			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_DESK_FULL);
@@ -1756,7 +1756,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		}
 	}
 
-	// ¼ÇÂ¼Íæ¼Ò½øÈë×À×Ó
+	// è®°å½•ç©å®¶è¿›å…¥æ¡Œå­
 	m_pRedis->SetUserRoomID(userID, roomID);
 	m_pRedis->SetUserDeskIdx(userID, deskIdx);
 
@@ -1774,14 +1774,14 @@ bool CGameLogonManage::OnHandleOtherMessage(int assistID, void * pData, int size
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.type != LOGON_SERVER_SOCKET_TYPE_USER)
 	{
-		ERROR_LOG("·ÇÍæ¼Òsocket£¬½ûÖ¹·¢ËÍ´ËÏûÏ¢ socketIdx:%d", socketIdx);
+		ERROR_LOG("éç©å®¶socketï¼Œç¦æ­¢å‘é€æ­¤æ¶ˆæ¯ socketIdx:%d", socketIdx);
 		return false;
 	}
 
 	int userID = socketInfo.identityID;
 	if (userID <= 0)
 	{
-		ERROR_LOG("Ã»ÓĞ°ó¶¨Íæ¼ÒidµÄÒì³£ socketIdx:%d", socketIdx);
+		ERROR_LOG("æ²¡æœ‰ç»‘å®šç©å®¶idçš„å¼‚å¸¸ socketIdx:%d", socketIdx);
 		return false;
 	}
 
@@ -1859,7 +1859,7 @@ bool CGameLogonManage::OnHandleRobotTakeMoney(int userID, void* pData, int size)
 		return true;
 	}
 
-	//»úÆ÷ÈË´Ó½±³ØÖĞÈ¡½ğ±Ò
+	//æœºå™¨äººä»å¥–æ± ä¸­å–é‡‘å¸
 	__int64 _i64PoolMoney = 0;
 	_i64PoolMoney = userData.money - (__int64)pMessage->iMoney;
 	m_pRedis->SetRoomPoolMoney(pMessage->iRoomID, _i64PoolMoney, true);
@@ -1892,7 +1892,7 @@ bool CGameLogonManage::OnHandleReqUserInfo(int userID, void* pData, int size)
 	UserData userData;
 	if (!m_pRedis->GetUserData(targetID, userData))
 	{
-		ERROR_LOG("ÇëÇó¸öÈËĞÅÏ¢Ê§°Ü targetID=%d", targetID);
+		ERROR_LOG("è¯·æ±‚ä¸ªäººä¿¡æ¯å¤±è´¥ targetID=%d", targetID);
 		return true;
 	}
 
@@ -1921,7 +1921,7 @@ bool CGameLogonManage::OnHandleReqUserInfo(int userID, void* pData, int size)
 	return true;
 }
 
-// ÇëÇó½øÈë±ÈÈü³¡Ò³Ãæ
+// è¯·æ±‚è¿›å…¥æ¯”èµ›åœºé¡µé¢
 bool CGameLogonManage::OnHandleJoinMatchScene(UINT uIndex)
 {
 	m_scoketMatch.insert(uIndex);
@@ -1929,7 +1929,7 @@ bool CGameLogonManage::OnHandleJoinMatchScene(UINT uIndex)
 	return true;
 }
 
-// ÇëÇóÍË³ö±ÈÈü³¡Ò³Ãæ
+// è¯·æ±‚é€€å‡ºæ¯”èµ›åœºé¡µé¢
 bool CGameLogonManage::OnHandleExitMatchScene(UINT uIndex)
 {
 	m_scoketMatch.erase(uIndex);
@@ -1938,7 +1938,7 @@ bool CGameLogonManage::OnHandleExitMatchScene(UINT uIndex)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// ÓÎÏ··şÏà¹ØÏûÏ¢
+// æ¸¸æˆæœç›¸å…³æ¶ˆæ¯
 
 bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx)
 {
@@ -1947,27 +1947,27 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(pMessage->roomID);
 	if (!pRoomBaseInfo)
 	{
-		ERROR_LOG("Ã»ÓĞÅäÖÃµÄroomID=%d", pMessage->roomID);
+		ERROR_LOG("æ²¡æœ‰é…ç½®çš„roomID=%d", pMessage->roomID);
 		return false;
 	}
 
-	// Èİ´í
+	// å®¹é”™
 	pMessage->passwd[sizeof(pMessage->passwd) - 1] = '\0';
 
-	// ÈÏÖ¤ÃÜÂë
+	// è®¤è¯å¯†ç 
 	if (strcmp(pMessage->passwd, ConfigManage()->m_loaderServerConfig.logonserverPasswd))
 	{
-		ERROR_LOG("ÃÜÂë´íÎó£¬pMessage->passwd=%s,pwd=%s", pMessage->passwd, ConfigManage()->m_loaderServerConfig.logonserverPasswd);
+		ERROR_LOG("å¯†ç é”™è¯¯ï¼ŒpMessage->passwd=%s,pwd=%s", pMessage->passwd, ConfigManage()->m_loaderServerConfig.logonserverPasswd);
 		return false;
 	}
 
-	// Ìí¼Óµ½ÄÚ´æ
+	// æ·»åŠ åˆ°å†…å­˜
 	LogonGServerInfo* pGServer = m_pGServerManage->GetGServer(pMessage->roomID);
 	if (pGServer)
 	{
-		ERROR_LOG("gserver£¨%d£©ÒÑ¾­µÇÂ¼¹ıÁË", pMessage->roomID);
+		ERROR_LOG("gserverï¼ˆ%dï¼‰å·²ç»ç™»å½•è¿‡äº†", pMessage->roomID);
 
-		// ·µ»Øtrue²»¶Ïsocket
+		// è¿”å›trueä¸æ–­socket
 		return true;
 	}
 	else
@@ -1978,10 +1978,10 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 		m_pGServerManage->AddGServer(pMessage->roomID, pGServer);
 	}
 
-	// socketIdxºÍgserver¹ØÁª
+	// socketIdxå’Œgserverå…³è”
 	m_socketInfoVec[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->roomID);
 
-	INFO_LOG("¡¾roomID=%d¡¿ÓÎÏ··şÁ¬½Ó±¾·ş", pMessage->roomID);
+	INFO_LOG("ã€roomID=%dã€‘æ¸¸æˆæœè¿æ¥æœ¬æœ", pMessage->roomID);
 
 	return true;
 }
@@ -1991,7 +1991,7 @@ bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead *
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (!pUser)
 	{
-		ERROR_LOG("Íæ¼Ò´æÔÚ userID=%d", userID);
+		ERROR_LOG("ç©å®¶å­˜åœ¨ userID=%d", userID);
 		return false;
 	}
 
@@ -2002,16 +2002,16 @@ bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead *
 	{
 		m_TCPSocket.SendData(pUser->socketIdx, NULL, 0, pNetHead->uMainID, pNetHead->uAssistantID, ERROR_GAME_NO_START, 0, roomID);
 
-		// ·µ»Øtrue²»¶Ïsocket
+		// è¿”å›trueä¸æ–­socket
 		return true;
 	}
 
-	// ´Ë´¦¿ÉÒÔ¸ù¾İÒµÎñÂß¼­£¬À¹½ØÓÎÏ·ÏûÏ¢
+	// æ­¤å¤„å¯ä»¥æ ¹æ®ä¸šåŠ¡é€»è¾‘ï¼Œæ‹¦æˆªæ¸¸æˆæ¶ˆæ¯
 	// todo:
 
 
 
-	// ×ª·¢µ½ÓÎÏ··ş
+	// è½¬å‘åˆ°æ¸¸æˆæœ
 	m_TCPSocket.SendData(pGServer->socketIdx, pData, uSize, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode, 0, userID);
 
 	return true;
@@ -2020,11 +2020,11 @@ bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead *
 
 bool CGameLogonManage::OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
-	// ´Ë´¦¿ÉÒÔ¸ù¾İÒµÎñÂß¼­£¬À¹½ØÓÎÏ·ÏûÏ¢
+	// æ­¤å¤„å¯ä»¥æ ¹æ®ä¸šåŠ¡é€»è¾‘ï¼Œæ‹¦æˆªæ¸¸æˆæ¶ˆæ¯
 	// todo:
 
 
-	// ×ª·¢ÏûÏ¢
+	// è½¬å‘æ¶ˆæ¯
 	SendData(pNetHead->uIdentification, pData, uSize, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode, roomID);
 
 	return true;
@@ -2042,7 +2042,7 @@ LogonServerSocket CGameLogonManage::GetIdentityIDBySocketIdx(int socketIdx)
 	return LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_NO, 0);
 }
 
-// É¾³ısocketIdxË÷Òı
+// åˆ é™¤socketIdxç´¢å¼•
 void CGameLogonManage::DelSocketIdx(int socketIdx)
 {
 	if (socketIdx >= 0 && socketIdx < (int)m_socketInfoVec.size())
@@ -2057,11 +2057,11 @@ bool CGameLogonManage::SendData(int userID, void * pData, int size, unsigned int
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (!pUser)
 	{
-		if (uIdentification > 0) // ×ª·¢ÓÎÏ·ÏûÏ¢
+		if (uIdentification > 0) // è½¬å‘æ¸¸æˆæ¶ˆæ¯
 		{
-			//ERROR_LOG("×ª·¢ÓÎÏ·ÏûÏ¢Ê§°Ü£ºuserID=%d,mainID=%d,assistID=%d,uIdentification=%d", userID, mainID, assistID, uIdentification);
+			//ERROR_LOG("è½¬å‘æ¸¸æˆæ¶ˆæ¯å¤±è´¥ï¼šuserID=%d,mainID=%d,assistID=%d,uIdentification=%d", userID, mainID, assistID, uIdentification);
 
-			// ¿ÉÒÔ½«ÏûÏ¢·¢ËÍ¸øÖĞĞÄ·ş£¬½øÒ»²½×ª·¢±£Ö¤Êı¾İ³É¹¦¡£
+			// å¯ä»¥å°†æ¶ˆæ¯å‘é€ç»™ä¸­å¿ƒæœï¼Œè¿›ä¸€æ­¥è½¬å‘ä¿è¯æ•°æ®æˆåŠŸã€‚
 			// todo:
 
 		}
@@ -2090,7 +2090,7 @@ bool CGameLogonManage::SendDataBatch(void * pData, UINT uSize, UINT uMainID, UIN
 	return true;
 }
 
-// ÏòÖĞĞÄ·şÎñÆ÷·¢ËÍÏûÏ¢
+// å‘ä¸­å¿ƒæœåŠ¡å™¨å‘é€æ¶ˆæ¯
 bool CGameLogonManage::SendMessageToCenterServer(UINT msgID, void* pData, UINT size, int userID/* = 0*/, UINT mainID/* = 0*/, UINT assistID/* = 0*/, UINT handleCode/* = 0*/)
 {
 	if (m_pTcpConnect)
@@ -2103,13 +2103,13 @@ bool CGameLogonManage::SendMessageToCenterServer(UINT msgID, void* pData, UINT s
 		bool ret = m_pTcpConnect->Send(msgID, pData, size, userID, &netHead);
 		if (!ret)
 		{
-			ERROR_LOG("ÏòÖĞĞÄ·ş·¢ËÍÊı¾İÊ§°Ü£¡£¡£¡");
+			ERROR_LOG("å‘ä¸­å¿ƒæœå‘é€æ•°æ®å¤±è´¥ï¼ï¼ï¼");
 		}
 		return ret;
 	}
 	else
 	{
-		ERROR_LOG("ÏòÖĞĞÄ·ş·¢ËÍÊı¾İÊ§°Ü£º£ºm_pTcpConnect=NULL");
+		ERROR_LOG("å‘ä¸­å¿ƒæœå‘é€æ•°æ®å¤±è´¥ï¼šï¼šm_pTcpConnect=NULL");
 	}
 
 	return false;
@@ -2117,19 +2117,19 @@ bool CGameLogonManage::SendMessageToCenterServer(UINT msgID, void* pData, UINT s
 
 void CGameLogonManage::InitRounteCheckEvent()
 {
-	// ÉèÖÃĞÄÌø¶¨Ê±Æ÷
+	// è®¾ç½®å¿ƒè·³å®šæ—¶å™¨
 	SetTimer(LOGON_TIMER_CHECK_HEARTBEAT, CHECK_HEAETBEAT_SECS * 1000);
 
-	// ÉèÖÃ¼ì²éredisÁ¬½Ó¶¨Ê±Æ÷
+	// è®¾ç½®æ£€æŸ¥redisè¿æ¥å®šæ—¶å™¨
 	SetTimer(LOGON_TIMER_CHECK_REDIS_CONNECTION, CHECK_REDIS_CONNECTION_SECS * 1000);
 
-	// ÉèÖÃ´æ´¢redisÊı¾İµ½DB¶¨Ê±Æ÷
+	// è®¾ç½®å­˜å‚¨redisæ•°æ®åˆ°DBå®šæ—¶å™¨
 	SetTimer(LOGON_TIMER_ROUTINE_SAVE_REDIS, CHECK_REDIS_SAVE_DB * 1000);
 
-	// ÉèÖÃ¶¨ÆÚÇåÀíÎ´µÇÂ¼µÄÁ¬½Ó
+	// è®¾ç½®å®šæœŸæ¸…ç†æœªç™»å½•çš„è¿æ¥
 	//SetTimer(LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET, ROUTINE_CHECK_UNBINDID_SOCKET * 1000);
 
-	// ÉèÖÃÍ¨ÓÃ¶¨Ê±Æ÷
+	// è®¾ç½®é€šç”¨å®šæ—¶å™¨
 	SetTimer(LOGON_TIMER_NORMAL, NORMAL_TIMER_SECS * 1000);
 }
 
@@ -2183,7 +2183,7 @@ void CGameLogonManage::CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeart
 			}
 			else
 			{
-				// ·¢ËÍĞÄÌø
+				// å‘é€å¿ƒè·³
 				m_TCPSocket.SendData(i, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0);
 				avtiveCount++;
 			}
@@ -2209,17 +2209,17 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 	time_t currTime = time(NULL);
 	bool bRecord = false;
 
-	// ¼ì²éÎ´°ó¶¨userIDµÄÒì³£socket
+	// æ£€æŸ¥æœªç»‘å®šuserIDçš„å¼‚å¸¸socket
 	for (size_t i = 0; i < m_InitData.uMaxPeople; i++)
 	{
 		bool bIsConnect = false;
 		time_t llAcceptMsgTime = 0, llLastRecvMsgTime = 0;
 		m_TCPSocket.GetTCPSocketInfo(i, bIsConnect, llAcceptMsgTime, llLastRecvMsgTime);
 
-		// Ã»ÓĞ°ó¶¨userIDµÄsocket
+		// æ²¡æœ‰ç»‘å®šuserIDçš„socket
 		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME && GetIdentityIDBySocketIdx(i).type <= 0)
 		{
-			INFO_LOG("ÇåÀíÃ»ÓĞ°ó¶¨µÄÁ¬½Ó¡¾connect-time=%lld,ip=%s¡¿", currTime - llAcceptMsgTime, m_TCPSocket.GetSocketIP(i));
+			INFO_LOG("æ¸…ç†æ²¡æœ‰ç»‘å®šçš„è¿æ¥ã€connect-time=%lld,ip=%sã€‘", currTime - llAcceptMsgTime, m_TCPSocket.GetSocketIP(i));
 			m_TCPSocket.CloseSocket(i);
 		}
 	}
@@ -2229,22 +2229,22 @@ void CGameLogonManage::OnNormalTimer()
 {
 	if (!m_pRedis)
 	{
-		ERROR_LOG("### redis Ö¸ÕëÎª¿Õ ###");
+		ERROR_LOG("### redis æŒ‡é’ˆä¸ºç©º ###");
 		return;
 	}
 
-	// ¼ì²éÊÇ·ñ¿çÌì
+	// æ£€æŸ¥æ˜¯å¦è·¨å¤©
 	time_t currTime = time(NULL);
 	int currHour = CUtil::GetHourTimeStamp(currTime);
 	int lastHour = CUtil::GetHourTimeStamp(m_lastNormalTimerTime);
 
-	//Áè³¿12µãÖ´ĞĞ½±³ØÍ³¼Æ
+	//å‡Œæ™¨12ç‚¹æ‰§è¡Œå¥–æ± ç»Ÿè®¡
 	if (currHour == 0 && currHour != lastHour)
 	{
 		OnServerCrossDay12Hour();
 	}
 
-	//Áè³¿5µãÖ´ĞĞÇåÀíÊı¾İ
+	//å‡Œæ™¨5ç‚¹æ‰§è¡Œæ¸…ç†æ•°æ®
 	if (currHour == 5 && currHour > lastHour)
 	{
 		OnServerCrossDay();
@@ -2311,10 +2311,10 @@ void CGameLogonManage::OnServerCrossDay()
 
 	m_pRedis->ClearGradeInfo();
 
-	//ÖØÖÃÃ¿ÈÕ½±³Ø£¬Ìí¼Óµ½×Ü½±³Ø
+	//é‡ç½®æ¯æ—¥å¥–æ± ï¼Œæ·»åŠ åˆ°æ€»å¥–æ± 
 	m_pRedis->ClearOneDayWinMoney();
 
-	//ÇåÀí¹ıÆÚÊı¾İ
+	//æ¸…ç†è¿‡æœŸæ•°æ®
 	if (m_pRedis->IsMainDistributedSystem())
 	{
 		m_pRedisPHP->ClearAllEmailInfo();
@@ -2326,7 +2326,7 @@ void CGameLogonManage::OnServerCrossDay()
 		CleanAllUserMoneyJewelsRank();
 	}
 
-	//Éú³ÉĞÂ±í£¬¼ÇÂ¼ÕËµ¥Êı¾İ
+	//ç”Ÿæˆæ–°è¡¨ï¼Œè®°å½•è´¦å•æ•°æ®
 	if (m_pRedis->IsMainDistributedSystem())
 	{
 		AutoCreateNewTable(false);
@@ -2341,7 +2341,7 @@ void CGameLogonManage::OnServerCrossDay()
 	}
 }
 
-// Áè³¿12µã
+// å‡Œæ™¨12ç‚¹
 void CGameLogonManage::OnServerCrossDay12Hour()
 {
 	AUTOCOST("OnServerCrossDay12Hour");
@@ -2357,14 +2357,14 @@ void CGameLogonManage::OnServerCrossWeek()
 	AUTOCOST("OnServerCrossWeek");
 	INFO_LOG("OnServerCrossWeek");
 
-	//·Ö²¼Ê½´¦Àí
+	//åˆ†å¸ƒå¼å¤„ç†
 	if (m_pRedis->IsMainDistributedSystem())
 	{
-		//ÇåÀíÊ¤¾ÖÊı
+		//æ¸…ç†èƒœå±€æ•°
 		CleanAllUserWinCount();
 	}
 
-	//ÇåÀí¹ıÆÚÎÄ¼ş£¬¿¼ÂÇµ½²»Í¬µÄµÇÂ½·ş£¬»á²¿Êğµ½²»Í¬µÄÖ÷»ú£¬Ã¿¸öÖ÷»ú¶¼ĞèÒªÖ´ĞĞ
+	//æ¸…ç†è¿‡æœŸæ–‡ä»¶ï¼Œè€ƒè™‘åˆ°ä¸åŒçš„ç™»é™†æœï¼Œä¼šéƒ¨ç½²åˆ°ä¸åŒçš„ä¸»æœºï¼Œæ¯ä¸ªä¸»æœºéƒ½éœ€è¦æ‰§è¡Œ
 	DeleteExpireFile();
 }
 
@@ -2376,7 +2376,7 @@ void CGameLogonManage::CleanAllUserWinCount()
 	}
 }
 
-// ÇåÀí½ğ±Ò×êÊ¯ÅÅĞĞ°ñ
+// æ¸…ç†é‡‘å¸é’»çŸ³æ’è¡Œæ¦œ
 void CGameLogonManage::CleanAllUserMoneyJewelsRank()
 {
 	m_pRedis->ClearAllUserRanking(TBL_RANKING_MONEY);
@@ -2391,10 +2391,10 @@ void CGameLogonManage::OnUserLogon(const UserData &userData)
 		return;
 	}
 
-	//·¢ËÍÏà¹ØÍ¨Öª 
+	//å‘é€ç›¸å…³é€šçŸ¥ 
 	NotifyUserInfo(userData);
 
-	// Í³¼ÆµÇÂ½´ÎÊı
+	// ç»Ÿè®¡ç™»é™†æ¬¡æ•°
 	if (m_pRedisPHP)
 	{
 		m_pRedisPHP->AddUserResNums(userData.userID, "loginLobbyCount", 1);
@@ -2408,20 +2408,20 @@ void CGameLogonManage::OnUserLogout(int userID)
 
 void CGameLogonManage::OnUserRegister(const UserData &userData)
 {
-	// ÍùÊı¾İ¿âÖĞÁ¢Âí²åÈëÒ»¸öÍæ¼Ò
+	// å¾€æ•°æ®åº“ä¸­ç«‹é©¬æ’å…¥ä¸€ä¸ªç©å®¶
 	char key[48] = "";
 	sprintf(key, "%s|%d", TBL_USER, userData.userID);
 	if (!m_pRedis->SaveRedisDataToDB(key, TBL_USER, userData.userID, REDIS_EXTEND_MODE_INSERT))
 	{
-		ERROR_LOG("×¢²á²åÈëÓÃ»§Ê§°Ü£ºuserID=%d", userData.userID);
+		ERROR_LOG("æ³¨å†Œæ’å…¥ç”¨æˆ·å¤±è´¥ï¼šuserID=%d", userData.userID);
 	}
 
-	// ÍùÈÎÎñ±íÀï²åÈëÒ»¸öÍæ¼Ò
+	// å¾€ä»»åŠ¡è¡¨é‡Œæ’å…¥ä¸€ä¸ªç©å®¶
 	char skey[48] = "";
 	sprintf(skey, "%s|%d", TBL_USER_BAG, userData.userID);
 	if (!m_pRedis->SaveRedisDataToDB(skey, TBL_USER_BAG, userData.userID, REDIS_EXTEND_MODE_INSERT))
 	{
-		ERROR_LOG("×¢²á±³°ü²åÈëÓÃ»§Ê§°Ü£ºuserID=%d", userData.userID);
+		ERROR_LOG("æ³¨å†ŒèƒŒåŒ…æ’å…¥ç”¨æˆ·å¤±è´¥ï¼šuserID=%d", userData.userID);
 	}
 
 	if (userData.money > 0)
@@ -2429,11 +2429,11 @@ void CGameLogonManage::OnUserRegister(const UserData &userData)
 		char tableName[128] = "";
 		ConfigManage()->GetTableNameByDate(TBL_STATI_USER_MONEY_CHANGE, tableName, sizeof(tableName));
 
-		// ½ğ±Ò±ä»¯
+		// é‡‘å¸å˜åŒ–
 		BillManage()->WriteBill(&m_SQLDataManage, "INSERT INTO %s (userID,time,money,changeMoney,reason,roomID,friendsGroupID,rateMoney) VALUES(%d,%d,%lld,%lld,%d,%d,%d,%d)",
 			tableName, userData.userID, (int)time(NULL), userData.money, userData.money, RESOURCE_CHANGE_REASON_REGISTER, 0, 0, 0);
 
-		// ½ğ±ÒÅÅĞĞ°ñ
+		// é‡‘å¸æ’è¡Œæ¦œ
 		m_pRedis->AddKeyToZSet(TBL_RANKING_MONEY, userData.money, userData.userID);
 	}
 
@@ -2442,15 +2442,15 @@ void CGameLogonManage::OnUserRegister(const UserData &userData)
 		char tableName[128] = "";
 		ConfigManage()->GetTableNameByDate(TBL_STATI_USER_JEWELS_CHANGE, tableName, sizeof(tableName));
 
-		// ×êÊ¯±ä»¯
+		// é’»çŸ³å˜åŒ–
 		BillManage()->WriteBill(&m_SQLDataManage, "INSERT INTO %s (userID,time,jewels,changeJewels,reason,roomID,friendsGroupID) VALUES(%d,%d,%d,%d,%d,%d,%d)",
 			tableName, userData.userID, (int)time(NULL), userData.jewels, userData.jewels, RESOURCE_CHANGE_REASON_REGISTER, 0, 0);
 
-		// ×êÊ¯ÅÅĞĞ°ñ
+		// é’»çŸ³æ’è¡Œæ¦œ
 		m_pRedis->AddKeyToZSet(TBL_RANKING_JEWELS, userData.jewels, userData.userID);
 	}
 
-	// post¸øphp£¬·¢ËÍÓÊ¼şÍ¨Öª
+	// postç»™phpï¼Œå‘é€é‚®ä»¶é€šçŸ¥
 	SendHTTPUserRegisterMessage(userData.userID);
 }
 
@@ -2458,13 +2458,13 @@ void CGameLogonManage::OnUserCrossDay(int userID, int time)
 {
 	m_pRedis->SetUserCrossDayTime(userID, time);
 
-	//Çå³ıÍæ¼ÒÕ½¼¨Ïà¹Ø
+	//æ¸…é™¤ç©å®¶æˆ˜ç»©ç›¸å…³
 	if (m_pRedis)
 	{
 		m_pRedis->ClearUserGradeInfo(userID);
 	}
 
-	//ÇåÀíÍæ¼ÒÎŞĞ§ÓÊ¼şºÍ¾ãÀÖ²¿Í¨Öª
+	//æ¸…ç†ç©å®¶æ— æ•ˆé‚®ä»¶å’Œä¿±ä¹éƒ¨é€šçŸ¥
 	if (m_pRedisPHP)
 	{
 		m_pRedisPHP->ClearUserEmailSet(userID);
@@ -2473,13 +2473,13 @@ void CGameLogonManage::OnUserCrossDay(int userID, int time)
 	}
 }
 
-// ÇåÀíÊı¾İ¿â¹ıÆÚÊı¾İ
+// æ¸…ç†æ•°æ®åº“è¿‡æœŸæ•°æ®
 void CGameLogonManage::ClearDataBase()
 {
-	// »ñÈ¡ÏµÍ³ÅäÖÃ£¬¿´¿´ÊÇ·ñĞèÒª·Ö±í
+	// è·å–ç³»ç»Ÿé…ç½®ï¼Œçœ‹çœ‹æ˜¯å¦éœ€è¦åˆ†è¡¨
 	OtherConfig otherConfig = ConfigManage()->GetOtherConfig();
 
-	// ·Ö±í²»ÇåÀíÊı¾İ
+	// åˆ†è¡¨ä¸æ¸…ç†æ•°æ®
 	if (otherConfig.byIsDistributedTable)
 	{
 		return;
@@ -2519,15 +2519,15 @@ void CGameLogonManage::ClearDataBase()
 	//BillManage()->WriteBill(&m_SQLDataManage, "DELETE from %s where time<%lld",
 	//	TBL_FG_COST_ACCOUNTS, currTime - iDataExpireTime);
 
-	//"statistics_roomwincount"£¬±£´æ7ÌìµÄÊı¾İ
+	//"statistics_roomwincount"ï¼Œä¿å­˜7å¤©çš„æ•°æ®
 	BillManage()->WriteBill(&m_SQLDataManage, "DELETE from %s where time<%lld",
 		TBL_STATI_ROOM_WIN_COUNT, currTime - 7 * 24 * 60 * 60);
 }
 
-// Éú³ÉĞÂ±í¼ÇÂ¼ÕËµ¥Êı¾İ
+// ç”Ÿæˆæ–°è¡¨è®°å½•è´¦å•æ•°æ®
 void CGameLogonManage::AutoCreateNewTable(bool start)
 {
-	// »ñÈ¡ÏµÍ³ÅäÖÃ£¬¿´¿´ÊÇ·ñĞèÒª·Ö±í
+	// è·å–ç³»ç»Ÿé…ç½®ï¼Œçœ‹çœ‹æ˜¯å¦éœ€è¦åˆ†è¡¨
 	OtherConfig otherConfig = ConfigManage()->GetOtherConfig();
 
 	if (!otherConfig.byIsDistributedTable)
@@ -2540,20 +2540,20 @@ void CGameLogonManage::AutoCreateNewTable(bool start)
 	char tableName[256] = "";
 	char date[64] = "";
 
-	if (start)  //´´½¨±¾ÔÂµÄ±í
+	if (start)  //åˆ›å»ºæœ¬æœˆçš„è¡¨
 	{
 		sprintf_s(date, sizeof(date), "%d%02d", sys.wYear, sys.wMonth);
 	}
-	else //´´½¨ÏÂ¸öÔÂµÄ±í
+	else //åˆ›å»ºä¸‹ä¸ªæœˆçš„è¡¨
 	{
-		if (sys.wDay != 26 && sys.wDay != 27 && sys.wDay != 28) //Ã¿¸öÔÂÖ»ÔÚ26£¬27£¬28½øĞĞÉú³É±í
+		if (sys.wDay != 26 && sys.wDay != 27 && sys.wDay != 28) //æ¯ä¸ªæœˆåªåœ¨26ï¼Œ27ï¼Œ28è¿›è¡Œç”Ÿæˆè¡¨
 		{
 			return;
 		}
 		sprintf_s(date, sizeof(date), "%d%02d", sys.wYear, sys.wMonth == 12 ? 1 : sys.wMonth + 1);
 	}
 
-	//ÒÔÏÂ¾ÍÊÇĞèÒª·Ö±íµÄ±í
+	//ä»¥ä¸‹å°±æ˜¯éœ€è¦åˆ†è¡¨çš„è¡¨
 
 	//"statistics_logonandlogout"
 	sprintf(tableName, "%s_%s", TBL_STATI_LOGON_LOGOUT, date);
@@ -2613,7 +2613,7 @@ void CGameLogonManage::AutoCreateNewTable(bool start)
 
 //////////////////////////////////////////////////////////////////////////
 
-// ÅĞ¶ÏroomIDµÄ·şÎñÆ÷ÊÇ·ñ´æÔÚ
+// åˆ¤æ–­roomIDçš„æœåŠ¡å™¨æ˜¯å¦å­˜åœ¨
 bool CGameLogonManage::IsRoomIDServerExists(int roomID)
 {
 	if (m_pGServerManage->GetGServer(roomID) != NULL)
@@ -2624,7 +2624,7 @@ bool CGameLogonManage::IsRoomIDServerExists(int roomID)
 	return false;
 }
 
-// ×Ô¶¯¿ª·¿
+// è‡ªåŠ¨å¼€æˆ¿
 bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 {
 	int userID = deskInfo.userID;
@@ -2642,11 +2642,11 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		return false;
 	}
 
-	//»ñÈ¡roomID
+	//è·å–roomID
 	ConfigManage()->GetBuyRoomInfo(deskInfo.gameID, deskInfo.roomType, m_buyRoomVec);
 	if (m_buyRoomVec.size() <= 0)
 	{
-		ERROR_LOG("Ã»ÓĞroomID::gameID=%d,roomType=%d", deskInfo.gameID, deskInfo.roomType);
+		ERROR_LOG("æ²¡æœ‰roomID::gameID=%d,roomType=%d", deskInfo.gameID, deskInfo.roomType);
 		return false;
 	}
 	int iBuyRoomID = m_buyRoomVec[CUtil::GetRandNum() % m_buyRoomVec.size()];
@@ -2658,23 +2658,23 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		return false;
 	}
 
-	//´´½¨¾ãÀÖ²¿·¿¼ä,ÅĞ¶Ï´´½¨·¿¼äÊÇ·ñÒÑ¾­µ½´ïÉÏÏŞ
+	//åˆ›å»ºä¿±ä¹éƒ¨æˆ¿é—´,åˆ¤æ–­åˆ›å»ºæˆ¿é—´æ˜¯å¦å·²ç»åˆ°è¾¾ä¸Šé™
 	int	friendsGroupID = deskInfo.friendsGroupID;
 	int friendsGroupDeskNumber = deskInfo.friendsGroupDeskNumber;
 	if (friendsGroupID <= 0 || friendsGroupDeskNumber <= 0 || friendsGroupDeskNumber > (MAX_FRIENDSGROUP_DESK_LIST_COUNT + MAX_FRIENDSGROUP_VIP_ROOM_COUNT))
 	{
-		ERROR_LOG("¾ãÀÖ²¿Òì³£: friendsGroupID=%d,friendsGroupDeskNumber=%d", friendsGroupID, friendsGroupDeskNumber);
+		ERROR_LOG("ä¿±ä¹éƒ¨å¼‚å¸¸: friendsGroupID=%d,friendsGroupDeskNumber=%d", friendsGroupID, friendsGroupDeskNumber);
 		return false;
 	}
 
-	// ÅĞ¶Ï¾ãÀÖ²¿ÊÇ·ñ´æÔÚ
+	// åˆ¤æ–­ä¿±ä¹éƒ¨æ˜¯å¦å­˜åœ¨
 	if (!m_pRedisPHP->IsCanJoinFriendsGroupRoom(userID, friendsGroupID))
 	{
-		ERROR_LOG("¾ãÀÖ²¿²»´æÔÚ friendsGroupID=%d,userID=%d", friendsGroupID, userID);
+		ERROR_LOG("ä¿±ä¹éƒ¨ä¸å­˜åœ¨ friendsGroupID=%d,userID=%d", friendsGroupID, userID);
 		return false;
 	}
 
-	//²éÕÒÊÇ·ñÓĞÕâ¸öÅäÖÃ
+	//æŸ¥æ‰¾æ˜¯å¦æœ‰è¿™ä¸ªé…ç½®
 	BuyGameDeskInfo buyGameDeskInfo;
 	BuyGameDeskInfo* pBuyGameDeskInfo = NULL;
 	BuyGameDeskInfoKey buyDekKey(deskInfo.gameID, deskInfo.maxCount, pRoomBaseInfo->type);
@@ -2688,17 +2688,17 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 	}
 	if (!pBuyGameDeskInfo)
 	{
-		ERROR_LOG("ÅäÖÃ²»´æÔÚ:gameID=%d,count=%d,roomType=%d", deskInfo.gameID, deskInfo.maxCount, pRoomBaseInfo->type);
+		ERROR_LOG("é…ç½®ä¸å­˜åœ¨:gameID=%d,count=%d,roomType=%d", deskInfo.gameID, deskInfo.maxCount, pRoomBaseInfo->type);
 		return false;
 	}
 
-	// ½âÎöjson
+	// è§£æjson
 	int iJsonRS = 0;
 	int buyGameCount = pBuyGameDeskInfo->count;
 	int payType = PAY_TYPE_NORMAL;
 	bool bAlreadyCost = false;
 	int needCostNums = 0;
-	// ½âÎöÖ§¸¶·½Ê½
+	// è§£ææ”¯ä»˜æ–¹å¼
 	if (deskInfo.gameRules[0] != '\0')
 	{
 		Json::Reader reader;
@@ -2717,7 +2717,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		pBuyGameDeskInfo->costResType = RESOURCE_TYPE_JEWEL;
 	}
 
-	////////////////////////////////Í¬²½Êı¾İ(Ò»¸öÈË²»ÄÜÍ¬Ê±¹ºÂò×À×Ó)//////////////////////////////////////////
+	////////////////////////////////åŒæ­¥æ•°æ®(ä¸€ä¸ªäººä¸èƒ½åŒæ—¶è´­ä¹°æ¡Œå­)//////////////////////////////////////////
 	char redisLockKey[48] = "";
 	sprintf(redisLockKey, "%s|%d", TBL_USER_BUY_DESK, userID);
 	CRedisLock redisLock(m_pRedisPHP->GetRedisContext(), redisLockKey, 5);
@@ -2729,7 +2729,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 			payType = PAY_TYPE_NORMAL;
 		}
 
-		// ¼ì²é·¿¿¨
+		// æ£€æŸ¥æˆ¿å¡
 		if (payType == PAY_TYPE_NORMAL)
 		{
 			needCostNums = pBuyGameDeskInfo->costNums;
@@ -2743,7 +2743,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		{
 			if (userData.money < needCostNums)
 			{
-				ERROR_LOG("·¿Ö÷½ğ±Ò²»×ã£¬×Ô¶¯¿ª·¿Ê§°Ü,userID = %d,userData.money=%lld,needCostNums=%d", userID, userData.money, needCostNums);
+				ERROR_LOG("æˆ¿ä¸»é‡‘å¸ä¸è¶³ï¼Œè‡ªåŠ¨å¼€æˆ¿å¤±è´¥,userID = %d,userData.money=%lld,needCostNums=%d", userID, userData.money, needCostNums);
 				return false;
 			}
 		}
@@ -2751,12 +2751,12 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		{
 			if (userData.jewels < needCostNums)
 			{
-				ERROR_LOG("·¿Ö÷×êÊ¯²»×ã£¬×Ô¶¯¿ª·¿Ê§°Ü,userID = %d,userData.jewels=%d,needCostNums=%d", userID, userData.jewels, needCostNums);
+				ERROR_LOG("æˆ¿ä¸»é’»çŸ³ä¸è¶³ï¼Œè‡ªåŠ¨å¼€æˆ¿å¤±è´¥,userID = %d,userData.jewels=%d,needCostNums=%d", userID, userData.jewels, needCostNums);
 				return false;
 			}
 		}
 
-		//·¿Ö÷Ö§¸¶ÏÈ¿Û
+		//æˆ¿ä¸»æ”¯ä»˜å…ˆæ‰£
 		if (payType == PAY_TYPE_NORMAL)
 		{
 			bAlreadyCost = true;
@@ -2771,9 +2771,9 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 
 			if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY)
 			{
-				if (userData.money < needCostNums) //ÏûºÄ¾ãÀÖ²¿ÈºÖ÷µÄ
+				if (userData.money < needCostNums) //æ¶ˆè€—ä¿±ä¹éƒ¨ç¾¤ä¸»çš„
 				{
-					ERROR_LOG("·¿Ö÷½ğ±Ò²»×ã£¬×Ô¶¯¿ª·¿Ê§°Ü,userID = %d,userData.money=%lld,needCostNums=%d", userID, userData.money, needCostNums);
+					ERROR_LOG("æˆ¿ä¸»é‡‘å¸ä¸è¶³ï¼Œè‡ªåŠ¨å¼€æˆ¿å¤±è´¥,userID = %d,userData.money=%lld,needCostNums=%d", userID, userData.money, needCostNums);
 					return false;
 				}
 			}
@@ -2781,13 +2781,13 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 			{
 				if (userData.jewels < needCostNums)
 				{
-					ERROR_LOG("·¿Ö÷×êÊ¯²»×ã£¬×Ô¶¯¿ª·¿Ê§°Ü,userID = %d,userData.jewels=%d,needCostNums=%d", userID, userData.jewels, needCostNums);
+					ERROR_LOG("æˆ¿ä¸»é’»çŸ³ä¸è¶³ï¼Œè‡ªåŠ¨å¼€æˆ¿å¤±è´¥,userID = %d,userData.jewels=%d,needCostNums=%d", userID, userData.jewels, needCostNums);
 					return false;
 				}
 			}
 		}
 	}
-	else if (pRoomBaseInfo->type == ROOM_TYPE_FG_VIP)//¾ãÀÖ²¿VIP·¿
+	else if (pRoomBaseInfo->type == ROOM_TYPE_FG_VIP)//ä¿±ä¹éƒ¨VIPæˆ¿
 	{
 		if (payType == PAY_TYPE_NORMAL)
 		{
@@ -2796,9 +2796,9 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 
 			if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY)
 			{
-				if (userData.money < needCostNums) //ÏûºÄ¾ãÀÖ²¿ÈºÖ÷µÄ
+				if (userData.money < needCostNums) //æ¶ˆè€—ä¿±ä¹éƒ¨ç¾¤ä¸»çš„
 				{
-					ERROR_LOG("·¿Ö÷½ğ±Ò²»×ã£¬×Ô¶¯¿ª·¿Ê§°Ü,userID = %d,userData.money=%lld,needCostNums=%d", userID, userData.money, needCostNums);
+					ERROR_LOG("æˆ¿ä¸»é‡‘å¸ä¸è¶³ï¼Œè‡ªåŠ¨å¼€æˆ¿å¤±è´¥,userID = %d,userData.money=%lld,needCostNums=%d", userID, userData.money, needCostNums);
 					return false;
 				}
 			}
@@ -2806,7 +2806,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 			{
 				if (userData.jewels < needCostNums)
 				{
-					ERROR_LOG("·¿Ö÷×êÊ¯²»×ã£¬×Ô¶¯¿ª·¿Ê§°Ü,userID = %d,userData.jewels=%d,needCostNums=%d", userID, userData.jewels, needCostNums);
+					ERROR_LOG("æˆ¿ä¸»é’»çŸ³ä¸è¶³ï¼Œè‡ªåŠ¨å¼€æˆ¿å¤±è´¥,userID = %d,userData.jewels=%d,needCostNums=%d", userID, userData.jewels, needCostNums);
 					return false;
 				}
 			}
@@ -2814,18 +2814,18 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 	}
 	else
 	{
-		ERROR_LOG("·¿¼äÀàĞÍ´íÎó");
+		ERROR_LOG("æˆ¿é—´ç±»å‹é”™è¯¯");
 		return false;
 	}
 
 	int maxUserCount = pGameBaseInfo->deskPeople;
-	// ÌØÊâÓÎÏ·µÄ´¦Àí
+	// ç‰¹æ®Šæ¸¸æˆçš„å¤„ç†
 	if (pGameBaseInfo->multiPeopleGame)
 	{
 		maxUserCount = iJsonRS;
 	}
 
-	// ´´½¨·¿¼ä
+	// åˆ›å»ºæˆ¿é—´
 	std::string deskPasswd = m_pRedis->CreatePrivateDeskRecord(userID, pRoomBaseInfo->roomID, 1, pRoomBaseInfo->deskCount,
 		buyGameCount, deskInfo.gameRules, maxUserCount, payType, pGameBaseInfo->watcherCount, friendsGroupID, friendsGroupDeskNumber);
 	if (deskPasswd == "")
@@ -2834,7 +2834,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		return false;
 	}
 
-	//·¿Ö÷Ö§¸¶£¬ÏÈ¿Û
+	//æˆ¿ä¸»æ”¯ä»˜ï¼Œå…ˆæ‰£
 	if (bAlreadyCost && needCostNums > 0)
 	{
 		if (pBuyGameDeskInfo->costResType == RESOURCE_TYPE_JEWEL)
@@ -2842,10 +2842,10 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 			long long newJewels = userData.jewels - needCostNums;
 			m_pRedis->SetUserJewelsEx(userID, -needCostNums, true, RESOURCE_CHANGE_REASON_CREATE_ROOM, iBuyRoomID, 0, userData.isVirtual, friendsGroupID);
 
-			// ½âËø
+			// è§£é”
 			redisLock.Unlock();
 
-			// Í¨Öª×ÊÔ´±ä»¯
+			// é€šçŸ¥èµ„æºå˜åŒ–
 			NotifyResourceChange(userID, RESOURCE_TYPE_JEWEL, newJewels, RESOURCE_CHANGE_REASON_CREATE_ROOM, -needCostNums);
 		}
 		else
@@ -2853,28 +2853,28 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 			long long newGolds = userData.money - needCostNums;
 			m_pRedis->SetUserMoneyEx(userID, -needCostNums, true, RESOURCE_CHANGE_REASON_CREATE_ROOM, iBuyRoomID, 0, userData.isVirtual, friendsGroupID);
 
-			// ½âËø
+			// è§£é”
 			redisLock.Unlock();
 
-			//Ëã·¿¿¨³¡ÏµÍ³Ó®Ç®
+			//ç®—æˆ¿å¡åœºç³»ç»Ÿèµ¢é’±
 			m_pRedis->SetRoomGameWinMoney(iBuyRoomID, needCostNums, true);
 
-			// Í¨Öª×ÊÔ´±ä»¯
+			// é€šçŸ¥èµ„æºå˜åŒ–
 			NotifyResourceChange(userID, RESOURCE_TYPE_MONEY, newGolds, RESOURCE_CHANGE_REASON_CREATE_ROOM, -needCostNums);
 		}
 	}
 
-	// ½âËø
+	// è§£é”
 	redisLock.Unlock();
 
-	//Ìí¼Ó¾ãÀÖ²¿ÅÆ×ÀÏûÏ¢
+	//æ·»åŠ ä¿±ä¹éƒ¨ç‰Œæ¡Œæ¶ˆæ¯
 	OneFriendsGroupDeskInfo deskInfoMsg;
 	bool bHaveRedSpot = false;
 	bool bRet = m_pRedis->CreateFriendsGroupDeskInfo(friendsGroupID, friendsGroupDeskNumber, deskPasswd, pRoomBaseInfo->gameID, pRoomBaseInfo->type, deskInfoMsg, bHaveRedSpot);
 	if (bRet)
 	{
-		// ·¢¸øÖĞĞÄ·şÎñÆ÷£¬ÈÃÖĞĞÄ·şÎñÆ÷×ª·¢
-		//ÍÆËÍ¸øËùÓĞÔÚÏß³ÉÔ±
+		// å‘ç»™ä¸­å¿ƒæœåŠ¡å™¨ï¼Œè®©ä¸­å¿ƒæœåŠ¡å™¨è½¬å‘
+		//æ¨é€ç»™æ‰€æœ‰åœ¨çº¿æˆå‘˜
 		UINT iMessageID = friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT
 			? MSG_NTF_LOGON_FRIENDSGROUP_NEW_VIPROOM_MSG : MSG_NTF_LOGON_FRIENDSGROUP_NEW_DESK_MSG;
 		SendMessageToCenterServer(CENTER_MESSAGE_LOGON_RELAY_FG_MSG, &deskInfoMsg, sizeof(deskInfoMsg), friendsGroupID, MSG_MAIN_FRIENDSGROUP_NOTIFY, iMessageID, 0);
@@ -2897,13 +2897,13 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 	}
 	else
 	{
-		ERROR_LOG("×Ô¶¯¿ª·¿Ê§°Ü,masterID = %d , friendsGroupID = %d,friendsGroupDeskNumber = %d", userID, friendsGroupID, friendsGroupDeskNumber);
+		ERROR_LOG("è‡ªåŠ¨å¼€æˆ¿å¤±è´¥,masterID = %d , friendsGroupID = %d,friendsGroupDeskNumber = %d", userID, friendsGroupID, friendsGroupDeskNumber);
 	}
 
 	return  bRet;
 }
 
-// ÅĞ¶Ï´ËipÊÇ·ñ¿ÉÒÔ×¢²á
+// åˆ¤æ–­æ­¤ipæ˜¯å¦å¯ä»¥æ³¨å†Œ
 bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char * ip)
 {
 	if (!ip)
@@ -2926,7 +2926,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char *
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo);
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo);
 		return true;
 	}
 
@@ -2946,7 +2946,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char *
 	return true;
 }
 
-// É¾³ı³ÌĞòÉú³ÉµÄÎŞĞ§ÎÄ¼ş
+// åˆ é™¤ç¨‹åºç”Ÿæˆçš„æ— æ•ˆæ–‡ä»¶
 void CGameLogonManage::DeleteExpireFile()
 {
 	char delJsonPath[128] = "";
@@ -2955,7 +2955,7 @@ void CGameLogonManage::DeleteExpireFile()
 	system(delJsonPath);
 }
 
-// ÅĞ¶ÏÄ³¸öÍæ¼ÒÊÇ·ñÊÇÓÎ¿Í
+// åˆ¤æ–­æŸä¸ªç©å®¶æ˜¯å¦æ˜¯æ¸¸å®¢
 bool CGameLogonManage::IsVisitorUser(int userID)
 {
 	UserData userData;
@@ -2993,7 +2993,7 @@ std::string CGameLogonManage::GetRandHeadURLBySex(BYTE sex)
 	return str;
 }
 
-////////////////////////////////´¦ÀíÖĞĞÄ·şÏûÏ¢//////////////////////////////////////////
+////////////////////////////////å¤„ç†ä¸­å¿ƒæœæ¶ˆæ¯//////////////////////////////////////////
 bool CGameLogonManage::OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID)
 {
 	switch (msgID)
@@ -3068,7 +3068,7 @@ bool CGameLogonManage::OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHe
 	return false;
 }
 
-// ·şÎñÆ÷idÖØ¸´´¦Àí
+// æœåŠ¡å™¨idé‡å¤å¤„ç†
 bool CGameLogonManage::OnCenterRepeatIDMessage(void* pData, int size)
 {
 	if (size != 0)
@@ -3076,14 +3076,14 @@ bool CGameLogonManage::OnCenterRepeatIDMessage(void* pData, int size)
 		return false;
 	}
 
-	ERROR_LOG("################ ·şÎñÆ÷Î¨Ò»µÄlogonIDÖØ¸´(logonID = %d)£¬Æô¶¯Ê§°Ü£¬ÇëÖØĞÂÅäÖÃlogonID £¡£¡£¡ ####################", ConfigManage()->GetLogonServerConfig().logonID);
+	ERROR_LOG("################ æœåŠ¡å™¨å”¯ä¸€çš„logonIDé‡å¤(logonID = %d)ï¼Œå¯åŠ¨å¤±è´¥ï¼Œè¯·é‡æ–°é…ç½®logonID ï¼ï¼ï¼ ####################", ConfigManage()->GetLogonServerConfig().logonID);
 
 	exit(0);
 
 	return true;
 }
 
-// ·Ö²¼Ê½ÏµÍ³ĞÅÏ¢
+// åˆ†å¸ƒå¼ç³»ç»Ÿä¿¡æ¯
 bool CGameLogonManage::OnCenterDistributedSystemInfoMessage(void* pData, int size)
 {
 	if (size != sizeof(PlatformDistributedSystemInfo))
@@ -3104,20 +3104,20 @@ bool CGameLogonManage::OnCenterDistributedSystemInfoMessage(void* pData, int siz
 
 	if (pMessage->logonGroupCount <= 0)
 	{
-		ERROR_LOG("ÖĞĞÄ·ş·¢ËÍÊı¾İ´íÎó pMessage->logonGroupCount%d", pMessage->logonGroupCount);
+		ERROR_LOG("ä¸­å¿ƒæœå‘é€æ•°æ®é”™è¯¯ pMessage->logonGroupCount%d", pMessage->logonGroupCount);
 		return false;
 	}
 
-	// ÉèÖÃ±¾ÏµÍ³ÔÚ¼¯ÈºµÄÎ»ÖÃĞÅÏ¢
+	// è®¾ç½®æœ¬ç³»ç»Ÿåœ¨é›†ç¾¤çš„ä½ç½®ä¿¡æ¯
 	m_pRedis->m_uLogonGroupCount = pMessage->logonGroupCount;
 	m_pRedis->m_uLogonGroupIndex = pMessage->logonGroupIndex;
 	m_pRedis->m_uMainLogonGroupIndex = pMessage->mainLogonGroupIndex;
 
-	INFO_LOG("¼¯ÈºĞÅÏ¢£ºm_uLogonGroupCount = %d , m_uLogonGroupIndex = %d , m_uMainLogonGroupIndex = %d",
+	INFO_LOG("é›†ç¾¤ä¿¡æ¯ï¼šm_uLogonGroupCount = %d , m_uLogonGroupIndex = %d , m_uMainLogonGroupIndex = %d",
 		m_pRedis->m_uLogonGroupCount, m_pRedis->m_uLogonGroupIndex, m_pRedis->m_uMainLogonGroupIndex);
 
 	static bool bStart = false;
-	// Æô¶¯Éú³É·Ö±í
+	// å¯åŠ¨ç”Ÿæˆåˆ†è¡¨
 	if (m_pRedis->m_uLogonGroupIndex == 0 && !bStart)
 	{
 		bStart = true;
@@ -3127,7 +3127,7 @@ bool CGameLogonManage::OnCenterDistributedSystemInfoMessage(void* pData, int siz
 	return true;
 }
 
-// Ìßµô±¾·ş¾ÉÍæ¼Ò£¨²»Í¬Éè±¸Í¬Ê±µÇÂ½Ê¹ÓÃ£©
+// è¸¢æ‰æœ¬æœæ—§ç©å®¶ï¼ˆä¸åŒè®¾å¤‡åŒæ—¶ç™»é™†ä½¿ç”¨ï¼‰
 bool CGameLogonManage::OnCenterKickOldUserMessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformRepeatUserLogon))
@@ -3146,30 +3146,30 @@ bool CGameLogonManage::OnCenterKickOldUserMessage(void* pData, UINT size)
 		return false;
 	}
 
-	// Íæ¼ÒÊÇ·ñµÇÂ¼ÁË
+	// ç©å®¶æ˜¯å¦ç™»å½•äº†
 	LogonUserInfo* pUser = m_pUserManage->GetUser(pMessage->userID);
 	if (pUser)
 	{
 		int oldSocketIdx = pUser->socketIdx;
 
-		// ²»Í¬Éè±¸
+		// ä¸åŒè®¾å¤‡
 		m_TCPSocket.SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0, 0);
 		//m_TCPSocket.CloseSocket(oldSocketIdx);
 
-		// ÇåÀíÍæ¼ÒÄÚ´æ
+		// æ¸…ç†ç©å®¶å†…å­˜
 		m_pUserManage->DelUser(pMessage->userID);
 		DelSocketIdx(oldSocketIdx);
 	}
 	else
 	{
-		ERROR_LOG("¾É·şÎñÆ÷²»´æÔÚÍæ¼Ò:userID=%d", pMessage->userID);
+		ERROR_LOG("æ—§æœåŠ¡å™¨ä¸å­˜åœ¨ç©å®¶:userID=%d", pMessage->userID);
 		return false;
 	}
 
 	return true;
 }
 
-// ÌßÈËµôÏßÏûÏ¢(·âºÅÊ¹ÓÃ)
+// è¸¢äººæ‰çº¿æ¶ˆæ¯(å°å·ä½¿ç”¨)
 bool CGameLogonManage::OnCenterKickUserMessage(void* pData, int size, int userID)
 {
 	if (size != 0)
@@ -3177,18 +3177,18 @@ bool CGameLogonManage::OnCenterKickUserMessage(void* pData, int size, int userID
 		return false;
 	}
 
-	// Íæ¼ÒÊÇ·ñµÇÂ¼ÁË
+	// ç©å®¶æ˜¯å¦ç™»å½•äº†
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (pUser)
 	{
-		INFO_LOG("ÊÕµ½ÖĞĞÄ·şÌßÈËÏûÏ¢,userID=%d", userID);
+		INFO_LOG("æ”¶åˆ°ä¸­å¿ƒæœè¸¢äººæ¶ˆæ¯,userID=%d", userID);
 		return m_TCPSocket.OnSocketClose(pUser->socketIdx);
 	}
 
 	return true;
 }
 
-// ·¢²¼¹«¸æ
+// å‘å¸ƒå…¬å‘Š
 bool CGameLogonManage::OnCenterNoticeMessage(void* pData, int size)
 {
 	if (size != sizeof(PlatformNoticeMessage))
@@ -3207,20 +3207,20 @@ bool CGameLogonManage::OnCenterNoticeMessage(void* pData, int size)
 	memcpy(msg.tile, pMessage->tile, sizeof(msg.tile));
 	memcpy(msg.content, pMessage->content, sizeof(msg.content));
 	msg.interval = pMessage->interval;
-	msg.times = pMessage->times;		// ¸æËßÇ°¶ËµÄ¶¼Ö»ÓĞÒ»´Î
+	msg.times = pMessage->times;		// å‘Šè¯‰å‰ç«¯çš„éƒ½åªæœ‰ä¸€æ¬¡
 	msg.type = pMessage->type;
 
-	// ¼ÆËã·¢ËÍ×Ö½ÚÊıÁ¿
+	// è®¡ç®—å‘é€å­—èŠ‚æ•°é‡
 	msg.sizeCount = min(strlen(msg.content) + 1, sizeof(msg.content));
 	int iSendSize = 40 + msg.sizeCount;
 
-	// È«·şÔÚÏßÍæ¼Ò·¢ËÍ¹«¸æ
+	// å…¨æœåœ¨çº¿ç©å®¶å‘é€å…¬å‘Š
 	SendDataBatch(&msg, iSendSize, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_NOTICE, 0);
 
 	return true;
 }
 
-// È«·şÓÊ¼şÍ¨Öª
+// å…¨æœé‚®ä»¶é€šçŸ¥
 bool CGameLogonManage::OnCenterAllUserMailMessage(void* pData, int size)
 {
 	if (size != 0)
@@ -3250,7 +3250,7 @@ bool CGameLogonManage::OnCenterAllUserMailMessage(void* pData, int size)
 	return true;
 }
 
-// ¹Ø·ş´¦Àí
+// å…³æœå¤„ç†
 bool CGameLogonManage::OnCenterCloseServerMessage(void* pData, int size)
 {
 	if (size != 0)
@@ -3265,7 +3265,7 @@ bool CGameLogonManage::OnCenterCloseServerMessage(void* pData, int size)
 
 	time_t currTime = time(NULL);
 
-	// Í³¼ÆÔÚÏßÊ±³¤£¬ÒÔ¼°·¢ËÍ¹Ø·şÍ¨Öª
+	// ç»Ÿè®¡åœ¨çº¿æ—¶é•¿ï¼Œä»¥åŠå‘é€å…³æœé€šçŸ¥
 	const auto& onlineUserMap = m_pUserManage->GetLogonUserInfoMap();
 	for (auto iter = onlineUserMap.begin(); iter != onlineUserMap.end(); ++iter)
 	{
@@ -3281,20 +3281,20 @@ bool CGameLogonManage::OnCenterCloseServerMessage(void* pData, int size)
 
 			m_pRedis->SetUserInfo(userID, " IsOnline 0 ");
 
-			//·¢ËÍÏûÏ¢Í¨ÖªÏÂÏß
+			//å‘é€æ¶ˆæ¯é€šçŸ¥ä¸‹çº¿
 			SendData(userID, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_CLOSE_SERVER, 0);
 		}
 	}
 
-	//±£´æËùÓĞÊı¾İµ½db
+	//ä¿å­˜æ‰€æœ‰æ•°æ®åˆ°db
 	RountineSaveRedisDataToDB(true);
 
-	INFO_LOG("==========LogonServer ¹Ø±Õ³É¹¦===========");
+	INFO_LOG("==========LogonServer å…³é—­æˆåŠŸ===========");
 
 	return true;
 }
 
-// ¿ª·ş´¦Àí
+// å¼€æœå¤„ç†
 bool CGameLogonManage::OnCenterOpenServerMessage(void* pData, int size)
 {
 	if (!m_pRedis)
@@ -3302,11 +3302,11 @@ bool CGameLogonManage::OnCenterOpenServerMessage(void* pData, int size)
 		return false;
 	}
 
-	AUTOCOST("¿ª·şºÄÊ±£¬Êı¾İ»Ö¸´");
+	AUTOCOST("å¼€æœè€—æ—¶ï¼Œæ•°æ®æ¢å¤");
 
 	int iAllData = 0, iSaveData = 0;
 
-	// »ñÈ¡±£´æµÄÊı¾İ
+	// è·å–ä¿å­˜çš„æ•°æ®
 	std::vector<SaveRedisFriendsGroupDesk> vecSaveRedisFriendsGroupDesk;
 	iAllData = m_pRedis->GetAllTempFgDesk(vecSaveRedisFriendsGroupDesk);
 
@@ -3314,7 +3314,7 @@ bool CGameLogonManage::OnCenterOpenServerMessage(void* pData, int size)
 	{
 		if (!AutoCreateRoom(vecSaveRedisFriendsGroupDesk[i]))
 		{
-			ERROR_LOG("»Ö¸´ÅÆ×ÀÊ§°Ü userID = %d friendsGroupID = %d,friendsGroupDeskNumber = %d", vecSaveRedisFriendsGroupDesk[i].userID,
+			ERROR_LOG("æ¢å¤ç‰Œæ¡Œå¤±è´¥ userID = %d friendsGroupID = %d,friendsGroupDeskNumber = %d", vecSaveRedisFriendsGroupDesk[i].userID,
 				vecSaveRedisFriendsGroupDesk[i].friendsGroupID, vecSaveRedisFriendsGroupDesk[i].friendsGroupDeskNumber);
 			continue;
 		}
@@ -3322,14 +3322,14 @@ bool CGameLogonManage::OnCenterOpenServerMessage(void* pData, int size)
 		iSaveData++;
 	}
 
-	INFO_LOG("±¾·ş»Ö¸´ÁË%d/%d¸öÅÆ×À", iSaveData, iAllData);
+	INFO_LOG("æœ¬æœæ¢å¤äº†%d/%dä¸ªç‰Œæ¡Œ", iSaveData, iAllData);
 
-	INFO_LOG("========LogonServer »Ö¸´Êı¾İ³É¹¦========");
+	INFO_LOG("========LogonServer æ¢å¤æ•°æ®æˆåŠŸ========");
 
 	return true;
 }
 
-// Íæ¼Ò·¢ËÍÀ®°È
+// ç©å®¶å‘é€å–‡å­
 bool CGameLogonManage::OnCenterSendHornMessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformHorn))
@@ -3349,26 +3349,26 @@ bool CGameLogonManage::OnCenterSendHornMessage(void* pData, UINT size)
 	memcpy(msg.userName, pMessage->userName, sizeof(msg.userName));
 	msg.userID = pMessage->userID;
 
-	// ¼ÆËã·¢ËÍ×Ö½ÚÊıÁ¿
+	// è®¡ç®—å‘é€å­—èŠ‚æ•°é‡
 	msg.sizeCount = min(strlen(msg.content) + 1, sizeof(msg.content));
 	int iSendSize = 72 + msg.sizeCount;
 
-	// ¹ã²¥Õâ¸ö¹«¸æ
+	// å¹¿æ’­è¿™ä¸ªå…¬å‘Š
 	SendDataBatch(&msg, iSendSize, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_HORN, 0);
 
 	return true;
 }
 
-// ÏòÄ³¸öÍæ¼ÒÍÆËÍÏûÏ¢
+// å‘æŸä¸ªç©å®¶æ¨é€æ¶ˆæ¯
 bool CGameLogonManage::OnCenterNotifyUserMessage(NetMessageHead * pNetHead, void* pData, int size, int userID)
 {
-	// Ö±½Ó·¢ËÍÊı¾İ¸øÓÃ»§
+	// ç›´æ¥å‘é€æ•°æ®ç»™ç”¨æˆ·
 	SendData(userID, pData, size, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode);
 
 	return true;
 }
 
-// ÖĞĞÄ·ş×Ô¶¯¿ª·¿
+// ä¸­å¿ƒæœè‡ªåŠ¨å¼€æˆ¿
 bool CGameLogonManage::OnCenterAutoCreateRoomMessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformAutoCreateRoom))
@@ -3399,10 +3399,10 @@ bool CGameLogonManage::OnCenterAutoCreateRoomMessage(void* pData, UINT size)
 	bool bRet = AutoCreateRoom(deskInfo);
 	if (!bRet)
 	{
-		// É¾³ıredisÖĞµÄÅÆ×À
+		// åˆ é™¤redisä¸­çš„ç‰Œæ¡Œ
 		m_pRedis->DelFGDeskRoom(friendsGroupID, friendsGroupDeskNumber);
 
-		ERROR_LOG("×Ô¶¯¿ª·¿Ê§°Ü,masterID = %d , friendsGroupID = %d,friendsGroupDeskNumber = %d", masterID, friendsGroupID, friendsGroupDeskNumber);
+		ERROR_LOG("è‡ªåŠ¨å¼€æˆ¿å¤±è´¥,masterID = %d , friendsGroupID = %d,friendsGroupDeskNumber = %d", masterID, friendsGroupID, friendsGroupDeskNumber);
 	}
 
 	return true;
@@ -3423,23 +3423,23 @@ bool CGameLogonManage::OnCenterPhoneInfoMessage(void* pData, int size)
 
 	if (CUtil::IsContainDirtyWord(pMessage->name))
 	{
-		ERROR_LOG("name°üº¬·Ç·¨´Ê£º%s", pMessage->name);
+		ERROR_LOG("nameåŒ…å«éæ³•è¯ï¼š%s", pMessage->name);
 		return false;
 	}
 
 	if (m_pRedis->GetUserIDByPhone(pMessage->phone) > 0)
 	{
-		ERROR_LOG("ÕËºÅÒÑ¾­´æÔÚ,phone=%s", pMessage->phone);
+		ERROR_LOG("è´¦å·å·²ç»å­˜åœ¨,phone=%s", pMessage->phone);
 		return false;
 	}
 
 	UserData userData = *pMessage;
 
-	// ±£´æµ½redis
+	// ä¿å­˜åˆ°redis
 	int ret = m_pRedis->Register(userData, LOGON_TEL_PHONE);
 	if (ret < 0)
 	{
-		ERROR_LOG("×¢²áÕËºÅÊ§°Ü:phone=%s,userID=%d,name=%s", userData.phone, userData.userID, userData.name);
+		ERROR_LOG("æ³¨å†Œè´¦å·å¤±è´¥:phone=%s,userID=%d,name=%s", userData.phone, userData.userID, userData.name);
 		return false;
 	}
 
@@ -3454,22 +3454,22 @@ bool CGameLogonManage::OnCenterActivityRewardsMessage(void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, LogonNotifyActivity, pData, size);
 
-	// È«·şÍÆËÍ
+	// å…¨æœæ¨é€
 	LogonNotifyActivity msg;
 
 	memcpy(msg.content, pMessage->content, sizeof(msg.content));
 	msg.sizeCount = pMessage->sizeCount;
 
-	// ¼ÆËã·¢ËÍ×Ö½ÚÊıÁ¿
+	// è®¡ç®—å‘é€å­—èŠ‚æ•°é‡
 	int iSendSize = 4 + msg.sizeCount;
 
-	// ¹ã²¥Õâ¸ö¹«¸æ
+	// å¹¿æ’­è¿™ä¸ªå…¬å‘Š
 	SendDataBatch(&msg, iSendSize, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_REWARD_ACTIVITY, 0);
 
 	return true;
 }
 
-// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨ÊµÊ±Èü£©
+// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®æ—¶èµ›ï¼‰
 bool CGameLogonManage::OnCenterSignUpMatchMessage(void* pData, UINT size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchPeople, pData, size);
@@ -3490,7 +3490,7 @@ bool CGameLogonManage::OnCenterSignUpMatchMessage(void* pData, UINT size)
 	return true;
 }
 
-// ±ÈÈü³¡Í¨ÖªÍæ¼Ò½øÈë±ÈÈü
+// æ¯”èµ›åœºé€šçŸ¥ç©å®¶è¿›å…¥æ¯”èµ›
 bool CGameLogonManage::OnCenterLoaderStartMatchMessage(void* pData, UINT size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformLoaderNotifyStartMatch, pData, size);
@@ -3512,7 +3512,7 @@ bool CGameLogonManage::OnCenterLoaderStartMatchMessage(void* pData, UINT size)
 	return true;
 }
 
-// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨¶¨Ê±Èü£©
+// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®šæ—¶èµ›ï¼‰
 bool CGameLogonManage::OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchTime, pData, size);
@@ -3534,7 +3534,7 @@ bool CGameLogonManage::OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT si
 //////////////////////////////////////////////////////////////////////////
 void CGameLogonManage::SendHTTPMessage(int userID, const std::string &url, BYTE postType)
 {
-	// HTTPÇëÇó
+	// HTTPè¯·æ±‚
 	LoaderAsyncHTTP asyncEvent;
 	asyncEvent.userID = userID;
 	strcpy_s(asyncEvent.url, sizeof(asyncEvent.url), url.c_str());
@@ -3559,7 +3559,7 @@ bool CGameLogonManage::SendHTTPUserRegisterMessage(int userID)
 	char bufUserID[20] = "";
 	sprintf_s(bufUserID, 20, "%d", userID);
 
-	//×éºÏÉú³ÉURL
+	//ç»„åˆç”ŸæˆURL
 	std::string url = "http://";
 	url += otherConfig.http;
 	url += "/hm_ucenter/web/index.php?api=c&action=userRegister&userID=";
@@ -3586,14 +3586,14 @@ bool CGameLogonManage::SendHTTPUserLogonLogout(int userID, BYTE type)
 	char bufUserID[20] = "";
 	sprintf_s(bufUserID, 20, "%d", userID);
 
-	//×éºÏÉú³ÉURL
+	//ç»„åˆç”ŸæˆURL
 	std::string url = "http://";
 	url += ConfigManage()->GetOtherConfig().http;
-	if (type == 0)  // µÇÂ½
+	if (type == 0)  // ç™»é™†
 	{
 		url += "/hm_ucenter/web/index.php?api=c&action=userLogin&userID=";
 	}
-	else // µÇ³ö
+	else // ç™»å‡º
 	{
 		url += "/hm_ucenter/web/index.php?api=c&action=userLogout&userID=";
 	}

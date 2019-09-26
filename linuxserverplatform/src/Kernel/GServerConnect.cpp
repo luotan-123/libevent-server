@@ -13,7 +13,7 @@
 // CGServerClient
 CGServerClient::CGServerClient()
 {
-	m_pDataLine = NULL;			//¹²ÏíµÄdataline¶ÔÏó
+	m_pDataLine = NULL;			//å…±äº«çš„datalineå¯¹è±¡
 	m_pCGServerConnect = NULL;
 	m_index = 0;
 	m_port = 0;
@@ -88,7 +88,7 @@ bool CGServerClient::Connect()
 		m_ReConnectCount = 0;
 		m_socket = sock;
 
-		//·¢ËÍÈÏÖ¤ÏûÏ¢
+		//å‘é€è®¤è¯æ¶ˆæ¯
 		PlatformLogonServerVerify msg;
 		msg.roomID = m_pCGServerConnect->GetRoomID();
 		memcpy(msg.passwd, ConfigManage()->m_loaderServerConfig.logonserverPasswd, sizeof(msg.passwd));
@@ -97,7 +97,7 @@ bool CGServerClient::Connect()
 		return true;
 	}
 
-	ERROR_LOG("Á¬½ÓµÇÂ½·şÎñÆ÷Ê§°Ü£¬ÉÔºó»áÖØÁ¬¡£roomID=%d,ip=%s,port=%d", m_pCGServerConnect->GetRoomID(), m_ip, m_port);
+	ERROR_LOG("è¿æ¥ç™»é™†æœåŠ¡å™¨å¤±è´¥ï¼Œç¨åä¼šé‡è¿ã€‚roomID=%d,ip=%s,port=%d", m_pCGServerConnect->GetRoomID(), m_ip, m_port);
 
 	return false;
 }
@@ -116,7 +116,7 @@ bool CGServerClient::OnRead()
 		return false;
 	}
 
-	// ½ÓÊÜÊı¾İ
+	// æ¥å—æ•°æ®
 	int recvBytes = recv(m_socket, m_recvBuf + m_remainRecvBytes, sizeof(m_recvBuf) - m_remainRecvBytes, 0);
 	if (recvBytes <= 0)
 	{
@@ -128,11 +128,11 @@ bool CGServerClient::OnRead()
 	NetMessageHead* pHead = (NetMessageHead*)m_recvBuf;
 	if (!pHead)
 	{
-		// ÕâÀï²»Ì«¿ÉÄÜ
+		// è¿™é‡Œä¸å¤ªå¯èƒ½
 		return false;
 	}
 
-	// ´¦ÀíÊı¾İ
+	// å¤„ç†æ•°æ®
 	while (m_remainRecvBytes >= sizeof(NetMessageHead) && m_remainRecvBytes >= (int)pHead->uMessageSize)
 	{
 		UINT messageSize = pHead->uMessageSize;
@@ -140,20 +140,20 @@ bool CGServerClient::OnRead()
 		void* pData = NULL;
 		if (realSize < 0)
 		{
-			ERROR_LOG("°üÍ·×Ö½Ú´óĞ¡´íÎó¡£ÒÑ¶ªÆú£º%d×Ö½Ú£¬ÊÕµ½Êı¾İ£º%d×Ö½Ú", m_remainRecvBytes, recvBytes);
+			ERROR_LOG("åŒ…å¤´å­—èŠ‚å¤§å°é”™è¯¯ã€‚å·²ä¸¢å¼ƒï¼š%då­—èŠ‚ï¼Œæ”¶åˆ°æ•°æ®ï¼š%då­—èŠ‚", m_remainRecvBytes, recvBytes);
 
-			// ¶ª°ü
+			// ä¸¢åŒ…
 			m_remainRecvBytes = 0;
 			return false;
 		}
 
 		if (realSize > 0)
 		{
-			// Ã»Êı¾İ¾ÍÎªNULL
+			// æ²¡æ•°æ®å°±ä¸ºNULL
 			pData = (void*)(m_recvBuf + sizeof(NetMessageHead));
 		}
 
-		if (pHead->uMainID != MDM_CONNECT)	// ¹ıÂËµôÁ¬½Ó²âÊÔÏûÏ¢
+		if (pHead->uMainID != MDM_CONNECT)	// è¿‡æ»¤æ‰è¿æ¥æµ‹è¯•æ¶ˆæ¯
 		{
 			SocketReadLine msg;
 
@@ -167,11 +167,11 @@ bool CGServerClient::OnRead()
 
 			if (addBytes == 0)
 			{
-				ERROR_LOG("Í¶µİÏûÏ¢Ê§°Ü,size=%d", realSize);
+				ERROR_LOG("æŠ•é€’æ¶ˆæ¯å¤±è´¥,size=%d", realSize);
 			}
 		}
 
-		// ÓĞÄÚ´æÖØµşµÄÊ±ºò£¬²»ÄÜÓÃmemcpy Ö»ÄÜÓÃmemmove
+		// æœ‰å†…å­˜é‡å çš„æ—¶å€™ï¼Œä¸èƒ½ç”¨memcpy åªèƒ½ç”¨memmove
 		memmove(m_recvBuf, m_recvBuf + messageSize, m_remainRecvBytes - messageSize);
 		m_remainRecvBytes -= messageSize;
 	}
@@ -188,7 +188,7 @@ bool CGServerClient::Send(const void* pData, int size)
 		return false;
 	}
 
-	// ¼ì²éÊÇ·ñÓĞÖÍÁôÊı¾İ
+	// æ£€æŸ¥æ˜¯å¦æœ‰æ»ç•™æ•°æ®
 	int bytes = 0;
 	while (m_remainSendBytes > 0)
 	{
@@ -215,7 +215,7 @@ bool CGServerClient::Send(const void* pData, int size)
 	memcpy(m_sendBuf + m_remainSendBytes, pData, size);
 	m_remainSendBytes += size;
 
-	// ¾ÍÖ»·¢ËÍÒ»´Î°É
+	// å°±åªå‘é€ä¸€æ¬¡å§
 	bytes = send(m_socket, m_sendBuf, m_remainSendBytes, 0);
 	if (bytes > 0)
 	{
@@ -331,10 +331,10 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	m_pDataLine = pDataLine;
 	m_roomID = roomID;
 
-	////½¨Á¢ÊÂ¼ş
+	////å»ºç«‹äº‹ä»¶
 	//m_hEventThread = ::CreateEvent(NULL, true, false, NULL);
 
-	// ·ÖÅäÄÚ´æ
+	// åˆ†é…å†…å­˜
 	m_socketVec.clear();
 	int iSocketIndex = 0;
 	for (auto itr = ConfigManage()->m_logonBaseInfoMap.begin(); itr != ConfigManage()->m_logonBaseInfoMap.end(); itr++)
@@ -350,7 +350,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 		iSocketIndex++;
 	}
 
-	// »ñÈ¡Ïß³ÌÊıÁ¿²ÎÊı
+	// è·å–çº¿ç¨‹æ•°é‡å‚æ•°
 	int recvThreadNumber = ConfigManage()->m_loaderServerConfig.recvThreadNumber;
 	if (recvThreadNumber < 1)
 	{
@@ -358,7 +358,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	}
 	recvThreadNumber = Min_(recvThreadNumber, (int)m_socketVec.size());
 
-	// ½¨Á¢¼ì²âÁ¬½ÓÏß³Ì
+	// å»ºç«‹æ£€æµ‹è¿æ¥çº¿ç¨‹
 	pthread_t connectThreadID = 0;
 	int err = pthread_create(&connectThreadID, NULL, ThreadCheckConnect, (void*)this);
 	if (err != 0)
@@ -373,7 +373,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	/*::WaitForSingleObject(m_hEventThread, INFINITE);
 	::ResetEvent(m_hEventThread);*/
 
-	// ½¨Á¢ÊÕ·¢Êı¾İÏß³Ì
+	// å»ºç«‹æ”¶å‘æ•°æ®çº¿ç¨‹
 	m_threadIDToIndexMap.clear();
 	for (int i = 0; i < recvThreadNumber; i++)
 	{
@@ -410,7 +410,7 @@ bool CGServerConnect::Stop()
 
 	m_running = false;
 
-	//¹Ø±Õ SOCKET
+	//å…³é—­ SOCKET
 	for (size_t i = 0; i < m_socketVec.size(); i++)
 	{
 		CGServerClient* pGServerClient = m_socketVec[i];
@@ -420,21 +420,21 @@ bool CGServerConnect::Stop()
 		}
 	}
 
-	////¹Ø±ÕÊÂ¼ş
+	////å…³é—­äº‹ä»¶
 	//if (m_hEventThread)
 	//{
 	//	CloseHandle(m_hEventThread);
 	//	m_hEventThread = NULL;
 	//}
 
-	// ¹Ø±Õ¼ì²âÁ¬½ÓÏß³Ì¾ä±ú£¨Ç¿É±Ïß³Ì£©
+	// å…³é—­æ£€æµ‹è¿æ¥çº¿ç¨‹å¥æŸ„ï¼ˆå¼ºæ€çº¿ç¨‹ï¼‰
 	if (m_hThreadCheckConnect)
 	{
 		pthread_cancel(m_hThreadCheckConnect);
 		m_hThreadCheckConnect = 0;
 	}
 
-	// ÊÍ·ÅÄÚ´æ
+	// é‡Šæ”¾å†…å­˜
 	for (size_t i = 0; i < m_socketVec.size(); i++)
 	{
 		SAFE_DELETE(m_socketVec[i]);
@@ -468,12 +468,12 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 		return false;
 	}
 
-	// ÕûºÏÒ»ÏÂÊı¾İ
+	// æ•´åˆä¸€ä¸‹æ•°æ®
 	char buf[MAX_TEMP_SENDBUF_SIZE] = "";
 
 	int pos = 0;
 
-	// Æ´½Ó°üÍ·
+	// æ‹¼æ¥åŒ…å¤´
 	NetMessageHead* pHead = (NetMessageHead*)buf;
 	pHead->uMainID = mainID;
 	pHead->uAssistantID = assistID;
@@ -483,14 +483,14 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 
 	pos += sizeof(NetMessageHead);
 
-	// °üÌå
+	// åŒ…ä½“
 	if (pData && size > 0)
 	{
 		memcpy(buf + pos, pData, size);
 		pos += size;
 	}
 
-	// ½»¸ø¾ßÌåµÄsocket
+	// äº¤ç»™å…·ä½“çš„socket
 	pTcpSocket->Send(buf, pos);
 
 	return true;
@@ -508,9 +508,9 @@ const std::vector<CGServerClient*>& CGServerConnect::GetSocketVec()
 
 void CGServerConnect::GetIndexByThreadID(pthread_t uThreadID, size_t& uMin, size_t& uMax)
 {
-	// ¸ºÔØ¾ùºâËã·¨£º
+	// è´Ÿè½½å‡è¡¡ç®—æ³•ï¼š
 
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	uMin = 0;
 	uMax = 0;
 
@@ -542,7 +542,7 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
-	//// Í¨ÖªÖ÷Ïß³Ì¶ÁÈ¡Ïß³Ì²ÎÊıÍê³É
+	//// é€šçŸ¥ä¸»çº¿ç¨‹è¯»å–çº¿ç¨‹å‚æ•°å®Œæˆ
 	//SetEvent(pThis->m_hEventThread);
 
 	while (true)
@@ -552,12 +552,12 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 			break;
 		}
 
-		// »ñÈ¡socketÊı×é
+		// è·å–socketæ•°ç»„
 		const std::vector<CGServerClient*>& vecSocket = pThis->GetSocketVec();
 
 		try
 		{
-			// ¼ì²âÁ¬½Ó
+			// æ£€æµ‹è¿æ¥
 			for (size_t i = 0; i < vecSocket.size(); i++)
 			{
 				CGServerClient* pGServerClient = vecSocket[i];
@@ -577,7 +577,7 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 			CON_ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 		}
 
-		// ¹ıÒ»¶ÎÊ±¼äÖ´ĞĞÒ»´Î
+		// è¿‡ä¸€æ®µæ—¶é—´æ‰§è¡Œä¸€æ¬¡
 		sleep(6);
 	}
 
@@ -596,7 +596,7 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
-	//// Í¨ÖªÖ÷Ïß³Ì¶ÁÈ¡Ïß³Ì²ÎÊıÍê³É
+	//// é€šçŸ¥ä¸»çº¿ç¨‹è¯»å–çº¿ç¨‹å‚æ•°å®Œæˆ
 	//SetEvent(pThis->m_hEventThread);
 
 	sleep(2);
@@ -607,19 +607,19 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 
 	if (uMinIndex == uMaxIndex)
 	{
-		INFO_LOG("µÇÂ¼·şÊıÁ¿¹ıÉÙ£¬µ±Ç°Ïß³Ì£¨%lu£©²»ĞèÒª²ÎÓëÊÕ·¢Êı¾İ", threadID);
+		INFO_LOG("ç™»å½•æœæ•°é‡è¿‡å°‘ï¼Œå½“å‰çº¿ç¨‹ï¼ˆ%luï¼‰ä¸éœ€è¦å‚ä¸æ”¶å‘æ•°æ®", threadID);
 		return 0;
 	}
 
-	INFO_LOG("¼àÌıË÷Òı min=%lu,max=%lu", uMinIndex, uMaxIndex);
+	INFO_LOG("ç›‘å¬ç´¢å¼• min=%lu,max=%lu", uMinIndex, uMaxIndex);
 
-	// ÉèÖÃselect³¬Ê±Ê±¼ä
+	// è®¾ç½®selectè¶…æ—¶æ—¶é—´
 	timeval selectTv = { 0, 500000 };
 
-	// »ñÈ¡socketÊı×é
+	// è·å–socketæ•°ç»„
 	const std::vector<CGServerClient*>& vecSocket = pThis->GetSocketVec();
 
-	// ¶¨Òåfd_set±äÁ¿
+	// å®šä¹‰fd_setå˜é‡
 	fd_set fdRead;
 
 	while (pThis->m_running == true)
@@ -629,7 +629,7 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 			FD_ZERO(&fdRead);
 			int max_fd = 0;
 
-			// ½«socket¼ÓÈëÊı×é
+			// å°†socketåŠ å…¥æ•°ç»„
 			for (size_t i = uMinIndex; i < uMaxIndex && i < vecSocket.size(); i++)
 			{
 				CGServerClient* pGServerClient = vecSocket[i];
@@ -645,7 +645,7 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 				}
 			}
 
-			// Ã»ÓĞÈÎºÎsocket
+			// æ²¡æœ‰ä»»ä½•socket
 			if (max_fd == 0)
 			{
 				sleep(1);
@@ -655,18 +655,18 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 			int ret = select(max_fd + 1, &fdRead, NULL, NULL, NULL);
 			if (ret == -1)
 			{
-				//Êä³ö´íÎóÏûÏ¢
+				//è¾“å‡ºé”™è¯¯æ¶ˆæ¯
 				SYS_ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit #####");
 				continue;
 			}
 
 			if (ret == 0)
 			{
-				// Õı³£
+				// æ­£å¸¸
 				continue;
 			}
 
-			// ¶ÁĞ´Êı¾İ
+			// è¯»å†™æ•°æ®
 			for (size_t i = uMinIndex; i < uMaxIndex && i < vecSocket.size(); i++)
 			{
 				CGServerClient* pGServerClient = vecSocket[i];

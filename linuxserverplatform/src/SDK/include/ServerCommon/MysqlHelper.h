@@ -7,7 +7,7 @@
 using namespace std;
 
 /*********************
-*@brief Êı¾İ¿âÒì³£Àà
+*@brief æ•°æ®åº“å¼‚å¸¸ç±»
 **********************/
 struct MysqlHelper_Exception //: public TC_Exception
 {
@@ -18,31 +18,31 @@ struct MysqlHelper_Exception //: public TC_Exception
 };
 
 /***********************
-* @brief Êı¾İ¿âÅäÖÃ½Ó¿Ú
+* @brief æ•°æ®åº“é…ç½®æ¥å£
 ***********************/
 struct DBConf
 {
-	string _host;//Ö÷»úµØÖ·
-	string _user; //ÓÃ»§Ãû 
-	string _password;//ÃÜÂë
-	string _database; //Êı¾İ¿â
-	string _charset; //×Ö·û¼¯
-	int _port;//¶Ë¿Ú
-	int _flag; //¿Í»§¶Ë±êÊ¶
+	string _host;//ä¸»æœºåœ°å€
+	string _user; //ç”¨æˆ·å 
+	string _password;//å¯†ç 
+	string _database; //æ•°æ®åº“
+	string _charset; //å­—ç¬¦é›†
+	int _port;//ç«¯å£
+	int _flag; //å®¢æˆ·ç«¯æ ‡è¯†
 
 	/*****************
-	* @brief ¹¹Ôìº¯Êı
+	* @brief æ„é€ å‡½æ•°
 	*****************/
 	DBConf() :_port(0), _flag(0) {}
 
 	/**********************************
-	* @brief ¶ÁÈ¡Êı¾İ¿âÅäÖÃ.
-	* @param mpParam ´æ·ÅÊı¾İ¿âÅäÖÃµÄmap
-	* dbhost: Ö÷»úµØÖ·
-	* dbuser:ÓÃ»§Ãû
-	* dbpass:ÃÜÂë
-	* dbname:Êı¾İ¿âÃû³Æ
-	* dbport:¶Ë¿Ú
+	* @brief è¯»å–æ•°æ®åº“é…ç½®.
+	* @param mpParam å­˜æ”¾æ•°æ®åº“é…ç½®çš„map
+	* dbhost: ä¸»æœºåœ°å€
+	* dbuser:ç”¨æˆ·å
+	* dbpass:å¯†ç 
+	* dbname:æ•°æ®åº“åç§°
+	* dbport:ç«¯å£
 	**********************************/
 	void loadFromMap(const map<string, string>& mpParam)
 	{
@@ -64,134 +64,134 @@ struct DBConf
 };
 
 /**************************************************************
-* @brief:MySQLÊı¾İ¿â²Ù×÷Àà
-* @feature:·ÇÏß³Ì°²È«£¬Í¨³£Ò»¸öÏß³ÌÒ»¸öCMysqlHelper¶ÔÏó£»
-* ¶ÔÓÚinsert/update¿ÉÒÔÓĞ¸üºÃµÄº¯Êı·â×°£¬±£Ö¤SQL×¢Èë£»
-* CMysqlHelper::DB_INT±íÊ¾×é×°sqlÓï¾äÊ±£¬²»¼Ó¡±¡±ºÍ×ªÒå£»
-* CMysqlHelper::DB_STR±íÊ¾×é×°sqlÓï¾äÊ±£¬¼Ó¡±¡±²¢×ªÒå£»
+* @brief:MySQLæ•°æ®åº“æ“ä½œç±»
+* @feature:éçº¿ç¨‹å®‰å…¨ï¼Œé€šå¸¸ä¸€ä¸ªçº¿ç¨‹ä¸€ä¸ªCMysqlHelperå¯¹è±¡ï¼›
+* å¯¹äºinsert/updateå¯ä»¥æœ‰æ›´å¥½çš„å‡½æ•°å°è£…ï¼Œä¿è¯SQLæ³¨å…¥ï¼›
+* CMysqlHelper::DB_INTè¡¨ç¤ºç»„è£…sqlè¯­å¥æ—¶ï¼Œä¸åŠ â€â€å’Œè½¬ä¹‰ï¼›
+* CMysqlHelper::DB_STRè¡¨ç¤ºç»„è£…sqlè¯­å¥æ—¶ï¼ŒåŠ â€â€å¹¶è½¬ä¹‰ï¼›
 **************************************************************/
 class CMysqlHelper
 {
 public:
 	/**
-	* @brief ¹¹Ôìº¯Êı
+	* @brief æ„é€ å‡½æ•°
 	*/
 	CMysqlHelper();
 
 	/**
-	* @brief ¹¹Ôìº¯Êı.
-	* @param: sHost:Ö÷»úIP
-	* @param sUser ÓÃ»§
-	* @param sPasswd ÃÜÂë
-	* @param sDatebase Êı¾İ¿â
-	* @param port ¶Ë¿Ú
+	* @brief æ„é€ å‡½æ•°.
+	* @param: sHost:ä¸»æœºIP
+	* @param sUser ç”¨æˆ·
+	* @param sPasswd å¯†ç 
+	* @param sDatebase æ•°æ®åº“
+	* @param port ç«¯å£
 	* @param iUnixSocket socket
-	* @param iFlag ¿Í»§¶Ë±êÊ¶
+	* @param iFlag å®¢æˆ·ç«¯æ ‡è¯†
 	*/
 	CMysqlHelper(const string& sHost, const string& sUser = "", const string& sPasswd = "", const string& sDatabase = "", const string& sCharSet = "", int port = 0, int iFlag = 0);
 
 	/**
-	* @brief ¹¹Ôìº¯Êı.
-	* @param tcDBConf Êı¾İ¿âÅäÖÃ
+	* @brief æ„é€ å‡½æ•°.
+	* @param tcDBConf æ•°æ®åº“é…ç½®
 	*/
 	CMysqlHelper(const DBConf& tcDBConf);
 
 	/**
-	* @brief Îö¹¹º¯Êı.
+	* @brief ææ„å‡½æ•°.
 	*/
 	~CMysqlHelper();
 
 	/**
-	* @brief ³õÊ¼»¯.
+	* @brief åˆå§‹åŒ–.
 	*
-	* @param sHost Ö÷»úIP
-	* @param sUser ÓÃ»§
-	* @param sPasswd ÃÜÂë
-	* @param sDatebase Êı¾İ¿â
-	* @param port ¶Ë¿Ú
+	* @param sHost ä¸»æœºIP
+	* @param sUser ç”¨æˆ·
+	* @param sPasswd å¯†ç 
+	* @param sDatebase æ•°æ®åº“
+	* @param port ç«¯å£
 	* @param iUnixSocket socket
-	* @param iFlag ¿Í»§¶Ë±êÊ¶
-	* @return ÎŞ
+	* @param iFlag å®¢æˆ·ç«¯æ ‡è¯†
+	* @return æ— 
 	*/
 	void init(const string& sHost, const string& sUser = "", const string& sPasswd = "", const string& sDatabase = "", const string& sCharSet = "", int port = 3306, int iFlag = 0);
 
 	/**
-	* @brief ³õÊ¼»¯.
+	* @brief åˆå§‹åŒ–.
 	*
-	* @param tcDBConf Êı¾İ¿âÅäÖÃ
+	* @param tcDBConf æ•°æ®åº“é…ç½®
 	*/
 	void init(const DBConf& tcDBConf);
 
 	/**
-	* @brief Á¬½ÓÊı¾İ¿â.
+	* @brief è¿æ¥æ•°æ®åº“.
 	*
 	* @throws MysqlHelper_Exception
-	* @return ÎŞ
+	* @return æ— 
 	*/
 	void connect();
 
 	/**
-	* @brief ¶Ï¿ªÊı¾İ¿âÁ¬½Ó.
-	* @return ÎŞ
+	* @brief æ–­å¼€æ•°æ®åº“è¿æ¥.
+	* @return æ— 
 	*/
 	void disconnect();
 
 	/**
-	* @brief »ñÈ¡Êı¾İ¿â±äÁ¿.
-	* @return Êı¾İ¿â±äÁ¿
+	* @brief è·å–æ•°æ®åº“å˜é‡.
+	* @return æ•°æ®åº“å˜é‡
 	*/
 	string getVariables(const string& sName);
 
 	/**
-	* @brief Ö±½Ó»ñÈ¡Êı¾İ¿âÖ¸Õë.
+	* @brief ç›´æ¥è·å–æ•°æ®åº“æŒ‡é’ˆ.
 	*
-	* @return MYSQL* Êı¾İ¿âÖ¸Õë
+	* @return MYSQL* æ•°æ®åº“æŒ‡é’ˆ
 	*/
 	MYSQL* getMysql();
 
 	/**
-	* @brief ×Ö·û×ªÒå.
+	* @brief å­—ç¬¦è½¬ä¹‰.
 	*
-	* @param sFrom Ô´×Ö·û´®
-	* @param sTo Êä³ö×Ö·û´®
-	* @return Êä³ö×Ö·û´®
+	* @param sFrom æºå­—ç¬¦ä¸²
+	* @param sTo è¾“å‡ºå­—ç¬¦ä¸²
+	* @return è¾“å‡ºå­—ç¬¦ä¸²
 	*/
 	string escapeString(const string& sFrom);
 
 	/**
-	* @brief ¸üĞÂ»òÕß²åÈëÊı¾İ.
+	* @brief æ›´æ–°æˆ–è€…æ’å…¥æ•°æ®.
 	*
-	* @param sSql sqlÓï¾ä
+	* @param sSql sqlè¯­å¥
 	* @throws MysqlHelper_Exception
 	* @return
 	*/
 	void execute(const string& sSql);
 
 	/**
-	* @brief ²éÑ¯³öÀ´µÄmysqlÊı¾İ
+	* @brief æŸ¥è¯¢å‡ºæ¥çš„mysqlæ•°æ®
 	*/
 	class MysqlData
 	{
 	public:
 		/**
-		* @brief ËùÓĞÊı¾İ.
+		* @brief æ‰€æœ‰æ•°æ®.
 		*
 		* @return vector<map<string,string>>&
 		*/
 		vector<map<string, string> >& data();
 
 		/**
-		* Êı¾İµÄ¼ÇÂ¼ÌõÊı
+		* æ•°æ®çš„è®°å½•æ¡æ•°
 		*
 		* @return size_t
 		*/
 		size_t size();
 
 		/**
-		* @brief »ñÈ¡Ä³Ò»Ìõ¼ÇÂ¼.
+		* @brief è·å–æŸä¸€æ¡è®°å½•.
 		*
-		* @param i Òª»ñÈ¡µÚ¼¸Ìõ¼ÇÂ¼
-		* @return MysqlRecordÀàĞÍµÄÊı¾İ£¬¿ÉÒÔ¸ù¾İ×Ö¶Î»ñÈ¡Ïà¹ØĞÅÏ¢£¬
+		* @param i è¦è·å–ç¬¬å‡ æ¡è®°å½•
+		* @return MysqlRecordç±»å‹çš„æ•°æ®ï¼Œå¯ä»¥æ ¹æ®å­—æ®µè·å–ç›¸å…³ä¿¡æ¯ï¼Œ
 		*/
 		map<string, string>& operator[](size_t i);
 
@@ -202,25 +202,25 @@ public:
 	/**
 	* @brief Query Record.
 	*
-	* @param sSql sqlÓï¾ä
+	* @param sSql sqlè¯­å¥
 	* @throws MysqlHelper_Exception
-	* @return MysqlDataÀàĞÍµÄÊı¾İ£¬¿ÉÒÔ¸ù¾İ×Ö¶Î»ñÈ¡Ïà¹ØĞÅÏ¢
+	* @return MysqlDataç±»å‹çš„æ•°æ®ï¼Œå¯ä»¥æ ¹æ®å­—æ®µè·å–ç›¸å…³ä¿¡æ¯
 	*/
 	bool queryRecord(const string& sSql, MysqlData& data, bool bSetGBK = false);
 
 	/**
-	* @brief Ö´ĞĞsqlÓï¾ä
+	* @brief æ‰§è¡Œsqlè¯­å¥
 	*
-	* @param sSql sqlÓï¾ä
+	* @param sSql sqlè¯­å¥
 	* @throws MysqlHelper_Exception
-	* @return ³É¹¦·µ»Øtrue£¬Ê§°Ü·µ»Øfalse
+	* @return æˆåŠŸè¿”å›trueï¼Œå¤±è´¥è¿”å›false
 	*/
 	void sqlExec(const char* sql, bool bSetGBK = false);
 
 	/**
-	* @brief ¶¨Òå×Ö¶ÎÀàĞÍ£¬
-	* DB_INT:Êı×ÖÀàĞÍ
-	* DB_STR:×Ö·û´®ÀàĞÍ
+	* @brief å®šä¹‰å­—æ®µç±»å‹ï¼Œ
+	* DB_INT:æ•°å­—ç±»å‹
+	* DB_STR:å­—ç¬¦ä¸²ç±»å‹
 	*/
 	enum FT
 	{
@@ -229,137 +229,137 @@ public:
 	};
 
 	/**
-	* Êı¾İ¼ÇÂ¼
+	* æ•°æ®è®°å½•
 	*/
 	typedef map<string, pair<FT, string> > RECORD_DATA;
 
 	/**
-	* @brief ¸üĞÂ¼ÇÂ¼.
+	* @brief æ›´æ–°è®°å½•.
 	*
-	* @param sTableName ±íÃû
-	* @param mpColumns ÁĞÃû/Öµ¶Ô
-	* @param sCondition where×ÓÓï¾ä,ÀıÈç:where A = B
+	* @param sTableName è¡¨å
+	* @param mpColumns åˆ—å/å€¼å¯¹
+	* @param sCondition whereå­è¯­å¥,ä¾‹å¦‚:where A = B
 	* @throws MysqlHelper_Exception
-	* @return size_t Ó°ÏìµÄĞĞÊı
+	* @return size_t å½±å“çš„è¡Œæ•°
 	*/
 	size_t updateRecord(const string& sTableName, const map<string, pair<FT, string> >& mpColumns, const string& sCondition);
 
 	/**
-	* @brief ²åÈë¼ÇÂ¼.
+	* @brief æ’å…¥è®°å½•.
 	*
-	* @param sTableName ±íÃû
-	* @param mpColumns ÁĞÃû/Öµ¶Ô
+	* @param sTableName è¡¨å
+	* @param mpColumns åˆ—å/å€¼å¯¹
 	* @throws MysqlHelper_Exception
-	* @return size_t Ó°ÏìµÄĞĞÊı
+	* @return size_t å½±å“çš„è¡Œæ•°
 	*/
 	size_t insertRecord(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
-	* @brief Ìæ»»¼ÇÂ¼.
+	* @brief æ›¿æ¢è®°å½•.
 	*
-	* @param sTableName ±íÃû
-	* @param mpColumns ÁĞÃû/Öµ¶Ô
+	* @param sTableName è¡¨å
+	* @param mpColumns åˆ—å/å€¼å¯¹
 	* @throws MysqlHelper_Exception
-	* @return size_t Ó°ÏìµÄĞĞÊı
+	* @return size_t å½±å“çš„è¡Œæ•°
 	*/
 	size_t replaceRecord(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
-	* @brief É¾³ı¼ÇÂ¼.
+	* @brief åˆ é™¤è®°å½•.
 	*
-	* @param sTableName ±íÃû
-	* @param sCondition where×ÓÓï¾ä,ÀıÈç:where A = B
+	* @param sTableName è¡¨å
+	* @param sCondition whereå­è¯­å¥,ä¾‹å¦‚:where A = B
 	* @throws MysqlHelper_Exception
-	* @return size_t Ó°ÏìµÄĞĞÊı
+	* @return size_t å½±å“çš„è¡Œæ•°
 	*/
 	size_t deleteRecord(const string& sTableName, const string& sCondition = "");
 
 	/**
-	* @brief »ñÈ¡Table²éÑ¯½á¹ûµÄÊıÄ¿.
+	* @brief è·å–TableæŸ¥è¯¢ç»“æœçš„æ•°ç›®.
 	*
-	* @param sTableName ÓÃÓÚ²éÑ¯µÄ±íÃû
-	* @param sCondition where×ÓÓï¾ä,ÀıÈç:where A = B
+	* @param sTableName ç”¨äºæŸ¥è¯¢çš„è¡¨å
+	* @param sCondition whereå­è¯­å¥,ä¾‹å¦‚:where A = B
 	* @throws MysqlHelper_Exception
-	* @return size_t ²éÑ¯µÄ¼ÇÂ¼ÊıÄ¿
+	* @return size_t æŸ¥è¯¢çš„è®°å½•æ•°ç›®
 	*/
 	size_t getRecordCount(const string& sTableName, const string& sCondition = "");
 
 	/**
-	* @brief »ñÈ¡Sql·µ»Ø½á¹û¼¯µÄ¸öÊı.
+	* @brief è·å–Sqlè¿”å›ç»“æœé›†çš„ä¸ªæ•°.
 	*
-	* @param sCondition where×ÓÓï¾ä,ÀıÈç:where A = B
+	* @param sCondition whereå­è¯­å¥,ä¾‹å¦‚:where A = B
 	* @throws MysqlHelper_Exception
-	* @return ²éÑ¯µÄ¼ÇÂ¼ÊıÄ¿
+	* @return æŸ¥è¯¢çš„è®°å½•æ•°ç›®
 	*/
 	size_t getSqlCount(const string& sCondition = "");
 
 	/**
-	* @brief »ñÈ¡×Ö¶Î×î´óÖµ.
+	* @brief è·å–å­—æ®µæœ€å¤§å€¼.
 	*
-	* @param sTableName ÓÃÓÚ²éÑ¯µÄ±íÃû
-	* @param sFieldName ÓÃÓÚ²éÑ¯µÄ×Ö¶Î
-	* @param sCondition where×ÓÓï¾ä,ÀıÈç:where A = B
+	* @param sTableName ç”¨äºæŸ¥è¯¢çš„è¡¨å
+	* @param sFieldName ç”¨äºæŸ¥è¯¢çš„å­—æ®µ
+	* @param sCondition whereå­è¯­å¥,ä¾‹å¦‚:where A = B
 	* @throws MysqlHelper_Exception
-	* @return ²éÑ¯µÄ¼ÇÂ¼ÊıÄ¿
+	* @return æŸ¥è¯¢çš„è®°å½•æ•°ç›®
 	*/
 	int getMaxValue(const string& sTableName, const string& sFieldName, const string& sCondition = "");
 
 	/**
-	* @brief »ñÈ¡auto_increment×îºó²åÈëµÃID.
+	* @brief è·å–auto_incrementæœ€åæ’å…¥å¾—ID.
 	*
-	* @return IDÖµ
+	* @return IDå€¼
 	*/
 	long lastInsertID();
 
 	/**
-	* @brief ¹¹ÔìInsert-SQLÓï¾ä.
+	* @brief æ„é€ Insert-SQLè¯­å¥.
 	*
-	* @param sTableName ±íÃû
-	* @param mpColumns ÁĞÃû/Öµ¶Ô
-	* @return string insert-SQLÓï¾ä
+	* @param sTableName è¡¨å
+	* @param mpColumns åˆ—å/å€¼å¯¹
+	* @return string insert-SQLè¯­å¥
 	*/
 	string buildInsertSQL(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
-	* @brief ¹¹ÔìReplace-SQLÓï¾ä.
+	* @brief æ„é€ Replace-SQLè¯­å¥.
 	*
-	* @param sTableName ±íÃû
-	* @param mpColumns ÁĞÃû/Öµ¶Ô
-	* @return string insert-SQLÓï¾ä
+	* @param sTableName è¡¨å
+	* @param mpColumns åˆ—å/å€¼å¯¹
+	* @return string insert-SQLè¯­å¥
 	*/
 	string buildReplaceSQL(const string& sTableName, const map<string, pair<FT, string> >& mpColumns);
 
 	/**
-	* @brief ¹¹ÔìUpdate-SQLÓï¾ä.
+	* @brief æ„é€ Update-SQLè¯­å¥.
 	*
-	* @param sTableName ±íÃû
-	* @param mpColumns ÁĞÃû/Öµ¶Ô
-	* @param sCondition where×ÓÓï¾ä
-	* @return string Update-SQLÓï¾ä
+	* @param sTableName è¡¨å
+	* @param mpColumns åˆ—å/å€¼å¯¹
+	* @param sCondition whereå­è¯­å¥
+	* @return string Update-SQLè¯­å¥
 	*/
 	string buildUpdateSQL(const string& sTableName, const map<string, pair<FT, string> >& mpColumns, const string& sCondition);
 
 	/**
-	* @brief »ñÈ¡×îºóÖ´ĞĞµÄSQLÓï¾ä.
+	* @brief è·å–æœ€åæ‰§è¡Œçš„SQLè¯­å¥.
 	*
-	* @return SQLÓï¾ä
+	* @return SQLè¯­å¥
 	*/
 	string getLastSQL() { return _sLastSql; }
 
 	/**
-	* @brief »ñÈ¡²éÑ¯Ó°ÏìÊı
+	* @brief è·å–æŸ¥è¯¢å½±å“æ•°
 	* @return int
 	*/
 	size_t getAffectedRows();
 protected:
 	/**
-	* @brief copy contructor£¬Ö»ÉêÃ÷,²»¶¨Òå,±£Ö¤²»±»Ê¹ÓÃ
+	* @brief copy contructorï¼Œåªç”³æ˜,ä¸å®šä¹‰,ä¿è¯ä¸è¢«ä½¿ç”¨
 	*/
 	CMysqlHelper(const CMysqlHelper& tcMysql);
 
 	/**
 	*
-	* @brief Ö»ÉêÃ÷,²»¶¨Òå,±£Ö¤²»±»Ê¹ÓÃ
+	* @brief åªç”³æ˜,ä¸å®šä¹‰,ä¿è¯ä¸è¢«ä½¿ç”¨
 	*/
 	CMysqlHelper& operator=(const CMysqlHelper& tcMysql);
 
@@ -367,22 +367,22 @@ protected:
 private:
 
 	/**
-	* Êı¾İ¿âÖ¸Õë
+	* æ•°æ®åº“æŒ‡é’ˆ
 	*/
 	MYSQL* _pstMql;
 
 	/**
-	* Êı¾İ¿âÅäÖÃ
+	* æ•°æ®åº“é…ç½®
 	*/
 	DBConf _dbConf;
 
 	/**
-	* ÊÇ·ñÒÑ¾­Á¬½Ó
+	* æ˜¯å¦å·²ç»è¿æ¥
 	*/
 	bool _bConnected;
 
 	/**
-	* ×îºóÖ´ĞĞµÄsql
+	* æœ€åæ‰§è¡Œçš„sql
 	*/
 	string _sLastSql;
 

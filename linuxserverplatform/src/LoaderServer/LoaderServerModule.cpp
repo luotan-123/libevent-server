@@ -1,7 +1,7 @@
 #include "LoaderServerModule.h"
 #include <dlfcn.h>
 
-//dllΩ”ø⁄∫Ø ˝∂®“Â
+//dllÊé•Âè£ÂáΩÊï∞ÂÆö‰πâ
 typedef IModuleManageService* (CreateServiceInterface)(UINT uVer);
 typedef bool(GetServiceInfo)(ServerDllInfoStruct* pServiceInfo, UINT uVer);
 
@@ -26,7 +26,7 @@ int CLoaderServerModule::StartAllRoom()
 	{
 		const RoomBaseInfo& roomBaseInfo = iter->second;
 
-		// º”‘ÿ”Î≈‰÷√Œƒº˛œ‡Õ¨√˚◊÷µƒ
+		// Âä†ËΩΩ‰∏éÈÖçÁΩÆÊñá‰ª∂Áõ∏ÂêåÂêçÂ≠óÁöÑ
 		if (strcmp(roomBaseInfo.serviceName, ConfigManage()->m_loaderServerConfig.serviceName))
 		{
 			continue;
@@ -35,7 +35,7 @@ int CLoaderServerModule::StartAllRoom()
 		GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(roomBaseInfo.gameID);
 		if (!pGameBaseInfo)
 		{
-			std::cout << "GameBaseInfo ±Ì÷–√ª”– gameID:" << roomBaseInfo.gameID << endl;
+			std::cout << "GameBaseInfo Ë°®‰∏≠Ê≤°Êúâ gameID:" << roomBaseInfo.gameID << endl;
 			continue;
 		}
 
@@ -56,19 +56,19 @@ int CLoaderServerModule::StartAllRoom()
 
 		if (!LoadServiceInfo(&info))
 		{
-			std::cout << "º”‘ÿ”Œœ∑∑øº‰ ß∞‹ roomID:" << roomBaseInfo.roomID << endl;
+			std::cout << "Âä†ËΩΩÊ∏∏ÊàèÊàøÈó¥Â§±Ë¥• roomID:" << roomBaseInfo.roomID << endl;
 			continue;
 		}
 
 		if (!StartGameRoom(&info))
 		{
-			std::cout << "∆Ù∂Ø”Œœ∑∑øº‰ ß∞‹ roomID:" << roomBaseInfo.roomID << endl;
+			std::cout << "ÂêØÂä®Ê∏∏ÊàèÊàøÈó¥Â§±Ë¥• roomID:" << roomBaseInfo.roomID << endl;
 			continue;
 		}
 
 		iStartCount++;
 		m_allRoomInfoMap[roomID] = info;
-		CON_INFO_LOG("∆Ù∂Ø≥…π¶£∫roomID=%d gameID=%d name=%s roomType=%d roomsort=%d deskCount=%d minPoint=%d maxPoint=%d basePoint=%d roomlevel=%d\n"
+		CON_INFO_LOG("ÂêØÂä®ÊàêÂäüÔºöroomID=%d gameID=%d name=%s roomType=%d roomsort=%d deskCount=%d minPoint=%d maxPoint=%d basePoint=%d roomlevel=%d\n"
 			, roomID, roomBaseInfo.gameID, roomBaseInfo.name, roomBaseInfo.type, roomBaseInfo.sort, roomBaseInfo.deskCount, roomBaseInfo.minPoint,
 			roomBaseInfo.maxPoint, roomBaseInfo.basePoint, roomBaseInfo.level);
 	}
@@ -139,26 +139,26 @@ bool CLoaderServerModule::LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo)
 		std::string soFileName = "./";
 		soFileName += pGameRoomInfo->ServiceInfo.szDLLFileName;
 
-		//≈–∂œŒƒº˛
+		//Âà§Êñ≠Êñá‰ª∂
 		if (!CINIFile::IsFileExist(soFileName.c_str()))
 		{
-			std::cout << "’“≤ªµΩŒƒº˛ " << pGameRoomInfo->ServiceInfo.szDLLFileName << endl;
+			std::cout << "Êâæ‰∏çÂà∞Êñá‰ª∂ " << pGameRoomInfo->ServiceInfo.szDLLFileName << endl;
 			return false;
 		}
 
-		//º”‘ÿ◊Èº˛
+		//Âä†ËΩΩÁªÑ‰ª∂
 		pGameRoomInfo->hDllInstance = dlopen(soFileName.c_str(), RTLD_NOW);
 		if (pGameRoomInfo->hDllInstance == NULL)
 		{
-			std::cout << "º”‘ÿ∂ØÃ¨ø‚ ß∞‹ " << pGameRoomInfo->ServiceInfo.szDLLFileName <<" error:"<< dlerror() << endl;
+			std::cout << "Âä†ËΩΩÂä®ÊÄÅÂ∫ìÂ§±Ë¥• " << pGameRoomInfo->ServiceInfo.szDLLFileName <<" error:"<< dlerror() << endl;
 			return false;
 		}
 
-		//ªÒ»°π‹¿ÌΩ”ø⁄
+		//Ëé∑ÂèñÁÆ°ÁêÜÊé•Âè£
 		CreateServiceInterface* pCreateServiceInterface = (CreateServiceInterface*)dlsym(pGameRoomInfo->hDllInstance, "CreateServiceInterface");
 		if (pCreateServiceInterface == NULL)
 		{
-			std::cout << "º”‘ÿ∂ØÃ¨ø‚∫Ø ˝ ß∞‹ " << "CreateServiceInterface" << endl;
+			std::cout << "Âä†ËΩΩÂä®ÊÄÅÂ∫ìÂáΩÊï∞Â§±Ë¥• " << "CreateServiceInterface" << endl;
 			return false;
 		}
 
@@ -172,14 +172,14 @@ bool CLoaderServerModule::LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo)
 		pGameRoomInfo->pIManageService = pCreateServiceInterface(DEV_LIB_VER);
 		if (pGameRoomInfo->pIManageService == NULL)
 		{
-			std::cout << "µ˜”√ CreateServiceInterface  ß∞‹" << endl;
+			std::cout << "Ë∞ÉÁî® CreateServiceInterface Â§±Ë¥•" << endl;
 			return false;
 		}
 
 		GetServiceInfo* pGetServiceInfo = (GetServiceInfo*)dlsym(pGameRoomInfo->hDllInstance, "GetServiceInfo");
 		if (pGetServiceInfo == NULL)
 		{
-			std::cout << "º”‘ÿ∂ØÃ¨ø‚∫Ø ˝ ß∞‹ " << "GetServiceInfo" << endl;
+			std::cout << "Âä†ËΩΩÂä®ÊÄÅÂ∫ìÂáΩÊï∞Â§±Ë¥• " << "GetServiceInfo" << endl;
 			return false;
 		}
 
@@ -190,11 +190,11 @@ bool CLoaderServerModule::LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo)
 			return false;
 		}
 
-		//÷∏∂®ƒƒ–©”Œœ∑ «ø…”√µƒ
+		//ÊåáÂÆöÂì™‰∫õÊ∏∏ÊàèÊòØÂèØÁî®ÁöÑ
 		ServerDllInfoStruct ServiceDllInfo;
 		if (pGetServiceInfo(&ServiceDllInfo, DEV_LIB_VER) == false)
 		{
-			std::cout << "µ˜”√ GetServiceInfo  ß∞‹" << endl;
+			std::cout << "Ë∞ÉÁî® GetServiceInfo Â§±Ë¥•" << endl;
 			return false;
 		}
 	}
@@ -235,31 +235,31 @@ void CLoaderServerModule::MakeInitData(GameRoomInitStruct* pGameRoomInfo, int ro
 	pGameRoomInfo->InitInfo.bCanCombineDesk = pGameBaseInfo->canCombineDesk;
 }
 
-//∆Ù∂Ø”Œœ∑∑øº‰
+//ÂêØÂä®Ê∏∏ÊàèÊàøÈó¥
 bool CLoaderServerModule::StartGameRoom(GameRoomInitStruct* pGameRoomInfo)
 {
 	try
 	{
 		if (pGameRoomInfo->pIManageService == NULL)
 		{
-			// º”‘ÿø‚
+			// Âä†ËΩΩÂ∫ì
 			if (!LoadServiceInfo(pGameRoomInfo))
 			{
-				std::cout << "º”‘ÿ”Œœ∑∑øº‰ ß∞‹ roomID:" << pGameRoomInfo->uServiceID << endl;
+				std::cout << "Âä†ËΩΩÊ∏∏ÊàèÊàøÈó¥Â§±Ë¥• roomID:" << pGameRoomInfo->uServiceID << endl;
 				return false;
 			}
 		}
 
 		UINT errCode = 0;
-		//∆Ù∂Ø◊Èº˛
+		//ÂêØÂä®ÁªÑ‰ª∂
 		if (pGameRoomInfo->pIManageService->InitService(&pGameRoomInfo->InitInfo) == false)
 		{
-			throw "◊Èº˛≥ı ºªØ¥ÌŒÛ";
+			throw "ÁªÑ‰ª∂ÂàùÂßãÂåñÈîôËØØ";
 		}
 
 		if (pGameRoomInfo->pIManageService->StartService(errCode) == false)
 		{
-			throw "◊Èº˛∆Ù∂Ø¥ÌŒÛ";
+			throw "ÁªÑ‰ª∂ÂêØÂä®ÈîôËØØ";
 		}
 
 		return true;
@@ -277,11 +277,11 @@ bool CLoaderServerModule::StartGameRoom(GameRoomInitStruct* pGameRoomInfo)
 	}
 	catch (...)
 	{
-		std::cout << "∑¢…˙Œ¥÷™“Ï≥£¥ÌŒÛ" << std::endl;
+		std::cout << "ÂèëÁîüÊú™Áü•ÂºÇÂ∏∏ÈîôËØØ" << std::endl;
 		ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 	}
 
-	//«Â¿Ì◊ ‘¥
+	//Ê∏ÖÁêÜËµÑÊ∫ê
 	if (pGameRoomInfo->pIManageService != NULL)
 	{
 		pGameRoomInfo->pIManageService->StoptService();
@@ -299,7 +299,7 @@ bool CLoaderServerModule::StartGameRoom(GameRoomInitStruct* pGameRoomInfo)
 	return false;
 }
 
-//Õ£÷π”Œœ∑∑øº‰
+//ÂÅúÊ≠¢Ê∏∏ÊàèÊàøÈó¥
 bool CLoaderServerModule::StopGameRoom(GameRoomInitStruct* pGameRoomInfo)
 {
 	if (!pGameRoomInfo)
@@ -314,25 +314,25 @@ bool CLoaderServerModule::StopGameRoom(GameRoomInitStruct* pGameRoomInfo)
 			return true;
 		}
 
-		//Õ£÷π◊Èº˛
+		//ÂÅúÊ≠¢ÁªÑ‰ª∂
 		if (pGameRoomInfo->pIManageService->StoptService() == false)
 		{
-			throw "◊Èº˛Õ£÷π¥ÌŒÛ";
+			throw "ÁªÑ‰ª∂ÂÅúÊ≠¢ÈîôËØØ";
 		}
 
 		if (pGameRoomInfo->pIManageService->UnInitService() == false)
 		{
-			throw "◊Èº˛–∂‘ÿ¥ÌŒÛ";
+			throw "ÁªÑ‰ª∂Âç∏ËΩΩÈîôËØØ";
 		}
 
 		if (pGameRoomInfo->pIManageService->DeleteService() == false)
 		{
-			throw "◊Èº˛«Â¿Ì¥ÌŒÛ";
+			throw "ÁªÑ‰ª∂Ê∏ÖÁêÜÈîôËØØ";
 		}
 
 		pGameRoomInfo->pIManageService = NULL;
 
-		//–∂‘ÿ◊Èº˛
+		//Âç∏ËΩΩÁªÑ‰ª∂
 		dlclose(pGameRoomInfo->hDllInstance);
 		pGameRoomInfo->hDllInstance = NULL;
 
@@ -351,11 +351,11 @@ bool CLoaderServerModule::StopGameRoom(GameRoomInitStruct* pGameRoomInfo)
 	}
 	catch (...)
 	{
-		std::cout << "∑¢…˙Œ¥÷™“Ï≥£¥ÌŒÛ" << std::endl;
+		std::cout << "ÂèëÁîüÊú™Áü•ÂºÇÂ∏∏ÈîôËØØ" << std::endl;
 		ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 	}
 
-	//«Â¿Ì◊ ‘¥
+	//Ê∏ÖÁêÜËµÑÊ∫ê
 	if (pGameRoomInfo->pIManageService != NULL)
 	{
 		pGameRoomInfo->pIManageService->StoptService();

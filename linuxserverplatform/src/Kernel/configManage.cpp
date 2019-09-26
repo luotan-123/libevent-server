@@ -46,20 +46,20 @@ bool CConfigManage::Init()
 	AUTOCOST("CConfigManage::Init()");
 	INFO_LOG("configManage Init begin...");
 
-	// ³õÊ¼»¯curl
+	// åˆå§‹åŒ–curl
 	curl_global_init(CURL_GLOBAL_ALL);
 
 	bool ret = false;
 
-	//// ÇëÇóÈÏÖ¤
+	//// è¯·æ±‚è®¤è¯
 	//if (!RequestAuth())
 	//{
 	//	ERROR_LOG("request auth failed");
-	//	AfxMessageBox("·şÎñÆ÷ÈÏÖ¤Ê§°Ü", MB_ICONSTOP);
+	//	AfxMessageBox("æœåŠ¡å™¨è®¤è¯å¤±è´¥", MB_ICONSTOP);
 	//	exit(0);
 	//}
 
-	// ¼ÓÔØdbÅäÖÃ
+	// åŠ è½½dbé…ç½®
 	ret = LoadDBConfig();
 	if (!ret)
 	{
@@ -67,7 +67,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØÖĞĞÄ·şÎñÆ÷ÅäÖÃ
+	// åŠ è½½ä¸­å¿ƒæœåŠ¡å™¨é…ç½®
 	ret = LoadCenterServerConfig();
 	if (!ret)
 	{
@@ -75,7 +75,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØ´óÌü·şÎñÆ÷ÅäÖÃ
+	// åŠ è½½å¤§å…æœåŠ¡å™¨é…ç½®
 	ret = LoadLogonServerConfig();
 	if (!ret)
 	{
@@ -83,7 +83,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØÓÎÏ··şÅäÖÃ
+	// åŠ è½½æ¸¸æˆæœé…ç½®
 	ret = LoadLoaderServerConfig();
 	if (!ret)
 	{
@@ -91,7 +91,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØ¹«¹²ÅäÖÃ
+	// åŠ è½½å…¬å…±é…ç½®
 	ret = LoadCommonConfig();
 	if (!ret)
 	{
@@ -99,7 +99,7 @@ bool CConfigManage::Init()
 		return true;
 	}
 
-	// ²âÊÔÊı¾İ¿âÁ¬½Ó
+	// æµ‹è¯•æ•°æ®åº“è¿æ¥
 	ret = ConnectToDatabase();
 	if (!ret)
 	{
@@ -107,7 +107,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØ¶¯Ì¬±íµÄ×Ö¶ÎÃèÊö
+	// åŠ è½½åŠ¨æ€è¡¨çš„å­—æ®µæè¿°
 	ret = LoadTableFiledConfig();
 	if (!ret)
 	{
@@ -115,7 +115,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØ±íµÄÖ÷¼ü
+	// åŠ è½½è¡¨çš„ä¸»é”®
 	ret = LoadTablesPrimaryKey();
 	if (!ret)
 	{
@@ -123,7 +123,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// ¼ÓÔØ»ù´¡ÅäÖÃ
+	// åŠ è½½åŸºç¡€é…ç½®
 	ret = LoadBaseConfig();
 	if (!ret)
 	{
@@ -131,7 +131,7 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	//¶Ï¿ªÓëÊı¾İ¿âµÄÁ¬½Ó
+	//æ–­å¼€ä¸æ•°æ®åº“çš„è¿æ¥
 	m_pMysqlHelper->disconnect();
 
 	INFO_LOG("configManage Init end.");
@@ -176,7 +176,7 @@ bool CConfigManage::LoadRedisConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -251,7 +251,7 @@ bool CConfigManage::LoadTableFiledConfig()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+			ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 			return false;
 		}
 
@@ -290,7 +290,7 @@ bool CConfigManage::LoadTableFiledConfig()
 
 			if (type == FIELD_VALUE_TYPE_NONE)
 			{
-				// ´æÔÚ²»Ö§³ÖµÄÊı¾İÀàĞÍ
+				// å­˜åœ¨ä¸æ”¯æŒçš„æ•°æ®ç±»å‹
 				ERROR_LOG("have unsupported type szType=%s", szType.c_str());
 				return false;
 			}
@@ -319,7 +319,7 @@ bool CConfigManage::LoadBaseConfig()
 {
 	AUTOCOST("LoadBaseConfig");
 
-	// ¼ÓÔØredisÅäÖÃ
+	// åŠ è½½redisé…ç½®
 	bool ret = LoadRedisConfig();
 	if (!ret)
 	{
@@ -394,7 +394,7 @@ bool CConfigManage::LoadOtherConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -425,7 +425,7 @@ bool CConfigManage::ConnectToDatabase()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -444,7 +444,7 @@ bool CConfigManage::LoadGameBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -480,7 +480,7 @@ bool CConfigManage::LoadBuyGameDeskConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -522,7 +522,7 @@ bool CConfigManage::LoadRoomBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -723,7 +723,7 @@ bool CConfigManage::LoadTablesPrimaryKey()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+			ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 			return false;
 		}
 
@@ -765,7 +765,7 @@ int CConfigManage::GetFieldType(const char* tableName, const char* filedName)
 		return FIELD_VALUE_TYPE_NONE;
 	}
 
-	// ÌØÊâ×Ö¶Î£¬ËùÓĞhash±í¹²ÓĞ
+	// ç‰¹æ®Šå­—æ®µï¼Œæ‰€æœ‰hashè¡¨å…±æœ‰
 	if (!strcmp(filedName, "extendMode"))
 	{
 		return FIELD_VALUE_TYPE_INT;
@@ -889,7 +889,7 @@ bool CConfigManage::GetRobotPositionInfo(int robotID, RobotPositionInfo& info)
 {
 	if (m_robotPositionInfoVec.size() <= 0)
 	{
-		// Ã»ÓĞÅäÖÃÎÄ¼ş
+		// æ²¡æœ‰é…ç½®æ–‡ä»¶
 		return false;
 	}
 
@@ -962,7 +962,7 @@ std::string CConfigManage::ParseJsonValue(const std::string& src, const char* ke
 
 void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& strValue)
 {
-	//// ²¹ÖúÏà¹Ø
+	//// è¡¥åŠ©ç›¸å…³
 	if (strKey == "supportTimesEveryDay")
 	{
 		m_otherConfig.supportTimesEveryDay = atoi(strValue.c_str());
@@ -976,7 +976,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_otherConfig.supportMoneyCount = atoi(strValue.c_str());
 	}
 
-	//// ×¢²áÔùËÍÏà¹Ø
+	//// æ³¨å†Œèµ é€ç›¸å…³
 	else if (strKey == "registerGiveMoney")
 	{
 		m_otherConfig.registerGiveMoney = atoi(strValue.c_str());
@@ -986,25 +986,25 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_otherConfig.registerGiveJewels = atoi(strValue.c_str());
 	}
 
-	//// Ã¿ÌìµÇÂ¼ÔùËÍ½ğ±ÒÏà¹Ø
+	//// æ¯å¤©ç™»å½•èµ é€é‡‘å¸ç›¸å…³
 	else if (strKey == "logonGiveMoneyEveryDay")
 	{
 		m_otherConfig.logonGiveMoneyEveryDay = atoi(strValue.c_str());
 	}
 
-	//// ÊÀ½ç¹ã²¥Ïà¹Ø
+	//// ä¸–ç•Œå¹¿æ’­ç›¸å…³
 	else if (strKey == "sendHornCostJewels")
 	{
 		m_otherConfig.sendHornCostJewels = atoi(strValue.c_str());
 	}
 
-	//// Ä§·¨±íÇéÏà¹Ø
+	//// é­”æ³•è¡¨æƒ…ç›¸å…³
 	else if (strKey == "useMagicExpressCostMoney")
 	{
 		m_otherConfig.useMagicExpressCostMoney = atoi(strValue.c_str());
 	}
 
-	//// ºÃÓÑ´òÉÍ
+	//// å¥½å‹æ‰“èµ
 	else if (strKey == "friendRewardMoney")
 	{
 		m_otherConfig.friendRewardMoney = atoi(strValue.c_str());
@@ -1018,13 +1018,13 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_otherConfig.friendTakeRewardMoneyCount = atoi(strValue.c_str());
 	}
 
-	//// ·¿¼äÁĞ±íÊıÁ¿
+	//// æˆ¿é—´åˆ—è¡¨æ•°é‡
 	else if (strKey == "buyingDeskCount")
 	{
 		m_otherConfig.buyingDeskCount = atoi(strValue.c_str());
 	}
 
-	//// ×ªÔùÏà¹Ø
+	//// è½¬èµ ç›¸å…³
 	else if (strKey == "sendGiftMyLimitMoney")
 	{
 		m_sendGiftConfig.myLimitMoney = atoll(strValue.c_str());
@@ -1046,7 +1046,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_sendGiftConfig.rate = atof(strValue.c_str());
 	}
 
-	//// ÒøĞĞÏà¹Ø
+	//// é“¶è¡Œç›¸å…³
 	else if (strKey == "bankMinSaveMoney")
 	{
 		m_bankConfig.minSaveMoney = atoll(strValue.c_str());
@@ -1072,7 +1072,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_bankConfig.transferMoneyMuti = atoi(strValue.c_str());
 	}
 
-	//// ¾ãÀÖ²¿Ïà¹Ø
+	//// ä¿±ä¹éƒ¨ç›¸å…³
 	else if (strKey == "groupCreateCount")
 	{
 		m_friendsGroupConfig.groupCreateCount = atoi(strValue.c_str());
@@ -1106,7 +1106,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_friendsGroupConfig.groupTransferCount = atoi(strValue.c_str());
 	}
 
-	////ftp·şÎñÆ÷Ïà¹Ø
+	////ftpæœåŠ¡å™¨ç›¸å…³
 	else if (strKey == "ftpIP")
 	{
 		memcpy(m_ftpConfig.ftpIP, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpIP) - 1));
@@ -1120,7 +1120,7 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		memcpy(m_ftpConfig.ftpPasswd, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_ftpConfig.ftpPasswd) - 1));
 	}
 
-	//// ip×¢²áÏŞÖÆ
+	//// ipæ³¨å†Œé™åˆ¶
 	else if (strKey == "byIsIPRegisterLimit")
 	{
 		m_otherConfig.byIsIPRegisterLimit = atoi(strValue.c_str());
@@ -1130,19 +1130,19 @@ void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& str
 		m_otherConfig.IPRegisterLimitCount = atoi(strValue.c_str());
 	}
 
-	//// ·Ö²¼Ê½ÅäÖÃ
+	//// åˆ†å¸ƒå¼é…ç½®
 	else if (strKey == "byIsDistributedTable")
 	{
 		m_otherConfig.byIsDistributedTable = atoi(strValue.c_str());
 	}
 
-	//// httpÇëÇó
+	//// httpè¯·æ±‚
 	else if (strKey == "http")
 	{
 		memcpy(m_otherConfig.http, strValue.c_str(), Min_(strlen(strValue.c_str()), sizeof(m_otherConfig.http) - 1));
 	}
 
-	//// ¿ØÖÆ1£º1Æ½Ì¨
+	//// æ§åˆ¶1ï¼š1å¹³å°
 	else if (strKey == "byIsOneToOne")
 	{
 		m_otherConfig.byIsOneToOne = atoi(strValue.c_str());
@@ -1188,7 +1188,7 @@ const CenterServerConfig& CConfigManage::GetCenterServerConfig()
 	return m_centerServerConfig;
 }
 
-// ´óÌü·ş»ù±¾ÅäÖÃ
+// å¤§å…æœåŸºæœ¬é…ç½®
 bool CConfigManage::LoadLogonBaseConfig()
 {
 	char sql[128] = "";
@@ -1201,7 +1201,7 @@ bool CConfigManage::LoadLogonBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ĞĞsqlÓï¾äÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("æ‰§è¡Œsqlè¯­å¥å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -1219,7 +1219,7 @@ bool CConfigManage::LoadLogonBaseConfig()
 
 		if (m_logonPortSet.count(configInfo) > 0)
 		{
-			ERROR_LOG("µÇÂ½·ş¶Ë¿Ú»òIPÖØ¸´");
+			ERROR_LOG("ç™»é™†æœç«¯å£æˆ–IPé‡å¤");
 			return false;
 		}
 
@@ -1229,20 +1229,20 @@ bool CConfigManage::LoadLogonBaseConfig()
 
 	if (m_logonBaseInfoMap.size() > MAX_LOGON_SERVER_COUNT)
 	{
-		ERROR_LOG("ÅäÖÃµÄµÇÂ½·şÊıÁ¿¹ı¶à¡£¡¾%lu/%d¡¿", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
+		ERROR_LOG("é…ç½®çš„ç™»é™†æœæ•°é‡è¿‡å¤šã€‚ã€%lu/%dã€‘", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
 		return false;
 	}
 
 	if (m_logonBaseInfoMap.size() == 0)
 	{
-		ERROR_LOG("Ã»ÓĞÅäÖÃµÇÂ½·ş¡£¡¾%lu/%d¡¿", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
+		ERROR_LOG("æ²¡æœ‰é…ç½®ç™»é™†æœã€‚ã€%lu/%dã€‘", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
 		return false;
 	}
 
 	return true;
 }
 
-// »ñÈ¡´óÌü»ù±¾ÅäÖÃ
+// è·å–å¤§å…åŸºæœ¬é…ç½®
 LogonBaseInfo* CConfigManage::GetLogonBaseInfo(int logonID)
 {
 	if (logonID <= 0)
@@ -1259,7 +1259,7 @@ LogonBaseInfo* CConfigManage::GetLogonBaseInfo(int logonID)
 	return NULL;
 }
 
-// »ñÈ¡¹ºÂòroomIDĞÅÏ¢
+// è·å–è´­ä¹°roomIDä¿¡æ¯
 void CConfigManage::GetBuyRoomInfo(int gameID, int roomType, std::vector<int>& roomIDVec)
 {
 	roomIDVec.clear();
@@ -1271,7 +1271,7 @@ void CConfigManage::GetBuyRoomInfo(int gameID, int roomType, std::vector<int>& r
 	}
 }
 
-// »ñµÃ·Ö±íµÄ±íÃû
+// è·å¾—åˆ†è¡¨çš„è¡¨å
 bool CConfigManage::GetTableNameByDate(const char* name, char* dateName, size_t size)
 {
 	if (name == NULL || dateName == NULL || size <= 1)

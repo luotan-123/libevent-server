@@ -4,12 +4,12 @@
 #include "DataBase.h"
 
 
-//´¦ÀíÏß³Ì½á¹¹¶¨Òå
+//å¤„ç†çº¿ç¨‹ç»“æ„å®šä¹‰
 struct DBThreadParam
 {
-	int					hEvent;									//ÍË³öÊÂ¼ş
-	//HANDLE					hCompletionPort;						//Íê³É¶Ë¿Ú
-	CDataBaseManage* pDataManage;							//Êı¾İ¿â¹ÜÀíÀàÖ¸Õë
+	int					hEvent;									//é€€å‡ºäº‹ä»¶
+	//HANDLE					hCompletionPort;						//å®Œæˆç«¯å£
+	CDataBaseManage* pDataManage;							//æ•°æ®åº“ç®¡ç†ç±»æŒ‡é’ˆ
 };
 
 CDataBaseManage::CDataBaseManage()
@@ -43,7 +43,7 @@ CDataBaseManage::~CDataBaseManage()
 	m_pHandleService = NULL;
 }
 
-//¿ªÊ¼·şÎñ
+//å¼€å§‹æœåŠ¡
 bool CDataBaseManage::Start()
 {
 	INFO_LOG("DataBaseManage start begin ...");
@@ -56,10 +56,10 @@ bool CDataBaseManage::Start()
 
 	m_bRun = true;
 
-	//½¨Á¢ÊÂ¼ş
+	//å»ºç«‹äº‹ä»¶
 	int StartEvent = 0;//CreateEvent(FALSE, true, NULL, NULL);
 
-	////½¨Á¢Íê³É¶Ë¿Ú
+	////å»ºç«‹å®Œæˆç«¯å£
 	//m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
 	//if (m_hCompletePort == NULL)
 	//{
@@ -71,7 +71,7 @@ bool CDataBaseManage::Start()
 	SQLConnectReset();
 	//SQLConnect();
 
-	//½¨Á¢Êı¾İ´¦ÀíÏß³Ì
+	//å»ºç«‹æ•°æ®å¤„ç†çº¿ç¨‹
 	pthread_t threadID = 0;
 
 	DBThreadParam ThreadStartData;
@@ -94,10 +94,10 @@ bool CDataBaseManage::Start()
 
 	m_hThread = threadID;
 
-	// ¹ØÁªÈÕÖ¾ÎÄ¼ş
+	// å…³è”æ—¥å¿—æ–‡ä»¶
 	GameLogManage()->AddLogFile(threadID, THREAD_TYPE_ASYNC, roomID);
 
-	//// µÈ´ı×ÓÏß³Ì¶ÁÈ¡Ïß³Ì²ÎÊı
+	//// ç­‰å¾…å­çº¿ç¨‹è¯»å–çº¿ç¨‹å‚æ•°
 	//WaitForSingleObject(StartEvent, INFINITE);
 
 	//ResetEvent(StartEvent);
@@ -120,7 +120,7 @@ bool CDataBaseManage::Stop()
 	m_bRun = false;
 
 
-	//// ÏÈ¹Ø±ÕÍê³É¶Ë¿Ú
+	//// å…ˆå…³é—­å®Œæˆç«¯å£
 	//if (m_hCompletePort)
 	//{
 	//	PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
@@ -128,18 +128,18 @@ bool CDataBaseManage::Stop()
 	//	m_hCompletePort = NULL;
 	//}
 
-	// ÇåÀídataline
+	// æ¸…ç†dataline
 	//m_DataLine.SetCompletionHandle(NULL);
 	m_DataLine.CleanLineData();
 
-	// ¹Ø±ÕÊı¾İ¿â´¦ÀíÏß³Ì¾ä±ú
+	// å…³é—­æ•°æ®åº“å¤„ç†çº¿ç¨‹å¥æŸ„
 	if (m_hThread)
 	{
 		pthread_cancel(m_hThread);
 		m_hThread = 0;
 	}
 
-	//¹Ø±ÕÊı¾İ¿âÁ¬½Ó
+	//å…³é—­æ•°æ®åº“è¿æ¥
 	if (m_pMysqlHelper)
 	{
 		m_pMysqlHelper->disconnect();
@@ -152,50 +152,50 @@ bool CDataBaseManage::Stop()
 	return true;
 }
 
-//È¡Ïû³õÊ¼»¯
+//å–æ¶ˆåˆå§‹åŒ–
 bool CDataBaseManage::UnInit()
 {
 	return true;
 }
 
-//¼ÓÈë´¦Àí¶ÓÁĞ
+//åŠ å…¥å¤„ç†é˜Ÿåˆ—
 bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT dwHandleID)
 {
-	//´¦ÀíÊı¾İ
+	//å¤„ç†æ•°æ®
 	pData->dwHandleID = dwHandleID;
 	pData->uIndex = uIndex;
 	pData->uHandleKind = uHandleKind;
 	return m_DataLine.AddData(&pData->dataLineHead, uSize, 0) != 0;
 }
 
-//Êı¾İ¿â´¦ÀíÏß³Ì
+//æ•°æ®åº“å¤„ç†çº¿ç¨‹
 void* CDataBaseManage::DataServiceThread(void* pThreadData)
 {
 	INFO_LOG("DataServiceThread starting...");
 
-	//Êı¾İ¶¨Òå
-	DBThreadParam* pData = (DBThreadParam*)pThreadData;		//Ïß³ÌÆô¶¯Êı¾İÖ¸Õë
-	CDataBaseManage* pDataManage = pData->pDataManage;				//Êı¾İ¿â¹ÜÀíÖ¸Õë
-	CDataLine* pDataLine = &pDataManage->m_DataLine;			//Êı¾İ¶ÓÁĞÖ¸Õë
-	IDataBaseHandleService* pHandleService = pDataManage->m_pHandleService;	//Êı¾İ´¦Àí½Ó¿Ú
-	//HANDLE					hCompletionPort = pData->hCompletionPort;			//Íê³É¶Ë¿Ú
+	//æ•°æ®å®šä¹‰
+	DBThreadParam* pData = (DBThreadParam*)pThreadData;		//çº¿ç¨‹å¯åŠ¨æ•°æ®æŒ‡é’ˆ
+	CDataBaseManage* pDataManage = pData->pDataManage;				//æ•°æ®åº“ç®¡ç†æŒ‡é’ˆ
+	CDataLine* pDataLine = &pDataManage->m_DataLine;			//æ•°æ®é˜Ÿåˆ—æŒ‡é’ˆ
+	IDataBaseHandleService* pHandleService = pDataManage->m_pHandleService;	//æ•°æ®å¤„ç†æ¥å£
+	//HANDLE					hCompletionPort = pData->hCompletionPort;			//å®Œæˆç«¯å£
 
-	//Ïß³ÌÊı¾İ¶ÁÈ¡Íê³É
+	//çº¿ç¨‹æ•°æ®è¯»å–å®Œæˆ
 	//::SetEvent(pData->hEvent);
 
-	//Êı¾İ»º´æ
+	//æ•°æ®ç¼“å­˜
 	BYTE					szBuffer[LD_MAX_PART];
 
 	while (pDataManage->m_bRun == true)
 	{
-		//µÈ´ıÍê³É¶Ë¿Ú
+		//ç­‰å¾…å®Œæˆç«¯å£
 		usleep(THREAD_ONCE_DATABASE);
 
 		while (pDataLine->GetDataCount())
 		{
 			try
 			{
-				//´¦ÀíÍê³É¶Ë¿ÚÊı¾İ
+				//å¤„ç†å®Œæˆç«¯å£æ•°æ®
 				if (pDataLine->GetData((DataLineHead*)szBuffer, sizeof(szBuffer)) < sizeof(DataBaseLineHead))
 				{
 					continue;
@@ -216,7 +216,7 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 	pthread_exit(NULL);
 }
 
-//ÖØÁªÊı¾İ¿â
+//é‡è”æ•°æ®åº“
 bool CDataBaseManage::SQLConnectReset()
 {
 	if (m_bsqlInit == false)
@@ -240,7 +240,7 @@ bool CDataBaseManage::SQLConnectReset()
 
 	m_pMysqlHelper = new CMysqlHelper;
 
-	//³õÊ¼»¯mysql¶ÔÏó²¢½¨Á¢Á¬½Ó
+	//åˆå§‹åŒ–mysqlå¯¹è±¡å¹¶å»ºç«‹è¿æ¥
 	m_pMysqlHelper->init(m_host, m_user, m_passwd, m_name, "", m_nPort);
 	try
 	{
@@ -248,7 +248,7 @@ bool CDataBaseManage::SQLConnectReset()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+		ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -283,7 +283,7 @@ bool CDataBaseManage::CheckSQLConnect()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("Á¬½ÓÊı¾İ¿âÊ§°Ü:%s", excep.errorInfo.c_str());
+			ERROR_LOG("è¿æ¥æ•°æ®åº“å¤±è´¥:%s", excep.errorInfo.c_str());
 			return false;
 		}
 	}
@@ -314,27 +314,27 @@ bool CDataBaseHandle::SetParameter(IAsynThreadResultService* pRusultService, CDa
 	return true;
 }
 
-//³õÊ¼»¯º¯Êı
+//åˆå§‹åŒ–å‡½æ•°
 bool CDataBaseManage::Init(ManageInfoStruct* pInitInfo, KernelInfoStruct* pKernelInfo, IDataBaseHandleService* pHandleService, IAsynThreadResultService* pResultService)
 {
 	if (!pInitInfo || !pKernelInfo || !pHandleService || !pResultService)
 	{
-		throw new CException("CDataBaseManage::Init ²ÎÊı´íÎó!", (UINT)0x407, true);
+		throw new CException("CDataBaseManage::Init å‚æ•°é”™è¯¯!", (UINT)0x407, true);
 	}
 
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	if (m_bInit == true || m_bRun == true)
 	{
-		throw new CException("CDataBaseManage::Init ×´Ì¬Ğ§ÑéÊ§°Ü", (UINT)0x408, true);
+		throw new CException("CDataBaseManage::Init çŠ¶æ€æ•ˆéªŒå¤±è´¥", (UINT)0x408, true);
 	}
 
-	//ÉèÖÃÊı¾İ
+	//è®¾ç½®æ•°æ®
 	m_pInitInfo = pInitInfo;
 	m_pKernelInfo = pKernelInfo;
 	m_pHandleService = pHandleService;
 	m_DataLine.CleanLineData();
 
-	//ÉèÖÃÊı¾İ
+	//è®¾ç½®æ•°æ®
 	m_bInit = true;
 
 	return true;

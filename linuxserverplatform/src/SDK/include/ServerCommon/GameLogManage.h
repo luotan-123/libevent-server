@@ -16,7 +16,7 @@ struct ThreadLogFiles
 	}
 };
 
-// ÓÎÏ·log¹ÜÀí
+// æ¸¸æˆlogç®¡ç†
 class CGameLogManage
 {
 private:
@@ -27,37 +27,37 @@ public:
 	static CGameLogManage* Instance();
 	void Release();
 
-	// Íâ²¿½Ó¿ÚÌí¼ÓÏß³ÌÈÕÖ¾
+	// å¤–éƒ¨æ¥å£æ·»åŠ çº¿ç¨‹æ—¥å¿—
 	void AddLogFile(pthread_t threadID, int threadType, int roomID = 0);
-	// »ñÈ¡¶ÔÓ¦Ïß³ÌµÄerrorlog
+	// è·å–å¯¹åº”çº¿ç¨‹çš„errorlog
 	std::string GetErrorLog(pthread_t threadID);
-	// »ñÈ¡¶ÔÓ¦Ïß³ÌµÄcostLog
+	// è·å–å¯¹åº”çº¿ç¨‹çš„costLog
 	std::string GetCostLog(pthread_t threadID);
 
-	// Ôö¼ÓÖ¸¶¨ÎÄ¼şµÄfp
+	// å¢åŠ æŒ‡å®šæ–‡ä»¶çš„fp
 	bool AddLogFileFp(std::string strFile, FILE* fp);
-	// »ñÈ¡Ö¸¶¨ÎÄ¼şµÄfp
+	// è·å–æŒ‡å®šæ–‡ä»¶çš„fp
 	FILE* GetLogFileFp(std::string&& strFile);
 
 private:
-	// Ìí¼ÓÖĞĞÄ·şÎñÆ÷Ïà¹ØÈÕÖ¾ÎÄ¼ş
+	// æ·»åŠ ä¸­å¿ƒæœåŠ¡å™¨ç›¸å…³æ—¥å¿—æ–‡ä»¶
 	void AddCenterLogFile(pthread_t threadID, int threadType);
 
-	// Ìí¼Ó´óÌü·şÎñÆ÷Ïà¹ØÈÕÖ¾ÎÄ¼ş
+	// æ·»åŠ å¤§å…æœåŠ¡å™¨ç›¸å…³æ—¥å¿—æ–‡ä»¶
 	void AddLogonLogFile(pthread_t threadID, int threadType);
 
-	// Ìí¼ÓÓÎÏ··şÎñÆ÷Ïà¹ØÈÕÖ¾ÎÄ¼ş
+	// æ·»åŠ æ¸¸æˆæœåŠ¡å™¨ç›¸å…³æ—¥å¿—æ–‡ä»¶
 	void AddLoaderLogFile(pthread_t threadID, int threadType, int roomID);
 
 private:
-	// ÓÎÏ·ÈÕÖ¾ÎÄ¼şmap
+	// æ¸¸æˆæ—¥å¿—æ–‡ä»¶map
 	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_loaderLogFilesMap;
-	// ´óÌüÈÕÖ¾ÎÄ¼şmap
+	// å¤§å…æ—¥å¿—æ–‡ä»¶map
 	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_logonLogFilesMap;
-	// ÖĞĞÄ·şÈÕÖ¾ÎÄ¼şmap
+	// ä¸­å¿ƒæœæ—¥å¿—æ–‡ä»¶map
 	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_centerLogFilesMap;
 
-	// ÎÄ¼şÃèÊö·ûmap
+	// æ–‡ä»¶æè¿°ç¬¦map
 	std::map<std::string, FILE*> m_filesFpMap;
 };
 

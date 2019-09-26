@@ -3,10 +3,10 @@
 #include "log.h"
 
 /******************************************************************************
-* ¹¦  ÄÜ£º¹¹Ôìº¯Êı
-* ²Î  Êı£ºÎŞ
-* ·µ»ØÖµ£ºÎŞ
-* ±¸  ×¢£º
+* åŠŸ  èƒ½ï¼šæ„é€ å‡½æ•°
+* å‚  æ•°ï¼šæ— 
+* è¿”å›å€¼ï¼šæ— 
+* å¤‡  æ³¨ï¼š
 ******************************************************************************/
 CINIFile::CINIFile(string fileName, string mode/* = "r+"*/)
 {
@@ -18,10 +18,10 @@ CINIFile::CINIFile(string fileName, string mode/* = "r+"*/)
 }
 
 /******************************************************************************
-* ¹¦  ÄÜ£ºÎö¹¹º¯Êı
-* ²Î  Êı£ºÎŞ
-* ·µ»ØÖµ£ºÎŞ
-* ±¸  ×¢£º
+* åŠŸ  èƒ½ï¼šææ„å‡½æ•°
+* å‚  æ•°ï¼šæ— 
+* è¿”å›å€¼ï¼šæ— 
+* å¤‡  æ³¨ï¼š
 ******************************************************************************/
 CINIFile::~CINIFile()
 {
@@ -49,14 +49,14 @@ string CINIFile::GetAppPath()
 {
 	char current_absolute_path[PATH_MAX] = "";
 
-	//»ñÈ¡µ±Ç°³ÌĞò¾ø¶ÔÂ·¾¶
+	//è·å–å½“å‰ç¨‹åºç»å¯¹è·¯å¾„
 	int cnt = readlink("/proc/self/exe", current_absolute_path, (size_t)PATH_MAX);
 	if (cnt < 0 || cnt >= PATH_MAX)
 	{
 		return "/home/";
 	}
 
-	//»ñÈ¡µ±Ç°Ä¿Â¼¾ø¶ÔÂ·¾¶£¬¼´È¥µô³ÌĞòÃû
+	//è·å–å½“å‰ç›®å½•ç»å¯¹è·¯å¾„ï¼Œå³å»æ‰ç¨‹åºå
 	for (int i = cnt; i >= 0; --i)
 	{
 		if (current_absolute_path[i] == '/')
@@ -70,10 +70,10 @@ string CINIFile::GetAppPath()
 }
 
 /******************************************************************************
-* ¹¦  ÄÜ£º´ò¿ªÎÄ¼şº¯Êı
-* ²Î  Êı£ºÎŞ
-* ·µ»ØÖµ£º
-* ±¸  ×¢£º
+* åŠŸ  èƒ½ï¼šæ‰“å¼€æ–‡ä»¶å‡½æ•°
+* å‚  æ•°ï¼šæ— 
+* è¿”å›å€¼ï¼š
+* å¤‡  æ³¨ï¼š
 ******************************************************************************/
 INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 {
@@ -96,7 +96,7 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 	while (fgets(strLine, CONFIGLEN, m_fp))
 	{
 		szLine.assign(strLine);
-		//É¾³ı×Ö·û´®ÖĞµÄ·Ç±ØÒª×Ö·û
+		//åˆ é™¤å­—ç¬¦ä¸²ä¸­çš„éå¿…è¦å­—ç¬¦
 		nLeftPos = szLine.find("\n");
 		if (string::npos != nLeftPos)
 		{
@@ -107,7 +107,7 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 		{
 			szLine.erase(nLeftPos, 1);
 		}
-		//ÅĞ¶ÏÊÇ·ñÊÇÖ÷¼ü
+		//åˆ¤æ–­æ˜¯å¦æ˜¯ä¸»é”®
 		nLeftPos = szLine.find("[");
 		nRightPos = szLine.find("]");
 		if (nLeftPos != string::npos && nRightPos != string::npos)
@@ -122,7 +122,7 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 		}
 		else
 		{
-			//ÊÇ·ñÊÇ×Ó¼ü
+			//æ˜¯å¦æ˜¯å­é”®
 			if (nIndexPos = szLine.find("="), string::npos != nIndexPos)
 			{
 				string szSubKey, szSubValue;
@@ -137,7 +137,7 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 			}
 			else
 			{
-				//TODO:²»·ûºÏini¼üÖµÄ£°åµÄÄÚÈİ Èç×¢ÊÍµÈ
+				//TODO:ä¸ç¬¦åˆinié”®å€¼æ¨¡æ¿çš„å†…å®¹ å¦‚æ³¨é‡Šç­‰
 
 			}
 		}
@@ -148,17 +148,17 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 }
 
 /******************************************************************************
-* ¹¦  ÄÜ£º¹Ø±ÕÎÄ¼şº¯Êı
-* ²Î  Êı£ºÎŞ
-* ·µ»ØÖµ£º
-* ±¸  ×¢£º
+* åŠŸ  èƒ½ï¼šå…³é—­æ–‡ä»¶å‡½æ•°
+* å‚  æ•°ï¼šæ— 
+* è¿”å›å€¼ï¼š
+* å¤‡  æ³¨ï¼š
 ******************************************************************************/
 INI_RES CINIFile::CloseFile()
 {
 	if (m_bModify)
 	{
 		fseek(m_fp, 0, SEEK_SET);
-		//±£´æ
+		//ä¿å­˜
 		for (MAINKEYMAP::iterator it = m_Map.begin(); it != m_Map.end(); ++it)
 		{
 			string AppName = "[";
@@ -184,13 +184,13 @@ INI_RES CINIFile::CloseFile()
 }
 
 /******************************************************************************
-* ¹¦  ÄÜ£º»ñÈ¡[SECTION]ÏÂµÄÄ³Ò»¸ö¼üÖµµÄ×Ö·û´®
-* ²Î  Êı£º
-*		string mAttr		ÊäÈë²ÎÊı   	Ö÷¼ü
-*		string cAttr		ÊäÈë²ÎÊı	×Ó¼ü
-*		string value		Êä³ö²ÎÊı	×Ó¼ü¼üÖµ
-* ·µ»ØÖµ£º
-* ±¸  ×¢£º
+* åŠŸ  èƒ½ï¼šè·å–[SECTION]ä¸‹çš„æŸä¸€ä¸ªé”®å€¼çš„å­—ç¬¦ä¸²
+* å‚  æ•°ï¼š
+*		string mAttr		è¾“å…¥å‚æ•°   	ä¸»é”®
+*		string cAttr		è¾“å…¥å‚æ•°	å­é”®
+*		string value		è¾“å‡ºå‚æ•°	å­é”®é”®å€¼
+* è¿”å›å€¼ï¼š
+* å¤‡  æ³¨ï¼š
 ******************************************************************************/
 INI_RES CINIFile::GetKey(string secName, string keyName, string& value)
 {

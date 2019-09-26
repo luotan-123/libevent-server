@@ -3,8 +3,8 @@
 #include "log.h"
 #include <exception>
 
-//¾²Ì¬±äÁ¿¶¨Òå
-bool CException::m_bShowError = false;					//ÊÇ·ñÏÔÊ¾´íÎó
+//é™æ€å˜é‡å®šä¹‰
+bool CException::m_bShowError = false;					//æ˜¯å¦æ˜¾ç¤ºé”™è¯¯
 
 CException::CException(const char* szErrorMessage, unsigned int uErrorCode, bool bAutoDelete)
 {
@@ -18,12 +18,12 @@ CException::CException(const char* szErrorMessage, unsigned int uErrorCode, bool
 		}
 		else
 		{
-			strcpy(m_szMessage, "Òì³£´íÎóĞÅÏ¢Ì«³¤");
+			strcpy(m_szMessage, "å¼‚å¸¸é”™è¯¯ä¿¡æ¯å¤ªé•¿");
 		}
 	}
 	else
 	{
-		strcpy(m_szMessage, "Ã»ÓĞÒì³£ĞÅÏ¢");
+		strcpy(m_szMessage, "æ²¡æœ‰å¼‚å¸¸ä¿¡æ¯");
 	}
 
 	if (m_bShowError == true)
@@ -37,14 +37,14 @@ CException::~CException()
 {
 }
 
-//»ñÈ¡´íÎó´úÂë
+//è·å–é”™è¯¯ä»£ç 
 UINT CException::GetErrorCode() const
 {
 	if (this != NULL) return m_uErrorCode;
 	return 0;
 }
 
-//É¾³ıº¯Êı
+//åˆ é™¤å‡½æ•°
 bool CException::Delete()
 {
 	if ((this != NULL) && (m_bAutoDelete == true))
@@ -55,12 +55,12 @@ bool CException::Delete()
 	return false;
 }
 
-//»ñÈ¡´íÎóĞÅÏ¢
+//è·å–é”™è¯¯ä¿¡æ¯
 char const* CException::GetErrorMessage(char* szBuffer, int iBufLength) const
 {
 	if (this != NULL)
 	{
-		//¿½±´´íÎóĞÅÏ¢
+		//æ‹·è´é”™è¯¯ä¿¡æ¯
 		if ((szBuffer != NULL) && (iBufLength > 0))
 		{
 			int iCopyLength = Min_(iBufLength - 1, strlen(m_szMessage));
@@ -72,7 +72,7 @@ char const* CException::GetErrorMessage(char* szBuffer, int iBufLength) const
 	return NULL;
 }
 
-//ÉèÖÃÊÇ·ñÏÔÊ¾´íÎó
+//è®¾ç½®æ˜¯å¦æ˜¾ç¤ºé”™è¯¯
 bool CException::ShowErrorMessage(bool bShowError)
 {
 	m_bShowError = bShowError;

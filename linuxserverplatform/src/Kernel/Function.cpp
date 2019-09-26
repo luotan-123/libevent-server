@@ -2,7 +2,7 @@
 #include <sys/syscall.h>
 #include "Function.h"
 
-//»ñÈ¡¶¯Ì¬Êı×éÖ¸Õë´óĞ¡
+//è·å–åŠ¨æ€æ•°ç»„æŒ‡é’ˆå¤§å°
 int GetNewArraySize(void* pArray)
 {
 	if (pArray == NULL)
@@ -21,7 +21,7 @@ int GetNewArraySize(void* pArray)
 	return iSize;
 }
 
-// »ñÈ¡ÏµÍ³Ê±¼ä
+// è·å–ç³»ç»Ÿæ—¶é—´
 void GetLocalTime(SYSTEMTIME* sysTime)
 {
 	if (!sysTime)
@@ -52,7 +52,7 @@ void GetLocalTime(SYSTEMTIME* sysTime)
 	sysTime->lMicroseconds = tv.tv_usec;
 }
 
-//»ñÈ¡Ê±¼ä´Á£¨µ¥Î»£ººÁÃë£©
+//è·å–æ—¶é—´æˆ³ï¼ˆå•ä½ï¼šæ¯«ç§’ï¼‰
 long long GetSysMilliseconds()
 {
 	struct timeval tv;
@@ -61,7 +61,7 @@ long long GetSysMilliseconds()
 	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
-//»ñÈ¡Ïß³Ìpid
+//è·å–çº¿ç¨‹pid
 pthread_t GetCurrentThreadId()
 {
 	return pthread_self();

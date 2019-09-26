@@ -1,4 +1,4 @@
-﻿#include "LoaderServerModule.h"
+#include "LoaderServerModule.h"
 
 // 登陆服务器（网关服务器）模块
 CLoaderServerModule	g_LoaderServerModule;
@@ -24,7 +24,7 @@ int main()
 	//CINIFile::GetAppPath();
 
 	CUtil::MkdirIfNotExists("log");
-	CUtil::MkdirIfNotExists("C:\\HM-Dump-v1.0");
+	//CUtil::MkdirIfNotExists("C:\\HM-Dump-v1.0");
 
 	// 设置服务器类型
 	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
@@ -83,9 +83,6 @@ int main()
 
 	GameLogManage()->Release();
 	ConfigManage()->Release();
-
-	printf("Press a key to continue...\n");
-	getchar();
 
 	return 0;
 }

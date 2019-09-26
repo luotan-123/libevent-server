@@ -2,7 +2,7 @@
 
 #include "RedisBase.h"
 
-// redis ¹«¹²Àà
+// redis å…¬å…±ç±»
 class CRedisCommon : public CRedisBase
 {
 public:
@@ -10,61 +10,61 @@ public:
 	virtual ~CRedisCommon();
 
 public:
-	//////////////////////////////////¹ºÂò×À×ÓÊı¾İ////////////////////////////////////////
-	// »ñÈ¡×À×ÓÊı¾İ
+	//////////////////////////////////è´­ä¹°æ¡Œå­æ•°æ®////////////////////////////////////////
+	// è·å–æ¡Œå­æ•°æ®
 	bool GetPrivateDeskRecordInfo(int deskMixID, PrivateDeskInfo& deskRecordInfo);
-	// ÉèÖÃ×î´ó¹ºÂò×À×ÓË÷Òı
+	// è®¾ç½®æœ€å¤§è´­ä¹°æ¡Œå­ç´¢å¼•
 	bool SetMarkDeskIndex(int roomID, int iMarkIndex);
-	// É¾³ı¾ãÀÖ²¿ÅÆ×À
+	// åˆ é™¤ä¿±ä¹éƒ¨ç‰Œæ¡Œ
 	bool DelFGDeskRoom(int friendsGroupID, int friendsGroupDeskNumber);
 
-	//////////////////////////////////±³°üÊı¾İ////////////////////////////////////////
-	//ÇëÇóÍæ¼Ò±³°üĞÅÏ¢
+	//////////////////////////////////èƒŒåŒ…æ•°æ®////////////////////////////////////////
+	//è¯·æ±‚ç©å®¶èƒŒåŒ…ä¿¡æ¯
 	bool GetUserBag(int userID, UserBag& userBagInfo);
-	//»ñÈ¡Ö¸¶¨±³°üµÀ¾ßÊıÁ¿
+	//è·å–æŒ‡å®šèƒŒåŒ…é“å…·æ•°é‡
 	int GetUserBagCount(int userID, const char * resName);
-	//ÉèÖÃÍæ¼Ò±³°ü
+	//è®¾ç½®ç©å®¶èƒŒåŒ…
 	bool SetUserBag(int userID, const char * resName, int changeResNums, bool bAdd);
 
-	/////////////////////////////////ÓÃ»§Êı¾İ/////////////////////////////////////////
-	// Íæ¼ÒÕËºÅÊÇ·ñ´æÔÚ
+	/////////////////////////////////ç”¨æˆ·æ•°æ®/////////////////////////////////////////
+	// ç©å®¶è´¦å·æ˜¯å¦å­˜åœ¨
 	bool IsAccountExists(const char* account);
-	// Í¨¹ıÍæ¼ÒÕËºÅ»ñÈ¡ID
+	// é€šè¿‡ç©å®¶è´¦å·è·å–ID
 	int GetUserIDByAccount(const char* account);
-	// »ñÈ¡Íæ¼ÒÊı¾İ
+	// è·å–ç©å®¶æ•°æ®
 	bool GetUserData(int userID, UserData& userData);
-	// ÉèÖÃÍæ¼ÒµÄroomID
+	// è®¾ç½®ç©å®¶çš„roomID
 	bool SetUserRoomID(int userID, int roomID);
-	// ÉèÖÃÍæ¼ÒdeskIdx
+	// è®¾ç½®ç©å®¶deskIdx
 	bool SetUserDeskIdx(int userID, int deskIdx);
-	// ÉèÖÃÍæ¼Ò½ğ±Ò
+	// è®¾ç½®ç©å®¶é‡‘å¸
 	bool SetUserMoney(int userID, long long money);
-	// ÉèÖÃÍæ¼Ò½ğ±Ò£¬ĞÂ·½·¨
+	// è®¾ç½®ç©å®¶é‡‘å¸ï¼Œæ–°æ–¹æ³•
 	bool SetUserMoneyEx(int userID, long long money, bool bAdd = true, int reason = 0, int roomID = 0, long long rateMoney = 0, BYTE isVirtual = 0, int friendsGroupID = 0, int roomType = -1);
-	// ÉèÖÃÍæ¼Ò·¿¿¨
+	// è®¾ç½®ç©å®¶æˆ¿å¡
 	bool SetUserJewels(int userID, int jewels);
-	// ĞÂµÄÉèÖÃÍæ¼Ò·¿¿¨
+	// æ–°çš„è®¾ç½®ç©å®¶æˆ¿å¡
 	bool SetUserJewelsEx(int userID, int jewels, bool bAdd = true, int reason = 0, int roomID = 0, int rateJewels = 0, BYTE isVirtual = 0, int friendsGroupID = 0, int roomType = -1);
-	// »ñÈ¡Íæ¼ÒÊôĞÔÖµ£¬Ö»ÄÜ»ñÈ¡ÊıÖµÀàĞÍ
+	// è·å–ç©å®¶å±æ€§å€¼ï¼Œåªèƒ½è·å–æ•°å€¼ç±»å‹
 	long long GetUserResNums(int userID, const char * resName);
-	// ÉèÖÃÍæ¼ÒÊôĞÔÖµ£¬Ö»ÄÜÉèÖÃÊıÖµÀàĞÍ
+	// è®¾ç½®ç©å®¶å±æ€§å€¼ï¼Œåªèƒ½è®¾ç½®æ•°å€¼ç±»å‹
 	bool SetUserResNums(int userID, const char * resName, long long resNums);
-	// Ôö¼Ó×ÊÔ´Öµ£¬Ö»ÄÜÉèÖÃÊıÖµÀàĞÍ
+	// å¢åŠ èµ„æºå€¼ï¼Œåªèƒ½è®¾ç½®æ•°å€¼ç±»å‹
 	long long AddUserResNums(int userID, const char * resName, long long changeResNums);
-	// ÉèÖÃÍæ¼Ò¹ºÂòÖĞµÄ×À×Ó´ÎÊı
+	// è®¾ç½®ç©å®¶è´­ä¹°ä¸­çš„æ¡Œå­æ¬¡æ•°
 	bool SetUserBuyingDeskCount(int userID, int count, bool bAdd = true);
-	// ÉèÖÃÍæ¼ÒµÄ¿çÌìÊ±¼ä
+	// è®¾ç½®ç©å®¶çš„è·¨å¤©æ—¶é—´
 	bool SetUserCrossDayTime(int useID, int time);
-	// ÉèÖÃÍæ¼Òtoken
+	// è®¾ç½®ç©å®¶token
 	bool SetUserToken(int userID, const char* token);
-	// »ñÈ¡Íæ¼ÒĞ¡ºìµãĞÅÏ¢
+	// è·å–ç©å®¶å°çº¢ç‚¹ä¿¡æ¯
 	bool GetUserRedSpot(int userID, UserRedSpot &userRedSpot);
-	// ÉèÖÃµ±Ç°×î´óÓÃ»§id
+	// è®¾ç½®å½“å‰æœ€å¤§ç”¨æˆ·id
 	bool SetCurMaxUserID(int iUserID);
-	// ÆÕÍ¨ÓÃ»§½¨Á¢account-userIDµÄË÷Òı, µÚÈı·½ÓÃ»§½¨Á¢key-userIDË÷Òı
+	// æ™®é€šç”¨æˆ·å»ºç«‹account-userIDçš„ç´¢å¼•, ç¬¬ä¸‰æ–¹ç”¨æˆ·å»ºç«‹key-userIDç´¢å¼•
 	bool FixAccountIndexInfo(const char* account, const char* passwd, int userID, int registerType);
 
-	/////////////////////////////////½±³ØÊı¾İ/////////////////////////////////////////
+	/////////////////////////////////å¥–æ± æ•°æ®/////////////////////////////////////////
 	bool GetRewardsPoolInfo(int roomID, RewardsPoolInfo& poolInfo);
 	bool SetRoomPoolMoney(int roomID, long long money, bool bAdd = false);
 	bool SetRoomGameWinMoney(int roomID, long long money, bool bAdd = false);
@@ -72,41 +72,41 @@ public:
 	bool SetRoomPoolData(int roomID, const char * fieldName, long long money, bool bAdd = false);
 	long long GetRoomPoolData(int roomID, const char * fieldName);
 
-	/////////////////////////////////·şÎñÆ÷ÅäÖÃÊı¾İ/////////////////////////////////////////
-	// »ñÈ¡·şÎñÆ÷×´Ì¬
+	/////////////////////////////////æœåŠ¡å™¨é…ç½®æ•°æ®/////////////////////////////////////////
+	// è·å–æœåŠ¡å™¨çŠ¶æ€
 	bool GetServerStatus(int &status);
-	// ÉèÖÃ·şÎñÆ÷×´Ì¬
+	// è®¾ç½®æœåŠ¡å™¨çŠ¶æ€
 	bool SetServerStatus(int status);
-	// »ñÈ¡OtherConfig
+	// è·å–OtherConfig
 	bool GetOtherConfig(OtherConfig &config);
-	// »ñÈ¡roomBaseInfo
+	// è·å–roomBaseInfo
 	bool GetRoomBaseInfo(int roomID, RoomBaseInfo &room);
-	// »ñÈ¡¹ºÂò·¿¿¨ÅäÖÃ privateDeskConfig
+	// è·å–è´­ä¹°æˆ¿å¡é…ç½® privateDeskConfig
 	bool GetBuyGameDeskInfo(const BuyGameDeskInfoKey &buyKey, BuyGameDeskInfo &buyInfo);
 
-	////////////////////////////////±ÈÈü³¡//////////////////////////////////////////
-	// »ñÈ¡ÂúÈË¿ª±ÈÈüÍæ¼Ò
+	////////////////////////////////æ¯”èµ›åœº//////////////////////////////////////////
+	// è·å–æ»¡äººå¼€æ¯”èµ›ç©å®¶
 	bool GetFullPeopleMatchPeople(int gameID, int matchID, int peopleCount, std::vector<MatchUserInfo> &vecPeople);
-	// »ñÈ¡¶¨Ê±Èü±¨ÃûÍæ¼Ò
+	// è·å–å®šæ—¶èµ›æŠ¥åç©å®¶
 	bool GetTimeMatchPeople(int matchID, std::vector<MatchUserInfo> &vecPeople);
 
 protected:
-	// ĞèÒª±£´æµ½dbÖ¸Áî½Ó¿Ú£¬Ä¿Ç°Ö»ÓĞÍæ¼ÒÊı¾İ Õâ¸öº¯ÊıÄ¿Ç°²»ÄÜÊ¹ÓÃredis lock Ê¹ÓÃredis lockµÄÊ±»úÓÉµ÷ÓÃÕß¾ö¶¨
-	bool InnerHINCRBYCommand(const char* key, const char* redisCmd, long long &retValue, int mode = REDIS_EXTEND_MODE_DEFAULT);	// Ö»ÄÜÕë¶ÔHINCRBYÖ¸Áî£¬Ö»ÄÜÊıÖµÀàĞÍ
-	bool InnerHMSetCommand(const char* key, const char* redisCmd, int mode = REDIS_EXTEND_MODE_DEFAULT);						// Ö»ÄÜÕë¶ÔHMSETÖ¸Áî
+	// éœ€è¦ä¿å­˜åˆ°dbæŒ‡ä»¤æ¥å£ï¼Œç›®å‰åªæœ‰ç©å®¶æ•°æ® è¿™ä¸ªå‡½æ•°ç›®å‰ä¸èƒ½ä½¿ç”¨redis lock ä½¿ç”¨redis lockçš„æ—¶æœºç”±è°ƒç”¨è€…å†³å®š
+	bool InnerHINCRBYCommand(const char* key, const char* redisCmd, long long &retValue, int mode = REDIS_EXTEND_MODE_DEFAULT);	// åªèƒ½é’ˆå¯¹HINCRBYæŒ‡ä»¤ï¼Œåªèƒ½æ•°å€¼ç±»å‹
+	bool InnerHMSetCommand(const char* key, const char* redisCmd, int mode = REDIS_EXTEND_MODE_DEFAULT);						// åªèƒ½é’ˆå¯¹HMSETæŒ‡ä»¤
 
 public:
-	//Íæ¼ÒÔÚÏßÎ¬»¤
+	//ç©å®¶åœ¨çº¿ç»´æŠ¤
 	bool IsUserOnline(int userID);
 	bool RemoveOnlineUser(int userID, BYTE isVirtual);
 	bool AddOnlineUser(int userID, BYTE isVirtual);
 	bool ClearOnlineUser();
 
-	// ¼¯ºÏ²Ù×÷
+	// é›†åˆæ“ä½œ
 	bool AddKeyToSet(const char* key, const char * assKey);
 	bool AddKeyToZSet(const char* key, long long socre, long long value);
-	bool GetZSetSocreByRank(const char* key, int rank, bool order, long long &socre); //true£º´Ó´óµ½Ğ¡
+	bool GetZSetSocreByRank(const char* key, int rank, bool order, long long &socre); //trueï¼šä»å¤§åˆ°å°
 public:
-	// »ñÈ¡Ö¸¶¨Î»ÊıµÄËæ»úÊı£¬Ê×Î»²»Îª0
+	// è·å–æŒ‡å®šä½æ•°çš„éšæœºæ•°ï¼Œé¦–ä½ä¸ä¸º0
 	static int GetRandDigit(int digit);
 };

@@ -2,11 +2,11 @@
 
 #include "CenterServerManage.h"
 
-//ÓÎÏ·µÇÂ½Ä£¿é
+//æ¸¸æˆç™»é™†æ¨¡å—
 class CCenterServerModule : public IModuleManageService
 {
 public:
-	CCenterServerManage		m_CenterServerManage;				//µÇÂ½¹ÜÀí
+	CCenterServerManage		m_CenterServerManage;				//ç™»é™†ç®¡ç†
 
 public:
 	CCenterServerModule();

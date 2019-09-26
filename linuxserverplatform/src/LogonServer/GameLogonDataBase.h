@@ -2,7 +2,7 @@
 
 #include "DataBase.h"
 
-//Êı¾İ¿â´¦ÀíÕß
+//æ•°æ®åº“å¤„ç†è€…
 class CServiceDataBaseHandle : public CDataBaseHandle
 {
 public:
@@ -13,9 +13,9 @@ private:
 	virtual UINT HandleDataBase(DataBaseLineHead * pSourceData);
 
 private:
-	// Ö´ĞĞsqlÓï¾ä
+	// æ‰§è¡Œsqlè¯­å¥
 	int OnHandleExecuteSQLStatement(DataBaseLineHead * pSourceData);
-	// HTTPÇëÇó
+	// HTTPè¯·æ±‚
 	int OnHandleHTTP(DataBaseLineHead * pSourceData);
 
 private:

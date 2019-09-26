@@ -1,7 +1,7 @@
 #pragma once
 
-#define CLIENT_SOCKET_SEND_BUF	(64 * 1024)		// ·¢ËÍ»º³åÇø´óĞ¡
-#define CLIENT_SOCKET_RECV_BUF  (32 * 1024)		// ½ÓÊÕ»º³åÇø´óĞ¡
+#define CLIENT_SOCKET_SEND_BUF	(64 * 1024)		// å‘é€ç¼“å†²åŒºå¤§å°
+#define CLIENT_SOCKET_RECV_BUF  (32 * 1024)		// æ¥æ”¶ç¼“å†²åŒºå¤§å°
 
 class CDataLine;
 class CTcpConnect;
@@ -18,7 +18,7 @@ public:
 	void SetIndex(int index) { m_index = index; }
 	int GetSocketIdx();
 
-	// ÊÇ·ñÓĞĞ§
+	// æ˜¯å¦æœ‰æ•ˆ
 	inline bool Enable();
 	bool OnRead();
 
@@ -34,7 +34,7 @@ public:
 	int GetSocket() { return m_socket; }
 	int GetRemainSendBufSize() { return m_remainSendBytes; }
 
-	// Çå¿Õ·ÇÓÀ¾ÃÊôĞÔ(³õÊ¼»¯»òÕßÖØĞÂÆôÓÃÒ»¸ö¶ÔÏóµ÷ÓÃ)
+	// æ¸…ç©ºéæ°¸ä¹…å±æ€§(åˆå§‹åŒ–æˆ–è€…é‡æ–°å¯ç”¨ä¸€ä¸ªå¯¹è±¡è°ƒç”¨)
 	void Clear();
 private:
 	int m_index;
@@ -47,9 +47,9 @@ private:
 	char m_sendBuf[CLIENT_SOCKET_SEND_BUF];
 	int m_remainSendBytes;
 
-	CDataLine* m_pDataLine;			//¹²ÏíµÄdataline¶ÔÏó
+	CDataLine* m_pDataLine;			//å…±äº«çš„datalineå¯¹è±¡
 	CSignedLock m_lock;
-	CTcpConnect* m_pTcpConnect;		//¹²Ïí¹ÜÀíÀà
+	CTcpConnect* m_pTcpConnect;		//å…±äº«ç®¡ç†ç±»
 };
 
 class CTcpConnect

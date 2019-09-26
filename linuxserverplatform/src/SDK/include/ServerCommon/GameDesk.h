@@ -4,49 +4,49 @@
 #include "gameUserManage.h"
 
 
-//¶¨Ê±Æ÷
-#define IDT_AGREE_DISMISS_DESK		1		//Í¬Òâ½âÉ¢×À×Ó¶¨Ê±Æ÷
-#define IDT_FRIEND_ROOM_GAMEBEGIN	2		//ºÃÓÑ·¿ÓÎÏ·¿ªÊ¼¶¨Ê±Æ÷
+//å®šæ—¶å™¨
+#define IDT_AGREE_DISMISS_DESK		1		//åŒæ„è§£æ•£æ¡Œå­å®šæ—¶å™¨
+#define IDT_FRIEND_ROOM_GAMEBEGIN	2		//å¥½å‹æˆ¿æ¸¸æˆå¼€å§‹å®šæ—¶å™¨
 
-//¶¨Ê±Æ÷Ïà¹ØÊ±¼ä
-const int CFG_DISMISS_DESK_WAIT_TIME = 120;						// ½âÉ¢×À×ÓµÈ´ıÊ±¼ä
-const int FRIEND_ROOM_WAIT_BEGIN_TIME = 61;						// ½ğ±Ò·¿¡¢vip·¿³äÖµÊ±¼ä
-const int GOLD_DESK_TIMEOUT_UNAGREE_KICKOUT_SECS = 31;			// ½ğ±Ò³¡³¬Ê±Î´×¼±¸T³ıÍæ¼ÒÊ±¼ä
-static int HUUNDRED_GAME_TIMEOUT_OPERATE_KICKOUT_SECS = 120;	// °ÙÈËÀàÓÎÏ·³¡¾°ÀàÓÎÏ·£¬³¤Ê±¼ä²»²Ù×÷ÌßÈËÊ±¼ä
+//å®šæ—¶å™¨ç›¸å…³æ—¶é—´
+const int CFG_DISMISS_DESK_WAIT_TIME = 120;						// è§£æ•£æ¡Œå­ç­‰å¾…æ—¶é—´
+const int FRIEND_ROOM_WAIT_BEGIN_TIME = 61;						// é‡‘å¸æˆ¿ã€vipæˆ¿å……å€¼æ—¶é—´
+const int GOLD_DESK_TIMEOUT_UNAGREE_KICKOUT_SECS = 31;			// é‡‘å¸åœºè¶…æ—¶æœªå‡†å¤‡Té™¤ç©å®¶æ—¶é—´
+static int HUUNDRED_GAME_TIMEOUT_OPERATE_KICKOUT_SECS = 120;	// ç™¾äººç±»æ¸¸æˆåœºæ™¯ç±»æ¸¸æˆï¼Œé•¿æ—¶é—´ä¸æ“ä½œè¸¢äººæ—¶é—´
 
-//ÓÎÏ·½áÊø±êÖ¾
-#define GFF_FORCE_FINISH			0			//Ç¿ĞĞ½â³ı
-#define GFF_SAFE_FINISH				1			//½â³ıÓÎÏ·
-#define GF_NORMAL					2			//ÓÎÏ·Õı³£½áÊø
-#define GF_SALE						3			//ÓÎÏ·°²È«½áÊø
-#define GF_NET_CAUSE                4			//ÍøÂçÔ­Òò£¬ÓÎÏ·½áÊø
-#define GFF_DISSMISS_FINISH			5			//½âÉ¢×À×Ó½áÊø
+//æ¸¸æˆç»“æŸæ ‡å¿—
+#define GFF_FORCE_FINISH			0			//å¼ºè¡Œè§£é™¤
+#define GFF_SAFE_FINISH				1			//è§£é™¤æ¸¸æˆ
+#define GF_NORMAL					2			//æ¸¸æˆæ­£å¸¸ç»“æŸ
+#define GF_SALE						3			//æ¸¸æˆå®‰å…¨ç»“æŸ
+#define GF_NET_CAUSE                4			//ç½‘ç»œåŸå› ï¼Œæ¸¸æˆç»“æŸ
+#define GFF_DISSMISS_FINISH			5			//è§£æ•£æ¡Œå­ç»“æŸ
 
-//¿ªÊ¼Ä£Ê½
+//å¼€å§‹æ¨¡å¼
 enum BeginMode
 {
-	FULL_BEGIN = 0,				// ÂúÈË²Å¿ªÊ¼
-	ALL_ARGEE = 1,				// ËùÓĞÈËÍ¬Òâ¾Í¿ªÊ¼
+	FULL_BEGIN = 0,				// æ»¡äººæ‰å¼€å§‹
+	ALL_ARGEE = 1,				// æ‰€æœ‰äººåŒæ„å°±å¼€å§‹
 };
 
 enum DismissType
 {
-	DISMISS_TYPE_DEFAULT = 0,	// Ä¬ÈÏ
-	DISMISS_TYPE_AGREE,			// Í¬Òâ½âÉ¢
-	DISMISS_TYPE_DISAGREE,		// ²»Í¬Òâ½âÉ¢
+	DISMISS_TYPE_DEFAULT = 0,	// é»˜è®¤
+	DISMISS_TYPE_AGREE,			// åŒæ„è§£æ•£
+	DISMISS_TYPE_DISAGREE,		// ä¸åŒæ„è§£æ•£
 };
 
-// ×À×ÓÍæ¼ÒĞÅÏ¢
+// æ¡Œå­ç©å®¶ä¿¡æ¯
 struct DeskUserInfo
 {
-	bool    bNetCut;			// ÊÇ·ñ¶ÏÏß
+	bool    bNetCut;			// æ˜¯å¦æ–­çº¿
 	BYTE	deskStation;
 	int		userID;
-	int		dismissType;		// ½âÉ¢ÀàĞÍ
-	time_t	lastWaitAgreeTime;	// ÉÏ´ÎµÈ´ı×¼±¸Ê±¼ä(°üº¬µÚÒ»´Î½øÈëÓÎÏ·, ÓÎÏ·½áÊø)½öÊµÓÃÓÚ½ğ±Ò³¡
-	bool	isAuto;				// ÊÇ·ñÍĞ¹Ü
-	BYTE	isVirtual;			// ÊÇ·ñ»úÆ÷ÈË
-	int		leftRoomUser;		// ÊÇ·ñÒÔÇ°Àë¿ª¹ı×À×Ó(Ë½ÈË·¿ÓÃ)
+	int		dismissType;		// è§£æ•£ç±»å‹
+	time_t	lastWaitAgreeTime;	// ä¸Šæ¬¡ç­‰å¾…å‡†å¤‡æ—¶é—´(åŒ…å«ç¬¬ä¸€æ¬¡è¿›å…¥æ¸¸æˆ, æ¸¸æˆç»“æŸ)ä»…å®ç”¨äºé‡‘å¸åœº
+	bool	isAuto;				// æ˜¯å¦æ‰˜ç®¡
+	BYTE	isVirtual;			// æ˜¯å¦æœºå™¨äºº
+	int		leftRoomUser;		// æ˜¯å¦ä»¥å‰ç¦»å¼€è¿‡æ¡Œå­(ç§äººæˆ¿ç”¨)
 
 	DeskUserInfo()
 	{
@@ -66,7 +66,7 @@ struct DeskUserInfo
 	}
 };
 
-// ÅÔ¹ÛÕßĞÅÏ¢
+// æ—è§‚è€…ä¿¡æ¯
 struct WatchUserInfo
 {
 	int userID;
@@ -81,464 +81,464 @@ struct WatchUserInfo
 class CGameMainManage;
 class CGameDesk
 {
-public: //¹¹Ôìº¯ÊıºÍÎö¹¹º¯Êı
+public: //æ„é€ å‡½æ•°å’Œææ„å‡½æ•°
 	explicit CGameDesk(BYTE byBeginMode);
 	virtual ~CGameDesk();
 
-	//Ğéº¯Êı£¬×ÓÀàÖØÔØµÄº¯Êı£¬°üÀ¨Ò»Ğ©¶¯×÷£¬ÊôĞÔÅĞ¶ÏµÈµÈ
+	//è™šå‡½æ•°ï¼Œå­ç±»é‡è½½çš„å‡½æ•°ï¼ŒåŒ…æ‹¬ä¸€äº›åŠ¨ä½œï¼Œå±æ€§åˆ¤æ–­ç­‰ç­‰
 public:
-	// »ñÈ¡ÓÎÏ·×´Ì¬ĞÅÏ¢
+	// è·å–æ¸¸æˆçŠ¶æ€ä¿¡æ¯
 	virtual bool OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser) = 0;
-	// ÖØÖÃÓÎÏ·×´Ì¬
+	// é‡ç½®æ¸¸æˆçŠ¶æ€
 	virtual bool ReSetGameState(BYTE bLastStation) = 0;
-	// ³õÊ¼»¯ÓÎÏ·Âß¼­
+	// åˆå§‹åŒ–æ¸¸æˆé€»è¾‘
 	virtual bool InitDeskGameStation() { return true; }
-	// ÓÎÏ·¿ªÊ¼
+	// æ¸¸æˆå¼€å§‹
 	virtual bool GameBegin(BYTE bBeginFlag);
-	// ÓÎÏ·½áÊø
+	// æ¸¸æˆç»“æŸ
 	virtual bool GameFinish(BYTE bDeskStation, BYTE bCloseFlag);
-	// ¶¨Ê±Æ÷ÏûÏ¢
+	// å®šæ—¶å™¨æ¶ˆæ¯
 	virtual bool OnTimer(UINT uTimerID);
-	// ×À×Ó³É¹¦½âÉ¢ isDismissMidway=ÊÇ·ñÖĞÍ¾½âÉ¢
+	// æ¡Œå­æˆåŠŸè§£æ•£ isDismissMidway=æ˜¯å¦ä¸­é€”è§£æ•£
 	virtual void OnDeskSuccessfulDissmiss(bool isDismissMidway = true);
-	// ³õÊ¼»¯ÓÎÏ·Êı¾İ£¬´ó½áËã³õÊ¼»¯
+	// åˆå§‹åŒ–æ¸¸æˆæ•°æ®ï¼Œå¤§ç»“ç®—åˆå§‹åŒ–
 	virtual void InitDeskGameData() { };
-	// ÅĞ¶ÏÓÎÏ·×ÀÉÏµÄÄ³¸öÍæ¼ÒÊÇ·ñ¿ªÊ¼ÓÎÏ·ÁË
+	// åˆ¤æ–­æ¸¸æˆæ¡Œä¸Šçš„æŸä¸ªç©å®¶æ˜¯å¦å¼€å§‹æ¸¸æˆäº†
 	virtual bool IsPlayGame(BYTE bDeskStation) { return m_bPlayGame; }
-	// ÊÇ·ñ¿ÉÒÔ¿ªÊ¼ÓÎÏ·
+	// æ˜¯å¦å¯ä»¥å¼€å§‹æ¸¸æˆ
 	virtual bool CanBeginGame();
-	// ÓÃ»§Í¬Òâ¿ªÊ¼
+	// ç”¨æˆ·åŒæ„å¼€å§‹
 	virtual bool UserAgreeGame(BYTE bDeskStation);
-	// ½âÉ¢ÏûÏ¢º¯Êı
+	// è§£æ•£æ¶ˆæ¯å‡½æ•°
 	virtual bool HandleDissmissMessage(BYTE deskStation, unsigned int assistID, void* pData, int size);
-	// ÓÃ»§¶ÏÏßÀë¿ª
+	// ç”¨æˆ·æ–­çº¿ç¦»å¼€
 	virtual bool UserNetCut(GameUserInfo *pUser);
-	// °ÙÈËÀàÓÎÏ·Æô¶¯£¬°ÙÈËÀàÓÎÏ·±ØĞëÖØÔØ
+	// ç™¾äººç±»æ¸¸æˆå¯åŠ¨ï¼Œç™¾äººç±»æ¸¸æˆå¿…é¡»é‡è½½
 	virtual bool OnStart() { return true; }
-	// °ÙÈËÀàÓÎÏ·,ÅĞ¶ÏÕâ¸öÍæ¼ÒÃû×ÖÊÇ·ñ¿É±ä£¨°üÀ¨»úÆ÷ÈË£¬ÒÔ¼°ÉÏ×¯ÁĞ±íÍæ¼Ò£©
+	// ç™¾äººç±»æ¸¸æˆ,åˆ¤æ–­è¿™ä¸ªç©å®¶åå­—æ˜¯å¦å¯å˜ï¼ˆåŒ…æ‹¬æœºå™¨äººï¼Œä»¥åŠä¸Šåº„åˆ—è¡¨ç©å®¶ï¼‰
 	virtual bool HundredGameIsInfoChange(BYTE deskStation) { return false; }
-	// ÉèÖÃÓÎÏ·×´Ì¬
+	// è®¾ç½®æ¸¸æˆçŠ¶æ€
 	virtual void SetGameStation(BYTE byGameStation) { m_byGameStation = byGameStation; }
-	// »ñµÃÓÎÏ·×´Ì¬
+	// è·å¾—æ¸¸æˆçŠ¶æ€
 	virtual BYTE GetGameStation() { return m_byGameStation; }
-	// »Ø·Å±êÊ¶Âë
+	// å›æ”¾æ ‡è¯†ç 
 	virtual bool GetVideoCode(char *pCode, int iLen);
-	// ¿ò¼ÜÏûÏ¢
+	// æ¡†æ¶æ¶ˆæ¯
 	virtual bool HandleFrameMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser = false);
-	// ÓÎÏ·ÏûÏ¢º¯Êı
+	// æ¸¸æˆæ¶ˆæ¯å‡½æ•°
 	virtual bool HandleNotifyMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser = false);
-	// Íæ¼ÒÀë¿ª×À×Ó£¬Ö±½Ó·µ»Ø´óÌü
+	// ç©å®¶ç¦»å¼€æ¡Œå­ï¼Œç›´æ¥è¿”å›å¤§å…
 	virtual bool UserLeftDesk(GameUserInfo* pUser);
-	// Íæ¼ÒÇëÇóÍĞ¹Ü
+	// ç©å®¶è¯·æ±‚æ‰˜ç®¡
 	virtual bool OnHandleUserRequestAuto(BYTE deskStation);
-	// Íæ¼ÒÈ¡ÏûÍĞ¹Ü
+	// ç©å®¶å–æ¶ˆæ‰˜ç®¡
 	virtual bool OnHandleUserRequestCancelAuto(BYTE deskStation);
-	// ÅÔ¹ÛÕßÊÇ·ñ¿ÉÒÔ×ø×À
+	// æ—è§‚è€…æ˜¯å¦å¯ä»¥åæ¡Œ
 	virtual bool WatchCanSit(GameUserInfo* pUser) { return true; }
-	// ÌØÊâÓÎÏ·×¨ÓÃ£¬±ÈÈçµÂÖİÆË¿Ë
+	// ç‰¹æ®Šæ¸¸æˆä¸“ç”¨ï¼Œæ¯”å¦‚å¾·å·æ‰‘å…‹
 	virtual void UserBeKicked(BYTE deskStation) {}
-	// ¼ì²éÍæ¼ÒµÄ½ğ±ÒÄÜ·ñ¼ÌĞøÍæÓÎÏ·
+	// æ£€æŸ¥ç©å®¶çš„é‡‘å¸èƒ½å¦ç»§ç»­ç©æ¸¸æˆ
 	virtual int CheckUserMoney(int userID);
-	// ¶¯Ì¬¼ÓÔØÅäÖÃÎÄ¼şÊı¾İ
+	// åŠ¨æ€åŠ è½½é…ç½®æ–‡ä»¶æ•°æ®
 	virtual void LoadDynamicConfig() {}
-	// Íæ¼Ò×ø×ÀÍ¨ÖªÓÎÏ·
+	// ç©å®¶åæ¡Œé€šçŸ¥æ¸¸æˆ
 	virtual bool UserSitDeskActionNotify(BYTE deskStation) { return true; };
 
-	// ½Ó¿Úº¯Êı
+	// æ¥å£å‡½æ•°
 public:
-	// ³õÊ¼»¯º¯Êı
+	// åˆå§‹åŒ–å‡½æ•°
 	bool Init(int deskIdx, BYTE bMaxPeople, CGameMainManage * pDataManage);
-	// ³õÊ¼»¯¹ºÂò×À×ÓÊı¾İ
+	// åˆå§‹åŒ–è´­ä¹°æ¡Œå­æ•°æ®
 	void InitBuyDeskData();
-	// ³õÊ¼»¯½âÉ¢Êı¾İ
+	// åˆå§‹åŒ–è§£æ•£æ•°æ®
 	void InitDismissData();
-	// ÉèÖÃ¶¨Ê±Æ÷£¬¶¨Ê±Æ÷Ä¬ÈÏÖ»Ö´ĞĞÒ»´Î£¬¿ÉÒÔĞŞ¸ÄtimerTypeÀ´ÊµÏÖÓÀ¾Ã¶¨Ê±Æ÷
+	// è®¾ç½®å®šæ—¶å™¨ï¼Œå®šæ—¶å™¨é»˜è®¤åªæ‰§è¡Œä¸€æ¬¡ï¼Œå¯ä»¥ä¿®æ”¹timerTypeæ¥å®ç°æ°¸ä¹…å®šæ—¶å™¨
 	bool SetTimer(UINT uTimerID, int uElapse, BYTE timerType = SERVERTIMER_TYPE_SINGLE);
-	// É¾³ı¶¨Ê±Æ÷
+	// åˆ é™¤å®šæ—¶å™¨
 	bool KillTimer(UINT uTimerID);
-	// »ñÈ¡·¿¼äÀàĞÍ
+	// è·å–æˆ¿é—´ç±»å‹
 	int GetRoomType();
-	// »ñÈ¡·¿¼äÖÖÀà£¨ÓÃÓÚ°ÙÈËÀà£©
+	// è·å–æˆ¿é—´ç§ç±»ï¼ˆç”¨äºç™¾äººç±»ï¼‰
 	int GetRoomSort();
-	// »ñÈ¡·¿¼äµÈ¼¶£¨³õ¼¶¡¢ÖĞ¼¶¡¢¸ß¼¶£©
+	// è·å–æˆ¿é—´ç­‰çº§ï¼ˆåˆçº§ã€ä¸­çº§ã€é«˜çº§ï¼‰
 	int GetRoomLevel();
-	// ¼ÓÔØ×À×ÓĞÅÏ¢
+	// åŠ è½½æ¡Œå­ä¿¡æ¯
 	void LoadPrivateDeskInfo(const PrivateDeskInfo& privateDeskInfo);
-	// ¹¹ÔìÏûÏ¢°ü
+	// æ„é€ æ¶ˆæ¯åŒ…
 	void MakeAllUserInfo(char* pBuf, int size, int& realSize);
-	// °ÙÈËÀà¹¹ÔìÍæ¼ÒĞÅÏ¢
+	// ç™¾äººç±»æ„é€ ç©å®¶ä¿¡æ¯
 	void HundredMakeAllUserInfo(char* pBuf, int size, int& realSize);
-	// ºÏ³É½âÉ¢·¿¼äÏûÏ¢
+	// åˆæˆè§£æ•£æˆ¿é—´æ¶ˆæ¯
 	void MakeDismissData(char* buf, int& size);
-	// ºÏ³ÉÍæ¼Ò¼òµ¥ĞÅÏ¢
+	// åˆæˆç©å®¶ç®€å•ä¿¡æ¯
 	bool MakeUserSimpleInfo(BYTE deskStation, UserSimpleInfo& userInfo);
-	// Çå³ı·¿¼äÀïÃæ×À×ÓÍæ¼ÒµÄĞÅÏ¢£¬°Ñ¹ÜÀíÆ÷ÖĞÍæ¼ÒµÄdeskIndexºÍdeskStationÖÃÎªÎŞĞ§
+	// æ¸…é™¤æˆ¿é—´é‡Œé¢æ¡Œå­ç©å®¶çš„ä¿¡æ¯ï¼ŒæŠŠç®¡ç†å™¨ä¸­ç©å®¶çš„deskIndexå’ŒdeskStationç½®ä¸ºæ— æ•ˆ
 	void ClearAllData(const PrivateDeskInfo& privateDeskInfo);
-	// ·¿¿¨³¡¿Û³ı·¿¿¨
+	// æˆ¿å¡åœºæ‰£é™¤æˆ¿å¡
 	BuyGameDeskInfo ProcessCostJewels();
-	// ĞèÒª¹ºÂòµÄ·¿¼ä£¬Ìí¼ÓÕ½¼¨
+	// éœ€è¦è´­ä¹°çš„æˆ¿é—´ï¼Œæ·»åŠ æˆ˜ç»©
 	bool AddDeskGrade(const char *pVideoCode, const char * gameData, const char * userInfoList);
-	// ·Ç½ğ±Ò³¡ÌßÈË£¬¶Ô´óÌüÕ½¼¨ÓĞÓ°Ïì£¬½ö½öÌá¹©¸øµÂÖİÆË¿ËÀàÓÎÏ·µ÷ÓÃ
+	// éé‡‘å¸åœºè¸¢äººï¼Œå¯¹å¤§å…æˆ˜ç»©æœ‰å½±å“ï¼Œä»…ä»…æä¾›ç»™å¾·å·æ‰‘å…‹ç±»æ¸¸æˆè°ƒç”¨
 	bool KickOutUser(BYTE deskStation, int ReaSon = REASON_KICKOUT_STAND);
-	// »ñÈ¡Ò»¸ö¿ÉÒÔ¿ªÊ¼ÓÎÏ·µÄÍæ¼Ò
+	// è·å–ä¸€ä¸ªå¯ä»¥å¼€å§‹æ¸¸æˆçš„ç©å®¶
 	void SetBeginUser();
-	// ¼ì²éÃ»ÓĞ×¼±¸µÄÍæ¼Ò
+	// æ£€æŸ¥æ²¡æœ‰å‡†å¤‡çš„ç©å®¶
 	void CheckTimeoutNotAgreeUser(time_t currTime);
-	// ¼ì²éÃ»ÓĞ²Ù×÷µÄÍæ¼Ò
+	// æ£€æŸ¥æ²¡æœ‰æ“ä½œçš„ç©å®¶
 	void CheckTimeoutNotOperateUser(time_t currTime);
-	// Í¨Öª×ÊÔ´±ä»¯
+	// é€šçŸ¥èµ„æºå˜åŒ–
 	void NotifyUserResourceChange(int userID, int resourceType, long long value, long long changeValue);
 
-	// ·¢ËÍÊı¾İÏà¹Ø
+	// å‘é€æ•°æ®ç›¸å…³
 public:
-	//·¢ËÍÓÎÏ·×´Ì¬
+	//å‘é€æ¸¸æˆçŠ¶æ€
 	bool SendGameStation(BYTE deskStation, UINT socketID, bool bWatchUser, void * pData, UINT size);
-	//·¢ËÍÊı¾İº¯Êı
+	//å‘é€æ•°æ®å‡½æ•°
 	bool SendGameData(BYTE deskStation, unsigned int mainID, unsigned int assistID, unsigned int handleCode);
-	//·¢ËÍÊı¾İº¯Êı 
+	//å‘é€æ•°æ®å‡½æ•° 
 	bool SendGameData(BYTE bDeskStation, void* pData, int  size, unsigned int mainID, unsigned int assistID, unsigned int handleCode);
-	//·¢ËÍÅÔ¹ÛÊı¾İ
+	//å‘é€æ—è§‚æ•°æ®
 	bool SendWatchData(void * pData, int uSize, int mainID, int assistID, int handleCode);
-	//·¢ËÍÍ¨ÖªÏûÏ¢
+	//å‘é€é€šçŸ¥æ¶ˆæ¯
 	bool SendGameMessage(BYTE deskStation, const char * lpszMessage, int wType = SMT_EJECT);
-	// ¹ã²¥×À×ÓĞÅÏ¢
+	// å¹¿æ’­æ¡Œå­ä¿¡æ¯
 	void BroadcastDeskData(void *pData, int size, unsigned int mainID, unsigned int assistID, bool sendVirtual = true, unsigned int handleCode = 0);
-	// ·¢ËÍËùÓĞÍæ¼ÒĞÅÏ¢
+	// å‘é€æ‰€æœ‰ç©å®¶ä¿¡æ¯
 	void SendAllDeskUserInfo(BYTE deskStation);
-	// ·¢ËÍ·¿¼äµÄ»ù±¾ĞÅÏ¢
+	// å‘é€æˆ¿é—´çš„åŸºæœ¬ä¿¡æ¯
 	void SendDeskBaseInfo(BYTE deskStation);
-	// ¹ã²¥·¿¼äµÄ»ù±¾ĞÅÏ¢
+	// å¹¿æ’­æˆ¿é—´çš„åŸºæœ¬ä¿¡æ¯
 	void BroadcastDeskBaseInfo();
-	// ¹ã²¥Íæ¼Ò×øÏÂĞÅÏ¢
+	// å¹¿æ’­ç©å®¶åä¸‹ä¿¡æ¯
 	void BroadcastUserSitData(BYTE deskStation);
-	// ¹ã²¥Íæ¼Ò×øÏÂĞÅÏ¢£¨²»¹ã²¥×Ô¼º£©
+	// å¹¿æ’­ç©å®¶åä¸‹ä¿¡æ¯ï¼ˆä¸å¹¿æ’­è‡ªå·±ï¼‰
 	void BroadcastUserSitDataExceptMyself(BYTE deskStation);
-	// ¹ã²¥Íæ¼Ò¼òµ¥ĞÅÏ¢
+	// å¹¿æ’­ç©å®¶ç®€å•ä¿¡æ¯
 	void BroadcastUserSimpleInfo(BYTE deskStation);
-	// ¹ã²¥Íæ¼ÒÀë¿ªÏûÏ¢
+	// å¹¿æ’­ç©å®¶ç¦»å¼€æ¶ˆæ¯
 	bool BroadcastUserLeftData(BYTE deskStation, int reason);
-	// ·¢ËÍÍæ¼ÒÀë¿ªÏûÏ¢
+	// å‘é€ç©å®¶ç¦»å¼€æ¶ˆæ¯
 	void SendUserLeftData(BYTE deskStation, int reason);
-	// ¹ã²¥Íæ¼ÒÍ¬ÒâÏûÏ¢
+	// å¹¿æ’­ç©å®¶åŒæ„æ¶ˆæ¯
 	void BroadcastUserAgreeData(BYTE deskStation);
-	// ¹Ø±ÕÍæ¼Ò¶ÏÏßÏûÏ¢
+	// å…³é—­ç©å®¶æ–­çº¿æ¶ˆæ¯
 	void BroadcastUserOfflineData(BYTE deskStation);
-	// ¹ã²¥Íæ¼Ò±»TµôÏûÏ¢
+	// å¹¿æ’­ç©å®¶è¢«Tæ‰æ¶ˆæ¯
 	void BroadcastUserKickoutData(BYTE deskStation);
-	// ·¢ËÍµÈ´ı×¼±¸Ê±¼äĞÅÏ¢
+	// å‘é€ç­‰å¾…å‡†å¤‡æ—¶é—´ä¿¡æ¯
 	void SendLeftWaitAgreeData(BYTE deskStation);
-	// Í¨Öª×À×ÓÍæ¼Ò½âÉ¢×À×ÓĞÅÏ¢
+	// é€šçŸ¥æ¡Œå­ç©å®¶è§£æ•£æ¡Œå­ä¿¡æ¯
 	void BroadcastDismissData();
-	// ·¢ËÍ½âÉ¢ĞÅÏ¢(ÓÃÓÚ¶ÏÏßÖØÁ¬)
+	// å‘é€è§£æ•£ä¿¡æ¯(ç”¨äºæ–­çº¿é‡è¿)
 	void SendDismissData();
-	// ¹ã²¥ÏûÏ¢£¬Éè¶¨²»¹ã²¥ÌØ¶¨Íæ¼Ò
+	// å¹¿æ’­æ¶ˆæ¯ï¼Œè®¾å®šä¸å¹¿æ’­ç‰¹å®šç©å®¶
 	void BroadcastGameMessageExcept(BYTE deskStation, const char * lpszMessage, int wType = SMT_EJECT);
 
-	// ½áËãº¯Êı
+	// ç»“ç®—å‡½æ•°
 protected:
-	// Ë½ÓĞ·¿½áËãº¯Êı
+	// ç§æœ‰æˆ¿ç»“ç®—å‡½æ•°
 	bool ChangeUserPointPrivate(long long *arPoint, bool *bCut, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL);
-	// Ë½ÓĞ·¿½áËãº¯Êı
+	// ç§æœ‰æˆ¿ç»“ç®—å‡½æ•°
 	bool ChangeUserPointPrivate(int *arPoint, bool *bCut, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL);
-	// ¸Ä±äÍæ¼Ò»ı·Ö£¬ÊÊÓÃÓÚ½ğ±Ò³¡
+	// æ”¹å˜ç©å®¶ç§¯åˆ†ï¼Œé€‚ç”¨äºé‡‘å¸åœº
 	bool ChangeUserPoint(long long *arPoint, bool *bCut, long long * rateMoney = NULL);
-	// ¸Ä±äÍæ¼Ò»ı·Ö£¬ÊÊÓÃÓÚ½ğ±Ò³¡
+	// æ”¹å˜ç©å®¶ç§¯åˆ†ï¼Œé€‚ç”¨äºé‡‘å¸åœº
 	bool ChangeUserPoint(int *arPoint, bool *bCut, long long * rateMoney = NULL);
-	// ¸Ä±äÍæ¼Ò±³°üÊı¾İ£¬ÔİÊ±²¶ÓãÊ¹ÓÃ
+	// æ”¹å˜ç©å®¶èƒŒåŒ…æ•°æ®ï¼Œæš‚æ—¶æ•é±¼ä½¿ç”¨
 	bool ChangeUserBage(BYTE deskStation, char * resName, int changeNum = 1, bool add = true);
-	// ¸Ä±äÍæ¼Ò½ğ±Ò
+	// æ”¹å˜ç©å®¶é‡‘å¸
 	bool ChangeUserPoint(BYTE deskStation, long long point, long long rateMoney = 0, bool notify = true);
-	// ¸Ä±äÍæ¼Ò»ğ±Ò
+	// æ”¹å˜ç©å®¶ç«å¸
 	bool ChangeUserFireCoin(long long *arPoint, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL);
-	// ¸Ä±äÍæ¼Ò»ğ±Ò
+	// æ”¹å˜ç©å®¶ç«å¸
 	bool ChangeUserFireCoin(int *arPoint, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL);
-	// ½ğ±Ò·¿½áËãº¯Êı
+	// é‡‘å¸æˆ¿ç»“ç®—å‡½æ•°
 	bool ChangeUserPointGoldRoom(long long *arPoint, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL, long long * rateMoney = NULL);
-	// ½ğ±Ò·¿½áËãº¯Êı
+	// é‡‘å¸æˆ¿ç»“ç®—å‡½æ•°
 	bool ChangeUserPointGoldRoom(int *arPoint, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL, long long * rateMoney = NULL);
-	// ×êÊ¯·¿½áËãº¯Êı
+	// é’»çŸ³æˆ¿ç»“ç®—å‡½æ•°
 	bool ChangeUserPointJewelsRoom(long long *arPoint, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL, long long * rateJewels = NULL);
-	// ×êÊ¯·¿½áËãº¯Êı
+	// é’»çŸ³æˆ¿ç»“ç®—å‡½æ•°
 	bool ChangeUserPointJewelsRoom(int *arPoint, char *pVideoCode = NULL, bool bGrade = false, char * gameData = NULL, long long * rateJewels = NULL);
 
-	// ÊôĞÔÅĞ¶Ïº¯Êı
+	// å±æ€§åˆ¤æ–­å‡½æ•°
 public:
-	// ×À×ÓÊÇ·ñÓĞĞ§
+	// æ¡Œå­æ˜¯å¦æœ‰æ•ˆ
 	inline bool IsEnable() { return m_enable; }
-	// Íæ¼ÒÊÇ·ñÍĞ¹Ü
+	// ç©å®¶æ˜¯å¦æ‰˜ç®¡
 	bool IsAuto(BYTE deskStation);
-	// ÅĞ¶ÏÍæ¼ÒÊÇ·ñµôÏß
+	// åˆ¤æ–­ç©å®¶æ˜¯å¦æ‰çº¿
 	bool IsNetCut(BYTE deskStation);
-	// ÅĞ¶ÏÍæ¼ÒÊÇ·ñ»úÆ÷ÈË
+	// åˆ¤æ–­ç©å®¶æ˜¯å¦æœºå™¨äºº
 	bool IsVirtual(BYTE deskStation);
-	// ÅĞ¶ÏÊÇ·ñÊÇ³¬¶Ë
+	// åˆ¤æ–­æ˜¯å¦æ˜¯è¶…ç«¯
 	bool IsSuperUser(BYTE deskStation);
-	// ÅĞ¶ÏÊÇ·ñÊÇÓÎ¿Í
+	// åˆ¤æ–­æ˜¯å¦æ˜¯æ¸¸å®¢
 	bool IsVisitorUser(BYTE deskStation);
-	// ÊÇ·ñ·¿¿¨³¡
+	// æ˜¯å¦æˆ¿å¡åœº
 	bool IsPrivateRoom() { return GetRoomType() == ROOM_TYPE_PRIVATE; }
-	// ÊÇ·ñ½ğ±Ò³¡
+	// æ˜¯å¦é‡‘å¸åœº
 	bool IsGoldRoom() { return GetRoomType() == ROOM_TYPE_GOLD; }
-	// ÊÇ·ñË½ÈË·¿
+	// æ˜¯å¦ç§äººæˆ¿
 	bool IsFriendRoom() { return GetRoomType() == ROOM_TYPE_FRIEND; }
-	// ÊÇ·ñ¾ãÀÖ²¿VIP·¿¼ä
+	// æ˜¯å¦ä¿±ä¹éƒ¨VIPæˆ¿é—´
 	bool IsFGVIPRoom() { return GetRoomType() == ROOM_TYPE_FG_VIP; }
-	//ÊÇ·ñ¿ÉÒÔ×ø×À
+	//æ˜¯å¦å¯ä»¥åæ¡Œ
 	bool IsCanSitDesk();
-	// ÊÇ·ñÅÔ¹ÛÕß
+	// æ˜¯å¦æ—è§‚è€…
 	bool IsWatcher(int userID);
-	// ÊÇ·ñ»¹ÓĞ×ùÎ»ºÅ
+	// æ˜¯å¦è¿˜æœ‰åº§ä½å·
 	bool IsHaveDeskStation(int userID, const PrivateDeskInfo &info);
-	// ÊÇ·ñÈ«²¿Íæ¼ÒµôÏß
+	// æ˜¯å¦å…¨éƒ¨ç©å®¶æ‰çº¿
 	bool IsAllUserOffline();
-	// ÓÎÏ·ÅĞ¶ÏÊÇ·ñĞèÒªÌßÒ»¸ö»úÆ÷ÈË(Ö÷ÒªÊÇ°ÙÈËÀàÊ¹ÓÃ)
+	// æ¸¸æˆåˆ¤æ–­æ˜¯å¦éœ€è¦è¸¢ä¸€ä¸ªæœºå™¨äºº(ä¸»è¦æ˜¯ç™¾äººç±»ä½¿ç”¨)
 	bool IsKickOutVirtual(BYTE deskStation);
 
-	// ÏûÏ¢´¦ÀíÏà¹Ø
+	// æ¶ˆæ¯å¤„ç†ç›¸å…³
 public:
-	// ´¦ÀíÍæ¼ÒµÇÂ¼
+	// å¤„ç†ç©å®¶ç™»å½•
 	bool OnPrivateUserLogin(int userID, const PrivateDeskInfo& info);
-	// ´¦ÀíÍæ¼ÒÇëÇó×À×ÓĞÅÏ¢
+	// å¤„ç†ç©å®¶è¯·æ±‚æ¡Œå­ä¿¡æ¯
 	bool OnHandleUserRequestDeskInfo(BYTE deskStation);
-	// ´¦ÀíÍæ¼ÒÇëÇóÓÎÏ·ĞÅÏ¢
+	// å¤„ç†ç©å®¶è¯·æ±‚æ¸¸æˆä¿¡æ¯
 	bool OnHandleUserRequestGameInfo(BYTE deskStation);
-	// ´¦ÀíÍæ¼ÒÇëÇó×À×ÓÍæ¼ÒĞÅÏ¢
+	// å¤„ç†ç©å®¶è¯·æ±‚æ¡Œå­ç©å®¶ä¿¡æ¯
 	bool OnHandleUserRequestALLUserInfo(BYTE deskStation);
-	// ´¦ÀíÇëÇóµ¥¸öÍæ¼ÒĞÅÏ¢
+	// å¤„ç†è¯·æ±‚å•ä¸ªç©å®¶ä¿¡æ¯
 	bool OnHandleUserRequestOneUserInfo(BYTE deskStation, void* pData, int size);
-	// ´¦ÀíÍæ¼ÒÖ÷¶¯ÇëÇó½âÉ¢
+	// å¤„ç†ç©å®¶ä¸»åŠ¨è¯·æ±‚è§£æ•£
 	bool OnHandleUserRequestDissmiss(BYTE deskStation);
-	// ´¦ÀíÍæ¼Ò»ØÓ¦½âÉ¢ÏûÏ¢
+	// å¤„ç†ç©å®¶å›åº”è§£æ•£æ¶ˆæ¯
 	bool OnHandleUserAnswerDissmiss(BYTE deskStation, void* pData, int size);
-	// ·¿¼ä½âÉ¢Ê§°Ü
+	// æˆ¿é—´è§£æ•£å¤±è´¥
 	bool OnDeskDismissFailed();
-	// Íæ¼ÒÍ¬Òâ½âÉ¢
+	// ç©å®¶åŒæ„è§£æ•£
 	bool OnUserAgreeDismiss(BYTE deskStation);
-	// ´¦ÀíÍæ¼ÒÁÄÌìÏûÏ¢
+	// å¤„ç†ç©å®¶èŠå¤©æ¶ˆæ¯
 	bool OnHandleTalkMessage(BYTE deskStation, void* pData, int size);
-	// ´¦ÀíÍæ¼ÒÓïÒôÏûÏ¢
+	// å¤„ç†ç©å®¶è¯­éŸ³æ¶ˆæ¯
 	bool OnHandleVoiceMessage(BYTE deskStation, void* pData, int size);
-	// ´¦ÀíÍæ¼ÒÊ¹ÓÃÄ§·¨±íÇé
+	// å¤„ç†ç©å®¶ä½¿ç”¨é­”æ³•è¡¨æƒ…
 	bool OnHandleUserRequestMagicExpress(BYTE deskStation, void* pData, int size);
-	// ÇëÇóÓÎÏ·¿ªÊ¼
+	// è¯·æ±‚æ¸¸æˆå¼€å§‹
 	bool OnUserRequsetGameBegin(int userID);
 
-	// Íæ¼ÒÊı¾İÏà¹Ø
+	// ç©å®¶æ•°æ®ç›¸å…³
 protected:
-	// Í¨¹ı×ùÎ»ºÅ»ñÈ¡Íæ¼ÒID
+	// é€šè¿‡åº§ä½å·è·å–ç©å®¶ID
 	int GetUserIDByDeskStation(BYTE deskStation);
-	// Í¨¹ıÍæ¼ÒID»ñÈ¡×ùÎ»ºÅ
+	// é€šè¿‡ç©å®¶IDè·å–åº§ä½å·
 	BYTE GetDeskStationByUserID(int userID);
-	// Í¨Öª×À×ÓºÅ»ñÈ¡Íæ¼ÒÊı¾İ
+	// é€šçŸ¥æ¡Œå­å·è·å–ç©å®¶æ•°æ®
 	bool GetUserData(BYTE deskStation, UserData& userData);
-	// Í¨Öª×À×ÓºÅ»ñÈ¡Íæ¼ÒÊı¾İ
+	// é€šçŸ¥æ¡Œå­å·è·å–ç©å®¶æ•°æ®
 	bool GetUserData(BYTE deskStation, GameUserInfo& userData);
-	// »ñÈ¡Íæ¼Ò±³°üÊı¾İ
+	// è·å–ç©å®¶èƒŒåŒ…æ•°æ®
 	bool GetUserBagData(BYTE bDeskStation, UserBag & userBagData);
-	// Í¨¹ıkey»ñÈ¡Íæ¼ÒÄ³µÀ¾ßÊıÁ¿
+	// é€šè¿‡keyè·å–ç©å®¶æŸé“å…·æ•°é‡
 	int GetUserBagDataByKey(BYTE bDeskStation, const char * resName);
-	// »ñÈ¡µ±Ç°Íæ¼ÒµÄ½ğ±ÒÊı»òÕß»ğ±ÒÊıÁ¿
+	// è·å–å½“å‰ç©å®¶çš„é‡‘å¸æ•°æˆ–è€…ç«å¸æ•°é‡
 	bool GetRoomResNums(BYTE deskStation, long long &resNums);
-	// ÉèÖÃÍæ¼Ò»ı·Ö
+	// è®¾ç½®ç©å®¶ç§¯åˆ†
 	bool SetUserScore(BYTE deskStation, long long score);
-	// »ñÈ¡Íæ¼Ò»ı·Ö
+	// è·å–ç©å®¶ç§¯åˆ†
 	long long GetUserScore(BYTE deskStation);
-	// »ñÈ¡Íæ¼Ò¿ØÖÆ²ÎÊı
+	// è·å–ç©å®¶æ§åˆ¶å‚æ•°
 	int GetUserControlParam(BYTE deskStation);
 
-	// ×À×ÓÊı¾İÏà¹Ø
+	// æ¡Œå­æ•°æ®ç›¸å…³
 public:
-	// »ñÈ¡×À×ÓÓÎÏ·×´Ì¬
+	// è·å–æ¡Œå­æ¸¸æˆçŠ¶æ€
 	bool GetPlayGame() { return m_bPlayGame; }
-	// »ñÈ¡×¼±¸Íæ¼ÒÊıÁ¿
+	// è·å–å‡†å¤‡ç©å®¶æ•°é‡
 	int AgreePeople();
-	// »ñÈ¡ÕæÈËÍæ¼Ò
+	// è·å–çœŸäººç©å®¶
 	int GetRealPeople();
-	// »ñÈ¡»úÆ÷ÈËÍæ¼Ò
+	// è·å–æœºå™¨äººç©å®¶
 	UINT GetRobotPeople();
-	// »ñÈ¡µ×·Ö(±¶ÂÊ)
+	// è·å–åº•åˆ†(å€ç‡)
 	int GetBasePoint();
-	// »ñÈ¡µ±Ç°Íæ¼ÒÊıÁ¿
+	// è·å–å½“å‰ç©å®¶æ•°é‡
 	int GetUserCount();
-	// »ñÈ¡ÀëÏßÍæ¼ÒÊıÁ¿
+	// è·å–ç¦»çº¿ç©å®¶æ•°é‡
 	int GetOfflineUserCount();
-	// »ñÈ¡ÒÑ×¼±¸µÄÍæ¼ÒÊıÁ¿
+	// è·å–å·²å‡†å¤‡çš„ç©å®¶æ•°é‡
 	int GetAgreeUserCount();
-	// ÉèÖÃË½ÈË·¿ÌßÈË×îµÍ½ğ±Ò
+	// è®¾ç½®ç§äººæˆ¿è¸¢äººæœ€ä½é‡‘å¸
 	void SetRemovePlayerMinPoint(int point) { m_RemoveMinPoint = point; }
-	// °ÙÈËÀàºÍ³¡¾°ÀàÓÎÏ·£¬ÉèÖÃ³¬Ê±Ê±¼ä
+	// ç™¾äººç±»å’Œåœºæ™¯ç±»æ¸¸æˆï¼Œè®¾ç½®è¶…æ—¶æ—¶é—´
 	void SetOperationTimeout(int time) { HUUNDRED_GAME_TIMEOUT_OPERATE_KICKOUT_SECS = time; }
 
-	// Íæ¼Ò¶¯×÷Ïà¹Ø(×øÏÂ¡¢Àë¿ªºÍµôÏß)
+	// ç©å®¶åŠ¨ä½œç›¸å…³(åä¸‹ã€ç¦»å¼€å’Œæ‰çº¿)
 public:
-	// Íæ¼Ò×øµ½×À×ÓÉÏ
+	// ç©å®¶ååˆ°æ¡Œå­ä¸Š
 	bool UserSitDesk(GameUserInfo* pUser);
-	// ·¿¿¨³¡×ø×ÀÂß¼­
+	// æˆ¿å¡åœºåæ¡Œé€»è¾‘
 	bool PrivateSitDeskLogic(GameUserInfo* pUser);
-	// ½ğ±Ò³¡×ø×ÀÂß¼­
+	// é‡‘å¸åœºåæ¡Œé€»è¾‘
 	bool MoneySitDeskLogic(GameUserInfo* pUser);
-	// ·¿¿¨³¡Àë¿ª×À×ÓÂß¼­
+	// æˆ¿å¡åœºç¦»å¼€æ¡Œå­é€»è¾‘
 	bool PrivateUserLeftDeskLogic(GameUserInfo * pUser);
-	// ½ğ±Ò³¡Àë¿ª×À×ÓÂß¼­
+	// é‡‘å¸åœºç¦»å¼€æ¡Œå­é€»è¾‘
 	bool MoneyUserLeftDeskLogic(GameUserInfo * pUser);
-	// °ÙÈËÀàÓÎÏ·Àë¿ª×À×ÓÂß¼­
+	// ç™¾äººç±»æ¸¸æˆç¦»å¼€æ¡Œå­é€»è¾‘
 	bool HundredGameUserLeftLogic(GameUserInfo* pUser);
-	// °ÙÈËÀàÓÎÏ·¶ÏÏßÂß¼­
+	// ç™¾äººç±»æ¸¸æˆæ–­çº¿é€»è¾‘
 	bool HundredGameUserNetCutLogic(GameUserInfo* pUser);
-	// ÅÔ¹ÛÕßÀë¿ª
+	// æ—è§‚è€…ç¦»å¼€
 	bool OnWatcherLeftDesk(GameUserInfo* pUser, const PrivateDeskInfo & deskInfo);
-	// ×À×ÓÍæ¼ÒÀë¿ª
+	// æ¡Œå­ç©å®¶ç¦»å¼€
 	bool OnDeskUserLeftDesk(GameUserInfo* pUser, const PrivateDeskInfo& deskInfo);
-	// ´¦ÀíÍæ¼ÒÅÔ¹Û
+	// å¤„ç†ç©å®¶æ—è§‚
 	bool ProcessUserWatch(GameUserInfo* pUser, const PrivateDeskInfo& privateDeskInfo);
-	// ´¦ÀíÍæ¼Ò×øÏÂ
+	// å¤„ç†ç©å®¶åä¸‹
 	bool ProcessPrivateUserSitDesk(GameUserInfo* pUser, const PrivateDeskInfo& privateDeskInfo);
-	// ÅÔ¹ÛÕßµôÏß
+	// æ—è§‚è€…æ‰çº¿
 	bool OnWatchUserOffline(int userID);
 
-	// ÓÎÏ·Á÷³ÌÏà¹Ø
+	// æ¸¸æˆæµç¨‹ç›¸å…³
 protected:
-	// ¸øÅÔ¹ÛÕß·ÖÅä×ùÎ»
+	// ç»™æ—è§‚è€…åˆ†é…åº§ä½
 	BYTE AllocWatcherDeskStation();
-	// ·ÖÅä×À×ÓµÄ×ùÎ»ºÅ
+	// åˆ†é…æ¡Œå­çš„åº§ä½å·
 	BYTE AllocDeskStation(int userID);
-	// °ÙÈËÀàÓÎÏ·¿ªÊ¼
+	// ç™¾äººç±»æ¸¸æˆå¼€å§‹
 	bool HundredGameBegin();
-	// °ÙÈËÀàÓÎÏ·½áÊø
+	// ç™¾äººç±»æ¸¸æˆç»“æŸ
 	bool HundredGameFinish();
-	// ½ğ±Ò³¡¿ª¾Ö¿Û½ğ±Ò
+	// é‡‘å¸åœºå¼€å±€æ‰£é‡‘å¸
 	void ProcessDeduceMoneyWhenGameBegin();
-	// Æ½Ì¨ÓÎÏ·´ó½áËã·¢ËÍÏà¹ØÊı¾İ
+	// å¹³å°æ¸¸æˆå¤§ç»“ç®—å‘é€ç›¸å…³æ•°æ®
 	void OnDeskDissmissFinishSendData();
 
-	// ¶¨Ê±Æ÷Ïà¹Ø
+	// å®šæ—¶å™¨ç›¸å…³
 private:
-	// ºÃÓÑ·¿¶¨Ê±¿ªÊ¼
+	// å¥½å‹æˆ¿å®šæ—¶å¼€å§‹
 	bool OnTimerFriendRoomGameBegin();
 
-	// ³éË®º¯Êı
+	// æŠ½æ°´å‡½æ•°
 protected:
-	// »ñÈ¡ÏµÍ³³éË®Öµ
+	// è·å–ç³»ç»ŸæŠ½æ°´å€¼
 	double GetDeskPercentage();
-	// ÉèÖÃ³éË®Ö®ºóµÄ·ÖÊı
+	// è®¾ç½®æŠ½æ°´ä¹‹åçš„åˆ†æ•°
 	bool SetDeskPercentageScore(long long * arPoint, long long * ratePoint = NULL, bool arPointIsChange = true);
-	// ÉèÖÃ³éË®Ö®ºóµÄ·ÖÊı
+	// è®¾ç½®æŠ½æ°´ä¹‹åçš„åˆ†æ•°
 	bool SetDeskPercentageScore(int * arPoint, int * ratePoint = NULL, bool arPointIsChange = true);
 
-	// ÖĞĞÄ·şÏà¹Ø
+	// ä¸­å¿ƒæœç›¸å…³
 public:
-	// ´óÌü½âÉ¢·¿¼äÏûÏ¢£¬ÓÎÏ·ÒÑ¾­¿ªÊ¼¾Í²»½âÉ¢
+	// å¤§å…è§£æ•£æˆ¿é—´æ¶ˆæ¯ï¼Œæ¸¸æˆå·²ç»å¼€å§‹å°±ä¸è§£æ•£
 	void LogonDissmissDesk(int userID, bool bDelete);
-	// ´óÌü½âÉ¢·¿¼äÏûÏ¢(Ç¿ĞĞ½âÉ¢)
+	// å¤§å…è§£æ•£æˆ¿é—´æ¶ˆæ¯(å¼ºè¡Œè§£æ•£)
 	void LogonDissmissDesk();
-	// Í¨Öª´óÌü¿ª·¿ĞÅÏ¢·¢Éú±ä»¯(ÈËÊı±ä»¯)
+	// é€šçŸ¥å¤§å…å¼€æˆ¿ä¿¡æ¯å‘ç”Ÿå˜åŒ–(äººæ•°å˜åŒ–)
 	void NotifyLogonBuyDeskInfoChange(int masterID, int userCount, int userID, BYTE updateType, int deskMixID);
-	// ´ó½áËã
+	// å¤§ç»“ç®—
 	void NotifyLogonDeskDissmiss(const PrivateDeskInfo& privateDeskInfo);
-	// ¾ÖÊı±ä»¯
+	// å±€æ•°å˜åŒ–
 	void NotifyLogonDeskStatusChange();
 
-	// Æ½Ì¨²ÎÊıºÍ½±³ØÊı¾İ
+	// å¹³å°å‚æ•°å’Œå¥–æ± æ•°æ®
 protected:
-	// ÉèÖÃÏµÍ³½±³Ø
+	// è®¾ç½®ç³»ç»Ÿå¥–æ± 
 	bool SetServerRoomPoolData(const char * fieldName, long long fieldValue, bool bAdd);
-	// ÉèÖÃÏµÍ³½±³Ø
+	// è®¾ç½®ç³»ç»Ÿå¥–æ± 
 	bool SetServerRoomPoolData(const char * fieldName, const char * fieldValue);
-	// »ñÈ¡·¿¼äÅäÖÃÊı¾İ
+	// è·å–æˆ¿é—´é…ç½®æ•°æ®
 	bool GetRoomConfigInfo(char configInfo[2048], int size);
-	// ÊÇ·ñÊÇ1£º1Æ½Ì¨
+	// æ˜¯å¦æ˜¯1ï¼š1å¹³å°
 	bool IsOneToOnePlatform();
-	// Æ½Ì¨±¶ÂÊ
+	// å¹³å°å€ç‡
 	int GetPlatformMultiple();
 
-	// ±ÈÈü³¡
+	// æ¯”èµ›åœº
 public:
-	// ³õÊ¼»¯±ÈÈü³¡Êı¾İ
+	// åˆå§‹åŒ–æ¯”èµ›åœºæ•°æ®
 	void InitDeskMatchData();
-	// ±ÈÈü³¡ÓÎÏ·½áÊø
+	// æ¯”èµ›åœºæ¸¸æˆç»“æŸ
 	bool MatchRoomGameBegin();
-	// ±ÈÈü³¡ÓÎÏ·½áÊø
+	// æ¯”èµ›åœºæ¸¸æˆç»“æŸ
 	bool MatchRoomGameFinish();
-	// ·¢ËÍµ±Ç°×À×ÓµÄ±ÈÈü×´Ì¬
+	// å‘é€å½“å‰æ¡Œå­çš„æ¯”èµ›çŠ¶æ€
 	void SendMatchDeskStatus(int userID);
-	// ±ÈÈü³¡×ø×ÀÂß¼­
+	// æ¯”èµ›åœºåæ¡Œé€»è¾‘
 	bool MatchRoomSitDeskLogic(GameUserInfo* pUser);
-	// ±ÈÈü³¡Íæ¼ÒÀë¿ª×À×Ó
+	// æ¯”èµ›åœºç©å®¶ç¦»å¼€æ¡Œå­
 	bool MatchRoomUserLeftDeskLogic(GameUserInfo * pUser);
-	// ±ÈÈü³¡»ñÈ¡Ò»¸ö×À×ÓËùÓĞÍæ¼Òid
+	// æ¯”èµ›åœºè·å–ä¸€ä¸ªæ¡Œå­æ‰€æœ‰ç©å®¶id
 	int MatchGetDeskUserID(int arrUserID[MAX_PLAYER_GRADE]);
-	// ±ÈÈü³¡½øÈë±¾×ÀÅÔ¹Û
+	// æ¯”èµ›åœºè¿›å…¥æœ¬æ¡Œæ—è§‚
 	bool MatchEnterMyDeskWatch(GameUserInfo * pUser, long long partOfMatchID);
-	// ±ÈÈü³¡ÍË³ö±¾×ÀÅÔ¹Û
+	// æ¯”èµ›åœºé€€å‡ºæœ¬æ¡Œæ—è§‚
 	bool MatchQuitMyDeskWatch(GameUserInfo * pUser, int socketIdx, BYTE result);
-	// ÊÇ·ñ±ÈÈü·¿
+	// æ˜¯å¦æ¯”èµ›æˆ¿
 	bool IsMatchRoom() { return GetRoomType() == ROOM_TYPE_MATCH; }
-	// ±ÈÈü³¡½áËãº¯Êı
+	// æ¯”èµ›åœºç»“ç®—å‡½æ•°
 	bool ChangeUserPointMatchRoom(long long *arPoint);
-	// ±ÈÈü³¡½áËãº¯Êı
+	// æ¯”èµ›åœºç»“ç®—å‡½æ•°
 	bool ChangeUserPointMatchRoom(int *arPoint);
 
 public:
-	// init Ê±ºò³õÊ¼»¯µÄÊı¾İ£¬ÉúÃüÖÜÆÚ´ÓÓÎÏ·Æô¶¯µ½ÓÎÏ·½áÊø
-	CGameMainManage				* m_pDataManage;		// ¹ÜÀíÆ÷Ö¸Õë
-	BYTE						m_byMaxPeople;			// ÓÎÏ·ÈËÊı
-	BYTE						m_byBeginMode;			// Í¬ÒâÄ£Ê½
-	int							m_deskIdx;				// ×À×ÓË÷Òı
-	bool						m_needLoadConfig;		// ÓÎÏ·ÖĞÊÇ·ñĞèÒª¼ÓÔØÊı¾İ
-	int							m_iRunGameCount;		// ÓÎÏ·ÔËĞĞµÄ¾ÖÊı
-	std::string					m_ctrlParmRecordInfo;	// ¿ØÖÆĞÅÏ¢£¬ÓÎÏ·¿ØÖÆµÄÊ±ºòÌîÈë£¬ºóÃæ»áĞ´µ½Êı¾İ¿â
+	// init æ—¶å€™åˆå§‹åŒ–çš„æ•°æ®ï¼Œç”Ÿå‘½å‘¨æœŸä»æ¸¸æˆå¯åŠ¨åˆ°æ¸¸æˆç»“æŸ
+	CGameMainManage				* m_pDataManage;		// ç®¡ç†å™¨æŒ‡é’ˆ
+	BYTE						m_byMaxPeople;			// æ¸¸æˆäººæ•°
+	BYTE						m_byBeginMode;			// åŒæ„æ¨¡å¼
+	int							m_deskIdx;				// æ¡Œå­ç´¢å¼•
+	bool						m_needLoadConfig;		// æ¸¸æˆä¸­æ˜¯å¦éœ€è¦åŠ è½½æ•°æ®
+	int							m_iRunGameCount;		// æ¸¸æˆè¿è¡Œçš„å±€æ•°
+	std::string					m_ctrlParmRecordInfo;	// æ§åˆ¶ä¿¡æ¯ï¼Œæ¸¸æˆæ§åˆ¶çš„æ—¶å€™å¡«å…¥ï¼Œåé¢ä¼šå†™åˆ°æ•°æ®åº“
 
 public:
-	// ´´½¨·¿¼äµÄÊ±ºòĞèÒªÉèÖÃµÄÊı¾İ
-	int							m_iVipGameCount;								// ¹ºÂò×À×Ó¾ÖÊı(¿É±ä)
-	char						m_szGameRules[MAX_BUY_DESK_JSON_LEN];			// ÓÎÏ·¹æÔò¡£json ¸ñÊ½£¬¾ßÌåÓÎÏ·¶¨Òå
-	char						m_szDeskPassWord[MAX_PRIVATE_DESK_PASSWD_LEN];	// ×À×ÓÃÜÂë
-	int						m_masterID;										// ·¿Ö÷ID
-	bool						m_isMasterNotPlay;                              // ÊÇ·ñÌæËûÈË¿ª·¿
-	int							m_iConfigCount;				// ×À×Ó×î´óÈËÊı£¨ÌØÊâÅäÖÃ£©
-	int							m_MinPoint;					// Èë³¡ÏŞÖÆ£¨½ğ±Ò·¿ºÍ¾ãÀÖ²¿vip·¿¼ä£©
-	int							m_RemoveMinPoint;			// ÌßÈËÏÂÏŞ£¨½ğ±Ò·¿ºÍ¾ãÀÖ²¿vip·¿¼ä£©
-	int							m_basePoint;				// µ××¢£¨½ğ±Ò·¿£©
-	BYTE						m_roomTipType;				// ³éË®·½Ê½
-	BYTE						m_roomTipTypeNums;			// ³éË®ÂÊ
-	BYTE						m_payType;					// Ö§¸¶ÀàĞÍ
-	BYTE						m_playMode;					// ÓÎÏ·Íæ·¨£¬ÈçÃ÷ÅÆÇÀ×¯
-	PlatformFriendsGroupMsg		m_friendsGroupMsg;			// ×À×ÓµÄ¾ãÀÖ²¿ĞÅÏ¢
+	// åˆ›å»ºæˆ¿é—´çš„æ—¶å€™éœ€è¦è®¾ç½®çš„æ•°æ®
+	int							m_iVipGameCount;								// è´­ä¹°æ¡Œå­å±€æ•°(å¯å˜)
+	char						m_szGameRules[MAX_BUY_DESK_JSON_LEN];			// æ¸¸æˆè§„åˆ™ã€‚json æ ¼å¼ï¼Œå…·ä½“æ¸¸æˆå®šä¹‰
+	char						m_szDeskPassWord[MAX_PRIVATE_DESK_PASSWD_LEN];	// æ¡Œå­å¯†ç 
+	int						m_masterID;										// æˆ¿ä¸»ID
+	bool						m_isMasterNotPlay;                              // æ˜¯å¦æ›¿ä»–äººå¼€æˆ¿
+	int							m_iConfigCount;				// æ¡Œå­æœ€å¤§äººæ•°ï¼ˆç‰¹æ®Šé…ç½®ï¼‰
+	int							m_MinPoint;					// å…¥åœºé™åˆ¶ï¼ˆé‡‘å¸æˆ¿å’Œä¿±ä¹éƒ¨vipæˆ¿é—´ï¼‰
+	int							m_RemoveMinPoint;			// è¸¢äººä¸‹é™ï¼ˆé‡‘å¸æˆ¿å’Œä¿±ä¹éƒ¨vipæˆ¿é—´ï¼‰
+	int							m_basePoint;				// åº•æ³¨ï¼ˆé‡‘å¸æˆ¿ï¼‰
+	BYTE						m_roomTipType;				// æŠ½æ°´æ–¹å¼
+	BYTE						m_roomTipTypeNums;			// æŠ½æ°´ç‡
+	BYTE						m_payType;					// æ”¯ä»˜ç±»å‹
+	BYTE						m_playMode;					// æ¸¸æˆç©æ³•ï¼Œå¦‚æ˜ç‰ŒæŠ¢åº„
+	PlatformFriendsGroupMsg		m_friendsGroupMsg;			// æ¡Œå­çš„ä¿±ä¹éƒ¨ä¿¡æ¯
 
 private:
-	// ÉêÇë½âÉ¢Ïà¹ØÊı¾İ
-	bool						m_isDismissStatus;			// ÊÇ·ñ´¦ÓÚ½âÉ¢×´Ì¬(·¿Ö÷ÇëÇó½âÉ¢£¬µ«ÊÇ»¹Î´ÕæÕı½âÉ¢)
-	BYTE						m_reqDismissDeskStation;	// ÇëÇó½âÉ¢µÄÈË
-	time_t						m_reqDismissTime;			// ÇëÇó½âÉ¢·¿¼äµÄÊ±¼ä
+	// ç”³è¯·è§£æ•£ç›¸å…³æ•°æ®
+	bool						m_isDismissStatus;			// æ˜¯å¦å¤„äºè§£æ•£çŠ¶æ€(æˆ¿ä¸»è¯·æ±‚è§£æ•£ï¼Œä½†æ˜¯è¿˜æœªçœŸæ­£è§£æ•£)
+	BYTE						m_reqDismissDeskStation;	// è¯·æ±‚è§£æ•£çš„äºº
+	time_t						m_reqDismissTime;			// è¯·æ±‚è§£æ•£æˆ¿é—´çš„æ—¶é—´
 
 private:
-	// ÓÎÏ·ÔËĞĞÖĞµÄÊı¾İ
-	bool						m_bPlayGame;				// ÓÎÏ·ÊÇ·ñ¿ªÊ¼±êÖ¾,Ö÷Òª±êÊ¶µ¥¾ÖÓÎÏ·
-	BYTE						m_byGameStation;			// ÓÎÏ·×´Ì¬
-	bool						m_enable;					// ÊÇ·ñÓĞĞ§
+	// æ¸¸æˆè¿è¡Œä¸­çš„æ•°æ®
+	bool						m_bPlayGame;				// æ¸¸æˆæ˜¯å¦å¼€å§‹æ ‡å¿—,ä¸»è¦æ ‡è¯†å•å±€æ¸¸æˆ
+	BYTE						m_byGameStation;			// æ¸¸æˆçŠ¶æ€
+	bool						m_enable;					// æ˜¯å¦æœ‰æ•ˆ
 	time_t						m_beginTime;
 	time_t						m_finishedTime;
-	int							m_beginUserID;				// ¿ªÊ¼ÓÎÏ·Íæ¼Ò
+	int							m_beginUserID;				// å¼€å§‹æ¸¸æˆç©å®¶
 
 public:
-	// ±ÈÈü³¡
-	long long					m_llPartOfMatchID;			// ×À×ÓÊôÓÚµÄ±ÈÈüid£¨Ğ¡£©
-	int							m_iCurMatchRound;			// ±ÈÈü½øĞĞµÄÂÖÊı
-	int							m_iMaxMatchRound;			// ×î´ó±ÈÈüÂÖÊı
-	time_t						m_llStartMatchTime;			// ±ÈÈü¿ªÊ¼Ê±¼ä
-	bool						m_bFinishMatch;				// ±¾×ÀÊÇ·ñÍê³É±ÈÈü
-	std::set<int>				m_matchWatchUserID;			// ±¾×ÀÅÔ¹ÛÕßĞÅÏ¢
+	// æ¯”èµ›åœº
+	long long					m_llPartOfMatchID;			// æ¡Œå­å±äºçš„æ¯”èµ›idï¼ˆå°ï¼‰
+	int							m_iCurMatchRound;			// æ¯”èµ›è¿›è¡Œçš„è½®æ•°
+	int							m_iMaxMatchRound;			// æœ€å¤§æ¯”èµ›è½®æ•°
+	time_t						m_llStartMatchTime;			// æ¯”èµ›å¼€å§‹æ—¶é—´
+	bool						m_bFinishMatch;				// æœ¬æ¡Œæ˜¯å¦å®Œæˆæ¯”èµ›
+	std::set<int>				m_matchWatchUserID;			// æœ¬æ¡Œæ—è§‚è€…ä¿¡æ¯
 
 private:
-	// ÆäËûÊı¾İ
-	std::vector<DeskUserInfo>	m_deskUserInfoVec;			// Íæ¼ÒĞÅÏ¢Êı×é
-	std::vector<long long>		m_gradeIDVec;				// Õ½¼¨ÁĞ±í
-	std::set<WatchUserInfo>		m_watchUserInfoSet;			// ÅÔ¹ÛÕßĞÅÏ¢¼¯ºÏ
-	int							m_finishedGameCount;		// Íê³ÉµÄÓÎÏ·¾ÖÊı
-	bool						m_isBegin;					// ÓÎÏ·ÊÇ·ñ¿ªÊ¼, ·¿¿¨³¡µÚÒ»¾Ö¿ªÊ¼Ö®ºóÖÃÎª¿ªÊ¼£¬³ÖĞøµ½·¿¼ä½âÉ¢»òÕß×îºóÒ»¾Ö½áÊø
-	int							m_autoBeginMode;			// ×Ô¶¯¿ªÊ¼Ä£Ê½(0£º·¿Ö÷¿ªÊ¼ N:ÂúNÈË¿ªÊ¼)
-	bool						m_bGameStopJoin;			// ÊÇ·ñÖĞÍ¾½ûÖ¹¼ÓÈë
-	int							m_iBuyGameCount;			// ¹ºÂò×À×Ó¾ÖÊı£¨´´½¨·¿¼ä¹Ì¶¨£¬²»¿É±ä£©
-	long long					m_uScore[MAX_PLAYER_GRADE];	// ×À×ÓÍæ¼Ò»ı·Ö
-	int							m_gameWinCount[MAX_PLAYER_GRADE];	// Ã¿¸öÍæ¼ÒµÄÊ¤¾ÖÊı
+	// å…¶ä»–æ•°æ®
+	std::vector<DeskUserInfo>	m_deskUserInfoVec;			// ç©å®¶ä¿¡æ¯æ•°ç»„
+	std::vector<long long>		m_gradeIDVec;				// æˆ˜ç»©åˆ—è¡¨
+	std::set<WatchUserInfo>		m_watchUserInfoSet;			// æ—è§‚è€…ä¿¡æ¯é›†åˆ
+	int							m_finishedGameCount;		// å®Œæˆçš„æ¸¸æˆå±€æ•°
+	bool						m_isBegin;					// æ¸¸æˆæ˜¯å¦å¼€å§‹, æˆ¿å¡åœºç¬¬ä¸€å±€å¼€å§‹ä¹‹åç½®ä¸ºå¼€å§‹ï¼ŒæŒç»­åˆ°æˆ¿é—´è§£æ•£æˆ–è€…æœ€åä¸€å±€ç»“æŸ
+	int							m_autoBeginMode;			// è‡ªåŠ¨å¼€å§‹æ¨¡å¼(0ï¼šæˆ¿ä¸»å¼€å§‹ N:æ»¡Näººå¼€å§‹)
+	bool						m_bGameStopJoin;			// æ˜¯å¦ä¸­é€”ç¦æ­¢åŠ å…¥
+	int							m_iBuyGameCount;			// è´­ä¹°æ¡Œå­å±€æ•°ï¼ˆåˆ›å»ºæˆ¿é—´å›ºå®šï¼Œä¸å¯å˜ï¼‰
+	long long					m_uScore[MAX_PLAYER_GRADE];	// æ¡Œå­ç©å®¶ç§¯åˆ†
+	int							m_gameWinCount[MAX_PLAYER_GRADE];	// æ¯ä¸ªç©å®¶çš„èƒœå±€æ•°
 };

@@ -61,7 +61,7 @@ void CMysqlHelper::connect()
 		_pstMql = mysql_init(NULL);
 	}
 
-	//½¨Á¢Á¬½Óºó, ×Ô¶¯µ÷ÓÃÉèÖÃ×Ö·û¼¯Óï¾ä
+	//å»ºç«‹è¿æ¥å, è‡ªåŠ¨è°ƒç”¨è®¾ç½®å­—ç¬¦é›†è¯­å¥
 	if (!_dbConf._charset.empty()) {
 		if (mysql_options(_pstMql, MYSQL_SET_CHARSET_NAME, _dbConf._charset.c_str())) {
 			throw MysqlHelper_Exception(string("CMysqlHelper::connect: mysql_options MYSQL_SET_CHARSET_NAME ") + _dbConf._charset + ":" + string(mysql_error(_pstMql)));
@@ -249,7 +249,7 @@ string CMysqlHelper::getVariables(const string& sName)
 void CMysqlHelper::execute(const string& sSql)
 {
 	/**
-	Ã»ÓĞÁ¬ÉÏ, Á¬½ÓÊı¾İ¿â
+	æ²¡æœ‰è¿ä¸Š, è¿æ¥æ•°æ®åº“
 	*/
 	if (!_bConnected)
 	{
@@ -262,7 +262,7 @@ void CMysqlHelper::execute(const string& sSql)
 	if (iRet != 0)
 	{
 		/**
-		×Ô¶¯ÖØĞÂÁ¬½Ó
+		è‡ªåŠ¨é‡æ–°è¿æ¥
 		*/
 		int iErrno = mysql_errno(_pstMql);
 		if (iErrno == 2013 || iErrno == 2006)
@@ -281,7 +281,7 @@ void CMysqlHelper::execute(const string& sSql)
 bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK/* = false*/)
 {
 	/**
-	Ã»ÓĞÁ¬ÉÏ, Á¬½ÓÊı¾İ¿â
+	æ²¡æœ‰è¿ä¸Š, è¿æ¥æ•°æ®åº“
 	*/
 	if (!_bConnected)
 	{
@@ -291,7 +291,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK
 	if (bSetGBK)
 	{
 		MYSQL_RES* pRes;
-		mysql_query(_pstMql, "SET NAMES GBK"); //ÉèÖÃ±àÂë¸ñÊ½£¨SET NAMES GBKÒ²ĞĞ£©£¬·ñÔòcmdÏÂÖĞÎÄÂÒÂë  
+		mysql_query(_pstMql, "SET NAMES GBK"); //è®¾ç½®ç¼–ç æ ¼å¼ï¼ˆSET NAMES GBKä¹Ÿè¡Œï¼‰ï¼Œå¦åˆ™cmdä¸‹ä¸­æ–‡ä¹±ç   
 		do
 		{
 			pRes = mysql_use_result(_pstMql);
@@ -305,7 +305,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK
 	if (iRet != 0)
 	{
 		/**
-		×Ô¶¯ÖØĞÂÁ¬½Ó
+		è‡ªåŠ¨é‡æ–°è¿æ¥
 		*/
 		int iErrno = mysql_errno(_pstMql);
 		if (iErrno == 2013 || iErrno == 2006)
@@ -364,7 +364,7 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK
 void CMysqlHelper::sqlExec(const char* sql, bool bSetGBK/* = false*/)
 {
 	/**
-	Ã»ÓĞÁ¬ÉÏ, Á¬½ÓÊı¾İ¿â
+	æ²¡æœ‰è¿ä¸Š, è¿æ¥æ•°æ®åº“
 	*/
 	if (!_bConnected)
 	{
@@ -374,7 +374,7 @@ void CMysqlHelper::sqlExec(const char* sql, bool bSetGBK/* = false*/)
 	if (bSetGBK)
 	{
 		MYSQL_RES* pRes;
-		mysql_query(_pstMql, "SET NAMES GBK"); //ÉèÖÃ±àÂë¸ñÊ½£¨SET NAMES GBKÒ²ĞĞ£©£¬·ñÔòcmdÏÂÖĞÎÄÂÒÂë  
+		mysql_query(_pstMql, "SET NAMES GBK"); //è®¾ç½®ç¼–ç æ ¼å¼ï¼ˆSET NAMES GBKä¹Ÿè¡Œï¼‰ï¼Œå¦åˆ™cmdä¸‹ä¸­æ–‡ä¹±ç   
 		do
 		{
 			pRes = mysql_use_result(_pstMql);
@@ -388,7 +388,7 @@ void CMysqlHelper::sqlExec(const char* sql, bool bSetGBK/* = false*/)
 	if (iRet != 0)
 	{
 		/**
-		×Ô¶¯ÖØĞÂÁ¬½Ó
+		è‡ªåŠ¨é‡æ–°è¿æ¥
 		*/
 		int iErrno = mysql_errno(_pstMql);
 		if (iErrno == 2013 || iErrno == 2006)

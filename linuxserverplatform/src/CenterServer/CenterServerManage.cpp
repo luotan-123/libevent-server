@@ -40,7 +40,7 @@ bool CCenterServerManage::OnSocketRead(NetMessageHead * pNetHead, CenterServerMe
 		return false;
 	}
 
-	AUTOCOST("ÖĞĞÄ·şÎñÆ÷ÏûÏ¢ºÄÊ± msgID: %d mainID: %d assistID: %d uIndex: %d", pCenterHead->msgID, pNetHead->uMainID, pNetHead->uAssistantID, uIndex);
+	AUTOCOST("ä¸­å¿ƒæœåŠ¡å™¨æ¶ˆæ¯è€—æ—¶ msgID: %d mainID: %d assistID: %d uIndex: %d", pCenterHead->msgID, pNetHead->uMainID, pNetHead->uAssistantID, uIndex);
 
 	if (pCenterHead->msgID == COMMON_VERIFY_MESSAGE)
 	{
@@ -75,24 +75,24 @@ bool CCenterServerManage::OnStart()
 {
 	INFO_LOG("CenterServerManage OnStart begin...");
 
-	//ÎªsocketIdxÖØĞÂ·ÖÅäÄÚ´æ
+	//ä¸ºsocketIdxé‡æ–°åˆ†é…å†…å­˜
 	if (m_socketToServerVec.size() != m_InitData.uMaxPeople)
 	{
 		m_socketToServerVec.resize(m_InitData.uMaxPeople);
 	}
 
-	//ÇåÀíËùÓĞÔÚÏßÓÃ»§
+	//æ¸…ç†æ‰€æœ‰åœ¨çº¿ç”¨æˆ·
 	if (m_pRedis)
 	{
 		m_pRedis->ClearOnlineUser();
 	}
 
-	//¼ÓÔØ±ÈÈüĞÅÏ¢
+	//åŠ è½½æ¯”èµ›ä¿¡æ¯
 	m_pRedisPHP->LoadAllMatchInfo(m_timeMatchInfoMap);
 
 	m_lastNormalTimerTime = time(NULL);
 
-	//// ²âÊÔredis¶ÁĞ´ËÙ¶È
+	//// æµ‹è¯•redisè¯»å†™é€Ÿåº¦
 	//m_pRedis->TestRedis("CenterServer-GameRedis-Speed");
 	//m_pRedisPHP->TestRedis("CenterServer-PHPRedis-Speed");
 
@@ -106,7 +106,7 @@ bool CCenterServerManage::OnStart()
 //////////////////////////////////////////////////////////////////////
 bool CCenterServerManage::OnTimerMessage(UINT uTimerID)
 {
-	AUTOCOST("¶¨Ê±Æ÷ºÄÊ±timerID = %d", uTimerID);
+	AUTOCOST("å®šæ—¶å™¨è€—æ—¶timerID = %d", uTimerID);
 	switch (uTimerID)
 	{
 	case CENTER_TIMER_CHECK_REDIS_CONNECTION:
@@ -166,18 +166,18 @@ bool CCenterServerManage::PreInitParameter(ManageInfoStruct * pInitData, KernelI
 }
 
 //////////////////////////////////////////////////////////////////////
-// ×ßµ½ÕâÀïµÄÒ»°ãÊÇµ×²ãÍ¨ÖªÒµÎñ²ã¹Ø±Õ(±ÈÈç¿Í»§¶Ë¶ÏÏß£¬»òÕßÖ÷¶¯¹Ø±ÕsocketÖ®Àà)
+// èµ°åˆ°è¿™é‡Œçš„ä¸€èˆ¬æ˜¯åº•å±‚é€šçŸ¥ä¸šåŠ¡å±‚å…³é—­(æ¯”å¦‚å®¢æˆ·ç«¯æ–­çº¿ï¼Œæˆ–è€…ä¸»åŠ¨å…³é—­socketä¹‹ç±»)
 bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime)
 {
-	AUTOCOST("´¦Àí×ÓÏµÍ³ÍË³ö¼¯ÈººÄÊ±£ºsocketIdx = %d", socketIdx);
+	AUTOCOST("å¤„ç†å­ç³»ç»Ÿé€€å‡ºé›†ç¾¤è€—æ—¶ï¼šsocketIdx = %d", socketIdx);
 
-	// ÏÈ¹Ø±ÕÕâ¸öÁ¬½Ó
+	// å…ˆå…³é—­è¿™ä¸ªè¿æ¥
 	if (!m_TCPSocket.CloseSocket(socketIdx))
 	{
 		return false;
 	}
 
-	// ¿¼ÂÇµ½PHP£¬ÕâÀï²»Éú³ÉÈÕÖ¾
+	// è€ƒè™‘åˆ°PHPï¼Œè¿™é‡Œä¸ç”Ÿæˆæ—¥å¿—
 	if (socketIdx >= m_socketToServerVec.size() || m_socketToServerVec[socketIdx].serverType == SERVICE_TYPE_BEGIN)
 	{
 		return true;
@@ -185,18 +185,18 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 
 	ServerBaseInfo serverInfo = m_socketToServerVec[socketIdx];
 
-	// É¾³ıÕâ¸öË÷Òı
+	// åˆ é™¤è¿™ä¸ªç´¢å¼•
 	m_socketToServerVec[socketIdx].serverType = SERVICE_TYPE_BEGIN;
 	m_socketToServerVec[socketIdx].serverID = 0;
 
 	auto itrServerToScoket = m_serverToSocketMap.find(serverInfo);
 	if (itrServerToScoket == m_serverToSocketMap.end())
 	{
-		ERROR_LOG("·şÎñÆ÷ĞÅÏ¢²»´æÔÚ serverType=%d,serverID=%d", serverInfo.serverType, serverInfo.serverID);
+		ERROR_LOG("æœåŠ¡å™¨ä¿¡æ¯ä¸å­˜åœ¨ serverType=%d,serverID=%d", serverInfo.serverType, serverInfo.serverID);
 		return false;
 	}
 
-	// É¾³ıÕâ¸ö·şÎñÆ÷
+	// åˆ é™¤è¿™ä¸ªæœåŠ¡å™¨
 	m_serverToSocketMap.erase(itrServerToScoket);
 
 	if (!m_pRedis)
@@ -205,7 +205,7 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		return false;
 	}
 
-	if (serverInfo.serverType == SERVICE_TYPE_LOGON) //µÇÂ¼·şÍË³ö¼¯Èº
+	if (serverInfo.serverType == SERVICE_TYPE_LOGON) //ç™»å½•æœé€€å‡ºé›†ç¾¤
 	{
 		auto itrVecLogonGroup = m_logonGroupSocket.begin();
 		for (; itrVecLogonGroup != m_logonGroupSocket.end(); itrVecLogonGroup++)
@@ -217,17 +217,17 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		}
 		if (itrVecLogonGroup == m_logonGroupSocket.end())
 		{
-			ERROR_LOG("µÇÂ¼·şsocketË÷Òı²»´æÔÚ socketIdx=%d", socketIdx);
+			ERROR_LOG("ç™»å½•æœsocketç´¢å¼•ä¸å­˜åœ¨ socketIdx=%d", socketIdx);
 			return false;
 		}
 
-		// É¾³ıË÷Òı
+		// åˆ é™¤ç´¢å¼•
 		m_logonGroupSocket.erase(itrVecLogonGroup);
 
-		//ÖØĞÂ·¢ËÍ¼¯ÈºĞÅÏ¢
+		//é‡æ–°å‘é€é›†ç¾¤ä¿¡æ¯
 		SendDistributedSystemInfo();
 
-		//½«´ËµÇÂ¼·şÔÚÏßÍæ¼ÒÍæ¼ÒÒÆ³ı
+		//å°†æ­¤ç™»å½•æœåœ¨çº¿ç©å®¶ç©å®¶ç§»é™¤
 		for (auto iter = m_centerUserInfoMap.begin(); iter != m_centerUserInfoMap.end(); )
 		{
 			if (iter->second.socketIdx == socketIdx)
@@ -243,37 +243,37 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 
 		m_pRedis->SetLogonServerStatus(serverInfo.serverID, 0);
 	}
-	else if (serverInfo.serverType == SERVICE_TYPE_LOADER) //ÓÎÏ··şÍË³ö¼¯Èº
+	else if (serverInfo.serverType == SERVICE_TYPE_LOADER) //æ¸¸æˆæœé€€å‡ºé›†ç¾¤
 	{
 		m_pRedis->SetRoomServerStatus(serverInfo.serverID, 0);
 	}
 
-	INFO_LOG("====== serverType:%d,serverID:%dÍË³ö¼¯Èº µÇÂ¼·ş¼¯ÈºÊıÁ¿:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
+	INFO_LOG("====== serverType:%d,serverID:%dé€€å‡ºé›†ç¾¤ ç™»å½•æœé›†ç¾¤æ•°é‡:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
 
 	return true;
 }
 
-//////////////////////////////·¢ËÍÊı¾İ(µÇÂ½·ş·¢ËÍ)////////////////////////////////////////////
+//////////////////////////////å‘é€æ•°æ®(ç™»é™†æœå‘é€)////////////////////////////////////////////
 bool CCenterServerManage::SendData(int userID, UINT msgID, void * pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode)
 {
 	auto itr = m_centerUserInfoMap.find(userID);
 	if (itr == m_centerUserInfoMap.end())
 	{
-		//WARNNING_LOG("===ÓÃ»§ userID:%d£¬ÔÚÖĞĞÄ·şÎñÆ÷ÖĞÃ»ÓĞ===", userID);
+		//WARNNING_LOG("===ç”¨æˆ· userID:%dï¼Œåœ¨ä¸­å¿ƒæœåŠ¡å™¨ä¸­æ²¡æœ‰===", userID);
 		return true;
 	}
 
 	int ret = m_TCPSocket.CenterServerSendData(itr->second.socketIdx, msgID, pData, size, mainID, assistID, handleCode, userID);
 	if (ret <= 0)
 	{
-		ERROR_LOG("##·¢ËÍÊı¾İÊ§°Ü£ºmsgID=%d##", msgID);
+		ERROR_LOG("##å‘é€æ•°æ®å¤±è´¥ï¼šmsgID=%d##", msgID);
 		return false;
 	}
 
 	return true;
 }
 
-// Ïò·şÎñÆ÷·¢ËÍÊı¾İ
+// å‘æœåŠ¡å™¨å‘é€æ•°æ®
 bool CCenterServerManage::SendData(ServerBaseInfo * pServer, UINT msgID, void* pData, UINT size, int userID /*= 0*/, UINT mainID/* = 0*/, UINT assistID /*= 0*/, UINT handleCode/* = 0*/)
 {
 	if (!pServer)
@@ -284,27 +284,27 @@ bool CCenterServerManage::SendData(ServerBaseInfo * pServer, UINT msgID, void* p
 	auto itr = m_serverToSocketMap.find(*pServer);
 	if (itr == m_serverToSocketMap.end())
 	{
-		ERROR_LOG("·şÎñÆ÷Ã»ÓĞºÍÖĞĞÄ·şÎñÆ÷½¨Á¢Á¬½Ó,serverType=%d,serverID=%d", pServer->serverType, pServer->serverID);
+		ERROR_LOG("æœåŠ¡å™¨æ²¡æœ‰å’Œä¸­å¿ƒæœåŠ¡å™¨å»ºç«‹è¿æ¥,serverType=%d,serverID=%d", pServer->serverType, pServer->serverID);
 		return false;
 	}
 
 	int ret = m_TCPSocket.CenterServerSendData(itr->second, msgID, pData, size, mainID, assistID, handleCode, userID);
 	if (ret <= 0)
 	{
-		ERROR_LOG("##·¢ËÍÊı¾İÊ§°Ü£ºmsgID=%d,mainID=%d,assistID=%d##", msgID, mainID, assistID);
+		ERROR_LOG("##å‘é€æ•°æ®å¤±è´¥ï¼šmsgID=%d,mainID=%d,assistID=%d##", msgID, mainID, assistID);
 		return false;
 	}
 
 	return true;
 }
 
-// Ïò·şÎñÆ÷·¢ËÍÊı¾İ
+// å‘æœåŠ¡å™¨å‘é€æ•°æ®
 bool CCenterServerManage::SendData(UINT uScoketIndex, UINT msgID, void* pData, UINT size, UINT handleCode/* = 0*/)
 {
 	int	ret = m_TCPSocket.CenterServerSendData(uScoketIndex, msgID, pData, size, 0, 0, handleCode, 0);
 	if (ret <= 0)
 	{
-		ERROR_LOG("##·¢ËÍÊı¾İÊ§°Ü£ºuScoketIndex = %d msgID=%d ##", uScoketIndex, msgID);
+		ERROR_LOG("##å‘é€æ•°æ®å¤±è´¥ï¼šuScoketIndex = %d msgID=%d ##", uScoketIndex, msgID);
 		return false;
 	}
 
@@ -321,7 +321,7 @@ void CCenterServerManage::NotifyResourceChange(int userID, int resourceType, lon
 	UserData userData;
 	if (!m_pRedis->GetUserData(userID, userData))
 	{
-		ERROR_LOG("Íæ¼Ò²»´æÔÚ,userID=%d", userID);
+		ERROR_LOG("ç©å®¶ä¸å­˜åœ¨,userID=%d", userID);
 		return;
 	}
 
@@ -334,11 +334,11 @@ void CCenterServerManage::NotifyResourceChange(int userID, int resourceType, lon
 
 	SendData(userID, PLATFORM_MESSAGE_NOTIFY_USERID, &msg, sizeof(LogonNotifyResourceChange), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_RESOURCE_CHANGE, 0);
 
-	// Èç¹ûÍæ¼ÒÔÚÓÎÏ·ÖĞ£¬Í¨Öªµ½ÓÎÏ·
+	// å¦‚æœç©å®¶åœ¨æ¸¸æˆä¸­ï¼Œé€šçŸ¥åˆ°æ¸¸æˆ
 	int roomID = userData.roomID;
 	if (roomID == 0 || !isNotifyRoom)
 	{
-		// Íæ¼Ò²»ÔÚÓÎÏ·
+		// ç©å®¶ä¸åœ¨æ¸¸æˆ
 		return;
 	}
 
@@ -357,11 +357,11 @@ void CCenterServerManage::NotifyResourceChange(int userID, int resourceType, lon
 
 	if (!SendData(&serverInfo, CENTER_MESSAGE_COMMON_RESOURCE_CHANGE, &msgToLoader, sizeof(msgToLoader), userID))
 	{
-		ERROR_LOG("ÏòÓÎÏ··ş·¢ËÍÊı¾İÊ§°Ü roomID=%d", roomID);
+		ERROR_LOG("å‘æ¸¸æˆæœå‘é€æ•°æ®å¤±è´¥ roomID=%d", roomID);
 	}
 }
 
-// ¸øµÇÂ¼·ş·şÎñÆ÷¼¯Èº·¢ËÍµ±Ç°¼¯ÈºĞÅÏ¢
+// ç»™ç™»å½•æœæœåŠ¡å™¨é›†ç¾¤å‘é€å½“å‰é›†ç¾¤ä¿¡æ¯
 void CCenterServerManage::SendDistributedSystemInfo()
 {
 	size_t iLogonGroupSocketSize = m_logonGroupSocket.size();
@@ -382,10 +382,10 @@ void CCenterServerManage::SendDistributedSystemInfo()
 	}
 }
 
-// ±ÈÈü¼´½«¿ªÊ¼£¬¸øËùÓĞ±¨ÃûÍæ¼Ò·¢ËÍÏûÏ¢Í¨Öª
+// æ¯”èµ›å³å°†å¼€å§‹ï¼Œç»™æ‰€æœ‰æŠ¥åç©å®¶å‘é€æ¶ˆæ¯é€šçŸ¥
 void CCenterServerManage::SendNotifyMatchStart(const MatchInfo &matchInfo)
 {
-	//»ñÈ¡±ÈÈüÈËÊı
+	//è·å–æ¯”èµ›äººæ•°
 	std::vector<MatchUserInfo> vecPeople;
 	if (!m_pRedis->GetTimeMatchPeople(matchInfo.matchID, vecPeople))
 	{
@@ -403,19 +403,19 @@ void CCenterServerManage::SendNotifyMatchStart(const MatchInfo &matchInfo)
 	}
 }
 
-////////////////////////////////ÄÚ²¿ÏµÍ³¹¤¾ß//////////////////////////////////////////
+////////////////////////////////å†…éƒ¨ç³»ç»Ÿå·¥å…·//////////////////////////////////////////
 void CCenterServerManage::InitRounteCheckEvent()
 {
-	// ÉèÖÃ¼ì²éredisÁ¬½Ó¶¨Ê±Æ÷
+	// è®¾ç½®æ£€æŸ¥redisè¿æ¥å®šæ—¶å™¨
 	SetTimer(CENTER_TIMER_CHECK_REDIS_CONNECTION, CHECK_REDIS_CONNECTION_SECS * 1000);
 
-	// ÉèÖÃÍ¨ÓÃ¶¨Ê±Æ÷
+	// è®¾ç½®é€šç”¨å®šæ—¶å™¨
 	SetTimer(CENTER_TIMER_NORMAL, NORMAL_TIMER_SECS * 1000);
 
-	// ÉèÖÃÇåÀíphpÁ¬½Ó¶¨Ê±Æ÷
+	// è®¾ç½®æ¸…ç†phpè¿æ¥å®šæ—¶å™¨
 	SetTimer(CENTER_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET, ROUTINE_CHECK_UNBINDID_SOCKET * 1000);
 
-	// ÉèÖÃ¶¨Ê±¼ÓÔØ±ÈÈüĞÅÏ¢
+	// è®¾ç½®å®šæ—¶åŠ è½½æ¯”èµ›ä¿¡æ¯
 	SetTimer(CENTER_TIMER_LOAD_MATCH_INFO, CHECK_REDIS_LOAD_MATCH_INFO * 1000);
 }
 
@@ -444,8 +444,8 @@ void CCenterServerManage::CheckRedisConnection()
 
 void CCenterServerManage::OnNormalTimer()
 {
-	//////////////////////////////ÖĞĞÄ·şÁè³¿6µã////////////////////////////////////////////
-	// ¼ì²éÊÇ·ñ¿çÌì
+	//////////////////////////////ä¸­å¿ƒæœå‡Œæ™¨6ç‚¹////////////////////////////////////////////
+	// æ£€æŸ¥æ˜¯å¦è·¨å¤©
 	time_t currTime = time(NULL);
 	int currHour = CUtil::GetHourTimeStamp(currTime);
 	int lastHour = CUtil::GetHourTimeStamp(m_lastNormalTimerTime);
@@ -461,7 +461,7 @@ void CCenterServerManage::OnNormalTimer()
 		}
 	}
 
-	//¼ì²éÊÇ·ñÓĞ¶¨Ê±Èü¿ÉÒÔ¿ªÈü
+	//æ£€æŸ¥æ˜¯å¦æœ‰å®šæ—¶èµ›å¯ä»¥å¼€èµ›
 	CheckTimeMatch(currTime);
 
 	m_lastNormalTimerTime = currTime;
@@ -477,7 +477,7 @@ void CCenterServerManage::RoutineCheckUnbindIDSocket()
 		time_t llAcceptMsgTime = 0, llLastRecvMsgTime = 0;
 		m_TCPSocket.GetTCPSocketInfo(i, bIsConnect, llAcceptMsgTime, llLastRecvMsgTime);
 
-		// ÇåÀí²»°ó¶¨µÄsocket
+		// æ¸…ç†ä¸ç»‘å®šçš„socket
 		if (bIsConnect && currTime - llLastRecvMsgTime > CONNECT_TIME_SECS && m_socketToServerVec[i].serverType == SERVICE_TYPE_BEGIN)
 		{
 			m_TCPSocket.CloseSocket(i);
@@ -490,7 +490,7 @@ void CCenterServerManage::OnServerCrossDay()
 	AUTOCOST("OnServerCrossDay");
 	INFO_LOG("OnServerCrossDay");
 
-	// Ã¿Ìì·¢ËÍÒ»´Î¼¯ÈºĞÅÏ¢
+	// æ¯å¤©å‘é€ä¸€æ¬¡é›†ç¾¤ä¿¡æ¯
 	SendDistributedSystemInfo();
 }
 
@@ -501,7 +501,7 @@ void CCenterServerManage::OnServerCrossWeek()
 
 }
 
-// Íæ¼ÒÊÇ·ñÔÚÏß
+// ç©å®¶æ˜¯å¦åœ¨çº¿
 bool CCenterServerManage::IsUserOnline(int userID)
 {
 	if (m_centerUserInfoMap.find(userID) != m_centerUserInfoMap.end())
@@ -512,7 +512,7 @@ bool CCenterServerManage::IsUserOnline(int userID)
 	return true;
 }
 
-// ¼ì²é¶¨Ê±Èü
+// æ£€æŸ¥å®šæ—¶èµ›
 void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 {
 	std::vector<int> matchRoomVec;
@@ -523,7 +523,7 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 		{
 			if (_abs64(currTime - itr->second.startTime) <= 120)
 			{
-				//Ê±¼äµ½ÁË£¬¿ÉÒÔ¿ªÊ¼±ÈÈüÁË
+				//æ—¶é—´åˆ°äº†ï¼Œå¯ä»¥å¼€å§‹æ¯”èµ›äº†
 				PlatformReqStartMatchTime msg;
 				msg.gameID = itr->second.gameID;
 				msg.matchID = itr->second.matchID;
@@ -535,12 +535,12 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 				ConfigManage()->GetBuyRoomInfo(msg.gameID, ROOM_TYPE_MATCH, matchRoomVec);
 				if (matchRoomVec.size() <= 0)
 				{
-					ERROR_LOG("Ã»ÓĞÅäÖÃ±ÈÈü³¡£¬gameID=%d", msg.gameID);
+					ERROR_LOG("æ²¡æœ‰é…ç½®æ¯”èµ›åœºï¼ŒgameID=%d", msg.gameID);
 					m_timeMatchInfoMap.erase(itr++);
 					return;
 				}
 
-				//·ÖÅäÒ»¸ö±ÈÈü³¡
+				//åˆ†é…ä¸€ä¸ªæ¯”èµ›åœº
 				int roomID = matchRoomVec[CUtil::GetRandNum() % matchRoomVec.size()];
 
 				ServerBaseInfo serverInfo;
@@ -549,11 +549,11 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 
 				if (!SendData(&serverInfo, CENTER_MESSAGE_COMMON_START_MATCH_TIME, &msg, sizeof(msg)))
 				{
-					ERROR_LOG("¶¨Ê±Èü£º¿ªÊ¼±ÈÈüÊ§°Ü roomID=%d", roomID);
+					ERROR_LOG("å®šæ—¶èµ›ï¼šå¼€å§‹æ¯”èµ›å¤±è´¥ roomID=%d", roomID);
 				}
 				else
 				{
-					INFO_LOG("¿ªÊ¼¶¨Ê±Èü£ºgameid=%d,starttime=%lld,matchID=%d", itr->second.gameID, itr->second.startTime, itr->second.matchID);
+					INFO_LOG("å¼€å§‹å®šæ—¶èµ›ï¼šgameid=%d,starttime=%lld,matchID=%d", itr->second.gameID, itr->second.startTime, itr->second.matchID);
 				}
 			}
 
@@ -562,7 +562,7 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 		}
 		else if (itr->second.startTime - currTime < MATCH_START_NOTIFY_TIME && itr->second.isNotified == 0)
 		{
-			// ±ÈÈü¿ªÊ¼Ç°Í¨ÖªÒ»´Î
+			// æ¯”èµ›å¼€å§‹å‰é€šçŸ¥ä¸€æ¬¡
 			SendNotifyMatchStart(itr->second);
 
 			itr->second.isNotified = 1;
@@ -664,7 +664,7 @@ bool CCenterServerManage::OnHandlePHPMessage(NetMessageHead * pNetHead, CenterSe
 	return false;
 }
 
-// Ìí¼Ó¹«¸æ
+// æ·»åŠ å…¬å‘Š
 bool CCenterServerManage::OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, int size)
 {
 	if (size != sizeof(PlatformNoticeMessage))
@@ -680,7 +680,7 @@ bool CCenterServerManage::OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, 
 		return false;
 	}
 
-	//¸øËùÓĞµÇÂ¼·ş·¢¹«¸æ
+	//ç»™æ‰€æœ‰ç™»å½•æœå‘å…¬å‘Š
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
 		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_NOTICE, pData, size);
@@ -691,7 +691,7 @@ bool CCenterServerManage::OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, 
 	return true;
 }
 
-// È«·şÓÊ¼şÍ¨Öª
+// å…¨æœé‚®ä»¶é€šçŸ¥
 bool CCenterServerManage::OnHandlePHPAllUserMailMessage(UINT socketIdx, void* pData, int size)
 {
 	SendData(socketIdx, PLATFORM_MESSAGE_REQ_ALL_USER_MAIL, NULL, 0, PF_SUCCESS);
@@ -704,7 +704,7 @@ bool CCenterServerManage::OnHandlePHPAllUserMailMessage(UINT socketIdx, void* pD
 	return true;
 }
 
-//½«reidsÊı¾İ±£´ædbÖĞ
+//å°†reidsæ•°æ®ä¿å­˜dbä¸­
 bool CCenterServerManage::OnHandlePHPCloseServerMessage(UINT socketIdx, void*pData, int size)
 {
 	if (size != sizeof(PlatformCloseServerMessage))
@@ -736,20 +736,20 @@ bool CCenterServerManage::OnHandlePHPCloseServerMessage(UINT socketIdx, void*pDa
 
 	m_pRedis->SetServerStatus(pMessage->status);
 
-	INFO_LOG("==========CenterServer ·¢ËÍ¹Ø·şÃüÁî===========");
+	INFO_LOG("==========CenterServer å‘é€å…³æœå‘½ä»¤===========");
 
 	for (auto itr = m_serverToSocketMap.begin(); itr != m_serverToSocketMap.end(); itr++)
 	{
 		SendData(itr->second, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0);
 	}
 
-	////ÇåÀíËùÓĞÔÚÏßÍæ¼Ò
+	////æ¸…ç†æ‰€æœ‰åœ¨çº¿ç©å®¶
 	//m_centerUserInfoMap.clear();
 
 	return true;
 }
 
-//´ÓreidsÖĞ¶ÁÈ¡Êı¾İ»Ö¸´
+//ä»reidsä¸­è¯»å–æ•°æ®æ¢å¤
 bool CCenterServerManage::OnHandlePHPOpenServerMessage(UINT socketIdx, void*pData, int size)
 {
 	if (size != 0)
@@ -764,7 +764,7 @@ bool CCenterServerManage::OnHandlePHPOpenServerMessage(UINT socketIdx, void*pDat
 		return false;
 	}
 
-	INFO_LOG("==========CenterServer ·¢ËÍ¿ª·şÃüÁî===========");
+	INFO_LOG("==========CenterServer å‘é€å¼€æœå‘½ä»¤===========");
 
 	m_pRedis->SetServerStatus(SERVER_PLATFROM_STATUS_NORMAL);
 
@@ -778,7 +778,7 @@ bool CCenterServerManage::OnHandlePHPOpenServerMessage(UINT socketIdx, void*pDat
 	return true;
 }
 
-// ·¢ËÍÀ®°È
+// å‘é€å–‡å­
 bool CCenterServerManage::OnHandlePHPHornMessage(UINT socketIdx, void*pData, int size)
 {
 	if (size != sizeof(PlatformHorn))
@@ -804,7 +804,7 @@ bool CCenterServerManage::OnHandlePHPHornMessage(UINT socketIdx, void*pData, int
 	return true;
 }
 
-// ½âÉ¢×À×Ó
+// è§£æ•£æ¡Œå­
 bool CCenterServerManage::OnHandlePHPDissmissDeskMessage(UINT socketIdx, UINT msgID, void*pData, int size)
 {
 	if (size != sizeof(PlatformDissmissDesk))
@@ -841,7 +841,7 @@ bool CCenterServerManage::OnHandlePHPDissmissDeskMessage(UINT socketIdx, UINT ms
 	return true;
 }
 
-// Í¨ÖªÄ³¸öÈË×ÊÔ´±ä»¯
+// é€šçŸ¥æŸä¸ªäººèµ„æºå˜åŒ–
 bool CCenterServerManage::OnHandlePHPNotifyResChangeMessage(UINT socketIdx, int userID, void*pData, int size)
 {
 	if (size != sizeof(PlatformResourceChange))
@@ -862,13 +862,13 @@ bool CCenterServerManage::OnHandlePHPNotifyResChangeMessage(UINT socketIdx, int 
 	return true;
 }
 
-// ÏòÄ³¸öÍæ¼ÒÍÆËÍÏûÏ¢
+// å‘æŸä¸ªç©å®¶æ¨é€æ¶ˆæ¯
 bool CCenterServerManage::OnHandlePHPNotifyOneUserMessage(UINT socketIdx, int userID, void*pData, int size, unsigned int mainID, unsigned int assistID)
 {
 	return SendData(userID, PLATFORM_MESSAGE_NOTIFY_USERID, pData, size, mainID, assistID, 0);
 }
 
-// Ïò¾ãÀÖ²¿Íæ¼ÒÍÆËÍÏûÏ¢
+// å‘ä¿±ä¹éƒ¨ç©å®¶æ¨é€æ¶ˆæ¯
 bool CCenterServerManage::OnHandlePHPNotifyFGMessage(UINT socketIdx, int friendsGroupID, void*pData, int size, unsigned int mainID, unsigned int assistID)
 {
 	if (!m_pRedisPHP)
@@ -881,7 +881,7 @@ bool CCenterServerManage::OnHandlePHPNotifyFGMessage(UINT socketIdx, int friends
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
@@ -893,7 +893,7 @@ bool CCenterServerManage::OnHandlePHPNotifyFGMessage(UINT socketIdx, int friends
 	return true;
 }
 
-// ÉèÖÃÍæ¼ÒÉí·İ
+// è®¾ç½®ç©å®¶èº«ä»½
 bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, void* pData, int size)
 {
 	if (size != sizeof(PlatformIdentUser))
@@ -930,7 +930,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 	}
 
 	int iStatus = 0;
-	if (pMessage->type == 1) //ÉèÖÃ
+	if (pMessage->type == 1) //è®¾ç½®
 	{
 		iStatus = userData.status | pMessage->statusValue;
 		if (pMessage->statusValue == USER_IDENTITY_TYPE_WIN && (userData.status&USER_IDENTITY_TYPE_FAIL) == USER_IDENTITY_TYPE_FAIL)
@@ -942,7 +942,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 			iStatus = iStatus ^ USER_IDENTITY_TYPE_WIN;
 		}
 	}
-	else //È¡Ïû
+	else //å–æ¶ˆ
 	{
 		if ((userData.status&pMessage->statusValue) == pMessage->statusValue)
 		{
@@ -955,7 +955,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 		}
 	}
 
-	//ÉèÖÃ·âºÅ¹¦ÄÜ£¬ÌîĞ´ÓÃ»§±»·âÊ±¼ä
+	//è®¾ç½®å°å·åŠŸèƒ½ï¼Œå¡«å†™ç”¨æˆ·è¢«å°æ—¶é—´
 	int iFinishTime = (int)time(NULL) + pMessage->otherValue;
 	if (pMessage->statusValue == USER_IDENTITY_TYPE_SEAL)
 	{
@@ -967,7 +967,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 			}
 			m_pRedis->SetUserSealTime(userID, iFinishTime);
 
-			//ÈÃÕâ¸öÍæ¼Ò¶ÏÏß
+			//è®©è¿™ä¸ªç©å®¶æ–­çº¿
 			SendData(userID, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, 0, 0, 0);
 		}
 		else if (pMessage->type == 0)
@@ -981,7 +981,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 
 	if (!m_pRedis->hmset(TBL_USER, userID, umap))
 	{
-		ERROR_LOG("ÉèÖÃÍæ¼ÒÉí·İÊ§°Ü:userID=%d", userID);
+		ERROR_LOG("è®¾ç½®ç©å®¶èº«ä»½å¤±è´¥:userID=%d", userID);
 	}
 
 	SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SUCCESS);
@@ -989,7 +989,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 	return true;
 }
 
-// Í¨ÖªĞ¡ºìµã
+// é€šçŸ¥å°çº¢ç‚¹
 bool CCenterServerManage::OnHandlePHPNotifyUserRedspotMessage(UINT socketIdx, int userID, void* pData, int size)
 {
 	if (size != sizeof(PlatformPHPRedSpotNotify))
@@ -1050,7 +1050,7 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedspotMessage(UINT socketIdx, in
 	return true;
 }
 
-// Í¨Öª¾ãÀÖ²¿Ğ¡ºìµã
+// é€šçŸ¥ä¿±ä¹éƒ¨å°çº¢ç‚¹
 bool CCenterServerManage::OnHandlePHPNotifyUserRedFGspotMessage(UINT socketIdx, int friendsGroupID, void* pData, int size)
 {
 	if (size != sizeof(PlatformPHPRedSpotNotify))
@@ -1076,7 +1076,7 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedFGspotMessage(UINT socketIdx, 
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
@@ -1107,7 +1107,7 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedFGspotMessage(UINT socketIdx, 
 	return true;
 }
 
-// ¼ÓÔØÓÎÏ·ÅäÖÃ
+// åŠ è½½æ¸¸æˆé…ç½®
 bool CCenterServerManage::OnHandlePHPReloadGameConfigMessage(UINT socketIdx, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPReloadGameConfig, pData, size);
@@ -1118,13 +1118,13 @@ bool CCenterServerManage::OnHandlePHPReloadGameConfigMessage(UINT socketIdx, voi
 
 	if (!SendData(&serverInfo, PLATFORM_MESSAGE_RELOAD_GAME_CONFIG, NULL, 0))
 	{
-		ERROR_LOG("ÏòÓÎÏ··ş·¢ËÍÊı¾İÊ§°Ü roomID=%d", pMessage->roomID);
+		ERROR_LOG("å‘æ¸¸æˆæœå‘é€æ•°æ®å¤±è´¥ roomID=%d", pMessage->roomID);
 	}
 
 	return true;
 }
 
-// ÊÖ»ú×¢²áÑéÖ¤³É¹¦£¬×¢²áÕËºÅ
+// æ‰‹æœºæ³¨å†ŒéªŒè¯æˆåŠŸï¼Œæ³¨å†Œè´¦å·
 bool CCenterServerManage::OnHandlePHPPhoneInfoMessage(UINT socketIdx, void* pData, int size)
 {
 	if (size != sizeof(PlatformPhoneInfo))
@@ -1143,7 +1143,7 @@ bool CCenterServerManage::OnHandlePHPPhoneInfoMessage(UINT socketIdx, void* pDat
 	if (strlen(pMessage->phone) >= sizeof(pMessage->phone) || strlen(pMessage->passwd) >= sizeof(pMessage->passwd)
 		|| strlen(pMessage->name) >= sizeof(pMessage->name) || strlen(pMessage->headURL) >= sizeof(pMessage->headURL))
 	{
-		ERROR_LOG("²ÎÊıÒì³£ phone=%s, passwd=%s, name=%s, headURL=%s", pMessage->phone, pMessage->passwd, pMessage->name, pMessage->headURL);
+		ERROR_LOG("å‚æ•°å¼‚å¸¸ phone=%s, passwd=%s, name=%s, headURL=%s", pMessage->phone, pMessage->passwd, pMessage->name, pMessage->headURL);
 		return false;
 	}
 
@@ -1171,7 +1171,7 @@ bool CCenterServerManage::OnHandlePHPPhoneInfoMessage(UINT socketIdx, void* pDat
 	return true;
 }
 
-// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨ÊµÊ±Èü£©
+// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®æ—¶èµ›ï¼‰
 bool CCenterServerManage::OnHandlePHPSignUpMatchMessage(UINT socketIdx, void*pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchPeople, pData, size);
@@ -1184,7 +1184,7 @@ bool CCenterServerManage::OnHandlePHPSignUpMatchMessage(UINT socketIdx, void*pDa
 	return true;
 }
 
-// ÇëÇó¿ªÊ¼±ÈÈü
+// è¯·æ±‚å¼€å§‹æ¯”èµ›
 bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPReqStartMatchPeople, pData, size);
@@ -1192,13 +1192,13 @@ bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*p
 	GameBaseInfo * pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pMessage->gameID);
 	if (!pGameBaseInfo)
 	{
-		ERROR_LOG("Ã»ÓĞÅäÖÃ¸ÃÓÎÏ·£¬gameID=%d", pMessage->gameID);
+		ERROR_LOG("æ²¡æœ‰é…ç½®è¯¥æ¸¸æˆï¼ŒgameID=%d", pMessage->gameID);
 		return false;
 	}
 
 	if (pGameBaseInfo->deskPeople <= 1 || pMessage->peopleCount <= 1 || pMessage->peopleCount > MAX_MATCH_PEOPLE_COUNT)
 	{
-		ERROR_LOG("Êı¾İÅäÖÃ´íÎó,pGameBaseInfo->deskPeople=%d,pMessage->peopleCount=%d", pGameBaseInfo->deskPeople, pMessage->peopleCount);
+		ERROR_LOG("æ•°æ®é…ç½®é”™è¯¯,pGameBaseInfo->deskPeople=%d,pMessage->peopleCount=%d", pGameBaseInfo->deskPeople, pMessage->peopleCount);
 		return false;
 	}
 
@@ -1213,12 +1213,12 @@ bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*p
 	}
 	if (iRound == 0)
 	{
-		ERROR_LOG("±ÈÈüÈËÊı²»ÕıÈ·,peopleCount=%d", pMessage->peopleCount);
+		ERROR_LOG("æ¯”èµ›äººæ•°ä¸æ­£ç¡®,peopleCount=%d", pMessage->peopleCount);
 		return false;
 	}
 	if (iRound != pMessage->matchRound)
 	{
-		ERROR_LOG("±ÈÈüÂÖÊı²»ÕıÈ·,pMessage->matchRound=%d,iRound=%d", pMessage->matchRound, iRound);
+		ERROR_LOG("æ¯”èµ›è½®æ•°ä¸æ­£ç¡®,pMessage->matchRound=%d,iRound=%d", pMessage->matchRound, iRound);
 		return false;
 	}
 
@@ -1226,11 +1226,11 @@ bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*p
 	ConfigManage()->GetBuyRoomInfo(pMessage->gameID, ROOM_TYPE_MATCH, matchRoomVec);
 	if (matchRoomVec.size() <= 0)
 	{
-		ERROR_LOG("Ã»ÓĞÅäÖÃ±ÈÈü³¡£¬gameID=%d", pMessage->gameID);
+		ERROR_LOG("æ²¡æœ‰é…ç½®æ¯”èµ›åœºï¼ŒgameID=%d", pMessage->gameID);
 		return false;
 	}
 
-	//·ÖÅäÒ»¸ö±ÈÈü³¡
+	//åˆ†é…ä¸€ä¸ªæ¯”èµ›åœº
 	int roomID = matchRoomVec[CUtil::GetRandNum() % matchRoomVec.size()];
 
 	ServerBaseInfo serverInfo;
@@ -1239,7 +1239,7 @@ bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*p
 
 	if (!SendData(&serverInfo, PLATFORM_MESSAGE_START_MATCH_PEOPLE, pData, size))
 	{
-		ERROR_LOG("ÏòÓÎÏ··ş·¢ËÍÊı¾İÊ§°Ü roomID=%d", roomID);
+		ERROR_LOG("å‘æ¸¸æˆæœå‘é€æ•°æ®å¤±è´¥ roomID=%d", roomID);
 	}
 
 	SendData(socketIdx, PLATFORM_MESSAGE_START_MATCH_PEOPLE, NULL, 0, PF_SUCCESS);
@@ -1247,12 +1247,12 @@ bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*p
 	return true;
 }
 
-// ´´½¨¡¢ĞŞ¸Ä¡¢É¾³ı£¬Ò»¸ö¶¨Ê±Èü
+// åˆ›å»ºã€ä¿®æ”¹ã€åˆ é™¤ï¼Œä¸€ä¸ªå®šæ—¶èµ›
 bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, void*pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPModifyTimeMatch, pData, size);
 
-	INFO_LOG("±ÈÈüĞÅÏ¢£ºmatchID=%d,gameID=%d,startTime=%lld,type=%d",
+	INFO_LOG("æ¯”èµ›ä¿¡æ¯ï¼šmatchID=%d,gameID=%d,startTime=%lld,type=%d",
 		pMessage->matchID, pMessage->gameID, pMessage->startTime, pMessage->type);
 
 	if (pMessage->type == 0)
@@ -1267,7 +1267,7 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 
 		if (m_timeMatchInfoMap.count(matchInfo.startTime) > 0)
 		{
-			ERROR_LOG("±ÈÈüÊ±¼äÖØ¸´£¬time=%lld,matchID=%d,gameID=%d", matchInfo.startTime, matchInfo.matchID, matchInfo.gameID);
+			ERROR_LOG("æ¯”èµ›æ—¶é—´é‡å¤ï¼Œtime=%lld,matchID=%d,gameID=%d", matchInfo.startTime, matchInfo.matchID, matchInfo.gameID);
 		}
 
 		m_timeMatchInfoMap[matchInfo.startTime] = matchInfo;
@@ -1277,7 +1277,7 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 		auto itr = m_timeMatchInfoMap.find(pMessage->startTime);
 		if (itr == m_timeMatchInfoMap.end())
 		{
-			ERROR_LOG("É¾³ıµÄ±ÈÈüĞÅÏ¢²»´æÔÚ£¬time=%lld,matchID=%d,gameID=%d", pMessage->startTime, pMessage->matchID, pMessage->gameID);
+			ERROR_LOG("åˆ é™¤çš„æ¯”èµ›ä¿¡æ¯ä¸å­˜åœ¨ï¼Œtime=%lld,matchID=%d,gameID=%d", pMessage->startTime, pMessage->matchID, pMessage->gameID);
 			return false;
 		}
 		if (itr->second.matchID == pMessage->matchID)
@@ -1286,7 +1286,7 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 		}
 		else
 		{
-			ERROR_LOG("É¾³ıµÄ±ÈÈüĞÅÏ¢²»´æÔÚ£¬time=%lld,matchID=%d,gameID=%d", itr->second.startTime, itr->second.matchID, itr->second.gameID);
+			ERROR_LOG("åˆ é™¤çš„æ¯”èµ›ä¿¡æ¯ä¸å­˜åœ¨ï¼Œtime=%lld,matchID=%d,gameID=%d", itr->second.startTime, itr->second.matchID, itr->second.gameID);
 		}
 	}
 	else if (pMessage->type == 2)
@@ -1302,14 +1302,14 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 
 		if (itr == m_timeMatchInfoMap.end())
 		{
-			ERROR_LOG("ĞŞ¸ÄµÄ±ÈÈüĞÅÏ¢²»´æÔÚ£¬time=%lld,matchID=%d,gameID=%d", pMessage->startTime, pMessage->matchID, pMessage->gameID);
+			ERROR_LOG("ä¿®æ”¹çš„æ¯”èµ›ä¿¡æ¯ä¸å­˜åœ¨ï¼Œtime=%lld,matchID=%d,gameID=%d", pMessage->startTime, pMessage->matchID, pMessage->gameID);
 			return false;
 		}
 
-		//ÏÈÉ¾³ı
+		//å…ˆåˆ é™¤
 		m_timeMatchInfoMap.erase(itr);
 
-		//ÔÙÌí¼Ó
+		//å†æ·»åŠ 
 		MatchInfo matchInfo;
 		matchInfo.matchID = pMessage->matchID;
 		matchInfo.gameID = pMessage->gameID;
@@ -1320,7 +1320,7 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 
 		if (m_timeMatchInfoMap.count(matchInfo.startTime) > 0)
 		{
-			ERROR_LOG("±ÈÈüÊ±¼äÖØ¸´£¬time=%lld,matchID=%d,gameID=%d", pMessage->startTime, pMessage->matchID, pMessage->gameID);
+			ERROR_LOG("æ¯”èµ›æ—¶é—´é‡å¤ï¼Œtime=%lld,matchID=%d,gameID=%d", pMessage->startTime, pMessage->matchID, pMessage->gameID);
 		}
 
 		m_timeMatchInfoMap[matchInfo.startTime] = matchInfo;
@@ -1329,7 +1329,7 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 	return true;
 }
 
-// Íæ¼Ò±¨Ãû»òÕßÍË³ö±¨Ãû£¨¶¨Ê±Èü£©
+// ç©å®¶æŠ¥åæˆ–è€…é€€å‡ºæŠ¥åï¼ˆå®šæ—¶èµ›ï¼‰
 bool CCenterServerManage::OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx, void*pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchTime, pData, size);
@@ -1342,13 +1342,13 @@ bool CCenterServerManage::OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx
 	return true;
 }
 
-////////////////////////////////´¦ÀíÍ¨ÓÃÏûÏ¢//////////////////////////////////////////
+////////////////////////////////å¤„ç†é€šç”¨æ¶ˆæ¯//////////////////////////////////////////
 bool CCenterServerManage::OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
 	return true;
 }
 
-// ÎªÃ¿¸ö·şÎñÆ÷°ó¶¨socketIdx
+// ä¸ºæ¯ä¸ªæœåŠ¡å™¨ç»‘å®šsocketIdx
 bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
 	if (size != sizeof(PlatformCenterServerVerify))
@@ -1374,14 +1374,14 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 
 	if (m_serverToSocketMap.find(serverInfo) != m_serverToSocketMap.end())
 	{
-		ERROR_LOG("####µÇÂ¼·şIDÖØ¸´,pMessage->serverID = %d####", pMessage->serverID);
+		ERROR_LOG("####ç™»å½•æœIDé‡å¤,pMessage->serverID = %d####", pMessage->serverID);
 		SendData(uIndex, CENTER_MESSAGE_COMMON_REPEAT_ID, NULL, 0);
 		return false;
 	}
 
 	if (m_socketToServerVec.size() != m_InitData.uMaxPeople)
 	{
-		WARNNING_LOG("#### ·şÎñÆ÷Æô¶¯¹ı¿ì£¬ÄÚ´æ»¹Ã»ÓĞ·ÖÅä,serverType=%d,serverID=%d,uIndex=%d,size=%d  ####",
+		WARNNING_LOG("#### æœåŠ¡å™¨å¯åŠ¨è¿‡å¿«ï¼Œå†…å­˜è¿˜æ²¡æœ‰åˆ†é…,serverType=%d,serverID=%d,uIndex=%d,size=%d  ####",
 			pMessage->serverType, pMessage->serverID, uIndex, m_socketToServerVec.size());
 		m_socketToServerVec.resize(m_InitData.uMaxPeople);
 	}
@@ -1389,8 +1389,8 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 	m_socketToServerVec[uIndex] = serverInfo;
 	m_serverToSocketMap.insert(std::make_pair(serverInfo, uIndex));
 
-	//·¢ËÍµ±Ç°·şÎñÆ÷¼¯Èº£¬·¢ËÍ±àºÅºÍÊıÁ¿£¬ÒÔ¼°Ö÷Òª·şÎñÆ÷±àºÅ
-	if (pMessage->serverType == SERVICE_TYPE_LOGON)   //µÇÂ¼·ş
+	//å‘é€å½“å‰æœåŠ¡å™¨é›†ç¾¤ï¼Œå‘é€ç¼–å·å’Œæ•°é‡ï¼Œä»¥åŠä¸»è¦æœåŠ¡å™¨ç¼–å·
+	if (pMessage->serverType == SERVICE_TYPE_LOGON)   //ç™»å½•æœ
 	{
 		m_pRedis->SetLogonServerStatus(serverInfo.serverID, 1);
 
@@ -1398,17 +1398,17 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 
 		SendDistributedSystemInfo();
 	}
-	else if (pMessage->serverType == SERVICE_TYPE_LOADER)//ÓÎÏ··ş
+	else if (pMessage->serverType == SERVICE_TYPE_LOADER)//æ¸¸æˆæœ
 	{
 		m_pRedis->SetRoomServerStatus(pMessage->serverID, 1);
 	}
 
-	INFO_LOG("====== serverType:%d,serverID:%d ¼ÓÈë¼¯ÈºÏµÍ³ µÇÂ¼·ş¼¯ÈºÊıÁ¿:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
+	INFO_LOG("====== serverType:%d,serverID:%d åŠ å…¥é›†ç¾¤ç³»ç»Ÿ ç™»å½•æœé›†ç¾¤æ•°é‡:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
 
 	return true;
 }
 
-////////////////////////////////´¦Àí´óÌü·şÏûÏ¢//////////////////////////////////////////
+////////////////////////////////å¤„ç†å¤§å…æœæ¶ˆæ¯//////////////////////////////////////////
 bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
 	switch (pCenterHead->msgID)
@@ -1443,7 +1443,7 @@ bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, Center
 	}
 	default:
 	{
-		WARNNING_LOG("ÖĞĞÄ·şÏûÏ¢²»´æÔÚ:pCenterHead->msgID = %d", pCenterHead->msgID);
+		WARNNING_LOG("ä¸­å¿ƒæœæ¶ˆæ¯ä¸å­˜åœ¨:pCenterHead->msgID = %d", pCenterHead->msgID);
 		break;
 	}
 	}
@@ -1451,7 +1451,7 @@ bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, Center
 	return true;
 }
 
-// µÇÂ½·ş×ÊÔ´±ä»¯
+// ç™»é™†æœèµ„æºå˜åŒ–
 bool CCenterServerManage::OnHandleLogonResChangeMessage(int userID, void* pData, UINT size)
 {
 	if (size != sizeof(PlatformResourceChange))
@@ -1482,7 +1482,7 @@ bool CCenterServerManage::OnHandleLogonResChangeMessage(int userID, void* pData,
 	return true;
 }
 
-// Íæ¼ÒÉÏÏÂÏß
+// ç©å®¶ä¸Šä¸‹çº¿
 bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
 	if (size != sizeof(PlatformUserLogonLogout))
@@ -1498,16 +1498,16 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 
 	if (uIndex >= m_socketToServerVec.size())
 	{
-		ERROR_LOG("#### redisÒÆ³ıÔÚÏßÍæ¼ÒÊ§°Ü m_socketToServerVecÖĞµÇÂ½·şË÷Òı²»´æÔÚ uIndex = %d ####", uIndex);
+		ERROR_LOG("#### redisç§»é™¤åœ¨çº¿ç©å®¶å¤±è´¥ m_socketToServerVecä¸­ç™»é™†æœç´¢å¼•ä¸å­˜åœ¨ uIndex = %d ####", uIndex);
 		return false;
 	}
 	if (m_socketToServerVec[uIndex].serverType != SERVICE_TYPE_LOGON)
 	{
-		ERROR_LOG("#### redisÒÆ³ıÔÚÏßÍæ¼ÒÊ§°Ü serverType=%d ´íÎó####", m_socketToServerVec[uIndex].serverType);
+		ERROR_LOG("#### redisç§»é™¤åœ¨çº¿ç©å®¶å¤±è´¥ serverType=%d é”™è¯¯####", m_socketToServerVec[uIndex].serverType);
 		return false;
 	}
 
-	if (pMessage->type == 0) //ĞÂÔö
+	if (pMessage->type == 0) //æ–°å¢
 	{
 		CenterUserInfo userInfo;
 		userInfo.userID = pMessage->userID;
@@ -1516,12 +1516,12 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 
 		m_centerUserInfoMap[pMessage->userID] = userInfo;
 	}
-	else  //É¾³ı
+	else  //åˆ é™¤
 	{
 		auto itr = m_centerUserInfoMap.find(pMessage->userID);
 		if (itr == m_centerUserInfoMap.end())
 		{
-			ERROR_LOG("É¾³ıÍæ¼Ò²»´æÔÚ pMessage->userID = %d", pMessage->userID);
+			ERROR_LOG("åˆ é™¤ç©å®¶ä¸å­˜åœ¨ pMessage->userID = %d", pMessage->userID);
 			return true;
 		}
 		if (itr->second.socketIdx == uIndex)
@@ -1531,32 +1531,32 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 		}
 		else
 		{
-			WARNNING_LOG("ĞÂ¾É·şÎñÆ÷²»Ò»ÖÂ:ĞÂsocketIdx=%d, ¾ÉuIndex=%d", itr->second.socketIdx, uIndex);
+			WARNNING_LOG("æ–°æ—§æœåŠ¡å™¨ä¸ä¸€è‡´:æ–°socketIdx=%d, æ—§uIndex=%d", itr->second.socketIdx, uIndex);
 		}
 	}
 
 	return true;
 }
 
-// ¸øÆäËüµÇÂ¼·ş·¢ËÍÊı¾İ£¬Ìßµô¾É·şÎñÆ÷Íæ¼Ò
+// ç»™å…¶å®ƒç™»å½•æœå‘é€æ•°æ®ï¼Œè¸¢æ‰æ—§æœåŠ¡å™¨ç©å®¶
 bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
 	if (size != 0)
 	{
-		ERROR_LOG("Ğ­Òé²»¶Ô");
+		ERROR_LOG("åè®®ä¸å¯¹");
 		return false;
 	}
 
 	auto itr = m_centerUserInfoMap.find(pCenterHead->userID);
 	if (itr == m_centerUserInfoMap.end())
 	{
-		ERROR_LOG("Ìß¾ÉÍæ¼ÒÊ§°Ü£ºuserID = %d", pCenterHead->userID);
+		ERROR_LOG("è¸¢æ—§ç©å®¶å¤±è´¥ï¼šuserID = %d", pCenterHead->userID);
 		return false;
 	}
 
 	if (itr->second.socketIdx == uIndex)
 	{
-		ERROR_LOG("Ìß¾ÉÍæ¼ÒÊ§°Ü£¬ĞÂ¾É·şÎñÆ÷Ò»ÖÂ£ºuserID = %d", pCenterHead->userID);
+		ERROR_LOG("è¸¢æ—§ç©å®¶å¤±è´¥ï¼Œæ–°æ—§æœåŠ¡å™¨ä¸€è‡´ï¼šuserID = %d", pCenterHead->userID);
 		return false;
 	}
 
@@ -1568,13 +1568,13 @@ bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead
 	return true;
 }
 
-// ×ª·¢ÏûÏ¢¸øÄ³¸öÈË
+// è½¬å‘æ¶ˆæ¯ç»™æŸä¸ªäºº
 bool CCenterServerManage::OnHandleLogonRelayUserMessage(NetMessageHead * pNetHead, void* pData, UINT size, int userID)
 {
 	return SendData(userID, PLATFORM_MESSAGE_NOTIFY_USERID, pData, size, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode);
 }
 
-// ×ª·¢ÏûÏ¢¸ø¾ãÀÖ²¿
+// è½¬å‘æ¶ˆæ¯ç»™ä¿±ä¹éƒ¨
 bool CCenterServerManage::OnHandleLogonRelayFGMessage(NetMessageHead * pNetHead, void* pData, UINT size, int friendsGroupID)
 {
 	if (!m_pRedisPHP)
@@ -1587,7 +1587,7 @@ bool CCenterServerManage::OnHandleLogonRelayFGMessage(NetMessageHead * pNetHead,
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
@@ -1599,7 +1599,7 @@ bool CCenterServerManage::OnHandleLogonRelayFGMessage(NetMessageHead * pNetHead,
 	return true;
 }
 
-// ÇëÇó¸ø¾ãÀÖ²¿ËùÓĞÍæ¼Ò·¢ËÍĞ¡ºìµã
+// è¯·æ±‚ç»™ä¿±ä¹éƒ¨æ‰€æœ‰ç©å®¶å‘é€å°çº¢ç‚¹
 bool CCenterServerManage::OnHandleLogonReqFGRedSpotMessage(void* pData, UINT size, int friendsGroupID)
 {
 	if (size != sizeof(PlatformFriendsGroupPushRedSpot))
@@ -1623,7 +1623,7 @@ bool CCenterServerManage::OnHandleLogonReqFGRedSpotMessage(void* pData, UINT siz
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
@@ -1642,7 +1642,7 @@ bool CCenterServerManage::OnHandleLogonReqFGRedSpotMessage(void* pData, UINT siz
 	return true;
 }
 
-// ÇëÇó½âÉ¢·¿¼ä
+// è¯·æ±‚è§£æ•£æˆ¿é—´
 bool CCenterServerManage::OnHandleLogonReqDissmissDeskessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformDissmissDesk))
@@ -1658,7 +1658,7 @@ bool CCenterServerManage::OnHandleLogonReqDissmissDeskessage(void* pData, UINT s
 
 	if (pMessage->deskMixID <= 0 || pMessage->roomID <= 0)
 	{
-		ERROR_LOG("·¿¼ä²»´æÔÚ,deskMixID=%d,roomID=%d", pMessage->deskMixID, pMessage->roomID);
+		ERROR_LOG("æˆ¿é—´ä¸å­˜åœ¨,deskMixID=%d,roomID=%d", pMessage->deskMixID, pMessage->roomID);
 		return false;
 	}
 
@@ -1669,7 +1669,7 @@ bool CCenterServerManage::OnHandleLogonReqDissmissDeskessage(void* pData, UINT s
 	return SendData(&serverInfo, PLATFORM_MESSAGE_MASTER_DISSMISS_DESK, pData, size);
 }
 
-////////////////////////////////´¦ÀíÓÎÏ··şÏûÏ¢//////////////////////////////////////////
+////////////////////////////////å¤„ç†æ¸¸æˆæœæ¶ˆæ¯//////////////////////////////////////////
 bool CCenterServerManage::OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
 {
 	switch (pCenterHead->msgID)
@@ -1707,14 +1707,14 @@ bool CCenterServerManage::OnHandleLoaderMessage(NetMessageHead * pNetHead, Cente
 		return OnHandleLoaderNotifyStartMatchFailMessage(pCenterHead->userID, pData, uSize);
 	}
 	default:
-		WARNNING_LOG("ÖĞĞÄ·şÏûÏ¢²»´æÔÚ:pCenterHead->msgID = %d", pCenterHead->msgID);
+		WARNNING_LOG("ä¸­å¿ƒæœæ¶ˆæ¯ä¸å­˜åœ¨:pCenterHead->msgID = %d", pCenterHead->msgID);
 		break;
 	}
 
 	return true;
 }
 
-// ÓÎÏ··ş×ÊÔ´±ä»¯
+// æ¸¸æˆæœèµ„æºå˜åŒ–
 bool CCenterServerManage::OnHandleLoaderResChangeMessage(int userID, void* pData, UINT size)
 {
 	if (size != sizeof(PlatformResourceChange))
@@ -1745,7 +1745,7 @@ bool CCenterServerManage::OnHandleLoaderResChangeMessage(int userID, void* pData
 	return true;
 }
 
-// ¿ª·¿ÁĞ±íĞÅÏ¢±ä»¯(ÈËÊı±ä»¯)
+// å¼€æˆ¿åˆ—è¡¨ä¿¡æ¯å˜åŒ–(äººæ•°å˜åŒ–)
 bool CCenterServerManage::OnHandleLoaderBuyDeskInfoChangeMessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformDeskPeopleCountChange))
@@ -1783,11 +1783,11 @@ bool CCenterServerManage::OnHandleLoaderBuyDeskInfoChangeMessage(void* pData, UI
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", pMessage->friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", pMessage->friendsGroupID);
 		return false;
 	}
 
-	// Ïò¾ãÀÖ²¿ËùÓĞ³ÉÔ±ÍÆËÍÏûÏ¢
+	// å‘ä¿±ä¹éƒ¨æ‰€æœ‰æˆå‘˜æ¨é€æ¶ˆæ¯
 	LogonFriendsGroupDeskInfoChange msgChange;
 	msgChange.friendsGroupID = pMessage->friendsGroupID;
 	msgChange.operType = 0;
@@ -1806,7 +1806,7 @@ bool CCenterServerManage::OnHandleLoaderBuyDeskInfoChangeMessage(void* pData, UI
 	return true;
 }
 
-// ÓÎÏ·´ó½áËã
+// æ¸¸æˆå¤§ç»“ç®—
 bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformDeskDismiss))
@@ -1820,7 +1820,7 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 		return false;
 	}
 
-	// Ïò¿ª·¿ÁĞ±íÀïÍÆËÍÊı¾İ
+	// å‘å¼€æˆ¿åˆ—è¡¨é‡Œæ¨é€æ•°æ®
 	int masterID = pMessage->masterID;
 	LogonNotifyBuyDeskInfoChange msg;
 
@@ -1834,9 +1834,9 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 		return true;
 	}
 
-	//¸üĞÂ¾ãÀÖ²¿ÏûÏ¢
-	int friendsGroupID = pMessage->friendsGroupID;       //¾ãÀÖ²¿id
-	int friendsGroupDeskNumber = pMessage->friendsGroupDeskNumber; //¾ãÀÖ²¿×À×ÓºÅ
+	//æ›´æ–°ä¿±ä¹éƒ¨æ¶ˆæ¯
+	int friendsGroupID = pMessage->friendsGroupID;       //ä¿±ä¹éƒ¨id
+	int friendsGroupDeskNumber = pMessage->friendsGroupDeskNumber; //ä¿±ä¹éƒ¨æ¡Œå­å·
 
 	if (!m_pRedisPHP)
 	{
@@ -1848,17 +1848,17 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", friendsGroupID);
 		return false;
 	}
 
-	// ÍÆËÍÅÆ×ÀÊı¾İ
+	// æ¨é€ç‰Œæ¡Œæ•°æ®
 	LogonFriendsGroupDeskInfoChange msgChange;
 	msgChange.friendsGroupID = friendsGroupID;
 	msgChange.operType = 1;
 	msgChange.friendsGroupDeskNumber = friendsGroupDeskNumber;
 
-	//ÍÆËÍ¸øËùÓĞÔÚÏß³ÉÔ±
+	//æ¨é€ç»™æ‰€æœ‰åœ¨çº¿æˆå‘˜
 	UINT iMessageID = friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT
 		? MSG_NTF_LOGON_FRIENDSGROUP_VIPROOM_CHANGE : MSG_NTF_LOGON_FRIENDSGROUP_DESK_INFO_CHANGE;
 	for (size_t i = 0; i < m_memberUserIDVec.size(); i++)
@@ -1866,12 +1866,12 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 		SendData(m_memberUserIDVec[i], PLATFORM_MESSAGE_NOTIFY_USERID, &msgChange, sizeof(msgChange), MSG_MAIN_FRIENDSGROUP_NOTIFY, iMessageID, 0);
 	}
 
-	//ĞèÒª×Ô¶¯¿ª·¿£¬·¢¸øµÇÂ½·şÎñÆ÷×Ô¶¯¿ª·¿
+	//éœ€è¦è‡ªåŠ¨å¼€æˆ¿ï¼Œå‘ç»™ç™»é™†æœåŠ¡å™¨è‡ªåŠ¨å¼€æˆ¿
 	if (!pMessage->bDeleteDesk)
 	{
 		if (m_logonGroupSocket.size() <= 0)
 		{
-			ERROR_LOG("×Ô¶¯¿ª·¿Ê§°Ü£¬Ã»ÓĞµÇÂ¼·şÔÚÏß");
+			ERROR_LOG("è‡ªåŠ¨å¼€æˆ¿å¤±è´¥ï¼Œæ²¡æœ‰ç™»å½•æœåœ¨çº¿");
 			return false;
 		}
 
@@ -1887,11 +1887,11 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 
 		UINT uSendSocketIdx = 0;
 		auto itr = m_centerUserInfoMap.find(masterID);
-		if (itr == m_centerUserInfoMap.end()) // ·¿Ö÷²»ÔÚ£¬Ëæ»úÑ¡Ôñ·şÎñÆ÷
+		if (itr == m_centerUserInfoMap.end()) // æˆ¿ä¸»ä¸åœ¨ï¼Œéšæœºé€‰æ‹©æœåŠ¡å™¨
 		{
 			uSendSocketIdx = m_logonGroupSocket[CUtil::GetRandNum() % m_logonGroupSocket.size()];
 		}
-		else // ·¿Ö÷´æÔÚ£¬×Ô¶¯¿ª·¿ÈÎÎñ½»¸ø·¿Ö÷µÄµÇÂ½·ş
+		else // æˆ¿ä¸»å­˜åœ¨ï¼Œè‡ªåŠ¨å¼€æˆ¿ä»»åŠ¡äº¤ç»™æˆ¿ä¸»çš„ç™»é™†æœ
 		{
 			uSendSocketIdx = itr->second.socketIdx;
 		}
@@ -1902,7 +1902,7 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 	return true;
 }
 
-// ¾ÖÊı±ä»¯
+// å±€æ•°å˜åŒ–
 bool CCenterServerManage::OnHandleLoaderDeskStatusChangeMessage(void* pData, UINT size)
 {
 	if (size != sizeof(PlatformDeskGameCountChange))
@@ -1931,11 +1931,11 @@ bool CCenterServerManage::OnHandleLoaderDeskStatusChangeMessage(void* pData, UIN
 
 	if (m_memberUserIDVec.size() <= 0)
 	{
-		ERROR_LOG("¾ãÀÖ²¿ÎŞ³ÉÔ± friendsGroupID=%d", pMessage->friendsGroupID);
+		ERROR_LOG("ä¿±ä¹éƒ¨æ— æˆå‘˜ friendsGroupID=%d", pMessage->friendsGroupID);
 		return false;
 	}
 
-	//ÍÆËÍÊı¾İ
+	//æ¨é€æ•°æ®
 	LogonFriendsGroupDeskInfoChange msg;
 	msg.friendsGroupID = pMessage->friendsGroupID;
 	msg.operType = 0;
@@ -1943,7 +1943,7 @@ bool CCenterServerManage::OnHandleLoaderDeskStatusChangeMessage(void* pData, UIN
 	msg.gameStatus = pMessage->gameStatus;
 	msg.updateType = 2;
 
-	//ÍÆËÍ¸øËùÓĞÔÚÏß³ÉÔ±
+	//æ¨é€ç»™æ‰€æœ‰åœ¨çº¿æˆå‘˜
 	UINT iMessageID = pMessage->friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT
 		? MSG_NTF_LOGON_FRIENDSGROUP_VIPROOM_CHANGE : MSG_NTF_LOGON_FRIENDSGROUP_DESK_INFO_CHANGE;
 
@@ -1955,7 +1955,7 @@ bool CCenterServerManage::OnHandleLoaderDeskStatusChangeMessage(void* pData, UIN
 	return true;
 }
 
-// »ğ±Ò±ä»¯Í¨Öª
+// ç«å¸å˜åŒ–é€šçŸ¥
 bool CCenterServerManage::OnHandleLoaderFireCoinChangeMessage(int userID, void* pData, UINT size)
 {
 	if (size != sizeof(PlatformResourceChange))
@@ -1985,7 +1985,7 @@ bool CCenterServerManage::OnHandleLoaderFireCoinChangeMessage(int userID, void* 
 	return true;
 }
 
-// ´ó½±Í¨Öª
+// å¤§å¥–é€šçŸ¥
 bool CCenterServerManage::OnHandleLoaderRewardMessage(void* pData, UINT size)
 {
 	SAFECHECK_MESSAGE(pMessage, LogonNotifyActivity, pData, size);
@@ -1998,7 +1998,7 @@ bool CCenterServerManage::OnHandleLoaderRewardMessage(void* pData, UINT size)
 	return true;
 }
 
-// ¿ªÊ¼±ÈÈü
+// å¼€å§‹æ¯”èµ›
 bool CCenterServerManage::OnHandleLoaderNotifyStartMatchMessage(void* pData, UINT size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformLoaderNotifyStartMatch, pData, size);
@@ -2011,7 +2011,7 @@ bool CCenterServerManage::OnHandleLoaderNotifyStartMatchMessage(void* pData, UIN
 	return true;
 }
 
-// ¿ªÊ¼±ÈÈüÊ§°Ü
+// å¼€å§‹æ¯”èµ›å¤±è´¥
 bool CCenterServerManage::OnHandleLoaderNotifyStartMatchFailMessage(int userID, void* pData, UINT size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformLoaderNotifyStartMatchFail, pData, size);

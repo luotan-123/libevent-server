@@ -8,24 +8,24 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-// ³£Á¿¶¨Òå
-const int SOCKET_SEND_BUF_SIZE = 128 * 1024;	// TCP·¢ËÍ»º³åÇø´óĞ¡
-const int SOCKET_RECV_BUF_SIZE = 64 * 1024;		// TCP½ÓÊÕ»º³åÇø´óĞ¡
+// å¸¸é‡å®šä¹‰
+const int SOCKET_SEND_BUF_SIZE = 128 * 1024;	// TCPå‘é€ç¼“å†²åŒºå¤§å°
+const int SOCKET_RECV_BUF_SIZE = 64 * 1024;		// TCPæ¥æ”¶ç¼“å†²åŒºå¤§å°
 
-// socketÊÂ¼şÀàĞÍ
+// socketäº‹ä»¶ç±»å‹
 enum SocketEventType
 {
-	SOCKET_EVENT_TYPE_RECV = 1,		// ·¢ËÍÊÂ¼ş
-	SOCKET_EVENT_TYPE_SEND = 2,		// ½ÓÊÕÊÂ¼ş
+	SOCKET_EVENT_TYPE_RECV = 1,		// å‘é€äº‹ä»¶
+	SOCKET_EVENT_TYPE_SEND = 2,		// æ¥æ”¶äº‹ä»¶
 };
 
-//×Ô¶¨ÒåÖØµş½á¹¹
+//è‡ªå®šä¹‰é‡å ç»“æ„
 struct OverLappedStruct
 {
-	OVERLAPPED	overLapped;		//ÖØµş½á¹¹
-	WSABUF		WSABuffer;		//Êı¾İ»º³å
-	int			type;			//ÀàĞÍ
-	int			handleID;		//´¦ÀíID
+	OVERLAPPED	overLapped;		//é‡å ç»“æ„
+	WSABUF		WSABuffer;		//æ•°æ®ç¼“å†²
+	int			type;			//ç±»å‹
+	int			handleID;		//å¤„ç†ID
 
 	OverLappedStruct()
 	{
@@ -64,89 +64,89 @@ public:
 	~CTCPSocket();
 
 public:
-	// ³õÊ¼»¯(·şÎñÆô¶¯Ê±Ö÷Ïß³Ìµ÷ÓÃ)
+	// åˆå§‹åŒ–(æœåŠ¡å¯åŠ¨æ—¶ä¸»çº¿ç¨‹è°ƒç”¨)
 	bool Init(int index, CTCPSocketManage* pManage);
-	// Çå¿Õ·ÇÓÀ¾ÃÊôĞÔ(³õÊ¼»¯»òÕßÖØĞÂÆôÓÃÒ»¸ö¶ÔÏóµ÷ÓÃ)
+	// æ¸…ç©ºéæ°¸ä¹…å±æ€§(åˆå§‹åŒ–æˆ–è€…é‡æ–°å¯ç”¨ä¸€ä¸ªå¯¹è±¡è°ƒç”¨)
 	void Clear();
-	// ½¨Á¢Á¬½ÓĞÔ(½ÓÊÕÁ¬½ÓÏß³Ìµ÷ÓÃ)
+	// å»ºç«‹è¿æ¥æ€§(æ¥æ”¶è¿æ¥çº¿ç¨‹è°ƒç”¨)
 	bool AcceptNewConnection(SOCKET sock, unsigned int handleID, HANDLE hCompletePort, unsigned long ip);
-	// Í¶µİrecvÇëÇó
+	// æŠ•é€’recvè¯·æ±‚
 	bool PostRecv();
-	// Í¶µİsendÇëÇó
+	// æŠ•é€’sendè¯·æ±‚
 	bool PostSend();
 
 public:
-	// ·¢ËÍÊı¾İ(ÒµÎñÂß¼­Ïß³Ìµ÷ÓÃ)
+	// å‘é€æ•°æ®(ä¸šåŠ¡é€»è¾‘çº¿ç¨‹è°ƒç”¨)
 	bool SendData(const char* pData, int size);
-	// ÊÇ·ñÁ¬½Ó
+	// æ˜¯å¦è¿æ¥
 	inline bool IsConnect();
-	//·¢ËÍÍê³Éº¯Êı(ÊÕ·¢Ïß³Ìµ÷ÓÃ)
+	//å‘é€å®Œæˆå‡½æ•°(æ”¶å‘çº¿ç¨‹è°ƒç”¨)
 	bool OnSendCompleted(unsigned int handleID, int sendedBytes);
-	//½ÓÊÕÍê³Éº¯Êı(ÊÕ·¢Ïß³Ìµ÷ÓÃ)
+	//æ¥æ”¶å®Œæˆå‡½æ•°(æ”¶å‘çº¿ç¨‹è°ƒç”¨)
 	bool OnRecvCompleted(unsigned int handleID, int recvedBytes);
-	// ¹Ø±ÕÁ¬½Ó(Ö»ÄÜÒµÎñÂß¼­Ïß³Ìµ÷ÓÃ)
+	// å…³é—­è¿æ¥(åªèƒ½ä¸šåŠ¡é€»è¾‘çº¿ç¨‹è°ƒç”¨)
 	bool CloseSocket();
 
 private:
-	// ÅÉ·¢Êı¾İ°ü(ÊÕ·¢Ïß³Ìµ÷ÓÃ)
+	// æ´¾å‘æ•°æ®åŒ…(æ”¶å‘çº¿ç¨‹è°ƒç”¨)
 	bool DispatchPacket(NetMessageHead* pHead, void* pData, int size);
 
 public:
-	// »ñÈ¡´¦Àí±êÊ¶
+	// è·å–å¤„ç†æ ‡è¯†
 	inline unsigned int GetHandleID() { return m_handleID; }
-	// »ñÈ¡¶ÔÏóÊı×éË÷Òı
+	// è·å–å¯¹è±¡æ•°ç»„ç´¢å¼•
 	inline int GetIndex() { return m_index; }
-	// »ñÈ¡ÉÏ´Î·¢ËÍÏûÏ¢Ê±¼ä
+	// è·å–ä¸Šæ¬¡å‘é€æ¶ˆæ¯æ—¶é—´
 	inline time_t GetLastRecvMsgTime() { return m_lastRecvMsgTime; }
-	// »ñÈ¡½¨Á¢Á¬½ÓµÄÊ±¼ä
+	// è·å–å»ºç«‹è¿æ¥çš„æ—¶é—´
 	inline time_t GetAcceptMsgTime() { return m_acceptMsgTime; }
-	// »ñÈ¡Ëø
+	// è·å–é”
 	inline CSignedLock* GetLock() { return &m_lock; }
-	// »ñÈ¡IP
+	// è·å–IP
 	inline const char* GetIP() { return m_ip; }
 
 private:
-	// ÓÀ¾ÃÊôĞÔ(¹¹Ôì¶ÔÏóÊ±ºòÈ·¶¨)
-	CTCPSocketManage*	m_pManage;			// ¹ÜÀí¶ÔÏó
-	int					m_index;			// ËùÔÚÊı×éË÷Òı
+	// æ°¸ä¹…å±æ€§(æ„é€ å¯¹è±¡æ—¶å€™ç¡®å®š)
+	CTCPSocketManage*	m_pManage;			// ç®¡ç†å¯¹è±¡
+	int					m_index;			// æ‰€åœ¨æ•°ç»„ç´¢å¼•
 
-	// ·ÇÓÀ¾ÃÊôĞÔ
+	// éæ°¸ä¹…å±æ€§
 	SOCKET				m_socket;
-	unsigned int		m_handleID;			// ´¦ÀíID
-	char				m_ip[24];			// ¿Í»§¶Ë×Ô¼ºµÄip
+	unsigned int		m_handleID;			// å¤„ç†ID
+	char				m_ip[24];			// å®¢æˆ·ç«¯è‡ªå·±çš„ip
 
 	char				m_recvBuf[SOCKET_RECV_BUF_SIZE];
 	int					m_recvBufLen;
 
 	char				m_sendBuf[SOCKET_SEND_BUF_SIZE];
 	int					m_sendBufLen;
-	bool				m_bSending;							//ÊÇ·ñ·¢ËÍÖĞ
+	bool				m_bSending;							//æ˜¯å¦å‘é€ä¸­
 
-	OverLappedStruct	m_recvOverLapped;	// ½ÓÊÕÖØµş½á¹¹
-	OverLappedStruct	m_sendOverLapped;	// ·¢ËÍÖØµş½á¹¹
+	OverLappedStruct	m_recvOverLapped;	// æ¥æ”¶é‡å ç»“æ„
+	OverLappedStruct	m_sendOverLapped;	// å‘é€é‡å ç»“æ„
 
-	volatile time_t		m_lastRecvMsgTime;	// ÉÏ´Î·¢ËÍÏûÏ¢µÄÊ±¼ä(ÓÃÀ´×öĞÄÌø)
-	volatile time_t		m_acceptMsgTime;	// ½¨Á¢Á¬½ÓµÄÊ±¼ä
+	volatile time_t		m_lastRecvMsgTime;	// ä¸Šæ¬¡å‘é€æ¶ˆæ¯çš„æ—¶é—´(ç”¨æ¥åšå¿ƒè·³)
+	volatile time_t		m_acceptMsgTime;	// å»ºç«‹è¿æ¥çš„æ—¶é—´
 
 	CSignedLock		m_lock;
 };
 
 
 /**************************************************************************************************************/
-// TCP SOCKET ÍøÂç²¿·Ö 
+// TCP SOCKET ç½‘ç»œéƒ¨åˆ† 
 /**************************************************************************************************************/
-//ÀàËµÃ÷
+//ç±»è¯´æ˜
 class CTCPSocket;
 class CTCPSocketManage;
 /**************************************************************************************************************/
-#define NO_CONNECT				0								//Ã»ÓĞÁ¬½Ó
-#define CONNECTING				1								//ÕıÔÚÁ¬½Ó
-#define CONNECTED				2								//³É¹¦Á¬½Ó
+#define NO_CONNECT				0								//æ²¡æœ‰è¿æ¥
+#define CONNECTING				1								//æ­£åœ¨è¿æ¥
+#define CONNECTED				2								//æˆåŠŸè¿æ¥
 
 /**************************************************************************************************************/
-//CloseSocketºÍOnSocketCloseÇø±ğ£º
-//1¡¢µ÷ÓÃCloseSocketÎŞ·¨Ö´ĞĞµ½CCenterServerManage::OnSocketCloseÂß¼­¡£
-//2¡¢OnSocketClose¿ÉÄÜ»áÖ´ĞĞÁ½´ÎCCenterServerManage::OnSocketCloseÂß¼­£¬µ«ÊÇ»á±£Ö¤¹Ø±ÕsocketÖ®Ç°£¬ÏûÏ¢·¢ËÍ³öÈ¥
+//CloseSocketå’ŒOnSocketCloseåŒºåˆ«ï¼š
+//1ã€è°ƒç”¨CloseSocketæ— æ³•æ‰§è¡Œåˆ°CCenterServerManage::OnSocketCloseé€»è¾‘ã€‚
+//2ã€OnSocketCloseå¯èƒ½ä¼šæ‰§è¡Œä¸¤æ¬¡CCenterServerManage::OnSocketCloseé€»è¾‘ï¼Œä½†æ˜¯ä¼šä¿è¯å…³é—­socketä¹‹å‰ï¼Œæ¶ˆæ¯å‘é€å‡ºå»
 class KERNEL_CLASS CTCPSocketManage
 {
 public:
@@ -154,45 +154,45 @@ public:
 	~CTCPSocketManage();
 
 public:
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	bool Init(IServerSocketService * pService, int maxCount, int port, int secretKey, const char *ip = NULL);
-	// È¡Ïû³õÊ¼»¯
+	// å–æ¶ˆåˆå§‹åŒ–
 	virtual bool UnInit();
-	// ¿ªÊ¼·şÎñ
+	// å¼€å§‹æœåŠ¡
 	virtual bool Start(int serverType);
-	// Í£Ö¹·şÎñ
+	// åœæ­¢æœåŠ¡
 	virtual bool Stop();
 
 public:
-	// ·¢ËÍÊı¾İº¯Êı
+	// å‘é€æ•°æ®å‡½æ•°
 	bool SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int handleID, unsigned int uIdentification = 0);
-	// ÖĞĞÄ·şÎñÆ÷·¢ËÍÊı¾İ
+	// ä¸­å¿ƒæœåŠ¡å™¨å‘é€æ•°æ®
 	bool CenterServerSendData(int idx, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID);
-	// ÅúÁ¿·¢ËÍº¯Êı
+	// æ‰¹é‡å‘é€å‡½æ•°
 	int SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode);
-	// ¹Ø±ÕÁ¬½Ó(ÒµÎñÂß¼­Ïß³Ìµ÷ÓÃ)
+	// å…³é—­è¿æ¥(ä¸šåŠ¡é€»è¾‘çº¿ç¨‹è°ƒç”¨)
 	bool CloseSocket(int index);
-	// ½ÓÊÕ¹Ø±ÕÁ¬½ÓÊÂ¼ş¡£
+	// æ¥æ”¶å…³é—­è¿æ¥äº‹ä»¶ã€‚
 	bool OnSocketClose(int index);
-	// ¼ì²éĞÄÌø
+	// æ£€æŸ¥å¿ƒè·³
 	void CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeartBeatTime);
-	// »ñÈ¡dataline
+	// è·å–dataline
 	CDataLine* GetDataLine();
-	// »ñÈ¡Á¬½Óip
+	// è·å–è¿æ¥ip
 	const char* GetSocketIP(int socketIdx);
-	// »ñÈ¡CTCPSocketÊôĞÔ
+	// è·å–CTCPSocketå±æ€§
 	void GetTCPSocketInfo(UINT uIndex, bool &bIsConnect, time_t &llAcceptMsgTime, time_t &llLastRecvMsgTime);
 private:
-	// ·ÖÅäÒ»¸ö¿ÉÓÃµÄsocket(Ïß³Ì»·¾³£ºThreadAccept)
+	// åˆ†é…ä¸€ä¸ªå¯ç”¨çš„socket(çº¿ç¨‹ç¯å¢ƒï¼šThreadAccept)
 	CTCPSocket * TCPSocketNew();
-	// »ñÈ¡´¦ÀíID(Ïß³Ì»·¾³£ºThreadAccept)
+	// è·å–å¤„ç†ID(çº¿ç¨‹ç¯å¢ƒï¼šThreadAccept)
 	static unsigned int GetHandleID();
 
-	// Ïß³Ìº¯Êı
+	// çº¿ç¨‹å‡½æ•°
 private:
-	// SOCKET Á¬½ÓÓ¦´ğÏß³Ì
+	// SOCKET è¿æ¥åº”ç­”çº¿ç¨‹
 	static unsigned __stdcall ThreadAccept(LPVOID pThreadData);
-	// SOCKET Êı¾İ½ÓÊÕÏß³Ì
+	// SOCKET æ•°æ®æ¥æ”¶çº¿ç¨‹
 	static unsigned __stdcall ThreadRSSocket(LPVOID pThreadData);
 
 private:

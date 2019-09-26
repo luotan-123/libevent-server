@@ -10,7 +10,7 @@
 
 CTcpClient::CTcpClient()
 {
-	m_pDataLine = NULL;			//¹²ÏíµÄdataline¶ÔÏó
+	m_pDataLine = NULL;			//å…±äº«çš„datalineå¯¹è±¡
 	m_pTcpConnect = NULL;
 	Clear();
 }
@@ -71,7 +71,7 @@ bool CTcpClient::OnRead()
 		return false;
 	}
 
-	// ½ÓÊÜÊı¾İ
+	// æ¥å—æ•°æ®
 	int recvBytes = recv(m_socket, m_recvBuf + m_remainRecvBytes, sizeof(m_recvBuf) - m_remainRecvBytes, 0);
 	if (recvBytes <= 0)
 	{
@@ -83,11 +83,11 @@ bool CTcpClient::OnRead()
 	PlatformMessageHead* pHead = (PlatformMessageHead*)m_recvBuf;
 	if (!pHead)
 	{
-		// ÕâÀï²»Ì«¿ÉÄÜ
+		// è¿™é‡Œä¸å¤ªå¯èƒ½
 		return false;
 	}
 
-	// ´¦ÀíÊı¾İ
+	// å¤„ç†æ•°æ®
 	while (m_remainRecvBytes >= sizeof(PlatformMessageHead) && m_remainRecvBytes >= (int)pHead->MainHead.uMessageSize)
 	{
 		UINT messageSize = pHead->MainHead.uMessageSize;
@@ -95,20 +95,20 @@ bool CTcpClient::OnRead()
 		void* pData = NULL;
 		if (realSize < 0)
 		{
-			ERROR_LOG("°üÍ·×Ö½Ú´óĞ¡´íÎó¡£ÒÑ¶ªÆú£º%d×Ö½Ú£¬ÊÕµ½Êı¾İ£º%d×Ö½Ú", m_remainRecvBytes, recvBytes);
+			ERROR_LOG("åŒ…å¤´å­—èŠ‚å¤§å°é”™è¯¯ã€‚å·²ä¸¢å¼ƒï¼š%då­—èŠ‚ï¼Œæ”¶åˆ°æ•°æ®ï¼š%då­—èŠ‚", m_remainRecvBytes, recvBytes);
 
-			// ¶ª°ü
+			// ä¸¢åŒ…
 			m_remainRecvBytes = 0;
 			return false;
 		}
 
 		if (realSize > 0)
 		{
-			// Ã»Êı¾İ¾ÍÎªNULL
+			// æ²¡æ•°æ®å°±ä¸ºNULL
 			pData = (void*)(m_recvBuf + sizeof(PlatformMessageHead));
 		}
 
-		if (pHead->MainHead.uMainID != MDM_CONNECT)	// ¹ıÂËµôÁ¬½Ó²âÊÔÏûÏ¢
+		if (pHead->MainHead.uMainID != MDM_CONNECT)	// è¿‡æ»¤æ‰è¿æ¥æµ‹è¯•æ¶ˆæ¯
 		{
 			PlatformDataLineHead dataLineHead;
 			dataLineHead.platformMessageHead = *pHead;
@@ -116,7 +116,7 @@ bool CTcpClient::OnRead()
 			m_pDataLine->AddData(&dataLineHead.lineHead, sizeof(PlatformDataLineHead), HD_PLATFORM_SOCKET_READ, pData, realSize);
 		}
 
-		// ÓĞÄÚ´æÖØµşµÄÊ±ºò£¬²»ÄÜÓÃmemcpy Ö»ÄÜÓÃmemmove
+		// æœ‰å†…å­˜é‡å çš„æ—¶å€™ï¼Œä¸èƒ½ç”¨memcpy åªèƒ½ç”¨memmove
 		memmove(m_recvBuf, m_recvBuf + messageSize, m_remainRecvBytes - messageSize);
 		m_remainRecvBytes -= messageSize;
 	}
@@ -133,7 +133,7 @@ bool CTcpClient::Send(const void* pData, int size)
 		return false;
 	}
 
-	// ¼ì²éÊÇ·ñÓĞÖÍÁôÊı¾İ
+	// æ£€æŸ¥æ˜¯å¦æœ‰æ»ç•™æ•°æ®
 	int bytes = 0;
 	while (m_remainSendBytes > 0)
 	{
@@ -160,7 +160,7 @@ bool CTcpClient::Send(const void* pData, int size)
 	memcpy(m_sendBuf + m_remainSendBytes, pData, size);
 	m_remainSendBytes += size;
 
-	// ¾ÍÖ»·¢ËÍÒ»´Î°É
+	// å°±åªå‘é€ä¸€æ¬¡å§
 	bytes = send(m_socket, m_sendBuf, m_remainSendBytes, 0);
 	if (bytes > 0)
 	{
@@ -272,7 +272,7 @@ bool CTcpConnect::Connect()
 	{
 		m_tcpClient.SetConnection(true);
 
-		//·¢ËÍÈÏÖ¤ÏûÏ¢
+		//å‘é€è®¤è¯æ¶ˆæ¯
 		PlatformCenterServerVerify msg;
 		msg.serverType = m_connectServerType;
 		msg.serverID = m_connectServerID;
@@ -281,7 +281,7 @@ bool CTcpConnect::Connect()
 		return false;
 	}
 
-	ERROR_LOG("Á¬½ÓÖĞĞÄ·şÎñÆ÷Ê§°Ü£¬ÉÔºó»áÖØÁ¬¡£ip=%s,port=%d", m_ip, m_port);
+	ERROR_LOG("è¿æ¥ä¸­å¿ƒæœåŠ¡å™¨å¤±è´¥ï¼Œç¨åä¼šé‡è¿ã€‚ip=%s,port=%d", m_ip, m_port);
 
 	return true;
 }
@@ -338,14 +338,14 @@ bool CTcpConnect::EventLoop()
 	int ret = select(sock + 1, &fdRead, NULL, NULL, NULL);
 	if (ret == -1)
 	{
-		//Êä³ö´íÎóÏûÏ¢
+		//è¾“å‡ºé”™è¯¯æ¶ˆæ¯
 		SYS_ERROR_LOG("##### CGServerConnect::ThreadRSSocket select error,thread Exit.#####");
 		return false;
 	}
 
 	if (ret == 0)
 	{
-		// Õı³£
+		// æ­£å¸¸
 		return true;
 	}
 

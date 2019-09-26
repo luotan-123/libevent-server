@@ -3,12 +3,12 @@
 #include "GameLogonManage.h"
 #include "GameLogonDataBase.h"
 
-//ÓÎÏ·µÇÂ½Ä£¿é
+//æ¸¸æˆç™»é™†æ¨¡å—
 class CGameLogonModule : public IModuleManageService
 {
 public:
-	CGameLogonManage		m_LogonManage;				//µÇÂ½¹ÜÀí
-	CServiceDataBaseHandle	m_DataBaseHandle;			//Êı¾İ¿âÊı¾İ´¦ÀíÄ£¿é
+	CGameLogonManage		m_LogonManage;				//ç™»é™†ç®¡ç†
+	CServiceDataBaseHandle	m_DataBaseHandle;			//æ•°æ®åº“æ•°æ®å¤„ç†æ¨¡å—
 
 public:
 	CGameLogonModule();

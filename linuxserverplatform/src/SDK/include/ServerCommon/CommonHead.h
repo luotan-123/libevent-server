@@ -1,6 +1,6 @@
 #pragma once
 
-// ¹«¹²Í·ÎÄ¼ş
+// å…¬å…±å¤´æ–‡ä»¶
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,13 +19,13 @@
 #include <errno.h>
 #include <limits.h>
 
-// ³£ÓÃÀàĞÍ±ğÃû
+// å¸¸ç”¨ç±»å‹åˆ«å
 typedef unsigned int UINT;
 typedef unsigned long int ULONG;
 typedef unsigned char BYTE;
 typedef unsigned long HANDLE;
 
-// °æ±¾¶¨Òå
+// ç‰ˆæœ¬å®šä¹‰
 #define VER_MAIN 2
 #define VER_MIDDLE 0
 #define VER_RESVERSE 0

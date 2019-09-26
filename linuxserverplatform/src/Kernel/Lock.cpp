@@ -42,12 +42,12 @@ inline void CSignedLockObject::UnLock()
 	}
 }
 
-// ³õÊ¼»¯ÊôĞÔ
+// åˆå§‹åŒ–å±æ€§
 CSignedLock::CSignedLock()
 {
 	pthread_mutexattr_init(&m_attr);
 
-	// ÉèÖÃ»¥³âËøÊôĞÔ
+	// è®¾ç½®äº’æ–¥é”å±æ€§
 	pthread_mutexattr_settype(&m_attr, PTHREAD_MUTEX_RECURSIVE_NP);
 
 	pthread_mutex_init(&m_csLock, &m_attr);

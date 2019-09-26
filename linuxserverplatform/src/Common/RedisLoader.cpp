@@ -48,7 +48,7 @@ bool CRedisLoader::SetPrivateDeskCurrUserCount(int deskMixID, int userCount)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HSET %s currDeskUserCount %d", key.c_str(), userCount);
 	if (!pReply)
 	{
-		ERROR_LOG("ÉèÖÃÈËÊıÊ§°Ükey=%s", key.c_str());
+		ERROR_LOG("è®¾ç½®äººæ•°å¤±è´¥key=%s", key.c_str());
 		return false;
 	}
 
@@ -70,7 +70,7 @@ bool CRedisLoader::SetPrivateDeskCurrWatchUserCount(int deskMixID, int watchUser
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HSET %s currWatchUserCount %d", key.c_str(), watchUserCount);
 	if (!pReply)
 	{
-		ERROR_LOG("ÉèÖÃÅÔ¹ÛÈËÊıÊ§°Ükey=%s", key.c_str());
+		ERROR_LOG("è®¾ç½®æ—è§‚äººæ•°å¤±è´¥key=%s", key.c_str());
 		return false;
 	}
 
@@ -88,7 +88,7 @@ bool CRedisLoader::DelPrivateDeskRecord(int deskMixID)
 {
 	std::string key = MakeKey(TBL_CACHE_DESK, deskMixID);
 
-	// È¡ÃÜÂë
+	// å–å¯†ç 
 	char passwd[128] = "";
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
@@ -104,10 +104,10 @@ bool CRedisLoader::DelPrivateDeskRecord(int deskMixID)
 
 	freeReplyObject(pReply);
 
-	// É¾³ıprivateDeskInfoµÄ¼ÇÂ¼
+	// åˆ é™¤privateDeskInfoçš„è®°å½•
 	DelKey(key.c_str());
 
-	// É¾³ıpasswdÓëdeskMixIDµÄÓ³Éä
+	// åˆ é™¤passwdä¸deskMixIDçš„æ˜ å°„
 	key = MakeKey(TBL_CACHE_DESK_PASSWD, passwd);
 	DelKey(key.c_str());
 
@@ -127,12 +127,12 @@ bool CRedisLoader::CleanRoomAllData(int roomID)
 		return true;
 	}
 
-	//  ½«·¿¼ä±ê¼ÇÖØÖÃ
+	//  å°†æˆ¿é—´æ ‡è®°é‡ç½®
 	SetMarkDeskIndex(roomID, 0);
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
-	// Çå³ı¶ÔÓ¦·¿¼äµÄ×À×ÓÊı¾İ
+	// æ¸…é™¤å¯¹åº”æˆ¿é—´çš„æ¡Œå­æ•°æ®
 	sprintf(redisCmd, "KEYS %s|%d*", TBL_CACHE_DESK, roomID);
 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
@@ -167,17 +167,17 @@ bool CRedisLoader::CleanRoomAllData(int roomID)
 			continue;
 		}
 
-		// Çå³ıÕâ¸ö×À×ÓÊı¾İ
+		// æ¸…é™¤è¿™ä¸ªæ¡Œå­æ•°æ®
 		DelPrivateDeskRecord(deskMixID);
 
 		int masterID = privateDeskInfo.masterID;
 		if (masterID <= 0)
 		{
-			ERROR_LOG("ÇåÀí·¿¼äÊ§°Ü£¬masterID=%d", masterID);
+			ERROR_LOG("æ¸…ç†æˆ¿é—´å¤±è´¥ï¼ŒmasterID=%d", masterID);
 			continue;
 		}
 
-		// ·¿Ö÷µÄ¿ª·¿¼ÇÂ¼
+		// æˆ¿ä¸»çš„å¼€æˆ¿è®°å½•
 		DelUserBuyDeskInfoInSet(masterID, privateDeskInfo.passwd);
 
 		UserData masterData;
@@ -187,13 +187,13 @@ bool CRedisLoader::CleanRoomAllData(int roomID)
 			continue;
 		}
 
-		// ·¿Ö÷µÄ¿ª·¿´ÎÊı
+		// æˆ¿ä¸»çš„å¼€æˆ¿æ¬¡æ•°
 		if (privateDeskInfo.friendsGroupID == 0)
 		{
 			SetUserBuyingDeskCount(masterID, -1, true);
 		}
 
-		// É¾³ıÅÆ×À
+		// åˆ é™¤ç‰Œæ¡Œ
 		if (privateDeskInfo.friendsGroupID > 0)
 		{
 			DelFGDeskRoom(privateDeskInfo.friendsGroupID, privateDeskInfo.friendsGroupDeskNumber);
@@ -277,7 +277,7 @@ long long CRedisLoader::GetRoomMaxGradeIndex(int roomID)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	if (!pReply)
 	{
-		ERROR_LOG("Ö´ĞĞÃüÁîÊ§°ÜredisCmd=%s", redisCmd);
+		ERROR_LOG("æ‰§è¡Œå‘½ä»¤å¤±è´¥redisCmd=%s", redisCmd);
 		return ret;
 	}
 
@@ -305,7 +305,7 @@ long long CRedisLoader::GetRoomMaxSimpleGradeIndex(int roomID)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	if (!pReply)
 	{
-		ERROR_LOG("Ö´ĞĞÃüÁîÊ§°ÜredisCmd=%s", redisCmd);
+		ERROR_LOG("æ‰§è¡Œå‘½ä»¤å¤±è´¥redisCmd=%s", redisCmd);
 		return ret;
 	}
 
@@ -332,7 +332,7 @@ bool CRedisLoader::SetUserWinCount(int userID)
 
 	std::string key = MakeKey(TBL_USER, userID);
 
-	// ±£´æÊ¤¾ÖÓÃ»§µ½¼¯ºÏ
+	// ä¿å­˜èƒœå±€ç”¨æˆ·åˆ°é›†åˆ
 	redisReply* pReply = NULL;
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
@@ -349,7 +349,7 @@ bool CRedisLoader::SetUserWinCount(int userID)
 
 	freeReplyObject(pReply);
 
-	//Ìí¼Óµ½Ê¤¾Ö¼¯ºÏ
+	//æ·»åŠ åˆ°èƒœå±€é›†åˆ
 	AddKeyToZSet(TBL_RANKING_WINCOUNT, winCount, userID);
 
 	return true;
@@ -439,7 +439,7 @@ bool CRedisLoader::SetPrivateDeskSimpleInfo(const std::vector<int>& userIDVec, P
 
 	freeReplyObject(pReply);
 
-	// ½«µ¥¾ÖÕ½¼¨µÄIDÌí¼ÓÈë¼¯ºÏ
+	// å°†å•å±€æˆ˜ç»©çš„IDæ·»åŠ å…¥é›†åˆ
 	key = MakeKey(TBL_GRADE_SIMPLE_SET, simpleGradeID);
 	sprintf(redisCmd, "SADD %s ", key.c_str());
 
@@ -453,7 +453,7 @@ bool CRedisLoader::SetPrivateDeskSimpleInfo(const std::vector<int>& userIDVec, P
 
 	freeReplyObject(pReply);
 
-	// ½«´ó½áËãÕ½¼¨Ìí¼Óµ½Íæ¼ÒµÄ¼¯ºÏ
+	// å°†å¤§ç»“ç®—æˆ˜ç»©æ·»åŠ åˆ°ç©å®¶çš„é›†åˆ
 	int currTime = (int)time(NULL);
 	for (size_t i = 0; i < userIDVec.size(); i++)
 	{
@@ -471,7 +471,7 @@ bool CRedisLoader::SetPrivateDeskSimpleInfo(const std::vector<int>& userIDVec, P
 	return true;
 }
 
-//»úÆ÷ÈËË÷Òı
+//æœºå™¨äººç´¢å¼•
 int CRedisLoader::GetRobotInfoIndex()
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "INCR %s", TBL_ROBOT_INFO_INDEX);
@@ -490,7 +490,7 @@ int CRedisLoader::GetRobotInfoIndex()
 	return ret;
 }
 
-// ÉèÖÃ³¬Ê±Êı¾İ
+// è®¾ç½®è¶…æ—¶æ•°æ®
 bool CRedisLoader::SetPrivateDeskCheckTime(int deskMixID, int checkTime)
 {
 	if (deskMixID <= 0)
@@ -534,7 +534,7 @@ bool CRedisLoader::SetPrivateDeskGameCount(int deskMixID, int gameCount)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HSET %s curGameCount %d", key.c_str(), gameCount);
 	if (!pReply)
 	{
-		ERROR_LOG("ÉèÖÃÓÎÏ·¾ÖÊıÊ§°Ü deskMixID=%d", deskMixID);
+		ERROR_LOG("è®¾ç½®æ¸¸æˆå±€æ•°å¤±è´¥ deskMixID=%d", deskMixID);
 		return false;
 	}
 
@@ -549,8 +549,8 @@ bool CRedisLoader::SetPrivateDeskGameCount(int deskMixID, int gameCount)
 	return ret;
 }
 
-//¿ª·¿ÁĞ±íÖĞ£¬Ìí¼Ó»òÕßÉ¾³ıÈË
-bool CRedisLoader::SetPrivateDeskUserID(int deskMixID, int userID, int type)//0ĞÂÔö£¬1É¾³ı
+//å¼€æˆ¿åˆ—è¡¨ä¸­ï¼Œæ·»åŠ æˆ–è€…åˆ é™¤äºº
+bool CRedisLoader::SetPrivateDeskUserID(int deskMixID, int userID, int type)//0æ–°å¢ï¼Œ1åˆ é™¤
 {
 	std::string key = MakeKey(TBL_CACHE_DESK, deskMixID);
 
@@ -581,21 +581,21 @@ bool CRedisLoader::SetPrivateDeskUserID(int deskMixID, int userID, int type)//0Ğ
 		}
 	}
 
-	if (type == 0) //ĞÂÔö
+	if (type == 0) //æ–°å¢
 	{
 		if (iIndex != -1)
 		{
-			ERROR_LOG("·¿¼äÖĞÒÑ¾­´æÔÚ userID=%d", userID);
+			ERROR_LOG("æˆ¿é—´ä¸­å·²ç»å­˜åœ¨ userID=%d", userID);
 			return false;
 		}
 
 		arrUserID[arrUserIDCount++] = userID;
 	}
-	else //É¾³ı
+	else //åˆ é™¤
 	{
 		if (iIndex == -1)
 		{
-			ERROR_LOG("·¿¼äÖĞ²»´æÔÚ userID=%d", userID);
+			ERROR_LOG("æˆ¿é—´ä¸­ä¸å­˜åœ¨ userID=%d", userID);
 			return false;
 		}
 
@@ -609,14 +609,14 @@ bool CRedisLoader::SetPrivateDeskUserID(int deskMixID, int userID, int type)//0Ğ
 	umap["arrUserID"] = strUserID;
 	if (!hmset(TBL_CACHE_DESK, deskMixID, umap))
 	{
-		ERROR_LOG("¿ª·¿ÁĞ±í£¬Ìí¼Ó»òÕßĞÂÔöÈËÊıÊ§°Ü deskMixID= %d , userID=%d£¬type=%d", deskMixID, userID, type);
+		ERROR_LOG("å¼€æˆ¿åˆ—è¡¨ï¼Œæ·»åŠ æˆ–è€…æ–°å¢äººæ•°å¤±è´¥ deskMixID= %d , userID=%dï¼Œtype=%d", deskMixID, userID, type);
 		return false;
 	}
 
 	return true;
 }
 
-//ÉèÖÃµ±Ç°·¿¼äÈËÊı
+//è®¾ç½®å½“å‰æˆ¿é—´äººæ•°
 bool CRedisLoader::SetRoomServerPeopleCount(int roomID, int peopleCount)
 {
 	if (roomID <= 0)
@@ -643,7 +643,7 @@ bool CRedisLoader::SetRoomServerPeopleCount(int roomID, int peopleCount)
 	return ret;
 }
 
-//¹Ø·ş±£´æ×À×Ó
+//å…³æœä¿å­˜æ¡Œå­
 bool CRedisLoader::SaveFGDeskRoom(const PrivateDeskInfo &privateDeskInfo)
 {
 	RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(privateDeskInfo.roomID);
@@ -652,7 +652,7 @@ bool CRedisLoader::SaveFGDeskRoom(const PrivateDeskInfo &privateDeskInfo)
 		return false;
 	}
 
-	//±£´æÅÆ×ÀÊı¾İ
+	//ä¿å­˜ç‰Œæ¡Œæ•°æ®
 	std::unordered_map<std::string, std::string> umap;
 	umap["userID"] = CUtil::Tostring(privateDeskInfo.masterID);
 	umap["friendsGroupID"] = CUtil::Tostring(privateDeskInfo.friendsGroupID);
@@ -667,7 +667,7 @@ bool CRedisLoader::SaveFGDeskRoom(const PrivateDeskInfo &privateDeskInfo)
 
 	if (hmset(TBL_FG_CLOSE_SAVE_DESK, assistantKey, umap) == false)
 	{
-		ERROR_LOG("¹Ø·ş±£´æÅÆ×ÀÊ§°Ü::assistantKey = %s", assistantKey);
+		ERROR_LOG("å…³æœä¿å­˜ç‰Œæ¡Œå¤±è´¥::assistantKey = %s", assistantKey);
 		return false;
 	}
 
@@ -701,7 +701,7 @@ bool CRedisLoader::GetUserControlParam(int userID, int &value)
 
 //////////////////////////////////////////////////////////////////////////
 
-//»ñÈ¡¾Ö²¿±ÈÈüË÷Òı
+//è·å–å±€éƒ¨æ¯”èµ›ç´¢å¼•
 long long CRedisLoader::GetPartOfMatchIndex()
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "INCR %s", TBL_PART_OF_MATCH_INDEX);
@@ -775,7 +775,7 @@ bool CRedisLoader::SetTimeMatchPeopleRank(int matchID, const std::vector<MatchUs
 
 	std::string key = MakeKey(TBL_SIGN_UP_TIME_MATCH_PEOPLE, matchID);
 
-	//ÏÈÉ¾µôÕû¸ö¼¯ºÏ
+	//å…ˆåˆ æ‰æ•´ä¸ªé›†åˆ
 	DelKey(key.c_str());
 
 	int size = vecPeople.size();
@@ -803,7 +803,7 @@ bool CRedisLoader::SetTimeMatchPeopleRank(int matchID, const std::vector<MatchUs
 	return true;
 }
 
-//»ñÈ¡»úÆ÷ÈËuserID
+//è·å–æœºå™¨äººuserID
 int CRedisLoader::GetRobotUserID()
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "INCR %s", TBL_MATCH_ROBOT_USERID_INDEX);

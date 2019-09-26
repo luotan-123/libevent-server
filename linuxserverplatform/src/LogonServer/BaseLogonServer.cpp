@@ -10,22 +10,22 @@
 
 #pragma warning (disable: 4355)
 
-//´°¿ÚÏß³ÌÆô¶¯½á¹¹
+//çª—å£çº¿ç¨‹å¯åŠ¨ç»“æ„
 struct WindowThreadStartStruct
 {
-	//±äÁ¿¶¨Òå
-	HANDLE								hEvent;						//Æô¶¯ÊÂ¼ş
-	BOOL								bSuccess;					//Æô¶¯³É¹¦±êÖ¾
-	CBaseLogonServer				* pMainManage;				//Êı¾İ¹ÜÀíÖ¸Õë
+	//å˜é‡å®šä¹‰
+	HANDLE								hEvent;						//å¯åŠ¨äº‹ä»¶
+	BOOL								bSuccess;					//å¯åŠ¨æˆåŠŸæ ‡å¿—
+	CBaseLogonServer				* pMainManage;				//æ•°æ®ç®¡ç†æŒ‡é’ˆ
 };
 
-//´¦ÀíÏß³ÌÆô¶¯½á¹¹
+//å¤„ç†çº¿ç¨‹å¯åŠ¨ç»“æ„
 struct HandleThreadStartStruct
 {
-	//±äÁ¿¶¨Òå
-	HANDLE								hEvent;						//Æô¶¯ÊÂ¼ş
-	HANDLE								hCompletionPort;			//Íê³É¶Ë¿Ú
-	CBaseLogonServer				* pMainManage;				//Êı¾İ¹ÜÀíÖ¸Õë
+	//å˜é‡å®šä¹‰
+	HANDLE								hEvent;						//å¯åŠ¨äº‹ä»¶
+	HANDLE								hCompletionPort;			//å®Œæˆç«¯å£
+	CBaseLogonServer				* pMainManage;				//æ•°æ®ç®¡ç†æŒ‡é’ˆ
 };
 
 /*****************************************************************************************************************/
@@ -54,7 +54,7 @@ CBaseLogonServer::~CBaseLogonServer()
 	SAFE_DELETE(m_pTcpConnect);
 }
 
-//³õÊ¼»¯º¯Êı 
+//åˆå§‹åŒ–å‡½æ•° 
 bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService * pDataHandleService)
 {
 	INFO_LOG("BaseMainManageForZ Init begin...");
@@ -79,12 +79,12 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 
 	srand((unsigned)time(NULL));
 
-	//ÉèÖÃÊı¾İ
+	//è®¾ç½®æ•°æ®
 	m_InitData = *pInitData;
 
 	bool ret = false;
 
-	// ¼ÓÔØ²ÎÊı
+	// åŠ è½½å‚æ•°
 	ret = PreInitParameter(&m_InitData, &m_KernelData);
 	if (!ret)
 	{
@@ -92,7 +92,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 		return false;
 	}
 
-	// redis Ïà¹Ø
+	// redis ç›¸å…³
 	m_pRedis = new CRedisLogon;
 	if (!m_pRedis)
 	{
@@ -103,11 +103,11 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 	ret = m_pRedis->Init();
 	if (!ret)
 	{
-		ERROR_LOG("Á¬½ÓredisÊ§°Ü");
+		ERROR_LOG("è¿æ¥rediså¤±è´¥");
 		return false;
 	}
 
-	// redis Ïà¹Ø
+	// redis ç›¸å…³
 	m_pRedisPHP = new CRedisPHP;
 	if (!m_pRedisPHP)
 	{
@@ -118,11 +118,11 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 	ret = m_pRedisPHP->Init();
 	if (!ret)
 	{
-		ERROR_LOG("Á¬½ÓPHP redisÊ§°Ü");
+		ERROR_LOG("è¿æ¥PHP rediså¤±è´¥");
 		return false;
 	}
 
-	// ³õÊ¼»¯ÍøÂç
+	// åˆå§‹åŒ–ç½‘ç»œ
 	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort, m_InitData.iSocketSecretKey);
 	if (!ret)
 	{
@@ -130,7 +130,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 		return false;
 	}
 
-	// DBÏà¹Ø
+	// DBç›¸å…³
 	ret = pDataHandleService->SetParameter(this, &m_SQLDataManage, &m_InitData, &m_KernelData);
 	if (!ret)
 	{
@@ -145,7 +145,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 		return false;
 	}
 
-	// ÖĞĞÄ·şÎñÆ÷Á¬½Ó
+	// ä¸­å¿ƒæœåŠ¡å™¨è¿æ¥
 	m_pTcpConnect = new CTcpConnect;
 	if (!m_pTcpConnect)
 	{
@@ -166,23 +166,23 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 	return true;
 }
 
-//È¡Ïû³õÊ¼»¯º¯Êı 
+//å–æ¶ˆåˆå§‹åŒ–å‡½æ•° 
 bool CBaseLogonServer::UnInit()
 {
-	////Í£Ö¹·şÎñ
+	////åœæ­¢æœåŠ¡
 	//if (m_bRun)
 	//{
 	//	Stop();
 	//}
 
-	////µ÷ÓÃ½Ó¿Ú
+	////è°ƒç”¨æ¥å£
 	//OnUnInit();
 
 	//m_bInit = false;
 	//m_TCPSocket.UnInit();
 	//m_SQLDataManage.UnInit();
 
-	////ÉèÖÃÊı¾İ
+	////è®¾ç½®æ•°æ®
 	//memset(&m_DllInfo, 0, sizeof(m_DllInfo));
 	//memset(&m_InitData, 0, sizeof(m_InitData));
 	//memset(&m_KernelData, 0, sizeof(m_KernelData));
@@ -190,7 +190,7 @@ bool CBaseLogonServer::UnInit()
 	return true;
 }
 
-//Æô¶¯º¯Êı
+//å¯åŠ¨å‡½æ•°
 bool CBaseLogonServer::Start()
 {
 	INFO_LOG("BaseMainManageForZ Start begin...");
@@ -203,10 +203,10 @@ bool CBaseLogonServer::Start()
 
 	m_bRun = true;
 
-	//½¨Á¢ÊÂ¼ş
+	//å»ºç«‹äº‹ä»¶
 	HANDLE StartEvent = CreateEvent(FALSE, TRUE, NULL, NULL);
 
-	//½¨Á¢Íê³É¶Ë¿Ú
+	//å»ºç«‹å®Œæˆç«¯å£
 	m_hCompletePort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
 	if (!m_hCompletePort)
 	{
@@ -216,7 +216,7 @@ bool CBaseLogonServer::Start()
 
 	m_DataLine.SetCompletionHandle(m_hCompletePort);
 
-	//Æô¶¯´¦ÀíÏß³Ì
+	//å¯åŠ¨å¤„ç†çº¿ç¨‹
 	UINT uThreadID = 0;
 
 	HandleThreadStartStruct	ThreadStartData;
@@ -232,14 +232,14 @@ bool CBaseLogonServer::Start()
 		return false;
 	}
 
-	// ¹ØÁª´óÌüÒµÎñÂß¼­Ïß³ÌÓë¶ÔÓ¦ÈÕÖ¾ÎÄ¼ş
+	// å…³è”å¤§å…ä¸šåŠ¡é€»è¾‘çº¿ç¨‹ä¸å¯¹åº”æ—¥å¿—æ–‡ä»¶
 	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC);
 
 	WaitForSingleObject(StartEvent, INFINITE);
 
 	bool ret = false;
 
-	//Æô¶¯´°¿ÚÄ£¿é
+	//å¯åŠ¨çª—å£æ¨¡å—
 	ret = CreateWindowsForTimer();
 	if (!ret)
 	{
@@ -247,7 +247,7 @@ bool CBaseLogonServer::Start()
 		return false;
 	}
 
-	// Æô¶¯DBÄ£¿é
+	// å¯åŠ¨DBæ¨¡å—
 	ret = m_SQLDataManage.Start();
 	if (!ret)
 	{
@@ -255,7 +255,7 @@ bool CBaseLogonServer::Start()
 		return false;
 	}
 
-	// Æô¶¯ÍøÂçÄ£¿é
+	// å¯åŠ¨ç½‘ç»œæ¨¡å—
 	ret = m_TCPSocket.Start(SERVICE_TYPE_LOGON);
 	if (!ret)
 	{
@@ -267,16 +267,16 @@ bool CBaseLogonServer::Start()
 	ret = m_pTcpConnect->Start(&m_DataLine, centerServerConfig.ip, centerServerConfig.port, SERVICE_TYPE_LOGON, ConfigManage()->GetLogonServerConfig().logonID);		// TODO	
 	if (!ret)
 	{
-		throw new CException(TEXT("BaseMainManageForZ::m_TCPSocket.Start Á¬½ÓÄ£¿éÆô¶¯Ê§°Ü"), 0x433);
+		throw new CException(TEXT("BaseMainManageForZ::m_TCPSocket.Start è¿æ¥æ¨¡å—å¯åŠ¨å¤±è´¥"), 0x433);
 	}
 
 	m_connectCServerHandle = (HANDLE)_beginthreadex(NULL, 0, TcpConnectThread, this, 0, NULL);
 	if (!m_connectCServerHandle)
 	{
-		throw new CException(TEXT("BaseMainManageForZ::m_TCPSocket.Start Á¬½ÓÏß³Ìº¯ÊıÆô¶¯Ê§°Ü"), 0x434);
+		throw new CException(TEXT("BaseMainManageForZ::m_TCPSocket.Start è¿æ¥çº¿ç¨‹å‡½æ•°å¯åŠ¨å¤±è´¥"), 0x434);
 	}
 
-	//µ÷ÓÃ½Ó¿Ú
+	//è°ƒç”¨æ¥å£
 	ret = OnStart();
 	if (!ret)
 	{
@@ -289,7 +289,7 @@ bool CBaseLogonServer::Start()
 	return true;
 }
 
-//Í£Ö¹·şÎñ
+//åœæ­¢æœåŠ¡
 bool CBaseLogonServer::Stop()
 {
 	INFO_LOG("BaseMainManageForZ Stop begin...");
@@ -304,13 +304,13 @@ bool CBaseLogonServer::Stop()
 
 	m_DataLine.SetCompletionHandle(NULL);
 
-	// ÏÈ¹Ø±ÕÍøÂçÄ£¿é
+	// å…ˆå…³é—­ç½‘ç»œæ¨¡å—
 	m_TCPSocket.Stop();
 
-	//¹Ø±ÕÓëÖĞĞÄ·şÎñÆ÷µÄÁ¬½Ó
+	//å…³é—­ä¸ä¸­å¿ƒæœåŠ¡å™¨çš„è¿æ¥
 	m_pTcpConnect->Stop();
 
-	//¹Ø±ÕÍê³É¶Ë¿Ú
+	//å…³é—­å®Œæˆç«¯å£
 	if (m_hCompletePort)
 	{
 		PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
@@ -318,7 +318,7 @@ bool CBaseLogonServer::Stop()
 		m_hCompletePort = NULL;
 	}
 
-	// ¹Ø±ÕlinedateÏß³Ì¾ä±ú
+	// å…³é—­linedateçº¿ç¨‹å¥æŸ„
 	if (m_hHandleThread)
 	{
 		WaitForSingleObject(m_hHandleThread, INFINITE);
@@ -326,7 +326,7 @@ bool CBaseLogonServer::Stop()
 		m_hHandleThread = NULL;
 	}
 
-	// ¹Ø±ÕÖĞĞÄ·şÁ¬½ÓÏß³Ì
+	// å…³é—­ä¸­å¿ƒæœè¿æ¥çº¿ç¨‹
 	if (m_connectCServerHandle)
 	{
 		//WaitForSingleObject(m_connectCServerHandle, INFINITE);
@@ -334,23 +334,23 @@ bool CBaseLogonServer::Stop()
 		m_connectCServerHandle = NULL;
 	}
 
-	// ÉÏ²ã½Ó¿Ú
-	OnStop();		// Ö÷Ïß³Ì¹Ø±Õ²¢ÇåÀí×ÊÔ´(ÕâÀïĞèÒªÒÀÀµredisºÍdb)
+	// ä¸Šå±‚æ¥å£
+	OnStop();		// ä¸»çº¿ç¨‹å…³é—­å¹¶æ¸…ç†èµ„æº(è¿™é‡Œéœ€è¦ä¾èµ–rediså’Œdb)
 
-	// ¹Ø±ÕDBÄ£¿é
+	// å…³é—­DBæ¨¡å—
 	m_SQLDataManage.Stop();
 
-	// ¹Ø±Õredis
+	// å…³é—­redis
 	m_pRedis->Stop();
 	m_pRedisPHP->Stop();
 
-	//¹Ø±Õ´°¿Ú
+	//å…³é—­çª—å£
 	if (m_hWindow != NULL && IsWindow(m_hWindow) == TRUE)
 	{
 		SendMessage(m_hWindow, WM_CLOSE, 0, 0);
 	}
 
-	// µÈ´ı´°¿ÚÏß³Ì
+	// ç­‰å¾…çª—å£çº¿ç¨‹
 	if (m_hWindowThread)
 	{
 		WaitForSingleObject(m_hWindowThread, INFINITE);
@@ -363,7 +363,7 @@ bool CBaseLogonServer::Stop()
 	return true;
 }
 
-//ÍøÂç¹Ø±Õ´¦Àí
+//ç½‘ç»œå…³é—­å¤„ç†
 bool CBaseLogonServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime)
 {
 	SocketCloseLine SocketClose;
@@ -373,7 +373,7 @@ bool CBaseLogonServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uCo
 	return (m_DataLine.AddData(&SocketClose.LineHead, sizeof(SocketClose), HD_SOCKET_CLOSE) != 0);
 }
 
-//ÍøÂçÏûÏ¢´¦Àí
+//ç½‘ç»œæ¶ˆæ¯å¤„ç†
 bool CBaseLogonServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, DWORD dwHandleID)
 {
 	if (!pNetHead)
@@ -391,7 +391,7 @@ bool CBaseLogonServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * 
 	return m_DataLine.AddData(&SocketRead.LineHead, sizeof(SocketRead), HD_SOCKET_READ, pData, uSize) != 0;
 }
 
-//¶¨Ê±Æ÷Í¨ÖªÏûÏ¢
+//å®šæ—¶å™¨é€šçŸ¥æ¶ˆæ¯
 bool CBaseLogonServer::WindowTimerMessage(UINT uTimerID)
 {
 	WindowTimerLine WindowTimer;
@@ -399,12 +399,12 @@ bool CBaseLogonServer::WindowTimerMessage(UINT uTimerID)
 	return (m_DataLine.AddData(&WindowTimer.LineHead, sizeof(WindowTimer), HD_TIMER_MESSAGE) != 0);
 }
 
-//Òì²½Ïß³Ì½á¹û´¦Àí
+//å¼‚æ­¥çº¿ç¨‹ç»“æœå¤„ç†
 bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
 {
 	AsynThreadResultLine resultData;
 
-	//°ü×°Êı¾İ
+	//åŒ…è£…æ•°æ®
 	resultData.LineHead.uSize = uResultSize;
 	resultData.LineHead.uDataKind = uDataType;
 
@@ -412,11 +412,11 @@ bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleRes
 	resultData.uHandleResult = uHandleResult;
 	resultData.uHandleID = uHandleID;
 
-	//¼ÓÈë¶ÓÁĞ
+	//åŠ å…¥é˜Ÿåˆ—
 	return (m_DataLine.AddData(&resultData.LineHead, sizeof(resultData), HD_ASYN_THREAD_RESULT, pData, uResultSize) != 0);
 }
 
-//Éè¶¨¶¨Ê±Æ÷
+//è®¾å®šå®šæ—¶å™¨
 bool CBaseLogonServer::SetTimer(UINT uTimerID, UINT uElapse)
 {
 	if ((m_hWindow != NULL) && (IsWindow(m_hWindow) == TRUE))
@@ -427,7 +427,7 @@ bool CBaseLogonServer::SetTimer(UINT uTimerID, UINT uElapse)
 	return false;
 }
 
-//Çå³ı¶¨Ê±Æ÷
+//æ¸…é™¤å®šæ—¶å™¨
 bool CBaseLogonServer::KillTimer(UINT uTimerID)
 {
 	if ((m_hWindow != NULL) && (::IsWindow(m_hWindow) == TRUE))
@@ -438,7 +438,7 @@ bool CBaseLogonServer::KillTimer(UINT uTimerID)
 	return false;
 }
 
-//´´½¨´°¿ÚÎªÁËÉú³É¶¨Ê±Æ÷
+//åˆ›å»ºçª—å£ä¸ºäº†ç”Ÿæˆå®šæ—¶å™¨
 bool CBaseLogonServer::CreateWindowsForTimer()
 {
 	if ((m_hWindow != NULL) && (::IsWindow(m_hWindow) == TRUE))
@@ -446,10 +446,10 @@ bool CBaseLogonServer::CreateWindowsForTimer()
 		return false;
 	}
 
-	//½¨Á¢ÊÂ¼ş
+	//å»ºç«‹äº‹ä»¶
 	HANDLE StartEvent = CreateEvent(FALSE, TRUE, NULL, NULL);
 
-	//½¨Á¢Ïß³Ì
+	//å»ºç«‹çº¿ç¨‹
 	WindowThreadStartStruct ThreadData;
 
 	ThreadData.bSuccess = FALSE;
@@ -474,10 +474,10 @@ bool CBaseLogonServer::CreateWindowsForTimer()
 	return true;
 }
 
-//¶ÓÁĞÊı¾İ´¦ÀíÏß³Ì
+//é˜Ÿåˆ—æ•°æ®å¤„ç†çº¿ç¨‹
 unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 {
-	// ¸øÖ÷Ïß³ÌÒ»µãÊ±¼ä
+	// ç»™ä¸»çº¿ç¨‹ä¸€ç‚¹æ—¶é—´
 	Sleep(1);
 
 	INFO_LOG("LineDataHandleThread start...");
@@ -500,30 +500,30 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 		return -3;
 	}
 
-	//Íê³É¶Ë¿Ú
+	//å®Œæˆç«¯å£
 	HANDLE hCompletionPort = pData->hCompletionPort;
 	if (!hCompletionPort)
 	{
 		return -4;
 	}
 
-	//ÔËĞĞ±êÖ¾
+	//è¿è¡Œæ ‡å¿—
 	bool& bRun = pThis->m_bRun;
 
 	::SetEvent(pData->hEvent);
 
-	// ³õÊ¼»¯Ëæ»úÊıÖÖ×Ó
+	// åˆå§‹åŒ–éšæœºæ•°ç§å­
 	srand((unsigned)time(NULL));
 
-	// ³õÊ¼»¯Òì³£º¯Êı
+	// åˆå§‹åŒ–å¼‚å¸¸å‡½æ•°
 	CWin32Exception::SetWin32ExceptionFunc();
 
-	//ÖØµşÊı¾İ
+	//é‡å æ•°æ®
 	DWORD dwThancferred = 0;
 	ULONG dwCompleteKey = 0;
 	LPOVERLAPPED OverData;
 
-	//Êı¾İ»º´æ
+	//æ•°æ®ç¼“å­˜
 	BYTE szBuffer[LD_MAX_PART] = "";
 	DataLineHead* pDataLineHead = (DataLineHead *)szBuffer;
 
@@ -543,21 +543,21 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 				unsigned int bytes = pDataLine->GetData(pDataLineHead, sizeof(szBuffer));
 				if (bytes == 0)
 				{
-					// È¡³öÀ´µÄÊı¾İ´óĞ¡Îª0£¬²»Ì«¿ÉÄÜ
+					// å–å‡ºæ¥çš„æ•°æ®å¤§å°ä¸º0ï¼Œä¸å¤ªå¯èƒ½
 					ERROR_LOG("GetDataCount data size = 0");
 					continue;
 				}
 
 				switch (pDataLineHead->uDataKind)
 				{
-				case HD_SOCKET_READ:		// socket Êı¾İ¶ÁÈ¡
+				case HD_SOCKET_READ:		// socket æ•°æ®è¯»å–
 				{
 					SocketReadLine * pSocketRead = (SocketReadLine *)pDataLineHead;
 					void* pBuffer = NULL;
 					unsigned int size = pSocketRead->uHandleSize;
 					if (size > 0)
 					{
-						pBuffer = (void *)(pSocketRead + 1);			// ÒÆ¶¯Ò»¸öSocketReadLine
+						pBuffer = (void *)(pSocketRead + 1);			// ç§»åŠ¨ä¸€ä¸ªSocketReadLine
 					}
 
 					if (!pThis->OnSocketRead(&pSocketRead->NetMessageHead, pBuffer, size, pSocketRead->uAccessIP, pSocketRead->uIndex, pSocketRead->dwHandleID))
@@ -567,13 +567,13 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 					}
 					break;
 				}
-				case HD_SOCKET_CLOSE:		// socket ¹Ø±Õ
+				case HD_SOCKET_CLOSE:		// socket å…³é—­
 				{
 					SocketCloseLine * pSocketClose = (SocketCloseLine *)pDataLineHead;
 					pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime);
 					break;
 				}
-				case HD_ASYN_THREAD_RESULT://Òì²½Ïß³Ì´¦Àí½á¹û
+				case HD_ASYN_THREAD_RESULT://å¼‚æ­¥çº¿ç¨‹å¤„ç†ç»“æœ
 				{
 					AsynThreadResultLine * pDataRead = (AsynThreadResultLine *)pDataLineHead;
 					void* pBuffer = NULL;
@@ -587,20 +587,20 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 
 					if (size > sizeof(AsynThreadResultLine))
 					{
-						pBuffer = (void *)(pDataRead + 1);			// ÒÆ¶¯Ò»¸öSocketReadLine
+						pBuffer = (void *)(pDataRead + 1);			// ç§»åŠ¨ä¸€ä¸ªSocketReadLine
 					}
 
 					pThis->OnAsynThreadResult(pDataRead, pBuffer, size - sizeof(AsynThreadResultLine));
 
 					break;
 				}
-				case HD_TIMER_MESSAGE:		// ¶¨Ê±Æ÷ÏûÏ¢
+				case HD_TIMER_MESSAGE:		// å®šæ—¶å™¨æ¶ˆæ¯
 				{
 					WindowTimerLine * pTimerMessage = (WindowTimerLine *)pDataLineHead;
 					pThis->OnTimerMessage(pTimerMessage->uTimerID);
 					break;
 				}
-				case HD_PLATFORM_SOCKET_READ:	// ÖĞĞÄ·şÏûÏ¢
+				case HD_PLATFORM_SOCKET_READ:	// ä¸­å¿ƒæœæ¶ˆæ¯
 				{
 					PlatformDataLineHead* pPlaformMessageHead = (PlatformDataLineHead*)pDataLineHead;
 					int size = pPlaformMessageHead->platformMessageHead.MainHead.uMessageSize - sizeof(PlatformMessageHead);
@@ -614,7 +614,7 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 
 					if (!pThis->OnCenterServerMessage(msgID, &pPlaformMessageHead->platformMessageHead.MainHead, pBuffer, size, userID))
 					{
-						ERROR_LOG("´¦ÀíÖĞĞÄ·şÎñÆ÷³ö´í,msgID=%d", msgID);
+						ERROR_LOG("å¤„ç†ä¸­å¿ƒæœåŠ¡å™¨å‡ºé”™,msgID=%d", msgID);
 					}
 
 					break;
@@ -631,7 +631,7 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 				PEXCEPTION_POINTERS pEx = Win32Ex.ExceptionInformation();
 				if (pEx != NULL && pEx->ExceptionRecord != NULL)
 				{
-					CWin32Exception::OutputWin32Exception("[ LogonServer ±àºÅ£º0x%x ] [ ÃèÊö£º%s] [ Ô´´úÂëÎ»ÖÃ£º0x%x ]", pEx->ExceptionRecord->ExceptionCode,
+					CWin32Exception::OutputWin32Exception("[ LogonServer ç¼–å·ï¼š0x%x ] [ æè¿°ï¼š%s] [ æºä»£ç ä½ç½®ï¼š0x%x ]", pEx->ExceptionRecord->ExceptionCode,
 						CWin32Exception::GetDescByCode(pEx->ExceptionRecord->ExceptionCode), ((pEx)->ExceptionRecord)->ExceptionAddress);
 				}
 				continue;
@@ -639,31 +639,31 @@ unsigned __stdcall CBaseLogonServer::LineDataHandleThread(LPVOID pThreadData)
 
 			catch (int iCode)
 			{
-				CWin32Exception::OutputWin32Exception("[ LogonServer ±àºÅ£º%d ] [ ÃèÊö£ºÈç¹ûÓĞdumpÎÄ¼ş£¬Çë²é¿´dumpÎÄ¼ş ] [ Ô´´úÂëÎ»ÖÃ£ºÎ´Öª ]", iCode);
+				CWin32Exception::OutputWin32Exception("[ LogonServer ç¼–å·ï¼š%d ] [ æè¿°ï¼šå¦‚æœæœ‰dumpæ–‡ä»¶ï¼Œè¯·æŸ¥çœ‹dumpæ–‡ä»¶ ] [ æºä»£ç ä½ç½®ï¼šæœªçŸ¥ ]", iCode);
 				continue;
 			}
 
 			catch (...)
 			{
-				CWin32Exception::OutputWin32Exception("#### Î´Öª±ÀÀ£¡£####");
+				CWin32Exception::OutputWin32Exception("#### æœªçŸ¥å´©æºƒã€‚####");
 				continue;
 			}
 		}
 	}
 
-	INFO_LOG("LineDataHandleThread exit¡£");
+	INFO_LOG("LineDataHandleThread exitã€‚");
 
 	return 0;
 }
 
-//WINDOW ÏûÏ¢Ñ­»·Ïß³Ì
+//WINDOW æ¶ˆæ¯å¾ªç¯çº¿ç¨‹
 unsigned __stdcall CBaseLogonServer::WindowMsgThread(LPVOID pThreadData)
 {
 	WindowThreadStartStruct * pStartData = (WindowThreadStartStruct *)pThreadData;
 
 	try
 	{
-		//×¢²á´°¿ÚÀà
+		//æ³¨å†Œçª—å£ç±»
 		LOGBRUSH		LogBrush;
 		WNDCLASS		WndClass;
 		TCHAR			szClassName[] = TEXT("CMainManageWindow");
@@ -683,24 +683,24 @@ unsigned __stdcall CBaseLogonServer::WindowMsgThread(LPVOID pThreadData)
 		WndClass.hbrBackground = (HBRUSH)::CreateBrushIndirect(&LogBrush);
 		::RegisterClass(&WndClass);
 
-		//½¨Á¢´°¿Ú
+		//å»ºç«‹çª—å£
 		pStartData->pMainManage->m_hWindow = ::CreateWindow(szClassName, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, pStartData->pMainManage);
-		if (pStartData->pMainManage->m_hWindow == NULL) throw TEXT("´°¿Ú½¨Á¢Ê§°Ü");
+		if (pStartData->pMainManage->m_hWindow == NULL) throw TEXT("çª—å£å»ºç«‹å¤±è´¥");
 	}
 	catch (...)
 	{
 		ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
-		//Æô¶¯´íÎó
+		//å¯åŠ¨é”™è¯¯
 		pStartData->bSuccess = FALSE;
 		::SetEvent(pStartData->hEvent);
 		_endthreadex(0);
 	}
 
-	//Æô¶¯³É¹¦
+	//å¯åŠ¨æˆåŠŸ
 	pStartData->bSuccess = TRUE;
 	::SetEvent(pStartData->hEvent);
 
-	//ÏûÏ¢Ñ­»·
+	//æ¶ˆæ¯å¾ªç¯
 	MSG	Message;
 	while (::GetMessage(&Message, NULL, 0, 0))
 	{
@@ -714,12 +714,12 @@ unsigned __stdcall CBaseLogonServer::WindowMsgThread(LPVOID pThreadData)
 	return 0;
 }
 
-//´°¿Ú»Øµ÷º¯Êı
+//çª—å£å›è°ƒå‡½æ•°
 LRESULT CALLBACK CBaseLogonServer::WindowProcFunc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-	case WM_CREATE:		//´°¿Ú½¨Á¢ÏûÏ¢
+	case WM_CREATE:		//çª—å£å»ºç«‹æ¶ˆæ¯
 	{
 		DWORD iIndex = TlsAlloc();
 		CBaseLogonServer * pMainManage = (CBaseLogonServer *)(((CREATESTRUCT *)lParam)->lpCreateParams);
@@ -727,19 +727,19 @@ LRESULT CALLBACK CBaseLogonServer::WindowProcFunc(HWND hWnd, UINT uMsg, WPARAM w
 		::SetWindowLong(hWnd, GWL_USERDATA, iIndex);
 		break;
 	}
-	case WM_TIMER:		//¶¨Ê±Æ÷ÏûÏ¢
+	case WM_TIMER:		//å®šæ—¶å™¨æ¶ˆæ¯
 	{
 		DWORD iIndex = ::GetWindowLong(hWnd, GWL_USERDATA);
 		CBaseLogonServer * pMainManage = (CBaseLogonServer *)::TlsGetValue(iIndex);
 		if ((pMainManage != NULL) && (pMainManage->WindowTimerMessage((UINT)wParam) == false)) ::KillTimer(hWnd, (UINT)wParam);
 		break;
 	}
-	case WM_CLOSE:		//´°¿Ú¹Ø±ÕÏûÏ¢
+	case WM_CLOSE:		//çª—å£å…³é—­æ¶ˆæ¯
 	{
 		DestroyWindow(hWnd);
 		break;
 	}
-	case WM_DESTROY:	//´°¿Ú¹Ø±ÕÏûÏ¢
+	case WM_DESTROY:	//çª—å£å…³é—­æ¶ˆæ¯
 	{
 		DWORD iIndex = ::GetWindowLong(hWnd, GWL_USERDATA);
 		CBaseLogonServer * pMainManage = (CBaseLogonServer *)::TlsGetValue(iIndex);

@@ -6,29 +6,29 @@
 #include "log.h"
 #include <map>
 
-// ¶¨Ê±Æ÷ID
+// å®šæ—¶å™¨ID
 enum LogonServerTimerID
 {
 	LOGON_TIMER_BEGIN = 0,
-	LOGON_TIMER_CHECK_HEARTBEAT,				// ĞÄÌø¶¨Ê±Æ÷
-	LOGON_TIMER_CHECK_REDIS_CONNECTION,			// redisÁ¬½ÓĞÔ
-	LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET,	// ¶¨ÆÚ¼ì²éÃ»ÓĞ°ó¶¨Íæ¼ÒIDµÄÎŞĞ§Á¬½Ó
-	LOGON_TIMER_ROUTINE_SAVE_REDIS,				// ¶¨ÆÚ´æ´¢redisÊı¾İ
-	LOGON_TIMER_NORMAL,							// Í¨ÓÃ¶¨Ê±Æ÷(s)
+	LOGON_TIMER_CHECK_HEARTBEAT,				// å¿ƒè·³å®šæ—¶å™¨
+	LOGON_TIMER_CHECK_REDIS_CONNECTION,			// redisè¿æ¥æ€§
+	LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET,	// å®šæœŸæ£€æŸ¥æ²¡æœ‰ç»‘å®šç©å®¶IDçš„æ— æ•ˆè¿æ¥
+	LOGON_TIMER_ROUTINE_SAVE_REDIS,				// å®šæœŸå­˜å‚¨redisæ•°æ®
+	LOGON_TIMER_NORMAL,							// é€šç”¨å®šæ—¶å™¨(s)
 	LOGON_TIMER_END,
 };
 
-const int CHECK_HEAETBEAT_SECS = 15;				// ĞÄÌø¶¨Ê±Æ÷Ê±¼ä(s)
-const int CHECK_REDIS_SAVE_DB = 61;					// ¶¨ÆÚ´æ´¢redisÊı¾İ(s)
-const int CHECK_REDIS_CONNECTION_SECS = 307;		// ¶¨ÆÚ¼ì²éredisÁ¬½Ó(s)
-const int ROUTINE_CHECK_UNBINDID_SOCKET = 41;		// ¶¨ÆÚ¼ì²éÎ´µÇÂ¼µÄÁ¬½Ó(s)
-const int NORMAL_TIMER_SECS = 2;					// Í¨ÓÃ¶¨Ê±Æ÷(s)
+const int CHECK_HEAETBEAT_SECS = 15;				// å¿ƒè·³å®šæ—¶å™¨æ—¶é—´(s)
+const int CHECK_REDIS_SAVE_DB = 61;					// å®šæœŸå­˜å‚¨redisæ•°æ®(s)
+const int CHECK_REDIS_CONNECTION_SECS = 307;		// å®šæœŸæ£€æŸ¥redisè¿æ¥(s)
+const int ROUTINE_CHECK_UNBINDID_SOCKET = 41;		// å®šæœŸæ£€æŸ¥æœªç™»å½•çš„è¿æ¥(s)
+const int NORMAL_TIMER_SECS = 2;					// é€šç”¨å®šæ—¶å™¨(s)
 
-// µÇÂ½·şsocket
+// ç™»é™†æœsocket
 struct LogonServerSocket
 {
-	BYTE type;			// Á½ÖÖÀàĞÍµÄsocket 1£ºÍæ¼ÒµÄsocket£¬2£ºÓÎÏ··şµÄsocket
-	int identityID;		// Íæ¼Òid»òÕßroomID
+	BYTE type;			// ä¸¤ç§ç±»å‹çš„socket 1ï¼šç©å®¶çš„socketï¼Œ2ï¼šæ¸¸æˆæœçš„socket
+	int identityID;		// ç©å®¶idæˆ–è€…roomID
 
 	LogonServerSocket()
 	{
@@ -46,19 +46,19 @@ struct LogonServerSocket
 class CGameLogonManage : public CBaseLogonServer
 {
 public:
-	UINT						m_nPort;					//µÇÂ½·şÎñÆ÷¶Ë¿Ú
-	UINT						m_uMaxPeople;				//Ö§³Ö×î´óÈËÊı£¨°üÀ¨gserverÊıÁ¿£©
+	UINT						m_nPort;					//ç™»é™†æœåŠ¡å™¨ç«¯å£
+	UINT						m_uMaxPeople;				//æ”¯æŒæœ€å¤§äººæ•°ï¼ˆåŒ…æ‹¬gserveræ•°é‡ï¼‰
 
 private:
-	CLogonUserManage*				m_pUserManage;			// Íæ¼Ò¹ÜÀíÆ÷
-	CLogonGServerManage*			m_pGServerManage;		// ÓÎÏ··ş¹ÜÀíÆ÷
-	std::vector<LogonServerSocket>	m_socketInfoVec;		// socketË÷ÒıºÍidentityIDµÄÓ³Éä±í
+	CLogonUserManage*				m_pUserManage;			// ç©å®¶ç®¡ç†å™¨
+	CLogonGServerManage*			m_pGServerManage;		// æ¸¸æˆæœç®¡ç†å™¨
+	std::vector<LogonServerSocket>	m_socketInfoVec;		// socketç´¢å¼•å’ŒidentityIDçš„æ˜ å°„è¡¨
 	std::vector<int>				m_buyRoomVec;
 	time_t							m_lastNormalTimerTime;
-	time_t							m_lastSendHeartBeatTime;// ÉÏ´Î·¢ËÍĞÄÌøÊ±¼ä
+	time_t							m_lastSendHeartBeatTime;// ä¸Šæ¬¡å‘é€å¿ƒè·³æ—¶é—´
 
 private:
-	std::set<UINT>					m_scoketMatch;			// ÔÚ±ÈÈü³¡Ïà¹ØÒ³ÃæµÄÍæ¼Ò
+	std::set<UINT>					m_scoketMatch;			// åœ¨æ¯”èµ›åœºç›¸å…³é¡µé¢çš„ç©å®¶
 
 public:
 	CGameLogonManage();
@@ -67,171 +67,171 @@ public:
 	virtual ~CGameLogonManage();
 
 public:
-	//Êı¾İ¹ÜÀíÄ£¿éÆô¶¯
+	//æ•°æ®ç®¡ç†æ¨¡å—å¯åŠ¨
 	virtual bool OnStart();
-	//Êı¾İ¹ÜÀíÄ£¿é¹Ø±Õ
+	//æ•°æ®ç®¡ç†æ¨¡å—å…³é—­
 	virtual bool OnStop();
 
-	//·şÎñÀ©Õ¹½Ó¿Úº¯Êı
+	//æœåŠ¡æ‰©å±•æ¥å£å‡½æ•°
 private:
-	//»ñÈ¡ĞÅÏ¢º¯Êı
+	//è·å–ä¿¡æ¯å‡½æ•°
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
-	//SOCKET Êı¾İ¶ÁÈ¡
+	//SOCKET æ•°æ®è¯»å–
 	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	//SOCKET ¹Ø±Õ
+	//SOCKET å…³é—­
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
-	//Òì²½Ïß³Ì´¦Àí½á¹û
+	//å¼‚æ­¥çº¿ç¨‹å¤„ç†ç»“æœ
 	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize);
-	//¶¨Ê±Æ÷ÏûÏ¢
+	//å®šæ—¶å™¨æ¶ˆæ¯
 	virtual bool OnTimerMessage(UINT uTimerID);
 
-	// µÇÂ½Í¨Öª
+	// ç™»é™†é€šçŸ¥
 private:
 	void NotifyUserInfo(const UserData &userData);
 private:
-	// Íæ¼Ò×¢²áÏà¹Ø
+	// ç©å®¶æ³¨å†Œç›¸å…³
 	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
 
-	// Íæ¼ÒµÇÂ½Ïà¹Ø
+	// ç©å®¶ç™»é™†ç›¸å…³
 	bool OnHandleUserLogonMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
 
 	bool OnHanleUserLogon(void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
 
-	// ×À×ÓÏà¹Ø
+	// æ¡Œå­ç›¸å…³
 	bool OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
 
 	bool OnHandleUserBuyDesk(int userID, void* pData, int size);
 	bool OnHandleUserEnterDesk(int userID, void* pData, int size);
 
-	// ÆäËûÏà¹Ø
+	// å…¶ä»–ç›¸å…³
 	bool OnHandleOtherMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
 
-	//Ë¢ĞÂ¸öÈËĞÅÏ¢
+	//åˆ·æ–°ä¸ªäººä¿¡æ¯
 	bool OnHandleUserInfoFlush(int userID, void* pData, int size);
-	//»úÆ÷ÈËÈ¡Ç®
+	//æœºå™¨äººå–é’±
 	bool OnHandleRobotTakeMoney(int userID, void* pData, int size);
-	// ÇëÇóÍæ¼ÒĞÅÏ¢
+	// è¯·æ±‚ç©å®¶ä¿¡æ¯
 	bool OnHandleReqUserInfo(int userID, void* pData, int size);
-	// ÇëÇó½øÈë±ÈÈü³¡Ò³Ãæ
+	// è¯·æ±‚è¿›å…¥æ¯”èµ›åœºé¡µé¢
 	bool OnHandleJoinMatchScene(UINT uIndex);
-	// ÇëÇóÍË³ö±ÈÈü³¡Ò³Ãæ
+	// è¯·æ±‚é€€å‡ºæ¯”èµ›åœºé¡µé¢
 	bool OnHandleExitMatchScene(UINT uIndex);
 
-	//////////////////////////////ÓÎÏ··şÏà¹Ø////////////////////////////////////////////
-	// ÈÏÖ¤
+	//////////////////////////////æ¸¸æˆæœç›¸å…³////////////////////////////////////////////
+	// è®¤è¯
 	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx);
-	// Ç°¶Ë ----> ÓÎÏ··ş
+	// å‰ç«¯ ----> æ¸¸æˆæœ
 	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
-	// ÓÎÏ··ş ----> Ç°¶Ë
+	// æ¸¸æˆæœ ----> å‰ç«¯
 	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
 
 public:
-	// Í¨¹ısocketIdx»ñÈ¡socketĞÅÏ¢
+	// é€šè¿‡socketIdxè·å–socketä¿¡æ¯
 	LogonServerSocket GetIdentityIDBySocketIdx(int socketIdx);
-	// É¾³ısocketIdxË÷Òı
+	// åˆ é™¤socketIdxç´¢å¼•
 	void DelSocketIdx(int socketIdx);
-	// ¸øÍæ¼Ò·¢ËÍÊı¾İ
+	// ç»™ç©å®¶å‘é€æ•°æ®
 	bool SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification = 0);
-	// ¹ã²¥È«²¿Íæ¼Ò£¨²»°üÀ¨gserver£©
+	// å¹¿æ’­å…¨éƒ¨ç©å®¶ï¼ˆä¸åŒ…æ‹¬gserverï¼‰
 	bool SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode);
-	// Í¨Öª×ÊÔ´±ä»¯, valueÎª×ÜÖµ£¬²»ÊÇ±ä»¯Öµ
+	// é€šçŸ¥èµ„æºå˜åŒ–, valueä¸ºæ€»å€¼ï¼Œä¸æ˜¯å˜åŒ–å€¼
 	void NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue);
-	// ÏòÖĞĞÄ·şÎñÆ÷·¢ËÍÏûÏ¢
+	// å‘ä¸­å¿ƒæœåŠ¡å™¨å‘é€æ¶ˆæ¯
 	bool SendMessageToCenterServer(UINT msgID, void* pData, UINT size, int userID = 0, UINT mainID = 0, UINT assistID = 0, UINT handleCode = 0);
 public:
-	// ÅĞ¶ÏroomIDµÄ·şÎñÆ÷ÊÇ·ñ´æÔÚ
+	// åˆ¤æ–­roomIDçš„æœåŠ¡å™¨æ˜¯å¦å­˜åœ¨
 	bool IsRoomIDServerExists(int roomID);
-	// É¾³ı³ÌĞòÉú³ÉµÄÎŞĞ§ÎÄ¼ş
+	// åˆ é™¤ç¨‹åºç”Ÿæˆçš„æ— æ•ˆæ–‡ä»¶
 	void DeleteExpireFile();
-	// Íæ¼ÒÊÇ·ñÔÚÏß
+	// ç©å®¶æ˜¯å¦åœ¨çº¿
 	bool IsUserOnline(int userID);
-	// ×Ô¶¯¿ª·¿
+	// è‡ªåŠ¨å¼€æˆ¿
 	bool AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo);
-	// ÅĞ¶Ï´ËipÊÇ·ñ¿ÉÒÔ×¢²á
+	// åˆ¤æ–­æ­¤ipæ˜¯å¦å¯ä»¥æ³¨å†Œ
 	bool IsIpRegister(const OtherConfig &otherConfig, const char * ip);
-	// ÅĞ¶ÏÄ³¸öÍæ¼ÒÊÇ·ñÊÇÓÎ¿Í
+	// åˆ¤æ–­æŸä¸ªç©å®¶æ˜¯å¦æ˜¯æ¸¸å®¢
 	bool IsVisitorUser(int userID);
-	// »ñÈ¡Ëæ»úÍ·Ïñ
+	// è·å–éšæœºå¤´åƒ
 	std::string GetRandHeadURLBySex(BYTE sex);
 private:
-	// ³õÊ¼»¯ĞèÒª¶¨ÆÚ¼ì²éµÄÊÂ¼ş
+	// åˆå§‹åŒ–éœ€è¦å®šæœŸæ£€æŸ¥çš„äº‹ä»¶
 	void InitRounteCheckEvent();
-	// ¼ì²éredisÁ¬½ÓĞÔ
+	// æ£€æŸ¥redisè¿æ¥æ€§
 	void CheckRedisConnection();
-	// ¼ì²éĞÄÌø
+	// æ£€æŸ¥å¿ƒè·³
 	void CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeartBeatTime);
-	// ¶¨Ê±´æ´¢redisÊı¾İµ½DB updateAll=ÊÇ·ñÈ«²¿¸üĞÂ
+	// å®šæ—¶å­˜å‚¨redisæ•°æ®åˆ°DB updateAll=æ˜¯å¦å…¨éƒ¨æ›´æ–°
 	void RountineSaveRedisDataToDB(bool updateAll);
-	// ¶¨ÆÚ¼ì²éÃ»ÓĞ°ó¶¨Íæ¼ÒIDµÄÁ´½Ó
+	// å®šæœŸæ£€æŸ¥æ²¡æœ‰ç»‘å®šç©å®¶IDçš„é“¾æ¥
 	void RoutineCheckUnbindIDSocket();
-	// Í¨ÓÃ¶¨Ê±Æ÷
+	// é€šç”¨å®šæ—¶å™¨
 	void OnNormalTimer();
-	// ¿çÌì
+	// è·¨å¤©
 	void OnServerCrossDay();
-	// Áè³¿12µã
+	// å‡Œæ™¨12ç‚¹
 	void OnServerCrossDay12Hour();
-	// ¿çÖÜ
+	// è·¨å‘¨
 	void OnServerCrossWeek();
-	// Çå³ıÊ¤¾Ö°ñ
+	// æ¸…é™¤èƒœå±€æ¦œ
 	void CleanAllUserWinCount();
-	// ÇåÀí½ğ±Ò×êÊ¯ÅÅĞĞ°ñ
+	// æ¸…ç†é‡‘å¸é’»çŸ³æ’è¡Œæ¦œ
 	void CleanAllUserMoneyJewelsRank();
-	// ´¦ÀíÍæ¼ÒµÇÂ¼
+	// å¤„ç†ç©å®¶ç™»å½•
 	void OnUserLogon(const UserData &userData);
-	// ´¦ÀíÍæ¼ÒµÇ³ö
+	// å¤„ç†ç©å®¶ç™»å‡º
 	void OnUserLogout(int userID);
-	// ´¦ÀíÍæ¼Ò×¢²á
+	// å¤„ç†ç©å®¶æ³¨å†Œ
 	void OnUserRegister(const UserData &userData);
-	// Íæ¼Ò¿çÌì
+	// ç©å®¶è·¨å¤©
 	void OnUserCrossDay(int userID, int time);
-	// ÇåÀíÊı¾İ¿â¹ıÆÚÊı¾İ
+	// æ¸…ç†æ•°æ®åº“è¿‡æœŸæ•°æ®
 	void ClearDataBase();
-	// Éú³ÉĞÂ±í¼ÇÂ¼ÕËµ¥Êı¾İ
+	// ç”Ÿæˆæ–°è¡¨è®°å½•è´¦å•æ•°æ®
 	void AutoCreateNewTable(bool start);
 
-	// ÖĞĞÄ·şÏûÏ¢Ïà¹Ø
+	// ä¸­å¿ƒæœæ¶ˆæ¯ç›¸å…³
 private:
-	// ´¦ÀíÖĞĞÄ·şÎñÆ÷µÄÏûÏ¢
+	// å¤„ç†ä¸­å¿ƒæœåŠ¡å™¨çš„æ¶ˆæ¯
 	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID);
-	// ·şÎñÆ÷idÖØ¸´´¦Àí
+	// æœåŠ¡å™¨idé‡å¤å¤„ç†
 	bool OnCenterRepeatIDMessage(void* pData, int size);
-	// ·Ö²¼Ê½ÏµÍ³ĞÅÏ¢
+	// åˆ†å¸ƒå¼ç³»ç»Ÿä¿¡æ¯
 	bool OnCenterDistributedSystemInfoMessage(void* pData, int size);
-	// Ìßµô±¾·ş¾ÉÍæ¼Ò£¨²»Í¬Éè±¸Í¬Ê±µÇÂ½Ê¹ÓÃ£©
+	// è¸¢æ‰æœ¬æœæ—§ç©å®¶ï¼ˆä¸åŒè®¾å¤‡åŒæ—¶ç™»é™†ä½¿ç”¨ï¼‰
 	bool OnCenterKickOldUserMessage(void* pData, UINT size);
-	// ÌßÈËµôÏßÏûÏ¢(·âºÅÊ¹ÓÃ)
+	// è¸¢äººæ‰çº¿æ¶ˆæ¯(å°å·ä½¿ç”¨)
 	bool OnCenterKickUserMessage(void* pData, int size, int userID);
-	// ·¢²¼¹«¸æ
+	// å‘å¸ƒå…¬å‘Š
 	bool OnCenterNoticeMessage(void* pData, int size);
-	// È«·şÓÊ¼şÍ¨Öª
+	// å…¨æœé‚®ä»¶é€šçŸ¥
 	bool OnCenterAllUserMailMessage(void* pData, int size);
-	// ¹Ø·ş´¦Àí
+	// å…³æœå¤„ç†
 	bool OnCenterCloseServerMessage(void* pData, int size);
-	// ¿ª·ş´¦Àí
+	// å¼€æœå¤„ç†
 	bool OnCenterOpenServerMessage(void* pData, int size);
-	// Íæ¼Ò·¢ËÍÀ®°È
+	// ç©å®¶å‘é€å–‡å­
 	bool OnCenterSendHornMessage(void* pData, UINT size);
-	// ÏòÄ³¸öÍæ¼ÒÍÆËÍÏûÏ¢
+	// å‘æŸä¸ªç©å®¶æ¨é€æ¶ˆæ¯
 	bool OnCenterNotifyUserMessage(NetMessageHead * pNetHead, void* pData, int size, int userID);
-	// ÖĞĞÄ·ş×Ô¶¯¿ª·¿
+	// ä¸­å¿ƒæœè‡ªåŠ¨å¼€æˆ¿
 	bool OnCenterAutoCreateRoomMessage(void* pData, UINT size);
-	// ÊÖ»ú×¢²á
+	// æ‰‹æœºæ³¨å†Œ
 	bool OnCenterPhoneInfoMessage(void* pData, int size);
-	// ½±ÀøÈ«·şÍ¨Öª
+	// å¥–åŠ±å…¨æœé€šçŸ¥
 	bool OnCenterActivityRewardsMessage(void* pData, int size);
-	// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü£¨ÊµÊ±Èü£©
+	// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›ï¼ˆå®æ—¶èµ›ï¼‰
 	bool OnCenterSignUpMatchMessage(void* pData, UINT size);
-	// ±ÈÈü³¡Í¨ÖªÍæ¼Ò½øÈë±ÈÈü
+	// æ¯”èµ›åœºé€šçŸ¥ç©å®¶è¿›å…¥æ¯”èµ›
 	bool OnCenterLoaderStartMatchMessage(void* pData, UINT size);
-	// ÓĞÈË±¨Ãû»òÕßÍË³ö±ÈÈü(¶¨Ê±Èü)
+	// æœ‰äººæŠ¥åæˆ–è€…é€€å‡ºæ¯”èµ›(å®šæ—¶èµ›)
 	bool OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT size);
 
-	//ÏòPHPÇëÇó½Ó¿ÚÏà¹Ø
+	//å‘PHPè¯·æ±‚æ¥å£ç›¸å…³
 private:
-	// ¸øphp·¢ËÍÏûÏ¢½Ó¿Ú
+	// ç»™phpå‘é€æ¶ˆæ¯æ¥å£
 	void SendHTTPMessage(int userID, const std::string &url, BYTE postType);
-	// Íæ¼Ò×¢²á·¢ËÍhttpÇëÇó
+	// ç©å®¶æ³¨å†Œå‘é€httpè¯·æ±‚
 	bool SendHTTPUserRegisterMessage(int userID);
-	// Íæ¼ÒµÇÂ½ºÍµÇ³öÍ¨Öª typeÀàĞÍ£º0µÇÂ½£¬1µÇ³ö
+	// ç©å®¶ç™»é™†å’Œç™»å‡ºé€šçŸ¥ typeç±»å‹ï¼š0ç™»é™†ï¼Œ1ç™»å‡º
 	bool SendHTTPUserLogonLogout(int userID, BYTE type);
 };

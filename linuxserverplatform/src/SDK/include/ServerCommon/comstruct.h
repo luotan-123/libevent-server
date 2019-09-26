@@ -2,66 +2,66 @@
 
 #pragma pack(1)
 
-///ÓÎÏ·×é¼şĞÅÏ¢½á¹¹ £¨·şÎñÆ÷¶¯Ì¬¿â×é¼ş»ñÈ¡£©
+///æ¸¸æˆç»„ä»¶ä¿¡æ¯ç»“æ„ ï¼ˆæœåŠ¡å™¨åŠ¨æ€åº“ç»„ä»¶è·å–ï¼‰
 struct ServerDllInfoStruct
 {
-	///ÓÎÏ·×é¼şĞÅÏ¢
-	UINT						uServiceVer;						///·şÎñ°æ±¾
-	UINT						uNameID;							///ÓÎÏ·Ãû×Ö ID
-	UINT						uSupportType;						///Ö§³ÖÀàĞÍ
-	UINT						uDeskPeople;						///ÓÎÏ·ÈËÊı
-	char						szGameName[61];						///ÓÎÏ·Ãû×Ö
-	char						szGameTable[61];					///Êı¾İ¿â±íÃû×Ö
-	char						szDLLFileName[61];					///ÎÄ¼şÃû×Ö
+	///æ¸¸æˆç»„ä»¶ä¿¡æ¯
+	UINT						uServiceVer;						///æœåŠ¡ç‰ˆæœ¬
+	UINT						uNameID;							///æ¸¸æˆåå­— ID
+	UINT						uSupportType;						///æ”¯æŒç±»å‹
+	UINT						uDeskPeople;						///æ¸¸æˆäººæ•°
+	char						szGameName[61];						///æ¸¸æˆåå­—
+	char						szGameTable[61];					///æ•°æ®åº“è¡¨åå­—
+	char						szDLLFileName[61];					///æ–‡ä»¶åå­—
 
-	///¸¨ÖúĞÅÏ¢
-	char						szWriter[61];						///Èí¼ş¿ª·¢Õß
-	char						szDllNote[51];						///±¸×¢ĞÅÏ¢
+	///è¾…åŠ©ä¿¡æ¯
+	char						szWriter[61];						///è½¯ä»¶å¼€å‘è€…
+	char						szDllNote[51];						///å¤‡æ³¨ä¿¡æ¯
 };
 
-//¹«¹²×é¼ş¼ÓÔØĞÅÏ¢½á¹¹	£¨·şÎñÆ÷ÉèÖÃÊı¾İ£©
+//å…¬å…±ç»„ä»¶åŠ è½½ä¿¡æ¯ç»“æ„	ï¼ˆæœåŠ¡å™¨è®¾ç½®æ•°æ®ï¼‰
 struct ManageInfoStruct
 {
-	bool						bPrivate;							//ÊÇ·ñË½ÓĞ·¿
-	char						szGameTable[31];					///ĞÅÏ¢±íÃû×Ö
-	char						szGameRoomName[61];					///·şÎñÆ÷Ãû×Ö
-	///ÖĞĞÄÊı¾İ¿âĞÅÏ¢
-	char						szSQLIP[16];						///ÖĞĞÄÊı¾İ¿âµØÖ·
-	char						szSQLName[61];						///ÖĞĞÄÊı¾İ¿âÓÃ»§Ãû×Ö
-	char						szSQLPass[61];						///ÖĞĞÄÊı¾İ¿âÃÜÂë
-	///µÇÂ½Êı¾İ¿âĞÅÏ¢
-	char						szLogonSQLIP[16];					///µÇÂ½Êı¾İ¿âµØÖ·
-	///±¾µØÊı¾İ¿âĞÅÏ¢
-	char						szNativeSQLIP[61];					///±¾µØÊı¾İ¿âµØÖ·
-	///»ìÕ½³¡·¿¼äĞÅÏ¢±í
+	bool						bPrivate;							//æ˜¯å¦ç§æœ‰æˆ¿
+	char						szGameTable[31];					///ä¿¡æ¯è¡¨åå­—
+	char						szGameRoomName[61];					///æœåŠ¡å™¨åå­—
+	///ä¸­å¿ƒæ•°æ®åº“ä¿¡æ¯
+	char						szSQLIP[16];						///ä¸­å¿ƒæ•°æ®åº“åœ°å€
+	char						szSQLName[61];						///ä¸­å¿ƒæ•°æ®åº“ç”¨æˆ·åå­—
+	char						szSQLPass[61];						///ä¸­å¿ƒæ•°æ®åº“å¯†ç 
+	///ç™»é™†æ•°æ®åº“ä¿¡æ¯
+	char						szLogonSQLIP[16];					///ç™»é™†æ•°æ®åº“åœ°å€
+	///æœ¬åœ°æ•°æ®åº“ä¿¡æ¯
+	char						szNativeSQLIP[61];					///æœ¬åœ°æ•°æ®åº“åœ°å€
+	///æ··æˆ˜åœºæˆ¿é—´ä¿¡æ¯è¡¨
 	char						szBattleGameTable[31];
-	char						szLockTable[31];					///Ëø¶¨±íÃû×Ö
-	char						szIPRuleTable[31];					///IP ÏŞÖÆ±íÃû×Ö
-	char						szNameRuleTable[31];				///UserNameÏŞÖÆ±íÃû×Ö
-	///ÓÎÏ·ĞÅÏ¢
-	UINT						uNameID;							///ÓÎÏ·Ãû×Ö ID
-	UINT						dwRoomRule;							///ÓÎÏ·ÉèÖÃ¹æÔò
-	UINT						dwUserPower;						///ÓÎÏ·¸½¼ÓÈ¨ÏŞ
-	///ÉèÖÃĞÅÏ¢
-	UINT						uComType;							///ÓÎÏ·ÀàĞÍ
-	UINT						uDeskType;							///ÓÎÏ·×ÀÀàĞÍ£¬Ö÷ÒªÎªÌí¼Ó°Ù¼ÒÀÖ×À
-	UINT						uBasePoint;							///ÓÎÏ·»ù´¡·Ö
-	UINT						uLessPoint;							///ÓÎÏ·µÄ×îÉÙ·ÖÊı
-	UINT						uMaxPoint;							///ÓÎÏ·µÄ×î´ó·ÖÊı
-	UINT						uMaxLimite;							///×î´ó·â¶¥Öµ
-	UINT						uRunPublish;						///ÌÓÅÜ¿Û·Ö
-	UINT						uTax;								///Ë°ÊÕ±ÈÀı
-	UINT						uListenPort;						///¼àÌı¶Ë¿Ú
-	UINT						uMaxPeople;							///×î´óÁ¬½ÓÊıÄ¿
-	char						szCenterIP[24];						///ÖĞĞÄ·şip
-	///·şÎñÆ÷ĞÅÏ¢
-	UINT						uRoomID;							///ÓÎÏ··şÎñÆ÷ ID ºÅÂë
-	int							iRoomType;							///·¿¼äÀàĞÍ
-	int							iRoomSort;							///·¿¼ä·ÖÀà
-	int							iRoomLevel;							///·¿¼äµÈ¼¶
-	UINT						uDeskCount;							///ÓÎÏ·×ÀÊıÄ¿
-	UINT						uStopLogon;							///Í£Ö¹µÇÂ½·¿¼ä
-	char						bCanCombineDesk;					///ÊÇ·ñ¿ÉÒÔ×é×À
+	char						szLockTable[31];					///é”å®šè¡¨åå­—
+	char						szIPRuleTable[31];					///IP é™åˆ¶è¡¨åå­—
+	char						szNameRuleTable[31];				///UserNameé™åˆ¶è¡¨åå­—
+	///æ¸¸æˆä¿¡æ¯
+	UINT						uNameID;							///æ¸¸æˆåå­— ID
+	UINT						dwRoomRule;							///æ¸¸æˆè®¾ç½®è§„åˆ™
+	UINT						dwUserPower;						///æ¸¸æˆé™„åŠ æƒé™
+	///è®¾ç½®ä¿¡æ¯
+	UINT						uComType;							///æ¸¸æˆç±»å‹
+	UINT						uDeskType;							///æ¸¸æˆæ¡Œç±»å‹ï¼Œä¸»è¦ä¸ºæ·»åŠ ç™¾å®¶ä¹æ¡Œ
+	UINT						uBasePoint;							///æ¸¸æˆåŸºç¡€åˆ†
+	UINT						uLessPoint;							///æ¸¸æˆçš„æœ€å°‘åˆ†æ•°
+	UINT						uMaxPoint;							///æ¸¸æˆçš„æœ€å¤§åˆ†æ•°
+	UINT						uMaxLimite;							///æœ€å¤§å°é¡¶å€¼
+	UINT						uRunPublish;						///é€ƒè·‘æ‰£åˆ†
+	UINT						uTax;								///ç¨æ”¶æ¯”ä¾‹
+	UINT						uListenPort;						///ç›‘å¬ç«¯å£
+	UINT						uMaxPeople;							///æœ€å¤§è¿æ¥æ•°ç›®
+	char						szCenterIP[24];						///ä¸­å¿ƒæœip
+	///æœåŠ¡å™¨ä¿¡æ¯
+	UINT						uRoomID;							///æ¸¸æˆæœåŠ¡å™¨ ID å·ç 
+	int							iRoomType;							///æˆ¿é—´ç±»å‹
+	int							iRoomSort;							///æˆ¿é—´åˆ†ç±»
+	int							iRoomLevel;							///æˆ¿é—´ç­‰çº§
+	UINT						uDeskCount;							///æ¸¸æˆæ¡Œæ•°ç›®
+	UINT						uStopLogon;							///åœæ­¢ç™»é™†æˆ¿é—´
+	char						bCanCombineDesk;					///æ˜¯å¦å¯ä»¥ç»„æ¡Œ
 
 	ManageInfoStruct()
 	{
@@ -69,20 +69,20 @@ struct ManageInfoStruct
 	}
 };
 
-//ÄÚºËÊı¾İ £¨·şÎñÆ÷ ¶¯Ì¬¿â ×é¼şÆô¶¯ÉèÖÃ£©
+//å†…æ ¸æ•°æ® ï¼ˆæœåŠ¡å™¨ åŠ¨æ€åº“ ç»„ä»¶å¯åŠ¨è®¾ç½®ï¼‰
 struct KernelInfoStruct
 {
-	UINT						uNameID;							//ÓÎÏ·Ãû×Ö ID ºÅÂë
-	UINT						uDeskPeople;						//ÓÎÏ·ÈËÊı
+	UINT						uNameID;							//æ¸¸æˆåå­— ID å·ç 
+	UINT						uDeskPeople;						//æ¸¸æˆäººæ•°
 
-	UINT						uMinDeskPeople;						//²¿·ÖÓÎÏ·Ö§³ÖM-N¸öÈËÓÎÏ·
+	UINT						uMinDeskPeople;						//éƒ¨åˆ†æ¸¸æˆæ”¯æŒM-Nä¸ªäººæ¸¸æˆ
 
-	BYTE						bMaxVer;							//Èí¼ş×î¸ß°æ±¾
-	BYTE						bLessVer;							//Èí¼ş×îµÍ°æ±¾
-	BYTE						bStartSQLDataBase;					//Ê¹ÓÃÊı¾İ¿âÁ¬½Ó
-	BYTE						bNativeDataBase;					//Ê¹ÓÃ±¾µØÊı¾İ¿â
-	BYTE						bLogonDataBase;						//Ê¹ÓÃµÇÂ½Êı¾İ¿â
-	BYTE						bStartTCPSocket;					//ÊÇ·ñÆô¶¯ÍøÂç
+	BYTE						bMaxVer;							//è½¯ä»¶æœ€é«˜ç‰ˆæœ¬
+	BYTE						bLessVer;							//è½¯ä»¶æœ€ä½ç‰ˆæœ¬
+	BYTE						bStartSQLDataBase;					//ä½¿ç”¨æ•°æ®åº“è¿æ¥
+	BYTE						bNativeDataBase;					//ä½¿ç”¨æœ¬åœ°æ•°æ®åº“
+	BYTE						bLogonDataBase;						//ä½¿ç”¨ç™»é™†æ•°æ®åº“
+	BYTE						bStartTCPSocket;					//æ˜¯å¦å¯åŠ¨ç½‘ç»œ
 
 	KernelInfoStruct()
 	{

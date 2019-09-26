@@ -63,7 +63,7 @@ bool CRedisBase::ParseKey(const char* key, char* tableName, int& id)
 	return true;
 }
 
-// ½âÎöredisÖĞµÄkey, "tableName|id"ĞÎÊ½
+// è§£æredisä¸­çš„key, "tableName|id"å½¢å¼
 bool CRedisBase::ParseKey(const char* key, char* tableName, long long& id)
 {
 	if (!key || !tableName)
@@ -132,7 +132,7 @@ bool CRedisBase::IsKeyExists(const char* key)
 	return ret;
 }
 
-// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 bool CRedisBase::IsKeyExists(const char* mainKey, int mainID, int assID)
 {
 	if (!mainKey)
@@ -157,7 +157,7 @@ bool CRedisBase::IsKeyExists(const char* mainKey, int mainID, int assID)
 	return ret;
 }
 
-// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 bool CRedisBase::IsKeyExists(const char* mainKey, int mainID)
 {
 	if (!mainKey)
@@ -182,7 +182,7 @@ bool CRedisBase::IsKeyExists(const char* mainKey, int mainID)
 	return ret;
 }
 
-// redis ÖĞµÄkeyÊÇ·ñ´æÔÚ
+// redis ä¸­çš„keyæ˜¯å¦å­˜åœ¨
 bool CRedisBase::IsKeyExists(const char* mainKey, const char* assKey)
 {
 	if (!mainKey || !assKey)
@@ -282,7 +282,7 @@ bool CRedisBase::SremMember(const char* key, const char* member)
 	return ret;
 }
 
-// É¾³ı¼¯ºÏ£¨ÓĞĞò¼¯ºÏ£©ÔªËØ
+// åˆ é™¤é›†åˆï¼ˆæœ‰åºé›†åˆï¼‰å…ƒç´ 
 bool CRedisBase::ZremMember(const char* key, const std::vector<long long>& memberVec)
 {
 	int size = memberVec.size();
@@ -310,7 +310,7 @@ bool CRedisBase::ZremMember(const char* key, const std::vector<long long>& membe
 	return true;
 }
 
-// É¾³ı¼¯ºÏ£¨ÓĞĞò¼¯ºÏ£©ÔªËØ(intÀàĞÍ)
+// åˆ é™¤é›†åˆï¼ˆæœ‰åºé›†åˆï¼‰å…ƒç´ (intç±»å‹)
 bool CRedisBase::ZremMember(const char* key, const std::vector<int>& memberVec)
 {
 	int size = memberVec.size();
@@ -338,7 +338,7 @@ bool CRedisBase::ZremMember(const char* key, const std::vector<int>& memberVec)
 	return true;
 }
 
-// »ñÈ¡ÓĞĞò¼¯ºÏµÄ´óĞ¡
+// è·å–æœ‰åºé›†åˆçš„å¤§å°
 int CRedisBase::GetZSetSize(const char* key)
 {
 	if (!key)
@@ -458,14 +458,14 @@ void CRedisBase::CheckConnection(const RedisConfig& redisConfig)
 
 	if (needReconnect)
 	{
-		ERROR_LOG("redisÁ¬½Ó¹Ø±Õ£¬ÕıÔÚÖØĞÂÁ¬½Ó£ºtype=%d,ip=%s,port=%d", redisConfig.redisTypeID, redisConfig.ip, redisConfig.port);
+		ERROR_LOG("redisè¿æ¥å…³é—­ï¼Œæ­£åœ¨é‡æ–°è¿æ¥ï¼štype=%d,ip=%s,port=%d", redisConfig.redisTypeID, redisConfig.ip, redisConfig.port);
 		ReConnect(redisConfig);
 	}
 }
 
 bool CRedisBase::ReConnect(const RedisConfig& redisConfig)
 {
-	// ÊÍ·Åµô¾ÉµÄ
+	// é‡Šæ”¾æ‰æ—§çš„
 	redisFree(m_pContext);
 
 	timeval tv = { 3, 0 };
@@ -473,7 +473,7 @@ bool CRedisBase::ReConnect(const RedisConfig& redisConfig)
 	m_pContext = redisConnectWithTimeout(redisConfig.ip, redisConfig.port, tv);
 	if (!m_pContext)
 	{
-		ERROR_LOG("ÖØÁ¬redisÊ§°Ü:type=%d,ip=%s,port=%d", redisConfig.redisTypeID, redisConfig.ip, redisConfig.port);
+		ERROR_LOG("é‡è¿rediså¤±è´¥:type=%d,ip=%s,port=%d", redisConfig.redisTypeID, redisConfig.ip, redisConfig.port);
 		return false;
 	}
 
@@ -483,7 +483,7 @@ bool CRedisBase::ReConnect(const RedisConfig& redisConfig)
 		return false;
 	}
 
-	INFO_LOG("=== ÖØÁ¬redis-server:type=%d,ip=%s,port=%d ===", redisConfig.redisTypeID, redisConfig.ip, redisConfig.port);
+	INFO_LOG("=== é‡è¿redis-server:type=%d,ip=%s,port=%d ===", redisConfig.redisTypeID, redisConfig.ip, redisConfig.port);
 
 	return true;
 }
@@ -551,7 +551,7 @@ bool CRedisBase::hmset(const char* table, const char* id, std::unordered_map<std
 	{
 		redisReply* pReply = NULL;
 
-		// ÏÈ±£´æµ½¼¯ºÏ
+		// å…ˆä¿å­˜åˆ°é›†åˆ
 		pReply = (redisReply*)redisCommand(m_pContext, "SADD %s %s", updateSet == NULL ? CACHE_UPDATE_SET : updateSet, key.c_str());
 		if (!pReply)
 		{
@@ -599,7 +599,7 @@ bool CRedisBase::hmset(const char* table, const char* id, std::unordered_map<std
 void CRedisBase::TestRedis(const char* name)
 {
 	redisReply* pReply = NULL;
-	const int expireTime = 100;		// Ê§Ğ§Ê±¼ä(ms)
+	const int expireTime = 100;		// å¤±æ•ˆæ—¶é—´(ms)
 	int lockCount = 0;
 
 	pReply = (redisReply*)redisCommand(m_pContext, "SET %s 0 PX %d NX", name, expireTime);
@@ -620,7 +620,7 @@ void CRedisBase::TestRedis(const char* name)
 		{
 			if (!strcmp(pReply->str, "OK"))
 			{
-				// ÉèÖÃ³É¹¦ÁË
+				// è®¾ç½®æˆåŠŸäº†
 				freeReplyObject(pReply);
 				break;
 			}
@@ -639,10 +639,10 @@ void CRedisBase::TestRedis(const char* name)
 		m_sleepTime = 10;
 	}
 
-	INFO_LOG("%s Ğ´Êı¾İ %d", name, lockCount);
+	INFO_LOG("%s å†™æ•°æ® %d", name, lockCount);
 }
 
-// »ñÈ¡Ä³¸ö¼üÖµË÷Òı
+// è·å–æŸä¸ªé”®å€¼ç´¢å¼•
 long long CRedisBase::GetKeyIndex(const char* key)
 {
 	long long llIndex = 1;
@@ -666,7 +666,7 @@ long long CRedisBase::GetKeyIndex(const char* key)
 	return llIndex;
 }
 
-// ÉèÖÃÄ³¸ö¼üÖµË÷Òı
+// è®¾ç½®æŸä¸ªé”®å€¼ç´¢å¼•
 bool CRedisBase::SetKeyIndex(const char* key, long long llIndex)
 {
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SET %s %lld", key, llIndex);
@@ -680,7 +680,7 @@ bool CRedisBase::SetKeyIndex(const char* key, long long llIndex)
 	return true;
 }
 
-// »ñÈ¡×ÔÔö×Ö·û´®
+// è·å–è‡ªå¢å­—ç¬¦ä¸²
 long long CRedisBase::GetIncrKeyIndex(const char* key)
 {
 	if (key == NULL)
@@ -704,7 +704,7 @@ long long CRedisBase::GetIncrKeyIndex(const char* key)
 	return ret;
 }
 
-// Êı¾İ¿â
+// æ•°æ®åº“
 void CRedisBase::SetDBManage(CDataBaseManage* pDBManage)
 {
 	if (pDBManage)
@@ -744,7 +744,7 @@ void CRedisLock::Lock()
 	}
 
 	redisReply* pReply = NULL;
-	const int expireTime = 1000;		// Ê§Ğ§Ê±¼ä(ms)
+	const int expireTime = 1000;		// å¤±æ•ˆæ—¶é—´(ms)
 	int lockCount = 0;
 
 	while (true)
@@ -762,7 +762,7 @@ void CRedisLock::Lock()
 		{
 			if (!strcmp(pReply->str, "OK"))
 			{
-				// ÉèÖÃ³É¹¦ÁË
+				// è®¾ç½®æˆåŠŸäº†
 				freeReplyObject(pReply);
 				break;
 			}
@@ -770,7 +770,7 @@ void CRedisLock::Lock()
 
 		if (pReply->type == REDIS_REPLY_ERROR)
 		{
-			ERROR_LOG("##########  ÉèÖÃ·Ö²¼Ê½ËøÊ§°Ü£¬¿ÉÄÜ»áµ¼ÖÂÊı¾İÍ¬²½ÎÊÌâ ERROR:¡¾%s¡¿  ###########", pReply->str);
+			ERROR_LOG("##########  è®¾ç½®åˆ†å¸ƒå¼é”å¤±è´¥ï¼Œå¯èƒ½ä¼šå¯¼è‡´æ•°æ®åŒæ­¥é—®é¢˜ ERROR:ã€%sã€‘  ###########", pReply->str);
 			freeReplyObject(pReply);
 			break;
 		}
@@ -785,7 +785,7 @@ void CRedisLock::Lock()
 
 	if (lockCount >= 2)
 	{
-		INFO_LOG("RedisLock³¬Ê± lockCount=%d m_sleepTime=%d key=%s ", lockCount, m_sleepTime, m_key);
+		INFO_LOG("RedisLockè¶…æ—¶ lockCount=%d m_sleepTime=%d key=%s ", lockCount, m_sleepTime, m_key);
 	}
 }
 

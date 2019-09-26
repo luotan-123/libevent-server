@@ -9,7 +9,7 @@
 #define USER_IDENTITY_TYPE_SUPER 1
 #endif
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 {
 	//InitMinDump();
@@ -19,7 +19,7 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 	::ZeroMemory(m_iBackCard, sizeof(m_iBackCard));
 	::ZeroMemory(m_iDeskCard, sizeof(m_iDeskCard));
 
-	//ÒÑ³õÊ¼»¯
+	//å·²åˆå§‹åŒ–
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
 		m_iLastCardCount[i] = 0;
@@ -33,7 +33,7 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 	m_iGameFlag = GS_FLAG_NORMAL;
 	m_iUpGradePeople = -1;
 	m_iLeaveArgee = 0;
-	m_iNtFirstCount = 0;		//µÚÒ»Ê×ÅÆÇåÁã
+	m_iNtFirstCount = 0;		//ç¬¬ä¸€é¦–ç‰Œæ¸…é›¶
 	//	m_iNowCallScorePeople = -1;		//
 	m_iBaseOutCount = 0;
 	m_iDealPeople = -1;
@@ -44,16 +44,16 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 	SetGameStation(GS_WAIT_ARGEE);
 	m_bThrowoutCard = 0x00;
 	m_bFirstCallScore = 255;
-	m_iPrepareNT = 255;		//Ô¤±¸×¯¼Ò
+	m_iPrepareNT = 255;		//é¢„å¤‡åº„å®¶
 	m_iFirstShow = 255;
 	m_iCurrentRobPeople = 255;
 	m_iFirstRobNt = 255;
 	m_bHaveSendBack = false;
 
 	::memset(m_iDeskCardCount, 0, sizeof(m_iDeskCardCount));
-	::memset(m_bAuto, 0, sizeof(m_bAuto));				//ÍĞ¹Ü
-	::memset(m_iCallScore, -1, sizeof(m_iCallScore));		//½Ğ·Ö
-	::memset(m_bIsCall, false, sizeof(m_bIsCall));		//±ê¼Ç½Ğ·Ö
+	::memset(m_bAuto, 0, sizeof(m_bAuto));				//æ‰˜ç®¡
+	::memset(m_iCallScore, -1, sizeof(m_iCallScore));		//å«åˆ†
+	::memset(m_bIsCall, false, sizeof(m_bIsCall));		//æ ‡è®°å«åˆ†
 	::memset(m_bCanleave, 1, sizeof(m_bCanleave));
 	::memset(m_bUserReady, 0, sizeof(m_bUserReady));
 	::memset(m_iRobStation, 0, sizeof(m_iRobStation));
@@ -76,20 +76,20 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 	m_GameMutiple.IniData(m_iBaseMult);
 	m_bRetryStart = false;
 	m_iFengDing = 0;
-	m_iRunTime = 0;//µ¥Î»Ãë
-	m_iGameBeginTime = 0; //µ¥Î»Ãë
+	m_iRunTime = 0;//å•ä½ç§’
+	m_iGameBeginTime = 0; //å•ä½ç§’
 	m_iGameEndTime = 0;
 
 	m_lastCardListIndex = 0;
 	memset(m_lastCardList, 0, sizeof(m_lastCardList));
 }
 
-//Îö¹¹º¯Êı
+//ææ„å‡½æ•°
 CServerGameDesk::~CServerGameDesk(void)
 {
 }
 
-//¼ÓÔØ¾ÖÊıÏŞÖÆ
+//åŠ è½½å±€æ•°é™åˆ¶
 BOOL CServerGameDesk::LoadExtIni()
 {
 	char szfile[256] = "";
@@ -98,7 +98,7 @@ BOOL CServerGameDesk::LoadExtIni()
 
 	int roomType = GetRoomType();
 
-	///////////////////////////////////ÓÎÏ·ÅäÖÃ///////////////////////////////////////
+	///////////////////////////////////æ¸¸æˆé…ç½®///////////////////////////////////////
 	string key = TEXT("game");
 	m_bHaveKing = f.GetKeyVal(key, "haveking", 1);
 	m_iPlayCard = f.GetKeyVal(key, "card", 1);
@@ -128,18 +128,18 @@ BOOL CServerGameDesk::LoadExtIni()
 	}
 	m_iGameMaxLimit = f.GetKeyVal(key, "GameMaxLimit", 0);
 	m_iLimitPoint = f.GetKeyVal(key, "LimitPoint", 0);
-	m_bNoXiPai = f.GetKeyVal(key, "XiPai", 0); //1ÊÇ²»Ï´ÅÆÄ£Ê½
+	m_bNoXiPai = f.GetKeyVal(key, "XiPai", 0); //1æ˜¯ä¸æ´—ç‰Œæ¨¡å¼
 	m_bKingCanReplace = f.GetKeyVal(key, "kingcanreplace", 0);
 	m_iTimeOutNoCardOut = f.GetKeyVal(key, "TimeOutNoCardOut", 1);
-	m_iModel = f.GetKeyVal(key, "Model", 1); //1:½Ğ·ÖÄ£Ê½,0:ÇÀµØÖ÷Ä£Ê½
-	m_bRobnt = f.GetKeyVal(key, "robnt", 1);   //£¨1£ºÓÎÏ·±ØĞëÇÀµØÖ÷ 0£ºÓÉÓÎÏ·¾ö¶¨µØÖ÷£©
+	m_iModel = f.GetKeyVal(key, "Model", 1); //1:å«åˆ†æ¨¡å¼,0:æŠ¢åœ°ä¸»æ¨¡å¼
+	m_bRobnt = f.GetKeyVal(key, "robnt", 1);   //ï¼ˆ1ï¼šæ¸¸æˆå¿…é¡»æŠ¢åœ°ä¸» 0ï¼šç”±æ¸¸æˆå†³å®šåœ°ä¸»ï¼‰
 	m_bTurnRule = f.GetKeyVal(key, "TurnRule", 1);
-	m_iLimitPlayGame = f.GetKeyVal(key, "limitplay", 1); ////ÖÁÉÙ´òÍê¶àÉÙ¾Ö
-	m_bAdddouble = f.GetKeyVal(key, "adddouble", 0); //ÊÇ·ñ¼Ó±¶
-	m_bShowcard = f.GetKeyVal(key, "showcard", 0);   //ÊÇ·ñÃ÷ÅÆ
+	m_iLimitPlayGame = f.GetKeyVal(key, "limitplay", 1); ////è‡³å°‘æ‰“å®Œå¤šå°‘å±€
+	m_bAdddouble = f.GetKeyVal(key, "adddouble", 0); //æ˜¯å¦åŠ å€
+	m_bShowcard = f.GetKeyVal(key, "showcard", 0);   //æ˜¯å¦æ˜ç‰Œ
 
 
-	//////////////////////////////////ÓÎÏ·Ê±¼ä////////////////////////////////////////
+	//////////////////////////////////æ¸¸æˆæ—¶é—´////////////////////////////////////////
 	key = TEXT("other");
 	m_iBeginTime = f.GetKeyVal(key, "begintime", 15);
 	m_iThinkTime = f.GetKeyVal(key, "thinktime", 20);
@@ -148,35 +148,35 @@ BOOL CServerGameDesk::LoadExtIni()
 	m_iCallScoreTime = f.GetKeyVal(key, "CallScoretime", 15);
 	m_iAddDoubleTime = f.GetKeyVal(key, "adddoubletime", 5);
 
-	/////////////////////////////////ÅÆĞÍ/////////////////////////////////////////
+	/////////////////////////////////ç‰Œå‹/////////////////////////////////////////
 	key = TEXT("cardshape");
 	m_iCardShape &= 0x00000000;
-	m_iCardShape |= (f.GetKeyVal(key, "one", 1) & 0xFFFFFFFF);//µ¥ÕÅ
-	m_iCardShape |= ((f.GetKeyVal(key, "two", 1) << 1) & 0xFFFFFFFF);//¶Ô
-	m_iCardShape |= ((f.GetKeyVal(key, "three", 1) << 2) & 0xFFFFFFFF);//ÈıÌõ
-	m_iCardShape |= ((f.GetKeyVal(key, "threeandone", 1) << 3) & 0xFFFFFFFF);//Èı´øµ¥
-	m_iCardShape |= ((f.GetKeyVal(key, "threeandtwo", 0) << 4) & 0xFFFFFFFF);//Èı´ø¶şµ¥
-	m_iCardShape |= ((f.GetKeyVal(key, "threeanddouble", 1) << 5) & 0xFFFFFFFF);//Èı´ø¶Ô
-	m_iCardShape |= ((f.GetKeyVal(key, "traight", 1) << 6) & 0xFFFFFFFF);//µ¥Ë³
-	m_iCardShape |= ((f.GetKeyVal(key, "traightflush", 0) << 7) & 0xFFFFFFFF);//Í¬»¨Ë³
-	m_iCardShape |= ((f.GetKeyVal(key, "twosequence", 1) << 8) & 0xFFFFFFFF);//Ë«Ë³
-	m_iCardShape |= ((f.GetKeyVal(key, "threesequence", 1) << 9) & 0xFFFFFFFF);//ÈıË³
-	m_iCardShape |= ((f.GetKeyVal(key, "threeandonesequence", 1) << 10) & 0xFFFFFFFF);//Èı´ø´øµ¥
-	m_iCardShape |= ((f.GetKeyVal(key, "threeandtwosequence", 0) << 11) & 0xFFFFFFFF);//Èı´ø¶şµ¥Ë³
-	m_iCardShape |= ((f.GetKeyVal(key, "threeanddublesequence", 1) << 12) & 0xFFFFFFFF);//Èı´ø¶ÔË³
-	m_iCardShape |= ((f.GetKeyVal(key, "fourandone", 0) << 13) & 0xFFFFFFFF);//ËÄ´øÒ»
-	m_iCardShape |= ((f.GetKeyVal(key, "fourandtwo", 1) << 14) & 0xFFFFFFFF);//ËÄ´ø¶şµ¥
-	m_iCardShape |= ((f.GetKeyVal(key, "fourandonedouble", 1) << 15) & 0xFFFFFFFF);//ËÄ´øÒ»¶Ô
-	m_iCardShape |= ((f.GetKeyVal(key, "fourandtwodouble", 1) << 16) & 0xFFFFFFFF);//ËÄ´ø¶ş¶Ô
+	m_iCardShape |= (f.GetKeyVal(key, "one", 1) & 0xFFFFFFFF);//å•å¼ 
+	m_iCardShape |= ((f.GetKeyVal(key, "two", 1) << 1) & 0xFFFFFFFF);//å¯¹
+	m_iCardShape |= ((f.GetKeyVal(key, "three", 1) << 2) & 0xFFFFFFFF);//ä¸‰æ¡
+	m_iCardShape |= ((f.GetKeyVal(key, "threeandone", 1) << 3) & 0xFFFFFFFF);//ä¸‰å¸¦å•
+	m_iCardShape |= ((f.GetKeyVal(key, "threeandtwo", 0) << 4) & 0xFFFFFFFF);//ä¸‰å¸¦äºŒå•
+	m_iCardShape |= ((f.GetKeyVal(key, "threeanddouble", 1) << 5) & 0xFFFFFFFF);//ä¸‰å¸¦å¯¹
+	m_iCardShape |= ((f.GetKeyVal(key, "traight", 1) << 6) & 0xFFFFFFFF);//å•é¡º
+	m_iCardShape |= ((f.GetKeyVal(key, "traightflush", 0) << 7) & 0xFFFFFFFF);//åŒèŠ±é¡º
+	m_iCardShape |= ((f.GetKeyVal(key, "twosequence", 1) << 8) & 0xFFFFFFFF);//åŒé¡º
+	m_iCardShape |= ((f.GetKeyVal(key, "threesequence", 1) << 9) & 0xFFFFFFFF);//ä¸‰é¡º
+	m_iCardShape |= ((f.GetKeyVal(key, "threeandonesequence", 1) << 10) & 0xFFFFFFFF);//ä¸‰å¸¦å¸¦å•
+	m_iCardShape |= ((f.GetKeyVal(key, "threeandtwosequence", 0) << 11) & 0xFFFFFFFF);//ä¸‰å¸¦äºŒå•é¡º
+	m_iCardShape |= ((f.GetKeyVal(key, "threeanddublesequence", 1) << 12) & 0xFFFFFFFF);//ä¸‰å¸¦å¯¹é¡º
+	m_iCardShape |= ((f.GetKeyVal(key, "fourandone", 0) << 13) & 0xFFFFFFFF);//å››å¸¦ä¸€
+	m_iCardShape |= ((f.GetKeyVal(key, "fourandtwo", 1) << 14) & 0xFFFFFFFF);//å››å¸¦äºŒå•
+	m_iCardShape |= ((f.GetKeyVal(key, "fourandonedouble", 1) << 15) & 0xFFFFFFFF);//å››å¸¦ä¸€å¯¹
+	m_iCardShape |= ((f.GetKeyVal(key, "fourandtwodouble", 1) << 16) & 0xFFFFFFFF);//å››å¸¦äºŒå¯¹
 	m_iCardShape |= ((f.GetKeyVal(key, "510k", 0) << 17) & 0xFFFFFFFF);			//510k
-	m_iCardShape |= ((f.GetKeyVal(key, "master510k", 0) << 18) & 0xFFFFFFFF);		//Í¬»¨510k
-	m_iCardShape |= ((f.GetKeyVal(key, "bomb", 1) << 19) & 0xFFFFFFFF);			//Õ¨µ¯
-	m_iCardShape |= ((f.GetKeyVal(key, "kingbomb", 1) << 20) & 0xFFFFFFFF);		//ÍõÕ¨
+	m_iCardShape |= ((f.GetKeyVal(key, "master510k", 0) << 18) & 0xFFFFFFFF);		//åŒèŠ±510k
+	m_iCardShape |= ((f.GetKeyVal(key, "bomb", 1) << 19) & 0xFFFFFFFF);			//ç‚¸å¼¹
+	m_iCardShape |= ((f.GetKeyVal(key, "kingbomb", 1) << 20) & 0xFFFFFFFF);		//ç‹ç‚¸
 	InitThisGame();
 	return TRUE;
 }
 
-//¸ù¾İ·¿¼äID¼ÓÔØÅäÖÃÎÄ¼ş
+//æ ¹æ®æˆ¿é—´IDåŠ è½½é…ç½®æ–‡ä»¶
 BOOL CServerGameDesk::LoadExtIni(int iRoomID)
 {
 	TCHAR szKey[20];
@@ -184,7 +184,7 @@ BOOL CServerGameDesk::LoadExtIni(int iRoomID)
 	sprintf(nid, "%d", NAME_ID);
 	sprintf(szKey, "%s_%d", nid, iRoomID);
 	string key = szKey;
-	string s = CINIFile::GetAppPath();/////±¾µØÂ·¾¶
+	string s = CINIFile::GetAppPath();/////æœ¬åœ°è·¯å¾„
 	CINIFile f(s + nid + "_s.ini");
 
 	m_iLimitPlayGame = f.GetKeyVal(key, "limitplay", m_iLimitPlayGame);
@@ -200,7 +200,7 @@ BOOL CServerGameDesk::LoadExtIni(int iRoomID)
 	return TRUE;
 }
 
-//ÉèÖÃÓÎÏ·×´Ì¬
+//è®¾ç½®æ¸¸æˆçŠ¶æ€
 BOOL CServerGameDesk::InitThisGame()
 {
 	m_Logic.SetKingCanReplace(m_bKingCanReplace);
@@ -208,7 +208,7 @@ BOOL CServerGameDesk::InitThisGame()
 	return true;
 }
 
-//³õÊ¼»¯×À×Ó
+//åˆå§‹åŒ–æ¡Œå­
 bool CServerGameDesk::InitDeskGameStation()
 {
 	LoadDynamicConfig();
@@ -219,11 +219,11 @@ bool CServerGameDesk::InitDeskGameStation()
 	return true;
 }
 
-//×À×Ó³É¹¦½âÉ¢
+//æ¡Œå­æˆåŠŸè§£æ•£
 void CServerGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway)
 {
 
-	if (m_iRunGameCount > 0) //´óÓÚÒ»¾Ö²Å·¢´ó½áËã
+	if (m_iRunGameCount > 0) //å¤§äºä¸€å±€æ‰å‘å¤§ç»“ç®—
 	{
 		UpdateCalculateBoard();
 	}
@@ -245,8 +245,8 @@ void CServerGameDesk::InitDeskGameData()
 	SetGameStation(GS_WAIT_SETGAME);
 	memset(m_bUserReady, 0, sizeof(m_bUserReady));
 	m_iFengDing = 0;
-	m_iRunTime = 0;//µ¥Î»Ãë
-	m_iGameBeginTime = 0; //µ¥Î»Ãë
+	m_iRunTime = 0;//å•ä½ç§’
+	m_iGameBeginTime = 0; //å•ä½ç§’
 	m_iGameEndTime = 0;
 	m_bFirstCallScore = 255;
 	m_byGameEndType = 0;
@@ -255,26 +255,26 @@ void CServerGameDesk::InitDeskGameData()
 	memset(m_lastCardList, 0, sizeof(m_lastCardList));
 }
 
-// Íæ¼ÒÇëÇóÍĞ¹Ü
+// ç©å®¶è¯·æ±‚æ‰˜ç®¡
 bool CServerGameDesk::OnHandleUserRequestAuto(BYTE deskStation)
 {
 	return __super::OnHandleUserRequestAuto(deskStation);
 }
 
-// Íæ¼ÒÈ¡ÏûÍĞ¹Ü
+// ç©å®¶å–æ¶ˆæ‰˜ç®¡
 bool CServerGameDesk::OnHandleUserRequestCancelAuto(BYTE deskStation)
 {
 	return __super::OnHandleUserRequestCancelAuto(deskStation);
 }
 
-// ¶¯Ì¬¼ÓÔØÅäÖÃÎÄ¼şÊı¾İ
+// åŠ¨æ€åŠ è½½é…ç½®æ–‡ä»¶æ•°æ®
 void CServerGameDesk::LoadDynamicConfig()
 {
 	LoadExtIni();
 	LoadExtIni(m_pDataManage->m_InitData.uRoomID);
 }
 
-//ÓÎÏ·Êı¾İ°ü´¦Àíº¯Êı
+//æ¸¸æˆæ•°æ®åŒ…å¤„ç†å‡½æ•°
 bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser)
 {
 	switch (assistID)
@@ -306,7 +306,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserCallScore(bDeskStation, pCallScore->iValue);
 		return true;
 	}
-	case ASS_ROB_NT:						//ÇÀµØÖ÷
+	case ASS_ROB_NT:						//æŠ¢åœ°ä¸»
 	{
 		if (bWatchUser)
 		{
@@ -330,7 +330,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserRobNT(pRobNT->byDeskStation, pRobNT->iValue);
 		return TRUE;
 	}
-	case ASS_ADD_DOUBLE:					//¼Ó±¶
+	case ASS_ADD_DOUBLE:					//åŠ å€
 	{
 		if (bWatchUser)
 		{
@@ -350,7 +350,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserAddDouble(pAddDouble->bDeskStation, pAddDouble->iValue);
 		return TRUE;
 	}
-	case ASS_SHOW_CARD:	//ÁÁÅÆ
+	case ASS_SHOW_CARD:	//äº®ç‰Œ
 	{
 		if (bWatchUser)
 		{
@@ -370,7 +370,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserShowCard(pShowCard->bDeskStation, pShowCard->iValue);
 		return true;
 	}
-	case ASS_OUT_CARD:		//ÓÃ»§³öÅÆ
+	case ASS_OUT_CARD:		//ç”¨æˆ·å‡ºç‰Œ
 	{
 		if (bWatchUser)
 		{
@@ -397,7 +397,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserOutCard(bDeskStation, pOutCard->iCardList, pOutCard->iCardCount);
 		return true;
 	}
-	case ASS_AUTO:			//ÍĞ¹Ü
+	case ASS_AUTO:			//æ‰˜ç®¡
 	{
 		if (bWatchUser)
 		{
@@ -412,7 +412,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserSetAuto(bDeskStation, pAuto->bAuto);
 		return true;
 	}
-	case ASS_HAVE_THING:	//ÓĞÊÂÇëÇóÀë¿ª
+	case ASS_HAVE_THING:	//æœ‰äº‹è¯·æ±‚ç¦»å¼€
 	{
 		if (bWatchUser)
 		{
@@ -427,7 +427,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		UserHaveThing(bDeskStation, pThing->szMessage);
 		return true;
 	}
-	case ASS_LEFT_RESULT: //Í¬ÒâÓÃ»§Àë¿ª
+	case ASS_LEFT_RESULT: //åŒæ„ç”¨æˆ·ç¦»å¼€
 	{
 		if (bWatchUser)
 		{
@@ -450,7 +450,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 	return __super::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
 }
 
-//¶¨Ê±Æ÷ÏûÏ¢
+//å®šæ—¶å™¨æ¶ˆæ¯
 bool CServerGameDesk::OnTimer(UINT uTimerID)
 {
 	KillTimer(uTimerID);
@@ -468,7 +468,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		}
 		break;
 	}
-	case TIME_SEND_CARD:				//°lÅÆ
+	case TIME_SEND_CARD:				//ç™¼ç‰Œ
 	{
 		if (GetGameStation() == GS_SEND_CARD)
 		{
@@ -477,7 +477,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		else KillTimer(TIME_SEND_CARD);
 		break;
 	}
-	case TIME_SEND_ALL_CARD:	//×¼±¸·¢ÅÆ¼ÆÊ±Æ÷	DWJ
+	case TIME_SEND_ALL_CARD:	//å‡†å¤‡å‘ç‰Œè®¡æ—¶å™¨	DWJ
 	{
 		if (GetGameStation() == GS_SEND_CARD)
 		{
@@ -489,45 +489,45 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		}
 		break;
 	}
-	case TIME_SEND_CARD_ANI:		///¿Í»§¶Ë·¢ÅÆ¶¨Ê±Æ÷		DWJ
+	case TIME_SEND_CARD_ANI:		///å®¢æˆ·ç«¯å‘ç‰Œå®šæ—¶å™¨		DWJ
 	{
 		KillTimer(TIME_SEND_CARD_ANI);
 		SetTimer(TIME_SEND_CARD_FINISH, 300);
 		break;
 	}
-	case  TIME_SEND_CARD_FINISH:	//·¢ÅÆ½áÊø¼ÆÊ±Æ÷	DWJ
+	case  TIME_SEND_CARD_FINISH:	//å‘ç‰Œç»“æŸè®¡æ—¶å™¨	DWJ
 	{
 		KillTimer(TIME_SEND_CARD_FINISH);
 		SendCardFinish();
 		break;
 	}
-	case TIME_JIAO_FEN:                // ½Ğ·Ö¶¨Ê±Æ÷
+	case TIME_JIAO_FEN:                // å«åˆ†å®šæ—¶å™¨
 	{
 		KillTimer(TIME_JIAO_FEN);
 		if (!IsGoldRoom())
 		{
 			if (GS_FLAG_CALL_SCORE == m_iGameFlag)
 			{
-				// ×Ô¶¯²»½Ğ·Ö
+				// è‡ªåŠ¨ä¸å«åˆ†
 				UserCallScore(m_bCurrentCallScore, 0);
 				break;
 			}
 		}
 		if (GS_WAIT_BACK == GetGameStation() && GS_FLAG_CALL_SCORE == m_iGameFlag)
 		{
-			// ×Ô¶¯²»½Ğ·Ö
+			// è‡ªåŠ¨ä¸å«åˆ†
 			UserCallScore(m_bCurrentCallScore, 0);
 		}
 		break;
 	}
-	case TIME_WAIT_NEWTURN:				//ĞÂÒ»İ†
+	case TIME_WAIT_NEWTURN:				//æ–°ä¸€è¼ª
 	{
 		KillTimer(TIME_WAIT_NEWTURN);
 		if (GetGameStation() == GS_PLAY_GAME)
 			NewPlayTurn(m_iNowBigPeople);
 		break;
 	}
-	case TIME_ADD_DOUBLE:		//¼Ó±¶¼ÆÊ±Æ÷	DWJ
+	case TIME_ADD_DOUBLE:		//åŠ å€è®¡æ—¶å™¨	DWJ
 	{
 		if (GetGameStation() == GS_WAIT_BACK)
 		{
@@ -539,7 +539,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		}
 		break;
 	}
-	case TIME_ROB_NT:	//Íæ¼Ò½ĞµØÖ÷¡¢ÇÀµØÖ÷¼ÆÊ±Æ÷	DWJ
+	case TIME_ROB_NT:	//ç©å®¶å«åœ°ä¸»ã€æŠ¢åœ°ä¸»è®¡æ—¶å™¨	DWJ
 	{
 		KillTimer(TIME_ROB_NT);
 		if (GetGameStation() == GS_WAIT_BACK)
@@ -553,21 +553,21 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		KillTimer(TIME_OUT_CARD);
 		if (!IsGoldRoom())
 		{
-			////ÍĞ¹Ü³öÅÆ£¬²¢×Ô¶¯½øÈëÍĞ¹Ü×´Ì¬  ĞŞ¸Ä·¿¿¨Ä£Ê½ÍĞ¹ÜºóÎŞ·´Ó¦ 2017/12/20
+			////æ‰˜ç®¡å‡ºç‰Œï¼Œå¹¶è‡ªåŠ¨è¿›å…¥æ‰˜ç®¡çŠ¶æ€  ä¿®æ”¹æˆ¿å¡æ¨¡å¼æ‰˜ç®¡åæ— ååº” 2017/12/20
 			//int iTemp = m_iOutCardPeople;
 			//UserAutoOutCard(m_iOutCardPeople);
 			break;
 		}
 		if (GetGameStation() == GS_PLAY_GAME)
 		{
-			//m_iTimeOutNoCardOutÎª1±íÊ¾²»³öÅÆ£¬»áµ¼ÖÂÍĞ¹ÜºóÎŞ·´Ó¦
-			if (1 != m_iTimeOutNoCardOut)//ĞŞ¸Ä½ğ±Ò³¡ÍĞ¹ÜºóÎŞ·´Ó¦  2017/12/21
+			//m_iTimeOutNoCardOutä¸º1è¡¨ç¤ºä¸å‡ºç‰Œï¼Œä¼šå¯¼è‡´æ‰˜ç®¡åæ— ååº”
+			if (1 != m_iTimeOutNoCardOut)//ä¿®æ”¹é‡‘å¸åœºæ‰˜ç®¡åæ— ååº”  2017/12/21
 			{
 				break;
 			}
 			else
 			{
-				//ÍĞ¹Ü³öÅÆ£¬²¢×Ô¶¯½øÈëÍĞ¹Ü×´Ì¬
+				//æ‰˜ç®¡å‡ºç‰Œï¼Œå¹¶è‡ªåŠ¨è¿›å…¥æ‰˜ç®¡çŠ¶æ€
 				int iTemp = m_iOutCardPeople;
 				UserAutoOutCard(m_iOutCardPeople);
 				UserSetAuto(iTemp, true);
@@ -575,14 +575,14 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		}
 		break;
 	}
-	case TIME_GAME_FINISH:				//½YÊø
+	case TIME_GAME_FINISH:				//çµæŸ
 	{
 		KillTimer(TIME_GAME_FINISH);
 		if (GetGameStation() == GS_PLAY_GAME)
 			GameFinish(0, GF_NORMAL);
 		break;
 	}
-	case TIME_SHOW_CARD:	//¼Ó±¶¼ÆÊ±Æ÷	DWJ
+	case TIME_SHOW_CARD:	//åŠ å€è®¡æ—¶å™¨	DWJ
 	{
 		KillTimer(TIME_SHOW_CARD);
 		if (GetGameStation() == GS_WAIT_BACK)
@@ -595,7 +595,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 	return __super::OnTimer(uTimerID);
 }
 
-//»ñÈ¡ÓÎÏ·×´Ì¬ĞÅÏ¢
+//è·å–æ¸¸æˆçŠ¶æ€ä¿¡æ¯
 bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser)
 {
 	if (!IsGoldRoom())
@@ -603,7 +603,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		GetSpecialRule();
 	}
 
-	/// Íæ¼ÒÖØÁ¬£¬±íÊ¾²»ÔÚÍĞ¹Ü×´Ì¬£¬Òò´ËÔÚÕâÀïÉèÖÃÎª²»ÍĞ¹Ü
+	/// ç©å®¶é‡è¿ï¼Œè¡¨ç¤ºä¸åœ¨æ‰˜ç®¡çŠ¶æ€ï¼Œå› æ­¤åœ¨è¿™é‡Œè®¾ç½®ä¸ºä¸æ‰˜ç®¡
 	if (!bWatchUser)
 	{
 		m_bAuto[bDeskStation] = false;
@@ -612,9 +612,9 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 	switch (GetGameStation())
 	{
-	case GS_WAIT_SETGAME:		//ÓÎÏ·Ã»ÓĞ¿ªÊ¼×´Ì¬
-	case GS_WAIT_ARGEE:			//µÈ´ıÍæ¼Ò¿ªÊ¼×´Ì¬
-	case GS_WAIT_NEXT:			//µÈ´ıÏÂÒ»ÅÌÓÎÏ·¿ªÊ¼
+	case GS_WAIT_SETGAME:		//æ¸¸æˆæ²¡æœ‰å¼€å§‹çŠ¶æ€
+	case GS_WAIT_ARGEE:			//ç­‰å¾…ç©å®¶å¼€å§‹çŠ¶æ€
+	case GS_WAIT_NEXT:			//ç­‰å¾…ä¸‹ä¸€ç›˜æ¸¸æˆå¼€å§‹
 	{
 		int iUserCount = 0;
 		for (int i = 0; i < PLAY_COUNT; i++)
@@ -627,21 +627,21 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		}
 		GameStation_2 GameStation;
 		::memset(&GameStation, 0, sizeof(GameStation));
-		//ÓÎÏ·°æ±¾ºË¶Ô
-		GameStation.iVersion = DEV_HEIGHT_VERSION;			//ÓÎÏ·¸ß°æ±¾
-		GameStation.iVersion2 = DEV_LOW_VERSION;			//µÍ°æ±¾
-		//ÓÎÏ·ÄÚÈİÉèÖÃ
-		GameStation.iCardShape = m_iCardShape;						//ÅÆĞÍÉèÖÃ
-		//¸¨ÖúÊ±¼ä
-		GameStation.iBeginTime = m_iBeginTime;				//ÓÎÏ·¿ªÊ¼Ê±¼äÉèÖÃ
-		GameStation.iThinkTime = m_iThinkTime;				//ÓÎÏ·Ë¼¿¼Ê±¼ä
-		GameStation.iCallScoreTime = m_iCallScoreTime;			//½Ğ·ÖÊ±¼ä
+		//æ¸¸æˆç‰ˆæœ¬æ ¸å¯¹
+		GameStation.iVersion = DEV_HEIGHT_VERSION;			//æ¸¸æˆé«˜ç‰ˆæœ¬
+		GameStation.iVersion2 = DEV_LOW_VERSION;			//ä½ç‰ˆæœ¬
+		//æ¸¸æˆå†…å®¹è®¾ç½®
+		GameStation.iCardShape = m_iCardShape;						//ç‰Œå‹è®¾ç½®
+		//è¾…åŠ©æ—¶é—´
+		GameStation.iBeginTime = m_iBeginTime;				//æ¸¸æˆå¼€å§‹æ—¶é—´è®¾ç½®
+		GameStation.iThinkTime = m_iThinkTime;				//æ¸¸æˆæ€è€ƒæ—¶é—´
+		GameStation.iCallScoreTime = m_iCallScoreTime;			//å«åˆ†æ—¶é—´
 		GameStation.iRobNTTime = m_iRobNTTime;
-		GameStation.iAddDoubleTime = m_iAddDoubleTime;			//½Ğ·ÖÊ±¼ä
-		//·¿¼ä±¶Êı
-		GameStation.iDeskBasePoint = GetDeskBasePoint();	//×À×Ó±¶Êı
-		GameStation.iRoomBasePoint = GetRoomMul();	//·¿¼ä±¶Êı
-		GameStation.iRunPublish = GetRunPublish();			//ÌÓÅÜ¿Û·Ö
+		GameStation.iAddDoubleTime = m_iAddDoubleTime;			//å«åˆ†æ—¶é—´
+		//æˆ¿é—´å€æ•°
+		GameStation.iDeskBasePoint = GetDeskBasePoint();	//æ¡Œå­å€æ•°
+		GameStation.iRoomBasePoint = GetRoomMul();	//æˆ¿é—´å€æ•°
+		GameStation.iRunPublish = GetRunPublish();			//é€ƒè·‘æ‰£åˆ†
 
 		GameStation.iGameMutiple = m_iBaseMult;
 		GameStation.iAddDoubleLimit = m_iAddDoubleLimit;
@@ -662,27 +662,27 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 		break;
 	}
-	case GS_SEND_CARD:		//·¢ÅÆ×´Ì¬
-	case GS_WAIT_BACK:		//µÈ´ıÂñµ×ÅÆ×´Ì¬
+	case GS_SEND_CARD:		//å‘ç‰ŒçŠ¶æ€
+	case GS_WAIT_BACK:		//ç­‰å¾…åŸ‹åº•ç‰ŒçŠ¶æ€
 	{
-		//·¢ËÍÈ¡Ïû»úÆ÷ÈËÍĞ¹Ü
+		//å‘é€å–æ¶ˆæœºå™¨äººæ‰˜ç®¡
 		GameStation_3 GameStation;
 		::memset(&GameStation, 0, sizeof(GameStation));
-		//ÓÎÏ·°æ±¾ºË¶Ô
-		GameStation.iVersion = DEV_HEIGHT_VERSION;			//ÓÎÏ·¸ß°æ±¾
-		GameStation.iVersion2 = DEV_LOW_VERSION;			//µÍ°æ±¾
-		//¸¨ÖúÊ±¼ä
-		GameStation.iBeginTime = m_iBeginTime;				//ÓÎÏ·¿ªÊ¼Ê±¼äÉèÖÃ
-		GameStation.iThinkTime = m_iThinkTime;				//ÓÎÏ·Ë¼¿¼Ê±¼ä
-		GameStation.iCallScoreTime = m_iCallScoreTime;			//½Ğ·ÖÊ±¼ä
+		//æ¸¸æˆç‰ˆæœ¬æ ¸å¯¹
+		GameStation.iVersion = DEV_HEIGHT_VERSION;			//æ¸¸æˆé«˜ç‰ˆæœ¬
+		GameStation.iVersion2 = DEV_LOW_VERSION;			//ä½ç‰ˆæœ¬
+		//è¾…åŠ©æ—¶é—´
+		GameStation.iBeginTime = m_iBeginTime;				//æ¸¸æˆå¼€å§‹æ—¶é—´è®¾ç½®
+		GameStation.iThinkTime = m_iThinkTime;				//æ¸¸æˆæ€è€ƒæ—¶é—´
+		GameStation.iCallScoreTime = m_iCallScoreTime;			//å«åˆ†æ—¶é—´
 		GameStation.iRobNTTime = m_iRobNTTime;
-		GameStation.iAddDoubleTime = m_iAddDoubleTime;			//½Ğ·ÖÊ±¼ä
-		//·¿¼ä±¶Êı
-		GameStation.iDeskBasePoint = GetDeskBasePoint();	//×À×Ó±¶Êı
-		GameStation.iRoomBasePoint = GetRoomMul();	//·¿¼ä±¶Êı
-		GameStation.iRunPublish = GetRunPublish();			//ÌÓÅÜ¿Û·Ö
+		GameStation.iAddDoubleTime = m_iAddDoubleTime;			//å«åˆ†æ—¶é—´
+		//æˆ¿é—´å€æ•°
+		GameStation.iDeskBasePoint = GetDeskBasePoint();	//æ¡Œå­å€æ•°
+		GameStation.iRoomBasePoint = GetRoomMul();	//æˆ¿é—´å€æ•°
+		GameStation.iRunPublish = GetRunPublish();			//é€ƒè·‘æ‰£åˆ†
 
-		GameStation.iCardShape = m_iCardShape;						//ÅÆĞÍÉèÖÃ
+		GameStation.iCardShape = m_iCardShape;						//ç‰Œå‹è®¾ç½®
 		GameStation.iGameMutiple = m_iBaseMult;
 		GameStation.iAddDoubleLimit = m_iAddDoubleLimit;
 		GameStation.iGameMaxLimit = m_iGameMaxLimit;
@@ -701,7 +701,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		{
 			GameStation.iCallScore[i] = m_iCallScore[i];
 			GameStation.iUserCardCount[i] = m_iUserCardCount[i];
-			/// Ö»·¢×Ô¼ºµÄÊÖÅÆ£¬Modified by zxd 20100314
+			/// åªå‘è‡ªå·±çš„æ‰‹ç‰Œï¼ŒModified by zxd 20100314
 			if (bDeskStation == i || m_GameMutiple.sMingPaiMutiple[i] > 0)
 			{
 				::CopyMemory(&GameStation.iUserCardList[iPos], m_iUserCard[i], sizeof(BYTE)*m_iUserCardCount[i]);
@@ -720,13 +720,13 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 			{
 				if (m_iFirstRobNt != 255)
 				{
-					if (m_iRobStation[i] == 255) ///²»ÇÀ
+					if (m_iRobStation[i] == 255) ///ä¸æŠ¢
 					{
-						GameStation.iRobNT[i] = 2; //²»ÇÀµØÖ÷
+						GameStation.iRobNT[i] = 2; //ä¸æŠ¢åœ°ä¸»
 					}
 					else if (m_iRobStation[i] > 0 && m_GameMutiple.sRobNtMutiple[bDeskStation] > 0)
 					{
-						GameStation.iRobNT[i] = 3; //ÇÀµØÖ÷
+						GameStation.iRobNT[i] = 3; //æŠ¢åœ°ä¸»
 					}
 					else
 					{
@@ -735,22 +735,22 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 				}
 				else
 				{
-					if (m_iRobStation[i] == 255) ///²»½Ğ
+					if (m_iRobStation[i] == 255) ///ä¸å«
 					{
-						GameStation.iRobNT[i] = 0; //²»½ĞµØÖ÷
+						GameStation.iRobNT[i] = 0; //ä¸å«åœ°ä¸»
 					}
-					else if (m_iRobStation[i] > 0) ///½ĞµØÖ÷
+					else if (m_iRobStation[i] > 0) ///å«åœ°ä¸»
 					{
-						GameStation.iRobNT[i] = 3; ///½ĞµØÖ÷
+						GameStation.iRobNT[i] = 3; ///å«åœ°ä¸»
 					}
-					else ///Ã»ÓĞ½Ğ
+					else ///æ²¡æœ‰å«
 					{
-						GameStation.iRobNT[i] = -1; //Ã»ÓĞ½Ğ¹ıµØÖ÷
+						GameStation.iRobNT[i] = -1; //æ²¡æœ‰å«è¿‡åœ°ä¸»
 					}
 				}
 			}
 
-			GameStation.iCurOperator = m_iCurrentRobPeople;  ///µ±Ç°½ĞµØÖ÷µÄÈË
+			GameStation.iCurOperator = m_iCurrentRobPeople;  ///å½“å‰å«åœ°ä¸»çš„äºº
 
 			break;
 		}
@@ -758,7 +758,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		{
 			for (int i = 0; i < PLAY_COUNT; i++)
 			{
-				if (m_iAddStation[i] == 255)  //²»¼Ó±¶
+				if (m_iAddStation[i] == 255)  //ä¸åŠ å€
 				{
 					GameStation.iUserDoubleValue[i] = -1;
 				}
@@ -793,25 +793,25 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 		break;
 	}
-	case GS_PLAY_GAME:	//ÓÎÏ·ÖĞ×´Ì¬
+	case GS_PLAY_GAME:	//æ¸¸æˆä¸­çŠ¶æ€
 	{
 		GameStation_4 GameStation;
 		::memset(&GameStation, 0, sizeof(GameStation));
-		//ÓÎÏ·°æ±¾ºË¶Ô
-		GameStation.iVersion = DEV_HEIGHT_VERSION;			//ÓÎÏ·¸ß°æ±¾
-		GameStation.iVersion2 = DEV_LOW_VERSION;			//µÍ°æ±¾
-		//ÓÎÏ·ÄÚÈİÉèÖÃ
-		GameStation.iCardShape = m_iCardShape;						//ÅÆĞÍÉèÖÃ
-		//¸¨ÖúÊ±¼ä
-		GameStation.iBeginTime = m_iBeginTime;				//ÓÎÏ·¿ªÊ¼Ê±¼äÉèÖÃ
-		GameStation.iThinkTime = m_iThinkTime;				//ÓÎÏ·Ë¼¿¼Ê±¼ä
-		GameStation.iCallScoreTime = m_iCallScoreTime;			//½Ğ·ÖÊ±¼ä
+		//æ¸¸æˆç‰ˆæœ¬æ ¸å¯¹
+		GameStation.iVersion = DEV_HEIGHT_VERSION;			//æ¸¸æˆé«˜ç‰ˆæœ¬
+		GameStation.iVersion2 = DEV_LOW_VERSION;			//ä½ç‰ˆæœ¬
+		//æ¸¸æˆå†…å®¹è®¾ç½®
+		GameStation.iCardShape = m_iCardShape;						//ç‰Œå‹è®¾ç½®
+		//è¾…åŠ©æ—¶é—´
+		GameStation.iBeginTime = m_iBeginTime;				//æ¸¸æˆå¼€å§‹æ—¶é—´è®¾ç½®
+		GameStation.iThinkTime = m_iThinkTime;				//æ¸¸æˆæ€è€ƒæ—¶é—´
+		GameStation.iCallScoreTime = m_iCallScoreTime;			//å«åˆ†æ—¶é—´
 		GameStation.iRobNTTime = m_iRobNTTime;
-		GameStation.iAddDoubleTime = m_iAddDoubleTime;			//½Ğ·ÖÊ±¼ä
-		//·¿¼ä±¶Êı
-		GameStation.iDeskBasePoint = GetDeskBasePoint();	//×À×Ó±¶Êı
-		GameStation.iRoomBasePoint = GetRoomMul();	//·¿¼ä±¶Êı
-		GameStation.iRunPublish = GetRunPublish();			//ÌÓÅÜ¿Û·Ö
+		GameStation.iAddDoubleTime = m_iAddDoubleTime;			//å«åˆ†æ—¶é—´
+		//æˆ¿é—´å€æ•°
+		GameStation.iDeskBasePoint = GetDeskBasePoint();	//æ¡Œå­å€æ•°
+		GameStation.iRoomBasePoint = GetRoomMul();	//æˆ¿é—´å€æ•°
+		GameStation.iRunPublish = GetRunPublish();			//é€ƒè·‘æ‰£åˆ†
 
 		GameStation.iGameMutiple = m_iBaseMult;
 		GameStation.iAddDoubleLimit = m_iAddDoubleLimit;
@@ -823,19 +823,19 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		GameStation.iFirstOutPeople = m_iFirstOutPeople;
 		GameStation.iBigOutPeople = m_iNowBigPeople;
 		memcpy(GameStation.iCallScoreResult, m_iCallScore, sizeof(GameStation.iCallScoreResult));
-		//ÓÎÏ·±¶Êı	
+		//æ¸¸æˆå€æ•°	
 		memcpy(GameStation.bCanleave, m_bCanleave, sizeof(m_bCanleave));
 		memcpy(GameStation.bAuto, m_bAuto, sizeof(m_bAuto));
 
 		memcpy(GameStation.bPass, m_byPass, sizeof(GameStation.bPass));
 		memcpy(GameStation.bLastTurnPass, m_byLastTurnPass, sizeof(GameStation.bLastTurnPass));
 
-		//ÉèÖÃ¸÷¼ÒÊÖÖĞÅÆ
+		//è®¾ç½®å„å®¶æ‰‹ä¸­ç‰Œ
 		int iPos = 0;
 		ZeroMemory(&GameStation.iUserCardList, sizeof(GameStation.iUserCardList));
 		for (int i = 0; i < PLAY_COUNT; i++)
 		{
-			//ÉèÖÃÓÃ»§ÊÖÖĞÅÆ
+			//è®¾ç½®ç”¨æˆ·æ‰‹ä¸­ç‰Œ
 			GameStation.iUserCardCount[i] = m_iUserCardCount[i];
 			if (i == bDeskStation || m_GameMutiple.sMingPaiMutiple[i] > 0)
 			{
@@ -844,7 +844,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 			iPos += m_iUserCardCount[i];
 		}
 
-		//ÉèÖÃÓÃ»§×ÀÃæÅÆÅÆ
+		//è®¾ç½®ç”¨æˆ·æ¡Œé¢ç‰Œç‰Œ
 		GameStation.bIsLastCard = m_bIsLastCard;
 
 		GameStation.iBaseOutCount = m_iBaseOutCount;
@@ -856,7 +856,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		::CopyMemory(&GameStation.iLastCardCount, m_iLastCardCount, sizeof(GameStation.iLastCardCount));
 		::CopyMemory(GameStation.iLastOutCard, m_iLastOutCard, sizeof(GameStation.iLastOutCard));
 
-		//ÊÇ·ñ²»³ö
+		//æ˜¯å¦ä¸å‡º
 		GameStation.bIsPass = m_byteHitPass;
 
 		GameStation.iBackCardCount = m_iBackCount;
@@ -885,13 +885,13 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		return false;
 	}
 
-	//³¬¶ËÑéÖ¤
+	//è¶…ç«¯éªŒè¯
 	SpuerExamine(bDeskStation);
 
 	return true;
 }
 
-//ÇåËùÓĞ¼ÆÊ±Æ÷
+//æ¸…æ‰€æœ‰è®¡æ—¶å™¨
 void CServerGameDesk::KillAllTimer()
 {
 	KillTimer(TIME_SEND_CARD);
@@ -909,7 +909,7 @@ void CServerGameDesk::KillAllTimer()
 
 }
 
-//ÖØÖÃÓÎÏ·×´Ì¬
+//é‡ç½®æ¸¸æˆçŠ¶æ€
 bool CServerGameDesk::ReSetGameState(BYTE bLastStation)
 {
 	KillAllTimer();
@@ -920,7 +920,7 @@ bool CServerGameDesk::ReSetGameState(BYTE bLastStation)
 		m_iDealPeople = -1;
 	}
 
-	m_iPrepareNT = 255;		//Ô¤±¸×¯¼Ò
+	m_iPrepareNT = 255;		//é¢„å¤‡åº„å®¶
 	m_iCurrentRobPeople = 255;
 	m_iFirstRobNt = 255;
 	m_iFirstShow = 255;
@@ -934,7 +934,7 @@ bool CServerGameDesk::ReSetGameState(BYTE bLastStation)
 	}
 	m_iGameFlag = GS_FLAG_NORMAL;
 	m_bCurrentCallScore = 255;
-	m_iNtFirstCount = 0;		//×¯¼Ò³öµÄµÚÒ»ÊÖÅÆÊıÁ¿
+	m_iNtFirstCount = 0;		//åº„å®¶å‡ºçš„ç¬¬ä¸€æ‰‹ç‰Œæ•°é‡
 	m_iLeaveArgee = 0;
 	m_iBaseOutCount = 0;
 	m_iNowBigPeople = -1;
@@ -944,9 +944,9 @@ bool CServerGameDesk::ReSetGameState(BYTE bLastStation)
 
 	::memset(m_iDeskCardCount, 0, sizeof(m_iDeskCardCount));
 	::memset(m_iUserCardCount, 0, sizeof(m_iUserCardCount));
-	::memset(m_bAuto, 0, sizeof(m_bAuto));				//ÍĞ¹Ü
-	::memset(m_iCallScore, -1, sizeof(m_iCallScore));		//½Ğ·Ö
-	::memset(m_bIsCall, false, sizeof(m_bIsCall));		//±ê¼Ç½Ğ·Ö
+	::memset(m_bAuto, 0, sizeof(m_bAuto));				//æ‰˜ç®¡
+	::memset(m_iCallScore, -1, sizeof(m_iCallScore));		//å«åˆ†
+	::memset(m_bIsCall, false, sizeof(m_bIsCall));		//æ ‡è®°å«åˆ†
 	::memset(m_iRobStation, 0, sizeof(m_iRobStation));
 	::memset(m_iAddStation, 0, sizeof(m_iAddStation));
 	memset(m_bUserReady, 0, sizeof(m_bUserReady));
@@ -957,7 +957,7 @@ bool CServerGameDesk::ReSetGameState(BYTE bLastStation)
 	return TRUE;
 }
 
-//·şÎñ¶Ë×Ô¶¯¿ªÊ¼ÓÎÏ·
+//æœåŠ¡ç«¯è‡ªåŠ¨å¼€å§‹æ¸¸æˆ
 BOOL CServerGameDesk::StartGame()
 {
 	/*for(int i = 0; i < PLAY_COUNT ;i++)
@@ -974,7 +974,7 @@ BOOL CServerGameDesk::StartGame()
 	return TRUE;
 }
 
-//ÓÎÏ·¿ªÊ¼
+//æ¸¸æˆå¼€å§‹
 bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 {
 	if (__super::GameBegin(bBeginFlag) == false)
@@ -1019,13 +1019,13 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 		m_bRetryStart = !m_bRetryStart;
 		//m_iRunGameCount--;
 	}
-	if (m_iRunTime > 0 && m_iRunGameCount == 1) //Ê±¼äÄ£Ê½, ÖØµÚÒ»¾Ö¿ªÊ¼
+	if (m_iRunTime > 0 && m_iRunGameCount == 1) //æ—¶é—´æ¨¡å¼, é‡ç¬¬ä¸€å±€å¼€å§‹
 	{
 		m_iVipGameCount = INT_MAX;
 		m_iGameBeginTime = GetCurTime();
 		m_iGameEndTime = m_iGameBeginTime + m_iRunTime;
 	}
-	if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //Ê±¼äÄ£Ê½
+	if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //æ—¶é—´æ¨¡å¼
 	{
 		m_iVipGameCount = m_iRunGameCount;
 		GameFinish(0, GF_SALE);
@@ -1050,7 +1050,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	m_bIsLastCard = false;
 	m_byteHitPass = 0;
 
-	//·¢ËÍÓÎÏ·¿ªÊ¼ÏûÏ¢
+	//å‘é€æ¸¸æˆå¼€å§‹æ¶ˆæ¯
 	GameBeginStruct TGameBegin;
 	TGameBegin.iBeenPlayGame = m_iBeenPlayGame;
 	TGameBegin.iPlayLimit = m_iLimitPlayGame;
@@ -1063,7 +1063,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	}
 	//SendWatchData(m_byMaxPeople,&TGameBegin,sizeof(TGameBegin),MSG_MAIN_LOADER_GAME,ASS_GAME_BEGIN,0);
 
-	//·şÎñ¶Ë·Ö·¢ËùÓĞÍæ¼ÒµÄÆË¿Ë
+	//æœåŠ¡ç«¯åˆ†å‘æ‰€æœ‰ç©å®¶çš„æ‰‘å…‹
 	BYTE iCardArray[162];
 	bool bOk = true;
 	for (int i = 0; i < m_iPlayCount; i ++)
@@ -1080,10 +1080,10 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	}
 	if (m_bNoXiPai && bOk)
 	{
-		////²»Ï´ÅÆÄ£Ê½
+		////ä¸æ´—ç‰Œæ¨¡å¼
 		//m_Logic.MatchDDZ(iCardArray, m_iPlayCount);
 
-		//½øĞĞÒ»´ÎÇĞÅÆ
+		//è¿›è¡Œä¸€æ¬¡åˆ‡ç‰Œ
 		int iQiePaiIndex = CUtil::GetRandNum() % (m_iPlayCount / 2) + m_iPlayCount / 4;
 		int iCardIndex = 0;
 		for (int i = iQiePaiIndex; i < m_iPlayCount; i++)
@@ -1104,11 +1104,11 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	m_lastCardListIndex = 0;
 	memset(m_lastCardList, 0, sizeof(m_lastCardList));
 
-	//Ã÷ÅÆ
+	//æ˜ç‰Œ
 	srand(GetTickCount());
 	m_bThrowoutCard = iCardArray[CUtil::GetRandNum() % (m_iSendCount/*m_iPlayCount - 3*/)];
 
-	//¿½±´Íæ¼ÒÅÆÊı¾İ
+	//æ‹·è´ç©å®¶ç‰Œæ•°æ®
 	int iSendUserIndex = CUtil::GetRandNum() % PLAY_COUNT;
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
@@ -1117,19 +1117,19 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	}
 	::CopyMemory(m_iBackCard, &iCardArray[m_iSendCount], sizeof(BYTE)*m_iBackCount);
 
-	//Æô¶¯»úÆ÷ÈËÊÖÅÆÔö¼Ó³ÌĞò
+	//å¯åŠ¨æœºå™¨äººæ‰‹ç‰Œå¢åŠ ç¨‹åº
 	if (m_iRobotCount == 2 && m_byRobotDesk1 != 255 && m_byRobotDesk2 != 255)
 	{
 		m_Logic.MatchMergeDDZ(m_iUserCard[m_byRobotDesk1], m_iUserCount, m_iUserCard[m_byRobotDesk2], m_iUserCount, m_bNoXiPai);
 	}
 
-	//³õÊ¼»¯ÈÎÎñ
+	//åˆå§‹åŒ–ä»»åŠ¡
 	m_Logic.InitGameTask();
 
-	//»ñÈ¡µ×ÅÆÅÆĞÍ
+	//è·å–åº•ç‰Œç‰Œå‹
 	if (!m_Logic.GetBackCardType(m_iBackCard, m_iBackCount))
 	{
-		//Ëæ»úÒ»¸öÈÎÎñ
+		//éšæœºä¸€ä¸ªä»»åŠ¡
 		m_Logic.GetRandTask(m_deskIdx);
 	}
 	GamePrepare();
@@ -1137,14 +1137,14 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	return TRUE;
 }
 
-//×¼±¸·¢ÅÆ
+//å‡†å¤‡å‘ç‰Œ
 BOOL	CServerGameDesk::GamePrepare()
 {
 	SetTimer(TIME_SEND_ALL_CARD, 200);
 	return TRUE;
 }
 
-//·¢ËÍÆË¿Ë¸øÓÃ»§
+//å‘é€æ‰‘å…‹ç»™ç”¨æˆ·
 BOOL CServerGameDesk::SendCard()
 {
 	if (m_iSendCardPos == m_iSendCount)
@@ -1153,7 +1153,7 @@ BOOL CServerGameDesk::SendCard()
 		SendCardFinish();
 		return TRUE;
 	}
-	//¼ÌĞø·¢ËÍÆË¿Ë(1´Î·¢Á½ÕÅ)
+	//ç»§ç»­å‘é€æ‰‘å…‹(1æ¬¡å‘ä¸¤å¼ )
 	for (int i = 0; i < 2; i++)
 	{
 		BYTE bDeskStation = (m_iDealPeople + m_iSendCardPos) % PLAY_COUNT;
@@ -1175,7 +1175,7 @@ BOOL CServerGameDesk::SendCard()
 	return TRUE;
 }
 
-//·¢ÅÆÏûÏ¢
+//å‘ç‰Œæ¶ˆæ¯
 BOOL CServerGameDesk::SendCardMsg(BYTE bDeskStation, BYTE bCard)
 {
 	if (m_bFirstCallScore != 255)
@@ -1194,7 +1194,7 @@ BOOL CServerGameDesk::SendCardMsg(BYTE bDeskStation, BYTE bCard)
 	return TRUE;
 }
 
-//Ò»´ÎĞÔ·¢ËÍËùÓĞÅÆ
+//ä¸€æ¬¡æ€§å‘é€æ‰€æœ‰ç‰Œ
 BOOL	CServerGameDesk::SendAllCard()
 {
 	SendAllStruct TSendAll;
@@ -1205,7 +1205,7 @@ BOOL	CServerGameDesk::SendAllCard()
 		TSendAll.iUserCardCount[i] = m_iUserCardCount[i];
 	}
 
-	//·¢ËÍÊı¾İ
+	//å‘é€æ•°æ®
 	int iPos = 0;
 	int iTempPos = 0;
 	for (int i = 0;i < PLAY_COUNT; i++)
@@ -1231,29 +1231,29 @@ BOOL	CServerGameDesk::SendAllCard()
 	if (m_iSendCardPos == 1)
 	{
 		KillTimer(TIME_SEND_ALL_CARD);
-		SetTimer(TIME_SEND_CARD_ANI, m_iSendCardTime * 1000); ///¸øÍæ¼Ò·¢ÅÆ¶¨Ê±Æ÷
+		SetTimer(TIME_SEND_CARD_ANI, m_iSendCardTime * 1000); ///ç»™ç©å®¶å‘ç‰Œå®šæ—¶å™¨
 		return TRUE;
 	}
 
 	return FALSE;
 }
 
-//·¢ÅÆ½áÊø
+//å‘ç‰Œç»“æŸ
 BOOL	CServerGameDesk::SendCardFinish()
 {
 	SendCardFinishStruct Tsendcardfinish;
 
-	//·¢ËÍ·¢ÅÆ½áÊø
+	//å‘é€å‘ç‰Œç»“æŸ
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
 		memset(&Tsendcardfinish, 0, sizeof(Tsendcardfinish));
-		//Èç¹ûÊÇ³¬¶Ë ¾Í°ÑËùÓĞµÄÅÆÊı¾İ·¢ËÍ¹ıÈ¥
+		//å¦‚æœæ˜¯è¶…ç«¯ å°±æŠŠæ‰€æœ‰çš„ç‰Œæ•°æ®å‘é€è¿‡å»
 		if (IsSuperUser(i))
 		{
-			//ËùÓĞÍæ¼ÒµÄÅÆÊı¾İ
+			//æ‰€æœ‰ç©å®¶çš„ç‰Œæ•°æ®
 			memcpy(&Tsendcardfinish.byUserCard, m_iUserCard, sizeof(Tsendcardfinish.byUserCard));
 			memcpy(&Tsendcardfinish.byUserCardCount, m_iUserCardCount, sizeof(Tsendcardfinish.byUserCardCount));
-			//µ×ÅÆÊı¾İ
+			//åº•ç‰Œæ•°æ®
 			memcpy(&Tsendcardfinish.byBackCardList, m_iBackCard, sizeof(Tsendcardfinish.byBackCardList));
 		}
 
@@ -1265,21 +1265,21 @@ BOOL	CServerGameDesk::SendCardFinish()
 	int iUser = CUtil::GetRandNum() % PLAY_COUNT;
 	int iCardIndex = CUtil::GetRandNum() % m_iUserCount;
 	byCard = m_iUserCard[iUser][iCardIndex];
-	if (1 == m_iModel)//½Ğ·ÖÄ£Ê½
+	if (1 == m_iModel)//å«åˆ†æ¨¡å¼
 	{
 		/*if (m_bFirstCallScore == 255)
 		{*/
 		//srand(GetTickCount());
 		//m_bFirstCallScore = rand()%PLAY_COUNT;
-		//Ëæ»úÉú³ÉÒ»ÕÅÅÆ£¨·Çµ×ÅÆ·¢¸øÓÃ»§£©,Ë­ÓĞË­ÏÈ½Ğ×¯
+		//éšæœºç”Ÿæˆä¸€å¼ ç‰Œï¼ˆéåº•ç‰Œå‘ç»™ç”¨æˆ·ï¼‰,è°æœ‰è°å…ˆå«åº„
 		m_bFirstCallScore = (BYTE)iUser;
 		//}
 		SendCallScore(m_bFirstCallScore, byCard);
 	}
-	else if (0 == m_iModel)//ÇÀµØÖ÷Ä£Ê½
+	else if (0 == m_iModel)//æŠ¢åœ°ä¸»æ¨¡å¼
 	{
 		SetGameStation(GS_WAIT_BACK);
-		if (m_iFirstShow != 255)  ///ÓĞÃ÷ÅÆ¿ªÊ¼µÄÈË
+		if (m_iFirstShow != 255)  ///æœ‰æ˜ç‰Œå¼€å§‹çš„äºº
 		{
 			m_iCurrentRobPeople = m_iFirstShow;
 		}
@@ -1292,7 +1292,7 @@ BOOL	CServerGameDesk::SendCardFinish()
 	return TRUE;
 }
 
-//·¢ËÍ¸øµÚÒ»¸ö½Ğ·Ö
+//å‘é€ç»™ç¬¬ä¸€ä¸ªå«åˆ†
 BOOL CServerGameDesk::SendCallScore(BYTE bDeskStation, BYTE byCard)
 {
 	SetGameStation(GS_WAIT_BACK);
@@ -1322,7 +1322,7 @@ BOOL CServerGameDesk::SendCallScore(BYTE bDeskStation, BYTE byCard)
 	return TRUE;
 }
 
-//½Ğ·Ö
+//å«åˆ†
 BOOL CServerGameDesk::UserCallScore(BYTE bDeskStation, int iVal)
 {
 	if (bDeskStation != m_bCurrentCallScore)
@@ -1333,9 +1333,9 @@ BOOL CServerGameDesk::UserCallScore(BYTE bDeskStation, int iVal)
 	{
 		return true;
 	}
-	// ½áÊø½Ğ·Ö¶¨Ê±Æ÷
+	// ç»“æŸå«åˆ†å®šæ—¶å™¨
 	KillTimer(TIME_JIAO_FEN);
-	if (iVal == 3)						//ÓĞÈËÖ±½Ó½Ğ3·Ö
+	if (iVal == 3)						//æœ‰äººç›´æ¥å«3åˆ†
 	{
 		bool bFirstScore = true;
 		for (int i = 0; i < PLAY_COUNT; i++)
@@ -1350,13 +1350,13 @@ BOOL CServerGameDesk::UserCallScore(BYTE bDeskStation, int iVal)
 		{
 			//m_byMaxScoreStation=bDeskStation;
 			/*CString lwlog;
-			lwlog.Format("lwlog::Ê×´Î½ĞÈı·ÖÎ»ÖÃm_byMaxScoreStation=%d",m_byMaxScoreStation);
+			lwlog.Format("lwlog::é¦–æ¬¡å«ä¸‰åˆ†ä½ç½®m_byMaxScoreStation=%d",m_byMaxScoreStation);
 			OutputDebugString(lwlog);*/
 		}
 	}
 	if (iVal == 0)
 	{
-		m_iCallScore[bDeskStation] = 0;		//====Ä³Î»ÖÃ²»½Ğ·Ö
+		m_iCallScore[bDeskStation] = 0;		//====æŸä½ç½®ä¸å«åˆ†
 	}
 	else
 	{
@@ -1364,16 +1364,16 @@ BOOL CServerGameDesk::UserCallScore(BYTE bDeskStation, int iVal)
 		{
 			m_bIsCall[iVal - 1] = true;
 		}
-		m_iCallScore[bDeskStation] = iVal;	//½Ğ·ÖÀàĞÍ
-		m_iPrepareNT = bDeskStation;				//×îºó½Ğ·ÖÕß
-		if (iVal == 3)						//ÓĞÈËÖ±½Ó½Ğ3·Ö
+		m_iCallScore[bDeskStation] = iVal;	//å«åˆ†ç±»å‹
+		m_iPrepareNT = bDeskStation;				//æœ€åå«åˆ†è€…
+		if (iVal == 3)						//æœ‰äººç›´æ¥å«3åˆ†
 		{
 			CallScoreStruct callscore;
 			callscore.bDeskStation = bDeskStation;
 			callscore.bCallScoreflag = FALSE;
-			callscore.iValue = m_iCallScore[bDeskStation];		//µ±Ç°½Ğ·ÖÀàĞÍ±£´æ
+			callscore.iValue = m_iCallScore[bDeskStation];		//å½“å‰å«åˆ†ç±»å‹ä¿å­˜
 			for (int i = 0; i < PLAY_COUNT; i++)
-				SendGameData(i, &callscore, sizeof(callscore), MSG_MAIN_LOADER_GAME, ASS_CALL_SCORE_RESULT, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+				SendGameData(i, &callscore, sizeof(callscore), MSG_MAIN_LOADER_GAME, ASS_CALL_SCORE_RESULT, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 			CallScoreFinish();
 			return true;
 		}
@@ -1381,13 +1381,13 @@ BOOL CServerGameDesk::UserCallScore(BYTE bDeskStation, int iVal)
 	CallScoreStruct callscore;
 	callscore.bDeskStation = bDeskStation;
 	callscore.bCallScoreflag = FALSE;
-	callscore.iValue = m_iCallScore[bDeskStation];		//µ±Ç°½Ğ·ÖÀàĞÍ±£´æ
+	callscore.iValue = m_iCallScore[bDeskStation];		//å½“å‰å«åˆ†ç±»å‹ä¿å­˜
 	for (int i = 0; i < PLAY_COUNT; i++)
-		SendGameData(i, &callscore, sizeof(callscore), MSG_MAIN_LOADER_GAME, ASS_CALL_SCORE_RESULT, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &callscore, sizeof(callscore), MSG_MAIN_LOADER_GAME, ASS_CALL_SCORE_RESULT, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 
 	//SendWatchData(m_byMaxPeople,&callscore,sizeof(callscore),MSG_MAIN_LOADER_GAME,ASS_CALL_SCORE_RESULT,0);
 	int iNextPeople = GetNextDeskStation(bDeskStation);
-	// iNextPeople == m_bFirstCallScore ,Õâ¾ä´úÂëµÄ×÷ÓÃ¾ÍÊÇ£¬Ã»ÈË½Ğ3·Ö£¬»¹ÈÃµÚÒ»¸ö½Ğ·ÖÍæ¼ÒÈ·ÈÏ½Ğ·Ö
+	// iNextPeople == m_bFirstCallScore ,è¿™å¥ä»£ç çš„ä½œç”¨å°±æ˜¯ï¼Œæ²¡äººå«3åˆ†ï¼Œè¿˜è®©ç¬¬ä¸€ä¸ªå«åˆ†ç©å®¶ç¡®è®¤å«åˆ†
 	if (m_iCallScore[iNextPeople] == -1 /*|| (iNextPeople == m_bFirstCallScore && m_bIsCall[2] == false)*/)
 	{
 		SendCallScore(iNextPeople);
@@ -1409,22 +1409,22 @@ BOOL CServerGameDesk::UserCallScore(BYTE bDeskStation, int iVal)
 	return true;
 }
 
-//½Ğ·Ö½áÊø
+//å«åˆ†ç»“æŸ
 BOOL CServerGameDesk::CallScoreFinish()
 {
-	if (m_iPrepareNT == 255)	//Ã»ÓĞÈË½Ğ·Ö.ÖØĞÂ·¢ÅÆ
+	if (m_iPrepareNT == 255)	//æ²¡æœ‰äººå«åˆ†.é‡æ–°å‘ç‰Œ
 	{
 		GameFinish(0, GF_NO_CALL_SCORE);
 		return true;
 	}
-	if (m_iCallScore[m_iPrepareNT] == 0)	//Ã»ÓĞÈË½Ğ·Ö.ÖØĞÂ·¢ÅÆ
+	if (m_iCallScore[m_iPrepareNT] == 0)	//æ²¡æœ‰äººå«åˆ†.é‡æ–°å‘ç‰Œ
 	{
 		GameFinish(0, GF_NO_CALL_SCORE);
 		return true;
 	}
 	m_iBaseMult = m_iCallScore[m_iPrepareNT];
 	m_GameMutiple.IniData(m_iBaseMult);
-	//ÓÃÓÚÇÀµØÖ÷Î»ÖÃ½áÊø¿ØÖÆ
+	//ç”¨äºæŠ¢åœ°ä¸»ä½ç½®ç»“æŸæ§åˆ¶
 	m_iUpGradePeople = m_iPrepareNT;
 	CallScoreStruct scoreresult;
 	scoreresult.iValue = m_iCallScore[m_iPrepareNT];
@@ -1432,20 +1432,20 @@ BOOL CServerGameDesk::CallScoreFinish()
 	scoreresult.bCallScoreflag = false;
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
-		SendGameData(i, &scoreresult, sizeof(scoreresult), MSG_MAIN_LOADER_GAME, ASS_CALL_SCORE_FINISH, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &scoreresult, sizeof(scoreresult), MSG_MAIN_LOADER_GAME, ASS_CALL_SCORE_FINISH, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&scoreresult,sizeof(scoreresult),MSG_MAIN_LOADER_GAME,ASS_CALL_SCORE_FINISH,0);
 
-	//·¢ËÍµ×ÅÆ
+	//å‘é€åº•ç‰Œ
 	SendBackCard();
 	return TRUE;
 }
 
-//·¢ËÍÇÀµØÖ÷ÏûÏ¢
+//å‘é€æŠ¢åœ°ä¸»æ¶ˆæ¯
 BOOL	CServerGameDesk::SendRobNT(BYTE bDeskStation, BYTE byCard)
 {
-	m_iGameFlag = GS_FLAG_ROB_NT;				//ÇÀµØÖ÷																
-	//ÇÀµØÖ÷Çé¿ö
+	m_iGameFlag = GS_FLAG_ROB_NT;				//æŠ¢åœ°ä¸»																
+	//æŠ¢åœ°ä¸»æƒ…å†µ
 	RobNTStruct  TRobNT;
 	TRobNT.byDeskStation = bDeskStation;
 	TRobNT.iValue = ((m_iFirstRobNt == 255) ? 0 : 1);
@@ -1467,7 +1467,7 @@ BOOL	CServerGameDesk::SendRobNT(BYTE bDeskStation, BYTE byCard)
 	return TRUE;
 }
 
-//Íæ¼ÒÇÀµØÖ÷ÏûÏ¢
+//ç©å®¶æŠ¢åœ°ä¸»æ¶ˆæ¯
 BOOL	CServerGameDesk::UserRobNT(BYTE bDeskStation, int iValue)
 {
 	if (bDeskStation != m_iCurrentRobPeople)
@@ -1482,11 +1482,11 @@ BOOL	CServerGameDesk::UserRobNT(BYTE bDeskStation, int iValue)
 
 	KillTimer(TIME_ROB_NT);
 
-	//ÇÀµØÖ÷½á¹ûÇé¿ö
+	//æŠ¢åœ°ä¸»ç»“æœæƒ…å†µ
 	if (iValue > 0)
 	{
 		m_iPrepareNT = bDeskStation;
-		//ĞÂÒ»Ô¤±¸×¯¼Ò
+		//æ–°ä¸€é¢„å¤‡åº„å®¶
 		m_iRobStation[bDeskStation] += 1;
 	}
 	else
@@ -1500,12 +1500,12 @@ BOOL	CServerGameDesk::UserRobNT(BYTE bDeskStation, int iValue)
 	{
 		if (iValue > 0)
 		{
-			iTempValue = 3;	//ÇÀµØÖ÷
+			iTempValue = 3;	//æŠ¢åœ°ä¸»
 			m_GameMutiple.sRobNtMutiple[bDeskStation] += 1;
 		}
 		else
 		{
-			iTempValue = 2;	//²»ÇÀµØÖ÷
+			iTempValue = 2;	//ä¸æŠ¢åœ°ä¸»
 		}
 	}
 	else
@@ -1514,15 +1514,15 @@ BOOL	CServerGameDesk::UserRobNT(BYTE bDeskStation, int iValue)
 	}
 	RobNTStruct  robnt;
 	robnt.byDeskStation = bDeskStation;
-	robnt.iValue = iTempValue;  // 0-½ĞµØÖ÷×´Ì¬ 1-ÇÀµØÖ÷×´Ì¬  2 - ²»ÇÀµØÖ÷   3 - ÇÀµØÖ÷
+	robnt.iValue = iTempValue;  // 0-å«åœ°ä¸»çŠ¶æ€ 1-æŠ¢åœ°ä¸»çŠ¶æ€  2 - ä¸æŠ¢åœ°ä¸»   3 - æŠ¢åœ°ä¸»
 	robnt.byRobCount = m_GameMutiple.sRobNtMutiple[bDeskStation];
 
 	for (int i = 0;i < PLAY_COUNT; i++)
 	{
-		SendGameData(i, &robnt, sizeof(robnt), MSG_MAIN_LOADER_GAME, ASS_ROB_NT_RESULT, 0);		  //½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &robnt, sizeof(robnt), MSG_MAIN_LOADER_GAME, ASS_ROB_NT_RESULT, 0);		  //å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&robnt,sizeof(robnt),MSG_MAIN_LOADER_GAME,ASS_ROB_NT_RESULT,0);
-	//Èç¹ûÆäËûÁ½¸öÍæ¼Ò¶¼²»½ĞµØÖ÷ ÄÇÃ´½ĞµØÖ÷¡¢ÇÀµØÖ÷½áÊø
+	//å¦‚æœå…¶ä»–ä¸¤ä¸ªç©å®¶éƒ½ä¸å«åœ°ä¸» é‚£ä¹ˆå«åœ°ä¸»ã€æŠ¢åœ°ä¸»ç»“æŸ
 	if (m_iRobStation[(bDeskStation + 1) % PLAY_COUNT] == 255 && m_iRobStation[(bDeskStation + 2) % PLAY_COUNT] == 255)
 	{
 		RobNTFinish();
@@ -1534,14 +1534,14 @@ BOOL	CServerGameDesk::UserRobNT(BYTE bDeskStation, int iValue)
 		RobNTFinish();
 		return  TRUE;
 	}
-	//Èç¹ûµ±Ç°²Ù×÷µÄÍæ¼Ò==µÚÒ»¸ö½ĞµØÖ÷µÄÍæ¼Ò
+	//å¦‚æœå½“å‰æ“ä½œçš„ç©å®¶==ç¬¬ä¸€ä¸ªå«åœ°ä¸»çš„ç©å®¶
 	if (bDeskStation == m_iFirstRobNt)
 	{
 		RobNTFinish();
 		return TRUE;
 	}
 
-	///µÚÒ»¸ö Ñ¡ÔñÇÀµØÖ÷µÄÈË
+	///ç¬¬ä¸€ä¸ª é€‰æ‹©æŠ¢åœ°ä¸»çš„äºº
 	if (iValue > 0 && m_iFirstRobNt == 255)
 	{
 		m_iFirstRobNt = bDeskStation;
@@ -1560,14 +1560,14 @@ BOOL	CServerGameDesk::UserRobNT(BYTE bDeskStation, int iValue)
 		return TRUE;
 	}
 
-	//¼ÇÂ¼µ±Ç°²Ù×÷µÄÍæ¼Ò
+	//è®°å½•å½“å‰æ“ä½œçš„ç©å®¶
 	m_iCurrentRobPeople = bDesk;
 	SendRobNT(bDesk);
 
 	return TRUE;
 }
 
-//»ñÈ¡Ò»¸öÇÀµØÖ÷Íæ¼Ò
+//è·å–ä¸€ä¸ªæŠ¢åœ°ä¸»ç©å®¶
 BYTE CServerGameDesk::GetRobNtDeskStation(BYTE bDeskStation)
 {
 	for (int i = GetNextDeskStation(bDeskStation); ; i = GetNextDeskStation(i))
@@ -1580,13 +1580,13 @@ BYTE CServerGameDesk::GetRobNtDeskStation(BYTE bDeskStation)
 	return bDeskStation;
 }
 
-//ÇÀµØÖ÷½áÊø
+//æŠ¢åœ°ä¸»ç»“æŸ
 BOOL	CServerGameDesk::RobNTFinish()
 {
-	//Èı¸öÈË½ĞµØÖ÷½áÊø Èç¹ûÃ»ÓĞÈË½ĞµØÖ÷ ÄÇÃ´ÓÎÏ·ÖØĞÂ¿ªÊ¼
+	//ä¸‰ä¸ªäººå«åœ°ä¸»ç»“æŸ å¦‚æœæ²¡æœ‰äººå«åœ°ä¸» é‚£ä¹ˆæ¸¸æˆé‡æ–°å¼€å§‹
 	if (m_iPrepareNT == 255)
 	{
-		//µÚÒ»¸öÃ÷ÅÆµÄÍæ¼Ò¾ÍÊÇµØÖ÷
+		//ç¬¬ä¸€ä¸ªæ˜ç‰Œçš„ç©å®¶å°±æ˜¯åœ°ä¸»
 		if (m_iFirstShow != 255)
 		{
 			m_iPrepareNT = m_iFirstShow;
@@ -1600,7 +1600,7 @@ BOOL	CServerGameDesk::RobNTFinish()
 
 	m_iUpGradePeople = m_iPrepareNT;
 
-	//ÇÀµØÖ÷ÊÇ·ñ³É¹¦
+	//æŠ¢åœ°ä¸»æ˜¯å¦æˆåŠŸ
 	RobNTStruct  robresult;
 	robresult.byDeskStation = m_iPrepareNT;
 	robresult.iValue = -1;
@@ -1610,12 +1610,12 @@ BOOL	CServerGameDesk::RobNTFinish()
 	}
 	//SendWatchData(m_byMaxPeople,&robresult,sizeof(robresult),MSG_MAIN_LOADER_GAME,ASS_ROB_NT_FINISH,0);
 
-	//ÇÀµØÖ÷½áÊø·¢µ×ÅÆ
+	//æŠ¢åœ°ä¸»ç»“æŸå‘åº•ç‰Œ
 	SendBackCard();
 	return TRUE;
 }
 
-//·¢ËÍµ×ÅÆ
+//å‘é€åº•ç‰Œ
 BOOL	CServerGameDesk::SendBackCard()
 {
 	if (m_bHaveSendBack)
@@ -1650,16 +1650,16 @@ BOOL	CServerGameDesk::SendBackCard()
 	return TRUE;
 }
 
-//·¢ËÍ¼Ó±¶ÏûÏ¢
+//å‘é€åŠ å€æ¶ˆæ¯
 BOOL	CServerGameDesk::SendAddDouble()
 {
-	m_iGameFlag = GS_FLAG_ADD_DOUBLE;				//¼Ó±¶																
+	m_iGameFlag = GS_FLAG_ADD_DOUBLE;				//åŠ å€																
 	m_iRecvMsg = 0;
 	SetTimer(TIME_ADD_DOUBLE, (m_iAddDoubleTime + 1) * 1000);
 
 
 
-	//ÇÀµØÖ÷Çé¿ö
+	//æŠ¢åœ°ä¸»æƒ…å†µ
 	AddDoubleStruct  adddouble;
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
@@ -1696,7 +1696,7 @@ BOOL	CServerGameDesk::SendAddDouble()
 			}
 		}
 
-		SendGameData(i, &adddouble, sizeof(adddouble), MSG_MAIN_LOADER_GAME, ASS_ADD_DOUBLE, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &adddouble, sizeof(adddouble), MSG_MAIN_LOADER_GAME, ASS_ADD_DOUBLE, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 		if (adddouble.iValue == 0)
 		{
 			UserAddDouble(i, 0);
@@ -1705,7 +1705,7 @@ BOOL	CServerGameDesk::SendAddDouble()
 	return  TRUE;
 }
 
-//Íæ¼Ò¼Ó±¶
+//ç©å®¶åŠ å€
 BOOL	CServerGameDesk::UserAddDouble(BYTE bDeskStation, int iVal)
 {
 	if (m_iAddStation[bDeskStation] > 0)
@@ -1725,14 +1725,14 @@ BOOL	CServerGameDesk::UserAddDouble(BYTE bDeskStation, int iVal)
 		m_iAddStation[bDeskStation] = 255;
 	}
 
-	//·¢ËÍ¼Ó±¶½á¹û
+	//å‘é€åŠ å€ç»“æœ
 	AddDoubleStruct  adddouble;
 	adddouble.bDeskStation = bDeskStation;
 	adddouble.iValue = iVal;
 
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
-		SendGameData(i, &adddouble, sizeof(adddouble), MSG_MAIN_LOADER_GAME, ASS_ADD_DOUBLE_RESULT, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &adddouble, sizeof(adddouble), MSG_MAIN_LOADER_GAME, ASS_ADD_DOUBLE_RESULT, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&adddouble,sizeof(adddouble),MSG_MAIN_LOADER_GAME,ASS_ADD_DOUBLE_RESULT,0);
 
@@ -1744,7 +1744,7 @@ BOOL	CServerGameDesk::UserAddDouble(BYTE bDeskStation, int iVal)
 	return TRUE;
 }
 
-//¼Ó±¶½á¹û
+//åŠ å€ç»“æœ
 BOOL	CServerGameDesk::AddDoubleResult()
 {
 	KillTimer(TIME_ADD_DOUBLE);
@@ -1752,17 +1752,17 @@ BOOL	CServerGameDesk::AddDoubleResult()
 	return TRUE;
 }
 
-//¼Ó±¶½áÊø
+//åŠ å€ç»“æŸ
 BOOL	CServerGameDesk::AddDoubleFinish()
 {
-	//ÇÀµØÖ÷½á¹ûÇé¿ö
+	//æŠ¢åœ°ä¸»ç»“æœæƒ…å†µ
 	AddDoubleStruct  adddouble;
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
 		::memset(&adddouble, 0, sizeof(adddouble));
 		adddouble.bDeskStation = i;
 		adddouble.iValue = m_GameMutiple.sAddGameMutiple[i];
-		SendGameData(i, &adddouble, sizeof(adddouble), MSG_MAIN_LOADER_GAME, ASS_ADD_DOUBLE_FINISH, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &adddouble, sizeof(adddouble), MSG_MAIN_LOADER_GAME, ASS_ADD_DOUBLE_FINISH, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&adddouble,sizeof(adddouble),MSG_MAIN_LOADER_GAME,ASS_ADD_DOUBLE_FINISH,0);
 	if (m_bShowcard && !m_GameMutiple.sMingPaiMutiple[m_iUpGradePeople])
@@ -1776,10 +1776,10 @@ BOOL	CServerGameDesk::AddDoubleFinish()
 	return true;
 }
 
-//ÁÁÅÆ
+//äº®ç‰Œ
 BOOL	CServerGameDesk::SendShowCard()
 {
-	m_iGameFlag = GS_FLAG_SHOW_CARD;				//ÁÁÅÆ																
+	m_iGameFlag = GS_FLAG_SHOW_CARD;				//äº®ç‰Œ																
 	ShowCardStruct show;
 	show.bDeskStation = m_iUpGradePeople;
 
@@ -1787,13 +1787,13 @@ BOOL	CServerGameDesk::SendShowCard()
 
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
-		SendGameData(i, &show, sizeof(show), MSG_MAIN_LOADER_GAME, ASS_SHOW_CARD, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &show, sizeof(show), MSG_MAIN_LOADER_GAME, ASS_SHOW_CARD, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&show,sizeof(show),MSG_MAIN_LOADER_GAME,ASS_SHOW_CARD,0);
 	return TRUE;
 }
 
-//Ã÷ÅÆÏûÏ¢
+//æ˜ç‰Œæ¶ˆæ¯
 BOOL	CServerGameDesk::UserShowCard(BYTE bDeskStation, int iValue)
 {
 	KillTimer(TIME_SHOW_CARD);
@@ -1817,18 +1817,18 @@ BOOL	CServerGameDesk::UserShowCard(BYTE bDeskStation, int iValue)
 
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
-		SendGameData(i, &showresult, sizeof(showresult), MSG_MAIN_LOADER_GAME, ASS_SHOW_CARD_RESULT, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &showresult, sizeof(showresult), MSG_MAIN_LOADER_GAME, ASS_SHOW_CARD_RESULT, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&showresult,sizeof(showresult),MSG_MAIN_LOADER_GAME,ASS_SHOW_CARD_RESULT,0);
 
-	if (m_iGameFlag == GS_FLAG_SHOW_CARD)   ///×¯¼ÒÃ÷ÅÆ
+	if (m_iGameFlag == GS_FLAG_SHOW_CARD)   ///åº„å®¶æ˜ç‰Œ
 	{
 		ShowCardFinish();
 	}
 	return TRUE;
 }
 
-//Ã÷ÅÆ½áÊø
+//æ˜ç‰Œç»“æŸ
 BOOL	CServerGameDesk::ShowCardFinish()
 {
 	m_iGameFlag = GS_FLAG_PLAY_GAME;
@@ -1838,7 +1838,7 @@ BOOL	CServerGameDesk::ShowCardFinish()
 
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
-		SendGameData(i, &showresult, sizeof(showresult), MSG_MAIN_LOADER_GAME, ASS_SHOW_CARD_FINISH, 0);		//½«½Ğ·ÖÇé¿ö·¢¸øÆäËûÓÃ»§
+		SendGameData(i, &showresult, sizeof(showresult), MSG_MAIN_LOADER_GAME, ASS_SHOW_CARD_FINISH, 0);		//å°†å«åˆ†æƒ…å†µå‘ç»™å…¶ä»–ç”¨æˆ·
 	}
 	//SendWatchData(m_byMaxPeople,&showresult,sizeof(showresult),MSG_MAIN_LOADER_GAME,ASS_SHOW_CARD_FINISH,0);
 
@@ -1847,21 +1847,21 @@ BOOL	CServerGameDesk::ShowCardFinish()
 	return TRUE;
 }
 
-//ÓÎÏ·¿ªÊ¼
+//æ¸¸æˆå¼€å§‹
 BOOL	CServerGameDesk::BeginPlay()
 {
 	KillAllTimer();
-	//ÉèÖÃÊı¾İ
+	//è®¾ç½®æ•°æ®
 	SetGameStation(GS_PLAY_GAME);
 	m_iBaseOutCount = 0;
 	m_iNowBigPeople = m_iOutCardPeople = m_iFirstOutPeople = m_iUpGradePeople;
 
 	::memset(m_iDeskCardCount, 0, sizeof(m_iDeskCardCount));
 
-	//ÅÅÁĞÆË¿Ë
+	//æ’åˆ—æ‰‘å…‹
 	for (int i = 0; i < PLAY_COUNT; i++)
 		m_Logic.SortCard(m_iUserCard[i], NULL, m_iUserCardCount[i]);
-	//·¢ËÍÓÎÏ·¿ªÊ¼ÏûÏ¢
+	//å‘é€æ¸¸æˆå¼€å§‹æ¶ˆæ¯
 	BeginPlayStruct Begin;
 	Begin.iOutDeskStation = m_iOutCardPeople;
 	for (int i = 0;i < PLAY_COUNT; i++)
@@ -1899,7 +1899,7 @@ BOOL	CServerGameDesk::BeginPlay()
 	return TRUE;
 }
 
-//ÓÃ»§³öÅÆ
+//ç”¨æˆ·å‡ºç‰Œ
 BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardCount)
 {
 	BYTE iOutCardShape = m_Logic.GetCardShape(iOutCard, iCardCount);
@@ -1913,58 +1913,58 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 	}
 	else
 	{
-		//µ±Ç°×î´ó³öÅÆµÄÍæ¼Ò²»ÄÜ²»³ö
+		//å½“å‰æœ€å¤§å‡ºç‰Œçš„ç©å®¶ä¸èƒ½ä¸å‡º
 		if (0 == iCardCount  && bDeskStation == m_iNowBigPeople)
 		{
 			SendOutCardError(bDeskStation, 3);
 			return true;
 		}
 	}
-	//´¦Àí·şÎñÆ÷ÅÆ
+	//å¤„ç†æœåŠ¡å™¨ç‰Œ
 	if (iCardCount > 0)
 	{
-		//Ôö¼Ó³öÅÆÂß¼­ºÏ·¨ĞÔÅĞ¶Ïzht 2010-03-23
+		//å¢åŠ å‡ºç‰Œé€»è¾‘åˆæ³•æ€§åˆ¤æ–­zht 2010-03-23
 		if (!m_Logic.CanOutCard(iOutCard, iCardCount, m_iDeskCard[m_iNowBigPeople], m_iDeskCardCount[m_iNowBigPeople],
 			m_iUserCard[bDeskStation], m_iUserCardCount[bDeskStation], bDeskStation == m_iNowBigPeople))
 		{
-			ERROR_LOG("=========================ÅÆĞÍ´íÎó=========================");
+			ERROR_LOG("=========================ç‰Œå‹é”™è¯¯=========================");
 			SendOutCardError(bDeskStation, 6);
 			return TRUE;
 		}
 		if (m_Logic.RemoveCard(iOutCard, iCardCount, m_iUserCard[bDeskStation], m_iUserCardCount[bDeskStation]) == 0)
 		{
-			ERROR_LOG("=========================É¾³ıÅÆ³ö´í===========================");
+			ERROR_LOG("=========================åˆ é™¤ç‰Œå‡ºé”™===========================");
 			SendOutCardError(bDeskStation, 4);
 			return TRUE;
 		}
-		if (0 == m_iNtFirstCount)		//µØÖ÷³öµÄµÚÒ»ÊÖÅÆ
+		if (0 == m_iNtFirstCount)		//åœ°ä¸»å‡ºçš„ç¬¬ä¸€æ‰‹ç‰Œ
 		{
 			m_iNtFirstCount = iCardCount;
 		}
 		m_iNowBigPeople = bDeskStation;
 		m_iBaseOutCount = iCardCount;
 		m_iUserCardCount[bDeskStation] -= iCardCount;
-		//¼ÇÂ¼³öÅÆĞÅÏ¢
+		//è®°å½•å‡ºç‰Œä¿¡æ¯
 		m_iDeskCardCount[bDeskStation] = iCardCount;
 		::CopyMemory(m_iDeskCard[bDeskStation], iOutCard, sizeof(BYTE)*iCardCount);
 		m_byPass[bDeskStation] = false;
 
-		//¼ÇÂ¼³öÅÆ
+		//è®°å½•å‡ºç‰Œ
 		memcpy(&m_lastCardList[m_lastCardListIndex], iOutCard, sizeof(BYTE)*iCardCount);
 		m_lastCardListIndex += iCardCount;
 	}
 	else
 	{
-		//Ä³Ò»Î»ÖÃÊ²üNÅÆÒ²²»³ö
+		//æŸä¸€ä½ç½®ä»€éº¼ç‰Œä¹Ÿä¸å‡º
 		m_iDeskCardCount[bDeskStation] = iCardCount;
 		memset(m_iDeskCard[bDeskStation], 0, sizeof(m_iDeskCard[bDeskStation]));
 
-		m_byteHitPass |= (1 << bDeskStation);	//¼ÇÂ¼PASS
+		m_byteHitPass |= (1 << bDeskStation);	//è®°å½•PASS
 		m_byPass[bDeskStation] = true;
 	}
 
 	KillTimer(TIME_OUT_CARD);
-	//·¢ËÍÍæ¼Ò³öÅÆ½á¹û
+	//å‘é€ç©å®¶å‡ºç‰Œç»“æœ
 	CMD_S_OutCard UserOutResult;
 	UserOutResult.byCurOutCardStation = bDeskStation;
 	UserOutResult.byCardCount = iCardCount;
@@ -1984,7 +1984,7 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 	}
 	//SendWatchData(m_byMaxPeople,&UserOutResult,sizeof(UserOutResult),MSG_MAIN_LOADER_GAME,ASS_OUT_CARD_RESULT,0);
 
-	//ÊÇ·ñÎª¼Ó·ÖÅÆĞÍ
+	//æ˜¯å¦ä¸ºåŠ åˆ†ç‰Œå‹
 	IsAwardPoin(iOutCard, iCardCount, bDeskStation);
 
 	if (m_Logic.IsKingBomb(iOutCard, iCardCount) || m_Logic.IsBomb(iOutCard, iCardCount))
@@ -1992,19 +1992,19 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 		m_tZongResult.iBombCount[bDeskStation]++;
 	}
 
-	//====ÅĞ¶ÏÊÇ·ñÕâ¸öÍæ¼ÒÊÇ·ñ³öÍêÅÆ
+	//====åˆ¤æ–­æ˜¯å¦è¿™ä¸ªç©å®¶æ˜¯å¦å‡ºå®Œç‰Œ
 	if (m_iUserCardCount[bDeskStation] <= 0)
 	{
 		m_bFirstCallScore = bDeskStation;
 		m_Logic.SetLastCardData(iOutCard, iCardCount);
 
 		m_iDealPeople = bDeskStation;
-		//³öÍêÅÆ¸÷…¢”µÔOÖÃ
+		//å‡ºå®Œç‰Œå„åƒæ•¸è¨­ç½®
 		SetTimer(TIME_GAME_FINISH, 1000);
 		return true;
 
 	}
-	//Ëù³öµÄÅÆ×î´ó,ÖØĞÂ¿ªÊ¼ĞÂÒ»ÂÖ
+	//æ‰€å‡ºçš„ç‰Œæœ€å¤§,é‡æ–°å¼€å§‹æ–°ä¸€è½®
 	if (m_Logic.IsKingBomb(iOutCard, iCardCount))
 	{
 		m_iNowBigPeople = m_iFirstOutPeople = m_iOutCardPeople = bDeskStation;
@@ -2012,15 +2012,15 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 		return true;
 	}
 
-	//¼ÆËãÏÂÒ»ÂÖ³öÅÆÕß
+	//è®¡ç®—ä¸‹ä¸€è½®å‡ºç‰Œè€…
 	m_iOutCardPeople = GetNextDeskStation(bDeskStation);//(bDeskStation+1)%PLAY_COUNT;
 
 	for (int i = m_iOutCardPeople;;i = GetNextDeskStation(i))
 	{
-		m_iOutCardPeople = i;				//µ±Ç°³öÅÆÕß
+		m_iOutCardPeople = i;				//å½“å‰å‡ºç‰Œè€…
 		if (IsNewTurn())
 			return true;
-		//µ±Ç°³öÅÆÕßÓĞÅÆÎ´³ö
+		//å½“å‰å‡ºç‰Œè€…æœ‰ç‰Œæœªå‡º
 		if (m_iUserCardCount[i] > 0)
 			break;
 	}
@@ -2042,7 +2042,7 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 		{
 			if (!pUser->IsOnline)
 			{
-				// ×Ô¶¯³öÅÆ
+				// è‡ªåŠ¨å‡ºç‰Œ
 				SetTimer(TIME_OUT_CARD, 1000);
 			}
 			else
@@ -2063,18 +2063,18 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 	return TRUE;
 }
 
-//»ñÈ¡ÏÂÒ»¸öÍæ¼ÒÎ»ÖÃ
+//è·å–ä¸‹ä¸€ä¸ªç©å®¶ä½ç½®
 BYTE CServerGameDesk::GetNextDeskStation(BYTE bDeskStation)
 {
-	if (!m_bTurnRule)//Ë³Ê±Õë
+	if (!m_bTurnRule)//é¡ºæ—¶é’ˆ
 	{
 		return (bDeskStation + 1) % PLAY_COUNT;
 	}
-	//ÄæÊ±Õë
+	//é€†æ—¶é’ˆ
 	return 	(bDeskStation + (PLAY_COUNT - 1)) % PLAY_COUNT;
 }
 
-//ÊÇ·ñéĞÂÒ»İ†
+//æ˜¯å¦ç‚ºæ–°ä¸€è¼ª
 BOOL CServerGameDesk::IsNewTurn()
 {
 	if (m_iOutCardPeople == m_iFirstOutPeople)
@@ -2084,7 +2084,7 @@ BOOL CServerGameDesk::IsNewTurn()
 
 		//SendWatchData(m_byMaxPeople,MSG_MAIN_LOADER_GAME,ASS_ONE_TURN_OVER,0);
 	}
-	if (m_iOutCardPeople == m_iNowBigPeople)			//×îÏÈ³öÅÆÕß
+	if (m_iOutCardPeople == m_iNowBigPeople)			//æœ€å…ˆå‡ºç‰Œè€…
 	{
 		//m_iOutCardPeople = -1;
 		SetTimer(TIME_WAIT_NEWTURN, 100);
@@ -2093,12 +2093,12 @@ BOOL CServerGameDesk::IsNewTurn()
 	return false;
 }
 
-//ĞÂÒ»ÂÖ¿ªÊ¼
+//æ–°ä¸€è½®å¼€å§‹
 BOOL CServerGameDesk::NewPlayTurn(BYTE bDeskStation)
 {
 	m_iBaseOutCount = 0;
 	m_iOutCardPeople = m_iFirstOutPeople = m_iNowBigPeople = bDeskStation;
-	//±£´æÉÏÒ»ÂÖ³öÅÆÇé¿ö
+	//ä¿å­˜ä¸Šä¸€è½®å‡ºç‰Œæƒ…å†µ
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
 		m_bIsLastCard = true;
@@ -2124,7 +2124,7 @@ BOOL CServerGameDesk::NewPlayTurn(BYTE bDeskStation)
 		{
 			if (!pUser->IsOnline)
 			{
-				//×Ô¶¯³öÅÆ
+				//è‡ªåŠ¨å‡ºç‰Œ
 				SetTimer(TIME_OUT_CARD, 1000);
 			}
 			else
@@ -2144,12 +2144,12 @@ BOOL CServerGameDesk::NewPlayTurn(BYTE bDeskStation)
 	return TRUE;
 }
 
-//Ëù³öÅÆÖĞÌÖÉÍÉèÖÃ
+//æ‰€å‡ºç‰Œä¸­è®¨èµè®¾ç½®
 BOOL CServerGameDesk::IsAwardPoin(BYTE iOutCard[], int iCardCount, BYTE bDeskStation)
 {
 	if (m_iFengDing > 0 && m_GameMutiple.sBombCount >= m_iFengDing)
 	{
-		//Õ¨µ¯·â¶¥ÁË
+		//ç‚¸å¼¹å°é¡¶äº†
 		return true;
 	}
 	if (m_Logic.IsKingBomb(iOutCard, iCardCount) || m_Logic.IsBomb(iOutCard, iCardCount))
@@ -2163,7 +2163,7 @@ BOOL CServerGameDesk::IsAwardPoin(BYTE iOutCard[], int iCardCount, BYTE bDeskSta
 		award.iAwardPoint = m_GameMutiple.sBombCount;		//add zrr
 		award.bDeskStation = bDeskStation;
 
-		//·¢ËÍ½±·ÖÇé¿ö
+		//å‘é€å¥–åˆ†æƒ…å†µ
 		for (int i = 0;i < PLAY_COUNT; i++)
 			SendGameData(i, &award, sizeof(award), MSG_MAIN_LOADER_GAME, ASS_AWARD_POINT, 0);
 		//SendWatchData(m_byMaxPeople,&award,sizeof(award),MSG_MAIN_LOADER_GAME,ASS_AWARD_POINT,0);
@@ -2186,11 +2186,11 @@ void CServerGameDesk::UpdateCalculateBoard()
 			temp.push_back(m_vecWinInfo[i][j]);
 		}
 
-		//×î¸ßÁ¬Ê¤
+		//æœ€é«˜è¿èƒœ
 		iContinueWinCount.clear();
 		for (auto ite = temp.begin(); ite != temp.end(); ite++)
 		{
-			//µÚÒ»¸öÓ®£¬²åÈë1
+			//ç¬¬ä¸€ä¸ªèµ¢ï¼Œæ’å…¥1
 			if (ite == temp.begin())
 			{
 				if (*ite == true)
@@ -2198,12 +2198,12 @@ void CServerGameDesk::UpdateCalculateBoard()
 					iContinueWinCount.push_back(1);
 				}
 			}
-			//ÓĞÁ½Á¬ĞøµÄ£¬ËµÃ÷ÊÇÁ¬Ê¤£¬Á¬Ê¤¼Ó1
+			//æœ‰ä¸¤è¿ç»­çš„ï¼Œè¯´æ˜æ˜¯è¿èƒœï¼Œè¿èƒœåŠ 1
 			else if (*(ite - 1) == true && *ite == true)
 			{
 				iContinueWinCount.at(iContinueWinCount.size() - 1) += 1;
 			}
-			//Ç°Ò»¸ö²»Ó®Õâ¸öÓ®£¬ĞÂ²åÈëÒ»¸ö1
+			//å‰ä¸€ä¸ªä¸èµ¢è¿™ä¸ªèµ¢ï¼Œæ–°æ’å…¥ä¸€ä¸ª1
 			else if (*ite == true)
 			{
 				iContinueWinCount.push_back(1);
@@ -2218,7 +2218,7 @@ void CServerGameDesk::UpdateCalculateBoard()
 				m_tZongResult.iMaxContinueCount[i] = *ite;
 			}
 		}
-		//´óÓ®¼Ò
+		//å¤§èµ¢å®¶
 		//m_tZongResult[i].bWinner = false;
 		m_tZongResult.bWinner[i] = false;
 		if (m_tZongResult.i64WinMoney[i] >= m_tZongResult.i64WinMoney[iBigWinnerStation])
@@ -2239,7 +2239,7 @@ void CServerGameDesk::UpdateCalculateBoard()
 		m_tZongResult.bWinner[iBigWinnerStation] = true;
 	}
 
-	// ¼ÆËã³éË®Öµ
+	// è®¡ç®—æŠ½æ°´å€¼
 	__super::SetDeskPercentageScore(m_tZongResult.i64WinMoney);
 
 	for (int i = 0; i < PLAY_COUNT; i++)
@@ -2253,18 +2253,18 @@ void CServerGameDesk::UpdateCalculateBoard()
 	}
 }
 
-//ÓÎÏ·½áÊø
+//æ¸¸æˆç»“æŸ
 bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 {
-	//±àĞ´´úÂë
+	//ç¼–å†™ä»£ç 
 	switch (bCloseFlag)
 	{
-	case GF_NORMAL:		//ÓÎÏ·Õı³£½áÊø
+	case GF_NORMAL:		//æ¸¸æˆæ­£å¸¸ç»“æŸ
 	{
 		int roomType = GetRoomType();
 		if (roomType != ROOM_TYPE_PRIVATE)
 		{
-			///ÓÎÏ·½áÊøºóËùÓĞÍæ¼ÒÈ¡ÏûÍĞ¹Ü
+			///æ¸¸æˆç»“æŸåæ‰€æœ‰ç©å®¶å–æ¶ˆæ‰˜ç®¡
 			for (int i = 0; i < PLAY_COUNT; i++)
 			{
 				long userID = GetUserIDByDeskStation(i);
@@ -2275,7 +2275,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			}
 		}
 
-		//±£´æ³öÅÆÁĞ±í
+		//ä¿å­˜å‡ºç‰Œåˆ—è¡¨
 		for (int i = 0; i < PLAY_COUNT; i ++)
 		{
 			if (m_iUserCardCount[i] <= 0)
@@ -2287,14 +2287,14 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			m_lastCardListIndex += m_iUserCardCount[i];
 		}
 
-		//////////////////////////////Ğ¡½áËã////////////////////////////////////////////
-		//ÓÎÏ·½áÊø
+		//////////////////////////////å°ç»“ç®—////////////////////////////////////////////
+		//æ¸¸æˆç»“æŸ
 		GameEndStruct GameEnd;
 		::memcpy(GameEnd.iUserCard, m_iUserCard, sizeof(m_iUserCard));
 		::memcpy(GameEnd.iUserCardCount, m_iUserCardCount, sizeof(m_iUserCardCount));
 		GameEnd.iBaseFen = GetBasePoint();
 		GameEnd.iBombCount = m_GameMutiple.sBombCount;
-		int iUserAllDouble[PLAY_COUNT];//ÓÃ»§×Ü±¶Êı
+		int iUserAllDouble[PLAY_COUNT];//ç”¨æˆ·æ€»å€æ•°
 		memset(iUserAllDouble, 0, sizeof(iUserAllDouble));
 		if (GetNoOutCard())
 		{
@@ -2315,7 +2315,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			iUserAllDouble[i] = iBaseDouble;
 		}
 		int  iTurePoint = iBaseDouble * GetBasePoint();
-		//ÊÇË­Ê¤
+		//æ˜¯è°èƒœ
 		if (m_iUserCardCount[m_iUpGradePeople] == 0)
 		{
 			iTurePoint = iTurePoint;
@@ -2325,22 +2325,22 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			iTurePoint = -iTurePoint;
 		}
 
-		////¼ÆËã¼Ó±¶
+		////è®¡ç®—åŠ å€
 		int  iNtMutiple = m_GameMutiple.sAddGameMutiple[m_iUpGradePeople] > 0 ? 2 : 1;
-		int  iAllFarMutiple = 0; //Å©ÃñµÄ×Ü±¶Êı
-		long long llMoney[PLAY_COUNT];			//Íæ¼ÒµÃ·Ö
+		int  iAllFarMutiple = 0; //å†œæ°‘çš„æ€»å€æ•°
+		long long llMoney[PLAY_COUNT];			//ç©å®¶å¾—åˆ†
 		memset(llMoney, 0, sizeof(llMoney));
 		for (int i = 0; i < PLAY_COUNT; i++)
 		{
 			GameEnd.bAddDouble[i] = m_GameMutiple.sAddGameMutiple[i];
 			int iMyMutiple = m_GameMutiple.sAddGameMutiple[i] > 0 ? 2 : 1;
-			if (i == m_iUpGradePeople)//×¯¼Ò
+			if (i == m_iUpGradePeople)//åº„å®¶
 			{
 				continue;
 			}
 			else
 			{
-				llMoney[i] = -iTurePoint*iNtMutiple*iMyMutiple;//¼Ó±¶
+				llMoney[i] = -iTurePoint*iNtMutiple*iMyMutiple;//åŠ å€
 				iUserAllDouble[i] *= iNtMutiple*iMyMutiple;
 				iAllFarMutiple += iUserAllDouble[i];
 			}
@@ -2349,13 +2349,13 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		iUserAllDouble[m_iUpGradePeople] = iAllFarMutiple;
 		memcpy(GameEnd.iAllDouble, iUserAllDouble, sizeof(GameEnd.iAllDouble));
 
-		///Ò»ÏÂ¼ÆËãÍæ¼ÒµÄµÃ·ÖÇé¿ö£¬Èç¹ûÊÇ½ğ±Ò³¡µÄ»°ĞèÒªÅĞ¶ÏÊÇ·ñ³¬¹ıÍæ¼ÒÉíÉÏµÄÇ®£¬Èç¹ûÊÇ»ı·Ö³¡Ôò²»ĞèÅĞ¶Ï
+		///ä¸€ä¸‹è®¡ç®—ç©å®¶çš„å¾—åˆ†æƒ…å†µï¼Œå¦‚æœæ˜¯é‡‘å¸åœºçš„è¯éœ€è¦åˆ¤æ–­æ˜¯å¦è¶…è¿‡ç©å®¶èº«ä¸Šçš„é’±ï¼Œå¦‚æœæ˜¯ç§¯åˆ†åœºåˆ™ä¸éœ€åˆ¤æ–­
 		if (roomType != ROOM_TYPE_PRIVATE)
 		{
 			long long _Int64Money = 0;
 
-			//¿ØÖÆÓ®
-			if (llMoney[m_iUpGradePeople] > 0) //×¯¼ÒÓ®
+			//æ§åˆ¶èµ¢
+			if (llMoney[m_iUpGradePeople] > 0) //åº„å®¶èµ¢
 			{
 				long long llResNums = 0;
 				if (GetRoomResNums(m_iUpGradePeople, llResNums) && llMoney[m_iUpGradePeople] > llResNums)
@@ -2370,7 +2370,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 					llMoney[m_iUpGradePeople] = llResNums;
 				}
 			}
-			else//×¯¼ÒÊä
+			else//åº„å®¶è¾“
 			{
 				_Int64Money = 0;
 				for (int i = 0; i < PLAY_COUNT; i++)
@@ -2390,8 +2390,8 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 				llMoney[m_iUpGradePeople] = _Int64Money;
 			}
 
-			//¿ØÖÆÊä
-			if (llMoney[m_iUpGradePeople] > 0) //×¯¼ÒÓ®
+			//æ§åˆ¶è¾“
+			if (llMoney[m_iUpGradePeople] > 0) //åº„å®¶èµ¢
 			{
 				for (int i = 0; i < PLAY_COUNT; i++)
 				{
@@ -2410,7 +2410,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 				}
 				llMoney[m_iUpGradePeople] = _Int64Money;
 			}
-			else//×¯¼ÒÊä
+			else//åº„å®¶è¾“
 			{
 				long long llResNums = 0;
 				GetRoomResNums(m_iUpGradePeople, llResNums);
@@ -2428,7 +2428,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			}
 		}
 
-		//¼ÆËã³éË®
+		//è®¡ç®—æŠ½æ°´
 		long long UserPumpGold[PLAY_COUNT] = { 0 };
 		memset(UserPumpGold, 0, sizeof(UserPumpGold));
 		if (roomType == ROOM_TYPE_GOLD)
@@ -2445,23 +2445,23 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 
 		if (roomType == ROOM_TYPE_PRIVATE)
 		{
-			//·¿¿¨³¡½áËã
+			//æˆ¿å¡åœºç»“ç®—
 			ChangeUserPointPrivate(llMoney, NULL, "", true);
 		}
 		else if (roomType == ROOM_TYPE_FRIEND)
 		{
-			// »ı·Ö·¿½áËã
+			// ç§¯åˆ†æˆ¿ç»“ç®—
 			//ChangeUserPointPrivate(llMoney, temp_cut,"",true);
 			//ChangeUserPoint(llMoney, temp_cut);
 			ChangeUserPointGoldRoom(llMoney, "", true);
 		}
 		else if (roomType == ROOM_TYPE_GOLD)
 		{
-			//½ğ±Ò³¡½áËã
+			//é‡‘å¸åœºç»“ç®—
 			ChangeUserPoint(llMoney, NULL, UserPumpGold);
 		}
 		else if (roomType == ROOM_TYPE_FG_VIP) {
-			//¾ãÀÖ²¿·¿¼ä
+			//ä¿±ä¹éƒ¨æˆ¿é—´
 			ChangeUserFireCoin(llMoney, "", true);
 		}
 
@@ -2471,7 +2471,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			GameEnd.iUserScore[i] = (int)llMoney[i];
 			m_tZongResult.i64WinMoney[i] += llMoney[i];
 		}
-		if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //Ê±¼äÄ£Ê½
+		if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //æ—¶é—´æ¨¡å¼
 		{
 			m_iVipGameCount = m_iRunGameCount;
 			GameEnd.iVipGameCount = m_iVipGameCount;
@@ -2486,25 +2486,25 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 
 		for (int i = 0; i < PLAY_COUNT; i++)
 		{
-			//×î¶àÓ®Ç®ÊıÄ¿
+			//æœ€å¤šèµ¢é’±æ•°ç›®
 			if (m_tZongResult.iMaxWinMoney[i] <= m_tZongResult.i64WinMoney[i])
 			{
 				m_tZongResult.iMaxWinMoney[i] = (int)m_tZongResult.i64WinMoney[i];
 			}
-			//Ê¤Àû¾ÖÊı
+			//èƒœåˆ©å±€æ•°
 			if (llMoney[i] > 0)
 			{
-				//±£´æÊäÓ®¼ÇÂ¼
+				//ä¿å­˜è¾“èµ¢è®°å½•
 				m_vecWinInfo[i].push_back(true);
 				m_tZongResult.iWinCount[i]++;
 			}
 			else
 			{
-				//±£´æÊäÓ®¼ÇÂ¼
+				//ä¿å­˜è¾“èµ¢è®°å½•
 				m_vecWinInfo[i].push_back(false);
 			}
 		}
-		//ÉèÖÃÊı¾İ 
+		//è®¾ç½®æ•°æ® 
 		SetGameStation(GS_WAIT_ARGEE);
 		ReSetGameState(bCloseFlag);
 		__super::GameFinish(bDeskStation, GF_NORMAL);
@@ -2514,7 +2514,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 	{
 		if (IsGoldRoom())
 		{
-			///ÓÎÏ·½áÊøºóËùÓĞÍæ¼ÒÈ¡ÏûÍĞ¹Ü
+			///æ¸¸æˆç»“æŸåæ‰€æœ‰ç©å®¶å–æ¶ˆæ‰˜ç®¡
 			for (int i = 0; i < PLAY_COUNT; i++)
 			{
 				long userID = GetUserIDByDeskStation(i);
@@ -2524,7 +2524,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 				}
 			}
 		}
-		//ÉèÖÃÊı¾İ 
+		//è®¾ç½®æ•°æ® 
 		SetGameStation(GS_WAIT_ARGEE);
 
 		m_lastCardListIndex = 0;
@@ -2553,20 +2553,20 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			GameFinish(255, GF_SALE);
 			return true;
 		}
-		////ÓÎÏ·½áÊø
+		////æ¸¸æˆç»“æŸ
 		//GameEndStruct GameEnd;
 		//::memset(&GameEnd,0,sizeof(GameEnd));
 
 		//::memcpy(GameEnd.iUserCard,m_iUserCard,sizeof(m_iUserCard));
 		//::memcpy(GameEnd.iUserCardCount,m_iUserCardCount,sizeof(m_iUserCardCount));
 
-		////·¢ËÍÊı¾İ
+		////å‘é€æ•°æ®
 		//for (int i = 0; i < PLAY_COUNT; i ++) 
 		//	SendGameData(i,&GameEnd,sizeof(GameEnd),MSG_MAIN_LOADER_GAME,ASS_NO_CALL_SCORE_END,0);
 		////SendWatchData(m_byMaxPeople,&GameEnd,sizeof(GameEnd),MSG_MAIN_LOADER_GAME,ASS_NO_CALL_SCORE_END,0);
 
 		ReSetGameState(GF_NORMAL);
-		if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //Ê±¼äÄ£Ê½
+		if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //æ—¶é—´æ¨¡å¼
 		{
 			m_iVipGameCount = m_iRunGameCount;
 		}
@@ -2584,9 +2584,9 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 	}
 
 	case GFF_SAFE_FINISH:
-	case GF_SALE:			//ÓÎÏ·°²È«½áÊø
+	case GF_SALE:			//æ¸¸æˆå®‰å…¨ç»“æŸ
 	{
-		//ÉèÖÃÊı¾İ
+		//è®¾ç½®æ•°æ®
 		SetGameStation(GS_WAIT_ARGEE);
 
 		m_lastCardListIndex = 0;
@@ -2604,7 +2604,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		bCloseFlag = GF_SALE;
 
 		ReSetGameState(bCloseFlag);
-		if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //Ê±¼äÄ£Ê½
+		if (m_iRunTime > 0 && GetCurTime() > m_iGameEndTime) //æ—¶é—´æ¨¡å¼
 		{
 			m_byGameEndType = 1;
 			m_iVipGameCount = m_iRunGameCount;
@@ -2612,13 +2612,13 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		__super::GameFinish(bDeskStation, bCloseFlag);
 		return true;
 	}
-	case GFF_FORCE_FINISH:		//ÓÃ»§¶ÏÏßÀë¿ª
+	case GFF_FORCE_FINISH:		//ç”¨æˆ·æ–­çº¿ç¦»å¼€
 	{
 		return TRUE;
 	}
-	case GF_AHEAD_END://ÌáÇ°½áÊø
+	case GF_AHEAD_END://æå‰ç»“æŸ
 	{
-		//ÉèÖÃÊı¾İ 
+		//è®¾ç½®æ•°æ® 
 		SetGameStation(GS_WAIT_ARGEE);
 		GameCutStruct CutEnd;
 		::memset(&CutEnd, 0, sizeof(CutEnd));
@@ -2633,20 +2633,20 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		return true;
 	}
 	}
-	//ÖØÖÃÊı¾İ
+	//é‡ç½®æ•°æ®
 	ReSetGameState(bCloseFlag);
 	__super::GameFinish(bDeskStation, bCloseFlag);
 
 	return true;
 }
 
-//ÌÓÅÜ¿Û·Ö
+//é€ƒè·‘æ‰£åˆ†
 int CServerGameDesk::GetRunPublish()
 {
 	return m_pDataManage->m_InitData.uRunPublish;
 }
 
-//ÌÓÅÜ¿Û·Ö
+//é€ƒè·‘æ‰£åˆ†
 int CServerGameDesk::GetRunPublish(BYTE bDeskStation)
 {
 	BYTE iResultCardList[45];
@@ -2704,24 +2704,24 @@ int CServerGameDesk::GetRunPublish(BYTE bDeskStation)
 
 }
 
-//ÓÎÏ·»ù´¡±¶Êı
+//æ¸¸æˆåŸºç¡€å€æ•°
 int CServerGameDesk::GetRoomMul()
 {
-	return m_pDataManage->m_InitData.uBasePoint; // ±¶Êı
+	return m_pDataManage->m_InitData.uBasePoint; // å€æ•°
 }
 
-//×À×Ó±¶Êı
+//æ¡Œå­å€æ•°
 int CServerGameDesk::GetDeskBasePoint()
 {
 	return m_iBaseMult;
 }
 
-//ÉèÖÃÏÂÒ»¸ö×¯¼Ò,¼´ÏÂÒ»¸ö·¢ÅÆÎ»ÖÃ,½Ğ·ÖÎ»ÖÃ
+//è®¾ç½®ä¸‹ä¸€ä¸ªåº„å®¶,å³ä¸‹ä¸€ä¸ªå‘ç‰Œä½ç½®,å«åˆ†ä½ç½®
 BOOL CServerGameDesk::SetNextBanker(BYTE bGameFinishState)
 {
 	switch (bGameFinishState)
 	{
-	case GF_NORMAL://Õı³£½áÊø±¾¾ÖÊ¤ÕßÏÂÒ»¾ÖÓÅÏÈ½Ğ·Ö
+	case GF_NORMAL://æ­£å¸¸ç»“æŸæœ¬å±€èƒœè€…ä¸‹ä¸€å±€ä¼˜å…ˆå«åˆ†
 		for (int i = 0; i < PLAY_COUNT; i++)
 		{
 			if (m_iUserCardCount[i] == 0)
@@ -2731,7 +2731,7 @@ BOOL CServerGameDesk::SetNextBanker(BYTE bGameFinishState)
 			}
 		}
 		break;
-	case GF_NO_CALL_SCORE://ÎŞÈË½Ğ·Ö
+	case GF_NO_CALL_SCORE://æ— äººå«åˆ†
 #ifdef TWO
 		m_iDealPeople = m_iUpGradePeople = (m_iUpGradePeople + 1) % PLAY_COUNT;
 #else
@@ -2744,7 +2744,7 @@ BOOL CServerGameDesk::SetNextBanker(BYTE bGameFinishState)
 	return TRUE;
 }
 
-//ÅĞ¶ÏÊÇ·ñÕıÔÚÓÎÏ·
+//åˆ¤æ–­æ˜¯å¦æ­£åœ¨æ¸¸æˆ
 bool CServerGameDesk::IsPlayGame(BYTE bDeskStation)
 {
 	if ((GetGameStation() >= GS_SEND_CARD && GetGameStation() < GS_WAIT_NEXT))
@@ -2752,10 +2752,10 @@ bool CServerGameDesk::IsPlayGame(BYTE bDeskStation)
 	return false;
 }
 
-//ÓÃ»§ÇëÇóÀë¿ª
+//ç”¨æˆ·è¯·æ±‚ç¦»å¼€
 BOOL CServerGameDesk::UserHaveThing(BYTE bDeskStation, char * szMessage)
 {
-	// ÒÑ¾­µã¹ıÍË³ö°´Å¥(Ò»¾ÖÖ»ÄÜµ¥»÷Ò»´Î)
+	// å·²ç»ç‚¹è¿‡é€€å‡ºæŒ‰é’®(ä¸€å±€åªèƒ½å•å‡»ä¸€æ¬¡)
 	if (!m_bCanleave[bDeskStation])
 		return TRUE;
 
@@ -2787,14 +2787,14 @@ BOOL CServerGameDesk::UserHaveThing(BYTE bDeskStation, char * szMessage)
 	return TRUE;
 }
 
-//Í¬ÒâÓÃ»§Àë¿ª
+//åŒæ„ç”¨æˆ·ç¦»å¼€
 BOOL CServerGameDesk::ArgeeUserLeft(BYTE bDeskStation, BOOL bArgee)
 {
 	m_icountleave++;
 	if (bArgee) m_iLeaveArgee |= 1 << bDeskStation;
 	else
 		m_iLeaveArgee = 0;
-	if (m_iLeaveArgee != 7)				//3¸öÈËÓÎÏ·
+	if (m_iLeaveArgee != 7)				//3ä¸ªäººæ¸¸æˆ
 	{
 		LeaveResultStruct Leave;
 		Leave.bDeskStation = bDeskStation;
@@ -2819,10 +2819,10 @@ BOOL CServerGameDesk::ArgeeUserLeft(BYTE bDeskStation, BOOL bArgee)
 	return TRUE;
 }
 
-//ÍĞ¹ÜÉèÖÃ
+//æ‰˜ç®¡è®¾ç½®
 bool CServerGameDesk::UserSetAuto(BYTE bDeskStation, bool bAutoCard)
 {
-	if (!IsPlayGame(0)) //·ÇÓÎÏ·×´Ì¬²»ÄÜÍĞ¹Ü
+	if (!IsPlayGame(0)) //éæ¸¸æˆçŠ¶æ€ä¸èƒ½æ‰˜ç®¡
 	{
 		return true;
 	}
@@ -2835,7 +2835,7 @@ bool CServerGameDesk::UserSetAuto(BYTE bDeskStation, bool bAutoCard)
 	for (int i = 0; i < PLAY_COUNT; i++)
 		SendGameData(i, &autoset, sizeof(autoset), MSG_MAIN_LOADER_GAME, ASS_AUTO, 0);
 	//SendWatchData(m_byMaxPeople,&autoset,sizeof(autoset),MSG_MAIN_LOADER_GAME,ASS_AUTO,0);
-	if (GetGameStation() == GS_PLAY_GAME) //·ÇÓÎÏ·×´Ì¬²»ÄÜÍĞ¹Ü
+	if (GetGameStation() == GS_PLAY_GAME) //éæ¸¸æˆçŠ¶æ€ä¸èƒ½æ‰˜ç®¡
 	{
 		if (!bTempAuto && bAutoCard && bDeskStation == m_iOutCardPeople)
 		{
@@ -2867,7 +2867,7 @@ bool CServerGameDesk::UserSetAuto(BYTE bDeskStation, bool bAutoCard)
 	return true;
 }
 
-//×Ô¶¯³öÅÆ
+//è‡ªåŠ¨å‡ºç‰Œ
 BOOL CServerGameDesk::UserAutoOutCard(BYTE bDeskStation)
 {
 	if (bDeskStation >= PLAY_COUNT)
@@ -2891,7 +2891,7 @@ BOOL CServerGameDesk::UserAutoOutCard(BYTE bDeskStation)
 	return UserOutCard(bDeskStation, bCardList, iCardCount);
 }
 
-//ÓÃ»§¶ÏÏßÀë¿ª
+//ç”¨æˆ·æ–­çº¿ç¦»å¼€
 bool CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 {
 	__super::UserNetCut(pUser);
@@ -2904,7 +2904,7 @@ bool CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 	return true;
 }
 
-//ÓÃ»§Àë¿ªÓÎÏ·×À
+//ç”¨æˆ·ç¦»å¼€æ¸¸æˆæ¡Œ
 bool CServerGameDesk::UserLeftDesk(GameUserInfo* pUser)
 {
 	m_bUserReady[pUser->deskStation] = false;
@@ -2912,11 +2912,11 @@ bool CServerGameDesk::UserLeftDesk(GameUserInfo* pUser)
 	return __super::UserLeftDesk(pUser);
 }
 
-//ÊÇ·ñÎªÎ´³ö¹ıÅÆ
+//æ˜¯å¦ä¸ºæœªå‡ºè¿‡ç‰Œ
 BYTE CServerGameDesk::GetNoOutCard()
 {
 	BOOL bOutCard = FALSE;
-	//Á½ÏĞ¼ÒÃ»ÓĞ³ö¹ıÅÆ
+	//ä¸¤é—²å®¶æ²¡æœ‰å‡ºè¿‡ç‰Œ
 	if (m_iUserCardCount[(m_iUpGradePeople + 1) % PLAY_COUNT] == m_iUserCardCount[(m_iUpGradePeople + 2) % PLAY_COUNT]
 		&& m_iUserCardCount[(m_iUpGradePeople + 2) % PLAY_COUNT] == 17)
 	{
@@ -2928,7 +2928,7 @@ BYTE CServerGameDesk::GetNoOutCard()
 		bOutCard = true;
 	}
 #endif
-	//×¯¼Ò½ö³öÁËµÚÒ»Ê×ÅÆ
+	//åº„å®¶ä»…å‡ºäº†ç¬¬ä¸€é¦–ç‰Œ
 	if (m_iUserCardCount[m_iUpGradePeople] == 20 - m_iNtFirstCount)
 	{
 		bOutCard = true;
@@ -2948,10 +2948,10 @@ bool	CServerGameDesk::IsSuperUser(BYTE byDeskStation)
 	return false;
 }
 
-//ÑéÖ¤ÊÇ·ñ³¬¶Ë
+//éªŒè¯æ˜¯å¦è¶…ç«¯
 void	CServerGameDesk::SpuerExamine(BYTE byDeskStation)
 {
-	//ÊÇ³¬¶ËÓÃ»§ ÄÇÃ´¾Í·¢ËÍ³¬¶ËÏûÏ¢¹ıÈ¥
+	//æ˜¯è¶…ç«¯ç”¨æˆ· é‚£ä¹ˆå°±å‘é€è¶…ç«¯æ¶ˆæ¯è¿‡å»
 	if (IsSuperUser(byDeskStation))
 	{
 		SuperUserMsg TSuperUser;
@@ -2961,17 +2961,17 @@ void	CServerGameDesk::SpuerExamine(BYTE byDeskStation)
 	}
 }
 
-//·¿¼ä¹æÔò½âÎö
+//æˆ¿é—´è§„åˆ™è§£æ
 void CServerGameDesk::GetSpecialRule()
 {
 	Json::Reader reader;
 	Json::Value root;
-	Json::Value arrayWanFa; //Íæ·¨
+	Json::Value arrayWanFa; //ç©æ³•
 
 	if (reader.parse(m_szGameRules, root))
 	{
-		//m_iFengDing //·â¶¥±¶Êı£¨Õ¨µ¯£©//
-		//Ê±¼äÄ£Ê½
+		//m_iFengDing //å°é¡¶å€æ•°ï¼ˆç‚¸å¼¹ï¼‰//
+		//æ—¶é—´æ¨¡å¼
 		int iTemp = 0;
 		iTemp = root["Fd"].asInt();
 		if (iTemp == 1)
@@ -2986,7 +2986,7 @@ void CServerGameDesk::GetSpecialRule()
 		{
 			m_iFengDing = 6;
 		}
-		iTemp = root["Time"].asInt();			//ÔËĞĞÊ±¼ä
+		iTemp = root["Time"].asInt();			//è¿è¡Œæ—¶é—´
 		if (iTemp == 1)
 		{
 			m_iRunTime = 5 * 60;
@@ -2995,7 +2995,7 @@ void CServerGameDesk::GetSpecialRule()
 		{
 			m_iRunTime = 10 * 60;
 		}
-		iTemp = root["gameIdx"].asInt();			//Íæ·¨
+		iTemp = root["gameIdx"].asInt();			//ç©æ³•
 		if (iTemp == 2)
 		{
 			m_bNoXiPai = true;
@@ -3005,13 +3005,13 @@ void CServerGameDesk::GetSpecialRule()
 	m_iAddDoubleLimit = m_MinPoint * 2;
 }
 
-//»ñÈ¡µ±Ç°Ê±¼ä£¬·µ»ØÃë
+//è·å–å½“å‰æ—¶é—´ï¼Œè¿”å›ç§’
 long long CServerGameDesk::GetCurTime()
 {
 	return time(NULL);
 }
 
-//·¢ËÍ³öÅÆ³ö´íÏûÏ¢
+//å‘é€å‡ºç‰Œå‡ºé”™æ¶ˆæ¯
 void CServerGameDesk::SendOutCardError(BYTE byDeskStation, int iErrorCode)
 {
 	if (byDeskStation < 0 || byDeskStation >= PLAY_COUNT)

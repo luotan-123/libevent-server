@@ -2,7 +2,7 @@
 
 #include "LoaderAsyncEvent.h"
 
-//ÓÎÏ·Êı¾İ¿â´¦Àí
+//æ¸¸æˆæ•°æ®åº“å¤„ç†
 class CGameDataBaseHandle : public CDataBaseHandle
 {
 public:
@@ -13,11 +13,11 @@ private:
 	virtual UINT HandleDataBase(DataBaseLineHead* pSourceData);
 
 private:
-	// ÉÏ´«Â¼Ïñ
+	// ä¸Šä¼ å½•åƒ
 	int OnUploadVideo(DataBaseLineHead* pSourceData);
-	// Ö´ĞĞsqlÓï¾ä
+	// æ‰§è¡Œsqlè¯­å¥
 	int OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData);
-	// HTTPÇëÇó
+	// HTTPè¯·æ±‚
 	int OnHandleHTTP(DataBaseLineHead* pSourceData);
 
 public:
