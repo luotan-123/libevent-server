@@ -30,7 +30,7 @@ void* TimerFun(void* p)
 {
 	evutil_gettimeofday(&g_lasttime, NULL);
 	CDataLine* pDataLine = (CDataLine*)p;
-	//Êı¾İ»º´æ
+	//æ•°æ®ç¼“å­˜
 	BYTE szBuffer[LD_MAX_PART] = "";
 	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
 
@@ -67,7 +67,7 @@ void* TimerFun(void* p)
 
 int main()
 {
-	getchar();
+	printf("ç½—æ½­\n");
 	//system("sh start.sh");
 	int a = 0;
 	int b = 123456;
@@ -78,7 +78,7 @@ int main()
 	//Team team;
 	//team.set_id(1);
 	//team.set_name("Rocket");
-	//Student* s1 = team.add_student(); // Ìí¼Órepeated³ÉÔ±
+	//Student* s1 = team.add_student(); // æ·»åŠ repeatedæˆå‘˜
 	//s1->set_id(1);
 	//s1->set_name("Mike");
 	//s1->set_sex(BOY);
@@ -96,16 +96,16 @@ int main()
 	//t.ParseFromArray(out.c_str(), out.size()); // or parseFromString
 	//cout << t.DebugString() << endl;
 	//for (int i = 0; i < t.student_size(); i++) {
-	//	Student s = t.student(i); // °´Ë÷Òı½ârepeated³ÉÔ±
+	//	Student s = t.student(i); // æŒ‰ç´¢å¼•è§£repeatedæˆå‘˜
 	//	cout << s.name() << " " << s.sex() << endl;
 	//}
 
 
 	CUtil::MkdirIfNotExists("log/");
 	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
-	// ÉèÖÃ·şÎñÆ÷ÀàĞÍ
+	// è®¾ç½®æœåŠ¡å™¨ç±»å‹
 	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
-	// ¹ØÁª´óÌüÖ÷Ïß³ÌµÄlogÎÄ¼ş
+	// å…³è”å¤§å…ä¸»çº¿ç¨‹çš„logæ–‡ä»¶
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 	ConfigManage()->Init();
 
@@ -120,7 +120,7 @@ int main()
 	pTime->SetTimer(123456, 2100, SERVERTIMER_TYPE_SINGLE);
 	evutil_gettimeofday(&g_lasttime, NULL);
 	printf("currtime %ld\n", g_lasttime.tv_sec);
-	// ¿ª±ÙÏß³Ì
+	// å¼€è¾Ÿçº¿ç¨‹
 	pthread_t threadID1 = 0;
 	int err = pthread_create(&threadID1, NULL, TimerFun, (void*)dataline);
 	if (err != 0)
@@ -133,12 +133,12 @@ int main()
 	//pTime->Stop();
 
 
-	////·¢ËÍÓÊ¼ş½Ó¿Ú
+	////å‘é€é‚®ä»¶æ¥å£
 	//MyCurl curl;
 	//std::vector<std::string> vUrlHeader;
 	//std::string postFields = "";
 	//std::string result = "";
-	////×éºÏÉú³ÉURL
+	////ç»„åˆç”ŸæˆURL
 	//std::string url = "http://api.androidhive.info/volley/person_object.json";
 	//curl.postUrlHttps(url, vUrlHeader, postFields, result);
 	//std::cout << result << endl;
@@ -186,17 +186,17 @@ int main()
 
 	//struct timeval tv;
 	//gettimeofday(&tv, NULL);
-	//printf("second:%ld\n", tv.tv_sec);  //Ãë
-	//printf("millisecond:%ld\n", tv.tv_sec * 1000 + tv.tv_usec / 1000);  //ºÁÃë
-	//printf("microsecond:%ld\n", tv.tv_sec * 1000000 + tv.tv_usec);  //Î¢Ãë
+	//printf("second:%ld\n", tv.tv_sec);  //ç§’
+	//printf("millisecond:%ld\n", tv.tv_sec * 1000 + tv.tv_usec / 1000);  //æ¯«ç§’
+	//printf("microsecond:%ld\n", tv.tv_sec * 1000000 + tv.tv_usec);  //å¾®ç§’
 
-	//sleep(3); // Îª·½±ã¹Û¿´£¬ÈÃ³ÌĞòË¯ÈıÃëºó¶Ô±È
+	//sleep(3); // ä¸ºæ–¹ä¾¿è§‚çœ‹ï¼Œè®©ç¨‹åºç¡ä¸‰ç§’åå¯¹æ¯”
 	//std::cout << "3s later:" << std::endl;
 
 	//gettimeofday(&tv, NULL);
-	//printf("second:%ld\n", tv.tv_sec);  //Ãë
-	//printf("millisecond:%ld\n", tv.tv_sec * 1000 + tv.tv_usec / 1000);  //ºÁÃë
-	//printf("microsecond:%ld\n", tv.tv_sec * 1000000 + tv.tv_usec);  //Î¢Ãë
+	//printf("second:%ld\n", tv.tv_sec);  //ç§’
+	//printf("millisecond:%ld\n", tv.tv_sec * 1000 + tv.tv_usec / 1000);  //æ¯«ç§’
+	//printf("microsecond:%ld\n", tv.tv_sec * 1000000 + tv.tv_usec);  //å¾®ç§’
 
 
 	//printf("+++++++++++++++==\n"); 
@@ -214,38 +214,38 @@ int main()
 	struct sockaddr_in     servaddr;
 	char    buff[4096];
 	int     n;
-	//³õÊ¼»¯Socket  
+	//åˆå§‹åŒ–Socket  
 	if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		printf("create socket error: %s(errno: %d)\n", strerror(errno), errno);
 		exit(0);
 	}
-	//³õÊ¼»¯  
+	//åˆå§‹åŒ–  
 	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);//IPµØÖ·ÉèÖÃ³ÉINADDR_ANY,ÈÃÏµÍ³×Ô¶¯»ñÈ¡±¾»úµÄIPµØÖ·¡£  
-	servaddr.sin_port = htons(6666);//ÉèÖÃµÄ¶Ë¿ÚÎªDEFAULT_PORT  
+	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);//IPåœ°å€è®¾ç½®æˆINADDR_ANY,è®©ç³»ç»Ÿè‡ªåŠ¨è·å–æœ¬æœºçš„IPåœ°å€ã€‚  
+	servaddr.sin_port = htons(6666);//è®¾ç½®çš„ç«¯å£ä¸ºDEFAULT_PORT  
 
-	//½«±¾µØµØÖ·°ó¶¨µ½Ëù´´½¨µÄÌ×½Ó×ÖÉÏ  
+	//å°†æœ¬åœ°åœ°å€ç»‘å®šåˆ°æ‰€åˆ›å»ºçš„å¥—æ¥å­—ä¸Š  
 	if (bind(socket_fd, (struct sockaddr*) & servaddr, sizeof(servaddr)) == -1) {
 		printf("bind socket error: %s(errno: %d)\n", strerror(errno), errno);
 		exit(0);
 	}
-	//¿ªÊ¼¼àÌıÊÇ·ñÓĞ¿Í»§¶ËÁ¬½Ó  
+	//å¼€å§‹ç›‘å¬æ˜¯å¦æœ‰å®¢æˆ·ç«¯è¿æ¥  
 	if (listen(socket_fd, 10) == -1) {
 		printf("listen socket error: %s(errno: %d)\n", strerror(errno), errno);
 		exit(0);
 	}
 	printf("======waiting for client's request======\n");
 	while (1) {
-		//×èÈûÖ±µ½ÓĞ¿Í»§¶ËÁ¬½Ó£¬²»È»¶àÀË·ÑCPU×ÊÔ´¡£  
+		//é˜»å¡ç›´åˆ°æœ‰å®¢æˆ·ç«¯è¿æ¥ï¼Œä¸ç„¶å¤šæµªè´¹CPUèµ„æºã€‚  
 		if ((connect_fd = accept(socket_fd, (struct sockaddr*)NULL, NULL)) == -1) {
 			printf("accept socket error: %s(errno: %d)", strerror(errno), errno);
 			continue;
 		}
-		//½ÓÊÜ¿Í»§¶Ë´«¹ıÀ´µÄÊı¾İ  
+		//æ¥å—å®¢æˆ·ç«¯ä¼ è¿‡æ¥çš„æ•°æ®  
 		n = recv(connect_fd, buff, sizeof(buff), 0);
-		//Ïò¿Í»§¶Ë·¢ËÍ»ØÓ¦Êı¾İ  
-		if (!fork()) { /*×Ï½û³Ç*/
+		//å‘å®¢æˆ·ç«¯å‘é€å›åº”æ•°æ®  
+		if (!fork()) { /*ç´«ç¦åŸ*/
 			if (send(connect_fd, "Hello,you are connected!\n", 26, 0) == -1)
 				perror("send error");
 			close(connect_fd);
