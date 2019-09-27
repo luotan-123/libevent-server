@@ -14,3 +14,8 @@ kill就是给某个进程id发送了一个信号。默认发送的信号是SIGTERM，而kill -9发送的信号
 
 二、链接命令
 ln -s /usr/local/bin/protoc /usr/bin
+
+
+三、生成core
+1、启动程序会话执行 ：ulimit -c unlimited
+2、设置core文件名格式：echo "./core-%p-%t" >/proc/sys/kernel/core_pattern
