@@ -2,26 +2,26 @@
 #define CHECKCPGACTION_H
 #include "GameDataEx.h"
 #include "mj.h"
-///³ÔÅö¸Ü¼ì²âÀà
+///åƒç¢°æ æ£€æµ‹ç±»
 class CheckCPGAction
 {
 public:
 	CheckCPGAction(void);
 	~CheckCPGAction(void);
 public:
-	///³õÊ¼»¯Êı¾İ
+	///åˆå§‹åŒ–æ•°æ®
 	virtual void InitData();
 
-	///ÄÜ·ñ³ÔÅÆ
+	///èƒ½å¦åƒç‰Œ
 	virtual bool CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE Result[][3], bool bChi[3]);
 
-	///ÄÜ·ñÅöÅÆ
+	///èƒ½å¦ç¢°ç‰Œ
 	virtual bool CanPeng(GameDataEx *pGameData, BYTE station, BYTE pai);
 
-	//ÄÜ·ñ¿²ÅÆ
+	//èƒ½å¦åç‰Œ
 	virtual bool CanKan(GameDataEx *pGameData, BYTE station, BYTE kan[]);
 
-	///ÄÜ·ñ¸ÜÅÆ
+	///èƒ½å¦æ ç‰Œ
 	virtual bool CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE Result[][2], bool bMe = false);
 };
 #endif

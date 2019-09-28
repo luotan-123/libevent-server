@@ -1,25 +1,25 @@
 #ifndef MJ_H
 #define MJ_H
 #define MAKE_A_MJ(hs,pd)  ( (hs) * 10 +(pd))
-#define MAX_MJ_KIND_NUM		34		//×î´óÂé½«ÖÖÀàÊıÁ¿
-#define MAX_MJ_HUA_NUM		8		//»¨ÅÆÖÖÀàÊıÁ¿
-#define MAX_MJ_PAI_COUNT    144     //Ò»¸±Âé½«ÅÆ×î´óÊıÁ¿£¬Ä¿Ç°²»ÄÜ³¬¹ı255
-#define MAX_JING_PAI_NUM    8       //×î´ó¾«ÅÆÊıÁ¿£¨¾«ÅÆÖ¸ÍòÄÜÅÆ£¬ñ®×Ó£©
-#define MAX_CPG_NUM         5		//×î´ó³ÔÅö¸ÜÊıÁ¿
-//×¥ÅÆË³Ê±Õë£¬´òÅÆÄæÊ±Õë
+#define MAX_MJ_KIND_NUM		34		//æœ€å¤§éº»å°†ç§ç±»æ•°é‡
+#define MAX_MJ_HUA_NUM		8		//èŠ±ç‰Œç§ç±»æ•°é‡
+#define MAX_MJ_PAI_COUNT    144     //ä¸€å‰¯éº»å°†ç‰Œæœ€å¤§æ•°é‡ï¼Œç›®å‰ä¸èƒ½è¶…è¿‡255
+#define MAX_JING_PAI_NUM    8       //æœ€å¤§ç²¾ç‰Œæ•°é‡ï¼ˆç²¾ç‰ŒæŒ‡ä¸‡èƒ½ç‰Œï¼Œç™å­ï¼‰
+#define MAX_CPG_NUM         5		//æœ€å¤§åƒç¢°æ æ•°é‡
+//æŠ“ç‰Œé¡ºæ—¶é’ˆï¼Œæ‰“ç‰Œé€†æ—¶é’ˆ
 class CMjEnum
 {
 public:
-	enum MJ_TYPE_HUA_SE//ÅÆÀàĞÍ
+	enum MJ_TYPE_HUA_SE//ç‰Œç±»å‹
 	{
-		MJ_TYPE_PAI_NONE = -10,//ÎŞ»¨É«
-		MJ_TYPE_PAI_WAN = 0,//Íò
-		MJ_TYPE_PAI_TIAO = 1,//Ìõ
-		MJ_TYPE_PAI_BING = 2,//Í¬
-		MJ_TYPE_PAI_FENG = 3,//·ç
-		MJ_TYPE_PAI_HUA = 4//»¨
+		MJ_TYPE_PAI_NONE = -10,//æ— èŠ±è‰²
+		MJ_TYPE_PAI_WAN = 0,//ä¸‡
+		MJ_TYPE_PAI_TIAO = 1,//æ¡
+		MJ_TYPE_PAI_BING = 2,//åŒ
+		MJ_TYPE_PAI_FENG = 3,//é£
+		MJ_TYPE_PAI_HUA = 4//èŠ±
 	};
-	enum MJ_TYPE_PAI_DIAN//ÅÆµã
+	enum MJ_TYPE_PAI_DIAN//ç‰Œç‚¹
 	{
 		MJ_TYPE_PAI_DIAN_NONE = -1,
 		MJ_TYPE_PAI_DIAN_1 = 1,
@@ -49,15 +49,15 @@ public:
 		MJ_TYPE_MAO = MAKE_A_MJ(MJ_TYPE_PAI_FENG, 21),
 		MJ_TYPE_LAOXU = MAKE_A_MJ(MJ_TYPE_PAI_FENG, 22),
 
-		MJ_TYPE_FD = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_1),///¶«
-		MJ_TYPE_FN = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_2),///ÄÏ
-		MJ_TYPE_FX = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_3),///Î÷
-		MJ_TYPE_FB = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_4),///±±
-		MJ_TYPE_ZHONG = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_5),///ºìÖĞ
-		MJ_TYPE_FA = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_6),///·¢²Æ
-		MJ_TYPE_BAI = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_7),///°×°å
+		MJ_TYPE_FD = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_1),///ä¸œ
+		MJ_TYPE_FN = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_2),///å—
+		MJ_TYPE_FX = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_3),///è¥¿
+		MJ_TYPE_FB = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_4),///åŒ—
+		MJ_TYPE_ZHONG = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_5),///çº¢ä¸­
+		MJ_TYPE_FA = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_6),///å‘è´¢
+		MJ_TYPE_BAI = MAKE_A_MJ(MJ_TYPE_PAI_FENG, MJ_TYPE_PAI_DIAN_7),///ç™½æ¿
 
-		MJ_TYPE_W1 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_1),///Íò
+		MJ_TYPE_W1 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_1),///ä¸‡
 		MJ_TYPE_W2 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_2),
 		MJ_TYPE_W3 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_3),
 		MJ_TYPE_W4 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_4),
@@ -67,7 +67,7 @@ public:
 		MJ_TYPE_W8 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_8),
 		MJ_TYPE_W9 = MAKE_A_MJ(MJ_TYPE_PAI_WAN, MJ_TYPE_PAI_DIAN_9),
 
-		MJ_TYPE_T1 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_1),///Ìõ
+		MJ_TYPE_T1 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_1),///æ¡
 		MJ_TYPE_T2 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_2),
 		MJ_TYPE_T3 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_3),
 		MJ_TYPE_T4 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_4),
@@ -77,7 +77,7 @@ public:
 		MJ_TYPE_T8 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_8),
 		MJ_TYPE_T9 = MAKE_A_MJ(MJ_TYPE_PAI_TIAO, MJ_TYPE_PAI_DIAN_9),
 
-		MJ_TYPE_B1 = MAKE_A_MJ(MJ_TYPE_PAI_BING, MJ_TYPE_PAI_DIAN_1),///Í¬
+		MJ_TYPE_B1 = MAKE_A_MJ(MJ_TYPE_PAI_BING, MJ_TYPE_PAI_DIAN_1),///åŒ
 		MJ_TYPE_B2 = MAKE_A_MJ(MJ_TYPE_PAI_BING, MJ_TYPE_PAI_DIAN_2),
 		MJ_TYPE_B3 = MAKE_A_MJ(MJ_TYPE_PAI_BING, MJ_TYPE_PAI_DIAN_3),
 		MJ_TYPE_B4 = MAKE_A_MJ(MJ_TYPE_PAI_BING, MJ_TYPE_PAI_DIAN_4),
@@ -130,7 +130,7 @@ static int stcArr_A_Mj[] =
 	CMjEnum::MJ_TYPE_BAI
 
 };
-//Âé½«µÄÍò
+//éº»å°†çš„ä¸‡
 static int stcArr_A_Mj_W[] =
 {
 	CMjEnum::MJ_TYPE_W1,
@@ -143,7 +143,7 @@ static int stcArr_A_Mj_W[] =
 	CMjEnum::MJ_TYPE_W8,
 	CMjEnum::MJ_TYPE_W9
 };
-//Âé½«µÄÌõ
+//éº»å°†çš„æ¡
 static int stcArr_A_Mj_T[] =
 {
 	CMjEnum::MJ_TYPE_T1,
@@ -156,7 +156,7 @@ static int stcArr_A_Mj_T[] =
 	CMjEnum::MJ_TYPE_T8,
 	CMjEnum::MJ_TYPE_T9
 };
-//Âé½«µÄÍ²
+//éº»å°†çš„ç­’
 static int stcArr_A_Mj_B[] =
 {
 	CMjEnum::MJ_TYPE_B1 ,
@@ -169,146 +169,146 @@ static int stcArr_A_Mj_B[] =
 	CMjEnum::MJ_TYPE_B8,
 	CMjEnum::MJ_TYPE_B9
 };
-//Âé½«µÄ·çÅÆ
+//éº»å°†çš„é£ç‰Œ
 static	int	stcArr_A_Mj_FENG[] =
 {
-	CMjEnum::MJ_TYPE_FD,//¶«·ç
-	CMjEnum::MJ_TYPE_FN,//ÄÏ·ç
-	CMjEnum::MJ_TYPE_FX,//Î÷·ç
-	CMjEnum::MJ_TYPE_FB //±±·ç
+	CMjEnum::MJ_TYPE_FD,//ä¸œé£
+	CMjEnum::MJ_TYPE_FN,//å—é£
+	CMjEnum::MJ_TYPE_FX,//è¥¿é£
+	CMjEnum::MJ_TYPE_FB //åŒ—é£
 };
-//Âé½«µÄ×ÖÅÆ
+//éº»å°†çš„å­—ç‰Œ
 static	int	stcArr_A_Mj_ZI[] =
 {
-	CMjEnum::MJ_TYPE_ZHONG,	//ºìÖĞ
-	CMjEnum::MJ_TYPE_FA,	//·¢²Æ
-	CMjEnum::MJ_TYPE_BAI	//°×°å
+	CMjEnum::MJ_TYPE_ZHONG,	//çº¢ä¸­
+	CMjEnum::MJ_TYPE_FA,	//å‘è´¢
+	CMjEnum::MJ_TYPE_BAI	//ç™½æ¿
 
 };
-//Âé½«µÄ»¨ÅÆ
+//éº»å°†çš„èŠ±ç‰Œ
 static int stcArr_A_Mj_Other[] =
 {
-	CMjEnum::MJ_TYPE_FCHUN,//´º
-	CMjEnum::MJ_TYPE_FXIA, //ÏÄ
-	CMjEnum::MJ_TYPE_FQIU, //Çï
-	CMjEnum::MJ_TYPE_FDONG,//¶¬
+	CMjEnum::MJ_TYPE_FCHUN,//æ˜¥
+	CMjEnum::MJ_TYPE_FXIA, //å¤
+	CMjEnum::MJ_TYPE_FQIU, //ç§‹
+	CMjEnum::MJ_TYPE_FDONG,//å†¬
 
-	CMjEnum::MJ_TYPE_FMEI, //Ã·
-	CMjEnum::MJ_TYPE_FLAN, //À¼
-	CMjEnum::MJ_TYPE_FZHU, //Öñ
-	CMjEnum::MJ_TYPE_FJU   //¾Õ
+	CMjEnum::MJ_TYPE_FMEI, //æ¢…
+	CMjEnum::MJ_TYPE_FLAN, //å…°
+	CMjEnum::MJ_TYPE_FZHU, //ç«¹
+	CMjEnum::MJ_TYPE_FJU   //èŠ
 };
-//ºıÅÆÀàĞÍ
-enum HUPAI_TYPE//ºúÅÆÀàĞÍÃ¶¾Ù½á¹¹
+//ç³Šç‰Œç±»å‹
+enum HUPAI_TYPE//èƒ¡ç‰Œç±»å‹æšä¸¾ç»“æ„
 {
-	HUPAI_TYPE_None = 0,		////Ã»ºı	
-	HUPAI_TYPE_HuPai = 1,		////³ÉÅÆ
-	HUPAI_TYPE_ZiMo = 2,		////×ÔÃş	
-	HUPAI_TYPE_PingHu = 3,		////Æ½ºı	
-	HUPAI_TYPE_TianHu = 4,		////Ììºı	
-	HUPAI_TYPE_DiHu = 5,		////µØºı	
-	HUPAI_TYPE_GangKai = 6,		//¸ÜÉÏ»¨	
-	HUPAI_TYPE_GangHaoPao = 7,		//¸ÜºóÅÚ
-	HUPAI_TYPE_YiBanGao = 8,		//Ò»°ã¸ß	
-	HUPAI_TYPE_XiXiangFeng = 9,		//Ï²Ïà·ê	
-	HUPAI_TYPE_LianLiu = 10,	//Á¬Áù		
-	HUPAI_TYPE_LaoShaoFu = 11,	//ÀÏÉÙ¸±	
-	HUPAI_TYPE_YaoJiuKe = 12,	//çÛ¾Å¿Ì	
-	HUPAI_TYPE_MingGang = 13,	//Ã÷¸Ü
-	HUPAI_TYPE_QueYiMen = 14,	//È±Ò»ÃÅ	
-	HUPAI_TYPE_WuZi = 15,	//ÎŞ×Ö
-	HUPAI_TYPE_BianZhang = 16,	//±ßÕÅ		
-	HUPAI_TYPE_KanZhang = 17,	//¿²ÕÅ		
-	HUPAI_TYPE_DanDiaoJiang = 18,	//µ¥µö½«
-	HUPAI_TYPE_JianKe = 19,	//¼ı¿Ì
-	HUPAI_TYPE_QuanFengKe = 20,	//È¦·ç¿Ì
-	HUPAI_TYPE_MenFengKe = 21,	//ÃÅ·ç¿Ì
-	HUPAI_TYPE_MenQianQing = 22,	//ÃÅÇ°Çå	
-	HUPAI_TYPE_SiGuiYi = 23,	//ËÄ¹éÒ»	
-	HUPAI_TYPE_ShuangTongKe = 24,	//Ë«Í¬¿Ì	
-	HUPAI_TYPE_ShuangAnKe = 25,	//Ë«°µ¿Ì	
-	HUPAI_TYPE_AnGang = 26,	//°µ¸Ü
-	HUPAI_TYPE_DuanYao = 27,	//¶ÏçÛ		
-	HUPAI_TYPE_QuanDaiYao = 28,	//È«´øçÛ	
-	HUPAI_TYPE_BuQiuRen = 29,	//²»ÇóÈË	
-	HUPAI_TYPE_ShuangMingGang = 30,	//Ë«Ã÷¸Ü	
-	HUPAI_TYPE_HuJueZhang = 31,	//ºÍ¾øÕÅ	
-	HUPAI_TYPE_PengPengHu = 32,	//ÅöÅöºÍ	
-	HUPAI_TYPE_HunYiSe = 33,	//»ìÒ»É«
-	HUPAI_TYPE_SanSeSanBuGao = 34,	//ÈıÉ«Èı²½¸ß
-	HUPAI_TYPE_WuMenQi = 35,	//ÎåÃÅÆë
-	HUPAI_TYPE_QuanQiuRen = 36,	//È«ÇóÈË	
-	HUPAI_TYPE_ShuangAnGang = 37,	//Ë«°µ¸Ü	
-	HUPAI_TYPE_ShuangJianKe = 38,	//Ë«¼ı¿Ì
-	HUPAI_TYPE_HuaLong = 39,	//»¨Áú		
-	HUPAI_TYPE_TuiBuDao = 40,	//ÍÆ²»µ¹
-	HUPAI_TYPE_SanSeSanTongShun = 41,	//ÈıÉ«ÈıÍ¬Ë³
-	HUPAI_TYPE_SanSeSanJieGao = 42,	//ÈıÉ«Èı½Ú¸ß
-	HUPAI_TYPE_WuFanHu = 43,	//ÎŞ·¬ºÍ	
-	HUPAI_TYPE_MiaoShouHuiChun = 44,	//ÃîÊÖ»Ø´º	
-	HUPAI_TYPE_HaiDiLaoYue = 45,	//º£µ×ÀÌÔÂ	
-	HUPAI_TYPE_QiangGang = 46,	//ÇÀ¸ÜºÍ	
-	HUPAI_TYPE_QuanBuKao = 47,	//È«²»¿¿(Ê®ÈıÀÃ)
-	HUPAI_TYPE_ZuHeLong = 48,	//×éºÏÁú	
-	HUPAI_TYPE_DaYuWu = 49,	//´óÓÚÎå	
-	HUPAI_TYPE_XiaoYuWu = 50,	//Ğ¡ÓÚÎå	
-	HUPAI_TYPE_SanFengKe = 51,	//Èı·ç¿Ì
-	HUPAI_TYPE_QingLong = 52,	//ÇåÁú		
-	HUPAI_TYPE_SanSeShuangLongHui = 53,	//ÈıÉ«Ë«Áú»á
-	HUPAI_TYPE_YiSeSanBuGao = 54,	//Ò»É«Èı²½¸ß
-	HUPAI_TYPE_QuanDaiWu = 55,	//È«´øÎå	
-	HUPAI_TYPE_SanTongKe = 56,	//ÈıÍ¬¿Ì	
-	HUPAI_TYPE_SanAnKe = 57,	//Èı°µ¿Ì	
-	HUPAI_TYPE_QiDui = 58,	//Æß¶Ô		
-	HUPAI_TYPE_QiXingBuKao = 59,	//ÆßĞÇ²»¿¿
-	HUPAI_TYPE_QuanShuangKe = 60,	//È«Ë«¿Ì	
-	HUPAI_TYPE_QingYiSe = 61,	//ÇåÒ»É«	
-	HUPAI_TYPE_YiSeSanTongShun = 62,	//Ò»É«ÈıÍ¬Ë³
-	HUPAI_TYPE_YiSeSanJieGao = 63,	//Ò»É«Èı½Ú¸ß
-	HUPAI_TYPE_QuanDa = 64,	//È«´ó		
-	HUPAI_TYPE_QuanZhong = 65,	//È«ÖĞ		
-	HUPAI_TYPE_QuanXiao = 66,	//È«Ğ¡		
-	HUPAI_TYPE_YiSeSiBuGao = 67,	//Ò»É«ËÄ²½¸ß
-	HUPAI_TYPE_SanGang = 68,	//Èı¸Ü		
-	HUPAI_TYPE_HunYaoJiu = 69,	//»ìçÛ¾Å
-	HUPAI_TYPE_YiSeSiTongShun = 70,	//Ò»É«ËÄÍ¬Ë³
-	HUPAI_TYPE_YiSeSiJieGao = 71,	//Ò»É«ËÄ½Ú¸ß
-	HUPAI_TYPE_QingYaoJiu = 72,	//ÇåçÛ¾Å	
-	HUPAI_TYPE_XiaoSiXi = 73,	//Ğ¡ËÄÏ²
-	HUPAI_TYPE_XiaoSanYuan = 74,	//Ğ¡ÈıÔª
-	HUPAI_TYPE_ZiYiSe = 75,	//×ÖÒ»É«
-	HUPAI_TYPE_SiAnKe = 76,	//ËÄ°µ¿Ì	
-	HUPAI_TYPE_YiSeShuangLongHui = 77,	//Ò»É«Ë«Áú»á
-	HUPAI_TYPE_DaSiXi = 78,	//´óËÄÏ²
-	HUPAI_TYPE_DaSanYuan = 79,	//´óÈıÔª
-	HUPAI_TYPE_LvYiSe = 80,	//ÂÌÒ»É«
-	HUPAI_TYPE_JiuLianBaoDeng = 81,	//¾ÅÁ«±¦µÆ
-	HUPAI_TYPE_SiGang = 82,	//ËÄ¸Ü£¨Ê®°ËÂŞºº£©	
-	HUPAI_TYPE_LianQiDui = 83,	//Á¬Æß¶Ô			
-	HUPAI_TYPE_ShiSanYao = 84,	//Ê®ÈıçÛ
-	HUPAI_TYPE_HUA = 85,    //»¨ÅÆ
-	HUPAI_TYPE_QingYiSeQiDui = 86,	//ÇåÒ»É«Æß¶Ô
-	HUPAI_TYPE_QingYiSeYiTiaoLong = 87,	//ÇåÒ»É«Ò»ÌõÁú
-	HUPAI_TYPE_LongQiDui = 88,	//ÁúÆß¶Ô
-	HUPAI_TYPE_DaPiao = 89,	//´óÆ®
-	HUPAI_TYPE_JingHu = 90,	//4¸öñ®×Óºú
+	HUPAI_TYPE_None = 0,		////æ²¡ç³Š	
+	HUPAI_TYPE_HuPai = 1,		////æˆç‰Œ
+	HUPAI_TYPE_ZiMo = 2,		////è‡ªæ‘¸	
+	HUPAI_TYPE_PingHu = 3,		////å¹³ç³Š	
+	HUPAI_TYPE_TianHu = 4,		////å¤©ç³Š	
+	HUPAI_TYPE_DiHu = 5,		////åœ°ç³Š	
+	HUPAI_TYPE_GangKai = 6,		//æ ä¸ŠèŠ±	
+	HUPAI_TYPE_GangHaoPao = 7,		//æ åç‚®
+	HUPAI_TYPE_YiBanGao = 8,		//ä¸€èˆ¬é«˜	
+	HUPAI_TYPE_XiXiangFeng = 9,		//å–œç›¸é€¢	
+	HUPAI_TYPE_LianLiu = 10,	//è¿å…­		
+	HUPAI_TYPE_LaoShaoFu = 11,	//è€å°‘å‰¯	
+	HUPAI_TYPE_YaoJiuKe = 12,	//å¹ºä¹åˆ»	
+	HUPAI_TYPE_MingGang = 13,	//æ˜æ 
+	HUPAI_TYPE_QueYiMen = 14,	//ç¼ºä¸€é—¨	
+	HUPAI_TYPE_WuZi = 15,	//æ— å­—
+	HUPAI_TYPE_BianZhang = 16,	//è¾¹å¼ 		
+	HUPAI_TYPE_KanZhang = 17,	//åå¼ 		
+	HUPAI_TYPE_DanDiaoJiang = 18,	//å•é’“å°†
+	HUPAI_TYPE_JianKe = 19,	//ç®­åˆ»
+	HUPAI_TYPE_QuanFengKe = 20,	//åœˆé£åˆ»
+	HUPAI_TYPE_MenFengKe = 21,	//é—¨é£åˆ»
+	HUPAI_TYPE_MenQianQing = 22,	//é—¨å‰æ¸…	
+	HUPAI_TYPE_SiGuiYi = 23,	//å››å½’ä¸€	
+	HUPAI_TYPE_ShuangTongKe = 24,	//åŒåŒåˆ»	
+	HUPAI_TYPE_ShuangAnKe = 25,	//åŒæš—åˆ»	
+	HUPAI_TYPE_AnGang = 26,	//æš—æ 
+	HUPAI_TYPE_DuanYao = 27,	//æ–­å¹º		
+	HUPAI_TYPE_QuanDaiYao = 28,	//å…¨å¸¦å¹º	
+	HUPAI_TYPE_BuQiuRen = 29,	//ä¸æ±‚äºº	
+	HUPAI_TYPE_ShuangMingGang = 30,	//åŒæ˜æ 	
+	HUPAI_TYPE_HuJueZhang = 31,	//å’Œç»å¼ 	
+	HUPAI_TYPE_PengPengHu = 32,	//ç¢°ç¢°å’Œ	
+	HUPAI_TYPE_HunYiSe = 33,	//æ··ä¸€è‰²
+	HUPAI_TYPE_SanSeSanBuGao = 34,	//ä¸‰è‰²ä¸‰æ­¥é«˜
+	HUPAI_TYPE_WuMenQi = 35,	//äº”é—¨é½
+	HUPAI_TYPE_QuanQiuRen = 36,	//å…¨æ±‚äºº	
+	HUPAI_TYPE_ShuangAnGang = 37,	//åŒæš—æ 	
+	HUPAI_TYPE_ShuangJianKe = 38,	//åŒç®­åˆ»
+	HUPAI_TYPE_HuaLong = 39,	//èŠ±é¾™		
+	HUPAI_TYPE_TuiBuDao = 40,	//æ¨ä¸å€’
+	HUPAI_TYPE_SanSeSanTongShun = 41,	//ä¸‰è‰²ä¸‰åŒé¡º
+	HUPAI_TYPE_SanSeSanJieGao = 42,	//ä¸‰è‰²ä¸‰èŠ‚é«˜
+	HUPAI_TYPE_WuFanHu = 43,	//æ— ç•ªå’Œ	
+	HUPAI_TYPE_MiaoShouHuiChun = 44,	//å¦™æ‰‹å›æ˜¥	
+	HUPAI_TYPE_HaiDiLaoYue = 45,	//æµ·åº•ææœˆ	
+	HUPAI_TYPE_QiangGang = 46,	//æŠ¢æ å’Œ	
+	HUPAI_TYPE_QuanBuKao = 47,	//å…¨ä¸é (åä¸‰çƒ‚)
+	HUPAI_TYPE_ZuHeLong = 48,	//ç»„åˆé¾™	
+	HUPAI_TYPE_DaYuWu = 49,	//å¤§äºäº”	
+	HUPAI_TYPE_XiaoYuWu = 50,	//å°äºäº”	
+	HUPAI_TYPE_SanFengKe = 51,	//ä¸‰é£åˆ»
+	HUPAI_TYPE_QingLong = 52,	//æ¸…é¾™		
+	HUPAI_TYPE_SanSeShuangLongHui = 53,	//ä¸‰è‰²åŒé¾™ä¼š
+	HUPAI_TYPE_YiSeSanBuGao = 54,	//ä¸€è‰²ä¸‰æ­¥é«˜
+	HUPAI_TYPE_QuanDaiWu = 55,	//å…¨å¸¦äº”	
+	HUPAI_TYPE_SanTongKe = 56,	//ä¸‰åŒåˆ»	
+	HUPAI_TYPE_SanAnKe = 57,	//ä¸‰æš—åˆ»	
+	HUPAI_TYPE_QiDui = 58,	//ä¸ƒå¯¹		
+	HUPAI_TYPE_QiXingBuKao = 59,	//ä¸ƒæ˜Ÿä¸é 
+	HUPAI_TYPE_QuanShuangKe = 60,	//å…¨åŒåˆ»	
+	HUPAI_TYPE_QingYiSe = 61,	//æ¸…ä¸€è‰²	
+	HUPAI_TYPE_YiSeSanTongShun = 62,	//ä¸€è‰²ä¸‰åŒé¡º
+	HUPAI_TYPE_YiSeSanJieGao = 63,	//ä¸€è‰²ä¸‰èŠ‚é«˜
+	HUPAI_TYPE_QuanDa = 64,	//å…¨å¤§		
+	HUPAI_TYPE_QuanZhong = 65,	//å…¨ä¸­		
+	HUPAI_TYPE_QuanXiao = 66,	//å…¨å°		
+	HUPAI_TYPE_YiSeSiBuGao = 67,	//ä¸€è‰²å››æ­¥é«˜
+	HUPAI_TYPE_SanGang = 68,	//ä¸‰æ 		
+	HUPAI_TYPE_HunYaoJiu = 69,	//æ··å¹ºä¹
+	HUPAI_TYPE_YiSeSiTongShun = 70,	//ä¸€è‰²å››åŒé¡º
+	HUPAI_TYPE_YiSeSiJieGao = 71,	//ä¸€è‰²å››èŠ‚é«˜
+	HUPAI_TYPE_QingYaoJiu = 72,	//æ¸…å¹ºä¹	
+	HUPAI_TYPE_XiaoSiXi = 73,	//å°å››å–œ
+	HUPAI_TYPE_XiaoSanYuan = 74,	//å°ä¸‰å…ƒ
+	HUPAI_TYPE_ZiYiSe = 75,	//å­—ä¸€è‰²
+	HUPAI_TYPE_SiAnKe = 76,	//å››æš—åˆ»	
+	HUPAI_TYPE_YiSeShuangLongHui = 77,	//ä¸€è‰²åŒé¾™ä¼š
+	HUPAI_TYPE_DaSiXi = 78,	//å¤§å››å–œ
+	HUPAI_TYPE_DaSanYuan = 79,	//å¤§ä¸‰å…ƒ
+	HUPAI_TYPE_LvYiSe = 80,	//ç»¿ä¸€è‰²
+	HUPAI_TYPE_JiuLianBaoDeng = 81,	//ä¹è²å®ç¯
+	HUPAI_TYPE_SiGang = 82,	//å››æ ï¼ˆåå…«ç½—æ±‰ï¼‰	
+	HUPAI_TYPE_LianQiDui = 83,	//è¿ä¸ƒå¯¹			
+	HUPAI_TYPE_ShiSanYao = 84,	//åä¸‰å¹º
+	HUPAI_TYPE_HUA = 85,    //èŠ±ç‰Œ
+	HUPAI_TYPE_QingYiSeQiDui = 86,	//æ¸…ä¸€è‰²ä¸ƒå¯¹
+	HUPAI_TYPE_QingYiSeYiTiaoLong = 87,	//æ¸…ä¸€è‰²ä¸€æ¡é¾™
+	HUPAI_TYPE_LongQiDui = 88,	//é¾™ä¸ƒå¯¹
+	HUPAI_TYPE_DaPiao = 89,	//å¤§é£˜
+	HUPAI_TYPE_JingHu = 90,	//4ä¸ªç™å­èƒ¡
 };
 
-//×éÅÆÀàĞÍ
+//ç»„ç‰Œç±»å‹
 enum MJ_GROUP_TYPE
 {
-	TYPE_JIANG_PAI = 15,				//½«ÅÆÀàĞÍ
-	TYPE_JINGDIAO_JIANG = 16,				//¾«µö½«ÅÆÀàĞÍ
-	TYPE_SHUN_ZI = 17,				//Ë³×ÓÀàĞÍ
-	TYPE_AN_KE = 18,				//°µ¿ÌÀàĞÍ
-	TYPE_JING_KE = 19,				//²ÆÉñ¿Ì×ÓÀàĞÍ
+	TYPE_JIANG_PAI = 15,				//å°†ç‰Œç±»å‹
+	TYPE_JINGDIAO_JIANG = 16,				//ç²¾é’“å°†ç‰Œç±»å‹
+	TYPE_SHUN_ZI = 17,				//é¡ºå­ç±»å‹
+	TYPE_AN_KE = 18,				//æš—åˆ»ç±»å‹
+	TYPE_JING_KE = 19,				//è´¢ç¥åˆ»å­ç±»å‹
 };
 class CMjRef
 {
 public:
 	CMjRef() {}
 	virtual ~CMjRef() {}
-	static bool IsValidateMj(BYTE iCard)//ºÏ·¨ÅÆÖµ
+	static bool IsValidateMj(BYTE iCard)//åˆæ³•ç‰Œå€¼
 	{
 		return iCard >= CMjEnum::MJ_TYPE_FCHUN && iCard <= CMjEnum::MJ_TYPE_LAOXU ||
 			iCard >= CMjEnum::MJ_TYPE_FD && iCard <= CMjEnum::MJ_TYPE_BAI ||
@@ -316,17 +316,17 @@ public:
 			iCard >= CMjEnum::MJ_TYPE_W1 && iCard <= CMjEnum::MJ_TYPE_W9 ||
 			iCard >= CMjEnum::MJ_TYPE_T1 && iCard <= CMjEnum::MJ_TYPE_T9;
 	}
-	//»ñÈ¡ÅÆµÄ»¨É«
+	//è·å–ç‰Œçš„èŠ±è‰²
 	static BYTE GetHuaSe(BYTE byCard)
 	{
 		return (byCard) / 10;
 	}
-	//»ñÈ¡ÅÆµÄÅÆµã
+	//è·å–ç‰Œçš„ç‰Œç‚¹
 	static BYTE GetCardPaiDian(BYTE byCard)
 	{
 		return (byCard) % 10;
 	}
-	//»ñÈ¡ÅÆµÄÅÆµã
+	//è·å–ç‰Œçš„ç‰Œç‚¹
 	static BYTE GetCardPaiDianEx(BYTE byCard)
 	{
 		if (byCard >= CMjEnum::MJ_TYPE_FD)
@@ -335,7 +335,7 @@ public:
 		}
 		return (byCard) % 10;
 	}
-	//ÅĞ¶ÏÅÆÊÇ²»ÊÇ1,9
+	//åˆ¤æ–­ç‰Œæ˜¯ä¸æ˜¯1,9
 	static bool IsYiJiuPai(BYTE byCard)
 	{
 		if (byCard >= CMjEnum::MJ_TYPE_FD)
@@ -348,12 +348,12 @@ public:
 		}
 		return true;
 	}
-	//¼ì²â2ÕÅÅÆÊÇ·ñÍ¬Ò»»¨É«
+	//æ£€æµ‹2å¼ ç‰Œæ˜¯å¦åŒä¸€èŠ±è‰²
 	static bool CheckIsTongSe(BYTE Card1, BYTE Card2)
 	{
 		return (Card1 / 10 == Card2 / 10);
 	}
-	//¼ì²â2ÕÅÅÆÊÇ·ñÒ»ÏàÁ¬
+	//æ£€æµ‹2å¼ ç‰Œæ˜¯å¦ä¸€ç›¸è¿
 	static  bool CheckIsYiXiangLian(BYTE Card1, BYTE Card2, bool big = false)
 	{
 		if (!CheckIsTongSe(Card1, Card2))
@@ -362,7 +362,7 @@ public:
 			return (Card1 == Card2 + 1);
 		return (Card1 == Card2 - 1);
 	}
-	//¼ì²â2ÕÅÅÆÊÇ·ñ¶şÏàÁ¬
+	//æ£€æµ‹2å¼ ç‰Œæ˜¯å¦äºŒç›¸è¿
 	static  bool CheckIsErXiangLian(BYTE Card1, BYTE Card2, bool big = false)
 	{
 		if (!CheckIsTongSe(Card1, Card2))
@@ -372,39 +372,39 @@ public:
 		return (Card1 == Card2 - 1 || Card1 == Card2 - 2);
 	}
 
-	static BYTE ExDToB(BYTE byMJ)//Âß¼­Êı¾İ×ª»»³É¿Ø¼şÊı¾İ
+	static BYTE ExDToB(BYTE byMJ)//é€»è¾‘æ•°æ®è½¬æ¢æˆæ§ä»¶æ•°æ®
 	{
 		if (byMJ == 0)
 		{
 			return 34;
 		}
-		else if (byMJ <= 9)	//¡°Íò¡±×ª»»
+		else if (byMJ <= 9)	//â€œä¸‡â€è½¬æ¢
 		{
 			return (byMJ - 1);
 		}
-		else if (byMJ <= 19)	//¡°Í¬¡±×ª»»
+		else if (byMJ <= 19)	//â€œåŒâ€è½¬æ¢
 		{
 			return (byMJ + 7);
 		}
-		else if (byMJ <= 29)	//¡°Ìõ¡±×ª»»
+		else if (byMJ <= 29)	//â€œæ¡â€è½¬æ¢
 		{
 			return (byMJ - 12);
 		}
-		else if (byMJ <= 37)	//·çÅÆ¡¢¡°ÖĞ·¢°×¡±×ª»»
+		else if (byMJ <= 37)	//é£ç‰Œã€â€œä¸­å‘ç™½â€è½¬æ¢
 		{
-			if (byMJ == 31)//¶«
+			if (byMJ == 31)//ä¸œ
 			{
 				return 27;
 			}
-			else if (byMJ == 32)//ÄÏ
+			else if (byMJ == 32)//å—
 			{
 				return 29;
 			}
-			else if (byMJ == 33)//Î÷
+			else if (byMJ == 33)//è¥¿
 			{
 				return 28;
 			}
-			else if (byMJ == 34)//±±
+			else if (byMJ == 34)//åŒ—
 			{
 				return 30;
 			}
@@ -413,46 +413,46 @@ public:
 				return byMJ - 4;
 			}
 		}
-		else if (byMJ <= 48)	//¡°´ºÏÄÇï¶¬Ã·À¼Öñ¾Õ¡±×ª»»
+		else if (byMJ <= 48)	//â€œæ˜¥å¤ç§‹å†¬æ¢…å…°ç«¹èŠâ€è½¬æ¢
 		{
 			return (byMJ - 5);
 		}
 		return 255;
 	}
 
-	static BYTE ExBToD(BYTE byMJ)//¿Ø¼şÊı¾İ×ª»»³ÉÂß¼­Êı¾İ
+	static BYTE ExBToD(BYTE byMJ)//æ§ä»¶æ•°æ®è½¬æ¢æˆé€»è¾‘æ•°æ®
 	{
 		if (byMJ < 0)
 		{
 			return byMJ;
 		}
-		else if (byMJ <= 8)	//¡°Íò¡±×ª»»
+		else if (byMJ <= 8)	//â€œä¸‡â€è½¬æ¢
 		{
 			return (byMJ + 1);
 		}
-		else if (byMJ <= 17)	//¡°Ìõ¡±×ª»»
+		else if (byMJ <= 17)	//â€œæ¡â€è½¬æ¢
 		{
 			return (byMJ + 12);
 		}
-		else if (byMJ <= 26)	//¡°Í¬¡±×ª»»
+		else if (byMJ <= 26)	//â€œåŒâ€è½¬æ¢
 		{
 			return (byMJ - 7);
 		}
-		else if (byMJ <= 33)	//·çÅÆ¡¢¡°ÖĞ·¢°×¡±×ª»»
+		else if (byMJ <= 33)	//é£ç‰Œã€â€œä¸­å‘ç™½â€è½¬æ¢
 		{
-			if (byMJ == 27)//¶«
+			if (byMJ == 27)//ä¸œ
 			{
 				return 31;
 			}
-			else if (byMJ == 29)//ÄÏ
+			else if (byMJ == 29)//å—
 			{
 				return 32;
 			}
-			else if (byMJ == 28)//Î÷
+			else if (byMJ == 28)//è¥¿
 			{
 				return 33;
 			}
-			else if (byMJ == 30)//±±
+			else if (byMJ == 30)//åŒ—
 			{
 				return 34;
 			}
@@ -461,18 +461,18 @@ public:
 				return (byMJ + 4);
 			}
 		}
-		else if (byMJ == 34) //¿ÕÅÆÓë±³ÅÆ
+		else if (byMJ == 34) //ç©ºç‰Œä¸èƒŒç‰Œ
 		{
 			return 0;
 		}
-		else if (byMJ <= 43)	//¡°´ºÏÄÇï¶¬Ã·À¼Öñ¾Õ¡±×ª»»
+		else if (byMJ <= 43)	//â€œæ˜¥å¤ç§‹å†¬æ¢…å…°ç«¹èŠâ€è½¬æ¢
 		{
 			return (byMJ + 5);
 		}
 		return 255;
 	}
 
-	static bool ExDToB(BYTE* byT, const BYTE* byS, int nMJSize)//Âß¼­Âé½«×ª»»³É¿Ø¼şÂé½«Êı¾İ£¨ÅúÁ¿×ª»»£©
+	static bool ExDToB(BYTE* byT, const BYTE* byS, int nMJSize)//é€»è¾‘éº»å°†è½¬æ¢æˆæ§ä»¶éº»å°†æ•°æ®ï¼ˆæ‰¹é‡è½¬æ¢ï¼‰
 	{
 		if (!byT || !byS)
 			return false;

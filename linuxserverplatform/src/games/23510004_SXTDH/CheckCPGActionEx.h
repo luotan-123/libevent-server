@@ -2,29 +2,29 @@
 #define CHECKCPGACTIONEX_H
 #include "CheckCPGAction.h"
 #include "CheckHuPaiEx.h"
-///³ÔÅö¸Ü¼ì²âÀà(ÖØÔØ)
+///åƒç¢°æ æ£€æµ‹ç±»(é‡è½½)
 class CheckCPGActionEx :public CheckCPGAction
 {
 public:
 	CheckCPGActionEx(void);
 	~CheckCPGActionEx(void);
 public:
-	///³õÊ¼»¯Êı¾İ
+	///åˆå§‹åŒ–æ•°æ®
 	virtual void InitData();
 
-	///ÄÜ·ñÅöÅÆ
+	///èƒ½å¦ç¢°ç‰Œ
 	virtual bool CanPeng(GameDataEx *pGameData, BYTE station, BYTE pai);
 
-	///ÄÜ·ñ¸ÜÅÆ
+	///èƒ½å¦æ ç‰Œ
 	bool CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE Result[][2], bool bMe = false, CheckHuPaiEx *pCheckHuData = NULL);
 
-	//¸ÜÅÆËã·Ö
+	//æ ç‰Œç®—åˆ†
 	virtual void CountGangFen(GameDataEx *pGameData, int iStation, int iBeStation, BYTE byType);
 
-	//¼ÆËã¸Ü·Ö
+	//è®¡ç®—æ åˆ†
 	void CountGangFenEx(GameDataEx *pGameData);
 
-	//¼õÈ¥ÇÀ¸ÜºúËùµÃ¸Ü·Ö,¼õ²¹¸Ü·Ö
+	//å‡å»æŠ¢æ èƒ¡æ‰€å¾—æ åˆ†,å‡è¡¥æ åˆ†
 	void MinusGangFen(GameDataEx *pGameData, int iStation, int iBeStation);
 };
 #endif

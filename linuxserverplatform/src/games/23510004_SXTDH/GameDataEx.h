@@ -3,141 +3,141 @@
 #include "GameData.h"
 #include <vector>
 
-///ÓÎÏ·Êı¾İ¹ÜÀíÀà
+///æ¸¸æˆæ•°æ®ç®¡ç†ç±»
 class GameDataEx : public GameData
 {
 public:
-	bool		m_bIsHu[PLAY_COUNT];		//ÊÇ·ñºúÅÆ
-	bool		m_bQiHu[PLAY_COUNT];		//Íæ¼ÒÊÇ·ñÆúºı×´Ì¬
-	bool		m_bQiPeng[PLAY_COUNT];		//ÆúÅö
-	int			m_iGangScore[PLAY_COUNT];	//¸ÜÅÆµÃ·Ö
-	int			m_iHuaScore[PLAY_COUNT];	//»¨ºúµÃ·Ö
-	int         m_iAddScore[PLAY_COUNT];	//Ã¿Ò»°ÑµÄÅÜÊı
-	int			m_iHuangZhuangCount;//»Ä×¯´ÎÊı
-	int         m_iZhuangWinCount; //×¯¼ÒÁ¬Ó®´ÎÊı
-	//BYTE		m_byDingQue[PLAY_COUNT];	//¶¨µÄÈ±£¬0±íÍò  1±íÌõ 2±íÍ²
-	BYTE		m_byQiHuTurn;//Æúºúµã
-	BYTE		m_byPengTurn;//ÅöÅÆµã
+	bool		m_bIsHu[PLAY_COUNT];		//æ˜¯å¦èƒ¡ç‰Œ
+	bool		m_bQiHu[PLAY_COUNT];		//ç©å®¶æ˜¯å¦å¼ƒç³ŠçŠ¶æ€
+	bool		m_bQiPeng[PLAY_COUNT];		//å¼ƒç¢°
+	int			m_iGangScore[PLAY_COUNT];	//æ ç‰Œå¾—åˆ†
+	int			m_iHuaScore[PLAY_COUNT];	//èŠ±èƒ¡å¾—åˆ†
+	int         m_iAddScore[PLAY_COUNT];	//æ¯ä¸€æŠŠçš„è·‘æ•°
+	int			m_iHuangZhuangCount;//è’åº„æ¬¡æ•°
+	int         m_iZhuangWinCount; //åº„å®¶è¿èµ¢æ¬¡æ•°
+	//BYTE		m_byDingQue[PLAY_COUNT];	//å®šçš„ç¼ºï¼Œ0è¡¨ä¸‡  1è¡¨æ¡ 2è¡¨ç­’
+	BYTE		m_byQiHuTurn;//å¼ƒèƒ¡ç‚¹
+	BYTE		m_byPengTurn;//ç¢°ç‰Œç‚¹
 	std::vector<BYTE> m_vecQiPengCard[PLAY_COUNT];
 	tagMatchMJ  m_tMatchMJ;
 	tagActionTurn  m_tActionTurn[PLAY_COUNT];
-	//µ±Ç°¿É²Ù×÷³ÔÅö¸ÜºúµÄÍæ¼Ò
+	//å½“å‰å¯æ“ä½œåƒç¢°æ èƒ¡çš„ç©å®¶
 	BYTE		m_byCurrentOperatorUser;
 
-	//ÌØÊâ¹æÔò
+	//ç‰¹æ®Šè§„åˆ™
 	tagStructGameRuler m_tGameRuler;
-	bool		m_bIsGangShangGang[PLAY_COUNT];//ÊÇ·ñÓĞ¸ÜÉÏ¸Ü£¬
-	int			m_bGangZiMo[PLAY_COUNT];//¼ÇÂ¼¸ÜÉÏ×ÔÃş£¬¡¾É¶Ò²Ã»Ó´ 0¡¿,¡¾¸Ü 1¡¿£¬¡¾¸ÜÉÏ×ÔÃş 2¡¿
+	bool		m_bIsGangShangGang[PLAY_COUNT];//æ˜¯å¦æœ‰æ ä¸Šæ ï¼Œ
+	int			m_bGangZiMo[PLAY_COUNT];//è®°å½•æ ä¸Šè‡ªæ‘¸ï¼Œã€å•¥ä¹Ÿæ²¡å“Ÿ 0ã€‘,ã€æ  1ã€‘ï¼Œã€æ ä¸Šè‡ªæ‘¸ 2ã€‘
 
-	//²¹»¨
-	vector<BYTE>   m_vHuapaiTemp[PLAY_COUNT]; //ÆğÊÖÃ¿¸öÍæ¼Ò»¨ÅÆµÄÊıÁ¿
-	bool		   m_bIsBuHua[PLAY_COUNT];	  //ÊÇ·ñÆğÊÖ²¹¹ı»¨
-	bool           m_bIsBuAllHua[PLAY_COUNT]; //ÊÇ·ñ²¹ÍêËùÓĞ»¨
-	BYTE		   m_byFangWei[PLAY_COUNT];	  //·½Î»£º¶«ÄÏÎ÷±±
-	BYTE		   m_byHuaPaiType[PLAY_COUNT][2];//»¨ÅÆÀàĞÍ£º´ºÏÄÇï¶¬ÅÆ£¬Ã·À¼Öñ¾ÕÅÆ¡£Ã¿¸öÈËÁ½ÖÖ±ÈÈçÃ·ºÍ´º
+	//è¡¥èŠ±
+	vector<BYTE>   m_vHuapaiTemp[PLAY_COUNT]; //èµ·æ‰‹æ¯ä¸ªç©å®¶èŠ±ç‰Œçš„æ•°é‡
+	bool		   m_bIsBuHua[PLAY_COUNT];	  //æ˜¯å¦èµ·æ‰‹è¡¥è¿‡èŠ±
+	bool           m_bIsBuAllHua[PLAY_COUNT]; //æ˜¯å¦è¡¥å®Œæ‰€æœ‰èŠ±
+	BYTE		   m_byFangWei[PLAY_COUNT];	  //æ–¹ä½ï¼šä¸œå—è¥¿åŒ—
+	BYTE		   m_byHuaPaiType[PLAY_COUNT][2];//èŠ±ç‰Œç±»å‹ï¼šæ˜¥å¤ç§‹å†¬ç‰Œï¼Œæ¢…å…°ç«¹èŠç‰Œã€‚æ¯ä¸ªäººä¸¤ç§æ¯”å¦‚æ¢…å’Œæ˜¥
 
-	//ĞÂµÄËã·ÖÍ³¼Æ
-	CountHuFenStruct                m_countHuFen[PLAY_COUNT];     //ºú·Ö
-	CountGangFenStruct              m_countGangFen[PLAY_COUNT];   //¸Ü·Ö
-	//CountGenZhuangFenStruct         m_countGenZhuang[PLAY_COUNT]; //¸ú×¯·Ö
-	//CountHorseFenStruct				m_countHorseFen[PLAY_COUNT];  //Âí·Ö
+	//æ–°çš„ç®—åˆ†ç»Ÿè®¡
+	CountHuFenStruct                m_countHuFen[PLAY_COUNT];     //èƒ¡åˆ†
+	CountGangFenStruct              m_countGangFen[PLAY_COUNT];   //æ åˆ†
+	//CountGenZhuangFenStruct         m_countGenZhuang[PLAY_COUNT]; //è·Ÿåº„åˆ†
+	//CountHorseFenStruct				m_countHorseFen[PLAY_COUNT];  //é©¬åˆ†
 
-	//±£´æÍæ¼ÒÌıÅÆ¡¢ºúÅÆÊı¾İ£¬¶ÏÏßÖØÁ¬Ê¹ÓÃ
-	BYTE m_byOutCanHuCard[HAND_CARD_NUM];				//´òÄÄÕÅÅÆ¿Éºú
-	BYTE m_byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];//´òÄÇÕÅÅÆºúÄÇÕÅÅÆ
-	BYTE m_byCardRemainNum[MAX_MJ_PAI];		//²Ù×÷Íæ¼ÒÏÔÊ¾Ê£ÓàÅÆÊıÁ¿
-	BYTE m_byOutAfterHuCard[PLAY_COUNT][MAX_CANHU_CARD_NUM]; //×óÏÂ½ÇÏÔÊ¾ºúÅÆ
-	BYTE m_byCardType[MAX_MJ_KIND_NUM]; //±¾¾ÖËùÓĞµÄÅÆ
+	//ä¿å­˜ç©å®¶å¬ç‰Œã€èƒ¡ç‰Œæ•°æ®ï¼Œæ–­çº¿é‡è¿ä½¿ç”¨
+	BYTE m_byOutCanHuCard[HAND_CARD_NUM];				//æ‰“å“ªå¼ ç‰Œå¯èƒ¡
+	BYTE m_byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];//æ‰“é‚£å¼ ç‰Œèƒ¡é‚£å¼ ç‰Œ
+	BYTE m_byCardRemainNum[MAX_MJ_PAI];		//æ“ä½œç©å®¶æ˜¾ç¤ºå‰©ä½™ç‰Œæ•°é‡
+	BYTE m_byOutAfterHuCard[PLAY_COUNT][MAX_CANHU_CARD_NUM]; //å·¦ä¸‹è§’æ˜¾ç¤ºèƒ¡ç‰Œ
+	BYTE m_byCardType[MAX_MJ_KIND_NUM]; //æœ¬å±€æ‰€æœ‰çš„ç‰Œ
 public:
 	GameDataEx(void);
 	~GameDataEx(void);
-	//³õÊ¼»¯Êı¾İ
+	//åˆå§‹åŒ–æ•°æ®
 	virtual void InitData();
-	//³õÊ¼»¯Êı¾İ
+	//åˆå§‹åŒ–æ•°æ®
 	virtual void LoadIni();
 
-	//////////////////ÊÖÅÆ²Ù×÷/////////////////////////////////////
-	///¼ì²éÊÇ·ñ´æÔÚÖ¸¶¨µÄÃÅÅÆ
+	//////////////////æ‰‹ç‰Œæ“ä½œ/////////////////////////////////////
+	///æ£€æŸ¥æ˜¯å¦å­˜åœ¨æŒ‡å®šçš„é—¨ç‰Œ
 	virtual	bool IsHaveAMenPai(BYTE pai);
 
-	//»»Ö¸¶¨µÄÒ»ÕÅÊÖÅÆ
+	//æ¢æŒ‡å®šçš„ä¸€å¼ æ‰‹ç‰Œ
 	bool	ChangeAHandPai(BYTE station, BYTE ChangePai, BYTE byNewCard);
 
-	//»»Ö¸¶¨Ò»ÕÅÃÅÅÆ
+	//æ¢æŒ‡å®šä¸€å¼ é—¨ç‰Œ
 	bool	ChangeAMenPai(BYTE ChangePai, BYTE byNewCard);
 
-	///ÊÇ·ñ³öÅÆÍæ¼Ò
+	///æ˜¯å¦å‡ºç‰Œç©å®¶
 	virtual bool IsOutPaiPeople(BYTE station);
 
-	///»ñÈ¡ÊÖÅÆµÄÅÆÉ«Êı
+	///è·å–æ‰‹ç‰Œçš„ç‰Œè‰²æ•°
 	virtual int GetPaiSeCount(BYTE station);
 
-	///ÃèÊö£º×¥Ò»ÕÅÅÆ
+	///æè¿°ï¼šæŠ“ä¸€å¼ ç‰Œ
 	virtual BYTE GetPai(int iStation, bool bhead, BYTE *pIndex = NULL, BYTE byGetPai = 255);
 
-	///ÊÇ·ñ»¹ÓĞÈ±ÃÅµÄÅÆ
+	///æ˜¯å¦è¿˜æœ‰ç¼ºé—¨çš„ç‰Œ
 	bool IsHaveQueMen(BYTE station, BYTE type);
 
-	//»ñÈ¡Ò»ÕÅdataÖĞÃ»ÓĞµÄÅÆ£¬ÓÃÀ´»»ÅÆ
+	//è·å–ä¸€å¼ dataä¸­æ²¡æœ‰çš„ç‰Œï¼Œç”¨æ¥æ¢ç‰Œ
 	BYTE GetChangePai(BYTE station, BYTE data[]);
 
-	///¼ì²éÄ³ÖÖ»¨É«ÅÆµÄ¸öÊı£¨0Íò 1Í² 2Ìõ)
+	///æ£€æŸ¥æŸç§èŠ±è‰²ç‰Œçš„ä¸ªæ•°ï¼ˆ0ä¸‡ 1ç­’ 2æ¡)
 	int GetAKindPaiCount(BYTE station, BYTE kind);
 
-	///µÃµ½Ä³ÖÖ»¨É«ÅÆ£¨0Íò 1Í² 2Ìõ)
+	///å¾—åˆ°æŸç§èŠ±è‰²ç‰Œï¼ˆ0ä¸‡ 1ç­’ 2æ¡)
 	int GetAKindPai(BYTE station, BYTE kind);
 
-	//////////////////³ÔÅö¸ÜÅÆ²Ù×÷/////////////////////////////////////
-	///Ìí¼ÓÒ»×éÊı¾İµ½¸Ü³ÔÅöÊı×éÖĞ
+	//////////////////åƒç¢°æ ç‰Œæ“ä½œ/////////////////////////////////////
+	///æ·»åŠ ä¸€ç»„æ•°æ®åˆ°æ åƒç¢°æ•°ç»„ä¸­
 	virtual void AddToGCP(BYTE station, TCPGStruct *gcpData);
 
-	//////////////////»¨ÅÆ²Ù×÷///////////////////////////////////////////////////////
-	///¼ì²âÄ³¸öÈËÊÇ·ñÄÇÕÅ»¨ÅÆ
+	//////////////////èŠ±ç‰Œæ“ä½œ///////////////////////////////////////////////////////
+	///æ£€æµ‹æŸä¸ªäººæ˜¯å¦é‚£å¼ èŠ±ç‰Œ
 	virtual bool CheckIsHaveHuaPai(BYTE station, BYTE pai);
 
-	///////////////////À©Õ¹¹¦ÄÜ///////////////////////////////////////////////////////
-	//»ìÂÒÅÆ
+	///////////////////æ‰©å±•åŠŸèƒ½///////////////////////////////////////////////////////
+	//æ··ä¹±ç‰Œ
 	virtual bool DisPatchCard();
 
-	///»ñÈ¡ÏÂ¼ÒÎ»ÖÃ
+	///è·å–ä¸‹å®¶ä½ç½®
 	BYTE GetNextStation(BYTE station, bool shun);
 
-	//ÅäÅÆ
+	//é…ç‰Œ
 	BYTE MatchMJ();
 
-	//·­¹í
+	//ç¿»é¬¼
 	void TurningString(BYTE &byPai0, BYTE &byPai1);
 
-	//ÅĞ¶ÏÊÇ·ñÂú×ã¸ú×¯¹æÔò
+	//åˆ¤æ–­æ˜¯å¦æ»¡è¶³è·Ÿåº„è§„åˆ™
 	int CheckIsShouZhangGen(bool bIsNext = false);
 
-	//»ñÈ¡Á½¸öÍæ¼ÒµÄÏà¶ÔÎ»ÖÃ¹ØÏµ
+	//è·å–ä¸¤ä¸ªç©å®¶çš„ç›¸å¯¹ä½ç½®å…³ç³»
 	BYTE GetPlayerStationRelation(BYTE byMeStation, BYTE byOtherStation);
 
-	//»ñÈ¡byMeStationÍæ¼ÒºÍ·ÇbyNoStationµÄ¹ØÏµ
+	//è·å–byMeStationç©å®¶å’ŒébyNoStationçš„å…³ç³»
 	BYTE GetPlayerStationRelationEx(BYTE byMeStation, BYTE byNoStation);
 
-	//»ñµÃÊ£ÓàÃÅÅÆ
+	//è·å¾—å‰©ä½™é—¨ç‰Œ
 	BYTE GetRemainMenPai(BYTE m_byRemainMenPai[MAX_REMAIN_MEN_PAI_NUM]);
 
-	//Ìí¼Óºú·Ö
-	//BYTE byNameType[3];					//ÏàÓ¦µÄÃû×Ö£¬ Ã¶¾ÙÀàĞÍMJ_HU_FEN_TYPE
-	//BYTE byXiangYingStation[3];			//ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-	//BYTE byXiangYingStationEx[3];		//ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-	//bool bBaoTing[3];					//µãÅÚÍæ¼Ò£ºbyXiangYingStationExÊÇ·ñ±¨Ìı£¬·ÇµãÅÚÍæ¼Ò£¨×ÔÃşÍæ¼Ò£©£ºbyXiangYingStationÊÇ·ñ±¨Ìı
-	//int iAllFen[3];						//ÊäÓ®µÄºú·Ö
+	//æ·»åŠ èƒ¡åˆ†
+	//BYTE byNameType[3];					//ç›¸åº”çš„åå­—ï¼Œ æšä¸¾ç±»å‹MJ_HU_FEN_TYPE
+	//BYTE byXiangYingStation[3];			//ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+	//BYTE byXiangYingStationEx[3];		//ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+	//bool bBaoTing[3];					//ç‚¹ç‚®ç©å®¶ï¼šbyXiangYingStationExæ˜¯å¦æŠ¥å¬ï¼Œéç‚¹ç‚®ç©å®¶ï¼ˆè‡ªæ‘¸ç©å®¶ï¼‰ï¼šbyXiangYingStationæ˜¯å¦æŠ¥å¬
+	//int iAllFen[3];						//è¾“èµ¢çš„èƒ¡åˆ†
 	bool AddToHuFenStruct(BYTE byStation, BYTE byNameType, BYTE byXiangYingStation, BYTE byXiangYingStationEx, bool bBaoTing, int iAllFen);
 
-	//Ìí¼Ó¸Ü·Ö
+	//æ·»åŠ æ åˆ†
 	bool AddToGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXiangYingStation, bool bBaoTing, int iAllFen);
 
-	//Çå³ı²¹¸ÜÁĞ±í·Ö
+	//æ¸…é™¤è¡¥æ åˆ—è¡¨åˆ†
 	bool DelBuGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXiangYingStation, bool bBaoTing, int iAllFen);
 
-	//Ìí¼ÓÂí·Ö
+	//æ·»åŠ é©¬åˆ†
 	bool AddToHorseFenStruct(BYTE byStation, BYTE byBuyHorseType, BYTE byMaiStation, BYTE byBeiMaiStation, int iAllFen);
 
-	//Ìí¼Ó¸ú×¯·Ö
+	//æ·»åŠ è·Ÿåº„åˆ†
 	bool AddToGenZhuangFenStruct(BYTE byStation, BYTE byGenZhuangType, BYTE byXiangYingStation, int iAllFen);
 };
 #endif

@@ -2,11 +2,11 @@
 #include "ServerManage.h"
 #include <shlobj.h>
 
-//È«¾Ö±äÁ¿
+//å…¨å±€å˜é‡
 bool CServerGameDesk::gOutMessageSize = true;
 /*------------------------------------------------------------------------------*/
 /**
-* ¹¹Ôìº¯Êı
+* æ„é€ å‡½æ•°
 */
 CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 {
@@ -14,21 +14,21 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 	SetGameStation(GS_STATUS_FREE);
 	ReSetGameState(0);
 	m_GameData.m_byNtStation = 255;
-	memset(m_GameData.m_iAddScore, 0, sizeof(m_GameData.m_iAddScore)); //Ã¿Ò»°ÑµÄ¼Ó·Ö
+	memset(m_GameData.m_iAddScore, 0, sizeof(m_GameData.m_iAddScore)); //æ¯ä¸€æŠŠçš„åŠ åˆ†
 	m_GameData.m_tGameRuler.Init();
-	m_GameData.m_iZhuangWinCount = 0;//×¯¼ÒÁ¬Ó®´ÎÊı
+	m_GameData.m_iZhuangWinCount = 0;//åº„å®¶è¿èµ¢æ¬¡æ•°
 	memset(m_bSuperFlag, false, sizeof(m_bSuperFlag));
 }
 /*------------------------------------------------------------------------------*/
 /**
-* Îö¹¹º¯Êı
+* ææ„å‡½æ•°
 */
 CServerGameDesk::~CServerGameDesk(void) {}
 
 /*-------------------------------------------------------------------------------------------------*/
 /**
-* ³õÊ¼»¯×À×Ó
-* @return ·µ»Ø²¼¶ûÀàĞÍ
+* åˆå§‹åŒ–æ¡Œå­
+* @return è¿”å›å¸ƒå°”ç±»å‹
 */
 bool CServerGameDesk::InitDeskGameStation()
 {
@@ -38,8 +38,8 @@ bool CServerGameDesk::InitDeskGameStation()
 
 void CServerGameDesk::LoadDynamicConfig()
 {
-	//¼ÓÔØ·¿¼äÉèÖÃ
-	CString s = CINIFile::GetAppPath();/////±¾µØÂ·¾¶
+	//åŠ è½½æˆ¿é—´è®¾ç½®
+	CString s = CINIFile::GetAppPath();/////æœ¬åœ°è·¯å¾„
 	CINIFile f(s + SKIN_FOLDER + _T("_s.ini"));
 	CString sKey;
 	sKey = TEXT("game");
@@ -48,10 +48,10 @@ void CServerGameDesk::LoadDynamicConfig()
 	m_GameData.m_mjRule.byOutTime = f.GetKeyVal(sKey, "OutTime", 15);
 	m_GameData.m_mjRule.byAutoOutTime = f.GetKeyVal(sKey, "AutoOutTime", 1);
 
-	//¶Á½ğ±Ò³¡ÅäÖÃÎÄ¼ş
+	//è¯»é‡‘å¸åœºé…ç½®æ–‡ä»¶
 	if (IsGoldRoom() && m_pDataManage)
 	{
-		//¸ù¾İ²»Í¬³¡²»Í¬Íæ·¨
+		//æ ¹æ®ä¸åŒåœºä¸åŒç©æ³•
 		sKey.Format("%d_%d", NAME_ID, m_pDataManage->m_InitData.uRoomID);
 		m_GameData.m_tGameRuler.bDaHu = f.GetKeyVal(sKey, "bDaHu", m_GameData.m_tGameRuler.bDaHu) == 0 ? false : true;
 		m_GameData.m_tGameRuler.bBaoTing = f.GetKeyVal(sKey, "bBaoTing", m_GameData.m_tGameRuler.bBaoTing) == 0 ? false : true;
@@ -63,8 +63,8 @@ void CServerGameDesk::LoadDynamicConfig()
 }
 /*-------------------------------------------------------------------------------------------------*/
 /**
-* ÓÎÏ·¿ªÊ¼
-* @param [in] bBeginFlasg ¿ªÊ¼Ä£Ê½±êÖ¾
+* æ¸¸æˆå¼€å§‹
+* @param [in] bBeginFlasg å¼€å§‹æ¨¡å¼æ ‡å¿—
 */
 bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 {
@@ -73,7 +73,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 		GameFinish(0, GF_SALE);
 		return false;
 	}
-	if (IsGoldRoom()) //½ğ±Ò³¡È«ÊÇ»úÆ÷ÈË²»¿ªÊ¼ÓÎÏ·
+	if (IsGoldRoom()) //é‡‘å¸åœºå…¨æ˜¯æœºå™¨äººä¸å¼€å§‹æ¸¸æˆ
 	{
 		int iRobotCount = 0;
 		for (int i = 0;i < PLAY_COUNT;i++)
@@ -98,11 +98,11 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	memset(m_bTrustee, false, sizeof(m_bTrustee));
 	memset(m_iOutCardChaoShiCount, 0, sizeof(m_iOutCardChaoShiCount));
 
-	//»ñÈ¡½±³ØÊı¾İ
+	//è·å–å¥–æ± æ•°æ®
 	m_pDataManage->LoadPoolData();
 
-	//////////////////////////////////////¶¨×¯ºÍÒ¡É¸×ÓÈ·¶¨ÆåÅÆÎ»ÖÃ
-	//»ìÂÒ÷»×Ó
+	//////////////////////////////////////å®šåº„å’Œæ‘‡ç­›å­ç¡®å®šæ£‹ç‰Œä½ç½®
+	//æ··ä¹±éª°å­
 	CLogicBase::GetSeziData(&m_GameData.T_TwoSeziDirAndGetPai.bySezi0, &m_GameData.T_TwoSeziDirAndGetPai.bySezi1);
 	if (!IsGoldRoom())
 	{
@@ -118,17 +118,17 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 			}
 		}
 	}
-	//Èç¹ûÃ»ÓĞ·¿Ö÷£¬Ëæ»ú¶¨×¯
+	//å¦‚æœæ²¡æœ‰æˆ¿ä¸»ï¼Œéšæœºå®šåº„
 	srand((unsigned)time(NULL));
 	if (255 == m_GameData.m_byNtStation)
 	{
-		m_GameData.m_byNtStation = rand() % PLAY_COUNT;//¶¨×¯
+		m_GameData.m_byNtStation = rand() % PLAY_COUNT;//å®šåº„
 	}
-	//ÏÈÇå¿ÕÊı¾İ
-	//ÖÀÉ¸×ÓÍæ¼ÒµÄÎ»ÖÃ = ×¯¼ÒµÄÎ»ÖÃ
+	//å…ˆæ¸…ç©ºæ•°æ®
+	//æ·ç­›å­ç©å®¶çš„ä½ç½® = åº„å®¶çš„ä½ç½®
 	m_GameData.T_TwoSeziDirAndGetPai.byUser = m_GameData.m_byNtStation;
-	//¼ÇÂ¼ÆğÅÆµÄ·½Ïò(1Îª×Ô¼º ÄæÊ±ÕëÊı)
-	//1,5,9ÊÇ¿ª×Ô¼ºÃÅÇ°µÄÅÆ£¬2,6,10ÊÇÓÒÊÖ±ß£¬3,7,11ÊÇ¶Ô¼Ò£¬4,8,12ÊÇ×óÊÖ±ß
+	//è®°å½•èµ·ç‰Œçš„æ–¹å‘(1ä¸ºè‡ªå·± é€†æ—¶é’ˆæ•°)
+	//1,5,9æ˜¯å¼€è‡ªå·±é—¨å‰çš„ç‰Œï¼Œ2,6,10æ˜¯å³æ‰‹è¾¹ï¼Œ3,7,11æ˜¯å¯¹å®¶ï¼Œ4,8,12æ˜¯å·¦æ‰‹è¾¹
 	m_GameData.m_MenPai.byGetPaiDir = (PLAY_COUNT - (m_GameData.T_TwoSeziDirAndGetPai.bySezi0 + m_GameData.T_TwoSeziDirAndGetPai.bySezi1 - 1) % PLAY_COUNT
 		+ m_GameData.T_TwoSeziDirAndGetPai.byUser) % PLAY_COUNT;
 	m_GameData.m_MenPai.byGetPai = min(m_GameData.T_TwoSeziDirAndGetPai.bySezi0, m_GameData.T_TwoSeziDirAndGetPai.bySezi1);
@@ -137,7 +137,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	{
 		return false;
 	}
-	//×¯¼Ò¶à×¥Ò»ÕÅÅÆ
+	//åº„å®¶å¤šæŠ“ä¸€å¼ ç‰Œ
 	BYTE byCard = 255;
 	BYTE byPai0 = 255, byPai1 = 255;
 	if (m_GameData.m_mjRule.bIsMatchMJ && HandCard())
@@ -167,7 +167,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 		{
 			m_GameData.SortHandPai(i, false);
 		}
-		byCard = m_GameData.GetPai(m_GameData.m_byNtStation, m_GameData.m_bZhuaPaiDir, NULL);//ÔÙ×¯¼Ò×¥ÅÆ
+		byCard = m_GameData.GetPai(m_GameData.m_byNtStation, m_GameData.m_bZhuaPaiDir, NULL);//å†åº„å®¶æŠ“ç‰Œ
 		if (m_GameData.m_mjRule.bHaveFlower && m_GameData.CheckIsHuaPai(byCard))
 		{
 			m_GameData.m_vHuapaiTemp[m_GameData.m_byNtStation].push_back(byCard);
@@ -179,7 +179,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 			m_GameData.m_StrJing.AddJing(byPai1);
 		}
 	}
-	m_GameData.T_ZhuaPai.byPs = byCard;//×¥ÅÆµÄÖµ
+	m_GameData.T_ZhuaPai.byPs = byCard;//æŠ“ç‰Œçš„å€¼
 	if (MJTABLE_CARDTYPE0 == m_byMJCardType)
 	{
 		m_byMJCardType = MJTABLE_CARDTYPE1;
@@ -188,11 +188,11 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	{
 		m_byMJCardType = MJTABLE_CARDTYPE0;
 	}
-	m_GameData.m_byNowOutStation = m_GameData.m_byNtStation;//ÉèÖÃ³öÅÆÍæ¼Ò
-	//ÉèÖÃ×´Ì¬
+	m_GameData.m_byNowOutStation = m_GameData.m_byNtStation;//è®¾ç½®å‡ºç‰Œç©å®¶
+	//è®¾ç½®çŠ¶æ€
 	SetGameStation(GS_STATUS_PLAYING);
 
-	//¹¹ÔìÊı¾İ£¬·¢ËÍ¸ø¿Í»§¶ËÓÎÏ·¿ªÊ¼Êı¾İ
+	//æ„é€ æ•°æ®ï¼Œå‘é€ç»™å®¢æˆ·ç«¯æ¸¸æˆå¼€å§‹æ•°æ®
 	CMD_S_GameStart GameStart;
 	GameStart.bySezi0 = m_GameData.T_TwoSeziDirAndGetPai.bySezi0;
 	GameStart.bySezi1 = m_GameData.T_TwoSeziDirAndGetPai.bySezi1;
@@ -206,17 +206,17 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	memcpy(GameStart.bSuperFlag, m_bSuperFlag, sizeof(GameStart.bSuperFlag));
 	/*GameStart.iGameBase=m_GameData.m_mjRule.iGameBase;*/
 	memcpy(GameStart.byCardCount, m_GameData.m_byArHandPaiCount, sizeof(GameStart.byCardCount));
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
 	if (!m_GameData.m_mjAction.bTing)
 	{
-		//ÌáÈ¡×¯¼ÒÌıÅÆÊı¾İ
+		//æå–åº„å®¶å¬ç‰Œæ•°æ®
 		memset(m_GameData.m_byOutCanHuCard, 255, sizeof(m_GameData.m_byOutCanHuCard));
 		memset(m_GameData.m_byHuCard, 255, sizeof(m_GameData.m_byHuCard));
 		memset(m_GameData.m_byCardRemainNum, 0, sizeof(m_GameData.m_byCardRemainNum));
 		m_CheckHuData.OutCardExtractHu(&m_GameData, m_GameData.m_byNowOutStation, m_GameData.m_byOutCanHuCard, m_GameData.m_byHuCard, m_GameData.m_byCardRemainNum);
 	}
 #endif
-	//·¢ËÍÊı¾İ
+	//å‘é€æ•°æ®
 	for (BYTE i = 0;i < PLAY_COUNT;i++)
 	{
 		memset(GameStart.byCard, 255, sizeof(GameStart.byCard));
@@ -248,7 +248,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	OnJson(&GameStart, 1);
 	if (m_GameData.m_mjAction.bBuHua)
 	{
-		//×¯¼ÒÏÈ²¹»¨
+		//åº„å®¶å…ˆè¡¥èŠ±
 		BYTE byDeskStation = m_GameData.m_byNtStation;
 		m_GameData.m_bIsBuHua[byDeskStation] = true;
 		for (int j = 0; j < (int)m_GameData.m_vHuapaiTemp[byDeskStation].size();j++)
@@ -261,7 +261,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 		m_GameData.m_bIsBuAllHua[byDeskStation] = true;
 	}
 
-	////¼ì²â¶¯×÷
+	////æ£€æµ‹åŠ¨ä½œ
 #ifdef DELAY_CHECK_ACTION
 	m_byBeginTempCard = byCard;
 	SetTimer(TIME_CHECK_ACTION, 3200);
@@ -272,7 +272,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 		//bBlock=true;
 		//m_GameData.m_byCurrentOperatorUser = m_GameData.m_byNowOutStation;
 		//CMD_S_OperateNotify ActionData;
-		//// ½øÈëÀ¹ÅÆ×´Ì¬
+		//// è¿›å…¥æ‹¦ç‰ŒçŠ¶æ€
 		//int i = m_GameData.m_byNowOutStation;
 		//ActionData.byUsr=i;
 		//memcpy(ActionData.byGangData,m_GameData.T_CPGNotify[i].iGangData,sizeof(ActionData.byGangData));
@@ -285,7 +285,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 		memcpy(m_GameData.T_TingPai.byTingCanOut,m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].byTingCanOut,sizeof(m_GameData.T_TingPai.byTingCanOut));*/
 		CMD_S_OperateNotify ActionData;
 		m_GameData.m_byCurrentOperatorUser = m_GameData.m_byNowOutStation;
-		// ½øÈëÀ¹ÅÆ×´Ì¬
+		// è¿›å…¥æ‹¦ç‰ŒçŠ¶æ€
 		ActionData.byUsr = m_GameData.m_byNowOutStation;
 		memcpy(ActionData.byGangData, m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].iGangData, sizeof(ActionData.byGangData));
 		memcpy(ActionData.byTingCanOut, m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].byTingCanOut, sizeof(ActionData.byTingCanOut));
@@ -328,16 +328,16 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 }
 /*-------------------------------------------------------------------------------------------------*/
 /**
-* ÓÎÏ·½áÊø
-* @param [in] bDeskStation Íæ¼ÒÎ»ÖÃ
-* @param [in] bCloseFlag ÓÎÏ·½áÊø±êÖ¾
-* @return ·µ»Ø²¼¶ûÀàĞÍ
+* æ¸¸æˆç»“æŸ
+* @param [in] bDeskStation ç©å®¶ä½ç½®
+* @param [in] bCloseFlag æ¸¸æˆç»“æŸæ ‡å¿—
+* @return è¿”å›å¸ƒå°”ç±»å‹
 */
 bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 {
 	switch (bCloseFlag)
 	{
-	case GF_NORMAL:		//ÓÎÏ·Õı³£½áÊø
+	case GF_NORMAL:		//æ¸¸æˆæ­£å¸¸ç»“æŸ
 	{
 		for (int i = 0; i < PLAY_COUNT; ++i)
 		{
@@ -346,25 +346,25 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 				continue;
 			}
 			OnHandleUserRequestCancelAuto(i);
-			//½ğ±Ò³¡£¬¶ÏÏßÍĞ¹Ü
+			//é‡‘å¸åœºï¼Œæ–­çº¿æ‰˜ç®¡
 			CMD_C_Trustee Data;
 			Data.bTrustee = false;
 			HandleNotifyMessage(i, C_S_TRUSTEE, &Data, sizeof(Data));
 		}
 		int roomType = GetRoomType();
 
-		//////////////////////////////////////////////////////////////////////////¼ÆËã×ÜÊı
-		//±äÁ¿¶¨Òå
+		//////////////////////////////////////////////////////////////////////////è®¡ç®—æ€»æ•°
+		//å˜é‡å®šä¹‰
 		CMD_S_GameEnd GameEnd;
-		int iGangZongFen[PLAY_COUNT];//¸Ü×Ü·Ö
-		int iHuZongFen[PLAY_COUNT];//ºú×Ü·Ö
+		int iGangZongFen[PLAY_COUNT];//æ æ€»åˆ†
+		int iHuZongFen[PLAY_COUNT];//èƒ¡æ€»åˆ†
 		memset(iGangZongFen, 0, sizeof(iGangZongFen));
 		memset(iHuZongFen, 0, sizeof(iHuZongFen));
 		memcpy(GameEnd.byHuType, m_GameData.T_CountFen.byHuType, sizeof(GameEnd.byHuType));
 		memcpy(GameEnd.iFanCount, m_GameData.T_CountFen.iFanCount, sizeof(GameEnd.iFanCount));
 		memcpy(GameEnd.bTing, m_GameData.m_bTing, sizeof(GameEnd.bTing));
 
-		//¸Ü·Ö£¬·ÇÁ÷¾Ö²ÅËã¸Ü·Ö
+		//æ åˆ†ï¼Œéæµå±€æ‰ç®—æ åˆ†
 		if (!m_GameData.T_HuPai.bIsLiuJu)
 		{
 			for (int i = 0;i < PLAY_COUNT;i++)
@@ -374,7 +374,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			memcpy(GameEnd.countGangFen, m_GameData.m_countGangFen, sizeof(GameEnd.countGangFen));
 		}
 
-		//ºú·Ö
+		//èƒ¡åˆ†
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
 			int iScore = 0;
@@ -386,30 +386,30 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		}
 		memcpy(GameEnd.countHuFen, m_GameData.m_countHuFen, sizeof(GameEnd.countHuFen));
 
-		//×Ü·Ö
+		//æ€»åˆ†
 		CString lwlog;
-		lwlog.Format("=======%sËã·Ö========\n", GAMENAME);
+		lwlog.Format("=======%sç®—åˆ†========\n", GAMENAME);
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
 			m_GameData.T_CountFen.iZongFen[i] = iHuZongFen[i] + iGangZongFen[i];
 			CString str_;
-			str_.Format("==========[Íæ¼Ò%d]--->[ºú·Ö£º%3d] [¸Ü·Ö£º%3d]  [·¬£º%2d] [×Ü·Ö:%3d] ==========\n", i,
+			str_.Format("==========[ç©å®¶%d]--->[èƒ¡åˆ†ï¼š%3d] [æ åˆ†ï¼š%3d]  [ç•ªï¼š%2d] [æ€»åˆ†:%3d] ==========\n", i,
 				iHuZongFen[i], iGangZongFen[i], m_GameData.T_CountFen.iFanCount[i], m_GameData.T_CountFen.iZongFen[i]);
 			lwlog += str_;
 		}
 		GameLog::OutputFile(lwlog);
 
-		GameEnd.bZimo = m_GameData.T_HuPai.bZimo;				//ÊÇ·ñ×ÔÃş
-		GameEnd.bIsLiuJu = m_GameData.T_HuPai.bIsLiuJu;		//ÊÇ·ñÁ÷¾Ö
-		GameEnd.byFangPao = m_GameData.T_HuPai.byFangPao;	//·ÅÅÚÍæ¼ÒÎ»ÖÃ
-		GameEnd.byPs = m_GameData.T_HuPai.byPs;				//ºúµÄÅÆ
-		memcpy(GameEnd.bIsHu, m_GameData.T_CountFen.bIsHu, sizeof(GameEnd.bIsHu)); //¸÷¸öºúÅÆ
+		GameEnd.bZimo = m_GameData.T_HuPai.bZimo;				//æ˜¯å¦è‡ªæ‘¸
+		GameEnd.bIsLiuJu = m_GameData.T_HuPai.bIsLiuJu;		//æ˜¯å¦æµå±€
+		GameEnd.byFangPao = m_GameData.T_HuPai.byFangPao;	//æ”¾ç‚®ç©å®¶ä½ç½®
+		GameEnd.byPs = m_GameData.T_HuPai.byPs;				//èƒ¡çš„ç‰Œ
+		memcpy(GameEnd.bIsHu, m_GameData.T_CountFen.bIsHu, sizeof(GameEnd.bIsHu)); //å„ä¸ªèƒ¡ç‰Œ
 
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
-			//ÊäÓ®±¶Êı
+			//è¾“èµ¢å€æ•°
 			GameEnd.iWinFailDouble[i] = m_GameData.T_CountFen.iZongFen[i];
-			//×Ü·Ö
+			//æ€»åˆ†
 			GameEnd.llGameScore[i] = m_GameData.T_CountFen.iZongFen[i] * GetBasePoint();
 		}
 
@@ -433,17 +433,17 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			m_GameData.CopyGCPData(i, UserGCPData);
 			memcpy(GameEnd.UserGCPData[i], UserGCPData, sizeof(GameEnd.UserGCPData[i]));
 		}
-		//»ñµÃÃ¿¸öÍæ¼ÒµÄ³öÅÆÊı¾İºÍÃÅÅÆÊı¾İ
+		//è·å¾—æ¯ä¸ªç©å®¶çš„å‡ºç‰Œæ•°æ®å’Œé—¨ç‰Œæ•°æ®
 		/*memcpy(GameEnd.byArOutPai,m_GameData.m_byArOutPai,sizeof(GameEnd.byArOutPai));
 		memcpy(GameEnd.byArOutPaiCount,m_GameData.m_byArOutPaiCount,sizeof(GameEnd.byArOutPaiCount));*/
 		GameEnd.byRemainMenPaiCount = m_GameData.GetRemainMenPai(GameEnd.byRemainMenPai);
 
-		long long   llReturnMoney[PLAY_COUNT];     //·µ»Ø½ğ±Ò	
+		long long   llReturnMoney[PLAY_COUNT];     //è¿”å›é‡‘å¸	
 		bool      temp_cut[PLAY_COUNT];
 		memset(llReturnMoney, 0, sizeof(llReturnMoney));
 		memset(temp_cut, 0, sizeof(temp_cut));
 
-		//ÏµÍ³Ëã·Ö
+		//ç³»ç»Ÿç®—åˆ†
 		if (roomType != ROOM_TYPE_GOLD)
 		{
 			char chfileName[100];
@@ -451,10 +451,10 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			char szTempCode[20];
 			memset(szTempCode, 0, sizeof(szTempCode));
 			GetVideoCode(szTempCode, 20);
-			//±£´æÕ½¼¨»Ø·Å
+			//ä¿å­˜æˆ˜ç»©å›æ”¾
 			sprintf(chfileName, "%s%s.json", SAVE_JSON_PATH, szTempCode);
 			string fileName = chfileName;
-			ofstream fVideoFile;                       //Éú³ÉjsonÎÄ¼şÓÃ
+			ofstream fVideoFile;                       //ç”Ÿæˆjsonæ–‡ä»¶ç”¨
 			fVideoFile.open(fileName, ios::out);
 			m_root["event"] = m_element;
 			fVideoFile << m_root.toStyledString() << endl;
@@ -474,18 +474,18 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		}
 		else
 		{
-			//½ğ±Ò³¡½áËã
+			//é‡‘å¸åœºç»“ç®—
 			ChangeUserPoint(GameEnd.llGameScore, temp_cut);
 		}
 
-		//·¢ËÍ×Ü·Ö½á¹û
+		//å‘é€æ€»åˆ†ç»“æœ
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
 			SendGameData(i, &GameEnd, sizeof(GameEnd), MSG_MAIN_LOADER_GAME, S_C_GAME_END, 0);
 			//SendWatchData(i,&GameEnd,sizeof(GameEnd), MSG_MAIN_LOADER_GAME, S_C_GAME_END, 0);
 		}
 
-		////////////////Í³¼ÆÕ½¼¨
+		////////////////ç»Ÿè®¡æˆ˜ç»©
 		if (!IsGoldRoom())
 		{
 			for (int i = 0;i < PLAY_COUNT;i++)
@@ -503,7 +503,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		}
 		OnJson(&GameEnd, 5);
 
-		//´´½¨·¿¼äµÄÎªµÚÒ»¸ö×¯£¬ÄÜÁ¬×¯¡£ºóÃæË­Ó®Ë­×ö×¯£¬»Ä¾ÖÁ¬×¯
+		//åˆ›å»ºæˆ¿é—´çš„ä¸ºç¬¬ä¸€ä¸ªåº„ï¼Œèƒ½è¿åº„ã€‚åé¢è°èµ¢è°åšåº„ï¼Œè’å±€è¿åº„
 		if (!m_GameData.T_HuPai.bIsLiuJu)
 		{
 			if (m_GameData.T_CountFen.byUserNums > 1)
@@ -545,16 +545,16 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		break;
 	}
 	}
-	// ÖØÖÃÊı¾İ
+	// é‡ç½®æ•°æ®
 	SetGameStation(GS_STATUS_FREE);
 	ReSetGameState(bCloseFlag);
 	return __super::GameFinish(bDeskStation, bCloseFlag);
 }
 /*-----------------------------------------------------------------------------------*/
 /**
-* ÅĞ¶ÏÊÇ·ñÕıÔÚÓÎÏ·
-* @param [in] bDeskStation Íæ¼ÒÎ»ÖÃ
-* @return ·µ»Øµ±Ç°ÓÎÏ·×´Ì¬
+* åˆ¤æ–­æ˜¯å¦æ­£åœ¨æ¸¸æˆ
+* @param [in] bDeskStation ç©å®¶ä½ç½®
+* @return è¿”å›å½“å‰æ¸¸æˆçŠ¶æ€
 */
 bool	CServerGameDesk::IsPlayGame(BYTE bDeskStation)
 {
@@ -563,11 +563,11 @@ bool	CServerGameDesk::IsPlayGame(BYTE bDeskStation)
 
 /*------------------------------------------------------------------------------*/
 /**
-* »ñÈ¡ÓÎÏ·×´Ì¬ĞÅÏ¢
-* @param [in] bDeskStation Íæ¼ÒÎ»ÖÃ
+* è·å–æ¸¸æˆçŠ¶æ€ä¿¡æ¯
+* @param [in] bDeskStation ç©å®¶ä½ç½®
 * @param [in] uSoketID Socket ID
-* @param [in] bWatchUser ÅÔ¹Û
-* @return ·µ»Ø²¼¶ûÀàĞÍ
+* @param [in] bWatchUser æ—è§‚
+* @return è¿”å›å¸ƒå°”ç±»å‹
 */
 bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser)
 {
@@ -591,27 +591,27 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 	}
 	switch (GetGameStation())
 	{
-	case GS_STATUS_FREE:	//¿ÕÏĞ×´Ì¬
+	case GS_STATUS_FREE:	//ç©ºé—²çŠ¶æ€
 	{
-		//±äÁ¿¶¨Òå
+		//å˜é‡å®šä¹‰
 		CMD_S_StatusFree StatusFree;
-		//¹¹ÔìÊı¾İ
+		//æ„é€ æ•°æ®
 		StatusFree.byBlockTime = m_GameData.m_mjRule.byBlockTime;
 		StatusFree.byOutTime = m_GameData.m_mjRule.byOutTime;
 		StatusFree.iPlayingCount = m_iPlayingCount;
 		//memcpy(StatusFree.bAgree,m_bAgree,sizeof(StatusFree.bAgree));
 		StatusFree.byMJCardType = m_byMJCardType;
 		//StatusFree.iBaseFen=m_GameData.m_mjRule.iGameBase;
-		StatusFree.bSuperFlag = m_bSuperFlag[bDeskStation]; //ÊÇ·ñ³¬¶Ë
-		//ÓÎÏ·¹æÔò
+		StatusFree.bSuperFlag = m_bSuperFlag[bDeskStation]; //æ˜¯å¦è¶…ç«¯
+		//æ¸¸æˆè§„åˆ™
 		memcpy(&StatusFree.tGameRuler, &m_GameData.m_tGameRuler, sizeof(StatusFree.tGameRuler));
-		//¸ø×Ô¼º·¢ËÍÊı¾İ
+		//ç»™è‡ªå·±å‘é€æ•°æ®
 		SendGameStation(bDeskStation, uSocketID, bWatchUser, &StatusFree, sizeof(StatusFree));
 	}
 	break;
-	case GS_STATUS_PLAYING:	//ÓÎÏ·×´Ì¬
+	case GS_STATUS_PLAYING:	//æ¸¸æˆçŠ¶æ€
 	{
-		//±äÁ¿¶¨Òå
+		//å˜é‡å®šä¹‰
 		CMD_S_StatusPlay StatusPlay;
 		StatusPlay.byBlockTime = m_GameData.m_mjRule.byBlockTime;
 		StatusPlay.byOutTime = m_GameData.m_mjRule.byOutTime;
@@ -631,7 +631,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		{
 			StatusPlay.byArOutPaiCount[i] = m_GameData.GetOutPaiCount(i);
 		}
-		StatusPlay.bSuperFlag = m_bSuperFlag[bDeskStation]; //ÊÇ·ñ³¬¶Ë
+		StatusPlay.bSuperFlag = m_bSuperFlag[bDeskStation]; //æ˜¯å¦è¶…ç«¯
 		memcpy(StatusPlay.UserGCPData, m_GameData.m_UserGCPData, sizeof(StatusPlay.UserGCPData));
 		StatusPlay.byNowOutStation = m_GameData.m_byNowOutStation;
 		StatusPlay.iMenNums = m_GameData.m_MenPai.GetMenPaiNum();
@@ -648,21 +648,21 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		StatusPlay.byBaoCard=m_GameData.m_StrJing.byPai[0];*/
 		StatusPlay.byNtStation = m_GameData.m_byNtStation;
 		//StatusPlay.iBaseFen=m_GameData.m_mjRule.iGameBase;
-		//ÓÎÏ·¹æÔò
+		//æ¸¸æˆè§„åˆ™
 		memcpy(&StatusPlay.tGameRuler, &m_GameData.m_tGameRuler, sizeof(StatusPlay.tGameRuler));
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
 		if (!m_GameData.m_mjAction.bTing && bDeskStation == m_GameData.m_byNowOutStation)
 		{
-			//ºúÅÆÊı¾İ
-			memcpy(StatusPlay.byOutCanHuCard, m_GameData.m_byOutCanHuCard, sizeof(StatusPlay.byOutCanHuCard)); //³öÅÆÇ°ÓÃ
+			//èƒ¡ç‰Œæ•°æ®
+			memcpy(StatusPlay.byOutCanHuCard, m_GameData.m_byOutCanHuCard, sizeof(StatusPlay.byOutCanHuCard)); //å‡ºç‰Œå‰ç”¨
 			memcpy(StatusPlay.byHuCard, m_GameData.m_byHuCard, sizeof(StatusPlay.byHuCard));
 			memcpy(StatusPlay.byCardRemainNum, m_GameData.m_byCardRemainNum, sizeof(StatusPlay.byCardRemainNum));
 		}
 #endif
 #ifdef RULE_HAVE_HU_PAI_NOTIFY
-		memcpy(StatusPlay.byOutAfterHuCard, m_GameData.m_byOutAfterHuCard[bDeskStation], sizeof(StatusPlay.byOutAfterHuCard));//³öÅÆºóÓÃ
+		memcpy(StatusPlay.byOutAfterHuCard, m_GameData.m_byOutAfterHuCard[bDeskStation], sizeof(StatusPlay.byOutAfterHuCard));//å‡ºç‰Œåç”¨
 #endif
-			//¸ø×Ô¼º·¢ËÍÊı¾İ
+			//ç»™è‡ªå·±å‘é€æ•°æ®
 		SendGameStation(bDeskStation, uSocketID, bWatchUser, &StatusPlay, sizeof(StatusPlay));
 		if (m_GameData.m_byCurrentOperatorUser == bDeskStation)
 		{
@@ -676,9 +676,9 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 /*------------------------------------------------------------------------------*/
 /**
-* ¶¨Ê±Æ÷ÏûÏ¢
-* @param [in] uTimerID ¶¨Ê±Æ÷ID
-* @return ·µ»Ø²¼¶ûÀàĞÍ
+* å®šæ—¶å™¨æ¶ˆæ¯
+* @param [in] uTimerID å®šæ—¶å™¨ID
+* @return è¿”å›å¸ƒå°”ç±»å‹
 */
 bool CServerGameDesk::OnTimer(UINT uTimerID)
 {
@@ -699,7 +699,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		if (m_GameData.m_byCurrentOperatorUser != 255 &&
 			m_GameData.T_CPGNotify[m_GameData.m_byCurrentOperatorUser].bCanAction)
 		{
-			if (m_GameData.T_CPGNotify[m_GameData.m_byCurrentOperatorUser].bHu)//ÌæÄãºúÅÆ¾ÍÉÕ¸ßÏãÁË£¬»¹ÒªÀÍ×Ê¸ÉÉ¶
+			if (m_GameData.T_CPGNotify[m_GameData.m_byCurrentOperatorUser].bHu)//æ›¿ä½ èƒ¡ç‰Œå°±çƒ§é«˜é¦™äº†ï¼Œè¿˜è¦åŠ³èµ„å¹²å•¥
 			{
 				CMD_C_OperateCard Data;
 				Data.byOperateType = ACTION_HU;
@@ -729,7 +729,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 				Data.byOperateType = ACTION_PENG;
 				OnUserOperate(m_GameData.m_byCurrentOperatorUser, &Data);
 			}
-			else//passµôÀ²
+			else//passæ‰å•¦
 			{
 				CMD_C_OperateCard Data;
 				Data.byOperateType = ACTION_PASS;
@@ -741,7 +741,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 	{
 		if (m_GameData.T_CPGNotify[m_GameData.m_byCurrentOperatorUser].bCanAction)
 		{
-			if (m_GameData.T_CPGNotify[m_GameData.m_byCurrentOperatorUser].bHu)//ÌæÄãºúÅÆ¾ÍÉÕ¸ßÏãÁË£¬»¹ÒªÀÍ×Ê¸ÉÉ¶
+			if (m_GameData.T_CPGNotify[m_GameData.m_byCurrentOperatorUser].bHu)//æ›¿ä½ èƒ¡ç‰Œå°±çƒ§é«˜é¦™äº†ï¼Œè¿˜è¦åŠ³èµ„å¹²å•¥
 			{
 				CMD_C_OperateCard Data;
 				Data.byOperateType = ACTION_HU;
@@ -763,14 +763,14 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 			}
 			OnUserOperate(m_GameData.m_byCurrentOperatorUser,&Data);
 			}*/
-			else//passµôÀ²
+			else//passæ‰å•¦
 			{
 				CMD_C_OperateCard Data;
 				Data.byOperateType = ACTION_PASS;
 				OnUserOperate(m_GameData.m_byCurrentOperatorUser, &Data);
 			}
 		}
-		////½ğ±Ò³¡£¬¶¯×÷Ñ¡Ôñ³¬Ê±³¬Ê±ÍĞ¹Ü
+		////é‡‘å¸åœºï¼ŒåŠ¨ä½œé€‰æ‹©è¶…æ—¶è¶…æ—¶æ‰˜ç®¡
 		//if(255!=m_GameData.m_byCurrentOperatorUser)
 		//{
 		//	m_bTrustee[m_GameData.m_byCurrentOperatorUser]=true;
@@ -796,7 +796,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 			BYTE byStation = m_GameData.m_byNowOutStation;
 			OnUserOutCard(m_GameData.m_byNowOutStation, &Data);
 			m_iOutCardChaoShiCount[byStation] ++;
-			//½ğ±Ò³¡£¬³öÅÆ³¬Ê±ÍĞ¹Ü
+			//é‡‘å¸åœºï¼Œå‡ºç‰Œè¶…æ—¶æ‰˜ç®¡
 			GameUserInfo user;
 			GetUserData(byStation, user);
 			if (m_GameData.m_mjRule.bChaoShiTuoGuan && !m_bTrustee[byStation]
@@ -851,7 +851,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 			memcpy(m_GameData.T_TingPai.byTingCanOut, m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].byTingCanOut, sizeof(m_GameData.T_TingPai.byTingCanOut));
 			CMD_S_OperateNotify ActionData;
 			m_GameData.m_byCurrentOperatorUser = m_GameData.m_byNowOutStation;
-			// ½øÈëÀ¹ÅÆ×´Ì¬
+			// è¿›å…¥æ‹¦ç‰ŒçŠ¶æ€
 			ActionData.byUsr = m_GameData.m_byNowOutStation;
 			memcpy(ActionData.byGangData, m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].iGangData, sizeof(ActionData.byGangData));
 			ActionData.bGang = m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].bGang;
@@ -902,12 +902,12 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 	return __super::OnTimer(uTimerID);
 }
 
-//×À×Ó³É¹¦½âÉ¢
+//æ¡Œå­æˆåŠŸè§£æ•£
 void CServerGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway)
 {
-	if (m_iPlayingCount > 0)  //´óÓÚÒ»¾Ö²Å·¢´ó½áËã
+	if (m_iPlayingCount > 0)  //å¤§äºä¸€å±€æ‰å‘å¤§ç»“ç®—
 	{
-		// ¼ÆËã³éË®Öµ
+		// è®¡ç®—æŠ½æ°´å€¼
 		__super::SetDeskPercentageScore(m_tZongResult.llGameScore);
 
 		for (int i = 0;i < PLAY_COUNT;i++)
@@ -919,19 +919,19 @@ void CServerGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway)
 	return __super::OnDeskSuccessfulDissmiss(isDismissMidway);
 }
 
-// Íæ¼ÒÇëÇóÍĞ¹Ü
+// ç©å®¶è¯·æ±‚æ‰˜ç®¡
 bool CServerGameDesk::OnHandleUserRequestAuto(BYTE deskStation)
 {
 	return __super::OnHandleUserRequestAuto(deskStation);
 }
 
-// Íæ¼ÒÈ¡ÏûÍĞ¹Ü
+// ç©å®¶å–æ¶ˆæ‰˜ç®¡
 bool CServerGameDesk::OnHandleUserRequestCancelAuto(BYTE deskStation)
 {
 	return __super::OnHandleUserRequestCancelAuto(deskStation);
 }
 
-//³õÊ¼»¯ÓÎÏ·Êı¾İ£¬·¿¿¨³¡·ÇÕı³£½áËãµÄÊ±ºòµ÷ÓÃ
+//åˆå§‹åŒ–æ¸¸æˆæ•°æ®ï¼Œæˆ¿å¡åœºéæ­£å¸¸ç»“ç®—çš„æ—¶å€™è°ƒç”¨
 void CServerGameDesk::InitDeskGameData()
 {
 	KillTimer(TIME_CHECK_ACTION);
@@ -947,20 +947,20 @@ void CServerGameDesk::InitDeskGameData()
 	m_CheckHuData.InitData();
 	m_GameData.m_byNtStation = 255;
 	SetGameStation(GS_STATUS_FREE);
-	// ÖØÖÃÊı¾İ
+	// é‡ç½®æ•°æ®
 	ReSetGameState(0);
 	m_iPlayingCount = 0;
 	m_GameData.m_iZhuangWinCount = 0;
 	m_GameData.m_iHuangZhuangCount = 0;
-	m_tZongResult.Init();						//×ÜÕ½¼¨
-	m_GameData.m_tGameRuler.Init(); //³õÊ¼»¯¹æÔò
-	memset(m_GameData.m_iAddScore, 0, sizeof(m_GameData.m_iAddScore)); //Ã¿Ò»°ÑµÄ¼Ó·Ö
+	m_tZongResult.Init();						//æ€»æˆ˜ç»©
+	m_GameData.m_tGameRuler.Init(); //åˆå§‹åŒ–è§„åˆ™
+	memset(m_GameData.m_iAddScore, 0, sizeof(m_GameData.m_iAddScore)); //æ¯ä¸€æŠŠçš„åŠ åˆ†
 }
 
 /**
-* ÖØÖÃÓÎÏ·×´Ì¬
-* @param [in] bLastStation ÓÎÏ·½áÊø±êÖ¾
-* @return ·µ»Ø²¼¶ûÀàĞÍ
+* é‡ç½®æ¸¸æˆçŠ¶æ€
+* @param [in] bLastStation æ¸¸æˆç»“æŸæ ‡å¿—
+* @return è¿”å›å¸ƒå°”ç±»å‹
 */
 bool	CServerGameDesk::ReSetGameState(BYTE bLastStation)
 {
@@ -976,20 +976,20 @@ bool	CServerGameDesk::ReSetGameState(BYTE bLastStation)
 
 /*-------------------------------------------------------------------------------------------------*/
 /**
-* ÓÎÏ·Êı¾İ°ü´¦Àíº¯Êı
-* @param [in] bDeskStation Íæ¼ÒÎ»ÖÃ
-* @param [in] pNetHead ÏûÏ¢Í·
-* @param [in] pData ÏûÏ¢Ìå
-* @param [in] uSize ÏûÏ¢°üµÄ´óĞ¡
+* æ¸¸æˆæ•°æ®åŒ…å¤„ç†å‡½æ•°
+* @param [in] bDeskStation ç©å®¶ä½ç½®
+* @param [in] pNetHead æ¶ˆæ¯å¤´
+* @param [in] pData æ¶ˆæ¯ä½“
+* @param [in] uSize æ¶ˆæ¯åŒ…çš„å¤§å°
 * @param [in] uSoketID Socket ID
-* @param [in] bWatchUser ÅÔ¹Û
-* @return ·µ»Ø²¼¶ûÀàĞÍ
+* @param [in] bWatchUser æ—è§‚
+* @return è¿”å›å¸ƒå°”ç±»å‹
 */
 bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser)
 {
 	switch (assistID)
 	{
-	case MSG_ASS_LOADER_GAME_AGREE:		//ÓÃ»§Í¬ÒâÓÎÏ·
+	case MSG_ASS_LOADER_GAME_AGREE:		//ç”¨æˆ·åŒæ„æ¸¸æˆ
 	{
 		if (bWatchUser)
 		{
@@ -1002,24 +1002,24 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		m_bAgree[bDeskStation] = true;
 		return __super::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
 	}
-	case C_S_OUT_CARD:		//³öÅÆÏûÏ¢
+	case C_S_OUT_CARD:		//å‡ºç‰Œæ¶ˆæ¯
 	{
-		//Ğ§ÑéÏûÏ¢
+		//æ•ˆéªŒæ¶ˆæ¯
 		if (size != sizeof(CMD_C_OutCard)) return false;
 		m_iOutCardChaoShiCount[bDeskStation] = 0;
-		//ÏûÏ¢´¦Àí
+		//æ¶ˆæ¯å¤„ç†
 		CMD_C_OutCard * pOutCard = (CMD_C_OutCard *)pData;
 		return OnUserOutCard(bDeskStation, pOutCard);
 	}
-	case C_S_OPERATE_CARD:	//²Ù×÷ÏûÏ¢
+	case C_S_OPERATE_CARD:	//æ“ä½œæ¶ˆæ¯
 	{
-		//Ğ§ÑéÏûÏ¢
+		//æ•ˆéªŒæ¶ˆæ¯
 		if (size != sizeof(CMD_C_OperateCard)) return false;
-		//ÏûÏ¢´¦Àí
+		//æ¶ˆæ¯å¤„ç†
 		CMD_C_OperateCard * pOperateCard = (CMD_C_OperateCard *)pData;
 		return OnUserOperate(bDeskStation, pOperateCard);
 	}
-	case C_S_TRUSTEE: //ÍĞ¹ÜÏûÏ¢
+	case C_S_TRUSTEE: //æ‰˜ç®¡æ¶ˆæ¯
 	{
 		if (size != sizeof(CMD_C_Trustee)) return false;
 		CMD_C_Trustee *pTrustee = (CMD_C_Trustee *)pData;
@@ -1039,7 +1039,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		}
 		return true;
 	}
-	case C_S_SUPER_REQUEST_LOOK:		//³¬¶Ë¿´ÅÆ
+	case C_S_SUPER_REQUEST_LOOK:		//è¶…ç«¯çœ‹ç‰Œ
 	{
 		if (GetGameStation() == GS_STATUS_PLAYING)
 		{
@@ -1048,7 +1048,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		}
 		break;
 	}
-	case C_S_SUPER_REQUEST_CRAD:		//³¬¶ËÒªÅÆ
+	case C_S_SUPER_REQUEST_CRAD:		//è¶…ç«¯è¦ç‰Œ
 	{
 		if (GetGameStation() == GS_STATUS_PLAYING)
 		{
@@ -1068,8 +1068,8 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 
 /*-----------------------------------------------------------------------------------*/
 /**
-* ÓÃ»§Àë¿ªÓÎÏ·×À
-* @return ·µ»ØÓÃ»§Àë¿ª×´Ì¬
+* ç”¨æˆ·ç¦»å¼€æ¸¸æˆæ¡Œ
+* @return è¿”å›ç”¨æˆ·ç¦»å¼€çŠ¶æ€
 */
 bool CServerGameDesk::UserLeftDesk(GameUserInfo* pUser)
 {
@@ -1087,11 +1087,11 @@ bool CServerGameDesk::UserLeftDesk(GameUserInfo* pUser)
 }
 
 /*-----------------------------------------------------------------------------------*/
-//ÓÃ»§¶ÏÏßÀë¿ª
+//ç”¨æˆ·æ–­çº¿ç¦»å¼€
 bool	CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 {
 	__super::UserNetCut(pUser);
-	////½ğ±Ò³¡£¬¶ÏÏßÍĞ¹Ü
+	////é‡‘å¸åœºï¼Œæ–­çº¿æ‰˜ç®¡
 	//CMD_C_Trustee Data;
 	//Data.bTrustee = true;
 	//if (IsGoldRoom() && m_GameData.m_mjRule.bDuanXianTuoGuan)
@@ -1099,7 +1099,7 @@ bool	CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 	//	HandleNotifyMessage(pUser->deskStation, C_S_TRUSTEE, &Data, sizeof(Data), false);
 	//}
 
-	//¼ÇÂ¼¶ÏÏßÍæ¼Ò£¨ÔÚÖØÁ¬Ç°²¿¸ø¸ÃÍæ¼Ò·¢ËÍÏûÏ¢£©
+	//è®°å½•æ–­çº¿ç©å®¶ï¼ˆåœ¨é‡è¿å‰éƒ¨ç»™è¯¥ç©å®¶å‘é€æ¶ˆæ¯ï¼‰
 	m_bNetCut[pUser->deskStation] = true;
 	
 	if (IsGoldRoom() && IsPlayGame(0) && IsAllUserOffline())
@@ -1110,10 +1110,10 @@ bool	CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 	return true;
 }
 
-//ÓÃ»§³öÅÆ,³öÅÆÓÃ»§ÒÎ×ÓºÅ,ÅÆÃæÖµ
+//ç”¨æˆ·å‡ºç‰Œ,å‡ºç‰Œç”¨æˆ·æ¤…å­å·,ç‰Œé¢å€¼
 bool CServerGameDesk::OnUserOutCard(BYTE byDeskStation, CMD_C_OutCard * pOutCard)
 {
-	//Ğ§Ñé×´Ì¬
+	//æ•ˆéªŒçŠ¶æ€
 	if (GS_STATUS_PLAYING != GetGameStation())
 	{
 		SendOutCardError(byDeskStation, 1);
@@ -1155,16 +1155,16 @@ bool CServerGameDesk::OnUserOutCard(BYTE byDeskStation, CMD_C_OutCard * pOutCard
 	m_GameData.m_byNowOutStation = 255;
 	m_GameData.T_OutPai.byUser = byDeskStation;
 	m_GameData.T_OutPai.byPs = pOutCard->byOutCardData;
-	//É¾³ıÒ»ÕÅÊÖÅÆ
+	//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 	BYTE byOutIndex = m_GameData.DeleteAHandPai(byDeskStation, pOutCard->byOutCardData);
 
-#ifdef RULE_HAVE_HU_PAI_NOTIFY //ÌáÈ¡Íæ¼Ò¿ÉÒÔºúµÄÅÆ
+#ifdef RULE_HAVE_HU_PAI_NOTIFY //æå–ç©å®¶å¯ä»¥èƒ¡çš„ç‰Œ
 	BYTE byHuCard[MAX_MJ_KIND_NUM];
 	memset(byHuCard, 255, sizeof(byHuCard));
 	m_CheckHuData.ExtractHu(&m_GameData, byDeskStation, byHuCard);
 	memcpy(m_GameData.m_byOutAfterHuCard[byDeskStation], byHuCard, sizeof(m_GameData.m_byOutAfterHuCard[byDeskStation]));
 #endif
-	//¹¹ÔìÊı¾İ
+	//æ„é€ æ•°æ®
 	CMD_S_OutCard OutCard;
 	OutCard.byOutCardUser = byDeskStation;
 	OutCard.byOutCardData = pOutCard->byOutCardData;
@@ -1179,15 +1179,15 @@ bool CServerGameDesk::OnUserOutCard(BYTE byDeskStation, CMD_C_OutCard * pOutCard
 		m_GameData.m_bTing[byDeskStation] = true;
 		OutCard.bTing = pOutCard->bTing;
 	}
-	//Ìí¼ÓÒ»ÕÅ³öÅÆ
+	//æ·»åŠ ä¸€å¼ å‡ºç‰Œ
 	m_GameData.AddToOutPai(byDeskStation, pOutCard->byOutCardData, OutCard.bTing);
 
-	//³öÍêÅÆ£¬ÖØÖÃÆúºú×´Ì¬
+	//å‡ºå®Œç‰Œï¼Œé‡ç½®å¼ƒèƒ¡çŠ¶æ€
 	m_GameData.m_bQiHu[byDeskStation] = false;
 	m_GameData.m_bQiPeng[byDeskStation] = false;
 	m_GameData.m_vecQiPengCard[byDeskStation].clear();
 
-	//»¨ÅÆ
+	//èŠ±ç‰Œ
 	if (m_GameData.m_mjRule.bHaveFlower && m_GameData.CheckIsHuaPai(OutCard.byOutCardData))
 	{
 		m_GameData.AddToHuaPai(byDeskStation, OutCard.byOutCardData);
@@ -1220,38 +1220,38 @@ bool CServerGameDesk::OnUserOutCard(BYTE byDeskStation, CMD_C_OutCard * pOutCard
 		//SendWatchData(i,&OutCard,sizeof(OutCard), MSG_MAIN_LOADER_GAME, S_C_OUT_CARD, 0);
 	}
 
-	//»¨ÅÆ
+	//èŠ±ç‰Œ
 	if (m_GameData.m_mjAction.bBuHua && m_GameData.CheckIsHuaPai(OutCard.byOutCardData))
 	{
 		//byDeskStation = (byDeskStation + 1)%PLAY_COUNT; 
-		//ZhuaPai(byDeskStation,true);//ÅÆÍ·²¹»¨
-		ZhuaPai(byDeskStation, false);//ÅÆÎ²²¹»¨ 
+		//ZhuaPai(byDeskStation,true);//ç‰Œå¤´è¡¥èŠ±
+		ZhuaPai(byDeskStation, false);//ç‰Œå°¾è¡¥èŠ± 
 		return true;
 	}
 
-	//¼ì²â¶¯×÷£¬ÌıÅÆµ¹¿Û£¬±ğÈËÎŞ·¨³ÔÅö¸Üºú
+	//æ£€æµ‹åŠ¨ä½œï¼Œå¬ç‰Œå€’æ‰£ï¼Œåˆ«äººæ— æ³•åƒç¢°æ èƒ¡
 	if (OutCard.bTing || !CheckAction(byDeskStation, pOutCard->byOutCardData, 2))
 	{
-		//Ã»ÓĞ¶¯×÷¾ÍÖ±½ÓÏÂÒ»¸öÍæ¼Ò×¥ÅÆ
+		//æ²¡æœ‰åŠ¨ä½œå°±ç›´æ¥ä¸‹ä¸€ä¸ªç©å®¶æŠ“ç‰Œ
 		ZhuaPai(byDeskStation, true);
 	}
 	else
 	{
-		//·¢ËÍÁËÀ¹ÅÆ¸ø¿Í»§¶ËÍæ¼Ò 
+		//å‘é€äº†æ‹¦ç‰Œç»™å®¢æˆ·ç«¯ç©å®¶ 
 		if (!HaveUserCanDoAction(byDeskStation))
 		{
-			//Ã´ÓĞ·¢ËÍÁËÀ¹ÅÆ¸ø¿Í»§¶ËÍæ¼Ò ¾ÍÆô¶¯×¥ÅÆÊÂ¼ş
-			//Ã»ÓĞ¶¯×÷¾ÍÖ±½ÓÏÂÒ»¸öÍæ¼Ò×¥ÅÆ
+			//ä¹ˆæœ‰å‘é€äº†æ‹¦ç‰Œç»™å®¢æˆ·ç«¯ç©å®¶ å°±å¯åŠ¨æŠ“ç‰Œäº‹ä»¶
+			//æ²¡æœ‰åŠ¨ä½œå°±ç›´æ¥ä¸‹ä¸€ä¸ªç©å®¶æŠ“ç‰Œ
 			ZhuaPai(byDeskStation, true);
 		}
 	}
 	return true;
 }
 
-//×¥ÅÆ
+//æŠ“ç‰Œ
 void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 {
-	if (m_GameData.m_MenPai.GetMenPaiNum() <= m_GameData.m_mjRule.byGamePassNum)//Á÷¾Ö
+	if (m_GameData.m_MenPai.GetMenPaiNum() <= m_GameData.m_mjRule.byGamePassNum)//æµå±€
 	{
 		GameFinish(byCurrentStation, GF_NORMAL);
 	}
@@ -1259,11 +1259,11 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 	{
 		if (bHead)
 		{
-			m_GameData.m_byNowOutStation = m_GameData.GetNextStation(byCurrentStation, false);//×¥ÅÆÎ»ÖÃ
+			m_GameData.m_byNowOutStation = m_GameData.GetNextStation(byCurrentStation, false);//æŠ“ç‰Œä½ç½®
 		}
 		else
 		{
-			m_GameData.m_byNowOutStation = byCurrentStation;//×¥ÅÆÎ»ÖÃ
+			m_GameData.m_byNowOutStation = byCurrentStation;//æŠ“ç‰Œä½ç½®
 		}
 		m_GameData.m_bQiHu[m_GameData.m_byNowOutStation] = false;
 		m_GameData.m_bQiPeng[m_GameData.m_byNowOutStation] = false;
@@ -1272,10 +1272,10 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 		m_GameData.m_byCurrentOperatorUser = 255;
 		BYTE byPaiIndex = 255;
 		BYTE byCard = 255;
-		//³¬¶ËÍæ¼Ò»»ÅÆ
+		//è¶…ç«¯ç©å®¶æ¢ç‰Œ
 		if (m_bSuperFlag[m_GameData.m_byNowOutStation] && m_ChangeCard[m_GameData.m_byNowOutStation] != 255)
 		{
-			byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex, m_ChangeCard[m_GameData.m_byNowOutStation]);//³¬¶Ë×¥ÅÆ
+			byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex, m_ChangeCard[m_GameData.m_byNowOutStation]);//è¶…ç«¯æŠ“ç‰Œ
 			m_ChangeCard[m_GameData.m_byNowOutStation] = 255;
 		}
 		else if (IsVirtual(m_GameData.m_byNowOutStation) && CUtil::GetRandNum() % 1000 < abs(m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent))
@@ -1294,31 +1294,31 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 					continue;
 				}
 
-				byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex, byTempCard);//³¬¶Ë×¥ÅÆ
+				byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex, byTempCard);//è¶…ç«¯æŠ“ç‰Œ
 				break;
 			}
 
 			if (byCard == 255)
 			{
-				byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex);//Õı³£×¥ÅÆ
+				byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex);//æ­£å¸¸æŠ“ç‰Œ
 			}
 		}
 		else
 		{
-			byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex);//Õı³£×¥ÅÆ
+			byCard = m_GameData.GetPai(m_GameData.m_byNowOutStation, bHead, &byPaiIndex);//æ­£å¸¸æŠ“ç‰Œ
 		}
-		m_GameData.T_ZhuaPai.byPs = byCard;		//×¥ÅÆµÄÖµ
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
+		m_GameData.T_ZhuaPai.byPs = byCard;		//æŠ“ç‰Œçš„å€¼
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
 		if (!m_GameData.m_mjAction.bTing)
 		{
-			//ÌáÈ¡×¯¼ÒÌıÅÆÊı¾İ
+			//æå–åº„å®¶å¬ç‰Œæ•°æ®
 			memset(m_GameData.m_byOutCanHuCard, 255, sizeof(m_GameData.m_byOutCanHuCard));
 			memset(m_GameData.m_byHuCard, 255, sizeof(m_GameData.m_byHuCard));
 			memset(m_GameData.m_byCardRemainNum, 0, sizeof(m_GameData.m_byCardRemainNum));
 			m_CheckHuData.OutCardExtractHu(&m_GameData, m_GameData.m_byNowOutStation, m_GameData.m_byOutCanHuCard, m_GameData.m_byHuCard, m_GameData.m_byCardRemainNum);
 		}
 #endif
-		//¹¹ÔìÊı¾İ
+		//æ„é€ æ•°æ®
 		CMD_S_SendCard SendCard;
 		SendCard.iMenNums = m_GameData.m_MenPai.GetMenPaiNum();
 		if (SendCard.iMenNums <= m_GameData.m_mjRule.byGamePassNum)
@@ -1349,7 +1349,7 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 			}
 			if (m_GameData.m_byNowOutStation == i)
 			{
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
 				if (!m_GameData.m_mjAction.bTing)
 				{
 					memcpy(SendCard.byOutCanHuCard, m_GameData.m_byOutCanHuCard, sizeof(SendCard.byOutCanHuCard));
@@ -1368,14 +1368,14 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 			SendGameData(i, &SendCard, sizeof(SendCard), MSG_MAIN_LOADER_GAME, S_C_SEND_CARD, 0);
 			//SendWatchData(i,&SendCard,sizeof(SendCard), MSG_MAIN_LOADER_GAME, S_C_SEND_CARD, 0);
 		}
-		////¼ÇÂ¼¸ÜÅÆ×´Ì¬£¬ÓµÓÚ¸Ü¿ªºÍ¸ÜºóÅÚ
+		////è®°å½•æ ç‰ŒçŠ¶æ€ï¼Œæ‹¥äºæ å¼€å’Œæ åç‚®
 		RecordGangStatus();
 		if (m_GameData.m_mjAction.bBuHua)
 		{
-			//ÓĞ»¨ÅÆµÄÂé½«£¬½øĞĞµÄÏà¹Ø²Ù×÷
+			//æœ‰èŠ±ç‰Œçš„éº»å°†ï¼Œè¿›è¡Œçš„ç›¸å…³æ“ä½œ
 			if (!m_GameData.m_bIsBuHua[m_GameData.m_byNowOutStation])
 			{
-				//ÏĞ¼Ò²¹»¨
+				//é—²å®¶è¡¥èŠ±
 				BYTE byDeskStation = m_GameData.m_byNowOutStation;
 				m_GameData.m_bIsBuHua[byDeskStation] = true;
 				for (int j = 0; j < (int)m_GameData.m_vHuapaiTemp[byDeskStation].size();j++)
@@ -1388,7 +1388,7 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 				}
 				m_GameData.m_bIsBuAllHua[byDeskStation] = true;
 			}
-			//×¥µ½»¨ÅÆ
+			//æŠ“åˆ°èŠ±ç‰Œ
 			if (m_GameData.CheckIsHuaPai(byCard))
 			{
 				if (m_GameData.m_bIsBuAllHua[m_GameData.m_byNowOutStation])
@@ -1406,7 +1406,7 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 				return;
 			}
 		}
-		//¼ì²â¶¯×÷
+		//æ£€æµ‹åŠ¨ä½œ
 		bool bBlock = false;
 		if (CheckAction(m_GameData.m_byNowOutStation, byCard, 0))
 		{
@@ -1415,7 +1415,7 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 			memcpy(m_GameData.T_TingPai.byTingCanOut, m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].byTingCanOut, sizeof(m_GameData.T_TingPai.byTingCanOut));
 			CMD_S_OperateNotify ActionData;
 			m_GameData.m_byCurrentOperatorUser = m_GameData.m_byNowOutStation;
-			// ½øÈëÀ¹ÅÆ×´Ì¬
+			// è¿›å…¥æ‹¦ç‰ŒçŠ¶æ€
 			ActionData.byUsr = m_GameData.m_byNowOutStation;
 			memcpy(ActionData.byGangData, m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].iGangData, sizeof(ActionData.byGangData));
 			ActionData.bGang = m_GameData.T_CPGNotify[m_GameData.m_byNowOutStation].bGang;
@@ -1466,13 +1466,13 @@ void CServerGameDesk::ZhuaPai(BYTE byCurrentStation, bool bHead)
 				}
 			}
 		}
-	} //·ÇÁ÷¾Ö
+	} //éæµå±€
 }
 
-//ÓÃ»§²Ù×÷
+//ç”¨æˆ·æ“ä½œ
 bool CServerGameDesk::OnUserOperate(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
-	//Ğ§Ñé×´Ì¬
+	//æ•ˆéªŒçŠ¶æ€
 	if (GS_STATUS_PLAYING != GetGameStation())
 	{
 		return true;
@@ -1489,7 +1489,7 @@ bool CServerGameDesk::OnUserOperate(BYTE byDeskStation, CMD_C_OperateCard *pActi
 	{
 		return OnPeng(byDeskStation, pAction);
 	}
-	else if (ACTION_GANG == pAction->byOperateType)//¸Ü
+	else if (ACTION_GANG == pAction->byOperateType)//æ 
 	{
 		return OnGang(byDeskStation, pAction);
 	}
@@ -1504,7 +1504,7 @@ bool CServerGameDesk::OnUserOperate(BYTE byDeskStation, CMD_C_OperateCard *pActi
 	return true;
 }
 
-//³ÔÅÆ
+//åƒç‰Œ
 bool CServerGameDesk::OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
 	if (!m_GameData.T_CPGNotify[byDeskStation].bChi || m_GameData.m_bTing[byDeskStation])
@@ -1564,7 +1564,7 @@ bool CServerGameDesk::OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		{
 			m_GameData.m_bGangState[i] = false;
 		}
-		//³ÔÅÆÊÂ¼ş
+		//åƒç‰Œäº‹ä»¶
 		TCPGStruct chi;
 		chi.Init();
 		chi.byType = m_GameData.temp_ChiPai.byType;
@@ -1582,7 +1582,7 @@ bool CServerGameDesk::OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			{
 				continue;
 			}
-			//É¾³ıÒ»ÕÅÊÖÅÆ
+			//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 			m_GameData.DeleteAHandPai(chi.iStation, chi.byData[i]);
 		}
 		m_GameData.m_byCurrentOperatorUser = 255;
@@ -1591,7 +1591,7 @@ bool CServerGameDesk::OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		OperateResult.iStation = chi.iStation;
 		OperateResult.iBeStation = chi.iBeStation;
 		OperateResult.iOutpai = chi.iOutpai;
-		m_GameData.DeleteLastOutPai(chi.iBeStation);//É¾³ı±»³ÔµÄÅÆ
+		m_GameData.DeleteLastOutPai(chi.iBeStation);//åˆ é™¤è¢«åƒçš„ç‰Œ
 		//m_GameData.CopyOutPai(chi.iBeStation,OperateResult.byArOutPai);
 		for (int i = 0;i < 3;i++)
 		{
@@ -1632,7 +1632,7 @@ bool CServerGameDesk::OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			bBlock = true;
 			CMD_S_OperateNotify ActionData;
 			m_GameData.m_byCurrentOperatorUser = m_GameData.m_byNowOutStation;
-			// ½øÈëÀ¹ÅÆ×´Ì¬
+			// è¿›å…¥æ‹¦ç‰ŒçŠ¶æ€
 			ActionData.Init();
 			ActionData.byUsr = byDeskStation;
 			ActionData.bTing = m_GameData.T_CPGNotify[byDeskStation].bTing;
@@ -1673,12 +1673,12 @@ bool CServerGameDesk::OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	}
 	else
 	{
-		HaveUserCanDoAction(byDeskStation); //±ğÈËÓĞÓÅÏÈ¼¶¸ü¸ßµÄ¶¯×÷£¬³ÔÊ§°Ü
+		HaveUserCanDoAction(byDeskStation); //åˆ«äººæœ‰ä¼˜å…ˆçº§æ›´é«˜çš„åŠ¨ä½œï¼Œåƒå¤±è´¥
 	}
 	return true;
 }
 
-//ÅöÅÆ
+//ç¢°ç‰Œ
 bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
 	if (!m_GameData.T_CPGNotify[byDeskStation].bPeng || m_GameData.m_bTing[byDeskStation])
@@ -1712,7 +1712,7 @@ bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		{
 			m_GameData.m_bGangState[i] = false;
 		}
-		//ÅöÅÆÊÂ¼ş
+		//ç¢°ç‰Œäº‹ä»¶
 		TCPGStruct peng;
 		peng.Init();
 		peng.byType = ACTION_PENG;
@@ -1726,7 +1726,7 @@ bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		m_GameData.AddToGCP(m_GameData.temp_PengPai.byUser, &peng);
 		for (int i = 0;i < 2;i++)
 		{
-			//É¾³ıÒ»ÕÅÊÖÅÆ
+			//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 			m_GameData.DeleteAHandPai(peng.iStation, peng.iOutpai);
 		}
 		m_GameData.m_byCurrentOperatorUser = 255;
@@ -1735,9 +1735,9 @@ bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		OperateResult.iStation = peng.iStation;
 		OperateResult.iBeStation = peng.iBeStation;
 		OperateResult.iOutpai = peng.iOutpai;
-		m_GameData.DeleteLastOutPai(peng.iBeStation);//É¾³ı±»ÅöµÄÅÆ
+		m_GameData.DeleteLastOutPai(peng.iBeStation);//åˆ é™¤è¢«ç¢°çš„ç‰Œ
 		//m_GameData.CopyOutPai(peng.iBeStation,OperateResult.byArOutPai);
-		//ÅöÒ»ÕÅ£¬ÕâÕÅ³öÅÆÊıÁ¿¼Ó2
+		//ç¢°ä¸€å¼ ï¼Œè¿™å¼ å‡ºç‰Œæ•°é‡åŠ 2
 		m_GameData.m_byAllOutCardNum[peng.iOutpai] += 2;
 		for (int i = 0;i < 3;i++)
 		{
@@ -1757,10 +1757,10 @@ bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 				{
 					m_GameData.SortHandPai(peng.iStation, false);
 					OperateResult.byCardCount = m_GameData.CopyOneUserHandPai(OperateResult.byCard, peng.iStation);
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
 					if (!m_GameData.m_mjAction.bTing)
 					{
-						//ÌáÈ¡×¯¼ÒÌıÅÆÊı¾İ
+						//æå–åº„å®¶å¬ç‰Œæ•°æ®
 						memset(m_GameData.m_byOutCanHuCard, 255, sizeof(m_GameData.m_byOutCanHuCard));
 						memset(m_GameData.m_byHuCard, 255, sizeof(m_GameData.m_byHuCard));
 						memset(m_GameData.m_byCardRemainNum, 0, sizeof(m_GameData.m_byCardRemainNum));
@@ -1785,12 +1785,12 @@ bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		}
 		m_GameData.m_byNowOutStation = OperateResult.iStation;
 		bool bBlock = false;
-		if (CheckAction(byDeskStation, 255, 4)) //ÅöºóÌıÅÆ
+		if (CheckAction(byDeskStation, 255, 4)) //ç¢°åå¬ç‰Œ
 		{
 			bBlock = true;
 			CMD_S_OperateNotify ActionData;
 			m_GameData.m_byCurrentOperatorUser = m_GameData.m_byNowOutStation;
-			// ½øÈëÀ¹ÅÆ×´Ì¬
+			// è¿›å…¥æ‹¦ç‰ŒçŠ¶æ€
 			ActionData.Init();
 			ActionData.byUsr = byDeskStation;
 			ActionData.bTing = m_GameData.T_CPGNotify[byDeskStation].bTing;
@@ -1831,12 +1831,12 @@ bool CServerGameDesk::OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	}
 	else
 	{
-		HaveUserCanDoAction(byDeskStation); //±ğÈËÓĞºú£¬ÅöÊ§°Ü
+		HaveUserCanDoAction(byDeskStation); //åˆ«äººæœ‰èƒ¡ï¼Œç¢°å¤±è´¥
 	}
 	return true;
 }
 
-//¸ÜÅÆ
+//æ ç‰Œ
 bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
 	if (!m_GameData.T_CPGNotify[byDeskStation].bGang || pAction->byActionData[0] == 255)
@@ -1866,7 +1866,7 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	}
 	else if (ACTION_BU_GANG == m_GameData.temp_GangPai.byType)
 	{
-		//²¹¸Ü£¬byBeGangÎª·ÅÅöÍæ¼Ò
+		//è¡¥æ ï¼ŒbyBeGangä¸ºæ”¾ç¢°ç©å®¶
 		for (int i = 0;i < 5;i++)
 		{
 			if (ACTION_PENG == m_GameData.m_UserGCPData[byDeskStation][i].byType &&
@@ -1910,7 +1910,7 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		m_GameData.T_GangPai.byBeGang = m_GameData.temp_GangPai.byBeGang;
 		m_GameData.T_GangPai.byPs = m_GameData.temp_GangPai.byPs;
 		m_GameData.T_GangPai.byType = m_GameData.temp_GangPai.byType;
-		//¸ÜÅÆÊÂ¼ş
+		//æ ç‰Œäº‹ä»¶
 		TCPGStruct gang;
 		gang.Init();
 		gang.byType = m_GameData.temp_GangPai.byType;
@@ -1920,11 +1920,11 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		memcpy(gang.byData, m_GameData.temp_GangPai.byGangPai, sizeof(gang.byData));
 		m_GameData.AddToGCP(m_GameData.temp_GangPai.byUser, &gang);
 		m_CPGData.CountGangFen(&m_GameData, gang.iStation, gang.iBeStation, gang.byType);
-		//¸ÜÅÆ£¬ÕâÕÅÅÆÈ«²¿´ò³öÈ¥ÁË
+		//æ ç‰Œï¼Œè¿™å¼ ç‰Œå…¨éƒ¨æ‰“å‡ºå»äº†
 		m_GameData.m_byAllOutCardNum[gang.iOutpai] = 4;
 		if (!IsGoldRoom())
 		{
-			//Í³¼ÆÕ½¼¨
+			//ç»Ÿè®¡æˆ˜ç»©
 			m_tZongResult.iGang[gang.iStation] ++;
 			if (gang.iBeStation != 255)
 			{
@@ -1937,25 +1937,25 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		{
 			for (int i = 0;i < 4;i++)
 			{
-				//É¾³ıÒ»ÕÅÊÖÅÆ
+				//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 				m_GameData.DeleteAHandPai(gang.iStation, gang.iOutpai);
 			}
 		}
 		else if (ACTION_BU_GANG == gang.byType)
 		{
 			m_GameData.DeleteAGCPData(gang.iStation, ACTION_PENG, gang.iOutpai);
-			//É¾³ıÒ»ÕÅÊÖÅÆ
+			//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 			m_GameData.DeleteAHandPai(gang.iStation, gang.iOutpai);
 		}
 		else if (ACTION_MING_GANG == gang.byType)
 		{
 			for (int i = 0;i < 3;i++)
 			{
-				//É¾³ıÒ»ÕÅÊÖÅÆ
+				//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 				m_GameData.DeleteAHandPai(gang.iStation, gang.iOutpai);
 			}
-			//É¾³ıÒ»ÕÅ³öÅÆ
-			m_GameData.DeleteLastOutPai(gang.iBeStation);//É¾³ı±»¸ÜµÄÅÆ
+			//åˆ é™¤ä¸€å¼ å‡ºç‰Œ
+			m_GameData.DeleteLastOutPai(gang.iBeStation);//åˆ é™¤è¢«æ çš„ç‰Œ
 		}
 		for (int i = 0;i < 4;i++)
 		{
@@ -1967,7 +1967,7 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		OperateResult.iOutpai = gang.iOutpai;
 		if (255 != gang.iBeStation)
 		{
-			m_GameData.DeleteLastOutPai(gang.iBeStation);//É¾³ı±»¸ÜµÄÅÆ
+			m_GameData.DeleteLastOutPai(gang.iBeStation);//åˆ é™¤è¢«æ çš„ç‰Œ
 			//m_GameData.CopyOutPai(gang.iBeStation,OperateResult.byArOutPai);
 		}
 		for (int i = 0;i < PLAY_COUNT;i++)
@@ -1999,11 +1999,11 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		}
 		m_GameData.m_byCurrentOperatorUser = 255;
 		bool bAction = false;
-		if (ACTION_BU_GANG == gang.byType)//ÊÇ·ñÓĞÇÀ¸Üºú
+		if (ACTION_BU_GANG == gang.byType)//æ˜¯å¦æœ‰æŠ¢æ èƒ¡
 		{
 			if (CheckAction(gang.iStation, gang.iOutpai, 3))
 			{
-				//·¢ËÍÁËÀ¹ÅÆ¸ø¿Í»§¶ËÍæ¼Ò 
+				//å‘é€äº†æ‹¦ç‰Œç»™å®¢æˆ·ç«¯ç©å®¶ 
 				if (HaveUserCanDoAction(byDeskStation))
 				{
 					bAction = true;
@@ -2017,16 +2017,16 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	}
 	else
 	{
-		HaveUserCanDoAction(byDeskStation); //±ğÈËÓĞºú£¬¸ÜÊ§°Ü
+		HaveUserCanDoAction(byDeskStation); //åˆ«äººæœ‰èƒ¡ï¼Œæ å¤±è´¥
 	}
 	return true;
 }
 
-//ºúÅÆ
+//èƒ¡ç‰Œ
 bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
-	// Í³¼ÆÏûºÄ
-	//WAUTOCOST("OnHu ºÄÊ±Í³¼ÆÍæ¼Ò%d", byDeskStation);
+	// ç»Ÿè®¡æ¶ˆè€—
+	//WAUTOCOST("OnHu è€—æ—¶ç»Ÿè®¡ç©å®¶%d", byDeskStation);
 	if (!m_GameData.T_CPGNotify[byDeskStation].bHu)
 	{
 		return true;
@@ -2041,8 +2041,8 @@ bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	m_GameData.temp_HuPai[byDeskStation].byPs = m_GameData.T_CPGNotify[byDeskStation].iHuPs;
 	m_GameData.T_CPGNotify[byDeskStation].Init();
 	bool bSuccess = true;
-	//·¢ËÍºúÍ¨Öª
-	CMD_S_OperateResult OperateResult;//¿Í»§¶ËÏû³ı¶¯×÷½çÃæÓÃ
+	//å‘é€èƒ¡é€šçŸ¥
+	CMD_S_OperateResult OperateResult;//å®¢æˆ·ç«¯æ¶ˆé™¤åŠ¨ä½œç•Œé¢ç”¨
 	OperateResult.byType = ACTION_HU;
 	OperateResult.iStation = byDeskStation;
 	OperateResult.iBeStation = m_GameData.temp_HuPai[byDeskStation].byFangPao;
@@ -2085,7 +2085,7 @@ bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			}
 		}
 	}
-	//¼ì²âÊÇ·ñ»¹ÓĞÆäËüÍæ¼Ò¿ÉÒÔºúÅÆ
+	//æ£€æµ‹æ˜¯å¦è¿˜æœ‰å…¶å®ƒç©å®¶å¯ä»¥èƒ¡ç‰Œ
 	if (!m_GameData.m_mjRule.bIsDuoXiang || bSuccess)
 	{
 		KillTimer(TIME_ACTION);
@@ -2110,9 +2110,9 @@ bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 				if (255 != m_GameData.temp_HuPai[iPlayer].byFangPao && iDelete <= 0)
 				{
 					iDelete++;
-					m_GameData.DeleteLastOutPai(m_GameData.temp_HuPai[iPlayer].byFangPao);//É¾³ı±»ºúµÄÅÆ
+					m_GameData.DeleteLastOutPai(m_GameData.temp_HuPai[iPlayer].byFangPao);//åˆ é™¤è¢«èƒ¡çš„ç‰Œ
 				}
-				//¼ÆËãºúÅÆÊı¾İ
+				//è®¡ç®—èƒ¡ç‰Œæ•°æ®
 				m_GameData.T_HuPai.bIsLiuJu = false;
 				m_GameData.T_HuPai.bZimo = (m_GameData.temp_HuPai[iPlayer].byFangPao == 255) ? true : false;
 				m_GameData.T_HuPai.byHu = iPlayer;
@@ -2123,7 +2123,7 @@ bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 				bHu = true;
 				if (!IsGoldRoom())
 				{
-					//Í³¼ÆÕ½¼¨
+					//ç»Ÿè®¡æˆ˜ç»©
 					if (m_GameData.T_HuPai.bZimo)
 					{
 						m_tZongResult.iZimo[iPlayer] ++;
@@ -2142,30 +2142,30 @@ bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			m_CheckHuData.CountHuFen(&m_GameData);
 			if (!IsGoldRoom())
 			{
-				//Í³¼ÆµãÅÚ´ÎÊı
+				//ç»Ÿè®¡ç‚¹ç‚®æ¬¡æ•°
 				if (!m_GameData.T_HuPai.bZimo && m_GameData.T_HuPai.byFangPao != 255)
 				{
 					m_tZongResult.iDianPao[m_GameData.T_HuPai.byFangPao] ++;
 				}
 			}
-			//ÇÀ¸Üºú£¬³ıÈ¥¸Ü·Ö
+			//æŠ¢æ èƒ¡ï¼Œé™¤å»æ åˆ†
 			if (!m_GameData.T_HuPai.bZimo && m_GameData.T_HuPai.byFangPao != 255 && ACTION_BU_GANG == m_GameData.T_GangPai.byType
 				&& m_GameData.m_bGangState[m_GameData.T_HuPai.byFangPao])
 			{
-				//½«¸Ü·ÖÈ¥µô
+				//å°†æ åˆ†å»æ‰
 				m_CPGData.MinusGangFen(&m_GameData, m_GameData.T_GangPai.byUser, m_GameData.T_GangPai.byBeGang);
 			}
 			GameFinish(byDeskStation, GF_NORMAL);
 		}
 	}
-	else //Ò»ÅÚ¶àÏì£¬¼ÌĞø·¢ËÍ¶¯×÷
+	else //ä¸€ç‚®å¤šå“ï¼Œç»§ç»­å‘é€åŠ¨ä½œ
 	{
 		HaveUserCanDoAction(byDeskStation);
 	}
 	return true;
 }
 
-//¹ıÅÆ
+//è¿‡ç‰Œ
 bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
 	if (!m_GameData.T_CPGNotify[byDeskStation].bCanAction)
@@ -2174,7 +2174,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	}
 	m_GameData.T_TingPai.Init();
 	bool bTing = m_GameData.T_CPGNotify[byDeskStation].bTing;
-	//¼ÇÂ¼ÆúºúºÍÆúÅö
+	//è®°å½•å¼ƒèƒ¡å’Œå¼ƒç¢°
 	if (m_GameData.T_CPGNotify[byDeskStation].bHu)
 	{
 		m_GameData.m_bQiHu[byDeskStation] = true;
@@ -2184,11 +2184,11 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		m_GameData.m_bQiPeng[byDeskStation] = true;
 		m_GameData.m_vecQiPengCard[byDeskStation].push_back(m_GameData.T_CPGNotify[byDeskStation].byPeng);
 	}
-	//ÇåÀí¼ÇÂ¼
+	//æ¸…ç†è®°å½•
 	m_GameData.T_CPGNotify[byDeskStation].Init();
 	if (IsGoldRoom())
 	{
-		CMD_S_OperateResult OperateResult;//¿Í»§¶ËÏû³ı¶¯×÷½çÃæÓÃ
+		CMD_S_OperateResult OperateResult;//å®¢æˆ·ç«¯æ¶ˆé™¤åŠ¨ä½œç•Œé¢ç”¨
 		OperateResult.byType = ACTION_PASS;
 		OperateResult.iStation = byDeskStation;
 		/*if(bTing)
@@ -2206,7 +2206,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 		SendGameData(byDeskStation, &OperateResult, sizeof(OperateResult), MSG_MAIN_LOADER_GAME, S_C_OPERATE_RESULT, 0);
 		//SendWatchData(byDeskStation,&OperateResult,sizeof(OperateResult), MSG_MAIN_LOADER_GAME, S_C_OPERATE_RESULT, 0);
 	}
-	if (!HaveUserCanDoAction(byDeskStation)) //Ã»ÓĞ·¢ÈÎºÎ¶¯×÷
+	if (!HaveUserCanDoAction(byDeskStation)) //æ²¡æœ‰å‘ä»»ä½•åŠ¨ä½œ
 	{
 		bool bEnd = false;
 		if (!bEnd)
@@ -2214,7 +2214,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			KillTimer(TIME_ACTION);
 			KillTimer(TIME_THINK);
 			KillTimer(TIME_TING_OUTCARD);
-			//ÄæÊ±ÕëºúÅÆ
+			//é€†æ—¶é’ˆèƒ¡ç‰Œ
 			int iDelete = 0;
 			int iPlayer = m_GameData.m_byNowOutStation == 255 ? m_GameData.T_OutPai.byUser : m_GameData.m_byNowOutStation;
 			bool bFirst = true;
@@ -2233,20 +2233,20 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 					if (255 != m_GameData.temp_HuPai[iPlayer].byFangPao && iDelete <= 0)
 					{
 						iDelete++;
-						m_GameData.DeleteLastOutPai(m_GameData.temp_HuPai[iPlayer].byFangPao);//É¾³ı±»ºúµÄÅÆ
+						m_GameData.DeleteLastOutPai(m_GameData.temp_HuPai[iPlayer].byFangPao);//åˆ é™¤è¢«èƒ¡çš„ç‰Œ
 					}
-					//¼ÆËãºúÅÆÊı¾İ
+					//è®¡ç®—èƒ¡ç‰Œæ•°æ®
 					m_GameData.T_HuPai.bIsLiuJu = false;
 					m_GameData.T_HuPai.bZimo = (m_GameData.temp_HuPai[iPlayer].byFangPao == 255) ? true : false;
-					m_GameData.T_HuPai.byHu = iPlayer; //ºúÅÆÍæ¼ÒÎ»ÖÃ
-					m_GameData.T_HuPai.byFangPao = m_GameData.temp_HuPai[iPlayer].byFangPao; //·ÅÅÚÍæ¼ÒÎ»ÖÃ
+					m_GameData.T_HuPai.byHu = iPlayer; //èƒ¡ç‰Œç©å®¶ä½ç½®
+					m_GameData.T_HuPai.byFangPao = m_GameData.temp_HuPai[iPlayer].byFangPao; //æ”¾ç‚®ç©å®¶ä½ç½®
 					m_GameData.T_HuPai.byPs = m_GameData.temp_HuPai[iPlayer].byPs;
 					m_GameData.T_HuPai.bHaveHu[iPlayer] = true;
 					m_GameData.T_HuPai.iUserNums++;
 					bEnd = true;
 					if (!IsGoldRoom())
 					{
-						//Í³¼ÆÕ½¼¨
+						//ç»Ÿè®¡æˆ˜ç»©
 						if (m_GameData.T_HuPai.bZimo)
 						{
 							m_tZongResult.iZimo[iPlayer] ++;
@@ -2265,17 +2265,17 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 				m_CheckHuData.CountHuFen(&m_GameData);
 				if (!IsGoldRoom())
 				{
-					//Í³¼ÆµãÅÚ´ÎÊı
+					//ç»Ÿè®¡ç‚¹ç‚®æ¬¡æ•°
 					if (!m_GameData.T_HuPai.bZimo && m_GameData.T_HuPai.byFangPao != 255)
 					{
 						m_tZongResult.iDianPao[m_GameData.T_HuPai.byFangPao] ++;
 					}
 				}
-				//ÇÀ¸Üºú£¬³ıÈ¥¸Ü·Ö
+				//æŠ¢æ èƒ¡ï¼Œé™¤å»æ åˆ†
 				if (!m_GameData.T_HuPai.bZimo && m_GameData.T_HuPai.byFangPao != 255 && ACTION_BU_GANG == m_GameData.T_GangPai.byType
 					&& m_GameData.m_bGangState[m_GameData.T_HuPai.byFangPao])
 				{
-					//½«¸Ü·ÖÈ¥µô
+					//å°†æ åˆ†å»æ‰
 					m_CPGData.MinusGangFen(&m_GameData, m_GameData.T_GangPai.byUser, m_GameData.T_GangPai.byBeGang);
 				}
 				GameFinish(byDeskStation, GF_NORMAL);
@@ -2283,14 +2283,14 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			}
 		}
 
-		////////////////////////////¸Ü
+		////////////////////////////æ 
 		if (!bEnd && ACTION_NO != m_GameData.temp_GangPai.byType)
 		{
 			KillTimer(TIME_ACTION);
 			KillTimer(TIME_THINK);
 			KillTimer(TIME_TING_OUTCARD);
 			bEnd = true;
-			//¸ÜÅÆÊÂ¼ş
+			//æ ç‰Œäº‹ä»¶
 			m_GameData.m_bGangState[m_GameData.temp_GangPai.byUser] = true;
 			m_GameData.T_GangPai.Init();
 			m_GameData.T_GangPai.byUser = m_GameData.temp_GangPai.byUser;
@@ -2307,11 +2307,11 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			memcpy(gang.byData, m_GameData.temp_GangPai.byGangPai, sizeof(gang.byData));
 			m_GameData.AddToGCP(m_GameData.temp_GangPai.byUser, &gang);
 			m_CPGData.CountGangFen(&m_GameData, gang.iStation, gang.iBeStation, gang.byType);
-			//¸ÜÅÆ£¬ÕâÕÅÅÆÈ«²¿´ò³öÈ¥ÁË
+			//æ ç‰Œï¼Œè¿™å¼ ç‰Œå…¨éƒ¨æ‰“å‡ºå»äº†
 			m_GameData.m_byAllOutCardNum[gang.iOutpai] = 4;
 			if (!IsGoldRoom())
 			{
-				//Í³¼ÆÕ½¼¨
+				//ç»Ÿè®¡æˆ˜ç»©
 				m_tZongResult.iGang[gang.iStation] ++;
 				if (gang.iBeStation != 255)
 				{
@@ -2323,25 +2323,25 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			{
 				for (int i = 0;i < 4;i++)
 				{
-					//É¾³ıÒ»ÕÅÊÖÅÆ
+					//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 					m_GameData.DeleteAHandPai(gang.iStation, gang.iOutpai);
 				}
 			}
 			else if (ACTION_BU_GANG == gang.byType)
 			{
 				m_GameData.DeleteAGCPData(gang.iStation, ACTION_PENG, gang.iOutpai);
-				//É¾³ıÒ»ÕÅÊÖÅÆ
+				//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 				m_GameData.DeleteAHandPai(gang.iStation, gang.iOutpai);
 			}
 			else if (ACTION_MING_GANG == gang.byType)
 			{
 				for (int i = 0;i < 3;i++)
 				{
-					//É¾³ıÒ»ÕÅÊÖÅÆ
+					//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 					m_GameData.DeleteAHandPai(gang.iStation, gang.iOutpai);
 				}
-				//É¾³ıÒ»ÕÅ³öÅÆ
-				m_GameData.DeleteLastOutPai(gang.iBeStation);//É¾³ı±»¸ÜµÄÅÆ
+				//åˆ é™¤ä¸€å¼ å‡ºç‰Œ
+				m_GameData.DeleteLastOutPai(gang.iBeStation);//åˆ é™¤è¢«æ çš„ç‰Œ
 			}
 			CMD_S_OperateResult OperateResult;
 			OperateResult.byType = gang.byType;
@@ -2350,7 +2350,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			OperateResult.iOutpai = gang.iOutpai;
 			if (255 != gang.iBeStation)
 			{
-				m_GameData.DeleteLastOutPai(gang.iBeStation);//É¾³ı±»¸ÜµÄÅÆ
+				m_GameData.DeleteLastOutPai(gang.iBeStation);//åˆ é™¤è¢«æ çš„ç‰Œ
 				//m_GameData.CopyOutPai(gang.iBeStation,OperateResult.byArOutPai);
 			}
 			for (int b = 0;b < 4;b++)
@@ -2393,7 +2393,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			KillTimer(TIME_THINK);
 			KillTimer(TIME_TING_OUTCARD);
 			bEnd = true;
-			//ÅöÅÆÊÂ¼ş
+			//ç¢°ç‰Œäº‹ä»¶
 			TCPGStruct peng;
 			peng.Init();
 			peng.byType = ACTION_PENG;
@@ -2407,7 +2407,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			m_GameData.AddToGCP(m_GameData.temp_PengPai.byUser, &peng);
 			for (int b = 0;b < 2;b++)
 			{
-				//É¾³ıÒ»ÕÅÊÖÅÆ
+				//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 				m_GameData.DeleteAHandPai(peng.iStation, peng.iOutpai);
 			}
 			CMD_S_OperateResult OperateResult;
@@ -2415,9 +2415,9 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			OperateResult.iStation = peng.iStation;
 			OperateResult.iBeStation = peng.iBeStation;
 			OperateResult.iOutpai = peng.iOutpai;
-			m_GameData.DeleteLastOutPai(peng.iBeStation);//É¾³ı±»ÅöµÄÅÆ
+			m_GameData.DeleteLastOutPai(peng.iBeStation);//åˆ é™¤è¢«ç¢°çš„ç‰Œ
 			//m_GameData.CopyOutPai(peng.iBeStation,OperateResult.byArOutPai);
-			//ÅöÒ»ÕÅ£¬ÕâÕÅ³öÅÆÊıÁ¿¼Ó2
+			//ç¢°ä¸€å¼ ï¼Œè¿™å¼ å‡ºç‰Œæ•°é‡åŠ 2
 			m_GameData.m_byAllOutCardNum[peng.iOutpai] += 2;
 			for (int b = 0;b < 3;b++)
 			{
@@ -2437,10 +2437,10 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 					{
 						m_GameData.SortHandPai(b, false);
 						OperateResult.byCardCount = m_GameData.CopyOneUserHandPai(OperateResult.byCard, peng.iStation);
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
 						if (!m_GameData.m_mjAction.bTing)
 						{
-							//ÌáÈ¡×¯¼ÒÌıÅÆÊı¾İ
+							//æå–åº„å®¶å¬ç‰Œæ•°æ®
 							memset(m_GameData.m_byOutCanHuCard, 255, sizeof(m_GameData.m_byOutCanHuCard));
 							memset(m_GameData.m_byHuCard, 255, sizeof(m_GameData.m_byHuCard));
 							memset(m_GameData.m_byCardRemainNum, 0, sizeof(m_GameData.m_byCardRemainNum));
@@ -2476,7 +2476,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			KillTimer(TIME_THINK);
 			KillTimer(TIME_TING_OUTCARD);
 			bEnd = true;
-			//³ÔÅÆÊÂ¼ş
+			//åƒç‰Œäº‹ä»¶
 			TCPGStruct chi;
 			chi.Init();
 			chi.byType = m_GameData.temp_ChiPai.byType;
@@ -2494,7 +2494,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 				{
 					continue;
 				}
-				//É¾³ıÒ»ÕÅÊÖÅÆ
+				//åˆ é™¤ä¸€å¼ æ‰‹ç‰Œ
 				m_GameData.DeleteAHandPai(chi.iStation, chi.byData[b]);
 			}
 			CMD_S_OperateResult OperateResult;
@@ -2502,7 +2502,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			OperateResult.iStation = chi.iStation;
 			OperateResult.iBeStation = chi.iBeStation;
 			OperateResult.iOutpai = chi.iOutpai;
-			m_GameData.DeleteLastOutPai(chi.iBeStation);//É¾³ı±»³ÔµÄÅÆ
+			m_GameData.DeleteLastOutPai(chi.iBeStation);//åˆ é™¤è¢«åƒçš„ç‰Œ
 			//m_GameData.CopyOutPai(chi.iBeStation,OperateResult.byArOutPai);
 			for (int b = 0;b < 3;b++)
 			{
@@ -2542,7 +2542,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			}
 		}
 
-		if (!bEnd && 255 == m_GameData.m_byNowOutStation)//¿ªÊ¼ÃşÅÆ
+		if (!bEnd && 255 == m_GameData.m_byNowOutStation)//å¼€å§‹æ‘¸ç‰Œ
 		{
 			KillTimer(TIME_ACTION);
 			KillTimer(TIME_THINK);
@@ -2551,7 +2551,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			ZhuaPai(m_GameData.T_OutPai.byUser, true);
 		}
 
-		if (!bEnd && m_GameData.m_byNowOutStation == byDeskStation)//×Ô¼ºÃşÅÆ/³ÔÅöºóÌıÅÆÓĞ¶¯×÷passÒÔºó¿Í·ş¶ËÖØĞÂ¼ÆÊ±³öÅÆ
+		if (!bEnd && m_GameData.m_byNowOutStation == byDeskStation)//è‡ªå·±æ‘¸ç‰Œ/åƒç¢°åå¬ç‰Œæœ‰åŠ¨ä½œpassä»¥åå®¢æœç«¯é‡æ–°è®¡æ—¶å‡ºç‰Œ
 		{
 			KillTimer(TIME_ACTION);
 			KillTimer(TIME_THINK);
@@ -2570,7 +2570,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 			}
 		}
 
-		if (!bEnd && m_GameData.m_byNowOutStation != 255)//ÇÀ¸Üºúµã¹ı£¬¿ªÊ¼ÃşÅÆ
+		if (!bEnd && m_GameData.m_byNowOutStation != 255)//æŠ¢æ èƒ¡ç‚¹è¿‡ï¼Œå¼€å§‹æ‘¸ç‰Œ
 		{
 			KillTimer(TIME_ACTION);
 			KillTimer(TIME_THINK);
@@ -2582,29 +2582,29 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 	return true;
 }
 
-///¼ì²âÍæ¼Òstationµ±Ç°ÄÜ×öÄÄĞ©¶¯×÷
+///æ£€æµ‹ç©å®¶stationå½“å‰èƒ½åšå“ªäº›åŠ¨ä½œ
 bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 {
-	// Í³¼ÆÏûºÄ
-	//WAUTOCOST("CheckAction ºÄÊ±Í³¼ÆÍæ¼Ò%d", iStation);
+	// ç»Ÿè®¡æ¶ˆè€—
+	//WAUTOCOST("CheckAction è€—æ—¶ç»Ÿè®¡ç©å®¶%d", iStation);
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
-		m_GameData.T_CPGNotify[i].Init();//ÇåÁã
+		m_GameData.T_CPGNotify[i].Init();//æ¸…é›¶
 	}
 	m_GameData.T_CountFen.Init();
 	m_GameData.T_TingPai.Init();
 	bool bAction = false;
 	switch (byType)
 	{
-	case 0://×ÔÃş
-	case 1://¸Ü¿ª(¸ÜÅÆÒÔºóÃşµ½ÅÆºú)
+	case 0://è‡ªæ‘¸
+	case 1://æ å¼€(æ ç‰Œä»¥åæ‘¸åˆ°ç‰Œèƒ¡)
 	{
-		//if (m_bTrustee[iStation]) //Íæ¼ÒÍĞ¹Ü²»¼ì²â¶¯×÷
+		//if (m_bTrustee[iStation]) //ç©å®¶æ‰˜ç®¡ä¸æ£€æµ‹åŠ¨ä½œ
 		//{
 		//	break;
 		//}
 
-		//ºı
+		//ç³Š
 		if (m_CheckHuData.CanHu(&m_GameData, iStation, 255, byCard, true))
 		{
 			m_GameData.T_CPGNotify[iStation].bHu = true;
@@ -2614,7 +2614,7 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 			m_GameData.T_CPGNotify[iStation].byMaxThing = ACTION_HU;
 		}
 
-		//Ìı
+		//å¬
 		if (!m_GameData.m_bTing[iStation] && m_GameData.m_mjAction.bTing && !m_GameData.T_CPGNotify[iStation].bHu &&
 			m_CheckHuData.OutCardExtractHu(&m_GameData, iStation, m_GameData.T_CPGNotify[iStation].byTingCanOut,
 				m_GameData.T_CPGNotify[iStation].byHuCard, m_GameData.T_CPGNotify[iStation].byCardRemainNum))
@@ -2623,7 +2623,7 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 			m_GameData.T_CPGNotify[iStation].byMaxThing = ACTION_TING_PAI;
 		}
 
-		//¸Ü
+		//æ 
 		if (m_CPGData.CanGang(&m_GameData, iStation, byCard, m_GameData.T_CPGNotify[iStation].iGangData, true, &m_CheckHuData))
 		{
 			m_GameData.T_CPGNotify[iStation].bGang = true;
@@ -2637,15 +2637,15 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 		}
 	}
 	break;
-	case 2://µãÅÚ
+	case 2://ç‚¹ç‚®
 	{
 		for (int i = 0;i < PLAY_COUNT;++i)
 		{
-			if (m_GameData.m_bIsHu[i])        // ÒÑºúÅÆÍæ¼Ò,»òÕß¶ÏÏß×´Ì¬
+			if (m_GameData.m_bIsHu[i])        // å·²èƒ¡ç‰Œç©å®¶,æˆ–è€…æ–­çº¿çŠ¶æ€
 			{
 				continue;
 			}
-			//if (m_bTrustee[i]) //Íæ¼ÒÍĞ¹Ü²»¼ì²â¶¯×÷
+			//if (m_bTrustee[i]) //ç©å®¶æ‰˜ç®¡ä¸æ£€æµ‹åŠ¨ä½œ
 			//{
 			//	continue;
 			//}
@@ -2653,20 +2653,20 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 			{
 				continue;
 			}
-			//Åö
+			//ç¢°
 			if (!m_GameData.m_bTing[i] && m_CPGData.CanPeng(&m_GameData, i, byCard))
 			{
 				m_GameData.T_CPGNotify[i].bPeng = true;
 				m_GameData.T_CPGNotify[i].byPeng = byCard;
 				m_GameData.T_CPGNotify[i].byMaxThing = ACTION_PENG;
 			}
-			//¸Ü
+			//æ 
 			if (m_CPGData.CanGang(&m_GameData, i, byCard, m_GameData.T_CPGNotify[i].iGangData, false, &m_CheckHuData))
 			{
 				m_GameData.T_CPGNotify[i].bGang = true;
 				m_GameData.T_CPGNotify[i].byMaxThing = ACTION_MING_GANG;
 			}
-			//ºı
+			//ç³Š
 			if (m_GameData.m_mjAction.bFangPao&&m_CheckHuData.CanHu(&m_GameData, i, iStation, byCard, false))
 			{
 
@@ -2685,15 +2685,15 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 		}
 	}
 	break;
-	case 3://ÇÀ¸Üºú
+	case 3://æŠ¢æ èƒ¡
 	{
 		for (int i = 0;i < PLAY_COUNT;++i)
 		{
-			if (m_GameData.m_bIsHu[i])        // ÒÑºúÅÆÍæ¼Ò,»òÕß¶ÏÏß×´Ì¬
+			if (m_GameData.m_bIsHu[i])        // å·²èƒ¡ç‰Œç©å®¶,æˆ–è€…æ–­çº¿çŠ¶æ€
 			{
 				continue;
 			}
-			//if (m_bTrustee[i]) //Íæ¼ÒÍĞ¹Ü²»¼ì²â¶¯×÷
+			//if (m_bTrustee[i]) //ç©å®¶æ‰˜ç®¡ä¸æ£€æµ‹åŠ¨ä½œ
 			//{
 			//	continue;
 			//}
@@ -2701,11 +2701,11 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 			{
 				continue;
 			}
-			//ºı
+			//ç³Š
 			if (m_GameData.m_mjAction.bQiangGangHu && m_CheckHuData.CanHu(&m_GameData, i, iStation, byCard, false))
 			{
 				m_GameData.T_CPGNotify[i].bHu = true;
-				m_GameData.T_CPGNotify[i].iHuPs = byCard;//¼ÇÂ¼ºúµÄÅÆ
+				m_GameData.T_CPGNotify[i].iHuPs = byCard;//è®°å½•èƒ¡çš„ç‰Œ
 				m_GameData.T_CPGNotify[i].byHu = i;
 				m_GameData.T_CPGNotify[i].byFangPao = iStation;
 				m_GameData.T_CPGNotify[i].byMaxThing = ACTION_HU;
@@ -2718,13 +2718,13 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 		}
 	}
 	break;
-	case 4: //¼ì²âÍæ¼ÒÊÇ·ñÌıÅÆ
+	case 4: //æ£€æµ‹ç©å®¶æ˜¯å¦å¬ç‰Œ
 	{
-		//if (m_bTrustee[iStation]) //Íæ¼ÒÍĞ¹Ü²»¼ì²â¶¯×÷
+		//if (m_bTrustee[iStation]) //ç©å®¶æ‰˜ç®¡ä¸æ£€æµ‹åŠ¨ä½œ
 		//{
 		//	break;
 		//}
-		//Ìı
+		//å¬
 		if (!m_GameData.m_bTing[iStation] && m_GameData.m_mjAction.bTing && m_CheckHuData.OutCardExtractHu(&m_GameData, iStation, m_GameData.T_CPGNotify[iStation].byTingCanOut,
 			m_GameData.T_CPGNotify[iStation].byHuCard, m_GameData.T_CPGNotify[iStation].byCardRemainNum))
 		{
@@ -2753,15 +2753,15 @@ bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 	return bAction;
 }
 
-///·¢ËÍÀ¹ÅÆĞÅÏ¢¸øÍæ¼Ò
+///å‘é€æ‹¦ç‰Œä¿¡æ¯ç»™ç©å®¶
 bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 {
-	bool bHaveSend = false;	//ÊÇ·ñÒÑ¾­·¢ËÍÁËÏûÏ¢
-	BYTE byCanActionDesk = 255;	//¿ÉÒÔ×ö¶¯×÷µÄÍæ¼Ò
+	bool bHaveSend = false;	//æ˜¯å¦å·²ç»å‘é€äº†æ¶ˆæ¯
+	BYTE byCanActionDesk = 255;	//å¯ä»¥åšåŠ¨ä½œçš„ç©å®¶
 	m_GameData.m_byCurrentOperatorUser = 255;
 	bool bIsHaveHuPai = false;
-	int iCanHuCount = 0; //ÒÑ¾­ºú
-	//¼ì²â´ËÊ±ÊÇ·ñÓĞÍæ¼ÒÒÑ¾­ºúÅÆ
+	int iCanHuCount = 0; //å·²ç»èƒ¡
+	//æ£€æµ‹æ­¤æ—¶æ˜¯å¦æœ‰ç©å®¶å·²ç»èƒ¡ç‰Œ
 	for (int i = 0;i < PLAY_COUNT;i++)
 	{
 		if (m_GameData.m_bIsHu[i])
@@ -2772,7 +2772,7 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 	}
 	if (!bHaveSend)
 	{
-		//¶¯×÷ÓÅÏÈ¼¶´óµÄÍæ¼ÒÏÈ·¢
+		//åŠ¨ä½œä¼˜å…ˆçº§å¤§çš„ç©å®¶å…ˆå‘
 		for (int j = 0;j < PLAY_COUNT - 1;j++)
 		{
 			int i = (byIgnoreStation + PLAY_COUNT - 1 - j) % PLAY_COUNT;
@@ -2781,10 +2781,10 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 				continue;
 			}
 
-			//ÓÅÏÈ¸øÄÜºúÅÆµÄÍæ¼Ò·¢ËÍ¶¯×÷ÏûÏ¢ 
+			//ä¼˜å…ˆç»™èƒ½èƒ¡ç‰Œçš„ç©å®¶å‘é€åŠ¨ä½œæ¶ˆæ¯ 
 			if (m_GameData.T_CPGNotify[i].bHu)
 			{
-				if (bIsHaveHuPai) //ÒÑ¾­ÓĞÈËºú£¬²»ÄÜÔÙ·¢ËÍÅö¸Ü³Ô
+				if (bIsHaveHuPai) //å·²ç»æœ‰äººèƒ¡ï¼Œä¸èƒ½å†å‘é€ç¢°æ åƒ
 				{
 					m_GameData.T_CPGNotify[i].bGang = false;
 					m_GameData.T_CPGNotify[i].bPeng = false;
@@ -2814,10 +2814,10 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 			}
 		}
 	}
-	//Ã»ÓĞ·¢ËÍºúµÄÏûÏ¢ ÄÇÃ´ÔÙÓÅÏÈ·¢ËÍ¸Ü »òÕßÅöµÄÏûÏ¢
+	//æ²¡æœ‰å‘é€èƒ¡çš„æ¶ˆæ¯ é‚£ä¹ˆå†ä¼˜å…ˆå‘é€æ  æˆ–è€…ç¢°çš„æ¶ˆæ¯
 	if (!bHaveSend && !bIsHaveHuPai)
 	{
-		//¶¯×÷ÓÅÏÈ¼¶´óµÄÍæ¼ÒÏÈ·¢
+		//åŠ¨ä½œä¼˜å…ˆçº§å¤§çš„ç©å®¶å…ˆå‘
 		for (int j = 0;j < PLAY_COUNT - 1;j++)
 		{
 			int i = (byIgnoreStation + PLAY_COUNT - 1 - j) % PLAY_COUNT;
@@ -2825,7 +2825,7 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 			{
 				continue;
 			}
-			//ÔÙÓÅÏÈ¸øÄÜ¸Ü¡¢ÅöÅÆµÄÍæ¼Ò·¢ËÍ¶¯×÷ÏûÏ¢ 
+			//å†ä¼˜å…ˆç»™èƒ½æ ã€ç¢°ç‰Œçš„ç©å®¶å‘é€åŠ¨ä½œæ¶ˆæ¯ 
 			if (m_GameData.T_CPGNotify[i].bGang || m_GameData.T_CPGNotify[i].bPeng)
 			{
 				SendChiPengGangHuMsg(i);
@@ -2844,10 +2844,10 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 		}
 	}
 
-	//Ã»ÓĞ·¢ËÍºú¡¢¸Ü¡¢ÅöÏûÏ¢ ÔÙ¼ì²é·¢ËÍ³ÔÅÆÏûÏ¢
+	//æ²¡æœ‰å‘é€èƒ¡ã€æ ã€ç¢°æ¶ˆæ¯ å†æ£€æŸ¥å‘é€åƒç‰Œæ¶ˆæ¯
 	if (!bHaveSend && !bIsHaveHuPai)
 	{
-		//¶¯×÷ÓÅÏÈ¼¶´óµÄÍæ¼ÒÏÈ·¢
+		//åŠ¨ä½œä¼˜å…ˆçº§å¤§çš„ç©å®¶å…ˆå‘
 		for (int j = 0;j < PLAY_COUNT;j++)
 		{
 			int i = (byIgnoreStation + PLAY_COUNT - 1 - j) % PLAY_COUNT;
@@ -2855,7 +2855,7 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 			{
 				continue;
 			}
-			//ÔÙÓÅÏÈ¸øÄÜ¸Ü¡¢ÅöÅÆµÄÍæ¼Ò·¢ËÍ¶¯×÷ÏûÏ¢ 
+			//å†ä¼˜å…ˆç»™èƒ½æ ã€ç¢°ç‰Œçš„ç©å®¶å‘é€åŠ¨ä½œæ¶ˆæ¯ 
 			if (m_GameData.T_CPGNotify[i].bChi)
 			{
 				m_GameData.T_CPGNotify[i].bCanAction = true;
@@ -2877,10 +2877,10 @@ bool CServerGameDesk::HaveUserCanDoAction(BYTE byIgnoreStation)
 	return bHaveSend;
 }
 
-///¹¦ÄÜ: ·¢ËÍ³ÔÅö¸ÜÏûÏ¢
+///åŠŸèƒ½: å‘é€åƒç¢°æ æ¶ˆæ¯
 void CServerGameDesk::SendChiPengGangHuMsg(int iDesk)
 {
-	if (m_bTrustee[iDesk]) //Èç¹ûÍæ¼Ò´¦ÓÚÍĞ¹Ü×´Ì¬£¬·şÎñÆ÷Ö±½Ó´¦Àí
+	if (m_bTrustee[iDesk]) //å¦‚æœç©å®¶å¤„äºæ‰˜ç®¡çŠ¶æ€ï¼ŒæœåŠ¡å™¨ç›´æ¥å¤„ç†
 	{
 		SetTimer(TIME_TUOGUAN_ACTION, m_GameData.m_mjRule.byAutoOutTime * 1000);
 		return;
@@ -2905,13 +2905,13 @@ void CServerGameDesk::SendChiPengGangHuMsg(int iDesk)
 	//SendWatchData(iDesk,&ActionData,sizeof(ActionData), MSG_MAIN_LOADER_GAME, S_C_OPERATE_NOTIFY, 0);
 }
 
-////¼ÇÂ¼¸ÜÅÆ×´Ì¬£¬ÓµÓÚ¸Ü¿ªºÍ¸ÜºóÅÚ
+////è®°å½•æ ç‰ŒçŠ¶æ€ï¼Œæ‹¥äºæ å¼€å’Œæ åç‚®
 void CServerGameDesk::RecordGangStatus()
 {
-	//¼ÇÂ¼¸ÜÅÆ×´Ì¬£¬ÓµÓÚ¸Ü¿ªºÍ¸ÜºóÅÚ
+	//è®°å½•æ ç‰ŒçŠ¶æ€ï¼Œæ‹¥äºæ å¼€å’Œæ åç‚®
 	for (int i = 0;i < PLAY_COUNT; ++i)
 	{
-		//¼ÇÂ¼¸ÜÉÏ×ÔÃşÁ÷³Ì£¬²½Öè0
+		//è®°å½•æ ä¸Šè‡ªæ‘¸æµç¨‹ï¼Œæ­¥éª¤0
 		m_GameData.m_bGangZiMo[i] = 0;
 		if (i != m_GameData.m_byNowOutStation)
 		{
@@ -2920,14 +2920,14 @@ void CServerGameDesk::RecordGangStatus()
 	}
 }
 
-//json´æ´¢,Õ½¼¨»Ø·Å
+//jsonå­˜å‚¨,æˆ˜ç»©å›æ”¾
 void CServerGameDesk::OnJson(void *pData, int iType)
 {
 	if (IsGoldRoom())
 	{
 		return;
 	}
-	if (1 == iType) //ÓÎÏ·¿ªÊ¼
+	if (1 == iType) //æ¸¸æˆå¼€å§‹
 	{
 		CMD_S_GameStart *pChangeData = (CMD_S_GameStart *)pData;
 		if (!pChangeData)
@@ -2951,12 +2951,12 @@ void CServerGameDesk::OnJson(void *pData, int iType)
 		m_root["bCurPlayCount"] = m_iRunGameCount;
 		m_root["bAllPlayCount"] = m_iVipGameCount;
 
-		/////·¿¼ä¹æÔò
-		m_root["bDaHu"] = m_GameData.m_tGameRuler.bDaHu; //´óºú
-		m_root["bBaoTing"] = m_GameData.m_tGameRuler.bBaoTing; //±¨Ìı
-		m_root["iZiMoScore"] = m_GameData.m_tGameRuler.iZiMoScore; //×ÔÃş·ÖÊı
-		m_root["bZhiZiMo"] = m_GameData.m_tGameRuler.bZhiZiMo; //Ö»×ÔÃş
-		m_root["bFenPai"] = m_GameData.m_tGameRuler.bFenPai; //ÊÇ·ñ´ø·çÅÆ
+		/////æˆ¿é—´è§„åˆ™
+		m_root["bDaHu"] = m_GameData.m_tGameRuler.bDaHu; //å¤§èƒ¡
+		m_root["bBaoTing"] = m_GameData.m_tGameRuler.bBaoTing; //æŠ¥å¬
+		m_root["iZiMoScore"] = m_GameData.m_tGameRuler.iZiMoScore; //è‡ªæ‘¸åˆ†æ•°
+		m_root["bZhiZiMo"] = m_GameData.m_tGameRuler.bZhiZiMo; //åªè‡ªæ‘¸
+		m_root["bFenPai"] = m_GameData.m_tGameRuler.bFenPai; //æ˜¯å¦å¸¦é£ç‰Œ
 		////////////////
 
 		Json::Value _index;
@@ -2998,7 +2998,7 @@ void CServerGameDesk::OnJson(void *pData, int iType)
 		}
 		m_root["handArrData"] = array_1;
 	}
-	else if (2 == iType) //³öÅÆ
+	else if (2 == iType) //å‡ºç‰Œ
 	{
 		CMD_S_OutCard *pChangeData = (CMD_S_OutCard *)pData;
 		if (!pChangeData)
@@ -3026,7 +3026,7 @@ void CServerGameDesk::OnJson(void *pData, int iType)
 		m_element[szEventIndex] = Json::Value(element);
 		m_iVideoIndex++;
 	}
-	else if (3 == iType) //×¥ÅÆ
+	else if (3 == iType) //æŠ“ç‰Œ
 	{
 		CMD_S_SendCard *pChangeData = (CMD_S_SendCard *)pData;
 		if (!pChangeData)
@@ -3044,7 +3044,7 @@ void CServerGameDesk::OnJson(void *pData, int iType)
 		m_element[szEventIndex] = Json::Value(element);
 		m_iVideoIndex++;
 	}
-	else if (4 == iType) //³ÔÅö¸Üºú¶¯×÷
+	else if (4 == iType) //åƒç¢°æ èƒ¡åŠ¨ä½œ
 	{
 		CMD_S_OperateResult *pChangeData = (CMD_S_OperateResult *)pData;
 		if (!pChangeData)
@@ -3280,10 +3280,10 @@ void CServerGameDesk::OnJson(void *pData, int iType)
 	}
 }
 
-//ÅäÅÆÆ÷
+//é…ç‰Œå™¨
 bool CServerGameDesk::HandCard()
 {
-	//¶ÁÈ¡³¬¶ËÊı¾İ
+	//è¯»å–è¶…ç«¯æ•°æ®
 	char cFileName[64];
 	memset(cFileName, 0, sizeof(cFileName));
 	sprintf_s(cFileName, 64, "C:/web/json/%d.json", NAME_ID);
@@ -3309,7 +3309,7 @@ bool CServerGameDesk::HandCard()
 
 	CString lwlog;
 
-	//»ñÈ¡ÊÖÅÆÊı¾İ
+	//è·å–æ‰‹ç‰Œæ•°æ®
 	int iCardCount[PLAY_COUNT];
 	memset(iCardCount, 0, sizeof(iCardCount));
 	int arraySize = root["CardCout"].size();
@@ -3353,7 +3353,7 @@ bool CServerGameDesk::HandCard()
 		}
 	}
 
-	//»ñÈ¡ÃÅÅÆÊı¾İ
+	//è·å–é—¨ç‰Œæ•°æ®
 	int iMCardCount[2];
 	memset(iMCardCount, 0, sizeof(iMCardCount));
 	int iMSize = root["MCardCout"].size();
@@ -3390,7 +3390,7 @@ bool CServerGameDesk::HandCard()
 
 	fin.close();
 
-	//°ÑÑ¡ÔñµÄÊÖÅÆ´ÓÃÅÅÆÖĞÉ¾³ı
+	//æŠŠé€‰æ‹©çš„æ‰‹ç‰Œä»é—¨ç‰Œä¸­åˆ é™¤
 	int iChangeNums = 0;
 	for (int i = 0;i < PLAY_COUNT;i++)
 	{
@@ -3420,7 +3420,7 @@ bool CServerGameDesk::HandCard()
 		}
 	}
 
-	//°ÑÑ¡ÔñµÄÃÅÅÆ´ÓÃÅÅÆÖĞÉ¾³ı
+	//æŠŠé€‰æ‹©çš„é—¨ç‰Œä»é—¨ç‰Œä¸­åˆ é™¤
 	for (int i = 0;i < 2;i++)
 	{
 		for (int j = 0;j < 10;j++)
@@ -3448,7 +3448,7 @@ bool CServerGameDesk::HandCard()
 	BYTE byTempMenPai[MAX_MJ_PAI_COUNT];
 	memset(byTempMenPai, 255, sizeof(byTempMenPai));
 
-	for (int i = 0;i < 10;i++)//ÏÈ·ÅÖÃÅäÖÃµÄÃÅÅÆÍ·µÄÅÆ
+	for (int i = 0;i < 10;i++)//å…ˆæ”¾ç½®é…ç½®çš„é—¨ç‰Œå¤´çš„ç‰Œ
 	{
 		if (255 != byMCardData[0][i])
 		{
@@ -3464,7 +3464,7 @@ bool CServerGameDesk::HandCard()
 		}
 	}
 
-	for (int i = 0;i < 10;i++)//×îºó·ÅÖÃÅäÖÃµÄÃÅÅÆÎ²µÄÅÆ
+	for (int i = 0;i < 10;i++)//æœ€åæ”¾ç½®é…ç½®çš„é—¨ç‰Œå°¾çš„ç‰Œ
 	{
 		if (255 != byMCardData[1][i])
 		{
@@ -3472,7 +3472,7 @@ bool CServerGameDesk::HandCard()
 		}
 	}
 
-	//ÅäÖÃÃÅÅÆºÍË÷Òı
+	//é…ç½®é—¨ç‰Œå’Œç´¢å¼•
 	memcpy(m_GameData.m_MenPai.byMenPai, byTempMenPai, sizeof(m_GameData.m_MenPai.byMenPai));
 	m_GameData.m_MenPai.byStartIndex = 0;
 	m_GameData.m_MenPai.byEndIndex = index - 1;
@@ -3503,12 +3503,12 @@ bool CServerGameDesk::HandCard()
 	{
 		m_GameData.m_byNtStation = iNt - 1;
 	}
-	//×¯¼Ò¶àÄÃÒ»ÕÅÅÆ
+	//åº„å®¶å¤šæ‹¿ä¸€å¼ ç‰Œ
 	m_GameData.GetPai(m_GameData.m_byNtStation, true, NULL);
 	return true;
 }
 
-//»ñÈ¡·¿¿¨Êı¾İÏûÏ¢
+//è·å–æˆ¿å¡æ•°æ®æ¶ˆæ¯
 void CServerGameDesk::GetSpecialRule()
 {
 	if (!m_GameData.m_tGameRuler.bAlreadSet)
@@ -3529,12 +3529,12 @@ void CServerGameDesk::GetSpecialRule()
 			}
 		}
 		CString str;
-		str.Format("¹æÔò£º%s\n====[´óºú%d] [±¨Ìı%d] [·çÅÆ%d] [Ö»ÄÜ×ÔÃşºú%d] [×ÔÃş·ÖÊı%d]===",
+		str.Format("è§„åˆ™ï¼š%s\n====[å¤§èƒ¡%d] [æŠ¥å¬%d] [é£ç‰Œ%d] [åªèƒ½è‡ªæ‘¸èƒ¡%d] [è‡ªæ‘¸åˆ†æ•°%d]===",
 			m_szGameRules, m_GameData.m_tGameRuler.bDaHu, m_GameData.m_tGameRuler.bBaoTing,
 			m_GameData.m_tGameRuler.bFenPai, m_GameData.m_tGameRuler.bZhiZiMo, m_GameData.m_tGameRuler.iZiMoScore);
 		GameLog::OutputFile(str);
 
-		//if (IsFriendRoom()) // ½ğ±Ò·¿ÉèÖÃÌßÈËÏÂÏŞ
+		//if (IsFriendRoom()) // é‡‘å¸æˆ¿è®¾ç½®è¸¢äººä¸‹é™
 		//{
 		//	SetRemovePlayerMinPoint(8 * GetBasePoint());
 		//}
@@ -3543,7 +3543,7 @@ void CServerGameDesk::GetSpecialRule()
 	}
 }
 
-//¸ù¾İtagStructGameRulerÉèÖÃÏàÓ¦¹æÔò
+//æ ¹æ®tagStructGameRulerè®¾ç½®ç›¸åº”è§„åˆ™
 void CServerGameDesk::SetSpecialRule()
 {
 	if (m_GameData.m_tGameRuler.bZhiZiMo)
@@ -3559,18 +3559,18 @@ void CServerGameDesk::SetSpecialRule()
 
 	if (m_GameData.m_tGameRuler.bFenPai)
 	{
-		m_GameData.m_mjRule.bHaveHongZhong = 1;			//ÊÇ·ñÓĞºìÖĞ
-		m_GameData.m_mjRule.bHaveFaCai = 1;			//ÊÇ·ñÓĞ·¢²Æ
-		m_GameData.m_mjRule.bHaveBaiBan = 1;			//ÊÇ·ñÓĞ°×°å
-		m_GameData.m_mjRule.bHaveFengPai = 1;			//ÊÇ·ñÓĞ¶«ÄÏÎ÷±±
+		m_GameData.m_mjRule.bHaveHongZhong = 1;			//æ˜¯å¦æœ‰çº¢ä¸­
+		m_GameData.m_mjRule.bHaveFaCai = 1;			//æ˜¯å¦æœ‰å‘è´¢
+		m_GameData.m_mjRule.bHaveBaiBan = 1;			//æ˜¯å¦æœ‰ç™½æ¿
+		m_GameData.m_mjRule.bHaveFengPai = 1;			//æ˜¯å¦æœ‰ä¸œå—è¥¿åŒ—
 		m_GameData.m_mjRule.byAllMjCount = 136;
 	}
 	else
 	{
-		m_GameData.m_mjRule.bHaveHongZhong = 0;			//ÊÇ·ñÓĞºìÖĞ
-		m_GameData.m_mjRule.bHaveFaCai = 0;			//ÊÇ·ñÓĞ·¢²Æ
-		m_GameData.m_mjRule.bHaveBaiBan = 0;			//ÊÇ·ñÓĞ°×°å
-		m_GameData.m_mjRule.bHaveFengPai = 0;			//ÊÇ·ñÓĞ¶«ÄÏÎ÷±±
+		m_GameData.m_mjRule.bHaveHongZhong = 0;			//æ˜¯å¦æœ‰çº¢ä¸­
+		m_GameData.m_mjRule.bHaveFaCai = 0;			//æ˜¯å¦æœ‰å‘è´¢
+		m_GameData.m_mjRule.bHaveBaiBan = 0;			//æ˜¯å¦æœ‰ç™½æ¿
+		m_GameData.m_mjRule.bHaveFengPai = 0;			//æ˜¯å¦æœ‰ä¸œå—è¥¿åŒ—
 		m_GameData.m_mjRule.byAllMjCount = 108;
 	}
 
@@ -3643,20 +3643,20 @@ void CServerGameDesk::SetSpecialRule()
 	}
 }
 
-//×Ô¶¯Ñ¡ÔñÒ»ÕÅÅÆ³ö
+//è‡ªåŠ¨é€‰æ‹©ä¸€å¼ ç‰Œå‡º
 BYTE CServerGameDesk::AutoOutCard(BYTE byStation)
 {
 	BYTE byCard = m_GameData.GetLastHandPai(byStation);
 	CLogicBase::SelectSort(m_GameData.m_byArHandPai[byStation], HAND_CARD_NUM, false);
-	int iCardCount = m_GameData.m_byArHandPaiCount[byStation]; //Íæ¼ÒµÄÓĞĞ§ÊÖÅÆÊıÁ¿
-	//³öÕâÕÅÅÆ¿ÉÒÔÌıÅÆ
+	int iCardCount = m_GameData.m_byArHandPaiCount[byStation]; //ç©å®¶çš„æœ‰æ•ˆæ‰‹ç‰Œæ•°é‡
+	//å‡ºè¿™å¼ ç‰Œå¯ä»¥å¬ç‰Œ
 	BYTE byCanTingCard = 255;
 	if ((byCanTingCard = m_CheckHuData.GetCanTingCard(&m_GameData, byStation)) != 255)
 	{
 		return byCanTingCard;
 	}
 
-	//Ë³×ÓÅĞ¶Ï
+	//é¡ºå­åˆ¤æ–­
 	for (int i = iCardCount - 1; i >= 0; i--)
 	{
 		if (i == 0)
@@ -3694,13 +3694,13 @@ BYTE CServerGameDesk::AutoOutCard(BYTE byStation)
 	return byCard;
 }
 
-//×Ô¶¯¶¯×÷
+//è‡ªåŠ¨åŠ¨ä½œ
 bool CServerGameDesk::AutoCanAction(BYTE byStation, BYTE byActionType)
 {
 	if (byActionType == ACTION_PENG && m_GameData.T_CPGNotify[byStation].bPeng)
 	{
 		CLogicBase::SelectSort(m_GameData.m_byArHandPai[byStation], HAND_CARD_NUM, false);
-		int iCardCount = m_GameData.m_byArHandPaiCount[byStation]; //Íæ¼ÒµÄÓĞĞ§ÊÖÅÆÊıÁ¿
+		int iCardCount = m_GameData.m_byArHandPaiCount[byStation]; //ç©å®¶çš„æœ‰æ•ˆæ‰‹ç‰Œæ•°é‡
 		int iDuiZiCount = 0;
 		for (int i = 0; i < iCardCount - 1;)
 		{
@@ -3770,7 +3770,7 @@ bool CServerGameDesk::AutoCanAction(BYTE byStation, BYTE byActionType)
 	return false;
 }
 
-//·¢ËÍ³öÅÆ³ö´íÏûÏ¢
+//å‘é€å‡ºç‰Œå‡ºé”™æ¶ˆæ¯
 void CServerGameDesk::SendOutCardError(BYTE byDeskStation, int iErrorCode)
 {
 	CMD_S_OutCard_Result rsOutCard;
@@ -3780,7 +3780,7 @@ void CServerGameDesk::SendOutCardError(BYTE byDeskStation, int iErrorCode)
 	//SendWatchData(byDeskStation,&rsOutCard,sizeof(rsOutCard), MSG_MAIN_LOADER_GAME, S_C_OUT_CARD_RESULT, 0);
 }
 
-//³¬¶ËÍæ¼ÒÇëÇó¿´ÃÅÅÆ
+//è¶…ç«¯ç©å®¶è¯·æ±‚çœ‹é—¨ç‰Œ
 bool CServerGameDesk::SuperUserLookMenPai(BYTE byDeskStation, CMD_C_SuperLook *SuperLook)
 {
 	if (m_bSuperFlag[byDeskStation] == false)
@@ -3808,7 +3808,7 @@ bool CServerGameDesk::SuperUserLookMenPai(BYTE byDeskStation, CMD_C_SuperLook *S
 	return true;
 }
 
-//³¬¶ËÍæ¼ÒÇëÇóÒªÅÆ
+//è¶…ç«¯ç©å®¶è¯·æ±‚è¦ç‰Œ
 bool CServerGameDesk::SuperUserChangePai(BYTE byDeskStation, CMD_C_Super_Request_Card *SuperChangeCard)
 {
 	CMD_S_Super_Request_Card_Result ChangeCardResult;
@@ -3821,19 +3821,19 @@ bool CServerGameDesk::SuperUserChangePai(BYTE byDeskStation, CMD_C_Super_Request
 	}
 	BYTE    m_byRemainPaiDate[MAX_REMAIN_MEN_PAI_NUM];
 	memset(m_byRemainPaiDate, 255, sizeof(m_byRemainPaiDate));
-	//»ñµÃÊ£ÓàµÄÃÅÅÆÊı¾İ
+	//è·å¾—å‰©ä½™çš„é—¨ç‰Œæ•°æ®
 	m_GameData.GetRemainMenPai(m_byRemainPaiDate);
-	//¼ì²âÊÇ·ñÃÅÅÆÖĞÊÇ·ñÖ¸¶¨µÄÕâÕÅÅÆ
+	//æ£€æµ‹æ˜¯å¦é—¨ç‰Œä¸­æ˜¯å¦æŒ‡å®šçš„è¿™å¼ ç‰Œ
 	if (m_GameData.IsHaveAMenPai(SuperChangeCard->CardDate) == false)
 	{
 		ChangeCardResult.ECode = 2;
 		SendGameData(byDeskStation, &ChangeCardResult, sizeof(ChangeCardResult), MSG_MAIN_LOADER_GAME, S_C_SUPER_REQUEST_CRAD_RESULT, 0);
-		//ÖØĞÂË¢ĞÂÊ£ÓàÊÖÅÆÊı¾İ
+		//é‡æ–°åˆ·æ–°å‰©ä½™æ‰‹ç‰Œæ•°æ®
 		CMD_C_SuperLook SuperLook;
 		SuperUserLookMenPai(byDeskStation, &SuperLook);
 		return false;
 	}
-	//±£´æÏÂ´Î¸ÃÍæ¼Ò×¥µÄÅÆ
+	//ä¿å­˜ä¸‹æ¬¡è¯¥ç©å®¶æŠ“çš„ç‰Œ
 	m_ChangeCard[byDeskStation] = SuperChangeCard->CardDate;
 	ChangeCardResult.ECode = 0;
 	SendGameData(byDeskStation, &ChangeCardResult, sizeof(ChangeCardResult), MSG_MAIN_LOADER_GAME, S_C_SUPER_REQUEST_CRAD_RESULT, 0);

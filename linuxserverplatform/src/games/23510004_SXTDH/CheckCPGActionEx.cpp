@@ -7,19 +7,19 @@ CheckCPGActionEx::CheckCPGActionEx(void)
 CheckCPGActionEx::~CheckCPGActionEx(void)
 {
 }
-///³õÊ¼»¯Êı¾İ
+///åˆå§‹åŒ–æ•°æ®
 void CheckCPGActionEx::InitData()
 {
 	CheckCPGAction::InitData();
 }
-///ÄÜ·ñÅöÅÆ
+///èƒ½å¦ç¢°ç‰Œ
 bool CheckCPGActionEx::CanPeng(GameDataEx *pGameData, BYTE station, BYTE pai)
 {
 	if (!pGameData->m_mjAction.bPeng)
 	{
 		return false;
 	}
-	if (pGameData->m_mjAction.bQiPeng && pGameData->m_bQiPeng[station]) //´ò³öÀ´²»Åö¡¢×Ô¼º×¥ÅÆÇ°²»×¼Åö
+	if (pGameData->m_mjAction.bQiPeng && pGameData->m_bQiPeng[station]) //æ‰“å‡ºæ¥ä¸ç¢°ã€è‡ªå·±æŠ“ç‰Œå‰ä¸å‡†ç¢°
 	{
 		for (size_t i = 0; i < pGameData->m_vecQiPengCard[station].size(); i++)
 		{
@@ -35,7 +35,7 @@ bool CheckCPGActionEx::CanPeng(GameDataEx *pGameData, BYTE station, BYTE pai)
 	}
 	return false;
 }
-///ÄÜ·ñ¸ÜÅÆ
+///èƒ½å¦æ ç‰Œ
 bool CheckCPGActionEx::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE Result[][2], bool bMe, CheckHuPaiEx *pCheckHuData)
 {
 	if (!pGameData->m_mjAction.bGang)
@@ -43,10 +43,10 @@ bool CheckCPGActionEx::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BY
 		return false;
 	}
 
-	/////////////////////////////¸ÜÅÆ£¬Ìı¿Ú²»ÄÜ±ä/////////////////////////////////////////////
+	/////////////////////////////æ ç‰Œï¼Œå¬å£ä¸èƒ½å˜/////////////////////////////////////////////
 	BYTE byTempHandCard[HAND_CARD_NUM];
 	bool bb = false;
-	if (bMe)//¸Ü×Ô¼ºµÄÅÆ£º°µ¸ÜºÍ²¹¸Ü
+	if (bMe)//æ è‡ªå·±çš„ç‰Œï¼šæš—æ å’Œè¡¥æ 
 	{
 		int temp = 0, index = 0;
 		for (int i = 0;i < HAND_CARD_NUM;i++)
@@ -56,7 +56,7 @@ bool CheckCPGActionEx::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BY
 				temp = pGameData->m_byArHandPai[station][i];
 				memset(byTempHandCard, 255, sizeof(byTempHandCard));
 				pGameData->CopyOneUserHandPai(byTempHandCard, station);
-				if (pGameData->m_bTing[station]) //¼ì²âÌı¿ÚÊÇ·ñ¸Ä±ä
+				if (pGameData->m_bTing[station]) //æ£€æµ‹å¬å£æ˜¯å¦æ”¹å˜
 				{
 					for (int i = 0; i < HAND_CARD_NUM; i++)
 					{
@@ -90,7 +90,7 @@ bool CheckCPGActionEx::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BY
 		}
 		return bb;
 	}
-	else//Ã÷¸Ü
+	else//æ˜æ 
 	{
 		if (pai == 255 || pai == 0)
 			return false;
@@ -98,7 +98,7 @@ bool CheckCPGActionEx::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BY
 		pGameData->CopyOneUserHandPai(byTempHandCard, station);
 		if (pGameData->GetAHandPaiCount(station, pai) >= 3)
 		{
-			if (pGameData->m_bTing[station]) //¼ì²âÌı¿ÚÊÇ·ñ¸Ä±ä
+			if (pGameData->m_bTing[station]) //æ£€æµ‹å¬å£æ˜¯å¦æ”¹å˜
 			{
 				for (int i = 0; i < HAND_CARD_NUM; i++)
 				{
@@ -120,11 +120,11 @@ bool CheckCPGActionEx::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BY
 	return bb;
 
 }
-//¸ÜÅÆËã·Ö,byCardÊÇ¸ÜµÄÅÆ
+//æ ç‰Œç®—åˆ†,byCardæ˜¯æ çš„ç‰Œ
 void CheckCPGActionEx::CountGangFen(GameDataEx *pGameData, int iStation, int iBeStation, BYTE byType)
 {
 	int iShuGang = 0;
-	if (ACTION_AN_GANG == byType)//°µ¸ÜÃ¿¼Ò2·Ö
+	if (ACTION_AN_GANG == byType)//æš—æ æ¯å®¶2åˆ†
 	{
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
@@ -141,7 +141,7 @@ void CheckCPGActionEx::CountGangFen(GameDataEx *pGameData, int iStation, int iBe
 		pGameData->m_iGangScore[iStation] += iShuGang;
 		pGameData->AddToGangFenStruct(iStation, MJ_GANG_FEN_TYPE_AN_GANG, MJ_STATION_ALL_JIA, false, iShuGang);
 	}
-	else if (ACTION_BU_GANG == byType)//²¹¸ÜÃ¿¼Ò1·Ö
+	else if (ACTION_BU_GANG == byType)//è¡¥æ æ¯å®¶1åˆ†
 	{
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
@@ -158,9 +158,9 @@ void CheckCPGActionEx::CountGangFen(GameDataEx *pGameData, int iStation, int iBe
 		pGameData->m_iGangScore[iStation] += iShuGang;
 		pGameData->AddToGangFenStruct(iStation, MJ_GANG_FEN_TYPE_BU_GANG, MJ_STATION_ALL_JIA, false, iShuGang);
 	}
-	else if (ACTION_MING_GANG == byType)//Ã÷¸ÜÒ»¼Ò3·Ö
+	else if (ACTION_MING_GANG == byType)//æ˜æ ä¸€å®¶3åˆ†
 	{
-		if (pGameData->m_bTing[iStation]) //±¨Ìıµã¸Ü£¬Èı¼Ò¶¼³ö·Ö
+		if (pGameData->m_bTing[iStation]) //æŠ¥å¬ç‚¹æ ï¼Œä¸‰å®¶éƒ½å‡ºåˆ†
 		{
 			for (int i = 0;i < PLAY_COUNT;i++)
 			{
@@ -196,18 +196,18 @@ void CheckCPGActionEx::CountGangFen(GameDataEx *pGameData, int iStation, int iBe
 	}
 }
 
-//¸ÜÅÆËã·Ö£º£º±ØĞëÏÈ¼ÆËãºú·Ö£¬²ÅÄÜ¼ÆËã¸Ü·Ö
+//æ ç‰Œç®—åˆ†ï¼šï¼šå¿…é¡»å…ˆè®¡ç®—èƒ¡åˆ†ï¼Œæ‰èƒ½è®¡ç®—æ åˆ†
 void CheckCPGActionEx::CountGangFenEx(GameDataEx *pGameData)
 {
-	//// Í³¼ÆÏûºÄ
-	////WAUTOCOST("CountGangFenEx ºÄÊ±Í³¼Æ");
+	//// ç»Ÿè®¡æ¶ˆè€—
+	////WAUTOCOST("CountGangFenEx è€—æ—¶ç»Ÿè®¡");
 	//memset(pGameData->m_iGangScore,0,sizeof(pGameData->m_iGangScore));
 	//for (int j = 0;j<5;j++)
 	//{
 	//	for(int i=0;i<PLAY_COUNT;i++)
 	//	{
 	//		int iShuGang=0;
-	//		if(ACTION_AN_GANG==pGameData->m_UserGCPData[i][j].byType)//°µ¸ÜÃ¿¼Ò2·Ö
+	//		if(ACTION_AN_GANG==pGameData->m_UserGCPData[i][j].byType)//æš—æ æ¯å®¶2åˆ†
 	//		{
 	//			for(int k=0;k<PLAY_COUNT;k++)
 	//			{
@@ -224,7 +224,7 @@ void CheckCPGActionEx::CountGangFenEx(GameDataEx *pGameData)
 	//			pGameData->m_iGangScore[i]+=iShuGang;
 	//			pGameData->AddToGangFenStruct(i,MJ_GANG_FEN_TYPE_AN_GANG,MJ_STATION_ALL_JIA,iShuGang);
 	//		}
-	//		else if(ACTION_BU_GANG==pGameData->m_UserGCPData[i][j].byType)//²¹¸ÜÃ¿¼Ò1·Ö(Ã÷¸Ü)
+	//		else if(ACTION_BU_GANG==pGameData->m_UserGCPData[i][j].byType)//è¡¥æ æ¯å®¶1åˆ†(æ˜æ )
 	//		{
 	//			for(int k=0;k<PLAY_COUNT;k++)
 	//			{
@@ -241,7 +241,7 @@ void CheckCPGActionEx::CountGangFenEx(GameDataEx *pGameData)
 	//			pGameData->m_iGangScore[i]+=iShuGang;
 	//			pGameData->AddToGangFenStruct(i,MJ_GANG_FEN_TYPE_BU_GANG,MJ_STATION_ALL_JIA,iShuGang);
 	//		}
-	//		else if(ACTION_MING_GANG==pGameData->m_UserGCPData[i][j].byType)//Ã÷¸ÜÒ»¼Ò3·Ö£¨³Ô¸Ü£©
+	//		else if(ACTION_MING_GANG==pGameData->m_UserGCPData[i][j].byType)//æ˜æ ä¸€å®¶3åˆ†ï¼ˆåƒæ ï¼‰
 	//		{
 	//			iShuGang = 3* pGameData->m_mjRule.iGameBase;
 	//			pGameData->m_iGangScore[pGameData->m_UserGCPData[i][j].iBeStation]-=iShuGang;
@@ -255,7 +255,7 @@ void CheckCPGActionEx::CountGangFenEx(GameDataEx *pGameData)
 	//}
 }
 
-//¼õÈ¥ÇÀ¸ÜºúËùµÃ¸Ü·Ö,¼õ²¹¸Ü·Ö
+//å‡å»æŠ¢æ èƒ¡æ‰€å¾—æ åˆ†,å‡è¡¥æ åˆ†
 void CheckCPGActionEx::MinusGangFen(GameDataEx *pGameData, int iStation, int iBeStation)
 {
 	if (pGameData->m_mjRule.bIsSuanGangHu)
@@ -263,7 +263,7 @@ void CheckCPGActionEx::MinusGangFen(GameDataEx *pGameData, int iStation, int iBe
 		return;
 	}
 	int iShuGang = 0;
-	for (int i = 0;i < PLAY_COUNT;i++)//ËãÓ®·Ö
+	for (int i = 0;i < PLAY_COUNT;i++)//ç®—èµ¢åˆ†
 	{
 		int iFen = 0;
 		if (iStation == i)

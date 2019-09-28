@@ -3,40 +3,40 @@
 #include "mj.h"
 #include "../../GameMessage/upgrademessage.h"
 #include "CLogicBase.h"
-#pragma pack(1) //1×Ö½Ú¶ÔÆë 
+#pragma pack(1) //1å­—èŠ‚å¯¹é½ 
 
 /*--------------------------------------------------------------------*/
-///Âé½«³£¹æÊôĞÔ
+///éº»å°†å¸¸è§„å±æ€§
 struct MjRuleSet
 {
-	bool	bHaveWan;			//ÊÇ·ñÓĞÍò		
-	bool	bHaveTiao;			//ÊÇ·ñÓĞÌõ		
-	bool	bHaveBing;			//ÊÇÊÇÓĞ±ú		
-	bool    bHaveHongZhong;		//ÊÇ·ñÓĞºìÖĞ	
-	bool    bHaveFaCai;			//ÊÇ·ñÓĞ·¢²Æ	
-	bool    bHaveBaiBan;		//ÊÇ·ñÓĞ°×°å	
-	bool    bHaveFengPai;		//ÊÇ·ñÓĞ¶«ÄÏÎ÷±±
-	bool    bHaveFlower;		//ÊÇ·ñÓĞ»¨ÅÆ	
-	bool	bHaveJing;			//ÓĞÎŞ²ÆÉñ		
-	bool    bNetCutTuoGuan;		//ÊÇ·ñ¶ÏÏßÍĞ¹Ü
-	bool	bForceTuoGuan;		//ÊÇ·ñÇ¿ÍËÍĞ¹Ü
-	bool	bAutoBegin;			//Ê±¼äµ½ÁËÊÇ·ñ×Ô¶¯¿ªÊ¼	  
-	BYTE    byAllMjCount;		//Âé½«µÄÊıÁ¿ 
-	BYTE	byHandCardNum;		//ÊÖÅÆÕÅÊı
-	BYTE	byGamePassType;		//Á÷¾ÖÊ£ÅÆÁôÏÂ
-	BYTE	byGamePassNum;		//Á÷¾ÖÅÆÊı
-	BYTE	byNextNtType;		//ÏÂ¾Ö×¯¼ÒµÄÈ·¶¨ÀàĞÍ	
-	BYTE    byMenPaiNum[4];		//¸÷¼ÒÃÅÅÆÊı
-	BYTE    byAutoOutTime;		//×Ô¶¯³öÅÆÊ±¼ä	
-	BYTE    byOutTime;			//³öÅÆÊ±¼ä		
-	BYTE    byBlockTime;		//À¹ÅÆË¼¿¼Ê±¼ä	
-	BYTE    byBeginTime;		//¿ªÊ¼µÈ´ıÊ±¼ä	
-	int		iGameBase;			//µ×·Ö
-	bool	bIsDuoXiang;        //ÊÇ·ñÒ»ÅÚ¶àÏì
-	bool	bIsSuanGangHu;      //ÊÇ·ñ¼ÆËãÇÀ¸ÜºúËùµÃ¸Ü·Ö
-	bool    bChaoShiTuoGuan;    //½ğ±Ò³¡³¬Ê±ÍĞ¹Ü
-	bool    bDuanXianTuoGuan;   //·Ç·¿¿¨³¡£¬¶ÏÏßÊÇ·ñÍĞ¹Ü
-	bool	bIsMatchMJ;			//ÊÇ·ñÅäÅÆ
+	bool	bHaveWan;			//æ˜¯å¦æœ‰ä¸‡		
+	bool	bHaveTiao;			//æ˜¯å¦æœ‰æ¡		
+	bool	bHaveBing;			//æ˜¯æ˜¯æœ‰æŸ„		
+	bool    bHaveHongZhong;		//æ˜¯å¦æœ‰çº¢ä¸­	
+	bool    bHaveFaCai;			//æ˜¯å¦æœ‰å‘è´¢	
+	bool    bHaveBaiBan;		//æ˜¯å¦æœ‰ç™½æ¿	
+	bool    bHaveFengPai;		//æ˜¯å¦æœ‰ä¸œå—è¥¿åŒ—
+	bool    bHaveFlower;		//æ˜¯å¦æœ‰èŠ±ç‰Œ	
+	bool	bHaveJing;			//æœ‰æ— è´¢ç¥		
+	bool    bNetCutTuoGuan;		//æ˜¯å¦æ–­çº¿æ‰˜ç®¡
+	bool	bForceTuoGuan;		//æ˜¯å¦å¼ºé€€æ‰˜ç®¡
+	bool	bAutoBegin;			//æ—¶é—´åˆ°äº†æ˜¯å¦è‡ªåŠ¨å¼€å§‹	  
+	BYTE    byAllMjCount;		//éº»å°†çš„æ•°é‡ 
+	BYTE	byHandCardNum;		//æ‰‹ç‰Œå¼ æ•°
+	BYTE	byGamePassType;		//æµå±€å‰©ç‰Œç•™ä¸‹
+	BYTE	byGamePassNum;		//æµå±€ç‰Œæ•°
+	BYTE	byNextNtType;		//ä¸‹å±€åº„å®¶çš„ç¡®å®šç±»å‹	
+	BYTE    byMenPaiNum[4];		//å„å®¶é—¨ç‰Œæ•°
+	BYTE    byAutoOutTime;		//è‡ªåŠ¨å‡ºç‰Œæ—¶é—´	
+	BYTE    byOutTime;			//å‡ºç‰Œæ—¶é—´		
+	BYTE    byBlockTime;		//æ‹¦ç‰Œæ€è€ƒæ—¶é—´	
+	BYTE    byBeginTime;		//å¼€å§‹ç­‰å¾…æ—¶é—´	
+	int		iGameBase;			//åº•åˆ†
+	bool	bIsDuoXiang;        //æ˜¯å¦ä¸€ç‚®å¤šå“
+	bool	bIsSuanGangHu;      //æ˜¯å¦è®¡ç®—æŠ¢æ èƒ¡æ‰€å¾—æ åˆ†
+	bool    bChaoShiTuoGuan;    //é‡‘å¸åœºè¶…æ—¶æ‰˜ç®¡
+	bool    bDuanXianTuoGuan;   //éæˆ¿å¡åœºï¼Œæ–­çº¿æ˜¯å¦æ‰˜ç®¡
+	bool	bIsMatchMJ;			//æ˜¯å¦é…ç‰Œ
 	MjRuleSet()
 	{
 		memset(this, 0, sizeof(MjRuleSet));
@@ -44,39 +44,39 @@ struct MjRuleSet
 
 };
 /*--------------------------------------------------------------------*/
-///¶¯×÷ÊôĞÔ
+///åŠ¨ä½œå±æ€§
 struct ActionRuleSet
 {
-	bool bChi;			//³Ô
-	bool bChiFeng;		//³Ô·çÅÆ
-	bool bChiJian;		//³ÔÖĞ·¢°×
-	bool bChiJing;		//³Ô²ÆÉñ
-	bool bPeng;			//Åö
-	bool bKan;			//¿²
-	bool bGang;			//¸Ü
-	bool bBuGang;		//²¹¸Ü
-	bool bTing;			//Ìı
-	bool bQiangChi;		//ÇÀ³Ô(³ÔºóÌıÅÆ)
-	bool bGangAfterTing;//ÌıÅÆºó»¹ÄÜ¸ÜÅÆ
-	bool bSeziAfterGang;//¸Üºó´òÉ«×Ó×¥ÅÆ
-	bool bQxHh;			//²»ÄÜÆúÏÈºıºó£¨Ò»È¦ÄÚ£©
-	bool bQiPeng;       //ÆúÅö²»ÄÜÅö(Ò»È¦ÄÚ)
-	bool bQxHhBut;		//²»ÄÜÆúÏÈºıºó£¨Ò»È¦ÄÚ£©£¬ºı²»Í¬µÄÅÆ¿ÉÒÔ£¬ºıµÃ¸ü´ó¿ÉÒÔ
-	bool bOutLianZhang;	//³ÔÅÆºó²»ÄÜ³öÁ¬ÕÅ£¨³öµÄÅÆ²»ÄÜÓë³ÔÅÆÖĞ×Ô¼ºµÄÁ½ÕÅÅÆ×é³ÉË³×Ó£©
-	bool bQiangGangHu;	//ÇÀ¸Üºú
-	bool bFangPao;		//ÊÇ·ñÄÜµãÅÚ
-	bool bZiMo;			//ÊÇ·ñÄÜ×ÔÃş
-	bool bBuHua;        //ÊÇ·ñĞèÒª²¹»¨
+	bool bChi;			//åƒ
+	bool bChiFeng;		//åƒé£ç‰Œ
+	bool bChiJian;		//åƒä¸­å‘ç™½
+	bool bChiJing;		//åƒè´¢ç¥
+	bool bPeng;			//ç¢°
+	bool bKan;			//å
+	bool bGang;			//æ 
+	bool bBuGang;		//è¡¥æ 
+	bool bTing;			//å¬
+	bool bQiangChi;		//æŠ¢åƒ(åƒåå¬ç‰Œ)
+	bool bGangAfterTing;//å¬ç‰Œåè¿˜èƒ½æ ç‰Œ
+	bool bSeziAfterGang;//æ åæ‰“è‰²å­æŠ“ç‰Œ
+	bool bQxHh;			//ä¸èƒ½å¼ƒå…ˆç³Šåï¼ˆä¸€åœˆå†…ï¼‰
+	bool bQiPeng;       //å¼ƒç¢°ä¸èƒ½ç¢°(ä¸€åœˆå†…)
+	bool bQxHhBut;		//ä¸èƒ½å¼ƒå…ˆç³Šåï¼ˆä¸€åœˆå†…ï¼‰ï¼Œç³Šä¸åŒçš„ç‰Œå¯ä»¥ï¼Œç³Šå¾—æ›´å¤§å¯ä»¥
+	bool bOutLianZhang;	//åƒç‰Œåä¸èƒ½å‡ºè¿å¼ ï¼ˆå‡ºçš„ç‰Œä¸èƒ½ä¸åƒç‰Œä¸­è‡ªå·±çš„ä¸¤å¼ ç‰Œç»„æˆé¡ºå­ï¼‰
+	bool bQiangGangHu;	//æŠ¢æ èƒ¡
+	bool bFangPao;		//æ˜¯å¦èƒ½ç‚¹ç‚®
+	bool bZiMo;			//æ˜¯å¦èƒ½è‡ªæ‘¸
+	bool bBuHua;        //æ˜¯å¦éœ€è¦è¡¥èŠ±
 	ActionRuleSet()
 	{
 		memset(this, 0, sizeof(ActionRuleSet));
 	}
 };
 
-///ºıÅÆ¼ì²âÁÙÊ±Êı¾İ
+///ç³Šç‰Œæ£€æµ‹ä¸´æ—¶æ•°æ®
 struct CheckHuStruct
 {
-	BYTE  data[HAND_CARD_NUM][2];   //ÅÆÊı¾İ£¬0ÅÆÖµ£¬1ÕÅÊı
+	BYTE  data[HAND_CARD_NUM][2];   //ç‰Œæ•°æ®ï¼Œ0ç‰Œå€¼ï¼Œ1å¼ æ•°
 	BYTE  count;
 	CheckHuStruct()
 	{
@@ -143,13 +143,13 @@ struct CheckHuStruct
 	}
 };
 
-///Æ½ºı×éÅÆÊı¾İ½á¹¹
+///å¹³ç³Šç»„ç‰Œæ•°æ®ç»“æ„
 struct PingHuStruct
 {
-	BYTE  byType[6];    //×éÅÆÀàĞÍ
-	BYTE  data[6][4];   //Êı¾İ
-	bool  isjing[6][4];//ÊÇ·ñ²ÆÉñÌæ´ú
-	BYTE  count;        //½ÚµãÊı
+	BYTE  byType[6];    //ç»„ç‰Œç±»å‹
+	BYTE  data[6][4];   //æ•°æ®
+	bool  isjing[6][4];//æ˜¯å¦è´¢ç¥æ›¿ä»£
+	BYTE  count;        //èŠ‚ç‚¹æ•°
 	PingHuStruct()
 	{
 		Init();
@@ -175,7 +175,7 @@ struct PingHuStruct
 			}
 		}
 	};
-	void DeleteData(BYTE type, BYTE pai[], bool jing[])//É¾³ıÔªËØ
+	void DeleteData(BYTE type, BYTE pai[], bool jing[])//åˆ é™¤å…ƒç´ 
 	{
 		for (int i = 0;i < 6;i++)
 		{
@@ -198,8 +198,8 @@ struct PingHuStruct
 			for (int j = i;j < 5;j++)
 			{
 				byType[j] = byType[j + 1];
-				memcpy(data[j], data[j + 1], sizeof(data[j]));//Êı¾İ
-				memcpy(isjing[j], isjing[j + 1], sizeof(isjing[j]));//ÊÇ·ñ²ÆÉñÌæ´ú
+				memcpy(data[j], data[j + 1], sizeof(data[j]));//æ•°æ®
+				memcpy(isjing[j], isjing[j + 1], sizeof(isjing[j]));//æ˜¯å¦è´¢ç¥æ›¿ä»£
 			}
 		}
 		count = 0;
@@ -211,11 +211,11 @@ struct PingHuStruct
 	};
 };
 
-///²ÆÉñÊı¾İ½á¹¹
+///è´¢ç¥æ•°æ®ç»“æ„
 struct JingStruct
 {
-	BYTE  byPai[MAX_JING_PAI_NUM]; //Ã¿ÕÅ¾«ÅÆµÄÅÆÖµ
-	BYTE  byJingNum;               //¾«ÅÆÖÖÀàÕÅÊı
+	BYTE  byPai[MAX_JING_PAI_NUM]; //æ¯å¼ ç²¾ç‰Œçš„ç‰Œå€¼
+	BYTE  byJingNum;               //ç²¾ç‰Œç§ç±»å¼ æ•°
 	BYTE  byJingGen;
 	JingStruct()
 	{
@@ -248,7 +248,7 @@ struct JingStruct
 		}
 		for (int i = 0;i < MAX_JING_PAI_NUM;i++)
 		{
-			if (byPai[i] != 255 && byPai[i] == pai) //ÒÑ¾­ÓĞÕâÖÖ¾«ÅÆÁË
+			if (byPai[i] != 255 && byPai[i] == pai) //å·²ç»æœ‰è¿™ç§ç²¾ç‰Œäº†
 			{
 				return false;
 			}
@@ -274,28 +274,28 @@ struct JingStruct
 		}
 		return false;
 	}
-	void Sort()//´ÓĞ¡µ½´óÅÅĞò
+	void Sort()//ä»å°åˆ°å¤§æ’åº
 	{
 		CLogicBase::SelectSort(byPai, MAX_JING_PAI_NUM, false);
 	}
 };
 
-//Âé½«ÅÆ£º¸÷¼ÒÃÅÅÆ£¬·­¾«µã£¬µ±Ç°ÄÃÅÆ·½Ïò
+//éº»å°†ç‰Œï¼šå„å®¶é—¨ç‰Œï¼Œç¿»ç²¾ç‚¹ï¼Œå½“å‰æ‹¿ç‰Œæ–¹å‘
 struct MjMenPaiData
 {
-	BYTE    byMenPai[MAX_MJ_PAI_COUNT];				//Âé½«µÄÊıÁ¿£¬Íæ¼Ò¸öÊı£¬ÃÅÅÆ×î´ó¶ØÊı£¬Ã¿¶ØÉÏÏÂ2ÕÅÅÆ 
-	BYTE    byNt;						//×¯¼ÒÎ»ÖÃ
-	BYTE	byStation;					//µ±Ç°×¥ÅÆÍæ¼ÒµÄÎ»ÖÃ
-	BYTE	byDir;						//µ±Ç°×¥ÅÆ·½Ïò(×¥ÄÇ¸öÍæ¼ÒÃÅÇ°µÄÅÆ)
-	BYTE	byGetPaiDir;				//±¾¾ÖÆğÅÆ·½Ïò
-	BYTE	byRemainDun;				//Ê£Óà¶ØÊı
-	BYTE	byGetPai;				    //ÆğÅÆ¶ØÊı
-	BYTE    byMenPaiDun[PLAY_COUNT];	//Ã¿¸öÍæ¼ÒÃÅÇ°µÄ¶ØÊı
-	BYTE    byStartIndex;				//ÃÅÅÆÆğÊ¼Ë÷Òı		
-	BYTE    byEndIndex;				    //ÃÅÅÆ½áÊøË÷Òı		
-	BYTE    byCaiShenIndex;				//²ÆÉñÎ»ÖÃË÷Òı		
-	BYTE    byAllPaiNum;				//ËùÓĞÅÆµÄÊıÁ¿
-	BYTE    byPaiNum;                   //ÃÅÅÆÊıÁ¿
+	BYTE    byMenPai[MAX_MJ_PAI_COUNT];				//éº»å°†çš„æ•°é‡ï¼Œç©å®¶ä¸ªæ•°ï¼Œé—¨ç‰Œæœ€å¤§æ•¦æ•°ï¼Œæ¯æ•¦ä¸Šä¸‹2å¼ ç‰Œ 
+	BYTE    byNt;						//åº„å®¶ä½ç½®
+	BYTE	byStation;					//å½“å‰æŠ“ç‰Œç©å®¶çš„ä½ç½®
+	BYTE	byDir;						//å½“å‰æŠ“ç‰Œæ–¹å‘(æŠ“é‚£ä¸ªç©å®¶é—¨å‰çš„ç‰Œ)
+	BYTE	byGetPaiDir;				//æœ¬å±€èµ·ç‰Œæ–¹å‘
+	BYTE	byRemainDun;				//å‰©ä½™æ•¦æ•°
+	BYTE	byGetPai;				    //èµ·ç‰Œæ•¦æ•°
+	BYTE    byMenPaiDun[PLAY_COUNT];	//æ¯ä¸ªç©å®¶é—¨å‰çš„æ•¦æ•°
+	BYTE    byStartIndex;				//é—¨ç‰Œèµ·å§‹ç´¢å¼•		
+	BYTE    byEndIndex;				    //é—¨ç‰Œç»“æŸç´¢å¼•		
+	BYTE    byCaiShenIndex;				//è´¢ç¥ä½ç½®ç´¢å¼•		
+	BYTE    byAllPaiNum;				//æ‰€æœ‰ç‰Œçš„æ•°é‡
+	BYTE    byPaiNum;                   //é—¨ç‰Œæ•°é‡
 	MjMenPaiData()
 	{
 		Init();
@@ -303,17 +303,17 @@ struct MjMenPaiData
 	void Init()
 	{
 		memset(byMenPai, 255, sizeof(byMenPai));
-		memset(byMenPaiDun, 0, sizeof(byMenPaiDun));//Íæ¼ÒÃÅÇ°µÄ¶ØÊı
-		byNt = 255;						//×¯¼ÒÎ»ÖÃ
-		byStation = 255;					//µ±Ç°×¥ÅÆÍæ¼ÒµÄÎ»ÖÃ
-		byDir = 255;						//µ±Ç°×¥ÅÆ·½Ïò(×¥ÄÇ¸öÍæ¼ÒÃÅÇ°µÄÅÆ)
-		byGetPaiDir = 255;				//±¾¾ÖÆğÅÆ·½Ïò
-		byRemainDun = 255;				//Ê£Óà¶ØÊı
-		byGetPai = 255;				    //ÆğÅÆ¶ØÊı
-		byStartIndex = 255;				//ÃÅÅÆÆğÊ¼Ë÷Òı
-		byEndIndex = 255;				    //ÃÅÅÆ½áÊøË÷Òı
-		byAllPaiNum = 0;				    //ËùÓĞÅÆµÄÊıÁ¿
-		byCaiShenIndex = 255;				//²ÆÉñÎ»ÖÃË÷Òı
+		memset(byMenPaiDun, 0, sizeof(byMenPaiDun));//ç©å®¶é—¨å‰çš„æ•¦æ•°
+		byNt = 255;						//åº„å®¶ä½ç½®
+		byStation = 255;					//å½“å‰æŠ“ç‰Œç©å®¶çš„ä½ç½®
+		byDir = 255;						//å½“å‰æŠ“ç‰Œæ–¹å‘(æŠ“é‚£ä¸ªç©å®¶é—¨å‰çš„ç‰Œ)
+		byGetPaiDir = 255;				//æœ¬å±€èµ·ç‰Œæ–¹å‘
+		byRemainDun = 255;				//å‰©ä½™æ•¦æ•°
+		byGetPai = 255;				    //èµ·ç‰Œæ•¦æ•°
+		byStartIndex = 255;				//é—¨ç‰Œèµ·å§‹ç´¢å¼•
+		byEndIndex = 255;				    //é—¨ç‰Œç»“æŸç´¢å¼•
+		byAllPaiNum = 0;				    //æ‰€æœ‰ç‰Œçš„æ•°é‡
+		byCaiShenIndex = 255;				//è´¢ç¥ä½ç½®ç´¢å¼•
 		byPaiNum = 0;
 	};
 	BYTE GetMenPaiNum()
@@ -358,7 +358,7 @@ struct MjMenPaiData
 		}
 		return false;
 	};
-	bool ChangAnMenPai(BYTE oldpai, BYTE newpai)// ÃÅÅÆÖĞÒª±»»»µÄÅÆ oldpai,»»À´µÄĞÂÅÆ newpai
+	bool ChangAnMenPai(BYTE oldpai, BYTE newpai)// é—¨ç‰Œä¸­è¦è¢«æ¢çš„ç‰Œ oldpai,æ¢æ¥çš„æ–°ç‰Œ newpai
 	{
 		if (oldpai == 255 || newpai == 255)
 			return false;
@@ -366,7 +366,7 @@ struct MjMenPaiData
 		{
 			if (byMenPai[i] == oldpai)
 			{
-				byMenPai[i] = newpai;//»»ÅÆ³É¹¦
+				byMenPai[i] = newpai;//æ¢ç‰ŒæˆåŠŸ
 				return true;
 			}
 		}
@@ -375,44 +375,44 @@ struct MjMenPaiData
 };
 
 /*----------------------------------------------------------------*/
-///×¥ÅÆÅÆÊÂ¼ş
+///æŠ“ç‰Œç‰Œäº‹ä»¶
 struct	tagZhuaPai
 {
-	BYTE	byUser;		//×¥ÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byPs;		//×¥ÅÆµÄÖµ
-	BYTE	byGetPaiIndex;//×¥ÅÆµÄË÷Òı
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//ÊÖÅÆÕÅÊı
-	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];//³öÅÆ²»³¬¹ı40ÕÅ£¬0Îª½áÊø±êÖ¾
-	BYTE	byMenPai[4][MEN_CARD_NUM];//ÃÅÅÆ
-	BYTE	m_byArHuaPai[PLAY_COUNT][HUA_CARD_NUM];//Íæ¼Ò»¨ÅÆ
+	BYTE	byUser;		//æŠ“ç‰Œç©å®¶ä½ç½®
+	BYTE	byPs;		//æŠ“ç‰Œçš„å€¼
+	BYTE	byGetPaiIndex;//æŠ“ç‰Œçš„ç´¢å¼•
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//æ‰‹ç‰Œå¼ æ•°
+	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];//å‡ºç‰Œä¸è¶…è¿‡40å¼ ï¼Œ0ä¸ºç»“æŸæ ‡å¿—
+	BYTE	byMenPai[4][MEN_CARD_NUM];//é—¨ç‰Œ
+	BYTE	m_byArHuaPai[PLAY_COUNT][HUA_CARD_NUM];//ç©å®¶èŠ±ç‰Œ
 	tagZhuaPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;		//×¥ÅÆÍæ¼ÒÎ»ÖÃ
-		byPs = 255;		//×¥ÅÆµÄÖµ
-		byGetPaiIndex = 255;//×¥ÅÆµÄË÷Òı
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));	//ÊÖÅÆÕÅÊı
-		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//³öÅÆÊı¾İ
-		memset(byMenPai, 255, sizeof(byMenPai));	//ÃÅÅÆ
-		memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));	//»¨ÅÆ
+		byUser = 255;		//æŠ“ç‰Œç©å®¶ä½ç½®
+		byPs = 255;		//æŠ“ç‰Œçš„å€¼
+		byGetPaiIndex = 255;//æŠ“ç‰Œçš„ç´¢å¼•
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));	//æ‰‹ç‰Œå¼ æ•°
+		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//å‡ºç‰Œæ•°æ®
+		memset(byMenPai, 255, sizeof(byMenPai));	//é—¨ç‰Œ
+		memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));	//èŠ±ç‰Œ
 	}
 };
 /*----------------------------------------------------------------*/
-///µ¥¸öÍæ¼Ò²¹»¨ÊÂ¼ş
+///å•ä¸ªç©å®¶è¡¥èŠ±äº‹ä»¶
 struct tagOneBuHua
 {
-	bool	bFinish;//ÊÇ·ñ²¹»¨½áÊø
-	BYTE	byUser;		//²¹»¨Íæ¼ÒÎ»ÖÃ
-	BYTE	byHua;		//×¥µ½µÃ»¨ÅÆ
-	BYTE	byPs;		//²¹»¨µÄÅÆ
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//ÊÖÅÆÕÅÊı
-	BYTE	byMenPai[4][MEN_CARD_NUM];//ÃÅÅÆ
+	bool	bFinish;//æ˜¯å¦è¡¥èŠ±ç»“æŸ
+	BYTE	byUser;		//è¡¥èŠ±ç©å®¶ä½ç½®
+	BYTE	byHua;		//æŠ“åˆ°å¾—èŠ±ç‰Œ
+	BYTE	byPs;		//è¡¥èŠ±çš„ç‰Œ
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//æ‰‹ç‰Œå¼ æ•°
+	BYTE	byMenPai[4][MEN_CARD_NUM];//é—¨ç‰Œ
 	BYTE	m_byArHuaPai[PLAY_COUNT][HUA_CARD_NUM];
 	tagOneBuHua()
 	{
@@ -420,60 +420,60 @@ struct tagOneBuHua
 	}
 	void Init()
 	{
-		byUser = 255;//²¹»¨Íæ¼ÒÎ»ÖÃ
-		byHua = 255;	  //×¥µ½µÃ»¨ÅÆ
-		byPs = 255;	  //²¹»¨µÄÅÆ
-		memset(byMenPai, 255, sizeof(byMenPai));	//ÃÅÅÆ
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));	//ÊÖÅÆÕÅÊı
-		memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));//»¨ÅÆÊı¾İ
+		byUser = 255;//è¡¥èŠ±ç©å®¶ä½ç½®
+		byHua = 255;	  //æŠ“åˆ°å¾—èŠ±ç‰Œ
+		byPs = 255;	  //è¡¥èŠ±çš„ç‰Œ
+		memset(byMenPai, 255, sizeof(byMenPai));	//é—¨ç‰Œ
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));	//æ‰‹ç‰Œå¼ æ•°
+		memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));//èŠ±ç‰Œæ•°æ®
 		bFinish = false;
 	}
 };
 /*----------------------------------------------------------------*/
-///ÖÀ2¿ÅÉ«×ÓÈ·¶¨ÆğÅÆÎ»ÖÃ£¨µãÊıºÍ£©ºÍÆğÅÆµã£¨×îĞ¡µã£©ÊÂ¼ş	
+///æ·2é¢—è‰²å­ç¡®å®šèµ·ç‰Œä½ç½®ï¼ˆç‚¹æ•°å’Œï¼‰å’Œèµ·ç‰Œç‚¹ï¼ˆæœ€å°ç‚¹ï¼‰äº‹ä»¶	
 struct	tagTwoSeziDirAndGetPai
 {
-	BYTE	byUser;		//ÖÀÉ«×ÓÍæ¼Ò
-	BYTE	bySezi0;	//É«×Ó0Êı¾İ
-	BYTE	bySezi1;	//É«×Ó1Êı¾İ
+	BYTE	byUser;		//æ·è‰²å­ç©å®¶
+	BYTE	bySezi0;	//è‰²å­0æ•°æ®
+	BYTE	bySezi1;	//è‰²å­1æ•°æ®
 	tagTwoSeziDirAndGetPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;	//ÖÀÉ«×ÓÍæ¼Ò
-		bySezi0 = 255;	//É«×Ó0Êı¾İ
-		bySezi1 = 255;	//É«×Ó1Êı¾İ
+		byUser = 255;	//æ·è‰²å­ç©å®¶
+		bySezi0 = 255;	//è‰²å­0æ•°æ®
+		bySezi1 = 255;	//è‰²å­1æ•°æ®
 	}
 };
 
 /*----------------------------------------------------------------*/
-///·¢ÅÆÊÂ¼ş
+///å‘ç‰Œäº‹ä»¶
 struct	tagSendPai
 {
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];		//Íæ¼ÒÊÖÅÆÕÅÊı
-	BYTE	byMenPai[4][MEN_CARD_NUM];//ÃÅÅÆ
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];		//ç©å®¶æ‰‹ç‰Œå¼ æ•°
+	BYTE	byMenPai[4][MEN_CARD_NUM];//é—¨ç‰Œ
 	tagSendPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//ÊÖÅÆÕÅÊı
-		memset(byMenPai, 255, sizeof(byMenPai));	//ÃÅÅÆ
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//æ‰‹ç‰Œå¼ æ•°
+		memset(byMenPai, 255, sizeof(byMenPai));	//é—¨ç‰Œ
 	}
 };
 /*----------------------------------------------------------------*/
-///ËùÓĞÍæ¼Ò²¹»¨ÊÂ¼ş
+///æ‰€æœ‰ç©å®¶è¡¥èŠ±äº‹ä»¶
 struct	tagAllBuHua
 {
-	BYTE byBeiBuCard[PLAY_COUNT][MAX_MJ_HUA_NUM];//±»²¹µÄ»¨ÅÆ
-	BYTE byBuCard[PLAY_COUNT][MAX_MJ_HUA_NUM];   //²¹µÄ·Ç»¨ÅÆ
-	int iBuCount[PLAY_COUNT];//²¹ÅÆÊıÁ¿
+	BYTE byBeiBuCard[PLAY_COUNT][MAX_MJ_HUA_NUM];//è¢«è¡¥çš„èŠ±ç‰Œ
+	BYTE byBuCard[PLAY_COUNT][MAX_MJ_HUA_NUM];   //è¡¥çš„éèŠ±ç‰Œ
+	int iBuCount[PLAY_COUNT];//è¡¥ç‰Œæ•°é‡
 	tagAllBuHua()
 	{
 		Init();
@@ -487,122 +487,122 @@ struct	tagAllBuHua
 };
 
 /*----------------------------------------------------------------*/
-///³ÔÅö¸ÜºıÍ¨ÖªÊÂ¼şÊÂ¼ş
+///åƒç¢°æ ç³Šé€šçŸ¥äº‹ä»¶äº‹ä»¶
 struct	tagCPGNotifyMes
 {
-	bool	bZhuaPai;			//±ê¼ÇÊÇ×¥ÅÆºóÓĞ¶¯×÷(¿Í»§¶ËÓÃÓÚÏÔÊ¾µ¹¼ÆÊ±Ê±¼äµÄ)
-	bool	bChi;				//ÊÇ·ñÄÜ³Ô
-	bool	bPeng;				//ÊÇ·ñÄÜÅö
-	bool	bGang;				//ÊÇ·ñÄÜ¸Ü
-	bool	bKan;				//ÊÇ·ñÄÜ¿²ÅÆ
-	bool	bSaoHu;				//µ±Ç°ÄÜ·ñÉ¨»¢
-	bool	bTing;				//µ±Ç°ÄÜ·ñÌıÅÆ
-	bool	bHu;				//ÊÇ·ñÄÜºı
-	bool    bHaveReturn;		//¿Í»§¶ËÊÇ·ñ·µ»ØµÄÓÃ»§Ñ¡Ôñ
-	bool    bCanAction;			//Íæ¼ÒÊÇ·ñÓĞ¶¯×÷¿É×ö
-	bool    bCanChi[3];			//Í·ÖĞÎ²ÄÜ¹»³Ô
-	BYTE    byPeng;				//ÄÜÅöµÄÅÆ
-	BYTE	byChi[3][3];		//ÄÜ³ÔµÄÅÆ
-	BYTE	iGangData[4][2];	//ÄÜ¸ÜµÄÅÆ	
-	BYTE	byTingCanOut[HAND_CARD_NUM];//ÌıÅÆÄÜ´òµÄÅÆ
-	BYTE    byMaxThing;					//Íæ¼ÒÄÜ×öµÄ×î´ó¶¯×÷
-	BYTE	byHuType[MAX_HUPAI_TYPE];	//ºıÅÆÀàĞÍ
-	BYTE    iHuPs;				//Íæ¼ÒºúµÄÅÆ
-	BYTE	byHu;			    //ºúÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE    byFangPao;	  	    //·ÅÍæ¼ÒÎ»ÖÃ
-	BYTE	byBlockTime;		//À¹ÅÆÊ±¼ä	
-	BYTE	byUser;				//³öÅÆÎ»ÖÃ
-	BYTE	byPs;				//³öÅÆµÄÖµ
+	bool	bZhuaPai;			//æ ‡è®°æ˜¯æŠ“ç‰Œåæœ‰åŠ¨ä½œ(å®¢æˆ·ç«¯ç”¨äºæ˜¾ç¤ºå€’è®¡æ—¶æ—¶é—´çš„)
+	bool	bChi;				//æ˜¯å¦èƒ½åƒ
+	bool	bPeng;				//æ˜¯å¦èƒ½ç¢°
+	bool	bGang;				//æ˜¯å¦èƒ½æ 
+	bool	bKan;				//æ˜¯å¦èƒ½åç‰Œ
+	bool	bSaoHu;				//å½“å‰èƒ½å¦æ‰«è™
+	bool	bTing;				//å½“å‰èƒ½å¦å¬ç‰Œ
+	bool	bHu;				//æ˜¯å¦èƒ½ç³Š
+	bool    bHaveReturn;		//å®¢æˆ·ç«¯æ˜¯å¦è¿”å›çš„ç”¨æˆ·é€‰æ‹©
+	bool    bCanAction;			//ç©å®¶æ˜¯å¦æœ‰åŠ¨ä½œå¯åš
+	bool    bCanChi[3];			//å¤´ä¸­å°¾èƒ½å¤Ÿåƒ
+	BYTE    byPeng;				//èƒ½ç¢°çš„ç‰Œ
+	BYTE	byChi[3][3];		//èƒ½åƒçš„ç‰Œ
+	BYTE	iGangData[4][2];	//èƒ½æ çš„ç‰Œ	
+	BYTE	byTingCanOut[HAND_CARD_NUM];//å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
+	BYTE    byMaxThing;					//ç©å®¶èƒ½åšçš„æœ€å¤§åŠ¨ä½œ
+	BYTE	byHuType[MAX_HUPAI_TYPE];	//ç³Šç‰Œç±»å‹
+	BYTE    iHuPs;				//ç©å®¶èƒ¡çš„ç‰Œ
+	BYTE	byHu;			    //èƒ¡ç‰Œç©å®¶ä½ç½®
+	BYTE    byFangPao;	  	    //æ”¾ç©å®¶ä½ç½®
+	BYTE	byBlockTime;		//æ‹¦ç‰Œæ—¶é—´	
+	BYTE	byUser;				//å‡ºç‰Œä½ç½®
+	BYTE	byPs;				//å‡ºç‰Œçš„å€¼
 	tagCPGNotifyMes()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;			//³öÅÆÍæ¼ÒÎ»ÖÃ
-		byPs = 255;			//³öÅÆµÄÖµ
-		byBlockTime = 255;		//À¹ÅÆË¼¿¼Ê±¼ä
-		bZhuaPai = false;			//ÊÇ·ñ×Ô¼º×¥ÅÆ
-		bChi = 0;				//ÊÇ·ñÄÜ³Ô
-		bPeng = 0;				//ÊÇ·ñÄÜÅö
-		bGang = 0;				//ÊÇ·ñÄÜ¸Ü
-		bKan = 0;				//ÊÇ·ñÄÜ¿²ÅÆ
-		bSaoHu = 0;				//µ±Ç°ÄÜ·ñÉ¨»¢
-		bTing = 0;				//µ±Ç°ÄÜ·ñÌıÅÆ
-		bHu = 0;				//ÊÇ·ñÄÜºı
-		bCanAction = false;		//Íæ¼ÒÊÇ·ñÓĞ¶¯×÷¿É×ö
-		byMaxThing = ACTION_NO;//Íæ¼ÒÄÜ×öµÄ×î´ó¶¯×÷
-		bHaveReturn = false;		//¿Í»§¶ËÊÇ·ñ·µ»ØµÄÓÃ»§Ñ¡Ôñ
-		memset(byChi, 255, sizeof(byChi));//ÄÜ³ÔµÄÅÆ
-		memset(iGangData, 255, sizeof(iGangData));//ÄÜ¸ÜµÄÅÆ	
-		memset(byTingCanOut, 255, sizeof(byTingCanOut));///ÌıÅÆÄÜ´òµÄÅÆ
-		memset(byHuType, 255, sizeof(byHuType));///ºıÅÆÀàĞÍ
-		iHuPs = 255;///Íæ¼ÒºúµÄÅÆ
+		byUser = 255;			//å‡ºç‰Œç©å®¶ä½ç½®
+		byPs = 255;			//å‡ºç‰Œçš„å€¼
+		byBlockTime = 255;		//æ‹¦ç‰Œæ€è€ƒæ—¶é—´
+		bZhuaPai = false;			//æ˜¯å¦è‡ªå·±æŠ“ç‰Œ
+		bChi = 0;				//æ˜¯å¦èƒ½åƒ
+		bPeng = 0;				//æ˜¯å¦èƒ½ç¢°
+		bGang = 0;				//æ˜¯å¦èƒ½æ 
+		bKan = 0;				//æ˜¯å¦èƒ½åç‰Œ
+		bSaoHu = 0;				//å½“å‰èƒ½å¦æ‰«è™
+		bTing = 0;				//å½“å‰èƒ½å¦å¬ç‰Œ
+		bHu = 0;				//æ˜¯å¦èƒ½ç³Š
+		bCanAction = false;		//ç©å®¶æ˜¯å¦æœ‰åŠ¨ä½œå¯åš
+		byMaxThing = ACTION_NO;//ç©å®¶èƒ½åšçš„æœ€å¤§åŠ¨ä½œ
+		bHaveReturn = false;		//å®¢æˆ·ç«¯æ˜¯å¦è¿”å›çš„ç”¨æˆ·é€‰æ‹©
+		memset(byChi, 255, sizeof(byChi));//èƒ½åƒçš„ç‰Œ
+		memset(iGangData, 255, sizeof(iGangData));//èƒ½æ çš„ç‰Œ	
+		memset(byTingCanOut, 255, sizeof(byTingCanOut));///å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
+		memset(byHuType, 255, sizeof(byHuType));///ç³Šç‰Œç±»å‹
+		iHuPs = 255;///ç©å®¶èƒ¡çš„ç‰Œ
 		byHu = 255;
 		byFangPao = 255;
-		byPeng = 255;//ÄÜÅöµÄÅÆ
+		byPeng = 255;//èƒ½ç¢°çš„ç‰Œ
 		memset(bCanChi, false, sizeof(bCanChi));
 	}
 };
 
-///³ÔÅö¸ÜºıÍ¨ÖªÊÂ¼şÊÂ¼ş
+///åƒç¢°æ ç³Šé€šçŸ¥äº‹ä»¶äº‹ä»¶
 struct	tagCPGNotify
 {
-	bool	bZhuaPai;			//±ê¼ÇÊÇ×¥ÅÆºóÓĞ¶¯×÷(¿Í»§¶ËÓÃÓÚÏÔÊ¾µ¹¼ÆÊ±Ê±¼äµÄ)
-	bool	bChi;				//ÊÇ·ñÄÜ³Ô
-	bool	bPeng;				//ÊÇ·ñÄÜÅö
-	bool	bGang;				//ÊÇ·ñÄÜ¸Ü
-	bool	bKan;				//ÊÇ·ñÄÜ¿²ÅÆ
-	bool	bSaoHu;				//µ±Ç°ÄÜ·ñÉ¨»¢
-	bool	bTing;				//µ±Ç°ÄÜ·ñÌıÅÆ
-	bool	bHu;				//ÊÇ·ñÄÜºı
-	bool    bHaveReturn;		//¿Í»§¶ËÊÇ·ñ·µ»ØµÄÓÃ»§Ñ¡Ôñ
-	bool    bCanAction;			//Íæ¼ÒÊÇ·ñÓĞ¶¯×÷¿É×ö
-	bool    bCanChi[3];			//Í·ÖĞÎ²ÄÜ¹»³Ô
-	BYTE    byPeng;				//ÄÜÅöµÄÅÆ
-	BYTE	byChi[3][3];		//ÄÜ³ÔµÄÅÆ
-	BYTE	iGangData[4][2];	//ÄÜ¸ÜµÄÅÆ	
-	BYTE	byTingCanOut[HAND_CARD_NUM];//ÌıÅÆÄÜ´òµÄÅÆ
-	BYTE    byMaxThing;					//Íæ¼ÒÄÜ×öµÄ×î´ó¶¯×÷
-	BYTE	byHuType[MAX_HUPAI_TYPE];	//ºıÅÆÀàĞÍ
-	BYTE    iHuPs;				//Íæ¼ÒºúµÄÅÆ
-	BYTE	byHu;				//ºúÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE    byFangPao;			//·ÅÅÚÍæ¼ÒÎ»ÖÃ
-	BYTE	byBlockTime;		//À¹ÅÆÊ±¼ä	
-	BYTE	byUser;				//³öÅÆÎ»ÖÃ
-	BYTE	byPs;				//³öÅÆµÄÖµ
+	bool	bZhuaPai;			//æ ‡è®°æ˜¯æŠ“ç‰Œåæœ‰åŠ¨ä½œ(å®¢æˆ·ç«¯ç”¨äºæ˜¾ç¤ºå€’è®¡æ—¶æ—¶é—´çš„)
+	bool	bChi;				//æ˜¯å¦èƒ½åƒ
+	bool	bPeng;				//æ˜¯å¦èƒ½ç¢°
+	bool	bGang;				//æ˜¯å¦èƒ½æ 
+	bool	bKan;				//æ˜¯å¦èƒ½åç‰Œ
+	bool	bSaoHu;				//å½“å‰èƒ½å¦æ‰«è™
+	bool	bTing;				//å½“å‰èƒ½å¦å¬ç‰Œ
+	bool	bHu;				//æ˜¯å¦èƒ½ç³Š
+	bool    bHaveReturn;		//å®¢æˆ·ç«¯æ˜¯å¦è¿”å›çš„ç”¨æˆ·é€‰æ‹©
+	bool    bCanAction;			//ç©å®¶æ˜¯å¦æœ‰åŠ¨ä½œå¯åš
+	bool    bCanChi[3];			//å¤´ä¸­å°¾èƒ½å¤Ÿåƒ
+	BYTE    byPeng;				//èƒ½ç¢°çš„ç‰Œ
+	BYTE	byChi[3][3];		//èƒ½åƒçš„ç‰Œ
+	BYTE	iGangData[4][2];	//èƒ½æ çš„ç‰Œ	
+	BYTE	byTingCanOut[HAND_CARD_NUM];//å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
+	BYTE    byMaxThing;					//ç©å®¶èƒ½åšçš„æœ€å¤§åŠ¨ä½œ
+	BYTE	byHuType[MAX_HUPAI_TYPE];	//ç³Šç‰Œç±»å‹
+	BYTE    iHuPs;				//ç©å®¶èƒ¡çš„ç‰Œ
+	BYTE	byHu;				//èƒ¡ç‰Œç©å®¶ä½ç½®
+	BYTE    byFangPao;			//æ”¾ç‚®ç©å®¶ä½ç½®
+	BYTE	byBlockTime;		//æ‹¦ç‰Œæ—¶é—´	
+	BYTE	byUser;				//å‡ºç‰Œä½ç½®
+	BYTE	byPs;				//å‡ºç‰Œçš„å€¼
 
-	//ÌıÅÆµÄÊ±ºòÓÃµ½
-	BYTE	byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];  //ÌıÅÆ£¬´òÄÇÕÅÅÆºúÄÇÕÅÅÆ
-	BYTE	byCardRemainNum[MAX_MJ_PAI]; //Ã¿ÕÅÅÆµÄÊ£ÓàÊıÁ¿
+	//å¬ç‰Œçš„æ—¶å€™ç”¨åˆ°
+	BYTE	byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];  //å¬ç‰Œï¼Œæ‰“é‚£å¼ ç‰Œèƒ¡é‚£å¼ ç‰Œ
+	BYTE	byCardRemainNum[MAX_MJ_PAI]; //æ¯å¼ ç‰Œçš„å‰©ä½™æ•°é‡
 	tagCPGNotify()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;			//³öÅÆÍæ¼ÒÎ»ÖÃ
-		byPs = 255;			//³öÅÆµÄÖµ
-		byBlockTime = 255;		//À¹ÅÆË¼¿¼Ê±¼ä
-		bZhuaPai = false;			//ÊÇ·ñ×Ô¼º×¥ÅÆ
-		bChi = 0;				//ÊÇ·ñÄÜ³Ô
-		bPeng = 0;				//ÊÇ·ñÄÜÅö
-		bGang = 0;				//ÊÇ·ñÄÜ¸Ü
-		bKan = 0;				//ÊÇ·ñÄÜ¿²ÅÆ
-		bSaoHu = 0;				//µ±Ç°ÄÜ·ñÉ¨»¢
-		bTing = 0;				//µ±Ç°ÄÜ·ñÌıÅÆ
-		bHu = 0;				//ÊÇ·ñÄÜºı
-		bCanAction = false;		//Íæ¼ÒÊÇ·ñÓĞ¶¯×÷¿É×ö
-		byMaxThing = ACTION_NO;//Íæ¼ÒÄÜ×öµÄ×î´ó¶¯×÷
-		bHaveReturn = false;		//¿Í»§¶ËÊÇ·ñ·µ»ØµÄÓÃ»§Ñ¡Ôñ
-		memset(byChi, 255, sizeof(byChi));//ÄÜ³ÔµÄÅÆ
-		memset(iGangData, 255, sizeof(iGangData));//ÄÜ¸ÜµÄÅÆ	
-		memset(byTingCanOut, 255, sizeof(byTingCanOut));///ÌıÅÆÄÜ´òµÄÅÆ
-		memset(byHuType, 255, sizeof(byHuType));///ºıÅÆÀàĞÍ
-		iHuPs = 255;///Íæ¼ÒºúµÄÅÆ
+		byUser = 255;			//å‡ºç‰Œç©å®¶ä½ç½®
+		byPs = 255;			//å‡ºç‰Œçš„å€¼
+		byBlockTime = 255;		//æ‹¦ç‰Œæ€è€ƒæ—¶é—´
+		bZhuaPai = false;			//æ˜¯å¦è‡ªå·±æŠ“ç‰Œ
+		bChi = 0;				//æ˜¯å¦èƒ½åƒ
+		bPeng = 0;				//æ˜¯å¦èƒ½ç¢°
+		bGang = 0;				//æ˜¯å¦èƒ½æ 
+		bKan = 0;				//æ˜¯å¦èƒ½åç‰Œ
+		bSaoHu = 0;				//å½“å‰èƒ½å¦æ‰«è™
+		bTing = 0;				//å½“å‰èƒ½å¦å¬ç‰Œ
+		bHu = 0;				//æ˜¯å¦èƒ½ç³Š
+		bCanAction = false;		//ç©å®¶æ˜¯å¦æœ‰åŠ¨ä½œå¯åš
+		byMaxThing = ACTION_NO;//ç©å®¶èƒ½åšçš„æœ€å¤§åŠ¨ä½œ
+		bHaveReturn = false;		//å®¢æˆ·ç«¯æ˜¯å¦è¿”å›çš„ç”¨æˆ·é€‰æ‹©
+		memset(byChi, 255, sizeof(byChi));//èƒ½åƒçš„ç‰Œ
+		memset(iGangData, 255, sizeof(iGangData));//èƒ½æ çš„ç‰Œ	
+		memset(byTingCanOut, 255, sizeof(byTingCanOut));///å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
+		memset(byHuType, 255, sizeof(byHuType));///ç³Šç‰Œç±»å‹
+		iHuPs = 255;///ç©å®¶èƒ¡çš„ç‰Œ
 		byHu = 255;
 		byFangPao = 255;
-		byPeng = 255;//ÄÜÅöµÄÅÆ
+		byPeng = 255;//èƒ½ç¢°çš„ç‰Œ
 		memset(bCanChi, false, sizeof(bCanChi));
 
 		memset(byHuCard, 255, sizeof(byHuCard));
@@ -610,12 +610,12 @@ struct	tagCPGNotify
 	}
 };
 /*----------------------------------------------------------------*/
-///³öÅÆÊÂ¼ş
+///å‡ºç‰Œäº‹ä»¶
 struct	tagOutPai
 {
 	bool	bTing;
-	BYTE	byUser;//³öÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byPs;//³öÅÆµÄÖµ
+	BYTE	byUser;//å‡ºç‰Œç©å®¶ä½ç½®
+	BYTE	byPs;//å‡ºç‰Œçš„å€¼
 	tagOutPai()
 	{
 		Init();
@@ -623,148 +623,148 @@ struct	tagOutPai
 	void Init()
 	{
 		bTing = false;
-		byUser = 255;				//³öÅÆÍæ¼ÒÎ»ÖÃ
-		byPs = 255;				//³öÅÆµÄÖµ
+		byUser = 255;				//å‡ºç‰Œç©å®¶ä½ç½®
+		byPs = 255;				//å‡ºç‰Œçš„å€¼
 	}
 };
 
 /*----------------------------------------------------------------*/
-///³ÔÅÆÅÆÊÂ¼ş
+///åƒç‰Œç‰Œäº‹ä»¶
 struct tagChiPai
 {
-	BYTE	byDo;		//0Î´·¢Éú£¬10ÒÑ½áÊø£¬ÖĞ¼ä×´Ì¬ÎªÕıÔÚ·¢Éú
-	BYTE	byUser;		//³ÔÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byBeChi;	//±»³ÔÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byType;		//³ÔÅÆµÄÀàĞÍ
-	BYTE	byPs;		//³ÔµÄÅÆÖµ
-	BYTE	byChiPs[3];	//³ÔÅÆµÄÊı×é
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//ÊÖÅÆÕÅÊı
-	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];	//³öÅÆ²»³¬¹ı40ÕÅ£¬0Îª½áÊø±êÖ¾
-	BYTE	m_byArOutPaiCount[PLAY_COUNT];		//³öÅÆµÄÊıÁ¿
-	TCPGStruct m_UserGCPData[PLAY_COUNT][5];     //³ÔÅö¸Ü¸ÜÅÆ
+	BYTE	byDo;		//0æœªå‘ç”Ÿï¼Œ10å·²ç»“æŸï¼Œä¸­é—´çŠ¶æ€ä¸ºæ­£åœ¨å‘ç”Ÿ
+	BYTE	byUser;		//åƒç‰Œç©å®¶ä½ç½®
+	BYTE	byBeChi;	//è¢«åƒç‰Œç©å®¶ä½ç½®
+	BYTE	byType;		//åƒç‰Œçš„ç±»å‹
+	BYTE	byPs;		//åƒçš„ç‰Œå€¼
+	BYTE	byChiPs[3];	//åƒç‰Œçš„æ•°ç»„
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//æ‰‹ç‰Œå¼ æ•°
+	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];	//å‡ºç‰Œä¸è¶…è¿‡40å¼ ï¼Œ0ä¸ºç»“æŸæ ‡å¿—
+	BYTE	m_byArOutPaiCount[PLAY_COUNT];		//å‡ºç‰Œçš„æ•°é‡
+	TCPGStruct m_UserGCPData[PLAY_COUNT][5];     //åƒç¢°æ æ ç‰Œ
 	tagChiPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byDo = 255;//0Î´·¢Éú£¬10ÒÑ½áÊø£¬ÖĞ¼ä×´Ì¬ÎªÕıÔÚ·¢Éú
-		byUser = 255;//³ÔÅÆÍæ¼ÒÎ»ÖÃ
-		byBeChi = 255;//±»³ÔÅÆÍæ¼ÒÎ»ÖÃ
-		byType = ACTION_NO;//³ÔÅÆµÄÀàĞÍ
-		byPs = 255;	//³ÔµÄÅÆÖµ
-		memset(byChiPs, 255, sizeof(byChiPs));//³ÔÅÆµÄÊı×é
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//ÊÖÅÆÕÅÊı
-		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//³öÅÆÊı¾İ
-		memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));	//³öÅÆÊıÁ¿
-		memset(m_UserGCPData, 255, sizeof(m_UserGCPData));//³ÔÅö¸Ü¸ÜÅÆ
+		byDo = 255;//0æœªå‘ç”Ÿï¼Œ10å·²ç»“æŸï¼Œä¸­é—´çŠ¶æ€ä¸ºæ­£åœ¨å‘ç”Ÿ
+		byUser = 255;//åƒç‰Œç©å®¶ä½ç½®
+		byBeChi = 255;//è¢«åƒç‰Œç©å®¶ä½ç½®
+		byType = ACTION_NO;//åƒç‰Œçš„ç±»å‹
+		byPs = 255;	//åƒçš„ç‰Œå€¼
+		memset(byChiPs, 255, sizeof(byChiPs));//åƒç‰Œçš„æ•°ç»„
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//æ‰‹ç‰Œå¼ æ•°
+		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//å‡ºç‰Œæ•°æ®
+		memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));	//å‡ºç‰Œæ•°é‡
+		memset(m_UserGCPData, 255, sizeof(m_UserGCPData));//åƒç¢°æ æ ç‰Œ
 	}
 };
 
 /*----------------------------------------------------------------*/
-///ÅöÅÆÅÆÊÂ¼ş
+///ç¢°ç‰Œç‰Œäº‹ä»¶
 struct tagPengPai
 {
-	BYTE	byUser;		//ÅöÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byBePeng;	//±»ÅöÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byPs;		//ÅöµÄÅÆÖµ
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//ÊÖÅÆÕÅÊı
-	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];//³öÅÆ²»³¬¹ı40ÕÅ£¬0Îª½áÊø±êÖ¾
-	BYTE	m_byArOutPaiCount[PLAY_COUNT];		//³öÅÆµÄÊıÁ¿
-	TCPGStruct m_UserGCPData[PLAY_COUNT][5];     //³ÔÅö¸Ü¸ÜÅÆ
+	BYTE	byUser;		//ç¢°ç‰Œç©å®¶ä½ç½®
+	BYTE	byBePeng;	//è¢«ç¢°ç‰Œç©å®¶ä½ç½®
+	BYTE	byPs;		//ç¢°çš„ç‰Œå€¼
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];	//æ‰‹ç‰Œå¼ æ•°
+	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];//å‡ºç‰Œä¸è¶…è¿‡40å¼ ï¼Œ0ä¸ºç»“æŸæ ‡å¿—
+	BYTE	m_byArOutPaiCount[PLAY_COUNT];		//å‡ºç‰Œçš„æ•°é‡
+	TCPGStruct m_UserGCPData[PLAY_COUNT][5];     //åƒç¢°æ æ ç‰Œ
 	tagPengPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;//³ÔÅÆÍæ¼ÒÎ»ÖÃ
-		byBePeng = 255;//±»ÅöÅÆÍæ¼ÒÎ»ÖÃ
-		byPs = 255;//ÅöµÄÅÆÖµ
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//ÊÖÅÆÕÅÊı
-		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//³öÅÆÊı¾İ
-		memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));	//³öÅÆÊıÁ¿
-		memset(m_UserGCPData, 255, sizeof(m_UserGCPData));//³ÔÅö¸Ü¸ÜÅÆ
+		byUser = 255;//åƒç‰Œç©å®¶ä½ç½®
+		byBePeng = 255;//è¢«ç¢°ç‰Œç©å®¶ä½ç½®
+		byPs = 255;//ç¢°çš„ç‰Œå€¼
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//æ‰‹ç‰Œå¼ æ•°
+		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//å‡ºç‰Œæ•°æ®
+		memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));	//å‡ºç‰Œæ•°é‡
+		memset(m_UserGCPData, 255, sizeof(m_UserGCPData));//åƒç¢°æ æ ç‰Œ
 	}
 };
 
 /*----------------------------------------------------------------*/
-///¸ÜÅÆÅÆÊÂ¼ş
+///æ ç‰Œç‰Œäº‹ä»¶
 struct tagGangPai
 {
-	BYTE	byUser;		//¸ÜÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byBeGang;	//±»¸ÜÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byType;		//¸ÜÅÆµÄÀàĞÍ
-	BYTE	byPs;		//¸ÜµÄÅÆÖµ
-	BYTE	byGangPai[4];//Òª¸ÜµÄËÄÕÅÅÆ
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];			//ÊÖÅÆÕÅÊı
-	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];	//³öÅÆ²»³¬¹ı40ÕÅ£¬0Îª½áÊø±êÖ¾
-	BYTE	m_byArOutPaiCount[PLAY_COUNT];			//³öÅÆµÄÊıÁ¿
-	int     iGangFen[PLAY_COUNT];					//¸Ü·Ö
-	TCPGStruct m_UserGCPData[PLAY_COUNT][5];		//³ÔÅö¸Ü¸ÜÅÆ
+	BYTE	byUser;		//æ ç‰Œç©å®¶ä½ç½®
+	BYTE	byBeGang;	//è¢«æ ç‰Œç©å®¶ä½ç½®
+	BYTE	byType;		//æ ç‰Œçš„ç±»å‹
+	BYTE	byPs;		//æ çš„ç‰Œå€¼
+	BYTE	byGangPai[4];//è¦æ çš„å››å¼ ç‰Œ
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];			//æ‰‹ç‰Œå¼ æ•°
+	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];	//å‡ºç‰Œä¸è¶…è¿‡40å¼ ï¼Œ0ä¸ºç»“æŸæ ‡å¿—
+	BYTE	m_byArOutPaiCount[PLAY_COUNT];			//å‡ºç‰Œçš„æ•°é‡
+	int     iGangFen[PLAY_COUNT];					//æ åˆ†
+	TCPGStruct m_UserGCPData[PLAY_COUNT][5];		//åƒç¢°æ æ ç‰Œ
 	tagGangPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;//¸ÜÅÆÍæ¼ÒÎ»ÖÃ
-		byBeGang = 255;//±»¸ÜÅÆÍæ¼ÒÎ»ÖÃ
-		byType = ACTION_NO;//¸ÜÅÆµÄÀàĞÍ
-		byPs = 255;	//¸ÜµÄÅÆÖµ
-		memset(byGangPai, 255, sizeof(byGangPai));//Òª¸ÜµÄËÄÕÅÅÆ
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//ÊÖÅÆÕÅÊı
-		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//³öÅÆÊı¾İ
-		memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));	//³öÅÆÊıÁ¿
-		memset(m_UserGCPData, 255, sizeof(m_UserGCPData));//³ÔÅö¸Ü¸ÜÅÆ
+		byUser = 255;//æ ç‰Œç©å®¶ä½ç½®
+		byBeGang = 255;//è¢«æ ç‰Œç©å®¶ä½ç½®
+		byType = ACTION_NO;//æ ç‰Œçš„ç±»å‹
+		byPs = 255;	//æ çš„ç‰Œå€¼
+		memset(byGangPai, 255, sizeof(byGangPai));//è¦æ çš„å››å¼ ç‰Œ
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//æ‰‹ç‰Œå¼ æ•°
+		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//å‡ºç‰Œæ•°æ®
+		memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));	//å‡ºç‰Œæ•°é‡
+		memset(m_UserGCPData, 255, sizeof(m_UserGCPData));//åƒç¢°æ æ ç‰Œ
 		memset(iGangFen, 0, sizeof(iGangFen));
 	}
 };
 /*----------------------------------------------------------------*/
-///ÌıÅÆÅÆÊÂ¼ş
+///å¬ç‰Œç‰Œäº‹ä»¶
 struct tagTingPai
 {
-	bool	bTing;		//ÊÇ·ñÌıÅÆ
-	bool	bHitTing[4];//Íæ¼Òµã»÷ÁËÌıÅÆ
-	BYTE	byUser;		//ÌıÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byTing;		//³öÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE	byPs;		//ÌıÅÆ³öµÄÅÆÖµ
-	BYTE	byTingCanOut[HAND_CARD_NUM];			//ÌıÅÆÄÜ´òµÄÅÆ
+	bool	bTing;		//æ˜¯å¦å¬ç‰Œ
+	bool	bHitTing[4];//ç©å®¶ç‚¹å‡»äº†å¬ç‰Œ
+	BYTE	byUser;		//å¬ç‰Œç©å®¶ä½ç½®
+	BYTE	byTing;		//å‡ºç‰Œç©å®¶ä½ç½®
+	BYTE	byPs;		//å¬ç‰Œå‡ºçš„ç‰Œå€¼
+	BYTE	byTingCanOut[HAND_CARD_NUM];			//å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
 	tagTingPai()
 	{
 		Init();
 	}
 	void Init()
 	{
-		byUser = 255;//ÌıÅÆÍæ¼ÒÎ»ÖÃ
-		byTing = 255;//³öÅÆÍæ¼ÒÎ»ÖÃ
-		byPs = 255;//ÌıÅÆ³öµÄÅÆÖµ	
+		byUser = 255;//å¬ç‰Œç©å®¶ä½ç½®
+		byTing = 255;//å‡ºç‰Œç©å®¶ä½ç½®
+		byPs = 255;//å¬ç‰Œå‡ºçš„ç‰Œå€¼	
 		bTing = false;
-		memset(bHitTing, 0, sizeof(bHitTing));//Íæ¼Òµã»÷ÁËÌıÅÆ
+		memset(bHitTing, 0, sizeof(bHitTing));//ç©å®¶ç‚¹å‡»äº†å¬ç‰Œ
 		memset(byTingCanOut, 255, sizeof(byTingCanOut));
 	}
 };
 /*----------------------------------------------------------------*/
-///ºıÅÆÅÆÊÂ¼ş
+///ç³Šç‰Œç‰Œäº‹ä»¶
 struct tagHuPai
 {
-	bool	bHaveHu[PLAY_COUNT];//¶ÔÓ¦µÄÍæ¼ÒÊÇ·ñºúÅÆÁË
-	bool    bZimo;				//ÊÇ·ñ×ÔÃş
-	bool	bIsLiuJu;			//ÊÇ·ñÁ÷¾Ö
-	BYTE	byHu;				//ºúÅÆÍæ¼ÒÎ»ÖÃ
-	BYTE    byFangPao;			//·ÅÅÚÍæ¼ÒÎ»ÖÃ
-	BYTE	byPs;				//ºúµÄÅÆ
-	int	    iUserNums;			//ºıÅÆÍæ¼ÒµÄ¸öÊı
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];			//ÊÖÅÆÕÅÊı
-	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];	//³öÅÆ²»³¬¹ı40ÕÅ£¬0Îª½áÊø±êÖ¾
-	BYTE    byHuType[PLAY_COUNT][MAX_HUPAI_TYPE];	//¸÷¸öÍæ¼ÒµÄºıÅÆÀàĞÍ
+	bool	bHaveHu[PLAY_COUNT];//å¯¹åº”çš„ç©å®¶æ˜¯å¦èƒ¡ç‰Œäº†
+	bool    bZimo;				//æ˜¯å¦è‡ªæ‘¸
+	bool	bIsLiuJu;			//æ˜¯å¦æµå±€
+	BYTE	byHu;				//èƒ¡ç‰Œç©å®¶ä½ç½®
+	BYTE    byFangPao;			//æ”¾ç‚®ç©å®¶ä½ç½®
+	BYTE	byPs;				//èƒ¡çš„ç‰Œ
+	int	    iUserNums;			//ç³Šç‰Œç©å®¶çš„ä¸ªæ•°
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];			//æ‰‹ç‰Œå¼ æ•°
+	BYTE	m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];	//å‡ºç‰Œä¸è¶…è¿‡40å¼ ï¼Œ0ä¸ºç»“æŸæ ‡å¿—
+	BYTE    byHuType[PLAY_COUNT][MAX_HUPAI_TYPE];	//å„ä¸ªç©å®¶çš„ç³Šç‰Œç±»å‹
 	tagHuPai()
 	{
 		Init();
@@ -772,21 +772,21 @@ struct tagHuPai
 	void Init()
 	{
 		iUserNums = 0;
-		byHu = 255;//µãÅÚÍæ¼ÒÎ»ÖÃ
+		byHu = 255;//ç‚¹ç‚®ç©å®¶ä½ç½®
 		byFangPao = 255;
-		byPs = 255;	//ºúµÄÅÆÖµ
-		bIsLiuJu = true;	//ÊÇ·ñÁ÷¾Ö
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//ÊÖÅÆÕÅÊı
-		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//³öÅÆÊı¾İ
-		memset(byHuType, 255, sizeof(byHuType));//¸÷¸öÍæ¼ÒµÄºıÅÆÀàĞÍ
+		byPs = 255;	//èƒ¡çš„ç‰Œå€¼
+		bIsLiuJu = true;	//æ˜¯å¦æµå±€
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//æ‰‹ç‰Œå¼ æ•°
+		memset(m_byArOutPai, 255, sizeof(m_byArOutPai));//å‡ºç‰Œæ•°æ®
+		memset(byHuType, 255, sizeof(byHuType));//å„ä¸ªç©å®¶çš„ç³Šç‰Œç±»å‹
 		memset(bHaveHu, 0, sizeof(bHaveHu));
-		bZimo = false;		//ÊÇ·ñ×ÔÃş
+		bZimo = false;		//æ˜¯å¦è‡ªæ‘¸
 	}
 };
 struct tagHuPaiInfo
 {
-	int     iHuFenType[PLAY_COUNT][MAX_HU_FEN_KIND];//¸÷¸öÍæ¼ÒµÄºıÅÆ·ÖÊı
+	int     iHuFenType[PLAY_COUNT][MAX_HU_FEN_KIND];//å„ä¸ªç©å®¶çš„ç³Šç‰Œåˆ†æ•°
 	tagHuPaiInfo()
 	{
 		Init();
@@ -797,30 +797,30 @@ struct tagHuPaiInfo
 	}
 };
 /*----------------------------------------------------------------*/
-///Ëã·ÖÊÂ¼ş
+///ç®—åˆ†äº‹ä»¶
 struct tagCountFen
 {
-	bool	bZiMo;								    //ÊÇ·ñ×ÔÃş
-	bool	bIsLiuJu;								//ÊÇ·ñÁ÷¾Ö
-	bool    bIsHu[PLAY_COUNT];						//ÄÄĞ©Íæ¼ÒºúÅÆÁË
-	BYTE	byFangPao;								//·ÅÅÚÍæ¼ÒÎ»ÖÃ
-	BYTE	byNt;									//×¯¼ÒÎ»ÖÃ
-	bool    m_bQiangGangHu;							 //ÊÇ·ñÇÀ¸Üºú£¬ÔÚÓĞÇÀ¸ÜºúµÄ¹æÔòÏÂ²Å´æÔÚ
-	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE	m_byArHandPaiCount[PLAY_COUNT];			//ÊÖÅÆÕÅÊı
-	BYTE    byHuType[PLAY_COUNT][MAX_HUPAI_TYPE];	//¸÷¸öÍæ¼ÒµÄºıÅÆÀàĞÍ
-	BYTE    byTypeFans[MAX_HUPAI_TYPE];				//ÀàĞÍ·¬Êı
-	int	    byUserNums;								//ºıÅÆÍæ¼ÒµÄ¸öÊı
-	int		iBase;						//µ×·Ö
-	int		iFanCount[PLAY_COUNT];		//¸÷Íæ¼Ò·¬Êı
-	int		iZongFen[PLAY_COUNT];		//¸÷Íæ¼Ò×Ü·Ö
-	int		iMingGang[PLAY_COUNT];		//Ã÷¸ÜµÄ¸öÊı
-	int		iAnGang[PLAY_COUNT];		//°µ¸ÜµÄ¸öÊı
-	int		iTax;						//·şÎñ·Ñ£¨ÊÕË°£©
-	int     iHuFenType[PLAY_COUNT][MAX_HU_FEN_KIND];//¸÷¸öÍæ¼ÒµÄºıÅÆ·ÖÊı
-	__int64 		i64ZongFen[PLAY_COUNT];			//¸÷¸öÍæ¼ÒµÄ×Ü·Ö
-	__int64 		i64Money[PLAY_COUNT];			//¸÷¸öÍæ¼ÒµÄ×Ü·Ö
-	TCPGStruct	UserGCPData[PLAY_COUNT][5];			//³ÔÅö¸Ü¸ÜÅÆ
+	bool	bZiMo;								    //æ˜¯å¦è‡ªæ‘¸
+	bool	bIsLiuJu;								//æ˜¯å¦æµå±€
+	bool    bIsHu[PLAY_COUNT];						//å“ªäº›ç©å®¶èƒ¡ç‰Œäº†
+	BYTE	byFangPao;								//æ”¾ç‚®ç©å®¶ä½ç½®
+	BYTE	byNt;									//åº„å®¶ä½ç½®
+	bool    m_bQiangGangHu;							 //æ˜¯å¦æŠ¢æ èƒ¡ï¼Œåœ¨æœ‰æŠ¢æ èƒ¡çš„è§„åˆ™ä¸‹æ‰å­˜åœ¨
+	BYTE	m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE	m_byArHandPaiCount[PLAY_COUNT];			//æ‰‹ç‰Œå¼ æ•°
+	BYTE    byHuType[PLAY_COUNT][MAX_HUPAI_TYPE];	//å„ä¸ªç©å®¶çš„ç³Šç‰Œç±»å‹
+	BYTE    byTypeFans[MAX_HUPAI_TYPE];				//ç±»å‹ç•ªæ•°
+	int	    byUserNums;								//ç³Šç‰Œç©å®¶çš„ä¸ªæ•°
+	int		iBase;						//åº•åˆ†
+	int		iFanCount[PLAY_COUNT];		//å„ç©å®¶ç•ªæ•°
+	int		iZongFen[PLAY_COUNT];		//å„ç©å®¶æ€»åˆ†
+	int		iMingGang[PLAY_COUNT];		//æ˜æ çš„ä¸ªæ•°
+	int		iAnGang[PLAY_COUNT];		//æš—æ çš„ä¸ªæ•°
+	int		iTax;						//æœåŠ¡è´¹ï¼ˆæ”¶ç¨ï¼‰
+	int     iHuFenType[PLAY_COUNT][MAX_HU_FEN_KIND];//å„ä¸ªç©å®¶çš„ç³Šç‰Œåˆ†æ•°
+	__int64 		i64ZongFen[PLAY_COUNT];			//å„ä¸ªç©å®¶çš„æ€»åˆ†
+	__int64 		i64Money[PLAY_COUNT];			//å„ä¸ªç©å®¶çš„æ€»åˆ†
+	TCPGStruct	UserGCPData[PLAY_COUNT][5];			//åƒç¢°æ æ ç‰Œ
 	tagHuPaiInfo HupaiInfo[PLAY_COUNT];
 	tagCountFen()
 	{
@@ -828,26 +828,26 @@ struct tagCountFen
 	}
 	void Init()
 	{
-		byFangPao = 255;		//·ÅÅÚÍæ¼ÒÎ»ÖÃ
-		byNt = 255;		//×¯¼ÒÎ»ÖÃ
-		bIsLiuJu = true;		//ÊÇ·ñÁ÷¾Ö
+		byFangPao = 255;		//æ”¾ç‚®ç©å®¶ä½ç½®
+		byNt = 255;		//åº„å®¶ä½ç½®
+		bIsLiuJu = true;		//æ˜¯å¦æµå±€
 		bZiMo = false;
 		memset(i64ZongFen, 0, sizeof(i64ZongFen));
 		memset(i64Money, 0, sizeof(i64Money));
-		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//ÊÖÅÆÊı¾İ	
-		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//ÊÖÅÆÕÅÊı	
+		memset(m_byArHandPai, 255, sizeof(m_byArHandPai));//æ‰‹ç‰Œæ•°æ®	
+		memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));//æ‰‹ç‰Œå¼ æ•°	
 		memset(UserGCPData, 255, sizeof(UserGCPData));
 		memset(iFanCount, 0, sizeof(iFanCount));
 		memset(iZongFen, 0, sizeof(iZongFen));
 		memset(iMingGang, 0, sizeof(iMingGang));
 		memset(iAnGang, 0, sizeof(iAnGang));
 		memset(byHuType, 255, sizeof(byHuType));
-		memset(bIsHu, 0, sizeof(bIsHu));	//ÄÄĞ©Íæ¼ÒºúÅÆÁË
+		memset(bIsHu, 0, sizeof(bIsHu));	//å“ªäº›ç©å®¶èƒ¡ç‰Œäº†
 		memset(byTypeFans, 0, sizeof(byTypeFans));
 		memset(iHuFenType, 0, sizeof(iHuFenType));
 		byUserNums = 0;
 		iBase = 0;
-		iTax = 0;//·şÎñ·Ñ£¨ÊÕË°£©
+		iTax = 0;//æœåŠ¡è´¹ï¼ˆæ”¶ç¨ï¼‰
 		m_bQiangGangHu = false;
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
@@ -856,12 +856,12 @@ struct tagCountFen
 	}
 };
 
-//ÅäÅÆÊı¾İ
+//é…ç‰Œæ•°æ®
 struct tagMatchMJ
 {
-	//ÊÖÅÆ²»³¬¹ı14ÕÅ 
+	//æ‰‹ç‰Œä¸è¶…è¿‡14å¼  
 	BYTE byArHandPai[PLAY_COUNT][HAND_CARD_NUM];
-	//ÊÖÅÆÕÅÊı	  
+	//æ‰‹ç‰Œå¼ æ•°	  
 	BYTE byArHandPaiCount[PLAY_COUNT];
 	tagMatchMJ()
 	{
@@ -874,13 +874,13 @@ struct tagMatchMJ
 	}
 };
 
-//¶¯×÷ÂÖÑ°ÊÂ¼ş
+//åŠ¨ä½œè½®å¯»äº‹ä»¶
 struct tagActionTurn
 {
-	BYTE	byChi;		//³Ô
-	BYTE	byPeng;		//Åö
-	BYTE	byGang;		//¸Ü
-	BYTE    byHu;		//ºú
+	BYTE	byChi;		//åƒ
+	BYTE	byPeng;		//ç¢°
+	BYTE	byGang;		//æ 
+	BYTE    byHu;		//èƒ¡
 	tagActionTurn()
 	{
 		Init();
@@ -893,5 +893,5 @@ struct tagActionTurn
 		byHu = 255;
 	}
 };
-#pragma pack() //1×Ö½Ú¶ÔÆë
+#pragma pack() //1å­—èŠ‚å¯¹é½
 #endif

@@ -2,158 +2,158 @@
 #include "../Server/MJ/mj.h"
 
 /*------------------------------------------------------------------------------------------------------*/
-//Ö§³ÖÀàĞÍ
-///Ö§³ÖÀàĞÍ¶¨Òå
-#define SUP_NORMAL_GAME			0x01								///ÆÕÍ¨ÓÎÏ·
-#define SUP_MATCH_GAME			0x02								///±ÈÈüÓÎÏ·
-#define SUP_MONEY_GAME			0x04								///½ğ±ÒÓÎÏ·
+//æ”¯æŒç±»å‹
+///æ”¯æŒç±»å‹å®šä¹‰
+#define SUP_NORMAL_GAME			0x01								///æ™®é€šæ¸¸æˆ
+#define SUP_MATCH_GAME			0x02								///æ¯”èµ›æ¸¸æˆ
+#define SUP_MONEY_GAME			0x04								///é‡‘å¸æ¸¸æˆ
 #define SUPPER_TYPE						SUP_NORMAL_GAME|SUP_MATCH_GAME|SUP_MONEY_GAME
 /*------------------------------------------------------------------------------------------------------*/
-#define MAIN_VERSION					710		// Ö÷°æ±¾ºÅ,?Äê?ÔÂ
-#define ASS_VERSION						15		// ¸¨Öú°æ±¾ºÅ,?ºÅ
+#define MAIN_VERSION					710		// ä¸»ç‰ˆæœ¬å·,?å¹´?æœˆ
+#define ASS_VERSION						15		// è¾…åŠ©ç‰ˆæœ¬å·,?å·
 /*------------------------------------------------------------------------------------------------------*/
-//ÎÄ¼şÃû×Ö¶¨Òå
-#define GAMENAME						TEXT("É½Î÷ÍÆµ½ºú")
-#define NAME_ID						    23510004  		// Ãû×Ö ID
+//æ–‡ä»¶åå­—å®šä¹‰
+#define GAMENAME						TEXT("å±±è¥¿æ¨åˆ°èƒ¡")
+#define NAME_ID						    23510004  		// åå­— ID
 
 /*------------------------------------------------------------------------------------------------------*/
-static TCHAR szTempStr[MAX_PATH] =		{0};/** Ôİ´æ×Ö·û´®£¬ÓÃÀ´»ñÈ¡ dll_name µÈµÄÊ±ºòÊ¹ÓÃ */
+static TCHAR szTempStr[MAX_PATH] =		{0};/** æš‚å­˜å­—ç¬¦ä¸²ï¼Œç”¨æ¥è·å– dll_name ç­‰çš„æ—¶å€™ä½¿ç”¨ */
 #define GET_CLIENT_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".ico"))
 #define GET_SERVER_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".dll"))
 #define GET_SKIN_FOLDER(A)				(sprintf(A,"%d",NAME_ID),strcat(A,""))
 /*------------------------------------------------------------------------------------------------------*/
 #define GET_STRING(NUM)                 #NUM
 #define INT_TO_STR(NUM)                 GET_STRING(NUM)
-#define SKIN_FOLDER                     TEXT(INT_TO_STR(NAME_ID))          // ·şÎñÆ÷Ä¿Â¼
+#define SKIN_FOLDER                     TEXT(INT_TO_STR(NAME_ID))          // æœåŠ¡å™¨ç›®å½•
 /*------------------------------------------------------------------------------------------------------*/
-// °æ±¾¶¨Òå
-#define GAME_MAX_VER					2									// ÏÖÔÚ×î¸ß°æ±¾
-#define GAME_LESS_VER					2									// ÏÖÔÚ×îµÍ°æ±¾
-#define GAME_CHANGE_VER					0									// ĞŞ¸Ä°æ±¾		
-#define PLAY_COUNT						4									// ÓÎÏ·ÈËÊı	
-// ÓÎÏ·×´Ì¬¶¨Òå
-#define GS_STATUS_FREE					0				//¿ÕÏĞ×´Ì¬
-#define GS_STATUS_PLAYING				1				//ÓÎÏ·ÖĞ×´Ì¬
-///¸÷ÖÖÅÆµÄÊıÁ¿
-#define HAND_CARD_NUM			14				//×î´óÊÖÅÆÕÅÊı
-#define OUT_CARD_NUM			40				//³öÅÆÕÅÊı
-#define MAX_REMAIN_MEN_PAI_NUM  92              //×î¶àÊ£ÓàÃÅÅÆÊıÁ¿
-#define HUA_CARD_NUM			8				//»¨ÅÆÕÅÊı
-#define MEN_CARD_NUM			34				//ÅÆÇ½ÕÅÊı(¸÷×ÔÔÚÃÅÇ°Âë³É17¶ÕÅÆ)
-#define MAX_HUPAI_TYPE			4				//ºıÅÆÀàĞÍ×î´óµÄ×éºÏ
-#define MAX_CANHU_CARD_NUM      13              //Ò»¸±ÅÆ×î¶àÄÜºúµÄÅÆÊıÁ¿
-#define MAX_HU_FEN_KIND         2				//ºú·ÖÖÖÀà
-#define MAX_MJ_PAI				38				//×î´óÅÆÖµ
-/***********************Ëã·ÖÊ¹ÓÃ******************/
-#define MAX_COUNT_GANG_FEN       13              //¸Ü·Ö²úÉúµÄ×î¶àÁĞ±íÏî
-#define MAX_COUNT_HORSE_FEN      8               //ÂòÂí·ÖÉú³ÉµÄ×î¶àÁĞ±íÏî£¬×î¶àÂòÁ½2ÂíµÄÊ±ºò£¬×î¶à²úÉú8Ïî
-#define MAX_COUNT_GEN_ZHUANG_FEN 1               //×î´ó¸ú×¯·ÖÏî
+// ç‰ˆæœ¬å®šä¹‰
+#define GAME_MAX_VER					2									// ç°åœ¨æœ€é«˜ç‰ˆæœ¬
+#define GAME_LESS_VER					2									// ç°åœ¨æœ€ä½ç‰ˆæœ¬
+#define GAME_CHANGE_VER					0									// ä¿®æ”¹ç‰ˆæœ¬		
+#define PLAY_COUNT						4									// æ¸¸æˆäººæ•°	
+// æ¸¸æˆçŠ¶æ€å®šä¹‰
+#define GS_STATUS_FREE					0				//ç©ºé—²çŠ¶æ€
+#define GS_STATUS_PLAYING				1				//æ¸¸æˆä¸­çŠ¶æ€
+///å„ç§ç‰Œçš„æ•°é‡
+#define HAND_CARD_NUM			14				//æœ€å¤§æ‰‹ç‰Œå¼ æ•°
+#define OUT_CARD_NUM			40				//å‡ºç‰Œå¼ æ•°
+#define MAX_REMAIN_MEN_PAI_NUM  92              //æœ€å¤šå‰©ä½™é—¨ç‰Œæ•°é‡
+#define HUA_CARD_NUM			8				//èŠ±ç‰Œå¼ æ•°
+#define MEN_CARD_NUM			34				//ç‰Œå¢™å¼ æ•°(å„è‡ªåœ¨é—¨å‰ç æˆ17å¢©ç‰Œ)
+#define MAX_HUPAI_TYPE			4				//ç³Šç‰Œç±»å‹æœ€å¤§çš„ç»„åˆ
+#define MAX_CANHU_CARD_NUM      13              //ä¸€å‰¯ç‰Œæœ€å¤šèƒ½èƒ¡çš„ç‰Œæ•°é‡
+#define MAX_HU_FEN_KIND         2				//èƒ¡åˆ†ç§ç±»
+#define MAX_MJ_PAI				38				//æœ€å¤§ç‰Œå€¼
+/***********************ç®—åˆ†ä½¿ç”¨******************/
+#define MAX_COUNT_GANG_FEN       13              //æ åˆ†äº§ç”Ÿçš„æœ€å¤šåˆ—è¡¨é¡¹
+#define MAX_COUNT_HORSE_FEN      8               //ä¹°é©¬åˆ†ç”Ÿæˆçš„æœ€å¤šåˆ—è¡¨é¡¹ï¼Œæœ€å¤šä¹°ä¸¤2é©¬çš„æ—¶å€™ï¼Œæœ€å¤šäº§ç”Ÿ8é¡¹
+#define MAX_COUNT_GEN_ZHUANG_FEN 1               //æœ€å¤§è·Ÿåº„åˆ†é¡¹
 /***********************************/
 
-//Âé½«ÅÆÃæ·ç¸ñ¶¨Òå
-#define MJTABLE_CARDTYPE0				0									//ÅÆÑùÊ½1
-#define MJTABLE_CARDTYPE1				1									//ÅÆÑùÊ½2
+//éº»å°†ç‰Œé¢é£æ ¼å®šä¹‰
+#define MJTABLE_CARDTYPE0				0									//ç‰Œæ ·å¼1
+#define MJTABLE_CARDTYPE1				1									//ç‰Œæ ·å¼2
 #pragma pack(1)
-//·şÎñÆ÷ÃüÁî½á¹¹
-#define S_C_GAME_START			100									//ÓÎÏ·¿ªÊ¼
-#define S_C_OUT_CARD			101									//³öÅÆÃüÁî
-#define S_C_SEND_CARD			102									//·¢ËÍÆË¿Ë
-#define S_C_OPERATE_NOTIFY		103									//²Ù×÷ÌáÊ¾
-#define S_C_OPERATE_RESULT		104									//²Ù×÷ÃüÁî
-#define S_C_GAME_END			105									//ÓÎÏ·½áÊø
-#define S_C_TRUSTEE				106									//ÓÃ»§ÍĞ¹Ü
-#define S_C_GAME_END_ALL		107								    //×Ü½áËã
-#define S_C_QIHU_NOTIFY		    108								    //ÆúºúÍ¨Öª
-#define S_C_OUT_CARD_RESULT		109								    //³öÅÆ½á¹û
+//æœåŠ¡å™¨å‘½ä»¤ç»“æ„
+#define S_C_GAME_START			100									//æ¸¸æˆå¼€å§‹
+#define S_C_OUT_CARD			101									//å‡ºç‰Œå‘½ä»¤
+#define S_C_SEND_CARD			102									//å‘é€æ‰‘å…‹
+#define S_C_OPERATE_NOTIFY		103									//æ“ä½œæç¤º
+#define S_C_OPERATE_RESULT		104									//æ“ä½œå‘½ä»¤
+#define S_C_GAME_END			105									//æ¸¸æˆç»“æŸ
+#define S_C_TRUSTEE				106									//ç”¨æˆ·æ‰˜ç®¡
+#define S_C_GAME_END_ALL		107								    //æ€»ç»“ç®—
+#define S_C_QIHU_NOTIFY		    108								    //å¼ƒèƒ¡é€šçŸ¥
+#define S_C_OUT_CARD_RESULT		109								    //å‡ºç‰Œç»“æœ
 
 
-/////////////////////////////////·şÎñÆ÷»ù´¡Íæ·¨ºê¶¨Òå////////////////////////
-//¶¨ÒåÍæ·¨¹æÔò±ØĞëRULE_¿ªÍ·
-#define RULE_HAVE_TING_PAI_NOTIFY //ÌıÅÆÌáÊ¾ 
-#define RULE_HAVE_HU_PAI_NOTIFY   //ºúÅÆÌáÊ¾
-#define DELAY_CHECK_ACTION   //ÑÓÊ±¼ì²â¶¯×÷
+/////////////////////////////////æœåŠ¡å™¨åŸºç¡€ç©æ³•å®å®šä¹‰////////////////////////
+//å®šä¹‰ç©æ³•è§„åˆ™å¿…é¡»RULE_å¼€å¤´
+#define RULE_HAVE_TING_PAI_NOTIFY //å¬ç‰Œæç¤º 
+#define RULE_HAVE_HU_PAI_NOTIFY   //èƒ¡ç‰Œæç¤º
+#define DELAY_CHECK_ACTION   //å»¶æ—¶æ£€æµ‹åŠ¨ä½œ
 /////////////////////////////////////////////////////////////////////////////
 
 
-//Âé½«¶¯×÷
+//éº»å°†åŠ¨ä½œ
 enum MJ_ACTION
 {
-	ACTION_NO=0,//Ã»ÓĞ¶¯×÷
-	ACTION_CHI,//³ÔÅÆ¶¯×÷
-	ACTION_CHI_FRONT,//³ÔÍ·
-	ACTION_CHI_MID,//³ÔÖĞ
-	ACTION_CHI_BACK,//³ÔÎ²
-	ACTION_PENG,//ÅöÅÆ¶¯×÷
-	ACTION_KAN,//¿²ÅÆÅÆ¶¯×÷
-	ACTION_GANG,//¸Ü
-	ACTION_AN_GANG,//°µ¸Ü¶¯×÷
-	ACTION_BU_GANG,//²¹¸Ü¶¯×÷
-	ACTION_MING_GANG,//Ã÷¸Ü¶¯×÷
-	ACTION_CHI_TNG,//ÇÀ³Ô£¨³ÔºóÌıÅÆ£©
-	ACTION_TING_PAI,//Ìı¶¯×÷
-	ACTION_HU,//ºı¶¯×÷
-	ACTION_PASS,//¹ı
+	ACTION_NO=0,//æ²¡æœ‰åŠ¨ä½œ
+	ACTION_CHI,//åƒç‰ŒåŠ¨ä½œ
+	ACTION_CHI_FRONT,//åƒå¤´
+	ACTION_CHI_MID,//åƒä¸­
+	ACTION_CHI_BACK,//åƒå°¾
+	ACTION_PENG,//ç¢°ç‰ŒåŠ¨ä½œ
+	ACTION_KAN,//åç‰Œç‰ŒåŠ¨ä½œ
+	ACTION_GANG,//æ 
+	ACTION_AN_GANG,//æš—æ åŠ¨ä½œ
+	ACTION_BU_GANG,//è¡¥æ åŠ¨ä½œ
+	ACTION_MING_GANG,//æ˜æ åŠ¨ä½œ
+	ACTION_CHI_TNG,//æŠ¢åƒï¼ˆåƒåå¬ç‰Œï¼‰
+	ACTION_TING_PAI,//å¬åŠ¨ä½œ
+	ACTION_HU,//ç³ŠåŠ¨ä½œ
+	ACTION_PASS,//è¿‡
 };
 
-//Âé½«Ëã·ÖÎ»ÖÃ
+//éº»å°†ç®—åˆ†ä½ç½®
 enum MJ_STATION
 {
-	MJ_STATION_NO = 0,//ÎŞÀàĞÍ
-	MJ_STATION_BEN_JIA = 1,//±¾¼Ò
-	MJ_STATION_XIA_JIA = 2,//ÏÂ¼Ò
-	MJ_STATION_DUI_JIA = 4,//¶Ô¼Ò
-	MJ_STATION_SHANG_JIA = 8,//ÉÏ¼Ò
-	MJ_STATION_SHANG_XIA_JIA = MJ_STATION_SHANG_JIA | MJ_STATION_XIA_JIA,//ÉÏ¼ÒºÍÏÂ¼Ò
-	MJ_STATION_SHANG_DUI_JIA = MJ_STATION_SHANG_JIA | MJ_STATION_DUI_JIA,//ÉÏ¼ÒºÍ¶Ô¼Ò
-	MJ_STATION_DUI_XIA_JIA = MJ_STATION_DUI_JIA | MJ_STATION_XIA_JIA,//¶Ô¼ÒºÍÏÂ¼Ò
-	MJ_STATION_ALL_JIA = MJ_STATION_SHANG_JIA | MJ_STATION_XIA_JIA | MJ_STATION_DUI_JIA,//Èı¼Ò£¨ÉÏ¼Ò£¬¶Ô¼ÒºÍÏÂ¼Ò£©£¬3ÈËÂé½«ÖĞ½ĞÁíÍâ2¼Ò£¬2ÈËÂé½«ÁíÍâ1¼Ò
+	MJ_STATION_NO = 0,//æ— ç±»å‹
+	MJ_STATION_BEN_JIA = 1,//æœ¬å®¶
+	MJ_STATION_XIA_JIA = 2,//ä¸‹å®¶
+	MJ_STATION_DUI_JIA = 4,//å¯¹å®¶
+	MJ_STATION_SHANG_JIA = 8,//ä¸Šå®¶
+	MJ_STATION_SHANG_XIA_JIA = MJ_STATION_SHANG_JIA | MJ_STATION_XIA_JIA,//ä¸Šå®¶å’Œä¸‹å®¶
+	MJ_STATION_SHANG_DUI_JIA = MJ_STATION_SHANG_JIA | MJ_STATION_DUI_JIA,//ä¸Šå®¶å’Œå¯¹å®¶
+	MJ_STATION_DUI_XIA_JIA = MJ_STATION_DUI_JIA | MJ_STATION_XIA_JIA,//å¯¹å®¶å’Œä¸‹å®¶
+	MJ_STATION_ALL_JIA = MJ_STATION_SHANG_JIA | MJ_STATION_XIA_JIA | MJ_STATION_DUI_JIA,//ä¸‰å®¶ï¼ˆä¸Šå®¶ï¼Œå¯¹å®¶å’Œä¸‹å®¶ï¼‰ï¼Œ3äººéº»å°†ä¸­å«å¦å¤–2å®¶ï¼Œ2äººéº»å°†å¦å¤–1å®¶
 };
 
-//Âé½«Ëã·Ö¸ÜÀàĞÍ
-//¸ù¾İ²»Í¬µÄÂé½«¿ÉÒÔÓĞ²»Í¬µÄ½Ğ·¨
+//éº»å°†ç®—åˆ†æ ç±»å‹
+//æ ¹æ®ä¸åŒçš„éº»å°†å¯ä»¥æœ‰ä¸åŒçš„å«æ³•
 enum MJ_GANG_FEN_TYPE
 {
-	MJ_GANG_FEN_TYPE_NO = 0,//ÎŞÀàĞÍ
-	MJ_GANG_FEN_TYPE_AN_GANG ,//°µ¸Ü
-	MJ_GANG_FEN_TYPE_MING_GANG,//Ã÷¸Ü
-	MJ_GANG_FEN_TYPE_BU_GANG,//Ã÷¸Ü(Åö)
-	MJ_GANG_FEN_TYPE_BEI_AN_GANG,//±»°µ¸Ü
-	MJ_GANG_FEN_TYPE_FANG_GANG,//µã¸Ü
-	MJ_GANG_FEN_TYPE_BEI_BU_GANG,//±»Ã÷¸Ü£¨Åö£© ----²¹¸ÜÒıÆğ
-	MJ_GANG_FEN_TYPE_BEI_MING_GANG,//±»Ã÷¸Ü
+	MJ_GANG_FEN_TYPE_NO = 0,//æ— ç±»å‹
+	MJ_GANG_FEN_TYPE_AN_GANG ,//æš—æ 
+	MJ_GANG_FEN_TYPE_MING_GANG,//æ˜æ 
+	MJ_GANG_FEN_TYPE_BU_GANG,//æ˜æ (ç¢°)
+	MJ_GANG_FEN_TYPE_BEI_AN_GANG,//è¢«æš—æ 
+	MJ_GANG_FEN_TYPE_FANG_GANG,//ç‚¹æ 
+	MJ_GANG_FEN_TYPE_BEI_BU_GANG,//è¢«æ˜æ ï¼ˆç¢°ï¼‰ ----è¡¥æ å¼•èµ·
+	MJ_GANG_FEN_TYPE_BEI_MING_GANG,//è¢«æ˜æ 
 };
 
-//Âé½«ºúÅÆÃû×Ö
-//²»Í¬µÄµØ·½Âé½«¿ÉÒÔÓĞ²»Í¬µÄ½Ğ·¨
+//éº»å°†èƒ¡ç‰Œåå­—
+//ä¸åŒçš„åœ°æ–¹éº»å°†å¯ä»¥æœ‰ä¸åŒçš„å«æ³•
 enum MJ_HU_FEN_TYPE
 {
-	MJ_HU_FEN_TYPE_NO = 0,//ÎŞÀàĞÍ
-	MJ_HU_FEN_TYPE_ZI_MO,//×ÔÃş
-	MJ_HU_FEN_TYPE_BEI_ZI_MO,//±»×ÔÃş
-	MJ_HU_FEN_TYPE_DIAN_PAO,//µãÅÚ£¨·ÅÅÚ£©
-	MJ_HU_FEN_TYPE_DIAN_PAO_HU,//³Ôºú£¨µãÅÚºú£©
+	MJ_HU_FEN_TYPE_NO = 0,//æ— ç±»å‹
+	MJ_HU_FEN_TYPE_ZI_MO,//è‡ªæ‘¸
+	MJ_HU_FEN_TYPE_BEI_ZI_MO,//è¢«è‡ªæ‘¸
+	MJ_HU_FEN_TYPE_DIAN_PAO,//ç‚¹ç‚®ï¼ˆæ”¾ç‚®ï¼‰
+	MJ_HU_FEN_TYPE_DIAN_PAO_HU,//åƒèƒ¡ï¼ˆç‚¹ç‚®èƒ¡ï¼‰
 };
 
-//ºıÅÆÀàĞÍ
-enum HUPAI_TYPE_MJ//Âé½«ºúÅÆÀàĞÍÃ¶¾Ù½á¹¹
+//ç³Šç‰Œç±»å‹
+enum HUPAI_TYPE_MJ//éº»å°†èƒ¡ç‰Œç±»å‹æšä¸¾ç»“æ„
 {
-	MJ_HUPAI_TYPE_None					=255,	//Ä¬ÈÏÌî³äÖµ	
-	MJ_HUPAI_TYPE_PingHu				=3,		//Æ½ºú
-	MJ_HUPAI_TYPE_QiangGang				=46,	//ÇÀ¸Üºú
-	MJ_HUPAI_TYPE_QiDui					=58,	//ÆßĞ¡¶Ô
-	MJ_HUPAI_TYPE_QingYiSe				=61,	//ÇåÒ»É«
-	MJ_HUPAI_TYPE_ShiSanYao				=84,	//Ê®ÈıçÛ
-	MJ_HUPAI_TYPE_LongQiDui				=88,	//ºÀ»ªÆß¶Ô
-	MJ_HUPAI_TYPE_YI_TIAO_LONG			=89,	//Ò»ÌõÁú
+	MJ_HUPAI_TYPE_None					=255,	//é»˜è®¤å¡«å……å€¼	
+	MJ_HUPAI_TYPE_PingHu				=3,		//å¹³èƒ¡
+	MJ_HUPAI_TYPE_QiangGang				=46,	//æŠ¢æ èƒ¡
+	MJ_HUPAI_TYPE_QiDui					=58,	//ä¸ƒå°å¯¹
+	MJ_HUPAI_TYPE_QingYiSe				=61,	//æ¸…ä¸€è‰²
+	MJ_HUPAI_TYPE_ShiSanYao				=84,	//åä¸‰å¹º
+	MJ_HUPAI_TYPE_LongQiDui				=88,	//è±ªåä¸ƒå¯¹
+	MJ_HUPAI_TYPE_YI_TIAO_LONG			=89,	//ä¸€æ¡é¾™
 };
 
-//ºú·Ö¼ÆËã
+//èƒ¡åˆ†è®¡ç®—
 struct CountHuFenStruct
 {
-	BYTE byNameType[3];					//ÏàÓ¦µÄÃû×Ö£¬ Ã¶¾ÙÀàĞÍMJ_HU_FEN_TYPE
-	BYTE byXiangYingStation[3];			//ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-	BYTE byXiangYingStationEx[3];		//ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-	int iAllFen[3];						//ÊäÓ®µÄºú·Ö
+	BYTE byNameType[3];					//ç›¸åº”çš„åå­—ï¼Œ æšä¸¾ç±»å‹MJ_HU_FEN_TYPE
+	BYTE byXiangYingStation[3];			//ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+	BYTE byXiangYingStationEx[3];		//ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+	int iAllFen[3];						//è¾“èµ¢çš„èƒ¡åˆ†
 	BYTE byNums;
 	CountHuFenStruct()
 	{
@@ -169,14 +169,14 @@ struct CountHuFenStruct
 	}
 };
 
-//¸Ü·Ö½áËã
+//æ åˆ†ç»“ç®—
 struct CountGangFenStruct
 {
-	BYTE byGangType[MAX_COUNT_GANG_FEN];		//¸ÜÀàĞÍ £¬Ã¶¾ÙÀàĞÍMJ_GANG_FEN_TYPE
-	BYTE byXiangYingStation[MAX_COUNT_GANG_FEN];//ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-	bool bBaoTing[MAX_COUNT_GANG_FEN];			//Õâ¸ö¸ÜÊÇ·ñ±¨Ìı(ÏàÓ¦Íæ¼ÒÊÇ·ñ±¨Ìı),true±¨Ìı¸Ü
-	BYTE byGangNums[MAX_COUNT_GANG_FEN];		//ÏàÍ¬¸ÜµÄÊıÁ¿£º£ºÖ¸¸ÜÀàĞÍÏàÍ¬£¬ÏàÓ¦Íæ¼ÒÎ»ÖÃÏàÍ¬
-	int iAllFen[MAX_COUNT_GANG_FEN];//×Ü·Ö
+	BYTE byGangType[MAX_COUNT_GANG_FEN];		//æ ç±»å‹ ï¼Œæšä¸¾ç±»å‹MJ_GANG_FEN_TYPE
+	BYTE byXiangYingStation[MAX_COUNT_GANG_FEN];//ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+	bool bBaoTing[MAX_COUNT_GANG_FEN];			//è¿™ä¸ªæ æ˜¯å¦æŠ¥å¬(ç›¸åº”ç©å®¶æ˜¯å¦æŠ¥å¬),trueæŠ¥å¬æ 
+	BYTE byGangNums[MAX_COUNT_GANG_FEN];		//ç›¸åŒæ çš„æ•°é‡ï¼šï¼šæŒ‡æ ç±»å‹ç›¸åŒï¼Œç›¸åº”ç©å®¶ä½ç½®ç›¸åŒ
+	int iAllFen[MAX_COUNT_GANG_FEN];//æ€»åˆ†
 	BYTE byNums;
 	CountGangFenStruct()
 	{
@@ -192,14 +192,14 @@ struct CountGangFenStruct
 	}
 };
 
-///³ÔÅö¸ÜÅÆÊı¾İ½á¹¹
+///åƒç¢°æ ç‰Œæ•°æ®ç»“æ„
 struct TCPGStruct
 {
-	BYTE  byType;    //³ÔÅö¸ÜÀàĞÍ
-	BYTE  iStation;  //³ÔÅö¸ÜÍæ¼ÒÎ»ÖÃ
-	BYTE  iBeStation;//±»³ÔÅö¸ÜÍæ¼ÒÎ»ÖÃ
-	BYTE  iOutpai;   //±ğÈË³öµÄÅÆ
-	BYTE  byData[4]; //³ÔÅö¸ÜÅÆÊı¾İ
+	BYTE  byType;    //åƒç¢°æ ç±»å‹
+	BYTE  iStation;  //åƒç¢°æ ç©å®¶ä½ç½®
+	BYTE  iBeStation;//è¢«åƒç¢°æ ç©å®¶ä½ç½®
+	BYTE  iOutpai;   //åˆ«äººå‡ºçš„ç‰Œ
+	BYTE  byData[4]; //åƒç¢°æ ç‰Œæ•°æ®
 	TCPGStruct()
 	{
 		Init();
@@ -207,22 +207,22 @@ struct TCPGStruct
 	void Init()
 	{
 		memset(byData,255,sizeof(byData));
-		byType = ACTION_NO;    //³ÔÅö¸ÜÀàĞÍ
-		iOutpai = 255;   //±ğÈË³öµÄÅÆ
-		iStation = 255;  //³ÔÅö¸ÜÍæ¼ÒÎ»ÖÃ
-		iBeStation = 255;//±»³ÔÅö¸ÜÍæ¼ÒÎ»ÖÃ
+		byType = ACTION_NO;    //åƒç¢°æ ç±»å‹
+		iOutpai = 255;   //åˆ«äººå‡ºçš„ç‰Œ
+		iStation = 255;  //åƒç¢°æ ç©å®¶ä½ç½®
+		iBeStation = 255;//è¢«åƒç¢°æ ç©å®¶ä½ç½®
 	};
 };
 
-//´Ë´¦¶¨Òå´´½¨·¿¼äµÄ¹æÔò£¬ÓÎÏ·¹æÔò
+//æ­¤å¤„å®šä¹‰åˆ›å»ºæˆ¿é—´çš„è§„åˆ™ï¼Œæ¸¸æˆè§„åˆ™
 struct tagStructGameRuler
 {
-	bool bDaHu;                  //ÊÇ·ñ´óºú£¬bDaHu=trueÊÇ´óºúÍæ·¨£¬bDaHu=falseÊÇÆ½ºúÍæ·¨
-	bool bBaoTing;               //±¨Ìı
-	int  iZiMoScore;			 //×ÔÃş·ÖÊı
-	bool bZhiZiMo;               //Ö»×ÔÃş
-	bool bFenPai;                //ÊÇ·ñ´ø·çÅÆ
-	bool bAlreadSet;			 //·şÎñÎñ¶Ë×ÔÓÃ
+	bool bDaHu;                  //æ˜¯å¦å¤§èƒ¡ï¼ŒbDaHu=trueæ˜¯å¤§èƒ¡ç©æ³•ï¼ŒbDaHu=falseæ˜¯å¹³èƒ¡ç©æ³•
+	bool bBaoTing;               //æŠ¥å¬
+	int  iZiMoScore;			 //è‡ªæ‘¸åˆ†æ•°
+	bool bZhiZiMo;               //åªè‡ªæ‘¸
+	bool bFenPai;                //æ˜¯å¦å¸¦é£ç‰Œ
+	bool bAlreadSet;			 //æœåŠ¡åŠ¡ç«¯è‡ªç”¨
 	tagStructGameRuler()
 	{
 		Init();
@@ -238,16 +238,16 @@ struct tagStructGameRuler
 	}
 };
 
-//¿ÕÏĞ×´Ì¬
+//ç©ºé—²çŠ¶æ€
 struct CMD_S_StatusFree
 {
-	bool bAgree[PLAY_COUNT];//×¼±¸Íæ¼Ò
-	BYTE byOutTime;			//³öÅÆÊ±¼ä		
-	BYTE byBlockTime;		//À¹ÅÆË¼¿¼Ê±¼ä
-	BYTE byMJCardType;		//Âé½«ÅÆÑùÊ½
-	int iPlayingCount;		//½øĞĞ¾ÖÊı
-	tagStructGameRuler tGameRuler;		//ÓÎÏ·¹æÔò
-	bool bSuperFlag;		//³¬¶ËÍæ¼Ò
+	bool bAgree[PLAY_COUNT];//å‡†å¤‡ç©å®¶
+	BYTE byOutTime;			//å‡ºç‰Œæ—¶é—´		
+	BYTE byBlockTime;		//æ‹¦ç‰Œæ€è€ƒæ—¶é—´
+	BYTE byMJCardType;		//éº»å°†ç‰Œæ ·å¼
+	int iPlayingCount;		//è¿›è¡Œå±€æ•°
+	tagStructGameRuler tGameRuler;		//æ¸¸æˆè§„åˆ™
+	bool bSuperFlag;		//è¶…ç«¯ç©å®¶
 	CMD_S_StatusFree()
 	{
 		Init();
@@ -263,41 +263,41 @@ struct CMD_S_StatusFree
 	}
 };
 
-//ÓÎÏ·ÖĞ×´Ì¬
+//æ¸¸æˆä¸­çŠ¶æ€
 struct CMD_S_StatusPlay
 {
-	bool				bTing[PLAY_COUNT];	//ÌıÅÆ
-	//bool				bTinging;			//ÊÇ·ñÕıÔÚ½øĞĞÌıÅÆ²Ù×÷
-	bool				bTuoGuan[PLAY_COUNT];//ÍĞ¹Ü
-	BYTE				byOutTime;			//³öÅÆÊ±¼ä		
-	BYTE				byBlockTime;		//À¹ÅÆË¼¿¼Ê±¼ä	
-	//ÊÖÅÆĞÅÏ¢
-	BYTE				byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆ²»³¬¹ı14ÕÅ 	 
-	BYTE				byArHandPaiCount[PLAY_COUNT];//ÊÖÅÆÕÅÊı	 
-	//³öÅÆĞÅÏ¢
-	BYTE				byArOutPai[PLAY_COUNT][OUT_CARD_NUM];//³öÅÆ²»³¬¹ı40ÕÅ
-	BYTE				byArOutPaiCount[PLAY_COUNT];//³öÅÆµÄÕÅÊı
-	BYTE				byMJCardType;//Âé½«ÅÆÑùÊ½
-	//³öÅÆÍæ¼Ò
-	BYTE				byNowOutStation;//³öÅÆÎ»ÖÃ
-	//BYTE				byTingCanOut[HAND_CARD_NUM];//ÌıÅÆÄÜ´òµÄÅÆ
+	bool				bTing[PLAY_COUNT];	//å¬ç‰Œ
+	//bool				bTinging;			//æ˜¯å¦æ­£åœ¨è¿›è¡Œå¬ç‰Œæ“ä½œ
+	bool				bTuoGuan[PLAY_COUNT];//æ‰˜ç®¡
+	BYTE				byOutTime;			//å‡ºç‰Œæ—¶é—´		
+	BYTE				byBlockTime;		//æ‹¦ç‰Œæ€è€ƒæ—¶é—´	
+	//æ‰‹ç‰Œä¿¡æ¯
+	BYTE				byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œä¸è¶…è¿‡14å¼  	 
+	BYTE				byArHandPaiCount[PLAY_COUNT];//æ‰‹ç‰Œå¼ æ•°	 
+	//å‡ºç‰Œä¿¡æ¯
+	BYTE				byArOutPai[PLAY_COUNT][OUT_CARD_NUM];//å‡ºç‰Œä¸è¶…è¿‡40å¼ 
+	BYTE				byArOutPaiCount[PLAY_COUNT];//å‡ºç‰Œçš„å¼ æ•°
+	BYTE				byMJCardType;//éº»å°†ç‰Œæ ·å¼
+	//å‡ºç‰Œç©å®¶
+	BYTE				byNowOutStation;//å‡ºç‰Œä½ç½®
+	//BYTE				byTingCanOut[HAND_CARD_NUM];//å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
 	BYTE				byNtStation;
-	BYTE				iMenNums;//ÃÅÅÆÊıÁ¿
-	int					iPlayingCount;//½øĞĞ¾ÖÊı
-	//³ÔÅö¸ÜĞÅÏ¢
-	TCPGStruct			UserGCPData[PLAY_COUNT][5];//³ÔÅö¸Ü
-	tagStructGameRuler  tGameRuler;		//ÓÎÏ·¹æÔò
-	bool                bQiHu;          //ÊÇ·ñÕı´¦ÓÚÆúºú×´Ì¬
-	BYTE				byTingOutCardIndex[PLAY_COUNT];//³öÅÆÁĞ±íÖĞ£¬ÌıÅÆµ¹¿ÛµÄË÷ÒıÅÆ
-	bool				bSuperFlag;	//³¬¶ËÍæ¼Ò
-#ifdef RULE_HAVE_TING_PAI_NOTIFY //ÊÇ·ñÓĞÌıÅÆÌáÊ¾
-	//ºúÅÆĞÅÏ¢
-	BYTE                byOutCanHuCard[HAND_CARD_NUM];  //³öÅÆÇ°£¬³öÕâÕÅÅÆÄÜÌı
-	BYTE				byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //³öÅÆÇ°£¬¶ÔÓ¦Ë÷ÒıÄÜºúµÄÅÆ
-	BYTE				byCardRemainNum[MAX_MJ_PAI];		//²Ù×÷Íæ¼ÒÏÔÊ¾Ê£ÓàÅÆÊıÁ¿
+	BYTE				iMenNums;//é—¨ç‰Œæ•°é‡
+	int					iPlayingCount;//è¿›è¡Œå±€æ•°
+	//åƒç¢°æ ä¿¡æ¯
+	TCPGStruct			UserGCPData[PLAY_COUNT][5];//åƒç¢°æ 
+	tagStructGameRuler  tGameRuler;		//æ¸¸æˆè§„åˆ™
+	bool                bQiHu;          //æ˜¯å¦æ­£å¤„äºå¼ƒèƒ¡çŠ¶æ€
+	BYTE				byTingOutCardIndex[PLAY_COUNT];//å‡ºç‰Œåˆ—è¡¨ä¸­ï¼Œå¬ç‰Œå€’æ‰£çš„ç´¢å¼•ç‰Œ
+	bool				bSuperFlag;	//è¶…ç«¯ç©å®¶
+#ifdef RULE_HAVE_TING_PAI_NOTIFY //æ˜¯å¦æœ‰å¬ç‰Œæç¤º
+	//èƒ¡ç‰Œä¿¡æ¯
+	BYTE                byOutCanHuCard[HAND_CARD_NUM];  //å‡ºç‰Œå‰ï¼Œå‡ºè¿™å¼ ç‰Œèƒ½å¬
+	BYTE				byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //å‡ºç‰Œå‰ï¼Œå¯¹åº”ç´¢å¼•èƒ½èƒ¡çš„ç‰Œ
+	BYTE				byCardRemainNum[MAX_MJ_PAI];		//æ“ä½œç©å®¶æ˜¾ç¤ºå‰©ä½™ç‰Œæ•°é‡
 #endif
 #ifdef RULE_HAVE_HU_PAI_NOTIFY
-	BYTE                byOutAfterHuCard[MAX_CANHU_CARD_NUM];   //³öÅÆºó£¬ºúÅÆÊı¾İ
+	BYTE                byOutAfterHuCard[MAX_CANHU_CARD_NUM];   //å‡ºç‰Œåï¼Œèƒ¡ç‰Œæ•°æ®
 #endif
 	CMD_S_StatusPlay()
 	{
@@ -334,25 +334,25 @@ struct CMD_S_StatusPlay
 	}
 };
 
-//ÓÎÏ·¿ªÊ¼
+//æ¸¸æˆå¼€å§‹
 struct CMD_S_GameStart
 {
-	BYTE							byNtStation;								//×¯¼Ò
-	BYTE							byCard[PLAY_COUNT][HAND_CARD_NUM];			//ÅÆÊı¾İ
-	BYTE							byCardCount[PLAY_COUNT];					//ÅÆÕÅÊı
-	BYTE							bySezi0;									//É«×Ó0Êı¾İ
-	BYTE							bySezi1;									//É«×Ó1Êı¾İ
-	BYTE							byGetPaiDir;								//±¾¾ÖÆğÅÆ·½Ïò
-	BYTE							byGetPai;									//ÆğÅÆ¶ØÊı
-	BYTE							byMJCardType;	                            //Âé½«ÅÆÑùÊ½
-	BYTE                            byNtCard;                                   //×¯¼ÒÆğÊÖ×¥µ½µÄÅÆ
-	BYTE							iMenNums;									//ÃÅÅÆÊıÁ¿
-	int								iPlayingCount;								//¾ÖÊı
-	bool							bSuperFlag[PLAY_COUNT];						//³¬¶ËÍæ¼Ò
+	BYTE							byNtStation;								//åº„å®¶
+	BYTE							byCard[PLAY_COUNT][HAND_CARD_NUM];			//ç‰Œæ•°æ®
+	BYTE							byCardCount[PLAY_COUNT];					//ç‰Œå¼ æ•°
+	BYTE							bySezi0;									//è‰²å­0æ•°æ®
+	BYTE							bySezi1;									//è‰²å­1æ•°æ®
+	BYTE							byGetPaiDir;								//æœ¬å±€èµ·ç‰Œæ–¹å‘
+	BYTE							byGetPai;									//èµ·ç‰Œæ•¦æ•°
+	BYTE							byMJCardType;	                            //éº»å°†ç‰Œæ ·å¼
+	BYTE                            byNtCard;                                   //åº„å®¶èµ·æ‰‹æŠ“åˆ°çš„ç‰Œ
+	BYTE							iMenNums;									//é—¨ç‰Œæ•°é‡
+	int								iPlayingCount;								//å±€æ•°
+	bool							bSuperFlag[PLAY_COUNT];						//è¶…ç«¯ç©å®¶
 #ifdef RULE_HAVE_TING_PAI_NOTIFY
-	BYTE                            byOutCanHuCard[HAND_CARD_NUM];  //³öÕâÕÅÅÆÄÜÌı
-	BYTE							byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //¶ÔÓ¦Ë÷ÒıÄÜºúµÄÅÆ   
-	BYTE							byCardRemainNum[MAX_MJ_PAI];		//²Ù×÷Íæ¼ÒÏÔÊ¾Ê£ÓàÅÆÊıÁ¿
+	BYTE                            byOutCanHuCard[HAND_CARD_NUM];  //å‡ºè¿™å¼ ç‰Œèƒ½å¬
+	BYTE							byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //å¯¹åº”ç´¢å¼•èƒ½èƒ¡çš„ç‰Œ   
+	BYTE							byCardRemainNum[MAX_MJ_PAI];		//æ“ä½œç©å®¶æ˜¾ç¤ºå‰©ä½™ç‰Œæ•°é‡
 #endif
 	CMD_S_GameStart()
 	{
@@ -378,25 +378,25 @@ struct CMD_S_GameStart
 	}
 };
 
-//³öÅÆ
+//å‡ºç‰Œ
 struct CMD_S_OutCard
 {
 	bool							bTing;
-	BYTE							byOutCardUser;						//³öÅÆÓÃ»§
-	BYTE							byOutCardData;						//³öÅÆÆË¿Ë	
-	BYTE                            byCardData[HAND_CARD_NUM];          //ÅÆÊı¾İ
-	BYTE                            byCardCount;                        //ÅÆÊıÄ¿
-#ifdef RULE_HAVE_HU_PAI_NOTIFY //ÊÇ·ñÒª×öºúÅÆÌáÊ¾
-	BYTE							byHuCard[MAX_CANHU_CARD_NUM];	    //ÄÜºúµÄÅÆ
+	BYTE							byOutCardUser;						//å‡ºç‰Œç”¨æˆ·
+	BYTE							byOutCardData;						//å‡ºç‰Œæ‰‘å…‹	
+	BYTE                            byCardData[HAND_CARD_NUM];          //ç‰Œæ•°æ®
+	BYTE                            byCardCount;                        //ç‰Œæ•°ç›®
+#ifdef RULE_HAVE_HU_PAI_NOTIFY //æ˜¯å¦è¦åšèƒ¡ç‰Œæç¤º
+	BYTE							byHuCard[MAX_CANHU_CARD_NUM];	    //èƒ½èƒ¡çš„ç‰Œ
 #endif
-	BYTE							byOutCardDataIndex;                 //³öÅÆË÷Òı
+	BYTE							byOutCardDataIndex;                 //å‡ºç‰Œç´¢å¼•
 	CMD_S_OutCard()
 	{
 		bTing=false;
 		byOutCardUser=255;
 		byOutCardData=255;
 		memset(byCardData,255,sizeof(byCardData));
-#ifdef RULE_HAVE_HU_PAI_NOTIFY //ÊÇ·ñÒª×öºúÅÆÌáÊ¾
+#ifdef RULE_HAVE_HU_PAI_NOTIFY //æ˜¯å¦è¦åšèƒ¡ç‰Œæç¤º
 		memset(byHuCard,255,sizeof(byHuCard));
 #endif
 		byCardCount=0;
@@ -404,11 +404,11 @@ struct CMD_S_OutCard
 	}
 };
 
-//³öÅÆ½á¹û
+//å‡ºç‰Œç»“æœ
 struct CMD_S_OutCard_Result
 {
-	bool							bResult;        //³öÅÆ½á¹û£¬³É¹¦true£¬Ê§°Üfalse
-	//´íÎóÂë£¬1£º·ÇÓÎÏ·×´Ì¬£¬2:²»ÊÇ³öÅÆÍæ¼Ò£¬3£ºÃ»ÓĞÕâÕÅÊÖÅÆ£¬4£ºÅÆÒÑ¾­³öÍê£¬5£ºÒÑ¾­ÌıÅÆ£¬6£ºÓĞ³ÔÅö¸Üºú¶¯×÷²»ÄÜ³öÅÆ
+	bool							bResult;        //å‡ºç‰Œç»“æœï¼ŒæˆåŠŸtrueï¼Œå¤±è´¥false
+	//é”™è¯¯ç ï¼Œ1ï¼šéæ¸¸æˆçŠ¶æ€ï¼Œ2:ä¸æ˜¯å‡ºç‰Œç©å®¶ï¼Œ3ï¼šæ²¡æœ‰è¿™å¼ æ‰‹ç‰Œï¼Œ4ï¼šç‰Œå·²ç»å‡ºå®Œï¼Œ5ï¼šå·²ç»å¬ç‰Œï¼Œ6ï¼šæœ‰åƒç¢°æ èƒ¡åŠ¨ä½œä¸èƒ½å‡ºç‰Œ
 	BYTE							byErrorCode;	
 	CMD_S_OutCard_Result()
 	{
@@ -417,18 +417,18 @@ struct CMD_S_OutCard_Result
 	}
 };
 
-//×¥ÅÆ
+//æŠ“ç‰Œ
 struct CMD_S_SendCard
 {
-	BYTE							byCardData;							//ÆË¿ËÊı¾İ
-	BYTE							byCurrentUser;						//µ±Ç°ÓÃ»§
-	BYTE                            byCard[HAND_CARD_NUM];				//ÅÆÊı¾İ
-	BYTE                            byCardCount;                        //ÅÆÊıÄ¿	
-	BYTE							iMenNums;							//ÃÅÅÆÊıÁ¿
+	BYTE							byCardData;							//æ‰‘å…‹æ•°æ®
+	BYTE							byCurrentUser;						//å½“å‰ç”¨æˆ·
+	BYTE                            byCard[HAND_CARD_NUM];				//ç‰Œæ•°æ®
+	BYTE                            byCardCount;                        //ç‰Œæ•°ç›®	
+	BYTE							iMenNums;							//é—¨ç‰Œæ•°é‡
 #ifdef RULE_HAVE_TING_PAI_NOTIFY
-	BYTE                            byOutCanHuCard[HAND_CARD_NUM];  //³öÕâÕÅÅÆÄÜÌı
-	BYTE							byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //¶ÔÓ¦Ë÷ÒıÄÜºúµÄÅÆ
-	BYTE							byCardRemainNum[MAX_MJ_PAI];		//²Ù×÷Íæ¼ÒÏÔÊ¾Ê£ÓàÅÆÊıÁ¿
+	BYTE                            byOutCanHuCard[HAND_CARD_NUM];  //å‡ºè¿™å¼ ç‰Œèƒ½å¬
+	BYTE							byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //å¯¹åº”ç´¢å¼•èƒ½èƒ¡çš„ç‰Œ
+	BYTE							byCardRemainNum[MAX_MJ_PAI];		//æ“ä½œç©å®¶æ˜¾ç¤ºå‰©ä½™ç‰Œæ•°é‡
 #endif
 	CMD_S_SendCard()
 	{
@@ -445,7 +445,7 @@ struct CMD_S_SendCard
 	}
 };
 
-//³ÔÅö¸Üºú²Ù×÷ÌáÊ¾
+//åƒç¢°æ èƒ¡æ“ä½œæç¤º
 struct CMD_S_OperateNotify
 {
 	bool							bChi;							
@@ -453,13 +453,13 @@ struct CMD_S_OperateNotify
 	bool							bGang;
 	bool							bHu;
 	bool							bTing;
-	BYTE							byUsr;								//²Ù×÷Íæ¼Ò
-	BYTE							byChi[3][3];						//ÄÜ³ÔµÄÅÆ
-	BYTE							byPeng;								//ÄÜÅöµÄÅÆ
-	BYTE							byGangData[4][2];					//ÄÜ¸ÜµÄÅÆ	
-	BYTE							byTingCanOut[HAND_CARD_NUM];		//ÌıÅÆÄÜ´òµÄÅÆ
-	BYTE							byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];  //ÌıÅÆ£¬´òÄÇÕÅÅÆºúÄÇÕÅÅÆ
-	BYTE							byCardRemainNum[MAX_MJ_PAI]; //Ã¿ÕÅÅÆµÄÊ£ÓàÊıÁ¿
+	BYTE							byUsr;								//æ“ä½œç©å®¶
+	BYTE							byChi[3][3];						//èƒ½åƒçš„ç‰Œ
+	BYTE							byPeng;								//èƒ½ç¢°çš„ç‰Œ
+	BYTE							byGangData[4][2];					//èƒ½æ çš„ç‰Œ	
+	BYTE							byTingCanOut[HAND_CARD_NUM];		//å¬ç‰Œèƒ½æ‰“çš„ç‰Œ
+	BYTE							byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];  //å¬ç‰Œï¼Œæ‰“é‚£å¼ ç‰Œèƒ¡é‚£å¼ ç‰Œ
+	BYTE							byCardRemainNum[MAX_MJ_PAI]; //æ¯å¼ ç‰Œçš„å‰©ä½™æ•°é‡
 	CMD_S_OperateNotify()
 	{
 		Init();
@@ -479,20 +479,20 @@ struct CMD_S_OperateNotify
 	}
 };
 
-//³ÔÅö¸Üºú²Ù×÷½á¹û
+//åƒç¢°æ èƒ¡æ“ä½œç»“æœ
 struct CMD_S_OperateResult
 {
-	BYTE  byType;    //³ÔÅö¸ÜÀàĞÍ
-	BYTE  iStation;  //³ÔÅö¸ÜÍæ¼ÒÎ»ÖÃ
-	BYTE  iBeStation;//±»³ÔÅö¸ÜÍæ¼ÒÎ»ÖÃ
-	BYTE  iOutpai;   //±ğÈË³öµÄÅÆ
-	BYTE  byData[4]; //³ÔÅö¸ÜÅÆÊı¾İ
-	BYTE  byCard[HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE  byCardCount;//ÊÖÅÆÊıÁ¿
+	BYTE  byType;    //åƒç¢°æ ç±»å‹
+	BYTE  iStation;  //åƒç¢°æ ç©å®¶ä½ç½®
+	BYTE  iBeStation;//è¢«åƒç¢°æ ç©å®¶ä½ç½®
+	BYTE  iOutpai;   //åˆ«äººå‡ºçš„ç‰Œ
+	BYTE  byData[4]; //åƒç¢°æ ç‰Œæ•°æ®
+	BYTE  byCard[HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE  byCardCount;//æ‰‹ç‰Œæ•°é‡
 #ifdef RULE_HAVE_TING_PAI_NOTIFY
-	BYTE  byOutCanHuCard[HAND_CARD_NUM];                 //³öÕâÕÅÅÆÄÜÌı
-	BYTE  byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //¶ÔÓ¦Ë÷ÒıÄÜºúµÄÅÆ
-	BYTE  byCardRemainNum[MAX_MJ_PAI];		//²Ù×÷Íæ¼ÒÏÔÊ¾Ê£ÓàÅÆÊıÁ¿
+	BYTE  byOutCanHuCard[HAND_CARD_NUM];                 //å‡ºè¿™å¼ ç‰Œèƒ½å¬
+	BYTE  byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM];    //å¯¹åº”ç´¢å¼•èƒ½èƒ¡çš„ç‰Œ
+	BYTE  byCardRemainNum[MAX_MJ_PAI];		//æ“ä½œç©å®¶æ˜¾ç¤ºå‰©ä½™ç‰Œæ•°é‡
 #endif
 	CMD_S_OperateResult()
 	{
@@ -511,42 +511,42 @@ struct CMD_S_OperateResult
 	}
 };
 
-//ÓÎÏ·½áÊø
+//æ¸¸æˆç»“æŸ
 struct CMD_S_GameEnd
 {
-	bool							bZimo;						//ÊÇ·ñ×ÔÃş
-	bool							bIsLiuJu;					//ÊÇ·ñÁ÷¾Ö
-	bool                            bIsHu[PLAY_COUNT];		//ÄÄĞ©Íæ¼ÒºúÅÆÁË
-	BYTE							byFangPao;				//·ÅÅÚÍæ¼ÒÎ»ÖÃ
-	BYTE							byPs;						//ºúµÄÅÆ 
-	BYTE							byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//ÊÖÅÆÊı¾İ
-	BYTE							byArHandPaiCount[PLAY_COUNT];//ÊÖÅÆÕÅÊı
-	///////////////////ÆäËüÊı¾İ//////////////////
-	//BYTE							byBaoCard;					//ñ®×ÓÅÆ
-	TCPGStruct						UserGCPData[PLAY_COUNT][5];	//³ÔÅö¸Ü
-	//BYTE							byArOutPai[PLAY_COUNT][OUT_CARD_NUM]; //³öÅÆÊı¾İ
-	//BYTE							byArOutPaiCount[PLAY_COUNT];	 //³öÅÆµÄÕÅÊı
+	bool							bZimo;						//æ˜¯å¦è‡ªæ‘¸
+	bool							bIsLiuJu;					//æ˜¯å¦æµå±€
+	bool                            bIsHu[PLAY_COUNT];		//å“ªäº›ç©å®¶èƒ¡ç‰Œäº†
+	BYTE							byFangPao;				//æ”¾ç‚®ç©å®¶ä½ç½®
+	BYTE							byPs;						//èƒ¡çš„ç‰Œ 
+	BYTE							byArHandPai[PLAY_COUNT][HAND_CARD_NUM];//æ‰‹ç‰Œæ•°æ®
+	BYTE							byArHandPaiCount[PLAY_COUNT];//æ‰‹ç‰Œå¼ æ•°
+	///////////////////å…¶å®ƒæ•°æ®//////////////////
+	//BYTE							byBaoCard;					//ç™å­ç‰Œ
+	TCPGStruct						UserGCPData[PLAY_COUNT][5];	//åƒç¢°æ 
+	//BYTE							byArOutPai[PLAY_COUNT][OUT_CARD_NUM]; //å‡ºç‰Œæ•°æ®
+	//BYTE							byArOutPaiCount[PLAY_COUNT];	 //å‡ºç‰Œçš„å¼ æ•°
 	BYTE							byRemainMenPai[MAX_REMAIN_MEN_PAI_NUM];
-	BYTE							byRemainMenPaiCount;//Ê£ÓàÃÅÅÆÊıÁ¿
-	BYTE							byHuType[PLAY_COUNT][MAX_HUPAI_TYPE];//ºúÅÆÀàĞÍ £¬255Ä¬ÈÏÌî³äÖµ
-	int								iFanCount[PLAY_COUNT];				 //ºúÅÆÀàĞÍµÄ·¬Êı£¬±ÈÈç´óËÄÏ²88·¬£¬ÇåÒ»É«16·¬
-	bool							bTing[PLAY_COUNT];					 //Íæ¼ÒÊÇ·ñ±¨Ìı
-	CountHuFenStruct                countHuFen[PLAY_COUNT];     //ºú·ÖÁĞ±í
-	CountGangFenStruct              countGangFen[PLAY_COUNT];   //¸Ü·ÖÁĞ±í
-	long long						llGameScore[PLAY_COUNT];	//×ÜµÃ·Ö
-	int								iWinFailDouble[PLAY_COUNT]; //½ğ±Ò³¡ÊäÓ®¶àÉÙ±¶
+	BYTE							byRemainMenPaiCount;//å‰©ä½™é—¨ç‰Œæ•°é‡
+	BYTE							byHuType[PLAY_COUNT][MAX_HUPAI_TYPE];//èƒ¡ç‰Œç±»å‹ ï¼Œ255é»˜è®¤å¡«å……å€¼
+	int								iFanCount[PLAY_COUNT];				 //èƒ¡ç‰Œç±»å‹çš„ç•ªæ•°ï¼Œæ¯”å¦‚å¤§å››å–œ88ç•ªï¼Œæ¸…ä¸€è‰²16ç•ª
+	bool							bTing[PLAY_COUNT];					 //ç©å®¶æ˜¯å¦æŠ¥å¬
+	CountHuFenStruct                countHuFen[PLAY_COUNT];     //èƒ¡åˆ†åˆ—è¡¨
+	CountGangFenStruct              countGangFen[PLAY_COUNT];   //æ åˆ†åˆ—è¡¨
+	long long						llGameScore[PLAY_COUNT];	//æ€»å¾—åˆ†
+	int								iWinFailDouble[PLAY_COUNT]; //é‡‘å¸åœºè¾“èµ¢å¤šå°‘å€
 	CMD_S_GameEnd()
 	{
 		Init();
 	}
 	void Init()
 	{
-		bZimo = false;		//ÊÇ·ñ×ÔÃş
+		bZimo = false;		//æ˜¯å¦è‡ªæ‘¸
 		byFangPao=255;
-		byPs		= 255;	//ºúµÄÅÆÖµ
-		bIsLiuJu	= true;	//ÊÇ·ñÁ÷¾Ö
+		byPs		= 255;	//èƒ¡çš„ç‰Œå€¼
+		bIsLiuJu	= true;	//æ˜¯å¦æµå±€
 		memset(bIsHu,false,sizeof(bIsHu));
-		memset(byArHandPai, 255, sizeof(byArHandPai));//ÊÖÅÆÊı¾İ	
+		memset(byArHandPai, 255, sizeof(byArHandPai));//æ‰‹ç‰Œæ•°æ®	
 		memset(byArHandPaiCount, 0, sizeof(byArHandPaiCount));
 		memset(llGameScore,0,sizeof(llGameScore));
 		memset(iFanCount,0,sizeof(iFanCount));
@@ -562,12 +562,12 @@ struct CMD_S_GameEnd
 };
 struct CMD_S_ZongResult
 {
-	int								iZimo[PLAY_COUNT];				//×ÔÃş´ÎÊı
-	int								iJiePao[PLAY_COUNT];			//½ÓÅÚ´ÎÊı
-	int								iDianPao[PLAY_COUNT];			//µãÅÚ´ÎÊı
-	int								iDianGang[PLAY_COUNT];			//µã¸Ü´ÎÊı
-	int								iGang[PLAY_COUNT];			    //¸ÜÅÆ´ÎÊı
-	long long						llGameScore[PLAY_COUNT];		//ÀÛ»ıµÃ·Ö
+	int								iZimo[PLAY_COUNT];				//è‡ªæ‘¸æ¬¡æ•°
+	int								iJiePao[PLAY_COUNT];			//æ¥ç‚®æ¬¡æ•°
+	int								iDianPao[PLAY_COUNT];			//ç‚¹ç‚®æ¬¡æ•°
+	int								iDianGang[PLAY_COUNT];			//ç‚¹æ æ¬¡æ•°
+	int								iGang[PLAY_COUNT];			    //æ ç‰Œæ¬¡æ•°
+	long long						llGameScore[PLAY_COUNT];		//ç´¯ç§¯å¾—åˆ†
 	CMD_S_ZongResult()
 	{
 		Init();
@@ -582,11 +582,11 @@ struct CMD_S_ZongResult
 		memset(llGameScore,0,sizeof(llGameScore));
 	}
 };
-//ÓÃ»§ÍĞ¹Ü
+//ç”¨æˆ·æ‰˜ç®¡
 struct CMD_S_Trustee
 {
-	bool							bTrustee;					//ÊÇ·ñÍĞ¹Ü
-	BYTE							byDeskStation;				//ÍĞ¹Ü×ùÎ»ºÅ
+	bool							bTrustee;					//æ˜¯å¦æ‰˜ç®¡
+	BYTE							byDeskStation;				//æ‰˜ç®¡åº§ä½å·
 	CMD_S_Trustee()
 	{
 		bTrustee=false;
@@ -595,71 +595,71 @@ struct CMD_S_Trustee
 };
 
 
-////////////////////¿Í»§¶Ë·¢ËÍ¸ø·şÎñÆ÷
+////////////////////å®¢æˆ·ç«¯å‘é€ç»™æœåŠ¡å™¨
 /////////////////////////////////////////////////////////////////////////////////////////////
-//¿Í»§¶ËÃüÁî½á¹¹
-#define C_S_OUT_CARD				50									//³öÅÆÃüÁî
-#define C_S_OPERATE_CARD			51									//²Ù×÷ÆË¿Ë
-#define C_S_TRUSTEE				    52									//ÓÃ»§ÍĞ¹Ü
+//å®¢æˆ·ç«¯å‘½ä»¤ç»“æ„
+#define C_S_OUT_CARD				50									//å‡ºç‰Œå‘½ä»¤
+#define C_S_OPERATE_CARD			51									//æ“ä½œæ‰‘å…‹
+#define C_S_TRUSTEE				    52									//ç”¨æˆ·æ‰˜ç®¡
 
-/*------------------------------------------³¬¶Ë------------------------------------*/
-#define C_S_SUPER_REQUEST_LOOK							120				//³¬¶Ë¿´ÅÆ
-#define S_C_SUPER_REQUEST_LOOK_RESULT					121				//³¬¶Ë¿´ÅÆ½á¹û
-#define C_S_SUPER_REQUEST_CRAD							122				//³¬¶ËÒªÅÆ
-#define S_C_SUPER_REQUEST_CRAD_RESULT					123				//³¬¶ËÒªÅÆ½á¹û
+/*------------------------------------------è¶…ç«¯------------------------------------*/
+#define C_S_SUPER_REQUEST_LOOK							120				//è¶…ç«¯çœ‹ç‰Œ
+#define S_C_SUPER_REQUEST_LOOK_RESULT					121				//è¶…ç«¯çœ‹ç‰Œç»“æœ
+#define C_S_SUPER_REQUEST_CRAD							122				//è¶…ç«¯è¦ç‰Œ
+#define S_C_SUPER_REQUEST_CRAD_RESULT					123				//è¶…ç«¯è¦ç‰Œç»“æœ
 
 
-//ÇëÇó¼ÇÅÆÆ÷
+//è¯·æ±‚è®°ç‰Œå™¨
 struct CMD_C_SuperLook
 {
 };
 
-//ÇëÇó¼ÇÅÆÆ÷½á¹û
+//è¯·æ±‚è®°ç‰Œå™¨ç»“æœ
 struct CMD_S_SuperLookResult
 {
-	BYTE    byRemainPaiDate[38];		//Ê£ÓàÅÆÊı¾İ	ÏÂ±êË÷ÒıÎªÅÆÖµ	
+	BYTE    byRemainPaiDate[38];		//å‰©ä½™ç‰Œæ•°æ®	ä¸‹æ ‡ç´¢å¼•ä¸ºç‰Œå€¼	
 	CMD_S_SuperLookResult()
 	{
 		memset(byRemainPaiDate,0,sizeof(byRemainPaiDate));
 	}
 };
 
-//ÇëÇóÒªÅÆ
+//è¯·æ±‚è¦ç‰Œ
 struct CMD_C_Super_Request_Card
 {
-	BYTE CardDate;                //ÅÆÊı¾İ
+	BYTE CardDate;                //ç‰Œæ•°æ®
 	CMD_C_Super_Request_Card()
 	{
 		CardDate = 255;
 	}
 };
 
-//ÇëÇóÒªÅÆ½á¹û
+//è¯·æ±‚è¦ç‰Œç»“æœ
 struct CMD_S_Super_Request_Card_Result
 {
-	BYTE	ECode;                 //´íÎóÂë£º0 ³É¹¦  1 ²»ÊÇ³¬¶ËÍæ¼Ò  2 Ã»ÓĞÕâÕÅÅÆ
+	BYTE	ECode;                 //é”™è¯¯ç ï¼š0 æˆåŠŸ  1 ä¸æ˜¯è¶…ç«¯ç©å®¶  2 æ²¡æœ‰è¿™å¼ ç‰Œ
 	CMD_S_Super_Request_Card_Result()
 	{
 		ECode = 0;
 	}
 };
 
-//³öÅÆ
+//å‡ºç‰Œ
 struct CMD_C_OutCard
 {
-	bool							bTing;								//ÌıÅÆ
-	BYTE							byOutCardData;						//³öÅÆÊı¾İ
+	bool							bTing;								//å¬ç‰Œ
+	BYTE							byOutCardData;						//å‡ºç‰Œæ•°æ®
 	CMD_C_OutCard()
 	{
 		bTing=false;
 		byOutCardData=255;
 	}
 };
-//³ÔÅö¸Üºú²Ù×÷
+//åƒç¢°æ èƒ¡æ“ä½œ
 struct CMD_C_OperateCard
 {
-	BYTE							byOperateType;						//²Ù×÷ÀàĞÍ
-	BYTE							byActionData[4];					//³ÔÅö¸ÜÊı¾İ
+	BYTE							byOperateType;						//æ“ä½œç±»å‹
+	BYTE							byActionData[4];					//åƒç¢°æ æ•°æ®
 	CMD_C_OperateCard()
 	{
 		memset(byActionData,255,sizeof(byActionData));
@@ -667,20 +667,20 @@ struct CMD_C_OperateCard
 	}
 };
 
-//¶îÍâ£¬¼Óµ×·Ö
+//é¢å¤–ï¼ŒåŠ åº•åˆ†
 struct CMD_C_AddScore
 {
-	int							    iNums;			//·ÖÊı
+	int							    iNums;			//åˆ†æ•°
 	CMD_C_AddScore()
 	{
 		iNums = 0;
 	}
 };
 
-//ÓÃ»§ÍĞ¹Ü
+//ç”¨æˆ·æ‰˜ç®¡
 struct CMD_C_Trustee
 {
-	bool							bTrustee;							//ÊÇ·ñÍĞ¹Ü	
+	bool							bTrustee;							//æ˜¯å¦æ‰˜ç®¡	
 	CMD_C_Trustee()
 	{
 		bTrustee=false;

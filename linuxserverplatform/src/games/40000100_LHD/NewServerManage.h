@@ -17,7 +17,7 @@ public:
 	virtual ~CNewServerManage();
 
 public:
-	// ÖØÔØÒ»Ğ©Ğéº¯Êı
+	// é‡è½½ä¸€äº›è™šå‡½æ•°
 	virtual bool InitDeskGameStation();
 	virtual bool OnStart();
 	virtual bool OnGetGameStation(BYTE deskStation, UINT uSocketID, bool bWatchUser);
@@ -27,30 +27,30 @@ public:
 	virtual bool UserLeftDesk(GameUserInfo* pUser);
 	virtual bool UserNetCut(GameUserInfo* pUser);
 	virtual bool IsPlayGame(BYTE deskStation);
-	virtual bool IsHundredGameSystemDealer();	//°ÙÈËÀàÓÎÏ·,ÅĞ¶ÏÊÇ·ñÏµÍ³×ö×¯¼Ò
+	virtual bool IsHundredGameSystemDealer();	//ç™¾äººç±»æ¸¸æˆ,åˆ¤æ–­æ˜¯å¦ç³»ç»Ÿåšåº„å®¶
 	virtual bool HundredGameIsInfoChange(BYTE deskStation);
 	virtual void UserBeKicked(BYTE deskStation);
 	virtual void LoadDynamicConfig();
-	// ÏûÏ¢´¦Àíº¯Êı
+	// æ¶ˆæ¯å¤„ç†å‡½æ•°
 private:
-	// ÇëÇóÉÏ×¯
+	// è¯·æ±‚ä¸Šåº„
 	bool OnHandleUserRequestShangZhuang(BYTE deskStation, void* pData, int size);
-	// ÇëÇóÏÂ×¯
+	// è¯·æ±‚ä¸‹åº„
 	bool OnHandleUserRequestXiaZhuang(BYTE deskStation);
-	// ÇëÇóÏÂ×¢
+	// è¯·æ±‚ä¸‹æ³¨
 	bool OnHandleUserReuqestNote(BYTE deskStation, void* pData, int size);
-	// ÇëÇóĞøÑ¹
+	// è¯·æ±‚ç»­å‹
 	bool OnHandleRequestContinueNote(BYTE deskStation);
-	// ÇëÇó×ßÊÆ
+	// è¯·æ±‚èµ°åŠ¿
 	bool OnHandleRequestAreaTrend(BYTE deskStation);
-	// ÇëÇó³¬¶ËÉèÖÃ
+	// è¯·æ±‚è¶…ç«¯è®¾ç½®
 	bool OnHandleRequestSuperSet(BYTE deskStation, void* pData, int size);
-	// ÇëÇóÊÇ·ñ¼ÌĞø×ø×¯
+	// è¯·æ±‚æ˜¯å¦ç»§ç»­ååº„
 	bool OnHandleRequestContinueZhuang(BYTE deskStation, void* pData, int size);
-	// ÇëÇó×øÏÂ
+	// è¯·æ±‚åä¸‹
 	bool OnHandleRequestSit(BYTE deskStation, void* pData, int size);
 
-	// ¶¨Ê±Æ÷Ïà¹Ø
+	// å®šæ—¶å™¨ç›¸å…³
 private:
 	void OnTimerWaitNext();
 	void OnTimerSendCard();
@@ -66,100 +66,100 @@ private:
 	void KillAllTimer();
 	bool ConfirmDealer();
 	time_t GetNextStageLeftSecs();
-	//»ñµÃËæ»úÊı
+	//è·å¾—éšæœºæ•°
 	int GetRandNum();
 	void SetResult(int result);
 private:
-	// µÈ´ı¿ªÊ¼½×¶Î
+	// ç­‰å¾…å¼€å§‹é˜¶æ®µ
 	void TransToWaitNextStage();
-	// ·¢ÅÆ½×¶Î
+	// å‘ç‰Œé˜¶æ®µ
 	void TransToSendCardStage();
-	// ÏÂ×¢½×¶Î
+	// ä¸‹æ³¨é˜¶æ®µ
 	void TransToNoteStage();
-	// ±ÈÅÆ½×¶Î
+	// æ¯”ç‰Œé˜¶æ®µ
 	void TransToCompareStage();
-	// ½áÊø½×¶Î
+	// ç»“æŸé˜¶æ®µ
 	void TransToSettleStage();
 
 private:
-	// Í¨ÖªÓÎÏ·×´Ì¬
+	// é€šçŸ¥æ¸¸æˆçŠ¶æ€
 	void BroadcastGameStatus();
-	// Í¨Öª×¯ĞÅÏ¢
+	// é€šçŸ¥åº„ä¿¡æ¯
 	void BroadcastZhuangInfo();
-	// Í¨Öª³ïÂë(ÏÂ×¢)ĞÅÏ¢
+	// é€šçŸ¥ç­¹ç (ä¸‹æ³¨)ä¿¡æ¯
 	void BrodcastNoteInfo(BYTE deskStation=255);
-	// Ìî³ä×¯ĞÅÏ¢(×¯¼ÒĞÅÏ¢+ÉÏ×¯ÁĞ±í)
+	// å¡«å……åº„ä¿¡æ¯(åº„å®¶ä¿¡æ¯+ä¸Šåº„åˆ—è¡¨)
 	bool MakeZhuangInfo(NewGameMessageNtfZhuangInfo& msg);
-	// Ìî³ä·¢ÅÆĞÅÏ¢
+	// å¡«å……å‘ç‰Œä¿¡æ¯
 	bool MakeSendCardInfo(NewGameMessageNtfSendCard& msg);
-	// ¼ÆËãÇøÓòÊäÓ®ĞÅÏ¢
+	// è®¡ç®—åŒºåŸŸè¾“èµ¢ä¿¡æ¯
 	void CalcAreaRate();
-	// ¸ü»»ÏµÍ³Ãû×Ö×ÊÔ´
+	// æ›´æ¢ç³»ç»Ÿåå­—èµ„æº
 	void ChangeSystemZhuangInfo();
 public:
-	/////////////////////////////////////////½±Öµ/////////////////////////////////
-	///»úÆ÷ÈËÊäÓ®×Ô¶¯¿ØÖÆ£¬true£º¿ØÖÆÁË£¬false£ºÃ»ÓĞ¿ØÖÆ
+	/////////////////////////////////////////å¥–å€¼/////////////////////////////////
+	///æœºå™¨äººè¾“èµ¢è‡ªåŠ¨æ§åˆ¶ï¼Œtrueï¼šæ§åˆ¶äº†ï¼Œfalseï¼šæ²¡æœ‰æ§åˆ¶
 	void AiWinAutoCtrl();
-	//»ñÈ¡±¾¾Ö¿ØÖÆÊä»¹ÊÇ¿ØÖÆÓ®£¬1£º¿ØÖÆÓ®£¬-1£º¿ØÖÆÊä£¬0£º²»¿ØÖÆ
+	//è·å–æœ¬å±€æ§åˆ¶è¾“è¿˜æ˜¯æ§åˆ¶èµ¢ï¼Œ1ï¼šæ§åˆ¶èµ¢ï¼Œ-1ï¼šæ§åˆ¶è¾“ï¼Œ0ï¼šä¸æ§åˆ¶
 	int GetCtrlRet();
-	//¼ÆËãµ±Ç°ÏµÍ³Ó®Ç®
+	//è®¡ç®—å½“å‰ç³»ç»Ÿèµ¢é’±
 	long long CalcSystemWinMoney(int iRateValue);
-	//Ö´ĞĞ³¬¶ËÉèÖÃ
+	//æ‰§è¡Œè¶…ç«¯è®¾ç½®
 	void SuperSetChange();
-	//»úÆ÷ÈË¿ØÖÆ½Ó¿Ú
+	//æœºå™¨äººæ§åˆ¶æ¥å£
 private:
-	// ÅĞ¶Ï»úÆ÷ÈËÊÇ·ñ¿ÉÒÔÉÏÏÂ×¯  0£ºÉÏ×¯   1£ºÏÂ×¯
+	// åˆ¤æ–­æœºå™¨äººæ˜¯å¦å¯ä»¥ä¸Šä¸‹åº„  0ï¼šä¸Šåº„   1ï¼šä¸‹åº„
 	bool IsVirtualCanShangXiazZhuang(BYTE deskStation, BYTE type);
-	// ¿ØÖÆÏÂ×¢
+	// æ§åˆ¶ä¸‹æ³¨
 	bool IsVirtualCanNote(BYTE deskStation, long long note);
-	// ÅĞ¶Ï»úÆ÷ÈËÊÇ·ñ¿ÉÒÔÉÏ×øÏÂÕ¾Æğ  0£º×øÏÂ   1£ºÕ¾Æğ
+	// åˆ¤æ–­æœºå™¨äººæ˜¯å¦å¯ä»¥ä¸Šåä¸‹ç«™èµ·  0ï¼šåä¸‹   1ï¼šç«™èµ·
 	bool IsVirtualCanSit(BYTE deskStation, BYTE type);
-	//×ùÎ»Ïà¹Ø
+	//åº§ä½ç›¸å…³
 private:
 	bool IsDeskUser(BYTE deskStation);
 	bool DelDeskUser(BYTE deskStation);
 	bool SetDeskUser(BYTE deskStation, BYTE byIndex);
 	bool IsDeskHaveUser(BYTE byIndex);
 	void ClearDeskUser();
-	//Ã¿¾Ö¿ÉÒÔÉÏ×ùµÄ»úÆ÷ÈËÊı
+	//æ¯å±€å¯ä»¥ä¸Šåº§çš„æœºå™¨äººæ•°
 	void UpSitPlayerCount();
 	std::vector<BYTE> m_gameDesk;
 
 private:
-	GameConfig m_gameConfig;				// ÓÎÏ·ÅäÖÃ
+	GameConfig m_gameConfig;				// æ¸¸æˆé…ç½®
 
 private:
 	CPokerGameLogic m_logic;
-	std::vector<DTUserInfo> m_userInfoVec;				// Íæ¼ÒĞÅÏ¢Êı×é(²»°üº¬×¯¼Ò)
-	DealerInfo m_dealerInfo;							// ×¯¼ÒĞÅÏ¢
-	std::vector<DealerInfo> m_dealerInfoVec;			// ÉÏ×¯ĞÅÏ¢
-	std::array<AreaInfo, MAX_AREA_COUNT> m_areaInfoArr;	// ÇøÓòĞÅÏ¢
-	std::queue<BYTE> m_deskCardQueue;					// ×ÀÉÏµÄÅÆ
-	int m_gameStatus;									// ÓÎÏ·×´Ì¬
-	BYTE m_dealerDeskStation;							// ×¯¼ÒÎ»ÖÃ(254ÎªÏµÍ³)
-	BYTE m_LastDealerDeskStation;                       // ÉÏ¾Ö×¯¼ÒÎ»ÖÃ
-	long long m_LastShangzhuangMoney;                   // ÉÏ¾Ö½áÊøºóµÄ×¯¼ÒĞ¯´ø½ğ±ÒÊı
-	int m_currDealerGameCount;							// µ±Ç°×¯¼Ò½øĞĞµÄ¾ÖÊı(½ö¶ÔÍæ¼ÒÓĞĞ§)
-	bool m_xiaZhuangRightNow;							// ÊÇ·ñÁ¢¿ÌÏÂ×¯
-	time_t m_startTime;									// "¿ªÊ¼"Ê±¼ä(µÈ´ı¿ªÊ¼½×¶Î¿ªÊ¼¼ÆÊ±)
-	bool					m_bIsSuper[PLAY_COUNT];			// ÊÇ·ñÊÇ³¬¶Ë
-	BYTE					m_bySuperSetType;				// ³¬¶ËÉèÖÃÀàĞÍ
-	int m_currWinArea;    //µ±Ç°¿ªÓ®µÄÇøÓò
-	std::list<TrendData> m_resultList;// ÇøÓò½á¹û
+	std::vector<DTUserInfo> m_userInfoVec;				// ç©å®¶ä¿¡æ¯æ•°ç»„(ä¸åŒ…å«åº„å®¶)
+	DealerInfo m_dealerInfo;							// åº„å®¶ä¿¡æ¯
+	std::vector<DealerInfo> m_dealerInfoVec;			// ä¸Šåº„ä¿¡æ¯
+	std::array<AreaInfo, MAX_AREA_COUNT> m_areaInfoArr;	// åŒºåŸŸä¿¡æ¯
+	std::queue<BYTE> m_deskCardQueue;					// æ¡Œä¸Šçš„ç‰Œ
+	int m_gameStatus;									// æ¸¸æˆçŠ¶æ€
+	BYTE m_dealerDeskStation;							// åº„å®¶ä½ç½®(254ä¸ºç³»ç»Ÿ)
+	BYTE m_LastDealerDeskStation;                       // ä¸Šå±€åº„å®¶ä½ç½®
+	long long m_LastShangzhuangMoney;                   // ä¸Šå±€ç»“æŸåçš„åº„å®¶æºå¸¦é‡‘å¸æ•°
+	int m_currDealerGameCount;							// å½“å‰åº„å®¶è¿›è¡Œçš„å±€æ•°(ä»…å¯¹ç©å®¶æœ‰æ•ˆ)
+	bool m_xiaZhuangRightNow;							// æ˜¯å¦ç«‹åˆ»ä¸‹åº„
+	time_t m_startTime;									// "å¼€å§‹"æ—¶é—´(ç­‰å¾…å¼€å§‹é˜¶æ®µå¼€å§‹è®¡æ—¶)
+	bool					m_bIsSuper[PLAY_COUNT];			// æ˜¯å¦æ˜¯è¶…ç«¯
+	BYTE					m_bySuperSetType;				// è¶…ç«¯è®¾ç½®ç±»å‹
+	int m_currWinArea;    //å½“å‰å¼€èµ¢çš„åŒºåŸŸ
+	std::list<TrendData> m_resultList;// åŒºåŸŸç»“æœ
 	std::list<int>		 m_resultSummaryList;
 	
-	ChouMaInfo m_tempChouMaData[MAX_CHOU_MA_COUNT];		// ³ïÂëÍ³¼Æ
-	int m_tempChouMaDataCount;							// ³ïÂëÊıÁ¿
-	int m_areaChouMaCount[MAX_AREA_COUNT][MAX_NOTE_SORT];	// Ã¿¸öÇøÓò³ïÂëÊıÁ¿
+	ChouMaInfo m_tempChouMaData[MAX_CHOU_MA_COUNT];		// ç­¹ç ç»Ÿè®¡
+	int m_tempChouMaDataCount;							// ç­¹ç æ•°é‡
+	int m_areaChouMaCount[MAX_AREA_COUNT][MAX_NOTE_SORT];	// æ¯ä¸ªåŒºåŸŸç­¹ç æ•°é‡
 
 	int m_allCount;
 	int m_longWinCount;
-	int m_iContinueZhuang;	//ÊÇ·ñ¼ÌĞø×ø×¯£¬-1£ºÄ¬ÈÏÖµ£¬0£ºÏÂ×¯£¬1£º¼ÌĞø×ø×¯
+	int m_iContinueZhuang;	//æ˜¯å¦ç»§ç»­ååº„ï¼Œ-1ï¼šé»˜è®¤å€¼ï¼Œ0ï¼šä¸‹åº„ï¼Œ1ï¼šç»§ç»­ååº„
 
-	//////////////////////////////////½±Öµ¡¢³¬¶ËÊı¾İ////////////////////////////////////////
+	//////////////////////////////////å¥–å€¼ã€è¶…ç«¯æ•°æ®////////////////////////////////////////
 	//RewardsPoolInfo			m_pooInfo;
 	std::vector<BYTE>		m_countResultCardVec;
-	std::vector<CtrlSystemParam>	m_ctrlParam;		// Ò»×é¿ØÖÆ²ÎÊıÖµ
+	std::vector<CtrlSystemParam>	m_ctrlParam;		// ä¸€ç»„æ§åˆ¶å‚æ•°å€¼
 	int m_curCtrlWinCount;
 	int m_runCtrlCount;
 	int m_ctrlParamIndex;

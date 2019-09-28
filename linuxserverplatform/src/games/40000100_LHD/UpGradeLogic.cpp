@@ -13,18 +13,18 @@ CPokerGameLogic::~CPokerGameLogic()
 
 }
 
-//»ñÈ¡ÆË¿Ë´óĞ¡ £¨2 - 18 £¬ 15 ÒÔÉÏÊÇÖ÷ÅÆ £º 2 - 21 £¬ 15 ÒÔÉÏÊÇÖ÷£©
+//è·å–æ‰‘å…‹å¤§å° ï¼ˆ2 - 18 ï¼Œ 15 ä»¥ä¸Šæ˜¯ä¸»ç‰Œ ï¼š 2 - 21 ï¼Œ 15 ä»¥ä¸Šæ˜¯ä¸»ï¼‰
 int CPokerGameLogic::GetCardBulk(BYTE iCard, int bExtVol)
 {
 	if ((iCard==0x4E)||(iCard==0x4F))
 	{
-		return bExtVol?(iCard-14):(iCard-62);	//´óĞ¡¹í64+14-62=16			Ö»·µ»Ø´óĞ¡Ã¨µÄÖµ
+		return bExtVol?(iCard-14):(iCard-62);	//å¤§å°é¬¼64+14-62=16			åªè¿”å›å¤§å°çŒ«çš„å€¼
 	}
 
 	int iCardNum=GetCardNum(iCard);
 	int iHuaKind=GetCardHuaKind(iCard);
 
-	if (iCardNum==14)	// AÎª1µã,Å£Å£, Áú»¢¶·ÖĞÌØÓĞ	
+	if (iCardNum==14)	// Aä¸º1ç‚¹,ç‰›ç‰›, é¾™è™æ–—ä¸­ç‰¹æœ‰	
 	{
 		if(bExtVol)		
 			return ((iHuaKind>>4)+(1*4));
@@ -34,7 +34,7 @@ int CPokerGameLogic::GetCardBulk(BYTE iCard, int bExtVol)
 	return ((bExtVol)?((iHuaKind>>4)+(iCardNum*4)):(iCardNum));
 }
 
-//»ñÈ¡ÆË¿Ë»¨É«
+//è·å–æ‰‘å…‹èŠ±è‰²
 BYTE CPokerGameLogic::GetCardHuaKind(BYTE iCard)
 { 
 	return iCard&UG_HUA_MASK; 
@@ -42,7 +42,7 @@ BYTE CPokerGameLogic::GetCardHuaKind(BYTE iCard)
 
 bool CPokerGameLogic::RandCard(std::vector<BYTE>& cardVec, int cardPairs)
 {
-	// Ìí¼ÓÅÆ
+	// æ·»åŠ ç‰Œ
 	for (int pairs = 0; pairs < cardPairs; pairs++)
 	{
 		for (int i = 0; i < POKER_CARD_NUM_NOKING; i++)
@@ -51,13 +51,13 @@ bool CPokerGameLogic::RandCard(std::vector<BYTE>& cardVec, int cardPairs)
 		}
 	} 
 
-	// ÂÒĞò
+	// ä¹±åº
 	random_shuffle(cardVec.begin(), cardVec.end());
 
 	return false;
 }
 
-//±È½ÏÅÆµãÊı´óĞ¡ ±È½ÏÅÆÁĞ±íAºÍBÖĞ×î´óµÄÅÆ  0=A<B 1=A>B 2=A=B
+//æ¯”è¾ƒç‰Œç‚¹æ•°å¤§å° æ¯”è¾ƒç‰Œåˆ—è¡¨Aå’ŒBä¸­æœ€å¤§çš„ç‰Œ  0=A<B 1=A>B 2=A=B
 int CPokerGameLogic::CompareCardValue(const BYTE * pCardListA, int cardCountA, const BYTE * pCardListB, int cardCountB)
 {
 	if (!pCardListA || !pCardListB)

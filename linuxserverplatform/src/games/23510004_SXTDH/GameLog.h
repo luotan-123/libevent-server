@@ -1,12 +1,12 @@
 #pragma once
 #include   <stdarg.h>
 
-//ÈÕÖ¾Àà
+//æ—¥å¿—ç±»
 class GameLog
 {
 public:
-	static void OutputFile(const char *strOutputString, ...);	 //Êä³öÈÕÖ¾ÎÄ¼ş
-	static void OutputString(const char * strOutputString, ...); //½«×Ö·û´®Êä³öµ½¿ØÖÆÌ¨
-	static void SFile(const char * strOutputString, ...);		 //½«×Ö·û´®Êä³öµ½ÎÄ¼ş£¬´Ëº¯ÊıÔËÓª°æÒ²¿ÉÒÔÊä³ö
+	static void OutputFile(const char *strOutputString, ...);	 //è¾“å‡ºæ—¥å¿—æ–‡ä»¶
+	static void OutputString(const char * strOutputString, ...); //å°†å­—ç¬¦ä¸²è¾“å‡ºåˆ°æ§åˆ¶å°
+	static void SFile(const char * strOutputString, ...);		 //å°†å­—ç¬¦ä¸²è¾“å‡ºåˆ°æ–‡ä»¶ï¼Œæ­¤å‡½æ•°è¿è¥ç‰ˆä¹Ÿå¯ä»¥è¾“å‡º
 private:
 };

@@ -11,155 +11,155 @@
 #pragma warning(disable:4305)
 #pragma warning(disable:4309)
 
-//´Ë´¦Ìí¼ÓÓÎÏ·¶¨Ê±Æ÷£ºÓÎÏ·¶¨Ê±Æ÷
-//ÌØ±ğ×¢Òâ¶¨Ê±Æ÷µÄID·¶Î§1-50
-#define TIME_ACTION				    30  //Âé½«¶¯×÷¶¨Ê±Æ÷
-#define TIME_THINK				    31  //Ë¼¿¼¶¨Ê±Æ÷
-#define TIME_TING_OUTCARD			32	//ÌıÅÆ³öÅÆ
-#define TIME_TUOGUAN			    33	//ÍĞ¹Ü³öÅÆ
-#define TIME_HUAPAI                 34  //¿ª¾Ö»¨ÅÆ
-#define TIME_BUHUA                  35  //²¹»¨
-#define TIME_CHECK_ACTION           36  //¼ì²â¶¯×÷
-#define TIME_DELAY_SEND_ACTION      38  //ÑÓÊ±·¢ËÍ¶¯×÷
-#define TIME_TUOGUAN_ACTION			39	//ÍĞ¹Ü¶¯×÷£¨³ÔÅö¸ÜºúÌıµÈµÈ£©
+//æ­¤å¤„æ·»åŠ æ¸¸æˆå®šæ—¶å™¨ï¼šæ¸¸æˆå®šæ—¶å™¨
+//ç‰¹åˆ«æ³¨æ„å®šæ—¶å™¨çš„IDèŒƒå›´1-50
+#define TIME_ACTION				    30  //éº»å°†åŠ¨ä½œå®šæ—¶å™¨
+#define TIME_THINK				    31  //æ€è€ƒå®šæ—¶å™¨
+#define TIME_TING_OUTCARD			32	//å¬ç‰Œå‡ºç‰Œ
+#define TIME_TUOGUAN			    33	//æ‰˜ç®¡å‡ºç‰Œ
+#define TIME_HUAPAI                 34  //å¼€å±€èŠ±ç‰Œ
+#define TIME_BUHUA                  35  //è¡¥èŠ±
+#define TIME_CHECK_ACTION           36  //æ£€æµ‹åŠ¨ä½œ
+#define TIME_DELAY_SEND_ACTION      38  //å»¶æ—¶å‘é€åŠ¨ä½œ
+#define TIME_TUOGUAN_ACTION			39	//æ‰˜ç®¡åŠ¨ä½œï¼ˆåƒç¢°æ èƒ¡å¬ç­‰ç­‰ï¼‰
 
-/// ÓÎÏ·×À×ÓÀà
+/// æ¸¸æˆæ¡Œå­ç±»
 class CServerGameDesk : public CGameDesk
 {
 public:
-	GameDataEx						m_GameData;							//ÓÎÏ·Êı¾İ
-	CheckCPGActionEx				m_CPGData;							//³ÔÅö¸ÜÊı¾İ
-	CheckHuPaiEx					m_CheckHuData;						//ºúÅÆÊı¾İ
-	bool							m_bAgree[PLAY_COUNT];				//Í¬Òâ±êÊ¾
-	bool							m_bTrustee[PLAY_COUNT];				//ÊÇ·ñÍĞ¹Ü
-	BYTE                            m_byMJCardType;						//Âé½«ÅÆÑùÊ½
-	int								m_iPlayingCount;					//ÓÎÏ·½øĞĞ¾ÖÊı
-	CMD_S_ZongResult				m_tZongResult;						//×ÜÕ½¼¨
-	int								m_iVideoIndex;                      //Õ½¼¨»Ø·ÅË÷Òı
-	Json::Value						m_element;                          //Õ½¼¨»Ø·ÅÔªËØ
-	Json::Value						m_root;                             //Õ½¼¨»Ø·ÅµÄ¸ù
-	bool							m_bNetCut[PLAY_COUNT];				//¶ÏÏß
-	BYTE                            m_byBeginTempCard;					//ÁÙÊ±±£´æµÄÅÆ
-	int                             m_iOutCardChaoShiCount[PLAY_COUNT]; //³¬Ê±³öÅÆ´ÎÊı
+	GameDataEx						m_GameData;							//æ¸¸æˆæ•°æ®
+	CheckCPGActionEx				m_CPGData;							//åƒç¢°æ æ•°æ®
+	CheckHuPaiEx					m_CheckHuData;						//èƒ¡ç‰Œæ•°æ®
+	bool							m_bAgree[PLAY_COUNT];				//åŒæ„æ ‡ç¤º
+	bool							m_bTrustee[PLAY_COUNT];				//æ˜¯å¦æ‰˜ç®¡
+	BYTE                            m_byMJCardType;						//éº»å°†ç‰Œæ ·å¼
+	int								m_iPlayingCount;					//æ¸¸æˆè¿›è¡Œå±€æ•°
+	CMD_S_ZongResult				m_tZongResult;						//æ€»æˆ˜ç»©
+	int								m_iVideoIndex;                      //æˆ˜ç»©å›æ”¾ç´¢å¼•
+	Json::Value						m_element;                          //æˆ˜ç»©å›æ”¾å…ƒç´ 
+	Json::Value						m_root;                             //æˆ˜ç»©å›æ”¾çš„æ ¹
+	bool							m_bNetCut[PLAY_COUNT];				//æ–­çº¿
+	BYTE                            m_byBeginTempCard;					//ä¸´æ—¶ä¿å­˜çš„ç‰Œ
+	int                             m_iOutCardChaoShiCount[PLAY_COUNT]; //è¶…æ—¶å‡ºç‰Œæ¬¡æ•°
 
-	////////////////////////////////¾²Ì¬±äÁ¿///////////////////////////////
-	static bool                     gOutMessageSize; //Êä³öĞ­Òé´óĞ¡
+	////////////////////////////////é™æ€å˜é‡///////////////////////////////
+	static bool                     gOutMessageSize; //è¾“å‡ºåè®®å¤§å°
 
-	////////////////////////////////³¬¶Ë///////////////////////////////
-	bool							m_bSuperFlag[PLAY_COUNT];			//³¬¶ËÍæ¼Ò½á¹û
-	BYTE							m_ChangeCard[PLAY_COUNT];			//³¬¶ËÍæ¼ÒÏÂ´Î×¥ÅÆÅÆÖµ
+	////////////////////////////////è¶…ç«¯///////////////////////////////
+	bool							m_bSuperFlag[PLAY_COUNT];			//è¶…ç«¯ç©å®¶ç»“æœ
+	BYTE							m_ChangeCard[PLAY_COUNT];			//è¶…ç«¯ç©å®¶ä¸‹æ¬¡æŠ“ç‰Œç‰Œå€¼
 
 public:
-	/// ¹¹Ôìº¯Êı
+	/// æ„é€ å‡½æ•°
 	CServerGameDesk();
-	/// Îö¹¹º¯Êı
+	/// ææ„å‡½æ•°
 	virtual ~CServerGameDesk();
 public:
-	/// ³õÊ¼ÓÎÏ·
+	/// åˆå§‹æ¸¸æˆ
 	virtual bool InitDeskGameStation();
 
-	/// ÓÎÏ·¿ªÊ¼
+	/// æ¸¸æˆå¼€å§‹
 	virtual bool GameBegin(BYTE bBeginFlag);
 
-	/// ÓÎÏ·½áÊø
+	/// æ¸¸æˆç»“æŸ
 	virtual bool GameFinish(BYTE bDeskStation, BYTE bCloseFlag);
 
-	/// ÅĞ¶ÏÊÇ·ñÕıÔÚÓÎÏ·
+	/// åˆ¤æ–­æ˜¯å¦æ­£åœ¨æ¸¸æˆ
 	virtual bool IsPlayGame(BYTE bDeskStation);
 
-	/// ÓÎÏ·Êı¾İ°ü´¦Àíº¯Êı
+	/// æ¸¸æˆæ•°æ®åŒ…å¤„ç†å‡½æ•°
 	virtual bool HandleNotifyMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser = false);
 
-	/// ÓÃ»§Àë¿ªÓÎÏ·×À
+	/// ç”¨æˆ·ç¦»å¼€æ¸¸æˆæ¡Œ
 	virtual bool UserLeftDesk(GameUserInfo* pUser);
 
-	//Íæ¼Ò¶ÏÏß´¦Àí
+	//ç©å®¶æ–­çº¿å¤„ç†
 	virtual bool UserNetCut(GameUserInfo *pUser);
 
-	/// »ñÈ¡ÓÎÏ·×´Ì¬ĞÅÏ¢
+	/// è·å–æ¸¸æˆçŠ¶æ€ä¿¡æ¯
 	virtual bool OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser);
 
-	/// ÖØÖÃÓÎÏ·×´Ì¬
+	/// é‡ç½®æ¸¸æˆçŠ¶æ€
 	virtual bool ReSetGameState(BYTE bLastStation);
 
-	/// ¶¨Ê±Æ÷ÏûÏ¢
+	/// å®šæ—¶å™¨æ¶ˆæ¯
 	virtual bool OnTimer(UINT uTimerID);
 
-	//×À×Ó³É¹¦½âÉ¢
+	//æ¡Œå­æˆåŠŸè§£æ•£
 	virtual void OnDeskSuccessfulDissmiss(bool isDismissMidway = true);
 
-	// Íæ¼ÒÇëÇóÍĞ¹Ü
+	// ç©å®¶è¯·æ±‚æ‰˜ç®¡
 	virtual bool OnHandleUserRequestAuto(BYTE deskStation);
 
-	// Íæ¼ÒÈ¡ÏûÍĞ¹Ü
+	// ç©å®¶å–æ¶ˆæ‰˜ç®¡
 	virtual bool OnHandleUserRequestCancelAuto(BYTE deskStation);
 
-	//³õÊ¼»¯ÓÎÏ·Êı¾İ£¬·ÇÕı³£´ó½áËã³õÊ¼»¯
+	//åˆå§‹åŒ–æ¸¸æˆæ•°æ®ï¼Œéæ­£å¸¸å¤§ç»“ç®—åˆå§‹åŒ–
 	virtual void InitDeskGameData();
 
-	// ¶¯Ì¬¼ÓÔØÅäÖÃÎÄ¼şÊı¾İ
+	// åŠ¨æ€åŠ è½½é…ç½®æ–‡ä»¶æ•°æ®
 	virtual void LoadDynamicConfig();
 public:
-	///¼ì²âÍæ¼Òstationµ±Ç°ÄÜ×öÄÄĞ©¶¯×÷
+	///æ£€æµ‹ç©å®¶stationå½“å‰èƒ½åšå“ªäº›åŠ¨ä½œ
 	bool CheckAction(int iStation, BYTE byCard, BYTE byType);
 
-	//×¥ÅÆ
+	//æŠ“ç‰Œ
 	void ZhuaPai(BYTE byCurrentStation, bool bHead);
 
-	//ÓÃ»§³öÅÆ
+	//ç”¨æˆ·å‡ºç‰Œ
 	bool OnUserOutCard(BYTE byDeskStation, CMD_C_OutCard *pOutCard);
 
-	//ÓÃ»§²Ù×÷
+	//ç”¨æˆ·æ“ä½œ
 	bool OnUserOperate(BYTE byDeskStation, CMD_C_OperateCard *pAction);
 
-	//³ÔÅÆ
+	//åƒç‰Œ
 	bool OnChi(BYTE byDeskStation, CMD_C_OperateCard *pAction);
 
-	//ÅöÅÆ
+	//ç¢°ç‰Œ
 	bool OnPeng(BYTE byDeskStation, CMD_C_OperateCard *pAction);
 
-	//¸ÜÅÆ
+	//æ ç‰Œ
 	bool OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction);
 
-	//ºúÅÆ
+	//èƒ¡ç‰Œ
 	bool OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction);
 
-	//¹ı
+	//è¿‡
 	bool OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction);
 
-	///ÓĞÍæ¼ÒÓĞ¶¯×÷·¢ËÍÀ¹ÅÆĞÅÏ¢¸øÍæ¼Ò
+	///æœ‰ç©å®¶æœ‰åŠ¨ä½œå‘é€æ‹¦ç‰Œä¿¡æ¯ç»™ç©å®¶
 	bool HaveUserCanDoAction(BYTE byIgnoreStation);
 
-	//·¢ËÍ³ÔÅö¸ÜÌı
+	//å‘é€åƒç¢°æ å¬
 	void SendChiPengGangHuMsg(int iDesk);
 
-	////¼ÇÂ¼¸ÜÅÆ×´Ì¬£¬ÓµÓÚ¸Ü¿ªºÍ¸ÜºóÅÚ
+	////è®°å½•æ ç‰ŒçŠ¶æ€ï¼Œæ‹¥äºæ å¼€å’Œæ åç‚®
 	void RecordGangStatus();
 
-	//json´æ´¢£¬Õ½¼¨»Ø·Å
+	//jsonå­˜å‚¨ï¼Œæˆ˜ç»©å›æ”¾
 	void OnJson(void *pData, int iType);
 
-	//ÅäÅÆ
+	//é…ç‰Œ
 	bool HandCard();
 
-	//»ñÈ¡·¿¼ä¹æÔò
+	//è·å–æˆ¿é—´è§„åˆ™
 	void GetSpecialRule();
 
-	//¸ù¾İtagStructGameRulerÉèÖÃÏàÓ¦¹æÔò
+	//æ ¹æ®tagStructGameRulerè®¾ç½®ç›¸åº”è§„åˆ™
 	void SetSpecialRule();
 
-	//×Ô¶¯Ñ¡ÔñÒ»ÕÅÅÆ³ö
+	//è‡ªåŠ¨é€‰æ‹©ä¸€å¼ ç‰Œå‡º
 	BYTE AutoOutCard(BYTE byStation);
 
-	//×Ô¶¯¶¯×÷
+	//è‡ªåŠ¨åŠ¨ä½œ
 	bool AutoCanAction(BYTE byStation, BYTE byActionType);
 
-	//·¢ËÍ³öÅÆ³ö´íÏûÏ¢
+	//å‘é€å‡ºç‰Œå‡ºé”™æ¶ˆæ¯
 	void SendOutCardError(BYTE byDeskStation, int iErrorCode);
 
-	//³¬¶ËÍæ¼ÒÇëÇó¿´ÃÅÅÆ
+	//è¶…ç«¯ç©å®¶è¯·æ±‚çœ‹é—¨ç‰Œ
 	bool SuperUserLookMenPai(BYTE byDeskStation, CMD_C_SuperLook *SuperLook);
 
-	//³¬¶ËÍæ¼ÒÇëÇóÒªÅÆ
+	//è¶…ç«¯ç©å®¶è¯·æ±‚è¦ç‰Œ
 	bool SuperUserChangePai(BYTE byDeskStation, CMD_C_Super_Request_Card *SuperChangeCard);
 };

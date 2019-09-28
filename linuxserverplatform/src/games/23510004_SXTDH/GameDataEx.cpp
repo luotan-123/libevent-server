@@ -7,7 +7,7 @@ GameDataEx::GameDataEx(void)
 	//memset(m_byDingQue, 255, sizeof(m_byDingQue));
 	//memset(m_iGangScore, 0, sizeof(m_iGangScore));
 	memset(m_bIsHu, false, sizeof(m_bIsHu));
-	memset(m_bQiHu, 0, sizeof(m_bQiHu));//Íæ¼ÒÊÇ·ñÆúºı×´Ì¬
+	memset(m_bQiHu, 0, sizeof(m_bQiHu));//ç©å®¶æ˜¯å¦å¼ƒç³ŠçŠ¶æ€
 	m_iHuangZhuangCount = 0;
 	LoadIni();
 	InitData();
@@ -17,21 +17,21 @@ GameDataEx::~GameDataEx(void)
 {
 }
 
-//virtual ³õÊ¼»¯Êı¾İ
+//virtual åˆå§‹åŒ–æ•°æ®
 void GameDataEx::InitData()
 {
 	GameData::InitData();
 	//memset(m_byDingQue, 255, sizeof(m_byDingQue));
 	memset(m_iGangScore, 0, sizeof(m_iGangScore));
 	memset(m_bIsHu, false, sizeof(m_bIsHu));
-	memset(m_bQiHu, 0, sizeof(m_bQiHu));//Íæ¼ÒÊÇ·ñÆúºı×´Ì¬
+	memset(m_bQiHu, 0, sizeof(m_bQiHu));//ç©å®¶æ˜¯å¦å¼ƒç³ŠçŠ¶æ€
 	memset(m_byOutCanHuCard, 255, sizeof(m_byOutCanHuCard));
 	memset(m_byHuCard, 255, sizeof(m_byHuCard));
 	memset(m_byOutAfterHuCard, 255, sizeof(m_byOutAfterHuCard));
 	memset(m_byCardRemainNum, 0, sizeof(m_byCardRemainNum));
 
-	m_byCurrentOperatorUser = 255;	//µ±Ç°¿É²Ù×÷³ÔÅö¸ÜµÄÍæ¼Ò
-	//ÆğÊÖ²¹»¨
+	m_byCurrentOperatorUser = 255;	//å½“å‰å¯æ“ä½œåƒç¢°æ çš„ç©å®¶
+	//èµ·æ‰‹è¡¥èŠ±
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
 		m_bIsBuHua[i] = false;
@@ -47,23 +47,23 @@ void GameDataEx::InitData()
 	m_byQiHuTurn = 255;
 	m_byPengTurn = 255;
 	memset(m_bQiPeng, false, sizeof(m_bQiPeng));
-	memset(m_iHuaScore, 0, sizeof(m_iHuaScore)); //»¨ºú
+	memset(m_iHuaScore, 0, sizeof(m_iHuaScore)); //èŠ±èƒ¡
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
-		m_countHuFen[i].Init();     //ºú·Ö
-		m_countGangFen[i].Init();   //¸Ü·Ö
-		//m_countGenZhuang[i].Init(); //¸ú×¯·Ö
-		//m_countHorseFen[i].Init();  //Âí·Ö
+		m_countHuFen[i].Init();     //èƒ¡åˆ†
+		m_countGangFen[i].Init();   //æ åˆ†
+		//m_countGenZhuang[i].Init(); //è·Ÿåº„åˆ†
+		//m_countHorseFen[i].Init();  //é©¬åˆ†
 	}
 }
 
-///³õÊ¼»¯Êı¾İ
+///åˆå§‹åŒ–æ•°æ®
 void GameDataEx::LoadIni()
 {
 	GameData::LoadIni();
 }
 
-///¼ì²éÊÇ·ñ´æÔÚÖ¸¶¨µÄÃÅÅÆ
+///æ£€æŸ¥æ˜¯å¦å­˜åœ¨æŒ‡å®šçš„é—¨ç‰Œ
 bool GameDataEx::IsHaveAMenPai(BYTE pai)
 {
 	for (int i = 0;i < MAX_MJ_PAI_COUNT;i++)
@@ -74,7 +74,7 @@ bool GameDataEx::IsHaveAMenPai(BYTE pai)
 	return false;
 }
 
-///µÃµ½Ä³ÖÖ»¨É«ÅÆ£¨0Íò 1Í² 2Ìõ)
+///å¾—åˆ°æŸç§èŠ±è‰²ç‰Œï¼ˆ0ä¸‡ 1ç­’ 2æ¡)
 int GameDataEx::GetAKindPai(BYTE station, BYTE kind)
 {
 	kind %= 3;
@@ -87,7 +87,7 @@ int GameDataEx::GetAKindPai(BYTE station, BYTE kind)
 	return 0;
 }
 
-///¼ì²éÄ³ÖÖ»¨É«ÅÆµÄ¸öÊı£¨0Íò 1Í² 2Ìõ)
+///æ£€æŸ¥æŸç§èŠ±è‰²ç‰Œçš„ä¸ªæ•°ï¼ˆ0ä¸‡ 1ç­’ 2æ¡)
 int GameDataEx::GetAKindPaiCount(BYTE station, BYTE kind)
 {
 	kind %= 3;
@@ -102,10 +102,10 @@ int GameDataEx::GetAKindPaiCount(BYTE station, BYTE kind)
 	return count;
 }
 
-//ChangePaiÊÖÅÆ
-//byNewCardÃÅÅÆ
-//´ÓÃÅÅÆÖĞ»»ÊÖÖĞÒ»ÕÅÅÆ
-//»»Ö¸¶¨µÄÒ»ÕÅÊÖÅÆ
+//ChangePaiæ‰‹ç‰Œ
+//byNewCardé—¨ç‰Œ
+//ä»é—¨ç‰Œä¸­æ¢æ‰‹ä¸­ä¸€å¼ ç‰Œ
+//æ¢æŒ‡å®šçš„ä¸€å¼ æ‰‹ç‰Œ
 bool	GameDataEx::ChangeAHandPai(BYTE station, BYTE ChangePai, BYTE byNewCard)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -127,7 +127,7 @@ bool	GameDataEx::ChangeAHandPai(BYTE station, BYTE ChangePai, BYTE byNewCard)
 	return false;
 }
 
-//»»Ö¸¶¨Ò»ÕÅÃÅÅÆ
+//æ¢æŒ‡å®šä¸€å¼ é—¨ç‰Œ
 bool	GameDataEx::ChangeAMenPai(BYTE ChangePai, BYTE byNewCard)
 {
 	if (0 == ChangePai || 255 == ChangePai || 0 == byNewCard || 255 == byNewCard)
@@ -145,10 +145,10 @@ bool	GameDataEx::ChangeAMenPai(BYTE ChangePai, BYTE byNewCard)
 	return false;
 }
 
-///Ãû³Æ£ºIsOutPaiPeople
-///ÃèÊö£ºÊÇ·ñ³öÅÆÍæ¼Ò
+///åç§°ï¼šIsOutPaiPeople
+///æè¿°ï¼šæ˜¯å¦å‡ºç‰Œç©å®¶
 ///@param 
-///@return  true ÊÇ ,false ²»ÊÇ
+///@return  true æ˜¯ ,false ä¸æ˜¯
 bool GameDataEx::IsOutPaiPeople(BYTE station)
 {
 	if (m_byNowOutStation < 0 || m_byNowOutStation >= PLAY_COUNT)
@@ -162,7 +162,7 @@ bool GameDataEx::IsOutPaiPeople(BYTE station)
 	return m_byNowOutStation == station ? true : false;
 }
 
-///»ñÈ¡ÊÖÅÆµÄÅÆÉ«Êı
+///è·å–æ‰‹ç‰Œçš„ç‰Œè‰²æ•°
 int GameDataEx::GetPaiSeCount(BYTE station)
 {
 	int count = 0;
@@ -181,7 +181,7 @@ int GameDataEx::GetPaiSeCount(BYTE station)
 	}
 	return count;
 }
-///ÊÇ·ñ»¹ÓĞÈ±ÃÅµÄÅÆ
+///æ˜¯å¦è¿˜æœ‰ç¼ºé—¨çš„ç‰Œ
 bool GameDataEx::IsHaveQueMen(BYTE station, BYTE type)
 {
 	if (type > 2 || type < 0)
@@ -195,7 +195,7 @@ bool GameDataEx::IsHaveQueMen(BYTE station, BYTE type)
 	}
 	return false;
 }
-//»ñÈ¡Ò»ÕÅdataÖĞÃ»ÓĞµÄÅÆ£¬ÓÃÀ´»»ÅÆ
+//è·å–ä¸€å¼ dataä¸­æ²¡æœ‰çš„ç‰Œï¼Œç”¨æ¥æ¢ç‰Œ
 BYTE GameDataEx::GetChangePai(BYTE station, BYTE data[])
 {
 	BYTE pai = 255;
@@ -205,7 +205,7 @@ BYTE GameDataEx::GetChangePai(BYTE station, BYTE data[])
 		for (int j = 0;j < HAND_CARD_NUM;++j)
 		{
 			if (data[j] == m_byArHandPai[station][i])
-				have = true;//»»ÅÆÊı×éÖĞ´æÔÚ¸ÃÅÆ£¬²»ÄÜÄÃÈ¥Ìæ»»
+				have = true;//æ¢ç‰Œæ•°ç»„ä¸­å­˜åœ¨è¯¥ç‰Œï¼Œä¸èƒ½æ‹¿å»æ›¿æ¢
 		}
 		if (!have)
 		{
@@ -216,9 +216,9 @@ BYTE GameDataEx::GetChangePai(BYTE station, BYTE data[])
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///Ãû³Æ£ºAddToGCP
-///ÃèÊö£ºÌí¼ÓÒ»×éÊı¾İµ½¸Ü³ÔÅöÊı×éÖĞ
-///@param gcpData ÒªÌí¼ÓµÄ³ÔÅö¸ÜÊı¾İ
+///åç§°ï¼šAddToGCP
+///æè¿°ï¼šæ·»åŠ ä¸€ç»„æ•°æ®åˆ°æ åƒç¢°æ•°ç»„ä¸­
+///@param gcpData è¦æ·»åŠ çš„åƒç¢°æ æ•°æ®
 ///@return 
 void GameDataEx::AddToGCP(BYTE station, TCPGStruct *gcpData)
 {
@@ -240,8 +240,8 @@ void GameDataEx::AddToGCP(BYTE station, TCPGStruct *gcpData)
 	}
 }
 
-/////////////////////»¨ÅÆ²Ù×÷////////////////////////////////////////////////////////
-///¼ì²âÄ³¸öÈËÊÇ·ñÄÇÕÅ»¨ÅÆ
+/////////////////////èŠ±ç‰Œæ“ä½œ////////////////////////////////////////////////////////
+///æ£€æµ‹æŸä¸ªäººæ˜¯å¦é‚£å¼ èŠ±ç‰Œ
 bool GameDataEx::CheckIsHaveHuaPai(BYTE station, BYTE pai)
 {
 	for (int i = 0; i < HUA_CARD_NUM; i++)
@@ -254,7 +254,7 @@ bool GameDataEx::CheckIsHaveHuaPai(BYTE station, BYTE pai)
 	return false;
 }
 
-//»ìÂÒÅÆ
+//æ··ä¹±ç‰Œ
 bool GameDataEx::DisPatchCard()
 {
 	BYTE index = 0;
@@ -339,7 +339,7 @@ bool GameDataEx::DisPatchCard()
 	{
 		return false;
 	}
-	///´òÂÒÅÆ
+	///æ‰“ä¹±ç‰Œ
 	srand(GetTickCount());
 	BYTE temp = 255, data = 0;
 	int iCount = 2;
@@ -354,9 +354,9 @@ bool GameDataEx::DisPatchCard()
 		}
 	}
 
-	//¸ù¾İ´ò÷»×ÓÇé¿ö£¬È·¶¨×¥ÃÅÅÆ¿ªÊ¼Ë÷ÒıºÍ½áÊøË÷Òı
-	//¸ù¾İ²»Í¬µÄÂé½«²»Í¬
-	//4ÕÅÅÆÎªÒ»¶Õ
+	//æ ¹æ®æ‰“éª°å­æƒ…å†µï¼Œç¡®å®šæŠ“é—¨ç‰Œå¼€å§‹ç´¢å¼•å’Œç»“æŸç´¢å¼•
+	//æ ¹æ®ä¸åŒçš„éº»å°†ä¸åŒ
+	//4å¼ ç‰Œä¸ºä¸€å¢©
 	int num = 0;
 	for (int i = 0; i < 4; i++)
 	{
@@ -371,9 +371,9 @@ bool GameDataEx::DisPatchCard()
 	{
 		num = num - index;
 	}
-	m_MenPai.byStartIndex = num; //ÃÅÅÆÆğÊ¼Ë÷Òı
-	m_MenPai.byAllPaiNum = index;//ËùÓĞÅÆµÄÊıÁ¿
-	m_MenPai.byPaiNum = index;   //Ê£ÓàÃÅÅÆÊıÁ¿
+	m_MenPai.byStartIndex = num; //é—¨ç‰Œèµ·å§‹ç´¢å¼•
+	m_MenPai.byAllPaiNum = index;//æ‰€æœ‰ç‰Œçš„æ•°é‡
+	m_MenPai.byPaiNum = index;   //å‰©ä½™é—¨ç‰Œæ•°é‡
 	int iVirtualIndex = m_MenPai.byStartIndex;
 	if (iVirtualIndex == 0)
 	{
@@ -386,19 +386,19 @@ bool GameDataEx::DisPatchCard()
 	m_MenPai.byEndIndex = iVirtualIndex;
 	return true;
 }
-//ÃèÊö£º×¥Ò»ÕÅÅÆ
+//æè¿°ï¼šæŠ“ä¸€å¼ ç‰Œ
 BYTE GameDataEx::GetPai(int iStation, bool bhead, BYTE *pIndex, BYTE byGetPai)
 {
-	BYTE paiIndex = 255;//±»×¥ÅÆµÄÎ»ÖÃ
+	BYTE paiIndex = 255;//è¢«æŠ“ç‰Œçš„ä½ç½®
 	BYTE card = 255;
-	if (bhead)//´ÓÇ°×¥
+	if (bhead)//ä»å‰æŠ“
 	{
 		if (m_MenPai.byStartIndex >= m_MenPai.byAllPaiNum)
 		{
 			m_MenPai.byStartIndex = 0;
 		}
 
-		if (byGetPai != 255) //Òª×¥Ö¸¶¨ÅÆ£¬
+		if (byGetPai != 255) //è¦æŠ“æŒ‡å®šç‰Œï¼Œ
 		{
 			bool bIsOk = false;
 			int iIndex = 0;
@@ -411,7 +411,7 @@ BYTE GameDataEx::GetPai(int iStation, bool bhead, BYTE *pIndex, BYTE byGetPai)
 					break;
 				}
 			}
-			if (bIsOk) //ÕÒµ½ÁËµ÷»»Î»ÖÃ
+			if (bIsOk) //æ‰¾åˆ°äº†è°ƒæ¢ä½ç½®
 			{
 				BYTE byTemp = m_MenPai.byMenPai[m_MenPai.byStartIndex];
 				m_MenPai.byMenPai[m_MenPai.byStartIndex] = m_MenPai.byMenPai[iIndex];
@@ -419,14 +419,14 @@ BYTE GameDataEx::GetPai(int iStation, bool bhead, BYTE *pIndex, BYTE byGetPai)
 			}
 		}
 
-		paiIndex = m_MenPai.byStartIndex;//±»×¥ÅÆµÄÎ»ÖÃ
+		paiIndex = m_MenPai.byStartIndex;//è¢«æŠ“ç‰Œçš„ä½ç½®
 		card = m_MenPai.byMenPai[m_MenPai.byStartIndex];
 		m_MenPai.byMenPai[m_MenPai.byStartIndex] = 255;
 		m_MenPai.byStartIndex++;
 	}
-	else//´ÓºóÃæ×¥
+	else//ä»åé¢æŠ“
 	{
-		if (byGetPai != 255) //Òª×¥Ö¸¶¨ÅÆ£¬
+		if (byGetPai != 255) //è¦æŠ“æŒ‡å®šç‰Œï¼Œ
 		{
 			bool bIsOk = false;
 			int iIndex = 0;
@@ -439,7 +439,7 @@ BYTE GameDataEx::GetPai(int iStation, bool bhead, BYTE *pIndex, BYTE byGetPai)
 					break;
 				}
 			}
-			if (bIsOk) //ÕÒµ½ÁËµ÷»»Î»ÖÃ
+			if (bIsOk) //æ‰¾åˆ°äº†è°ƒæ¢ä½ç½®
 			{
 				BYTE byTemp = m_MenPai.byMenPai[m_MenPai.byEndIndex];
 				m_MenPai.byMenPai[m_MenPai.byEndIndex] = m_MenPai.byMenPai[iIndex];
@@ -447,7 +447,7 @@ BYTE GameDataEx::GetPai(int iStation, bool bhead, BYTE *pIndex, BYTE byGetPai)
 			}
 		}
 
-		paiIndex = m_MenPai.byEndIndex;//±»×¥ÅÆµÄÎ»ÖÃ
+		paiIndex = m_MenPai.byEndIndex;//è¢«æŠ“ç‰Œçš„ä½ç½®
 		card = m_MenPai.byMenPai[m_MenPai.byEndIndex];
 		m_MenPai.byMenPai[m_MenPai.byEndIndex] = 255;
 		if (m_MenPai.byEndIndex == 0)
@@ -465,14 +465,14 @@ BYTE GameDataEx::GetPai(int iStation, bool bhead, BYTE *pIndex, BYTE byGetPai)
 	}
 	if (pIndex != NULL)
 	{
-		*pIndex = paiIndex;//±»×¥ÅÆµÄÎ»ÖÃ
+		*pIndex = paiIndex;//è¢«æŠ“ç‰Œçš„ä½ç½®
 	}
 	return card;
 }
 BYTE GameDataEx::GetNextStation(BYTE station, bool shun)
 {
 	BYTE re = 255;
-	if (shun)//Ë³Ê±Õë
+	if (shun)//é¡ºæ—¶é’ˆ
 	{
 		re = (station + 1) % PLAY_COUNT;
 	}
@@ -482,7 +482,7 @@ BYTE GameDataEx::GetNextStation(BYTE station, bool shun)
 	}
 	return re;
 }
-//ÅäÅÆ
+//é…ç‰Œ
 BYTE GameDataEx::MatchMJ()
 {
 	CString lw;
@@ -491,7 +491,7 @@ BYTE GameDataEx::MatchMJ()
 		return 255;
 	}
 
-	m_tMatchMJ.byArHandPaiCount[0] = 14;//×¯¼Ò
+	m_tMatchMJ.byArHandPaiCount[0] = 14;//åº„å®¶
 	m_tMatchMJ.byArHandPaiCount[1] = 13;
 	m_tMatchMJ.byArHandPaiCount[2] = 13;
 	m_tMatchMJ.byArHandPaiCount[3] = 13;
@@ -649,7 +649,7 @@ BYTE GameDataEx::MatchMJ()
 	return m_tMatchMJ.byArHandPai[0][13];
 }
 
-//·­¹í
+//ç¿»é¬¼
 void GameDataEx::TurningString(BYTE &byPai0, BYTE &byPai1)
 {
 	BYTE byCard = GetPai(255, true, NULL);
@@ -682,7 +682,7 @@ void GameDataEx::TurningString(BYTE &byPai0, BYTE &byPai1)
 	byPai1 = byCard;
 }
 
-//ÅĞ¶ÏÊÇ·ñÂú×ã¸ú×¯¹æÔò
+//åˆ¤æ–­æ˜¯å¦æ»¡è¶³è·Ÿåº„è§„åˆ™
 int GameDataEx::CheckIsShouZhangGen(bool bIsNext)
 {
 	int cout_ = 0;
@@ -750,7 +750,7 @@ int GameDataEx::CheckIsShouZhangGen(bool bIsNext)
 	return cout_;
 }
 
-//»ñÈ¡Á½¸öÍæ¼ÒµÄÏà¶ÔÎ»ÖÃ¹ØÏµ
+//è·å–ä¸¤ä¸ªç©å®¶çš„ç›¸å¯¹ä½ç½®å…³ç³»
 BYTE GameDataEx::GetPlayerStationRelation(BYTE byMeStation, BYTE byOtherStation)
 {
 	if (byMeStation < 0 || byMeStation >= PLAY_COUNT
@@ -784,7 +784,7 @@ BYTE GameDataEx::GetPlayerStationRelation(BYTE byMeStation, BYTE byOtherStation)
 	return MJ_STATION_NO;
 }
 
-//»ñÈ¡byMeStationÍæ¼ÒºÍ·ÇbyNoStationµÄ¹ØÏµ
+//è·å–byMeStationç©å®¶å’ŒébyNoStationçš„å…³ç³»
 BYTE GameDataEx::GetPlayerStationRelationEx(BYTE byMeStation, BYTE byNoStation)
 {
 	if (PLAY_COUNT != 4)
@@ -810,7 +810,7 @@ BYTE GameDataEx::GetPlayerStationRelationEx(BYTE byMeStation, BYTE byNoStation)
 	return GetPlayerStationRelation(byMeStation, byPlayer1) | GetPlayerStationRelation(byMeStation, byPlayer2);
 }
 
-//»ñµÃÊ£ÓàÃÅÅÆ
+//è·å¾—å‰©ä½™é—¨ç‰Œ
 BYTE GameDataEx::GetRemainMenPai(BYTE byRemainMenPai[MAX_REMAIN_MEN_PAI_NUM])
 {
 	BYTE byNum = 0;
@@ -828,11 +828,11 @@ BYTE GameDataEx::GetRemainMenPai(BYTE byRemainMenPai[MAX_REMAIN_MEN_PAI_NUM])
 	return byNum;
 }
 
-//BYTE byHuType[MAX_HUPAI_TYPE];		//ºúÅÆÀàĞÍ £¬255Ä¬ÈÏÌî³äÖµ
-//BYTE byNameType;					//ÏàÓ¦µÄÃû×Ö£¬ Ã¶¾ÙÀàĞÍMJ_HU_FEN_TYPE
-//BYTE byXiangYingStation[MAX_COUNT_HUPAI_FEN]; //ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-//int iFanCount;						//ºúÅÆÀàĞÍµÄ·¬Êı£¬±ÈÈç´óËÄÏ²88·¬£¬ÇåÒ»É«16·¬
-//int iAllFen[MAX_COUNT_HUPAI_FEN];   //ÊäÓ®µÄºú·Ö
+//BYTE byHuType[MAX_HUPAI_TYPE];		//èƒ¡ç‰Œç±»å‹ ï¼Œ255é»˜è®¤å¡«å……å€¼
+//BYTE byNameType;					//ç›¸åº”çš„åå­—ï¼Œ æšä¸¾ç±»å‹MJ_HU_FEN_TYPE
+//BYTE byXiangYingStation[MAX_COUNT_HUPAI_FEN]; //ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+//int iFanCount;						//èƒ¡ç‰Œç±»å‹çš„ç•ªæ•°ï¼Œæ¯”å¦‚å¤§å››å–œ88ç•ªï¼Œæ¸…ä¸€è‰²16ç•ª
+//int iAllFen[MAX_COUNT_HUPAI_FEN];   //è¾“èµ¢çš„èƒ¡åˆ†
 bool GameDataEx::AddToHuFenStruct(BYTE byStation, BYTE byNameType, BYTE byXiangYingStation, BYTE byXiangYingStationEx, bool bBaoTing, int iAllFen)
 {
 	if (byStation >= PLAY_COUNT || byStation < 0 || m_countHuFen[byStation].byNums >= 3)
@@ -848,9 +848,9 @@ bool GameDataEx::AddToHuFenStruct(BYTE byStation, BYTE byNameType, BYTE byXiangY
 	return true;
 }
 
-//BYTE byGangType[MAX_COUNT_GANG_FEN]; //¸ÜÀàĞÍ £¬Ã¶¾ÙÀàĞÍMJ_GANG_FEN_TYPE
-//BYTE byXiangYingStation[MAX_COUNT_GANG_FEN]; //ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-//int iAllFen[MAX_COUNT_GANG_FEN];//×Ü·Ö
+//BYTE byGangType[MAX_COUNT_GANG_FEN]; //æ ç±»å‹ ï¼Œæšä¸¾ç±»å‹MJ_GANG_FEN_TYPE
+//BYTE byXiangYingStation[MAX_COUNT_GANG_FEN]; //ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+//int iAllFen[MAX_COUNT_GANG_FEN];//æ€»åˆ†
 bool GameDataEx::AddToGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXiangYingStation, bool bBaoTing, int iAllFen)
 {
 	if (m_countGangFen[byStation].byNums >= MAX_COUNT_GANG_FEN || byGangType == MJ_GANG_FEN_TYPE_NO)
@@ -886,7 +886,7 @@ bool GameDataEx::AddToGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXian
 	return true;
 }
 
-//Çå³ı²¹¸ÜÁĞ±í·Ö
+//æ¸…é™¤è¡¥æ åˆ—è¡¨åˆ†
 bool GameDataEx::DelBuGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXiangYingStation, bool bBaoTing, int iAllFen)
 {
 	if (m_countGangFen[byStation].byNums >= MAX_COUNT_GANG_FEN || byGangType == MJ_GANG_FEN_TYPE_NO)
@@ -920,7 +920,7 @@ bool GameDataEx::DelBuGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXian
 	}
 	return false;
 }
-////Ìí¼ÓÂòÂí·Ö
+////æ·»åŠ ä¹°é©¬åˆ†
 //bool GameDataEx::AddToHorseFenStruct(BYTE byStation,BYTE byBuyHorseType,BYTE byMaiStation,BYTE byBeiMaiStation,int iAllFen)
 //{
 //	if (m_countHorseFen[byStation].byNums >= MAX_COUNT_HORSE_FEN)
@@ -935,9 +935,9 @@ bool GameDataEx::DelBuGangFenStruct(BYTE byStation, BYTE byGangType, BYTE byXian
 //	return true;
 //}
 
-//BYTE byGenZhuangType; //ÀàĞÍ ¡¾0£¬Ä¬ÈÏÌî³äÖµ¡¿¡¾1,¸ú×¯¡¿¡¾2£¬±»¸ú×¯¡¿
-//BYTE byXiangYingStation; //ÏàÓ¦Íæ¼Ò£¬Ã¶¾ÙÀàĞÍMJ_STATION
-//int iAllFen;//¸ú×¯·Ö
+//BYTE byGenZhuangType; //ç±»å‹ ã€0ï¼Œé»˜è®¤å¡«å……å€¼ã€‘ã€1,è·Ÿåº„ã€‘ã€2ï¼Œè¢«è·Ÿåº„ã€‘
+//BYTE byXiangYingStation; //ç›¸åº”ç©å®¶ï¼Œæšä¸¾ç±»å‹MJ_STATION
+//int iAllFen;//è·Ÿåº„åˆ†
 //bool GameDataEx::AddToGenZhuangFenStruct(BYTE byStation,BYTE byGenZhuangType,BYTE byXiangYingStation,int iAllFen)
 //{
 //	if (m_countGenZhuang[byStation].byNums >= MAX_COUNT_GEN_ZHUANG_FEN)

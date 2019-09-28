@@ -1,17 +1,17 @@
 //////////////////////////////////////////////////////////////////////////
-/// µ÷ÊÔĞÅÏ¢¡¢³ö´íĞÅÏ¢Êä³öº¯Êı¶¨Òå
-/// ÆäÖĞ£¬GameLogÓÃÓÚµ÷ÊÔ¸ú×ÙÊ±Êä³öĞÅÏ¢£¬·¢ĞĞÊ±¿ÉÒÔĞŞ¸Äº¯ÊıÌå£¬²»Ğ´ÎÄ¼şÖ±½Ó·µ»Ø
+/// è°ƒè¯•ä¿¡æ¯ã€å‡ºé”™ä¿¡æ¯è¾“å‡ºå‡½æ•°å®šä¹‰
+/// å…¶ä¸­ï¼ŒGameLogç”¨äºè°ƒè¯•è·Ÿè¸ªæ—¶è¾“å‡ºä¿¡æ¯ï¼Œå‘è¡Œæ—¶å¯ä»¥ä¿®æ”¹å‡½æ•°ä½“ï¼Œä¸å†™æ–‡ä»¶ç›´æ¥è¿”å›
 #include "stdafx.h"
 #include <Windows.h>
 #include <tchar.h>
 #include <stdio.h>
 #include "../GameMessage/upgrademessage.h"
 
-//´òÓ¡ÈÕÖ¾
+//æ‰“å°æ—¥å¿—
 void GameLog::OutputFile(const char *strOutputString, ...)
 {
 #ifdef _RELEASEEX
-	//ÔËÓª°æ½ûÖ¹µ÷ÓÃOutputFileº¯Êı£¬ÒòÎª¸Ãº¯ÊıºÄÊ±Ô¼1.5ºÁÃë
+	//è¿è¥ç‰ˆç¦æ­¢è°ƒç”¨OutputFileå‡½æ•°ï¼Œå› ä¸ºè¯¥å‡½æ•°è€—æ—¶çº¦1.5æ¯«ç§’
 	return;
 #endif // _RELEASEEX
 	char szFilename[256];
@@ -24,7 +24,7 @@ void GameLog::OutputFile(const char *strOutputString, ...)
 	{
 		return;
 	}
-	//²åÈëÊ±¼ä
+	//æ’å…¥æ—¶é—´
 	char cTime[30];
 	::memset(cTime, 0, sizeof(cTime));
 	sprintf(cTime, "[%d:%d:%d] ", time.GetHour(), time.GetMinute(), time.GetSecond());
@@ -42,13 +42,13 @@ void GameLog::SFile(const char * strOutputString, ...)
 	CString strPath = CINIFile::GetAppPath() + GAMENAME + "_log\\";
 	SHCreateDirectoryEx(NULL, strPath, NULL);
 	CTime time = CTime::GetCurrentTime();
-	sprintf(szFilename, "%s%d__%d%02d%02d_ÌØÊâÈÕÖ¾.txt", strPath.GetBuffer(), NAME_ID, time.GetYear(), time.GetMonth(), time.GetDay());
+	sprintf(szFilename, "%s%d__%d%02d%02d_ç‰¹æ®Šæ—¥å¿—.txt", strPath.GetBuffer(), NAME_ID, time.GetYear(), time.GetMonth(), time.GetDay());
 	FILE *fp = fopen(szFilename, "a");
 	if (NULL == fp)
 	{
 		return;
 	}
-	//²åÈëÊ±¼ä
+	//æ’å…¥æ—¶é—´
 	char cTime[30];
 	::memset(cTime, 0, sizeof(cTime));
 	sprintf(cTime, "[%d:%d:%d] ", time.GetHour(), time.GetMinute(), time.GetSecond());
@@ -63,10 +63,10 @@ void GameLog::SFile(const char * strOutputString, ...)
 void GameLog::OutputString(const char * strOutputString, ...)
 {
 #ifdef _RELEASEEX
-	//ÔËÓª°æ½ûÖ¹µ÷ÓÃOutputDebugStringº¯Êı£¬ÒòÎª¸Ãº¯ÊıºÄÊ±ÑÏÖØ
+	//è¿è¥ç‰ˆç¦æ­¢è°ƒç”¨OutputDebugStringå‡½æ•°ï¼Œå› ä¸ºè¯¥å‡½æ•°è€—æ—¶ä¸¥é‡
 	return;
 #endif // _RELEASEEX
-	//²åÈëÊ±¼ä
+	//æ’å…¥æ—¶é—´
 	CTime time = CTime::GetCurrentTime();
 	char cTime[30];
 	::memset(cTime, 0, sizeof(cTime));

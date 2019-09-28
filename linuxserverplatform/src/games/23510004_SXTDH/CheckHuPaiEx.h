@@ -1,56 +1,56 @@
 #ifndef CHECKHUPAIEX_H
 #define CHECKHUPAIEX_H
 #include "CheckHuPai.h"
-///ÊÂ¼ş´¦ÀíÀà£¨ÖØÔØ£©
+///äº‹ä»¶å¤„ç†ç±»ï¼ˆé‡è½½ï¼‰
 class CheckHuPaiEx :public CheckHuPai
 {
 public:
-	int   m_byTingMaxFan;//ÌıÅÆ¿ÉÄÜµÄ×î´ó·¬
+	int   m_byTingMaxFan;//å¬ç‰Œå¯èƒ½çš„æœ€å¤§ç•ª
 	int   m_iHuFenType[PLAY_COUNT][MAX_HU_FEN_KIND];
 public:
 	CheckHuPaiEx(void);
 	~CheckHuPaiEx(void);
-	//³õÊ¼»¯Êı¾İ
+	//åˆå§‹åŒ–æ•°æ®
 	virtual void InitData();
 
-	/////////¼ì²âÊÇ·ñÄÜºúÅÆ////////
+	/////////æ£€æµ‹æ˜¯å¦èƒ½èƒ¡ç‰Œ////////
 	virtual bool CanHu(GameDataEx *pGameData, BYTE station, BYTE byBeStation, BYTE lastpai, bool zimo);
 
-	///////////////Âé½«Ëã·Ö//////////////////
+	///////////////éº»å°†ç®—åˆ†//////////////////
 	void CountHuFen(GameDataEx *pGameData);
 
-	//¸ù¾İºúÅÆÀàĞÍ£¬»ñÈ¡ºúÅÆ±¶Êı
+	//æ ¹æ®èƒ¡ç‰Œç±»å‹ï¼Œè·å–èƒ¡ç‰Œå€æ•°
 	int GetHuTypeFans(GameDataEx *pGameData, BYTE m_byHuType[MAX_HUPAI_TYPE]);
 
-	//¼ì²âÄÜ·ñÌıÅÆ
+	//æ£€æµ‹èƒ½å¦å¬ç‰Œ
 	virtual bool CanTing(GameDataEx *pGameData, BYTE station, BYTE CanOut[]);
 
-	//»ñÈ¡Ò»ÕÅ¿ÉÌıµÄÅÆ
+	//è·å–ä¸€å¼ å¯å¬çš„ç‰Œ
 	BYTE GetCanTingCard(GameDataEx *pGameData, BYTE station);
 
-	//ÌáÈ¡ºıÅÆ
+	//æå–ç³Šç‰Œ
 	virtual void ExtractHu(GameDataEx *pGameData, BYTE station, BYTE byHuCard[]);
 
-	//´ÓÊÖÅÆÖĞ³öÒ»ÕÅÅÆ£¬È»ºóÌáÈ¡ÄÜºıµÄÅÆ
+	//ä»æ‰‹ç‰Œä¸­å‡ºä¸€å¼ ç‰Œï¼Œç„¶åæå–èƒ½ç³Šçš„ç‰Œ
 	bool OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE byOutCanHuCard[HAND_CARD_NUM],
 		BYTE byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM], BYTE byCardRemainNum[MAX_MJ_PAI]);
 
-	//½«½«ºú
+	//å°†å°†èƒ¡
 	bool CheckAllJiang(GameDataEx *pGameData);
 
-	///¼ÆËãÆß¶ÔÖĞËÄÕÅÅÆµÄÊıÁ¿
+	///è®¡ç®—ä¸ƒå¯¹ä¸­å››å¼ ç‰Œçš„æ•°é‡
 	int CountLongQi();
 
-	///¼ÆËãÆß¶ÔÖĞËÄÕÅÅÆµÄÊıÁ¿
+	///è®¡ç®—ä¸ƒå¯¹ä¸­å››å¼ ç‰Œçš„æ•°é‡
 	bool CheckHuGen(BYTE lastpai);
 
-	//¼ì²âÊÇ·ñçÛ¾ÅÆß¶Ô
+	//æ£€æµ‹æ˜¯å¦å¹ºä¹ä¸ƒå¯¹
 	bool CheckYaoJiuQiDui(GameDataEx *pGameData);
 
-	//ĞÂÆß¶Ô¼ì²â
+	//æ–°ä¸ƒå¯¹æ£€æµ‹
 	bool CheckQiDuiEx(GameDataEx *pGameData);
 
-	//¼ì²âÁ½·ùÊÖÅÆµÄºúÅÆÊÇ·ñ¸Ä±ä
+	//æ£€æµ‹ä¸¤å¹…æ‰‹ç‰Œçš„èƒ¡ç‰Œæ˜¯å¦æ”¹å˜
 	bool IsTingKouChange(GameDataEx *pGameData, BYTE station, BYTE byChangeCard[HAND_CARD_NUM]);
 };
 #endif

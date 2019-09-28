@@ -3,316 +3,316 @@
 #include "Mj_Message.h"
 #include "mj.h"
 #include "CLogicBase.h"
-///ÓÎÏ·Êı¾İ¹ÜÀíÀà:ÅäÖÃÊı¾İ£¬ÓÎÏ·»ù±¾Êı¾İµÈ£¬¶ÔÊı¾İ½øĞĞ²åÈëĞŞ¸ÄµÈ¶¯×÷
+///æ¸¸æˆæ•°æ®ç®¡ç†ç±»:é…ç½®æ•°æ®ï¼Œæ¸¸æˆåŸºæœ¬æ•°æ®ç­‰ï¼Œå¯¹æ•°æ®è¿›è¡Œæ’å…¥ä¿®æ”¹ç­‰åŠ¨ä½œ
 class GameData
 {
 public:
-	MjRuleSet				m_mjRule;		/// Âé½«³£¹æÊôĞÔ	  
-	ActionRuleSet			m_mjAction;		/// Âé½«¶¯×÷ÊôĞÔ        
-	BYTE					m_byNtStation;	//	×¯¼ÒÎ»ÖÃ	    
-	bool					m_bGangState[PLAY_COUNT];//¼ÇÂ¼¸ÜÅÆ×´Ì¬£¬ÓµÓÚ¸Ü¿ªºÍ¸ÜºóÅÚ
-	////////////»ù±¾Êı¾İ¶¨Òå/////////////////////////////////////////////////////////
+	MjRuleSet				m_mjRule;		/// éº»å°†å¸¸è§„å±æ€§	  
+	ActionRuleSet			m_mjAction;		/// éº»å°†åŠ¨ä½œå±æ€§        
+	BYTE					m_byNtStation;	//	åº„å®¶ä½ç½®	    
+	bool					m_bGangState[PLAY_COUNT];//è®°å½•æ ç‰ŒçŠ¶æ€ï¼Œæ‹¥äºæ å¼€å’Œæ åç‚®
+	////////////åŸºæœ¬æ•°æ®å®šä¹‰/////////////////////////////////////////////////////////
 
-	///³ÔÅÆÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ
+	///åƒç‰Œç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®
 	tagChiPai				temp_ChiPai;
 
-	///ÅöÅÆÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ
+	///ç¢°ç‰Œç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®
 	tagPengPai				temp_PengPai;
 
-	///¸ÜÅÆÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ
+	///æ ç‰Œç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®
 	tagGangPai				temp_GangPai;
 
-	///ºúÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ(¶à¸öÈË¿ÉÒÔºúÅÆ)
+	///èƒ¡ç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®(å¤šä¸ªäººå¯ä»¥èƒ¡ç‰Œ)
 	tagHuPai				temp_HuPai[PLAY_COUNT];
-public:////////////ÊÂ¼şÊı¾İ¶ÔÏó¶¨Òå//////////////////////
-	///ÖÀ2¿ÅÉ«×ÓÈ·¶¨ÆğÅÆÎ»ÖÃ£¨µãÊıºÍ£©ºÍÆğÅÆµã£¨×îĞ¡µã£©ÊÂ¼ş	
+public:////////////äº‹ä»¶æ•°æ®å¯¹è±¡å®šä¹‰//////////////////////
+	///æ·2é¢—è‰²å­ç¡®å®šèµ·ç‰Œä½ç½®ï¼ˆç‚¹æ•°å’Œï¼‰å’Œèµ·ç‰Œç‚¹ï¼ˆæœ€å°ç‚¹ï¼‰äº‹ä»¶	
 	tagTwoSeziDirAndGetPai	T_TwoSeziDirAndGetPai;
 
-	///·¢ÅÆÊÂ¼ş	
+	///å‘ç‰Œäº‹ä»¶	
 	//tagSendPai			T_SendPai;
 
-	///ËùÓĞÍæ¼Ò²¹»¨ÊÂ¼ş	
+	///æ‰€æœ‰ç©å®¶è¡¥èŠ±äº‹ä»¶	
 	//tagAllBuHua			T_AllBuHua;
 
-	///³öÅÆÊÂ¼ş	
+	///å‡ºç‰Œäº‹ä»¶	
 	tagOutPai			T_OutPai;
 
-	///³ÔÅö¸ÜºıÅÆÍ¨ÖªÊÂ¼şÅÆÊÂ¼ş	  
+	///åƒç¢°æ ç³Šç‰Œé€šçŸ¥äº‹ä»¶ç‰Œäº‹ä»¶	  
 	tagCPGNotify		T_CPGNotify[PLAY_COUNT];
 
-	///×¥ÅÆÅÆÊÂ¼ş		
+	///æŠ“ç‰Œç‰Œäº‹ä»¶		
 	tagZhuaPai			T_ZhuaPai;
 
-	///µ¥¸öÍæ¼Ò²¹»¨ÊÂ¼ş	
+	///å•ä¸ªç©å®¶è¡¥èŠ±äº‹ä»¶	
 	//tagOneBuHua			T_OneBuHua;
 
-	///³ÔÅÆÅÆÊÂ¼ş	
+	///åƒç‰Œç‰Œäº‹ä»¶	
 	tagChiPai			T_ChiPai;
 
-	///ÅöÅÆÅÆÊÂ¼ş	
+	///ç¢°ç‰Œç‰Œäº‹ä»¶	
 	tagPengPai			T_PengPai;
 
-	///¸ÜÅÆÅÆÊÂ¼ş	
+	///æ ç‰Œç‰Œäº‹ä»¶	
 	tagGangPai			T_GangPai;
 
-	///ÌıÅÆÅÆÊÂ¼ş	
+	///å¬ç‰Œç‰Œäº‹ä»¶	
 	tagTingPai			T_TingPai;
 
-	///ºıÅÆÅÆÊÂ¼ş	
+	///ç³Šç‰Œç‰Œäº‹ä»¶	
 	tagHuPai			T_HuPai;
 
-	///Ëã·ÖÊÂ¼ş		
+	///ç®—åˆ†äº‹ä»¶		
 	tagCountFen			T_CountFen;
 public:
-	//ÃÅÅÆÊı¾İ
+	//é—¨ç‰Œæ•°æ®
 	MjMenPaiData		m_MenPai;
 
-	//³ÔÅö¸Ü
+	//åƒç¢°æ 
 	TCPGStruct			m_UserGCPData[PLAY_COUNT][5];
 
-	///¾«ÅÆÊı¾İ
+	///ç²¾ç‰Œæ•°æ®
 	JingStruct			m_StrJing;
 
-	//ÊÖÅÆ²»³¬¹ı14ÕÅ 
+	//æ‰‹ç‰Œä¸è¶…è¿‡14å¼  
 	BYTE				m_byArHandPai[PLAY_COUNT][HAND_CARD_NUM];
 
-	//ÊÖÅÆÕÅÊı	  
+	//æ‰‹ç‰Œå¼ æ•°	  
 	BYTE				m_byArHandPaiCount[PLAY_COUNT];
 
-	//ÃÅÅÆ²»³¬¹ı40ÕÅ£¬0£º´Ë¶ÕÓĞÃÅÅÆ£¬255£º´Ë´¦ÎŞÃÅÅÆ£¨2DÂé½«²»ĞèÒªÏÔÊ¾ÃÅÅÆ¶ÕÊı£©
-	BYTE				m_iArMenPai[4][MEN_CARD_NUM]; //ºÍÓÎÏ·ÈËÊıÎŞ¹Ø£¬¶¼ÊÇ4¶ÕÃÅÅÆ
+	//é—¨ç‰Œä¸è¶…è¿‡40å¼ ï¼Œ0ï¼šæ­¤å¢©æœ‰é—¨ç‰Œï¼Œ255ï¼šæ­¤å¤„æ— é—¨ç‰Œï¼ˆ2Déº»å°†ä¸éœ€è¦æ˜¾ç¤ºé—¨ç‰Œå¢©æ•°ï¼‰
+	BYTE				m_iArMenPai[4][MEN_CARD_NUM]; //å’Œæ¸¸æˆäººæ•°æ— å…³ï¼Œéƒ½æ˜¯4å¢©é—¨ç‰Œ
 
-	//»¨ÅÆ²»³¬¹ı8ÕÅ
+	//èŠ±ç‰Œä¸è¶…è¿‡8å¼ 
 	BYTE				m_byArHuaPai[PLAY_COUNT][HUA_CARD_NUM];
 
-	//»¨ÅÆ¸öÊı
+	//èŠ±ç‰Œä¸ªæ•°
 	BYTE				m_byArHuaPaiCount[PLAY_COUNT];
 
-	//³öÅÆ²»³¬¹ı40ÕÅ
+	//å‡ºç‰Œä¸è¶…è¿‡40å¼ 
 	BYTE				m_byArOutPai[PLAY_COUNT][OUT_CARD_NUM];
 
-	//³öÅÆµÄÕÅÊı
+	//å‡ºç‰Œçš„å¼ æ•°
 	BYTE				m_byArOutPaiCount[PLAY_COUNT];
 
-	//µ±Ç°²Ù×÷Íæ¼Ò	  
+	//å½“å‰æ“ä½œç©å®¶	  
 	BYTE				m_byNowOutStation;
 
-	//¼ÇÂ¼Íæ¼ÒÊÇ·ñ³ö¹ıÅÆÁË(ÓÃÓÚ¼ì²âÌìºúµØºú)
+	//è®°å½•ç©å®¶æ˜¯å¦å‡ºè¿‡ç‰Œäº†(ç”¨äºæ£€æµ‹å¤©èƒ¡åœ°èƒ¡)
 	bool				m_bHaveOut[PLAY_COUNT];
 
-	//Íæ¼ÒÊÇ·ñÌıÅÆ
+	//ç©å®¶æ˜¯å¦å¬ç‰Œ
 	bool				m_bTing[PLAY_COUNT];
 
-	//ÌıÅÆÀàĞÍ(Ã÷Â¥ »¹ÊÇ°µÂ¥--É½¶«Âé½«ÌØÓĞ)
+	//å¬ç‰Œç±»å‹(æ˜æ¥¼ è¿˜æ˜¯æš—æ¥¼--å±±ä¸œéº»å°†ç‰¹æœ‰)
 	BYTE				m_byTingType[PLAY_COUNT];
 
-	//×ª»»ºóµÄÃÅÅÆÊı¾İ
+	//è½¬æ¢åçš„é—¨ç‰Œæ•°æ®
 	BYTE				m_byMenPaiData[4][MEN_CARD_NUM / 2][2];
 
-	//×îºó´ò³öµÄÅÆ
+	//æœ€åæ‰“å‡ºçš„ç‰Œ
 	BYTE				m_byLastOutPai;
 
-	//×¥×îºóÒ»ÕÅÅÆµÄÍæ¼Ò
+	//æŠ“æœ€åä¸€å¼ ç‰Œçš„ç©å®¶
 	BYTE				m_byEndZhuaPaiPalyer;
 
-	//µ±Ç°×¥ÅÆ·½Ïò£¬true Ë³Ê±Õë£¬false ÄæÊ±Õë	  
+	//å½“å‰æŠ“ç‰Œæ–¹å‘ï¼Œtrue é¡ºæ—¶é’ˆï¼Œfalse é€†æ—¶é’ˆ	  
 	bool				m_bZhuaPaiDir;
 
-	//ÉÏ´Î³öÅÆÎ»ÖÃ
+	//ä¸Šæ¬¡å‡ºç‰Œä½ç½®
 	BYTE				m_byLastOutStation;
 
-	//Í£ÅÆ»òÆäËû²Ù×÷ºóÄÜ´ò³öµÄÅÆ
+	//åœç‰Œæˆ–å…¶ä»–æ“ä½œåèƒ½æ‰“å‡ºçš„ç‰Œ
 	BYTE				m_byCanOutCard[PLAY_COUNT][HAND_CARD_NUM];
 
-	//È¦·ç
+	//åœˆé£
 	BYTE				m_byQuanFeng;
 
-	//ÃÅ·ç
+	//é—¨é£
 	BYTE				m_byMenFeng[PLAY_COUNT];
 
-	///µ±Ç°Ñ¡ÖĞÅÅË÷Òı
+	///å½“å‰é€‰ä¸­æ’ç´¢å¼•
 	BYTE				m_bySelectIndex;
 
-	//Ê£ÓàÃÅÅÆ
+	//å‰©ä½™é—¨ç‰Œ
 	BYTE                m_byRemainMenPai[MAX_REMAIN_MEN_PAI_NUM];
 
-	//Ê£ÓàÃÅÅÆÊıÁ¿
+	//å‰©ä½™é—¨ç‰Œæ•°é‡
 	BYTE                m_byRemainMenPaiCount;
 
-	//ÌØÊâÍæ·¨
-	BYTE		m_byTingOutCardIndex[PLAY_COUNT];//ÌıÅÆµ¹¿ÛµÄË÷ÒıÅÆ
-	BYTE		m_byAllOutCardNum[MAX_MJ_PAI]; //ÒÑ¾­´ò³öÀ´µÄÃ¿ÕÅÅÆµÄÊıÁ¿
+	//ç‰¹æ®Šç©æ³•
+	BYTE		m_byTingOutCardIndex[PLAY_COUNT];//å¬ç‰Œå€’æ‰£çš„ç´¢å¼•ç‰Œ
+	BYTE		m_byAllOutCardNum[MAX_MJ_PAI]; //å·²ç»æ‰“å‡ºæ¥çš„æ¯å¼ ç‰Œçš„æ•°é‡
 public:
 	GameData(void);
 	~GameData(void);
-	//³õÊ¼»¯Êı¾İ
+	//åˆå§‹åŒ–æ•°æ®
 	virtual void InitData();
 
-	///³õÊ¼»¯Êı¾İ
+	///åˆå§‹åŒ–æ•°æ®
 	virtual void LoadIni();
 
-	//////////////////ÊÖÅÆ²Ù×÷/////////////////////////////////////
-	//¼ì²éÊÇ·ñ´æÔÚÖ¸¶¨µÄÊÖÅÆ
+	//////////////////æ‰‹ç‰Œæ“ä½œ/////////////////////////////////////
+	//æ£€æŸ¥æ˜¯å¦å­˜åœ¨æŒ‡å®šçš„æ‰‹ç‰Œ
 	virtual bool IsHaveAHandPai(BYTE station, BYTE pai);
 
-	//¼ì²éÊÖÅÆÖĞÄ³ÕÅÅÆµÄ¸öÊı
+	//æ£€æŸ¥æ‰‹ç‰Œä¸­æŸå¼ ç‰Œçš„ä¸ªæ•°
 	virtual int GetAHandPaiCount(BYTE station, BYTE pai);
 
-	//¼ì²éÊÖÅÆµÄÕÅÊı
+	//æ£€æŸ¥æ‰‹ç‰Œçš„å¼ æ•°
 	virtual int GetHandPaiCount(BYTE station);
 
-	//¿½±´Íæ¼ÒµÄÊÖÅÆ
+	//æ‹·è´ç©å®¶çš„æ‰‹ç‰Œ
 	virtual int CopyHandPai(BYTE pai[][HAND_CARD_NUM], BYTE station, bool show);
 
-	//ÃèÊö£º¿½±´Ä³¸öÍæ¼ÒµÄÊÖÅÆ
+	//æè¿°ï¼šæ‹·è´æŸä¸ªç©å®¶çš„æ‰‹ç‰Œ
 	virtual int CopyOneUserHandPai(BYTE pai[HAND_CARD_NUM], BYTE station);
 
-	//ÊÖÅÆÅÅĞò£¬smallÊÇ·ñ´ÓĞ¡µ½´óÅÅ
+	//æ‰‹ç‰Œæ’åºï¼Œsmallæ˜¯å¦ä»å°åˆ°å¤§æ’
 	virtual void SortHandPai(BYTE station, bool big);
 
-	//Ìí¼ÓÒ»ÕÅÅÆµ½ÊÖÅÆÖĞ
+	//æ·»åŠ ä¸€å¼ ç‰Œåˆ°æ‰‹ç‰Œä¸­
 	virtual void AddToHandPai(BYTE station, BYTE pai);
 
-	//ÉèÖÃÊÖÅÆÊı¾İ
+	//è®¾ç½®æ‰‹ç‰Œæ•°æ®
 	virtual void SetHandPaiData(BYTE station, BYTE pai[], BYTE byCount);
 
-	//É¾³ıÒ»ÕÅÖ¸¶¨µÄÊÖÅÆ
+	//åˆ é™¤ä¸€å¼ æŒ‡å®šçš„æ‰‹ç‰Œ
 	virtual BYTE DeleteAHandPai(BYTE station, BYTE pai);
 
-	//ÉèÖÃÊÖÅÆÅÆ±³
+	//è®¾ç½®æ‰‹ç‰Œç‰ŒèƒŒ
 	virtual void SetHandPaiBack(BYTE station, BYTE num);
 
-	//»ñµÃ×îºóÒ»ÕÅÊÖÅÆ
+	//è·å¾—æœ€åä¸€å¼ æ‰‹ç‰Œ
 	virtual BYTE GetLastHandPai(BYTE station);
 
-	//»ñµÃÑ¡ÖĞµÄÒ»ÕÅÊÖÅÆ
+	//è·å¾—é€‰ä¸­çš„ä¸€å¼ æ‰‹ç‰Œ
 	virtual BYTE GetSelectHandPai(BYTE station);
 
-	//ÊÇ·ñ³öÅÆÍæ¼Ò
+	//æ˜¯å¦å‡ºç‰Œç©å®¶
 	virtual bool IsOutPaiPeople(BYTE station);
 
-	//¼ì²âÊÖÅÆÖĞÊÇ·ñ´æÔÚ»¨ÅÆ
+	//æ£€æµ‹æ‰‹ç‰Œä¸­æ˜¯å¦å­˜åœ¨èŠ±ç‰Œ
 	virtual bool IsHuaPaiInHand(BYTE station);
 
-	//½«ÊÖÅÆÖĞµÄ»¨ÅÆÒÆµ½»¨ÅÆÊı×éÖĞ
+	//å°†æ‰‹ç‰Œä¸­çš„èŠ±ç‰Œç§»åˆ°èŠ±ç‰Œæ•°ç»„ä¸­
 	virtual int MoveHuaPaiFormHand(BYTE station);
 
-	//Í¨¹ıË÷Òı»ñÈ¡Ò»ÕÅÊÖÅÆ
+	//é€šè¿‡ç´¢å¼•è·å–ä¸€å¼ æ‰‹ç‰Œ
 	virtual BYTE GetHandPaiFromIndex(BYTE station, int index);
 
-	//Í¨¹ıË÷ÒıÉèÖÃÒ»ÕÅÊÖÅÆ
+	//é€šè¿‡ç´¢å¼•è®¾ç½®ä¸€å¼ æ‰‹ç‰Œ
 	virtual bool SetHandPaiFromIndex(BYTE station, int index, BYTE pai);
 
-	//Ë÷ÒıÊÇ·ñÓĞÅÆ
+	//ç´¢å¼•æ˜¯å¦æœ‰ç‰Œ
 	virtual bool IsHaveHandPaiFromIndex(BYTE station, int index);
 
-	//////////////////³ÔÅö¸ÜÅÆ²Ù×÷/////////////////////////////////////
-	//»ñÈ¡Íæ¼Ò¸ÜÅÆµÄ¸öÊı(°µ¸Ü£¬Ã÷¸Ü£¬²¹¸Ü)
+	//////////////////åƒç¢°æ ç‰Œæ“ä½œ/////////////////////////////////////
+	//è·å–ç©å®¶æ ç‰Œçš„ä¸ªæ•°(æš—æ ï¼Œæ˜æ ï¼Œè¡¥æ )
 	virtual int GetUserGangNum(BYTE station, BYTE &an, BYTE &ming, BYTE &bu);
 
-	//Íæ¼Ò³ÔÅÆ´ÎÊı
+	//ç©å®¶åƒç‰Œæ¬¡æ•°
 	virtual int GetUserChiNum(BYTE station);
 
-	//Íæ¼ÒÅöÅÆ´ÎÊı
+	//ç©å®¶ç¢°ç‰Œæ¬¡æ•°
 	virtual int GetUserPengNum(BYTE station);
 
-	//Íæ¼Ò¸ÜÁËÄ³¸öÅÆ
+	//ç©å®¶æ äº†æŸä¸ªç‰Œ
 	virtual bool IsUserHaveGangPai(BYTE station, BYTE pai, BYTE &type);
 
-	//Íæ¼ÒÊÇ·ñÅöÁËÄ³ÕÅÅÆ
+	//ç©å®¶æ˜¯å¦ç¢°äº†æŸå¼ ç‰Œ
 	virtual bool IsUserHavePengPai(BYTE station, BYTE pai);
 
-	//Íæ¼ÒÊÇ·ñ³Ô¹ıÄ³ÕÅÅÆ
+	//ç©å®¶æ˜¯å¦åƒè¿‡æŸå¼ ç‰Œ
 	virtual bool IsUserHaveChiPai(BYTE station, BYTE pai);
 
-	//Ìí¼ÓÒ»×éÊı¾İµ½¸Ü³ÔÅöÊı×éÖĞ
+	//æ·»åŠ ä¸€ç»„æ•°æ®åˆ°æ åƒç¢°æ•°ç»„ä¸­
 	virtual void AddToGCP(BYTE station, TCPGStruct *gcpData);
 
-	//É¾³ı¸Õ³ÔÅöÊı×éÖĞÖ¸¶¨µÄÊı¾İ×é
+	//åˆ é™¤åˆšåƒç¢°æ•°ç»„ä¸­æŒ‡å®šçš„æ•°æ®ç»„
 	virtual void DeleteAGCPData(BYTE station, BYTE type, BYTE pai);
 
-	//¿½±´¸Ü³ÔÅöÊı×éÖĞµÄÊı¾İ×é
+	//æ‹·è´æ åƒç¢°æ•°ç»„ä¸­çš„æ•°æ®ç»„
 	virtual int CopyGCPData(BYTE station, TCPGStruct gcpData[]);
 
-	//ÉèÖÃ³ÔÅöÊı×éÖĞµÄÊı¾İ×é
+	//è®¾ç½®åƒç¢°æ•°ç»„ä¸­çš„æ•°æ®ç»„
 	virtual void SetGCPData(BYTE station, TCPGStruct gcpData[]);
 
-	//»ñÈ¡¸Ü³ÔÅöµÄ½Úµã¸öÊı
+	//è·å–æ åƒç¢°çš„èŠ‚ç‚¹ä¸ªæ•°
 	virtual int GetGCPCount(BYTE station);
 
-	//ÃèÊö£º»ñÈ¡¸Ü³ÔÅöµÄÖĞÄ³ÖÖÅÆµÄÊıÁ¿
+	//æè¿°ï¼šè·å–æ åƒç¢°çš„ä¸­æŸç§ç‰Œçš„æ•°é‡
 	virtual int GetOnePaiGCPCount(BYTE station, BYTE pai);
 
-	//ÅÅĞò¸Ü³ÔÅöÊı×é
+	//æ’åºæ åƒç¢°æ•°ç»„
 	virtual void ShortGCP(BYTE station);
 
-	//ÃèÊö£º³õÊ¼»¯¸Ü³ÔÅöÊı×é
+	//æè¿°ï¼šåˆå§‹åŒ–æ åƒç¢°æ•°ç»„
 	virtual void InitGCP(BYTE station);
 
-	///////////////////³öÅÆ²Ù×÷///////////////////////////////////////////////////////
-	//Ìí¼ÓÒ»ÕÅÅÆµ½³öÅÆÊı×éÖĞ
+	///////////////////å‡ºç‰Œæ“ä½œ///////////////////////////////////////////////////////
+	//æ·»åŠ ä¸€å¼ ç‰Œåˆ°å‡ºç‰Œæ•°ç»„ä¸­
 	virtual void AddToOutPai(BYTE station, BYTE pai, bool bTingCard = false);
 
-	//É¾³ı×îºóÒ»ÕÅ³öÅÆ
+	//åˆ é™¤æœ€åä¸€å¼ å‡ºç‰Œ
 	virtual void DeleteLastOutPai(BYTE station);
 
-	//ÉèÖÃ³öÅÆÊı¾İ
+	//è®¾ç½®å‡ºç‰Œæ•°æ®
 	virtual void SetOutPaiData(BYTE station, BYTE pai);
 
-	//¿½±´Íæ¼ÒµÄ³öÅÆ
+	//æ‹·è´ç©å®¶çš„å‡ºç‰Œ
 	virtual int CopyOutPai(BYTE station, BYTE pai[]);
 
-	//»ñÈ¡Íæ¼ÒµÄ³öÅÆÊıÁ¿
+	//è·å–ç©å®¶çš„å‡ºç‰Œæ•°é‡
 	virtual int GetOutPaiCount(BYTE station);
 
-	//ÃèÊö£º»ñÈ¡Íæ¼ÒÄ³ÕÅÅÆµÄ³öÅÆÊıÁ¿
+	//æè¿°ï¼šè·å–ç©å®¶æŸå¼ ç‰Œçš„å‡ºç‰Œæ•°é‡
 	virtual int GetOneOutPaiCount(BYTE station, BYTE pai);
 
-	//////////////////»¨ÅÆ²Ù×÷///////////////////////////////////////////////////////
-	//Ìí¼ÓÒ»ÕÅ»¨ÅÆµ½»¨ÅÆÊı×éÖĞ
+	//////////////////èŠ±ç‰Œæ“ä½œ///////////////////////////////////////////////////////
+	//æ·»åŠ ä¸€å¼ èŠ±ç‰Œåˆ°èŠ±ç‰Œæ•°ç»„ä¸­
 	virtual void AddToHuaPai(BYTE station, BYTE pai);
 
-	//ÉèÖÃ»¨ÅÆÊı¾İ
+	//è®¾ç½®èŠ±ç‰Œæ•°æ®
 	virtual void SetHuaPaiData(BYTE station, BYTE pai[]);
 
-	//¿½±´Íæ¼ÒµÄ»¨ÅÆ
+	//æ‹·è´ç©å®¶çš„èŠ±ç‰Œ
 	virtual int CopyHuaPai(BYTE station, BYTE pai[]);
 
-	//¼ì²âÊÇ·ñ»¨ÅÆ
+	//æ£€æµ‹æ˜¯å¦èŠ±ç‰Œ
 	virtual bool CheckIsHuaPai(BYTE pai);
 
-	///////////////////ÃÅÅÆÅÆ²Ù×÷///////////////////////////////////////////////////////
-	//ÉèÖÃÃÅÅÆÊı¾İ
+	///////////////////é—¨ç‰Œç‰Œæ“ä½œ///////////////////////////////////////////////////////
+	//è®¾ç½®é—¨ç‰Œæ•°æ®
 	virtual void SetMenPaiData(BYTE station, BYTE pai[]);
 
-	//¿½±´ËùÓĞÃÅÅÆ
+	//æ‹·è´æ‰€æœ‰é—¨ç‰Œ
 	virtual void CopyAllMenPai(BYTE pai[][MEN_CARD_NUM]);
 
-	//¿½±´Íæ¼ÒµÄÃÅÅÆ
+	//æ‹·è´ç©å®¶çš„é—¨ç‰Œ
 	virtual int CopyMenPai(BYTE station, BYTE pai[]);
 
-	//ÃèÊö£ºÃÅÅÆ×ª»»
+	//æè¿°ï¼šé—¨ç‰Œè½¬æ¢
 	virtual void ChangeMenPai(int iIndex, BYTE byCard = 255);
 
-	//ÃèÊö£º´´½¨ÃÅÅÆ
+	//æè¿°ï¼šåˆ›å»ºé—¨ç‰Œ
 	virtual void CreateMenPai();
 
-	//ÃèÊö£º»ñÈ¡Ä³Íæ¼ÒµÄÃÅÅÆÊıÁ¿
+	//æè¿°ï¼šè·å–æŸç©å®¶çš„é—¨ç‰Œæ•°é‡
 	virtual int GetMenPaiCount(BYTE station);
 
-	///////////////////²ÆÉñ²Ù×÷//////////////////////////////////////////////
-	/////¼ì²âpaiÊÇ·ñ²ÆÉñ
+	///////////////////è´¢ç¥æ“ä½œ//////////////////////////////////////////////
+	/////æ£€æµ‹paiæ˜¯å¦è´¢ç¥
 	//virtual bool CheckIsCaiShen(BYTE pai);
-	/////Çå¿Õ²ÆÉñ½á¹¹
+	/////æ¸…ç©ºè´¢ç¥ç»“æ„
 	//virtual void InitCaiShen();
-	/////////////////³¬¼¶¿Í»§¶ËÉèÖÃÅÆ²Ù×÷///////////////////////
-	//»»ËùÓĞÊÖÅÆ
+	/////////////////è¶…çº§å®¢æˆ·ç«¯è®¾ç½®ç‰Œæ“ä½œ///////////////////////
+	//æ¢æ‰€æœ‰æ‰‹ç‰Œ
 	virtual void ChangeAllHandPai(BYTE station, BYTE pai[], BYTE count);
 
-	//»»Ö¸¶¨ÊÖÅÆ
+	//æ¢æŒ‡å®šæ‰‹ç‰Œ
 	virtual void ChangeSomeHandPai(BYTE station, BYTE pai[], BYTE handpai[], BYTE count);
 
-	///ÉèÖÃÅÆÇ½µÄÏÂÒ»ÕÅÅÆ
+	///è®¾ç½®ç‰Œå¢™çš„ä¸‹ä¸€å¼ ç‰Œ
 	virtual void SetGameNextPai(BYTE pai);
 };
 #endif

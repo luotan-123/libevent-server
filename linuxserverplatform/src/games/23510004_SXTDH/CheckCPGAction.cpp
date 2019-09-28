@@ -7,11 +7,11 @@ CheckCPGAction::CheckCPGAction(void)
 CheckCPGAction::~CheckCPGAction(void)
 {
 }
-///³õÊ¼»¯Êı¾İ
+///åˆå§‹åŒ–æ•°æ®
 void CheckCPGAction::InitData()
 {
 }
-//ÄÜ·ñ³ÔÅÆ
+//èƒ½å¦åƒç‰Œ
 bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE Result[][3], bool bChi[3])
 {
 	bool canchi = false;
@@ -26,10 +26,10 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 		return false;
 	}
 	memset(Result, 255, 9 * sizeof(BYTE));
-	if (pai <= CMjEnum::MJ_TYPE_B9)//³ÔÍò±ıÌõ
+	if (pai <= CMjEnum::MJ_TYPE_B9)//åƒä¸‡é¥¼æ¡
 	{
 		BYTE huase = CMjRef::GetHuaSe(pai);
-		if (pGameData->IsHaveAHandPai(station, pai + 1) && pGameData->IsHaveAHandPai(station, pai + 2) && CMjRef::GetHuaSe(pai + 1) == huase && CMjRef::GetHuaSe(pai + 2) == huase)//³ÔÍ·
+		if (pGameData->IsHaveAHandPai(station, pai + 1) && pGameData->IsHaveAHandPai(station, pai + 2) && CMjRef::GetHuaSe(pai + 1) == huase && CMjRef::GetHuaSe(pai + 2) == huase)//åƒå¤´
 		{
 			if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(pai + 1) && !pGameData->m_StrJing.CheckIsJing(pai + 2)))
 			{
@@ -41,7 +41,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 				canchi = true;
 			}
 		}
-		if (pGameData->IsHaveAHandPai(station, pai + 1) && pGameData->IsHaveAHandPai(station, pai - 1) && CMjRef::GetHuaSe(pai + 1) == huase && CMjRef::GetHuaSe(pai - 1) == huase)//³ÔÖĞ
+		if (pGameData->IsHaveAHandPai(station, pai + 1) && pGameData->IsHaveAHandPai(station, pai - 1) && CMjRef::GetHuaSe(pai + 1) == huase && CMjRef::GetHuaSe(pai - 1) == huase)//åƒä¸­
 		{
 			if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(pai + 1) && !pGameData->m_StrJing.CheckIsJing(pai - 1)))
 			{
@@ -53,7 +53,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 				canchi = true;
 			}
 		}
-		if (pGameData->IsHaveAHandPai(station, pai - 1) && pGameData->IsHaveAHandPai(station, pai - 2) && CMjRef::GetHuaSe(pai - 1) == huase && CMjRef::GetHuaSe(pai - 2) == huase)//³ÔÎ²
+		if (pGameData->IsHaveAHandPai(station, pai - 1) && pGameData->IsHaveAHandPai(station, pai - 2) && CMjRef::GetHuaSe(pai - 1) == huase && CMjRef::GetHuaSe(pai - 2) == huase)//åƒå°¾
 		{
 			if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(pai - 1) && !pGameData->m_StrJing.CheckIsJing(pai - 2)))
 			{
@@ -68,12 +68,12 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 
 	}
 	else if (pai <= CMjEnum::MJ_TYPE_FB &&  pGameData->m_mjAction.bChiFeng)
-	{//³Ô¶«ÄÏÎ÷±±
+	{//åƒä¸œå—è¥¿åŒ—
 		switch (pai)
 		{
-		case CMjEnum::MJ_TYPE_FD://¶«
+		case CMjEnum::MJ_TYPE_FD://ä¸œ
 		{
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//¶«ÄÏÎ÷
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//ä¸œå—è¥¿
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FN) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FX)))
 				{
@@ -84,7 +84,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//¶«ÄÏ±±
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//ä¸œå—åŒ—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FN) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FB)))
 				{
@@ -95,7 +95,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//¶«Î÷±±
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//ä¸œè¥¿åŒ—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FX) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FB)))
 				{
@@ -108,9 +108,9 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 			}
 		}
 		break;
-		case CMjEnum::MJ_TYPE_FN://ÄÏ
+		case CMjEnum::MJ_TYPE_FN://å—
 		{
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//ÄÏ¶«Î÷
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//å—ä¸œè¥¿
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FD) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FX)))
 				{
@@ -121,7 +121,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//ÄÏ¶«±±
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//å—ä¸œåŒ—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FD) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FB)))
 				{
@@ -132,7 +132,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//ÄÏÎ÷±±
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//å—è¥¿åŒ—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FX) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FB)))
 				{
@@ -145,9 +145,9 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 			}
 		}
 		break;
-		case CMjEnum::MJ_TYPE_FX://Î÷
+		case CMjEnum::MJ_TYPE_FX://è¥¿
 		{
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN))//Î÷¶«ÄÏ
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN))//è¥¿ä¸œå—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FD) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FN)))
 				{
@@ -158,7 +158,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//Î÷ÄÏ±±
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//è¥¿å—åŒ—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FN) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FB)))
 				{
@@ -169,7 +169,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//Î÷¶«±±
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FB))//è¥¿ä¸œåŒ—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FD) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FB)))
 				{
@@ -182,9 +182,9 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 			}
 		}
 		break;
-		case CMjEnum::MJ_TYPE_FB://±±
+		case CMjEnum::MJ_TYPE_FB://åŒ—
 		{
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN))//±±¶«ÄÏ
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN))//åŒ—ä¸œå—
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FD) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FN)))
 				{
@@ -195,7 +195,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//±±¶«Î÷
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FD) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//åŒ—ä¸œè¥¿
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FD) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FX)))
 				{
@@ -206,7 +206,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 					canchi = true;
 				}
 			}
-			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//±±ÄÏÎ÷
+			if (pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FN) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FX))//åŒ—å—è¥¿
 			{
 				if (pGameData->m_mjAction.bChiJing || (!pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FN) && !pGameData->m_StrJing.CheckIsJing(CMjEnum::MJ_TYPE_FX)))
 				{
@@ -222,7 +222,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 		}
 	}
 	else if (pGameData->m_mjAction.bChiJian &&  pai <= CMjEnum::MJ_TYPE_BAI && pai >= CMjEnum::MJ_TYPE_ZHONG)
-	{//³ÔÖĞ·¢°×
+	{//åƒä¸­å‘ç™½
 		if (pai == CMjEnum::MJ_TYPE_ZHONG && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_FA) && pGameData->IsHaveAHandPai(station, CMjEnum::MJ_TYPE_BAI))
 		{
 			canchi = true;
@@ -254,7 +254,7 @@ bool CheckCPGAction::CanChi(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE 
 	}
 	return canchi;
 }
-///ÄÜ·ñÅöÅÆ
+///èƒ½å¦ç¢°ç‰Œ
 bool CheckCPGAction::CanPeng(GameDataEx *pGameData, BYTE station, BYTE pai)
 {
 	if (pGameData->m_mjAction.bPeng  && pai != 255 && pGameData->GetAHandPaiCount(station, pai) >= 2)
@@ -263,7 +263,7 @@ bool CheckCPGAction::CanPeng(GameDataEx *pGameData, BYTE station, BYTE pai)
 	}
 	return false;
 }
-//ÄÜ·ñ¿²ÅÆ
+//èƒ½å¦åç‰Œ
 bool CheckCPGAction::CanKan(GameDataEx *pGameData, BYTE station, BYTE kan[])
 {
 	if (!pGameData->m_mjAction.bKan)
@@ -284,13 +284,13 @@ bool CheckCPGAction::CanKan(GameDataEx *pGameData, BYTE station, BYTE kan[])
 	}
 	return bKan;
 }
-///ÄÜ·ñ¸ÜÅÆ
+///èƒ½å¦æ ç‰Œ
 bool CheckCPGAction::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE Result[][2], bool bMe)
 {
 	if (!pGameData->m_mjAction.bGang)
 		return false;
 	bool bGang = false;
-	if (bMe)//¸Ü×Ô¼ºµÄÅÆ£º°µ¸ÜºÍ²¹¸Ü
+	if (bMe)//æ è‡ªå·±çš„ç‰Œï¼šæš—æ å’Œè¡¥æ 
 	{
 		int temp = 0, index = 0;
 		for (int i = 0;i < HAND_CARD_NUM;i++)
@@ -319,7 +319,7 @@ bool CheckCPGAction::CanGang(GameDataEx *pGameData, BYTE station, BYTE pai, BYTE
 			}
 		}
 	}
-	else//Ã÷¸Ü
+	else//æ˜æ 
 	{
 		if (pai == 255 || pai == 0)
 			return false;

@@ -40,7 +40,7 @@ bool CNewServerManage::InitDeskGameStation()
 bool CNewServerManage::OnStart()
 {
 	m_gameStatus = GAME_STATUS_WAITNEXT;
-	SetTimer(GAME_TIMER_WAITNEXT, m_gameConfig.waitBeginTime * 1000);		// ÉèÖÃÏÂÒ»½×¶ÎµÄ¶¨Ê±Æ÷
+	SetTimer(GAME_TIMER_WAITNEXT, m_gameConfig.waitBeginTime * 1000);		// è®¾ç½®ä¸‹ä¸€é˜¶æ®µçš„å®šæ—¶å™¨
 
 	ChangeSystemZhuangInfo();
 
@@ -62,7 +62,7 @@ bool CNewServerManage::OnGetGameStation(BYTE deskStation, UINT socketID, bool bW
 
 	msg.byIsSuper = m_bIsSuper[deskStation];
 
-	// ÅäÖÃÏà¹Ø
+	// é…ç½®ç›¸å…³
 	msg.cfgWaitBeginKeepTime = m_gameConfig.waitBeginTime;
 	msg.cfgNoteKeepTime = m_gameConfig.noteKeepTime;
 	msg.cfgSendCardKeepTime = m_gameConfig.sendCardKeepTime;
@@ -78,7 +78,7 @@ bool CNewServerManage::OnGetGameStation(BYTE deskStation, UINT socketID, bool bW
 	const DTUserInfo& userInfo = m_userInfoVec[deskStation];
 	memcpy(msg.myAreaNoteList, userInfo.noteList, sizeof(msg.myAreaNoteList));
 
-	//·¢ËÍÇøÓòÏÂ×¢
+	//å‘é€åŒºåŸŸä¸‹æ³¨
 	if (msg.byIsSuper)
 	{
 		for (int i = 0; i < MAX_AREA_COUNT; i++)
@@ -113,7 +113,7 @@ bool CNewServerManage::OnGetGameStation(BYTE deskStation, UINT socketID, bool bW
 	return true;
 }
 
-// ÇÀ×¯ÅÅĞò
+// æŠ¢åº„æ’åº
 bool SortShangZhuangByGold(const DealerInfo &v1, const DealerInfo &v2)
 {
 	return v1.shangzhuangMoney > v2.shangzhuangMoney;
@@ -227,17 +227,17 @@ bool CNewServerManage::OnTimer(unsigned int timerID)
 
 bool CNewServerManage::ReSetGameState(BYTE bLastStation)
 {
-	// ÇåÀí³ïÂë¼ÇÂ¼
+	// æ¸…ç†ç­¹ç è®°å½•
 	m_tempChouMaDataCount = 0;
 	memset(m_areaChouMaCount, 0, sizeof(m_areaChouMaCount));
 
-	// Çå³ıÇøÓòĞÅÏ¢
+	// æ¸…é™¤åŒºåŸŸä¿¡æ¯
 	for (size_t i = 0; i < m_areaInfoArr.size(); i++)
 	{
 		m_areaInfoArr[i].Clear();
 	}
 
-	// Çå³ıÍæ¼ÒµÄÏÂ×¢ĞÅÏ¢
+	// æ¸…é™¤ç©å®¶çš„ä¸‹æ³¨ä¿¡æ¯
 	for (size_t i = 0; i < m_userInfoVec.size(); i++)
 	{
 		DTUserInfo& userInfo = m_userInfoVec[i];
@@ -254,7 +254,7 @@ bool CNewServerManage::ReSetGameState(BYTE bLastStation)
 				continue;
 			}
 			GameUserInfo* pUser = m_pDataManage->GetUser(userID);
-			//Æô¶¯ÓÎÏ·£¬³õÊ¼»¯×À×ÓµÄÊ±ºò£¬Ò²µ÷ÓÃÕâ¸ö½Ó¿Ú£¬µ«ÊÇÄÇ¸öÊ±ºò£¬ÓÃ»§Î´µÇÂ½£¬²é²»µ½ÓÃ»§ĞÅÏ¢µÄ»áµ¼ÖÂ´íÎó£¬ĞèÒª¶ÔÖ¸Õë½øĞĞÅĞ¿Õ²Ù×÷
+			//å¯åŠ¨æ¸¸æˆï¼Œåˆå§‹åŒ–æ¡Œå­çš„æ—¶å€™ï¼Œä¹Ÿè°ƒç”¨è¿™ä¸ªæ¥å£ï¼Œä½†æ˜¯é‚£ä¸ªæ—¶å€™ï¼Œç”¨æˆ·æœªç™»é™†ï¼ŒæŸ¥ä¸åˆ°ç”¨æˆ·ä¿¡æ¯çš„ä¼šå¯¼è‡´é”™è¯¯ï¼Œéœ€è¦å¯¹æŒ‡é’ˆè¿›è¡Œåˆ¤ç©ºæ“ä½œ
 			if (NULL == pUser)
 			{
 				it = m_dealerInfoVec.erase(it);
@@ -281,7 +281,7 @@ bool CNewServerManage::ReSetGameState(BYTE bLastStation)
 		std::sort(m_dealerInfoVec.begin(), m_dealerInfoVec.end(), SortShangZhuangByGold);
 	}
 
-	// ÇåÀí×øÏÂÁĞ±í
+	// æ¸…ç†åä¸‹åˆ—è¡¨
 	ClearDeskUser();
 
 	return true;
@@ -303,10 +303,10 @@ bool CNewServerManage::UserLeftDesk(GameUserInfo* pUser)
 
 	bool bKickShangZhuangUser = false;
 
-	// Íæ¼ÒÎª×¯
+	// ç©å®¶ä¸ºåº„
 	if (pUser->deskStation == m_dealerDeskStation)
 	{
-		ERROR_LOG("×¯¼Ò±»Ìß");
+		ERROR_LOG("åº„å®¶è¢«è¸¢");
 	}
 	else
 	{
@@ -330,7 +330,7 @@ bool CNewServerManage::UserLeftDesk(GameUserInfo* pUser)
 	DTUserInfo& userInfo = m_userInfoVec[pUser->deskStation];
 	userInfo.Clear();
 
-	// É¾³ı×ùÎ»ºÅ
+	// åˆ é™¤åº§ä½å·
 	DelDeskUser(pUser->deskStation);
 
 	return __super::UserLeftDesk(pUser);
@@ -375,56 +375,56 @@ bool CNewServerManage::OnHandleUserRequestShangZhuang(BYTE deskStation, void* pD
 
 	NewGameMessageRspShangZhuang msg;
 
-	// ÔÚÉÏ×¯ÁĞ±íÄÚÎŞ·¨ÇëÇóÉÏ×¯
+	// åœ¨ä¸Šåº„åˆ—è¡¨å†…æ— æ³•è¯·æ±‚ä¸Šåº„
 	for (auto it = m_dealerInfoVec.begin(); it != m_dealerInfoVec.end(); ++it)
 	{
 		if (it->userID == userID)
 		{
 			ERROR_LOG("user:%d is already in shangzhuang list");
-			SendGameMessage(deskStation, "ÄúÒÑ¾­ÉêÇëÁËÉÏ×¯£¬²»ÄÜÔÙ´ÎÉêÇë£¡", SMT_EJECT);
+			SendGameMessage(deskStation, "æ‚¨å·²ç»ç”³è¯·äº†ä¸Šåº„ï¼Œä¸èƒ½å†æ¬¡ç”³è¯·ï¼", SMT_EJECT);
 			return false;
 		}
 	}
 
-	// ÉÏ×¯ÁĞ±íÂúÁËÎŞ·¨ÉÏ×¯
+	// ä¸Šåº„åˆ—è¡¨æ»¡äº†æ— æ³•ä¸Šåº„
 	if (m_dealerInfoVec.size() >= MAX_SHANGZHUANG_COUNT)
 	{
-		SendGameMessage(deskStation, "ÉÏ×¯ÁĞ±íÒÑÂú!", SMT_EJECT);
+		SendGameMessage(deskStation, "ä¸Šåº„åˆ—è¡¨å·²æ»¡!", SMT_EJECT);
 		return true;
 	}
 
-	// ÉíÉÏÇ®²»¹»
+	// èº«ä¸Šé’±ä¸å¤Ÿ
 	if (pUser->money < pMessage->shangzhuangMoney)
 	{
-		SendGameMessage(deskStation, "×Ê½ğ²»¹»", SMT_EJECT);
+		SendGameMessage(deskStation, "èµ„é‡‘ä¸å¤Ÿ", SMT_EJECT);
 		return true;
 	}
 
-	// Ç®²»¹»ÎŞ·¨ÉÏ×¯
+	// é’±ä¸å¤Ÿæ— æ³•ä¸Šåº„
 	if (pMessage->shangzhuangMoney < m_gameConfig.shangZhuangLimitMoney)
 	{
-		SendGameMessage(deskStation, "×Ê½ğ²»¹»ÉÏ×¯", SMT_EJECT);
+		SendGameMessage(deskStation, "èµ„é‡‘ä¸å¤Ÿä¸Šåº„", SMT_EJECT);
 		return true;
 	}
-	// »úÆ÷ÈËÉÏ×¯ÌØÊâÅĞ¶Ï
+	// æœºå™¨äººä¸Šåº„ç‰¹æ®Šåˆ¤æ–­
 	if (IsVirtual(deskStation) && !IsVirtualCanShangXiazZhuang(deskStation, 0))
 	{
 		return false;
 	}
-	// ¼ÓÈëÉÏ×¯ÁĞ±í
+	// åŠ å…¥ä¸Šåº„åˆ—è¡¨
 	DealerInfo info;
 	info.isSystem = false;
 	info.userID = userID;
 	info.shangzhuangMoney = pMessage->shangzhuangMoney;
 	m_dealerInfoVec.push_back(info);
 
-	// ÇÀ×¯ÅÅĞò
+	// æŠ¢åº„æ’åº
 	std::sort(m_dealerInfoVec.begin(), m_dealerInfoVec.end(), SortShangZhuangByGold);
 
-	// Í¨Öª±ä»¯
+	// é€šçŸ¥å˜åŒ–
 	BroadcastZhuangInfo();
 
-	SendGameMessage(deskStation, "ÉÏ×¯³É¹¦£¡", SMT_EJECT);
+	SendGameMessage(deskStation, "ä¸Šåº„æˆåŠŸï¼", SMT_EJECT);
 
 	SendGameData(deskStation, &msg, sizeof(msg), MSG_MAIN_LOADER_GAME, MSG_GAME_RSP_SHANGZHUANG, 0);
 	return true;
@@ -447,7 +447,7 @@ bool CNewServerManage::OnHandleUserRequestXiaZhuang(BYTE deskStation)
 	}
 
 	bool bXiaZhuang = false;
-	// Ö»ÓĞ´¦ÓÚÉÏ×¯ÁĞ±í»òÕß×Ô¼ºÎª×¯¼Ò²ÅÄÜÏÂ×¯
+	// åªæœ‰å¤„äºä¸Šåº„åˆ—è¡¨æˆ–è€…è‡ªå·±ä¸ºåº„å®¶æ‰èƒ½ä¸‹åº„
 	for (auto it = m_dealerInfoVec.begin(); it != m_dealerInfoVec.end(); ++it)
 	{
 		if (it->userID == userID)
@@ -456,7 +456,7 @@ bool CNewServerManage::OnHandleUserRequestXiaZhuang(BYTE deskStation)
 			break;
 		}
 	}
-	// »úÆ÷ÈËÏÂ×¯ÌØÊâÅĞ¶Ï
+	// æœºå™¨äººä¸‹åº„ç‰¹æ®Šåˆ¤æ–­
 	if (IsVirtual(deskStation) && !IsVirtualCanShangXiazZhuang(deskStation, 1))
 	{
 		return false;
@@ -469,13 +469,13 @@ bool CNewServerManage::OnHandleUserRequestXiaZhuang(BYTE deskStation)
 
 	if (deskStation == m_dealerDeskStation)
 	{
-		// ÉèÖÃÕâ¾Ö½áÊøÖ®ºóÁ¢¿ÌÈÃ×¯¼ÒÏÂ×¯
-		SendGameMessage(deskStation, "±¾¾ÖÒÑ¾­¿ªÊ¼£¬±¾¾Ö½áÊøºóÁ¢¿ÌÏÂ×¯£¡");
+		// è®¾ç½®è¿™å±€ç»“æŸä¹‹åç«‹åˆ»è®©åº„å®¶ä¸‹åº„
+		SendGameMessage(deskStation, "æœ¬å±€å·²ç»å¼€å§‹ï¼Œæœ¬å±€ç»“æŸåç«‹åˆ»ä¸‹åº„ï¼");
 		m_xiaZhuangRightNow = true;
 	}
 	else
 	{
-		// ´ÓÉÏ×¯ÁĞ±íÖĞÒÆ³ı
+		// ä»ä¸Šåº„åˆ—è¡¨ä¸­ç§»é™¤
 		for (auto it = m_dealerInfoVec.begin(); it != m_dealerInfoVec.end(); ++it)
 		{
 			if (it->userID == userID)
@@ -484,11 +484,11 @@ bool CNewServerManage::OnHandleUserRequestXiaZhuang(BYTE deskStation)
 				break;
 			}
 		}
-		SendGameMessage(deskStation, "ÏÂ×¯³É¹¦£¡");
+		SendGameMessage(deskStation, "ä¸‹åº„æˆåŠŸï¼");
 	}
 
 
-	// ÇÀ×¯ÅÅĞò
+	// æŠ¢åº„æ’åº
 	std::sort(m_dealerInfoVec.begin(), m_dealerInfoVec.end(), SortShangZhuangByGold);
 
 	BroadcastZhuangInfo();
@@ -529,7 +529,7 @@ bool CNewServerManage::OnHandleUserReuqestNote(BYTE deskStation, void* pData, in
 
 	NewGameMessageRspNote msg;
 
-	// ×¯¼Ò²»ÄÜÏÂ×¢
+	// åº„å®¶ä¸èƒ½ä¸‹æ³¨
 	if (deskStation == m_dealerDeskStation)
 	{
 		return false;
@@ -555,14 +555,14 @@ bool CNewServerManage::OnHandleUserReuqestNote(BYTE deskStation, void* pData, in
 		return false;
 	}
 
-	//ÇøÓò×ÜÏÂ×¢Öµ
+	//åŒºåŸŸæ€»ä¸‹æ³¨å€¼
 	long long llAllAreaBet = 0;
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
 		llAllAreaBet += m_areaInfoArr[i].areaNote;
 	}
 
-	//Íæ¼ÒÏÂ×¢ÏŞÖÆ
+	//ç©å®¶ä¸‹æ³¨é™åˆ¶
 	long long iAllBet = 0;
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
@@ -571,31 +571,31 @@ bool CNewServerManage::OnHandleUserReuqestNote(BYTE deskStation, void* pData, in
 
 	if ((iAllBet + note) > llUserResNums)
 	{
-		//ÉíÉÏµÄÇ®²»¹»ÏÂ×¢
-		SendGameMessage(deskStation, "ÏÂ×¢³¬¹ı×ÔÉíÏŞÖÆ");
+		//èº«ä¸Šçš„é’±ä¸å¤Ÿä¸‹æ³¨
+		SendGameMessage(deskStation, "ä¸‹æ³¨è¶…è¿‡è‡ªèº«é™åˆ¶");
 		return true;
 	}
 
 	if (m_gameConfig.allUserMaxNote > 0 && (llAllAreaBet + note) > m_gameConfig.allUserMaxNote)
 	{
-		SendGameMessage(deskStation, "ÏÂ×¢³¬¹ıÏŞÖÆ");
+		SendGameMessage(deskStation, "ä¸‹æ³¨è¶…è¿‡é™åˆ¶");
 		return true;
 	}
 
-	//¼ÆËã»úÆ÷ÈËÏÂ×¢
+	//è®¡ç®—æœºå™¨äººä¸‹æ³¨
 	if (pUser->isVirtual && !IsVirtualCanNote(deskStation, note))
 	{
 		return false;
 	}
 
-	//ÇøÓò×ÜÏÂ×¢Öµ Áú
+	//åŒºåŸŸæ€»ä¸‹æ³¨å€¼ é¾™
 	long long llDragonAreaBet = m_areaInfoArr[0].areaNote;
-	//ºÍÅÆÇøÓòÏÂ×¢Öµ  ºÍ
+	//å’Œç‰ŒåŒºåŸŸä¸‹æ³¨å€¼  å’Œ
 	long long llDrawAreaBet = m_areaInfoArr[1].areaNote;
-	//ÇøÓò×ÜÏÂ×¢Öµ »¢
+	//åŒºåŸŸæ€»ä¸‹æ³¨å€¼ è™
 	long long llTigerAreaBet = m_areaInfoArr[2].areaNote;
 
-	int iNoteArea = pMessage->area; //ÏÂ×¢ÇøÓò
+	int iNoteArea = pMessage->area; //ä¸‹æ³¨åŒºåŸŸ
 	if (iNoteArea == 0)
 	{
 		llDragonAreaBet += note;
@@ -611,19 +611,19 @@ bool CNewServerManage::OnHandleUserReuqestNote(BYTE deskStation, void* pData, in
 
 	if (pMessage->area != 1)
 	{
-		//ÏÂ×¢²»ÄÜ³¬¹ı×¯¼Ò(·ÇÏµÍ³)ÉÏ×¯½ğ±Ò
+		//ä¸‹æ³¨ä¸èƒ½è¶…è¿‡åº„å®¶(éç³»ç»Ÿ)ä¸Šåº„é‡‘å¸
 		if (abs(llDragonAreaBet - llTigerAreaBet) > m_dealerInfo.shangzhuangMoney)
 		{
-			SendGameMessage(deskStation, "ÏÂ×¢³¬¹ı×¯¼ÒÏŞÖÆ");
+			SendGameMessage(deskStation, "ä¸‹æ³¨è¶…è¿‡åº„å®¶é™åˆ¶");
 			return true;
 		}
 	}
 	else
 	{
-		//ÏÂ×¢²»ÄÜ³¬¹ı×¯¼Ò(·ÇÏµÍ³)ÉÏ×¯½ğ±Ò
+		//ä¸‹æ³¨ä¸èƒ½è¶…è¿‡åº„å®¶(éç³»ç»Ÿ)ä¸Šåº„é‡‘å¸
 		if (llDrawAreaBet * 8 > m_dealerInfo.shangzhuangMoney)
 		{
-			SendGameMessage(deskStation, "ÏÂ×¢³¬¹ı×¯¼ÒÏŞÖÆ");
+			SendGameMessage(deskStation, "ä¸‹æ³¨è¶…è¿‡åº„å®¶é™åˆ¶");
 			return true;
 		}
 	}
@@ -635,13 +635,13 @@ bool CNewServerManage::OnHandleUserReuqestNote(BYTE deskStation, void* pData, in
 	userInfo.noteList[pMessage->area] += note;
 	areaInfo.areaNote += note;
 
-	//±£´æÕæÈËÏÂ×¢Öµ
+	//ä¿å­˜çœŸäººä¸‹æ³¨å€¼
 	if (!pUser->isVirtual)
 	{
 		areaInfo.areaRealPeopleNote += note;
 	}
 
-	// Í¨ÖªÍæ¼Ò×Ô¼ºÏÂ×¢³É¹¦
+	// é€šçŸ¥ç©å®¶è‡ªå·±ä¸‹æ³¨æˆåŠŸ
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
 		msg.noteList[i] = userInfo.noteList[i];
@@ -649,7 +649,7 @@ bool CNewServerManage::OnHandleUserReuqestNote(BYTE deskStation, void* pData, in
 
 	SendGameData(deskStation, &msg, sizeof(msg), MSG_MAIN_LOADER_GAME, MSG_GAME_RSP_NOTE, 0);
 
-	//¼ÇÂ¼³ïÂë
+	//è®°å½•ç­¹ç 
 	m_areaChouMaCount[pMessage->area][pMessage->noteIndex] ++;
 	if (m_tempChouMaDataCount < MAX_CHOU_MA_COUNT && m_tempChouMaDataCount >= 0)
 	{
@@ -693,66 +693,66 @@ bool CNewServerManage::OnHandleRequestContinueNote(BYTE deskStation)
 		return false;
 	}
 
-	//×Ô¼ºÊÇ×¯¼Ò£¬ÎŞ·¨ĞøÑ¹
+	//è‡ªå·±æ˜¯åº„å®¶ï¼Œæ— æ³•ç»­å‹
 	if (deskStation == m_dealerDeskStation)
 	{
-		SendGameMessage(deskStation, "×¯¼Ò²»ÄÜĞøÑ¹", SMT_EJECT);
+		SendGameMessage(deskStation, "åº„å®¶ä¸èƒ½ç»­å‹", SMT_EJECT);
 		return false;
 	}
 
-	// ÏÂ×¢ÁË¾Í²»ÄÜĞøÑ¹
+	// ä¸‹æ³¨äº†å°±ä¸èƒ½ç»­å‹
 	DTUserInfo& userInfo = m_userInfoVec[deskStation];
 	if (userInfo.isNote == true)
 	{
-		SendGameMessage(deskStation, "ÒÑ¾­ÏÂ×¢£¬²»ÄÜĞøÑ¹", SMT_EJECT);
+		SendGameMessage(deskStation, "å·²ç»ä¸‹æ³¨ï¼Œä¸èƒ½ç»­å‹", SMT_EJECT);
 		return false;
 	}
 
-	// ÒÑ¾­ĞøÑ¹ÁË²»ÄÜÔÙ´ÎĞøÑ¹
+	// å·²ç»ç»­å‹äº†ä¸èƒ½å†æ¬¡ç»­å‹
 	if (userInfo.isContinueNote == true)
 	{
-		SendGameMessage(deskStation, "ÒÑ¾­ĞøÑ¹¹ı£¬²»ÄÜĞøÑ¹", SMT_EJECT);
+		SendGameMessage(deskStation, "å·²ç»ç»­å‹è¿‡ï¼Œä¸èƒ½ç»­å‹", SMT_EJECT);
 		return false;
 	}
 
-	//ÇøÓò×ÜÏÂ×¢Öµ
+	//åŒºåŸŸæ€»ä¸‹æ³¨å€¼
 	long long llAllAreaBet = 0;
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
 		llAllAreaBet += m_areaInfoArr[i].areaNote;
 	}
 
-	//Íæ¼ÒĞøÑ¹ÏŞÖÆ
+	//ç©å®¶ç»­å‹é™åˆ¶
 	long long iAllbet = 0;
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
 		iAllbet += m_userInfoVec[deskStation].lastNoteList[i];
 	}
 
-	//ÉÏ¾ÖÃ»ÓĞÏÂ×¢
+	//ä¸Šå±€æ²¡æœ‰ä¸‹æ³¨
 	if (iAllbet <= 0)
 	{
-		SendGameMessage(deskStation, "ÉÏÒ»¾ÖÃ»ÓĞÏÂ×¢£¬²»ÄÜĞøÑ¹", SMT_EJECT);
+		SendGameMessage(deskStation, "ä¸Šä¸€å±€æ²¡æœ‰ä¸‹æ³¨ï¼Œä¸èƒ½ç»­å‹", SMT_EJECT);
 		return true;
 	}
 
-	//ĞøÑ¹²»ÄÜ³¬¹ıµ±Ç°½ğ±ÒµÄ°Ù·ÖÖ®10
+	//ç»­å‹ä¸èƒ½è¶…è¿‡å½“å‰é‡‘å¸çš„ç™¾åˆ†ä¹‹10
 	if (iAllbet > llUserResNums)
 	{
-		SendGameMessage(deskStation, "ĞøÑ¹²»ÄÜ³¬¹ı×ÔÉí½ğ¶î", SMT_EJECT);
+		SendGameMessage(deskStation, "ç»­å‹ä¸èƒ½è¶…è¿‡è‡ªèº«é‡‘é¢", SMT_EJECT);
 		return true;
 	}
 
-	//×Ü×¢²»³¬¹ı×¯¼Ò30%
+	//æ€»æ³¨ä¸è¶…è¿‡åº„å®¶30%
 	if ((llAllAreaBet + iAllbet) > m_dealerInfo.shangzhuangMoney * 3 / 10)
 	{
-		SendGameMessage(deskStation, "ÏÂ×¢³¬¹ı×¯¼ÒÏŞÖÆ", SMT_EJECT);
+		SendGameMessage(deskStation, "ä¸‹æ³¨è¶…è¿‡åº„å®¶é™åˆ¶", SMT_EJECT);
 		return true;
 	}
 
 	if (m_gameConfig.allUserMaxNote > 0 && (llAllAreaBet + iAllbet) > m_gameConfig.allUserMaxNote)
 	{
-		SendGameMessage(deskStation, "ÏÂ×¢³¬¹ıÏŞÖÆ");
+		SendGameMessage(deskStation, "ä¸‹æ³¨è¶…è¿‡é™åˆ¶");
 		return true;
 	}
 
@@ -777,7 +777,7 @@ bool CNewServerManage::OnHandleRequestContinueNote(BYTE deskStation)
 
 	SendGameData(deskStation, &msg, sizeof(msg), MSG_MAIN_LOADER_GAME, MSG_GAME_RSP_CONTINUE_NOTE, 0);
 
-	//ËãÒ»ÏÂÒª¶àÉÙ¸ö³ïÂë
+	//ç®—ä¸€ä¸‹è¦å¤šå°‘ä¸ªç­¹ç 
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
 		if (userInfo.noteList[i]>0)
@@ -789,7 +789,7 @@ bool CNewServerManage::OnHandleRequestContinueNote(BYTE deskStation)
 				if (noteNum >= GetNoteByIndex(noteIndex))
 				{
 					noteNum -= GetNoteByIndex(noteIndex);
-					//¼ÇÂ¼³ïÂë
+					//è®°å½•ç­¹ç 
 					m_areaChouMaCount[i][noteIndex] ++;
 					if (m_tempChouMaDataCount < MAX_CHOU_MA_COUNT && m_tempChouMaDataCount >= 0)
 					{
@@ -851,7 +851,7 @@ bool CNewServerManage::OnHandleRequestAreaTrend(BYTE deskStation)
 	return true;
 }
 
-// ÇëÇó³¬¶ËÉèÖÃ
+// è¯·æ±‚è¶…ç«¯è®¾ç½®
 bool CNewServerManage::OnHandleRequestSuperSet(BYTE deskStation, void* pData, int size)
 {
 	if (size != sizeof(NewGameMessageReqSuperSet))
@@ -878,12 +878,12 @@ bool CNewServerManage::OnHandleRequestSuperSet(BYTE deskStation, void* pData, in
 
 	m_bySuperSetType = pMessage->bySuperSetType;
 
-	SendGameMessage(deskStation, "ÉèÖÃ³É¹¦", SMT_EJECT);
+	SendGameMessage(deskStation, "è®¾ç½®æˆåŠŸ", SMT_EJECT);
 
 	return true;
 }
 
-// ÇëÇóÊÇ·ñ¼ÌĞø×ø×¯
+// è¯·æ±‚æ˜¯å¦ç»§ç»­ååº„
 bool CNewServerManage::OnHandleRequestContinueZhuang(BYTE deskStation, void* pData, int size)
 {
 	if (size != sizeof(NewGameMessageReqContinueZhuang))
@@ -899,13 +899,13 @@ bool CNewServerManage::OnHandleRequestContinueZhuang(BYTE deskStation, void* pDa
 
 	if (m_gameStatus != GAME_STATUS_WAITNEXT && m_gameStatus != GAME_STATUS_SETTLE)
 	{
-		SendGameMessage(deskStation, "ÏûÏ¢ÒÑ¾­¹ıÊ±", SMT_EJECT);
+		SendGameMessage(deskStation, "æ¶ˆæ¯å·²ç»è¿‡æ—¶", SMT_EJECT);
 		return false;
 	}
 
 	if (deskStation != m_dealerDeskStation)
 	{
-		SendGameMessage(deskStation, "²»ÊÇ×¯¼Ò", SMT_EJECT);
+		SendGameMessage(deskStation, "ä¸æ˜¯åº„å®¶", SMT_EJECT);
 		return false;
 	}
 
@@ -925,53 +925,53 @@ bool CNewServerManage::OnHandleRequestSit(BYTE deskStation, void* pData, int siz
 		ERROR_LOG("GetUser failed userID=%d", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
-	//Ëæ»ú»úÆ÷ÈË×øÏÂÊıÁ¿
+	//éšæœºæœºå™¨äººåä¸‹æ•°é‡
 	if (IsVirtual(deskStation) && !IsVirtualCanSit(deskStation, pMessage->type))
 	{
 		return false;
 	}
 
-	if (pMessage->type == 0) //×øÏÂ
+	if (pMessage->type == 0) //åä¸‹
 	{
-		// ×øÏÂÌõ¼şÅĞ¶Ï£¬½ğ±ÒÊÇ·ñ×ã¹»
+		// åä¸‹æ¡ä»¶åˆ¤æ–­ï¼Œé‡‘å¸æ˜¯å¦è¶³å¤Ÿ
 		if (llUserResNums < m_gameConfig.sitLimitMoney)
 		{
 			char msg[128] = "";
-			sprintf_s(msg, sizeof(msg), "ÄúµÄ½ğ±Ò²»¹»%lld£¬ÎŞ·¨×øÏÂ", m_gameConfig.sitLimitMoney);
+			sprintf_s(msg, sizeof(msg), "æ‚¨çš„é‡‘å¸ä¸å¤Ÿ%lldï¼Œæ— æ³•åä¸‹", m_gameConfig.sitLimitMoney);
 			SendGameMessage(deskStation, msg);
 			return false;
 		}
 
 		if (deskStation == m_dealerDeskStation)
 		{
-			SendGameMessage(deskStation, "×¯¼Ò²»ÄÜ×øÏÂ");
+			SendGameMessage(deskStation, "åº„å®¶ä¸èƒ½åä¸‹");
 			return false;
 		}
 
 		if (IsDeskUser(deskStation))
 		{
-			SendGameMessage(deskStation, "ÄãÒÑ¾­ÔÚ×ùÎ»ÖĞ");
+			SendGameMessage(deskStation, "ä½ å·²ç»åœ¨åº§ä½ä¸­");
 			return false;
 		}
 
 		if (IsDeskHaveUser(pMessage->index))
 		{
-			SendGameMessage(deskStation, "¸Ã×ùÎ»ÒÑ¾­ÓĞÈË");
+			SendGameMessage(deskStation, "è¯¥åº§ä½å·²ç»æœ‰äºº");
 			return false;
 		}
 
-		// Ìí¼Óµ½×ùÎ»
+		// æ·»åŠ åˆ°åº§ä½
 		SetDeskUser(deskStation, pMessage->index);
 	}
-	else //Õ¾Æğ
+	else //ç«™èµ·
 	{
 		if (!IsDeskUser(deskStation))
 		{
-			SendGameMessage(deskStation, "ÄúÃ»ÓĞ×øÏÂ£¬²»ÄÜÕ¾Æğ");
+			SendGameMessage(deskStation, "æ‚¨æ²¡æœ‰åä¸‹ï¼Œä¸èƒ½ç«™èµ·");
 			return false;
 		}
 
-		// É¾³ıÎ»ÖÃ
+		// åˆ é™¤ä½ç½®
 		DelDeskUser(deskStation);
 	}
 
@@ -1085,7 +1085,7 @@ bool CNewServerManage::ConfirmDealer()
 	}
 	else if (m_dealerDeskStation != SYSTEM_DEALER_DESKSTATION)
 	{
-		//ÉÏ×¯ÁĞ±íÖĞÍæ¼ÒĞ¯´øÉÏ×¯½ğ±ÒÊı×î¶àµÄÄÇ¸ö
+		//ä¸Šåº„åˆ—è¡¨ä¸­ç©å®¶æºå¸¦ä¸Šåº„é‡‘å¸æ•°æœ€å¤šçš„é‚£ä¸ª
 		long long topDealerMoney = 0;
 		if (!m_dealerInfoVec.empty())
 		{
@@ -1096,7 +1096,7 @@ bool CNewServerManage::ConfirmDealer()
 			}
 		}
 
-		//Íæ¼ÒÉÏ×¯Ğ¯´ø½ğ±ÒÊıÉÙÓÚÁĞ±íÖĞµÄÍæ¼Ò½ğ±ÒÊıµÄÊ±ºòÏÂ×¯£¬·ñÔò¼ÌĞø×ø×¯
+		//ç©å®¶ä¸Šåº„æºå¸¦é‡‘å¸æ•°å°‘äºåˆ—è¡¨ä¸­çš„ç©å®¶é‡‘å¸æ•°çš„æ—¶å€™ä¸‹åº„ï¼Œå¦åˆ™ç»§ç»­ååº„
 		if (m_currDealerGameCount >= m_gameConfig.maxZhuangGameCount && m_dealerInfo.shangzhuangMoney < topDealerMoney)
 		{
 			m_xiaZhuangRightNow = true;
@@ -1118,7 +1118,7 @@ bool CNewServerManage::ConfirmDealer()
 
 	if (m_dealerDeskStation == INVALID_DESKSTATION || IsHundredGameSystemDealer())
 	{
-		// ³õÊ¼ÓÎÏ·»òÕßÏµÍ³×ø×¯
+		// åˆå§‹æ¸¸æˆæˆ–è€…ç³»ç»Ÿååº„
 		if (!m_dealerInfoVec.empty())
 		{
 			for (auto it = m_dealerInfoVec.begin(); it != m_dealerInfoVec.end(); ++it)
@@ -1154,7 +1154,7 @@ bool CNewServerManage::ConfirmDealer()
 			return true;
 		}
 
-		// Íæ¼Ò»òÕß»úÆ÷ÈË×ø×¯,ÒªÉÏÒ»×¯¼ÒÏÂ×¯ºó£¬²ÅÄÜÇĞ»»
+		// ç©å®¶æˆ–è€…æœºå™¨äººååº„,è¦ä¸Šä¸€åº„å®¶ä¸‹åº„åï¼Œæ‰èƒ½åˆ‡æ¢
 		if (!m_dealerInfoVec.empty())
 		{
 			vector<DealerInfo>::iterator it;
@@ -1230,10 +1230,10 @@ void CNewServerManage::TransToWaitNextStage()
 
 	BroadcastGameStatus();
 
-	// ÏÈ¿ªÊ¼·¢ÅÆ
+	// å…ˆå¼€å§‹å‘ç‰Œ
 	SetTimer(GAME_TIMER_SENDCARD, (m_gameConfig.waitBeginTime + 1) * 1000);
 
-	// ³¬¶ËÈ·ÈÏ
+	// è¶…ç«¯ç¡®è®¤
 	m_bySuperSetType = 0;
 	memset(m_bIsSuper, 0, sizeof(m_bIsSuper));
 	for (int i = 0; i < PLAY_COUNT; ++i)
@@ -1259,7 +1259,7 @@ void CNewServerManage::TransToWaitNextStage()
 
 void CNewServerManage::TransToSendCardStage()
 {
-	// È·¶¨×¯¼Ò
+	// ç¡®å®šåº„å®¶
 	if (ConfirmDealer() == false)
 	{
 		ERROR_LOG("ConfirmDealer failed");
@@ -1282,7 +1282,7 @@ void CNewServerManage::TransToSendCardStage()
 	}
 
 
-	// ³õÊ¼»¯×¯¼ÒÑ¡Ôñ
+	// åˆå§‹åŒ–åº„å®¶é€‰æ‹©
 	m_iContinueZhuang = -1;
 
 	ChangeSystemZhuangInfo();
@@ -1296,10 +1296,10 @@ void CNewServerManage::TransToSendCardStage()
 	GameBegin(0);
 	m_xiaZhuangRightNow = false;
 
-	// Í¨Öª×¯ĞÅÏ¢
+	// é€šçŸ¥åº„ä¿¡æ¯
 	BroadcastZhuangInfo();
 
-	// Ï´ÅÆ
+	// æ´—ç‰Œ
 	std::vector<BYTE> cardVec;
 	m_logic.RandCard(cardVec, 1);
 
@@ -1311,7 +1311,7 @@ void CNewServerManage::TransToSendCardStage()
 		m_deskCardQueue.push(cardVec[i]);
 	}
 
-	// ·¢ÇøÓòµÄÅÆ Áú »¢
+	// å‘åŒºåŸŸçš„ç‰Œ é¾™ è™
 	for (size_t areaIdx = 0; areaIdx < m_areaInfoArr.size(); areaIdx++)
 	{
 		if (areaIdx != 1)
@@ -1323,10 +1323,10 @@ void CNewServerManage::TransToSendCardStage()
 
 	m_gameStatus = GAME_STATUS_SENDCARD;
 
-	// Í¨ÖªÇ°¶Ë½×¶Î±ä»¯
+	// é€šçŸ¥å‰ç«¯é˜¶æ®µå˜åŒ–
 	BroadcastGameStatus();
 
-	// ·¢ÍêÅÆÏÂ×¢
+	// å‘å®Œç‰Œä¸‹æ³¨
 	SetTimer(GAME_TIMER_NOTE, m_gameConfig.sendCardKeepTime * 1000);
 }
 
@@ -1334,7 +1334,7 @@ void CNewServerManage::TransToNoteStage()
 {
 	m_gameStatus = GAME_STATUS_NOTE;
 
-	// Í¨ÖªËùÓĞÍæ¼ÒÏÂ×¢¿ªÊ¼
+	// é€šçŸ¥æ‰€æœ‰ç©å®¶ä¸‹æ³¨å¼€å§‹
 	BroadcastGameStatus();
 
 	NewGameMessageHasXuYa msg;
@@ -1355,11 +1355,11 @@ void CNewServerManage::TransToNoteStage()
 		SendGameData(i, &msg, sizeof(msg), MSG_MAIN_LOADER_GAME, MSG_GAME_NIF_XUYA, 0);
 	}
 
-	// ÉèÖÃ·¢ËÍÏÂ×¢ĞÅÏ¢¶¨Ê±Æ÷
+	// è®¾ç½®å‘é€ä¸‹æ³¨ä¿¡æ¯å®šæ—¶å™¨
 	//SetTimer(GAME_TIMER_NOTEINFO, 200);
 	m_tempChouMaDataCount = 0;
 
-	// ÏÂ×¢Íê±ÈÅÆ
+	// ä¸‹æ³¨å®Œæ¯”ç‰Œ
 	SetTimer(GAME_TIMER_COMPARE, m_gameConfig.noteKeepTime * 1000);
 }
 
@@ -1372,23 +1372,23 @@ void CNewServerManage::TransToCompareStage()
 
 	if (!m_bySuperSetType)
 	{
-		//Ö´ĞĞ¸ÅÂÊ¿ØÖÆ
+		//æ‰§è¡Œæ¦‚ç‡æ§åˆ¶
 		AiWinAutoCtrl();
 	}
 
-	//Ö´ĞĞ³¬¶ËÉèÖÃ
+	//æ‰§è¡Œè¶…ç«¯è®¾ç½®
 	SuperSetChange();
 
-	// ¼ÆËãÇøÓòÊäÓ®ĞÅÏ¢
+	// è®¡ç®—åŒºåŸŸè¾“èµ¢ä¿¡æ¯
 	CalcAreaRate();
 
-	// ÔÙ·¢ÉúÒ»´ÎÅÆĞÅÏ¢
-	// °ÑÅÆµÄĞÅÏ¢·¢ËÍ¸øËùÓĞÇ°¶Ë
+	// å†å‘ç”Ÿä¸€æ¬¡ç‰Œä¿¡æ¯
+	// æŠŠç‰Œçš„ä¿¡æ¯å‘é€ç»™æ‰€æœ‰å‰ç«¯
 	NewGameMessageNtfSendCard msg;
 	MakeSendCardInfo(msg);
 	BroadcastDeskData(&msg, sizeof(msg), MSG_MAIN_LOADER_GAME, MSG_GAME_NTF_SENDCARD);
 
-	// Í¨ÖªÇ°¶Ë½×¶Î±ä»¯
+	// é€šçŸ¥å‰ç«¯é˜¶æ®µå˜åŒ–
 	BroadcastGameStatus();
 
 	SetTimer(GAME_TIMER_SETTLE, m_gameConfig.compareKeepTime * 1000);
@@ -1402,9 +1402,9 @@ void CNewServerManage::TransToSettleStage()
 		dealerID = GetUserIDByDeskStation(m_dealerDeskStation);
 		if (dealerID <= 0)
 		{
-			ERROR_LOG("invalid dealerID dealerID=%d, deskStation=%d£¬×¯¼Ò²»´æÔÚ£¬×¯¼Ò×Ô¶¯±ä³ÉÏµÍ³×¯¼Ò", dealerID, m_dealerDeskStation);
+			ERROR_LOG("invalid dealerID dealerID=%d, deskStation=%dï¼Œåº„å®¶ä¸å­˜åœ¨ï¼Œåº„å®¶è‡ªåŠ¨å˜æˆç³»ç»Ÿåº„å®¶", dealerID, m_dealerDeskStation);
 
-			// Èİ´í´¦Àí£¬×¯¼Ò×Ô¶¯±ä³ÉÏµÍ³×¯¼Ò
+			// å®¹é”™å¤„ç†ï¼Œåº„å®¶è‡ªåŠ¨å˜æˆç³»ç»Ÿåº„å®¶
 			m_dealerDeskStation = SYSTEM_DEALER_DESKSTATION;
 		}
 	}
@@ -1415,7 +1415,7 @@ void CNewServerManage::TransToSettleStage()
 	long long winMoneyList[PLAY_COUNT] = { 0 };
 	memset(winMoneyList, 0, sizeof(winMoneyList));
 
-	// ¼ÆËãÊäÓ®
+	// è®¡ç®—è¾“èµ¢
 	BYTE maxWinnerDeskStation = INVALID_DESKSTATION;
 	long long maxWinMoney = 0;
 	long long dealerWinMoney = 0;
@@ -1424,7 +1424,7 @@ void CNewServerManage::TransToSettleStage()
 	{
 		DTUserInfo& userInfo = m_userInfoVec[i];
 
-		//»º´æÉÏ´ÎÏÂ×¢ĞÅÏ¢
+		//ç¼“å­˜ä¸Šæ¬¡ä¸‹æ³¨ä¿¡æ¯
 		for (int idx = 0; idx < MAX_AREA_COUNT; idx++)
 		{
 			userInfo.lastNoteList[idx] = userInfo.noteList[idx];
@@ -1432,7 +1432,7 @@ void CNewServerManage::TransToSettleStage()
 
 		if (userInfo.isNote == false || i == m_dealerDeskStation)
 		{
-			// Ã»ÏÂ×¢»òÕßÎª×¯¼Ò
+			// æ²¡ä¸‹æ³¨æˆ–è€…ä¸ºåº„å®¶
 			continue;
 		}
 
@@ -1444,7 +1444,7 @@ void CNewServerManage::TransToSettleStage()
 				long long noteMoney = userInfo.noteList[areaIdx];
 				if (noteMoney > 0)
 				{
-					//  ÏÂ×¢ÁË
+					//  ä¸‹æ³¨äº†
 					int areaRate = m_areaInfoArr[areaIdx].currWinRate;
 					winMoney += noteMoney * areaRate;
 				}
@@ -1452,11 +1452,11 @@ void CNewServerManage::TransToSettleStage()
 		}
 		else
 		{
-			//¿ªºÍ£¬Ôò¿Û³ıÁú»¢ÇøÏÂ×¢µÄ10%£¬ÊÕÈ¡ºÍÇøµÄ8±¶
+			//å¼€å’Œï¼Œåˆ™æ‰£é™¤é¾™è™åŒºä¸‹æ³¨çš„10%ï¼Œæ”¶å–å’ŒåŒºçš„8å€
 			long long tmpwinMoney0 = -userInfo.noteList[0] * m_areaInfoArr[0].currWinRate;
 			long long tmpwinMoney2 = -userInfo.noteList[2] * m_areaInfoArr[2].currWinRate;
 			winMoney -= (long long)floor((tmpwinMoney0 + tmpwinMoney2) * shurate);
-			winMoney += userInfo.noteList[1] * m_areaInfoArr[1].currWinRate; //¼ÆËãÑ¹ºÍµÄ¶Ä×¢£¬ÕâÀïËãÓ®			
+			winMoney += userInfo.noteList[1] * m_areaInfoArr[1].currWinRate; //è®¡ç®—å‹å’Œçš„èµŒæ³¨ï¼Œè¿™é‡Œç®—èµ¢			
 		}
 
 		winMoneyList[i] = winMoney;
@@ -1469,7 +1469,7 @@ void CNewServerManage::TransToSettleStage()
 		}
 	}
 
-	// ×¯¼Ò
+	// åº„å®¶
 	if (m_dealerDeskStation != SYSTEM_DEALER_DESKSTATION)
 	{
 		if (m_dealerDeskStation < m_userInfoVec.size())
@@ -1478,7 +1478,7 @@ void CNewServerManage::TransToSettleStage()
 		}
 	}
 
-	///////////////////////////////¼ÆËã³éË®///////////////////////////////////////////
+	///////////////////////////////è®¡ç®—æŠ½æ°´///////////////////////////////////////////
 	double rate = double(m_gameConfig.taxRate) / 100.0;
 	long long llRateMoney[PLAY_COUNT] = { 0 };
 	for (int i = 0; i < PLAY_COUNT; i++)
@@ -1490,11 +1490,11 @@ void CNewServerManage::TransToSettleStage()
 		}
 		if (winMoneyList[i] > 0)
 		{
-			long long i64WinMoney = winMoneyList[i]; //¼ÇÂ¼Íæ¼ÒÓ®µÄÇ®
+			long long i64WinMoney = winMoneyList[i]; //è®°å½•ç©å®¶èµ¢çš„é’±
 			taxValue = (long long)floor(rate * i64WinMoney);
 			i64WinMoney -= taxValue;
-			llRateMoney[i] += taxValue; //ÀÛ¼Ó³éË®½ğ±ÒÊı
-			winMoneyList[i] = i64WinMoney; //Íæ¼ÒÓ®µÄÇ®£¬¿Û³ıµô³éË®ºóµÄ
+			llRateMoney[i] += taxValue; //ç´¯åŠ æŠ½æ°´é‡‘å¸æ•°
+			winMoneyList[i] = i64WinMoney; //ç©å®¶èµ¢çš„é’±ï¼Œæ‰£é™¤æ‰æŠ½æ°´åçš„
 		}
 	}
 
@@ -1508,10 +1508,10 @@ void CNewServerManage::TransToSettleStage()
 		}
 	}
 
-	// ½ğ±Ò±ä»¯
+	// é‡‘å¸å˜åŒ–
 	ChangeUserPoint(winMoneyList, NULL, llRateMoney);
 
-	// ½áËãÃæ°åÏà¹ØĞÅÏ¢TODO
+	// ç»“ç®—é¢æ¿ç›¸å…³ä¿¡æ¯TODO
 	NewGameMessageNtfSettle msg;
 	if (m_dealerDeskStation != SYSTEM_DEALER_DESKSTATION)
 	{
@@ -1523,7 +1523,7 @@ void CNewServerManage::TransToSettleStage()
 		msg.dealerWinMoney = dealerWinMoney;
 		m_dealerInfo.shangzhuangMoney += dealerWinMoney;
 	}
-	msg.dealerMoney = m_dealerInfo.shangzhuangMoney;  //¼ÇÂ¼×¯¼ÒĞ¯´ø½ğ±ÒÊı
+	msg.dealerMoney = m_dealerInfo.shangzhuangMoney;  //è®°å½•åº„å®¶æºå¸¦é‡‘å¸æ•°
 	if (maxWinnerDeskStation != INVALID_DESKSTATION)
 	{
 		long maxWinnerID = GetUserIDByDeskStation(maxWinnerDeskStation);
@@ -1540,7 +1540,7 @@ void CNewServerManage::TransToSettleStage()
 		}
 	}
 
-	// »ñÈ¡×øÏÂÍæ¼ÒµÄÊäÓ®Çé¿öÒÔ¼°½ğ±Ò
+	// è·å–åä¸‹ç©å®¶çš„è¾“èµ¢æƒ…å†µä»¥åŠé‡‘å¸
 	for (size_t i = 0; i < m_gameDesk.size(); i++)
 	{
 		BYTE sitDeskStation = m_gameDesk[i];
@@ -1575,11 +1575,11 @@ void CNewServerManage::TransToSettleStage()
 		}
 	}
 
-	// µ÷ÓÃ½Ó¿Ú
+	// è°ƒç”¨æ¥å£
 	HundredGameFinish();
 
-	m_LastShangzhuangMoney = m_dealerInfo.shangzhuangMoney; //ÉÏ×¯Ğ¯´ø½ğ±ÒÊı±ä¸ü
-	// µ±Ç°×¯¼Ò»¹ÄÜ·ñ¼ÌĞø×ø×¯
+	m_LastShangzhuangMoney = m_dealerInfo.shangzhuangMoney; //ä¸Šåº„æºå¸¦é‡‘å¸æ•°å˜æ›´
+	// å½“å‰åº„å®¶è¿˜èƒ½å¦ç»§ç»­ååº„
 	if (m_dealerDeskStation != SYSTEM_DEALER_DESKSTATION)
 	{
 		GameUserInfo* pDealer = m_pDataManage->GetUser(dealerID);
@@ -1594,7 +1594,7 @@ void CNewServerManage::TransToSettleStage()
 			m_xiaZhuangRightNow = true;
 		}
 
-		////ÉÏ×¯ÁĞ±íÖĞÍæ¼ÒĞ¯´øÉÏ×¯½ğ±ÒÊı×î¶àµÄÄÇ¸ö
+		////ä¸Šåº„åˆ—è¡¨ä¸­ç©å®¶æºå¸¦ä¸Šåº„é‡‘å¸æ•°æœ€å¤šçš„é‚£ä¸ª
 		//long long topDealerMoney = 0;
 		//if (!m_dealerInfoVec.empty())
 		//{
@@ -1605,13 +1605,13 @@ void CNewServerManage::TransToSettleStage()
 		//	}
 		//}
 
-		////Íæ¼ÒÉÏ×¯Ğ¯´ø½ğ±ÒÊıÉÙÓÚÁĞ±íÖĞµÄÍæ¼Ò½ğ±ÒÊıµÄÊ±ºòÏÂ×¯£¬·ñÔò¼ÌĞø×ø×¯
+		////ç©å®¶ä¸Šåº„æºå¸¦é‡‘å¸æ•°å°‘äºåˆ—è¡¨ä¸­çš„ç©å®¶é‡‘å¸æ•°çš„æ—¶å€™ä¸‹åº„ï¼Œå¦åˆ™ç»§ç»­ååº„
 		//if (m_currDealerGameCount >= m_gameConfig.maxZhuangGameCount && m_dealerInfo.shangzhuangMoney < topDealerMoney)
 		//{
 		//	m_xiaZhuangRightNow = true;
 		//}
 
-		//ÉÏ×¯Ğ¯´ø½ğ±ÒÊıĞ¡ÓÚÏÂÏŞ£¬×Ô¶¯ÏÂ×¯
+		//ä¸Šåº„æºå¸¦é‡‘å¸æ•°å°äºä¸‹é™ï¼Œè‡ªåŠ¨ä¸‹åº„
 		if (m_dealerInfo.shangzhuangMoney < m_gameConfig.shangZhuangLimitMoney)
 		{
 			m_xiaZhuangRightNow = true;
@@ -1628,13 +1628,13 @@ void CNewServerManage::TransToSettleStage()
 
 	BroadcastGameStatus();
 
-	// Í¨Öª×¯ĞÅÏ¢
+	// é€šçŸ¥åº„ä¿¡æ¯
 	//BroadcastZhuangInfo();
 
-	//Ã¿¾Ö¿ÉÒÔÉÏ×ùµÄ»úÆ÷ÈËÊı
+	//æ¯å±€å¯ä»¥ä¸Šåº§çš„æœºå™¨äººæ•°
 	UpSitPlayerCount();
 
-	// µÈ´ıÏÂ¾Ö½×¶Î
+	// ç­‰å¾…ä¸‹å±€é˜¶æ®µ
 	SetTimer(GAME_TIMER_WAITNEXT, m_gameConfig.waitSettleTime * 1000);
 }
 
@@ -1650,9 +1650,9 @@ void CNewServerManage::BroadcastGameStatus()
 void CNewServerManage::BroadcastZhuangInfo()
 {
 	NewGameMessageNtfZhuangInfo msg;
-	//µ±Ç°×¯¼ÒµÄĞÅÏ¢
+	//å½“å‰åº„å®¶çš„ä¿¡æ¯
 	MakeZhuangInfo(msg);
-	//½ÓÏÂÀ´»ñÈ¡×¯¼ÒÁĞ±íÖĞµÄ×¯¼ÒĞÅÏ¢
+	//æ¥ä¸‹æ¥è·å–åº„å®¶åˆ—è¡¨ä¸­çš„åº„å®¶ä¿¡æ¯
 	int i = 0;
 	auto iter = m_dealerInfoVec.begin();
 	for (; iter != m_dealerInfoVec.end(); iter++, i++)
@@ -1706,13 +1706,13 @@ void CNewServerManage::BrodcastNoteInfo(BYTE deskStation)
 		SendGameData(i, &msg, iSendSize, MSG_MAIN_LOADER_GAME, MSG_GAME_NTF_NOTEINFO, 0);
 	}
 
-	// ÇåÀíµô
+	// æ¸…ç†æ‰
 	m_tempChouMaDataCount = 0;
 }
 
 bool CNewServerManage::MakeZhuangInfo(NewGameMessageNtfZhuangInfo& msg)
 {
-	// ×¯¼ÒĞÅÏ¢
+	// åº„å®¶ä¿¡æ¯
 	long dealerID = GetUserIDByDeskStation(m_dealerDeskStation);
 	if (dealerID > 0)
 	{
@@ -1729,10 +1729,10 @@ bool CNewServerManage::MakeZhuangInfo(NewGameMessageNtfZhuangInfo& msg)
 	}
 	else
 	{
-		// ÏµÍ³×ø×¯
+		// ç³»ç»Ÿååº„
 		msg.isSystemZhuang = true;
 		msg.zhuangInfo.money = m_dealerInfo.shangzhuangMoney;
-		strcpy(msg.zhuangInfo.name, "ÏµÍ³×ø×¯");
+		strcpy(msg.zhuangInfo.name, "ç³»ç»Ÿååº„");
 		strcpy(msg.zhuangInfo.headURL, "aa");
 		msg.zhuangInfo.shangzhuangMoney = m_dealerInfo.shangzhuangMoney;
 	}
@@ -1745,7 +1745,7 @@ bool CNewServerManage::MakeZhuangInfo(NewGameMessageNtfZhuangInfo& msg)
 
 bool CNewServerManage::MakeSendCardInfo(NewGameMessageNtfSendCard& msg)
 {
-	//±ØĞëÏÂ×¢ÒÔºóµÄ×´Ì¬²ÅÓĞÊı¾İ
+	//å¿…é¡»ä¸‹æ³¨ä»¥åçš„çŠ¶æ€æ‰æœ‰æ•°æ®
 	if (m_gameStatus == GAME_STATUS_NOTE || m_gameStatus == GAME_STATUS_SENDCARD)
 	{
 		return true;
@@ -1770,10 +1770,10 @@ void CNewServerManage::CalcAreaRate()
 {
 	if (m_areaInfoArr.size() >= 3)
 	{
-		//±È×î´óµÄÅÆµãÊı
+		//æ¯”æœ€å¤§çš„ç‰Œç‚¹æ•°
 		int isWin = m_logic.CompareCardValue(m_areaInfoArr[0].cardList, AREA_CARD_COUNT, m_areaInfoArr[2].cardList, AREA_CARD_COUNT);
 		m_currWinArea = isWin;
-		if (0 == isWin)  //»¢Ó®
+		if (0 == isWin)  //è™èµ¢
 		{
 			SetResult(1);
 			for (size_t i = 0; i < m_areaInfoArr.size(); i++)
@@ -1788,7 +1788,7 @@ void CNewServerManage::CalcAreaRate()
 				}
 			}
 		}
-		else if (1 == isWin) //ÁúÓ®
+		else if (1 == isWin) //é¾™èµ¢
 		{
 			SetResult(0);
 			for (size_t i = 0; i < m_areaInfoArr.size(); i++)
@@ -1803,7 +1803,7 @@ void CNewServerManage::CalcAreaRate()
 				}
 			}
 		}
-		else if (2 == isWin) //ºÍ
+		else if (2 == isWin) //å’Œ
 		{
 			SetResult(2);
 			for (size_t i = 0; i < m_areaInfoArr.size(); i++)
@@ -1918,10 +1918,10 @@ void CNewServerManage::UserBeKicked(BYTE deskStation)
 
 	bool bKickShangZhuangUser = false;
 
-	// Íæ¼ÒÎª×¯
+	// ç©å®¶ä¸ºåº„
 	if (deskStation == m_dealerDeskStation)
 	{
-		ERROR_LOG("×¯¼Ò±»Ìß");
+		ERROR_LOG("åº„å®¶è¢«è¸¢");
 	}
 	else
 	{
@@ -1945,7 +1945,7 @@ void CNewServerManage::UserBeKicked(BYTE deskStation)
 	DTUserInfo& userInfo = m_userInfoVec[deskStation];
 	userInfo.Clear();
 
-	// É¾³ı×ùÎ»ºÅ
+	// åˆ é™¤åº§ä½å·
 	DelDeskUser(deskStation);
 }
 
@@ -1958,7 +1958,7 @@ bool CNewServerManage::IsPlayGame(BYTE deskStation)
 	DTUserInfo& userInfo = m_userInfoVec[deskStation];
 	if (userInfo.isNote == false)
 	{
-		//×¯¼Ò
+		//åº„å®¶
 		if (deskStation == m_dealerDeskStation)
 		{
 			return true;
@@ -1970,10 +1970,10 @@ bool CNewServerManage::IsPlayGame(BYTE deskStation)
 	return true;
 }
 
-// ¶¯Ì¬¼ÓÔØÅäÖÃÎÄ¼şÊı¾İ
+// åŠ¨æ€åŠ è½½é…ç½®æ–‡ä»¶æ•°æ®
 void CNewServerManage::LoadDynamicConfig()
 {
-	//////////////////////////////////¹«¹²ÅäÖÃ////////////////////////////////////////
+	//////////////////////////////////å…¬å…±é…ç½®////////////////////////////////////////
 	CString nameID;
 	nameID.Format("%d", NAME_ID);
 	CINIFile f(CINIFile::GetAppPath() + nameID + "_s.ini");
@@ -1997,7 +1997,7 @@ void CNewServerManage::LoadDynamicConfig()
 		m_gameConfig.randCount = 60;
 	}
 
-	//¸ù¾İÓÎÏ·ÈËÊıÀ´ÅĞ¶Ï»úÆ÷ÈË×øÏÂÈËÊı
+	//æ ¹æ®æ¸¸æˆäººæ•°æ¥åˆ¤æ–­æœºå™¨äººåä¸‹äººæ•°
 	m_gameConfig.GamePlayCount_1 = f.GetKeyVal(key, "GamePlayCount_1", 3);
 	m_gameConfig.GamePlayCount_2 = f.GetKeyVal(key, "GamePlayCount_2", 5);
 	m_gameConfig.GamePlayCount_3 = f.GetKeyVal(key, "GamePlayCount_3", 10);
@@ -2017,7 +2017,7 @@ void CNewServerManage::LoadDynamicConfig()
 		m_gameConfig.GamePlayCount_3 = 10;
 	}
 
-	//ÖØĞÂÉèÖÃ×ùÎ»
+	//é‡æ–°è®¾ç½®åº§ä½
 	int maxDeskCount = f.GetKeyVal(key, "maxDeskCount", 6);
 	if (maxDeskCount != m_gameConfig.maxDeskCount)
 	{
@@ -2029,7 +2029,7 @@ void CNewServerManage::LoadDynamicConfig()
 		}
 	}
 
-	//¸ù¾İ³õÖĞ¸ß½øĞĞ¼ÓÔØÅäÖÃ
+	//æ ¹æ®åˆä¸­é«˜è¿›è¡ŒåŠ è½½é…ç½®
 	if (GetRoomLevel() == 1)
 	{
 		m_gameConfig.shangZhuangLimitMoney = f.GetKeyVal(key, "shangZhuangLimitMoney1", 200000)* GetPlatformMultiple();
@@ -2067,14 +2067,14 @@ void CNewServerManage::LoadDynamicConfig()
 		m_gameConfig.allUserMaxNote = f.GetKeyVal(key, "allUserMaxNote3", 2000000)* GetPlatformMultiple();
 	}
 
-	////////////////////////////////ÌØÊâ·¿¼äÅäÖÃ//////////////////////////////////////////
+	////////////////////////////////ç‰¹æ®Šæˆ¿é—´é…ç½®//////////////////////////////////////////
 	TCHAR szKey[20];
 	wsprintf(szKey, "%s_%d", nameID, m_pDataManage->m_InitData.uRoomID);
 	key = szKey;
 	m_gameConfig.waitBeginTime = f.GetKeyVal(key, "waitBeginTime", m_gameConfig.waitBeginTime);
 
 
-	//ÖØĞÂÉèÖÃ×ùÎ»
+	//é‡æ–°è®¾ç½®åº§ä½
 	m_gameDesk.resize(m_gameConfig.maxDeskCount);
 	for (size_t i = 0; i < m_gameDesk.size(); i++)
 	{
@@ -2114,18 +2114,18 @@ void CNewServerManage::AiWinAutoCtrl()
 		long dealerID = GetUserIDByDeskStation(m_dealerDeskStation);
 		if (dealerID <= 0)
 		{
-			ERROR_LOG("¿ØÖÆÊ§°Ü£¬×¯¼Ò×ùÎ»ºÅ²»´æÔÚ,m_dealerDeskStation = %d", m_dealerDeskStation);
+			ERROR_LOG("æ§åˆ¶å¤±è´¥ï¼Œåº„å®¶åº§ä½å·ä¸å­˜åœ¨,m_dealerDeskStation = %d", m_dealerDeskStation);
 			return;
 		}
 
 		GameUserInfo* pDealer = m_pDataManage->GetUser(dealerID);
 		if (!pDealer)
 		{
-			ERROR_LOG("¿ØÖÆÊ§°Ü£¬×¯¼Ò×ùÎ»ºÅ²»´æÔÚ,dealerID = %d", dealerID);
+			ERROR_LOG("æ§åˆ¶å¤±è´¥ï¼Œåº„å®¶åº§ä½å·ä¸å­˜åœ¨,dealerID = %d", dealerID);
 			return;
 		}
 
-		if (pDealer->isVirtual) //»úÆ÷ÈË×ø×¯
+		if (pDealer->isVirtual) //æœºå™¨äººååº„
 		{
 			iRateValue = 1;
 		}
@@ -2167,7 +2167,7 @@ void CNewServerManage::AiWinAutoCtrl()
 
 	for (size_t i = 0; i < m_deskCardQueue.size(); i++)
 	{
-		// ¸Ä±ä»¢ÇøÓòÅÆ
+		// æ”¹å˜è™åŒºåŸŸç‰Œ
 		SendAreaCards(m_areaInfoArr[2].cardList);
 
 		if (iCtrlType == 1 && CalcSystemWinMoney(iRateValue) >= 0 || iCtrlType == -1 && CalcSystemWinMoney(iRateValue) <= 0)
@@ -2184,7 +2184,7 @@ void CNewServerManage::AiWinAutoCtrl()
 
 int CNewServerManage::GetCtrlRet()
 {
-	// °´ÕÕ¸ÅÂÊÖ´ĞĞ
+	// æŒ‰ç…§æ¦‚ç‡æ‰§è¡Œ
 	if (m_pDataManage->m_rewardsPoolInfo.platformCtrlType == 1)
 	{
 		if (CUtil::GetRandNum() % 1000 < abs(m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent))
@@ -2217,11 +2217,11 @@ int CNewServerManage::GetCtrlRet()
 
 	if (iArrayCount % 2 != 0)
 	{
-		ERROR_LOG("jsonÅäÖÃ´íÎó");
+		ERROR_LOG("jsoné…ç½®é”™è¯¯");
 		return 0;
 	}
 
-	// ÅĞ¶Ï²ÎÊıÊÇ·ñ¸Ä±ä
+	// åˆ¤æ–­å‚æ•°æ˜¯å¦æ”¹å˜
 	char strTemp[256] = "";
 	for (int i = 0; i < iArrayCount; i++)
 	{
@@ -2241,7 +2241,7 @@ int CNewServerManage::GetCtrlRet()
 			param.allCount = pArray[i + 1];
 			if (param.allCount <= 0)
 			{
-				ERROR_LOG("jsonÅäÖÃ´íÎó£¬×Ü¾ÖÊı²»ÄÜĞ¡ÓÚ0");
+				ERROR_LOG("jsoné…ç½®é”™è¯¯ï¼Œæ€»å±€æ•°ä¸èƒ½å°äº0");
 				return 0;
 			}
 			m_ctrlParam.push_back(param);
@@ -2253,13 +2253,13 @@ int CNewServerManage::GetCtrlRet()
 		return 0;
 	}
 
-	// Ê×¾Ö
+	// é¦–å±€
 	if (m_runCtrlCount == 0)
 	{
 		m_ctrlParamIndex = CUtil::GetRandNum() % m_ctrlParam.size();
 	}
 
-	// ±¾´Î¿ØÖÆÍêÁË£¬»»¸öË÷Òı£¬ÖØÖÃÊı¾İ
+	// æœ¬æ¬¡æ§åˆ¶å®Œäº†ï¼Œæ¢ä¸ªç´¢å¼•ï¼Œé‡ç½®æ•°æ®
 	if (m_runCtrlCount >= m_ctrlParam[m_ctrlParamIndex].allCount)
 	{
 		m_ctrlParamIndex = CUtil::GetRandNum() % m_ctrlParam.size();
@@ -2267,29 +2267,29 @@ int CNewServerManage::GetCtrlRet()
 		m_runCtrlCount = 0;
 	}
 
-	// ½«Öµ´«¸øÆ½Ì¨
+	// å°†å€¼ä¼ ç»™å¹³å°
 	char paramBuf[128] = "";
-	sprintf(paramBuf, "[×Ü¹²%d¾Ö,ÒªÓ®%d¾Ö],Ä¿Ç°ÊÇ[µÚ%d¾Ö,ÒÑ¾­Ó®%d¾Ö]", m_ctrlParam[m_ctrlParamIndex].allCount,
+	sprintf(paramBuf, "[æ€»å…±%då±€,è¦èµ¢%då±€],ç›®å‰æ˜¯[ç¬¬%då±€,å·²ç»èµ¢%då±€]", m_ctrlParam[m_ctrlParamIndex].allCount,
 		m_ctrlParam[m_ctrlParamIndex].winCount, m_runCtrlCount, m_curCtrlWinCount);
 	m_ctrlParmRecordInfo = paramBuf;
 
-	// ¸ù¾İºóÌ¨ÉèÖÃÖµ£¬½øĞĞËã·¨ÅĞ¶Ï
-	if (m_ctrlParam[m_ctrlParamIndex].winCount < 0) //È«Êä
+	// æ ¹æ®åå°è®¾ç½®å€¼ï¼Œè¿›è¡Œç®—æ³•åˆ¤æ–­
+	if (m_ctrlParam[m_ctrlParamIndex].winCount < 0) //å…¨è¾“
 	{
 		return -1;
 	}
 
-	if (m_ctrlParam[m_ctrlParamIndex].winCount == 0) //²»¿ØÖÆ
+	if (m_ctrlParam[m_ctrlParamIndex].winCount == 0) //ä¸æ§åˆ¶
 	{
 		return 0;
 	}
 
-	if (m_ctrlParam[m_ctrlParamIndex].winCount >= m_ctrlParam[m_ctrlParamIndex].allCount) //È«Ó®
+	if (m_ctrlParam[m_ctrlParamIndex].winCount >= m_ctrlParam[m_ctrlParamIndex].allCount) //å…¨èµ¢
 	{
 		return 1;
 	}
 
-	if (m_curCtrlWinCount >= m_ctrlParam[m_ctrlParamIndex].winCount) //Ó®µÄÊıÁ¿µ½´ï×î´ó
+	if (m_curCtrlWinCount >= m_ctrlParam[m_ctrlParamIndex].winCount) //èµ¢çš„æ•°é‡åˆ°è¾¾æœ€å¤§
 	{
 		return -1;
 	}
@@ -2306,29 +2306,29 @@ int CNewServerManage::GetCtrlRet()
 	return 0;
 }
 
-//¼ÆËãµ±Ç°ÏµÍ³Ó®Ç®
+//è®¡ç®—å½“å‰ç³»ç»Ÿèµ¢é’±
 long long CNewServerManage::CalcSystemWinMoney(int iRateValue)
 {
 	long long winMoney = 0;
 
-	//±È×î´óµÄÅÆµãÊı
+	//æ¯”æœ€å¤§çš„ç‰Œç‚¹æ•°
 	int isWin = m_logic.CompareCardValue(m_areaInfoArr[0].cardList, AREA_CARD_COUNT, m_areaInfoArr[2].cardList, AREA_CARD_COUNT);
 
 	if (iRateValue == 1)
 	{
-		if (0 == isWin)  //»¢Ó®
+		if (0 == isWin)  //è™èµ¢
 		{
 			winMoney += m_areaInfoArr[0].areaRealPeopleNote;
 			winMoney += m_areaInfoArr[1].areaRealPeopleNote;
 			winMoney -= m_areaInfoArr[2].areaRealPeopleNote;
 		}
-		else if (1 == isWin) //ÁúÓ®
+		else if (1 == isWin) //é¾™èµ¢
 		{
 			winMoney -= m_areaInfoArr[0].areaRealPeopleNote;
 			winMoney += m_areaInfoArr[1].areaRealPeopleNote;
 			winMoney += m_areaInfoArr[2].areaRealPeopleNote;
 		}
-		else if (2 == isWin) //ºÍ
+		else if (2 == isWin) //å’Œ
 		{
 			winMoney += m_areaInfoArr[0].areaRealPeopleNote;
 			winMoney -= 8 * m_areaInfoArr[1].areaRealPeopleNote;
@@ -2337,19 +2337,19 @@ long long CNewServerManage::CalcSystemWinMoney(int iRateValue)
 	}
 	else
 	{
-		if (0 == isWin)  //»¢Ó®
+		if (0 == isWin)  //è™èµ¢
 		{
 			winMoney += (m_areaInfoArr[0].areaNote - m_areaInfoArr[0].areaRealPeopleNote);
 			winMoney += (m_areaInfoArr[1].areaNote - m_areaInfoArr[1].areaRealPeopleNote);
 			winMoney -= (m_areaInfoArr[2].areaNote - m_areaInfoArr[2].areaRealPeopleNote);
 		}
-		else if (1 == isWin) //ÁúÓ®
+		else if (1 == isWin) //é¾™èµ¢
 		{
 			winMoney -= (m_areaInfoArr[0].areaNote - m_areaInfoArr[0].areaRealPeopleNote);
 			winMoney += (m_areaInfoArr[1].areaNote - m_areaInfoArr[1].areaRealPeopleNote);
 			winMoney += (m_areaInfoArr[2].areaNote - m_areaInfoArr[2].areaRealPeopleNote);
 		}
-		else if (2 == isWin) //ºÍ
+		else if (2 == isWin) //å’Œ
 		{
 			winMoney += (m_areaInfoArr[0].areaNote - m_areaInfoArr[0].areaRealPeopleNote);
 			winMoney -= 8 * (m_areaInfoArr[1].areaNote - m_areaInfoArr[1].areaRealPeopleNote);
@@ -2362,14 +2362,14 @@ long long CNewServerManage::CalcSystemWinMoney(int iRateValue)
 	return winMoney;
 }
 
-// ¸ü»»ÏµÍ³Ãû×Ö×ÊÔ´
+// æ›´æ¢ç³»ç»Ÿåå­—èµ„æº
 void CNewServerManage::ChangeSystemZhuangInfo()
 {
-	// ×¯¼ÒĞÅÏ¢
+	// åº„å®¶ä¿¡æ¯
 	if (m_dealerDeskStation == SYSTEM_DEALER_DESKSTATION)
 	{
 		m_dealerInfo.isSystem = true;
-		// ÏµÍ³×ø×¯
+		// ç³»ç»Ÿååº„
 		if (m_dealerDeskStation != m_LastDealerDeskStation)
 		{
 			m_dealerInfo.shangzhuangMoney = CUtil::GetRandRange((int)m_gameConfig.shangZhuangLimitMoney, 9 * (int)m_gameConfig.shangZhuangLimitMoney);
@@ -2388,7 +2388,7 @@ void CNewServerManage::ChangeSystemZhuangInfo()
 	}
 }
 
-//Ö´ĞĞ³¬¶ËÉèÖÃ
+//æ‰§è¡Œè¶…ç«¯è®¾ç½®
 void CNewServerManage::SuperSetChange()
 {
 	if (!m_bySuperSetType)
@@ -2396,18 +2396,18 @@ void CNewServerManage::SuperSetChange()
 		return;
 	}
 
-	//±È×î´óµÄÅÆµãÊı
+	//æ¯”æœ€å¤§çš„ç‰Œç‚¹æ•°
 	int isWin = m_logic.CompareCardValue(m_areaInfoArr[0].cardList, AREA_CARD_COUNT, m_areaInfoArr[2].cardList, AREA_CARD_COUNT);
 
-	if (0 == isWin && m_bySuperSetType == 2)  //»¢Ó®
+	if (0 == isWin && m_bySuperSetType == 2)  //è™èµ¢
 	{
 		return;
 	}
-	else if (1 == isWin && m_bySuperSetType == 1) //ÁúÓ®
+	else if (1 == isWin && m_bySuperSetType == 1) //é¾™èµ¢
 	{
 		return;
 	}
-	else if (2 == isWin && m_bySuperSetType == 3) //ºÍ
+	else if (2 == isWin && m_bySuperSetType == 3) //å’Œ
 	{
 		return;
 	}
@@ -2427,21 +2427,21 @@ void CNewServerManage::SuperSetChange()
 
 	for (size_t i = 0; i < m_deskCardQueue.size(); i++)
 	{
-		//¸Ä±ä»¢ÇøÓòÅÆ
+		//æ”¹å˜è™åŒºåŸŸç‰Œ
 		SendAreaCards(m_areaInfoArr[2].cardList);
 
-		//±È×î´óµÄÅÆµãÊı
+		//æ¯”æœ€å¤§çš„ç‰Œç‚¹æ•°
 		int isWin = m_logic.CompareCardValue(m_areaInfoArr[0].cardList, AREA_CARD_COUNT, m_areaInfoArr[2].cardList, AREA_CARD_COUNT);
 
-		if (0 == isWin && m_bySuperSetType == 2)  //»¢Ó®
+		if (0 == isWin && m_bySuperSetType == 2)  //è™èµ¢
 		{
 			return;
 		}
-		else if (1 == isWin && m_bySuperSetType == 1) //ÁúÓ®
+		else if (1 == isWin && m_bySuperSetType == 1) //é¾™èµ¢
 		{
 			return;
 		}
-		else if (2 == isWin && m_bySuperSetType == 3) //ºÍ
+		else if (2 == isWin && m_bySuperSetType == 3) //å’Œ
 		{
 			return;
 		}
@@ -2491,7 +2491,7 @@ bool CNewServerManage::DelDeskUser(BYTE deskStation)
 
 	m_gameDesk[iIndex] = 255;
 
-	// ÍÆËÍÏûÏ¢
+	// æ¨é€æ¶ˆæ¯
 	NewGameMessageNtfUserSit msg;
 	msg.deskStation = deskStation;
 	msg.index = iIndex;
@@ -2515,7 +2515,7 @@ bool CNewServerManage::SetDeskUser(BYTE deskStation, BYTE byIndex)
 
 	m_gameDesk[byIndex] = deskStation;
 
-	// ÍÆËÍÏûÏ¢
+	// æ¨é€æ¶ˆæ¯
 	NewGameMessageNtfUserSit msg;
 	msg.deskStation = deskStation;
 	msg.index = byIndex;
@@ -2567,7 +2567,7 @@ void CNewServerManage::ClearDeskUser()
 	}
 }
 
-//¸üĞÂÉÏ×ùÈËÊı
+//æ›´æ–°ä¸Šåº§äººæ•°
 void CNewServerManage::UpSitPlayerCount()
 {
 	BYTE UserCount = GetRealPeople();
@@ -2586,7 +2586,7 @@ void CNewServerManage::UpSitPlayerCount()
 }
 
 //////////////////////////////////////////////////////////////////////////
-// ÅĞ¶Ï»úÆ÷ÈËÊÇ·ñ¿ÉÒÔÉÏÏÂ×¯  0£ºÉÏ×¯   1£ºÏÂ×¯
+// åˆ¤æ–­æœºå™¨äººæ˜¯å¦å¯ä»¥ä¸Šä¸‹åº„  0ï¼šä¸Šåº„   1ï¼šä¸‹åº„
 bool CNewServerManage::IsVirtualCanShangXiazZhuang(BYTE deskStation, BYTE type)
 {
 	int iShangZhuangRobotCount = 0;
@@ -2602,7 +2602,7 @@ bool CNewServerManage::IsVirtualCanShangXiazZhuang(BYTE deskStation, BYTE type)
 	int iMinCount = m_pDataManage->GetPoolConfigInfo("zMinC");
 	int iMaxCount = m_pDataManage->GetPoolConfigInfo("zMaxC") + 1;
 
-	if (type == 0) // ÉÏ×¯
+	if (type == 0) // ä¸Šåº„
 	{
 		int iRandCount = CUtil::GetRandRange(iMinCount, iMaxCount);
 		if (iRandCount <= 0)
@@ -2615,7 +2615,7 @@ bool CNewServerManage::IsVirtualCanShangXiazZhuang(BYTE deskStation, BYTE type)
 			return false;
 		}
 	}
-	else // ÏÂ×¯
+	else // ä¸‹åº„
 	{
 		if (iShangZhuangRobotCount <= iMinCount)
 		{
@@ -2628,14 +2628,14 @@ bool CNewServerManage::IsVirtualCanShangXiazZhuang(BYTE deskStation, BYTE type)
 
 bool CNewServerManage::IsVirtualCanNote(BYTE deskStation, long long note)
 {
-	// ¼ÆËã»úÆ÷ÈË×ÜÏÂ×¢
+	// è®¡ç®—æœºå™¨äººæ€»ä¸‹æ³¨
 	long long llAllRobotNote = 0;
 	for (int i = 0; i < MAX_AREA_COUNT; i++)
 	{
 		llAllRobotNote += m_areaInfoArr[i].areaNote - m_areaInfoArr[i].areaRealPeopleNote;
 	}
 
-	// »ñÈ¡Õ¼±È
+	// è·å–å æ¯”
 	int iNoteRate = m_pDataManage->GetPoolConfigInfo("noteRate");
 	iNoteRate = iNoteRate <= 0 ? 3 : iNoteRate;
 
@@ -2647,7 +2647,7 @@ bool CNewServerManage::IsVirtualCanNote(BYTE deskStation, long long note)
 	return true;
 }
 
-// ÅĞ¶Ï»úÆ÷ÈËÊÇ·ñ¿ÉÒÔÉÏ×øÏÂÕ¾Æğ  0£º×øÏÂ   1£ºÕ¾Æğ
+// åˆ¤æ–­æœºå™¨äººæ˜¯å¦å¯ä»¥ä¸Šåä¸‹ç«™èµ·  0ï¼šåä¸‹   1ï¼šç«™èµ·
 bool CNewServerManage::IsVirtualCanSit(BYTE deskStation, BYTE type)
 {
 	int iSitRobotCount = 0;
@@ -2663,7 +2663,7 @@ bool CNewServerManage::IsVirtualCanSit(BYTE deskStation, BYTE type)
 	int iMinCount = m_pDataManage->GetPoolConfigInfo("sMinC");
 	int iMaxCount = m_pDataManage->GetPoolConfigInfo("sMaxC") + 1;
 
-	if (type == 0) // ×øÏÂ
+	if (type == 0) // åä¸‹
 	{
 		int iRandCount = CUtil::GetRandRange(iMinCount, iMaxCount);
 		if (iRandCount <= 0)
@@ -2676,7 +2676,7 @@ bool CNewServerManage::IsVirtualCanSit(BYTE deskStation, BYTE type)
 			return false;
 		}
 	}
-	else // Õ¾Æğ
+	else // ç«™èµ·
 	{
 		if (iSitRobotCount <= iMinCount)
 		{

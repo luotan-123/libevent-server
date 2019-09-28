@@ -4,38 +4,38 @@
 
 #define SYSTEMMONEY 88888888
 
-// ¶¨ÒåÓÎÏ·ÖĞµÄÒ»Ğ©Êı¾İ
-const int AREA_CARD_COUNT = 1;					// Ã¿¸öÎ»ÖÃÅÆµÄÊıÁ¿
-const int MAX_AREA_COUNT = 3;					// ÇøÓòÊı
-const int MAX_SHANGZHUANG_COUNT = 5;			// ÉÏ×¯ÁĞ±í×î´óÈËÊı
-const int MAX_NOTE_SORT = 6;					// ×î´ó³ïÂëÖÖÀà
-const int MAX_AREA_TREND_COUNT = 20;			// ÇøÓò×ßÊÆ×î´óÊıÁ¿
-const int MAX_GOLD_ROOM_COUNT = 5;				// ½ğ±Ò³¡×î´óÊıÁ¿
-const int MAX_DESK_USER = 6;					// ×î´ó×ùÎ»ºÅ
-const int MAX_CHOU_MA_COUNT = 100;				// ×î´óµÄ³ïÂëÊıÁ¿
+// å®šä¹‰æ¸¸æˆä¸­çš„ä¸€äº›æ•°æ®
+const int AREA_CARD_COUNT = 1;					// æ¯ä¸ªä½ç½®ç‰Œçš„æ•°é‡
+const int MAX_AREA_COUNT = 3;					// åŒºåŸŸæ•°
+const int MAX_SHANGZHUANG_COUNT = 5;			// ä¸Šåº„åˆ—è¡¨æœ€å¤§äººæ•°
+const int MAX_NOTE_SORT = 6;					// æœ€å¤§ç­¹ç ç§ç±»
+const int MAX_AREA_TREND_COUNT = 20;			// åŒºåŸŸèµ°åŠ¿æœ€å¤§æ•°é‡
+const int MAX_GOLD_ROOM_COUNT = 5;				// é‡‘å¸åœºæœ€å¤§æ•°é‡
+const int MAX_DESK_USER = 6;					// æœ€å¤§åº§ä½å·
+const int MAX_CHOU_MA_COUNT = 100;				// æœ€å¤§çš„ç­¹ç æ•°é‡
 
-// ÓÎÏ·ÅäÖÃ½á¹¹
+// æ¸¸æˆé…ç½®ç»“æ„
 struct GameConfig
 {
 	BYTE randBankerCount;
-	BYTE randCount;						//Ëæ»ú×ø×¯¸ÅÂÊ
-	BYTE CanSitCount;					//»úÆ÷ÈË×î¶àÄÜ×øÏÂ¶àÉÙÈË
-	BYTE GamePlayCount_1;			//¸ù¾İÓÎÏ·ÈËÊıÀ´ÅĞ¶Ï»úÆ÷ÈË×øÏÂÈËÊı
-	BYTE GamePlayCount_2;			//¸ù¾İÓÎÏ·ÈËÊıÀ´ÅĞ¶Ï»úÆ÷ÈË×øÏÂÈËÊı
-	BYTE GamePlayCount_3;			//¸ù¾İÓÎÏ·ÈËÊıÀ´ÅĞ¶Ï»úÆ÷ÈË×øÏÂÈËÊı
+	BYTE randCount;						//éšæœºååº„æ¦‚ç‡
+	BYTE CanSitCount;					//æœºå™¨äººæœ€å¤šèƒ½åä¸‹å¤šå°‘äºº
+	BYTE GamePlayCount_1;			//æ ¹æ®æ¸¸æˆäººæ•°æ¥åˆ¤æ–­æœºå™¨äººåä¸‹äººæ•°
+	BYTE GamePlayCount_2;			//æ ¹æ®æ¸¸æˆäººæ•°æ¥åˆ¤æ–­æœºå™¨äººåä¸‹äººæ•°
+	BYTE GamePlayCount_3;			//æ ¹æ®æ¸¸æˆäººæ•°æ¥åˆ¤æ–­æœºå™¨äººåä¸‹äººæ•°
 
-	int waitBeginTime;					// µÈ´ı¿ªÊ¼Ê±¼ä
-	int noteKeepTime;					// ÏÂ×¢½×¶Î³ÖĞøÊ±¼ä
-	int sendCardKeepTime;				// ·¢ÅÆ½×¶Î³ÖĞøÊ±¼ä
-	int compareKeepTime;				// ±ÈÅÆ½×¶Î³ÖĞøÊ±¼ä
-	int waitSettleTime;					// µÈ´ı½áËãÊ±¼ä
-	int maxZhuangGameCount;				// ×¯¼Ò×î¶à½øĞĞµÄ¾ÖÊı
-	int taxRate;						// ³éË®
-	int maxDeskCount;					// ×î¶à×ùÎ»ºÅ
+	int waitBeginTime;					// ç­‰å¾…å¼€å§‹æ—¶é—´
+	int noteKeepTime;					// ä¸‹æ³¨é˜¶æ®µæŒç»­æ—¶é—´
+	int sendCardKeepTime;				// å‘ç‰Œé˜¶æ®µæŒç»­æ—¶é—´
+	int compareKeepTime;				// æ¯”ç‰Œé˜¶æ®µæŒç»­æ—¶é—´
+	int waitSettleTime;					// ç­‰å¾…ç»“ç®—æ—¶é—´
+	int maxZhuangGameCount;				// åº„å®¶æœ€å¤šè¿›è¡Œçš„å±€æ•°
+	int taxRate;						// æŠ½æ°´
+	int maxDeskCount;					// æœ€å¤šåº§ä½å·
 	long long shangZhuangLimitMoney;
-	long long sitLimitMoney;			// ×øÏÂ×îÉÙĞèÒª½ğ±Ò
+	long long sitLimitMoney;			// åä¸‹æœ€å°‘éœ€è¦é‡‘å¸
 	long long noteList[MAX_GOLD_ROOM_COUNT][MAX_NOTE_SORT];
-	long long allUserMaxNote;			// ËùÓĞÍæ¼Ò(°üÀ¨»úÆ÷ÈË)£¬×Ü¹²ÄÜÏÂ×¢ÊıÁ¿
+	long long allUserMaxNote;			// æ‰€æœ‰ç©å®¶(åŒ…æ‹¬æœºå™¨äºº)ï¼Œæ€»å…±èƒ½ä¸‹æ³¨æ•°é‡
 
 	GameConfig()
 	{
@@ -78,14 +78,14 @@ struct GameConfig
 	}
 };
 
-// Íæ¼ÒĞÅÏ¢
+// ç©å®¶ä¿¡æ¯
 struct DTUserInfo
 {
-	long userID;								// Íæ¼ÒID
-	bool isNote;								// ±ê¼ÇÊÇ·ñÏÂ×¢
-	bool isContinueNote;						// ÊÇ·ñĞøÑ¹
-	long long noteList[MAX_AREA_COUNT];			// ¼ÇÂ¼µ±Ç°Ñ¹×¢
-	long long lastNoteList[MAX_AREA_COUNT];		// ¼ÇÂ¼ÉÏ¾ÖÑ¹×¢, ÓÃÓÚĞøÑ¹
+	long userID;								// ç©å®¶ID
+	bool isNote;								// æ ‡è®°æ˜¯å¦ä¸‹æ³¨
+	bool isContinueNote;						// æ˜¯å¦ç»­å‹
+	long long noteList[MAX_AREA_COUNT];			// è®°å½•å½“å‰å‹æ³¨
+	long long lastNoteList[MAX_AREA_COUNT];		// è®°å½•ä¸Šå±€å‹æ³¨, ç”¨äºç»­å‹
 
 	DTUserInfo()
 	{
@@ -105,12 +105,12 @@ struct DTUserInfo
 	}
 };
 
-// ×¯¼ÒĞÅÏ¢
+// åº„å®¶ä¿¡æ¯
 struct DealerInfo
 {
-	bool isSystem;					// ÊÇ·ñÏµÍ³×ø×¯	
-	long userID;					// ÓÃ»§ID
-	long long shangzhuangMoney;		// ÉÏ×¯Ğ¯´ø½ğ±ÒÊı
+	bool isSystem;					// æ˜¯å¦ç³»ç»Ÿååº„	
+	long userID;					// ç”¨æˆ·ID
+	long long shangzhuangMoney;		// ä¸Šåº„æºå¸¦é‡‘å¸æ•°
 
 	DealerInfo()
 	{
@@ -124,11 +124,11 @@ struct DealerInfo
 };
 
 #pragma pack(1)
-// Ç÷ÊÆ
+// è¶‹åŠ¿
 struct TrendData
 {
-	int type;			// ÀàĞÍ£¬-1£ºÄ¬ÈÏ£¬0£ºÁú£¬1£º»¢£¬2£ººÍ
-	BYTE count;			// ÊıÁ¿
+	int type;			// ç±»å‹ï¼Œ-1ï¼šé»˜è®¤ï¼Œ0ï¼šé¾™ï¼Œ1ï¼šè™ï¼Œ2ï¼šå’Œ
+	BYTE count;			// æ•°é‡
 	TrendData()
 	{
 		type = -1;
@@ -142,13 +142,13 @@ struct TrendData
 };
 #pragma pack()
 
-// ÇøÓòĞÅÏ¢
+// åŒºåŸŸä¿¡æ¯
 struct AreaInfo
 {
-	long long areaNote;				//ÇøÓòÏÂ×¢¶î
-	long long areaRealPeopleNote;	//ÕæÈËÏÂ×¢Öµ
+	long long areaNote;				//åŒºåŸŸä¸‹æ³¨é¢
+	long long areaRealPeopleNote;	//çœŸäººä¸‹æ³¨å€¼
 	BYTE cardList[AREA_CARD_COUNT];
-	int currWinRate;				// µ±Ç°»ñµÃµÄ±¶ÂÊ£¬ÊäÁËÔòÎª¸ºÊı
+	int currWinRate;				// å½“å‰è·å¾—çš„å€ç‡ï¼Œè¾“äº†åˆ™ä¸ºè´Ÿæ•°
 	
 	AreaInfo()
 	{
@@ -172,7 +172,7 @@ struct AreaInfo
 	}
 };
 
-// ÊäÓ®¿ØÖÆÏà¹Ø
+// è¾“èµ¢æ§åˆ¶ç›¸å…³
 struct CtrlSystemParam
 {
 	int winCount;
@@ -184,27 +184,27 @@ struct CtrlSystemParam
 	}
 };
 
-// ÓÎÏ·×´Ì¬
+// æ¸¸æˆçŠ¶æ€
 enum GameStatus
 {
-	GAME_STATUS_WAITNEXT = 1,		// µÈ´ıÏÂ¾Ö¿ªÊ¼
-	GAME_STATUS_NOTE,				// ÏÂ×¢½×¶Î
-	GAME_STATUS_SENDCARD,			// ·¢ÅÆ½×¶Î
-	GAME_STATUS_COMPARE,			// ±ÈÅÆ½×¶Î
-	GAME_STATUS_SETTLE,				// ½áËã½×¶Î
+	GAME_STATUS_WAITNEXT = 1,		// ç­‰å¾…ä¸‹å±€å¼€å§‹
+	GAME_STATUS_NOTE,				// ä¸‹æ³¨é˜¶æ®µ
+	GAME_STATUS_SENDCARD,			// å‘ç‰Œé˜¶æ®µ
+	GAME_STATUS_COMPARE,			// æ¯”ç‰Œé˜¶æ®µ
+	GAME_STATUS_SETTLE,				// ç»“ç®—é˜¶æ®µ
 };
 
-// ¶¨Ê±Æ÷
+// å®šæ—¶å™¨
 enum GameTimer
 {
 	GAME_TIMER_DEFAULT = 40,
 	GAME_TIMER_WAITNEXT,
-	GAME_TIMER_NOTE,				// ÏÂ×¢½×¶Î¶¨Ê±Æ÷
-	GAME_TIMER_NOTEINFO,			// ·¢ËÍÏÂ×¢ĞÅÏ¢¶¨Ê±Æ÷
-	GAME_TIMER_SENDCARD,			// ·¢ÅÆ¶¨Ê±Æ÷
-	GAME_TIMER_COMPARE,				// ±ÈÅÆ½×¶Î¶¨Ê±Æ÷
-	GAME_TIMER_SETTLE,				// ½áËã½×¶Î¶¨Ê±Æ÷
+	GAME_TIMER_NOTE,				// ä¸‹æ³¨é˜¶æ®µå®šæ—¶å™¨
+	GAME_TIMER_NOTEINFO,			// å‘é€ä¸‹æ³¨ä¿¡æ¯å®šæ—¶å™¨
+	GAME_TIMER_SENDCARD,			// å‘ç‰Œå®šæ—¶å™¨
+	GAME_TIMER_COMPARE,				// æ¯”ç‰Œé˜¶æ®µå®šæ—¶å™¨
+	GAME_TIMER_SETTLE,				// ç»“ç®—é˜¶æ®µå®šæ—¶å™¨
 	GAME_TIMER_END,
 };
 
-#define SYSTEM_DEALER_DESKSTATION	254		// ÏµÍ³×ø×¯
+#define SYSTEM_DEALER_DESKSTATION	254		// ç³»ç»Ÿååº„

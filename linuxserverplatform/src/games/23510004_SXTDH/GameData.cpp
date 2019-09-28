@@ -2,25 +2,25 @@
 #include "GameData.h"
 GameData::GameData(void)
 {
-	memset(m_byArHandPai, 255, sizeof(m_byArHandPai));	/// ÊÖÅÆ²»³¬¹ı20ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_byArOutPai, 255, sizeof(m_byArOutPai));		/// ³öÅÆ²»³¬¹ı160ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));		/// »¨ÅÆ²»³¬¹ı10ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_iArMenPai, 255, sizeof(m_iArMenPai));		/// ÃÅÅÆ²»³¬¹ı40ÕÅ£¬255Îª½áÊø±êÖ¾	
-	memset(m_byCanOutCard, 255, sizeof(m_byCanOutCard));	/// Í£ÅÆ»òÆäËû²Ù×÷ºóÄÜ´ò³öµÄÅÆ
-	memset(m_byMenFeng, 255, sizeof(m_byMenFeng));		/// ÃÅ·ç	
-	memset(m_bHaveOut, 0, sizeof(m_bHaveOut));			///	¼ÇÂ¼Íæ¼ÒÊÇ·ñ³ö¹ıÅÆÁË
+	memset(m_byArHandPai, 255, sizeof(m_byArHandPai));	/// æ‰‹ç‰Œä¸è¶…è¿‡20å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_byArOutPai, 255, sizeof(m_byArOutPai));		/// å‡ºç‰Œä¸è¶…è¿‡160å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));		/// èŠ±ç‰Œä¸è¶…è¿‡10å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_iArMenPai, 255, sizeof(m_iArMenPai));		/// é—¨ç‰Œä¸è¶…è¿‡40å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—	
+	memset(m_byCanOutCard, 255, sizeof(m_byCanOutCard));	/// åœç‰Œæˆ–å…¶ä»–æ“ä½œåèƒ½æ‰“å‡ºçš„ç‰Œ
+	memset(m_byMenFeng, 255, sizeof(m_byMenFeng));		/// é—¨é£	
+	memset(m_bHaveOut, 0, sizeof(m_bHaveOut));			///	è®°å½•ç©å®¶æ˜¯å¦å‡ºè¿‡ç‰Œäº†
 	memset(m_byArHuaPaiCount, 0, sizeof(m_byArHuaPaiCount));
 
 	m_StrJing.Init();
-	//³õÊ¼»¯ÅÆ
+	//åˆå§‹åŒ–ç‰Œ
 	m_MenPai.Init();
-	m_byQuanFeng = 255;			///È¦·ç
-	m_bySelectIndex = 255;		///µ±Ç°Ñ¡ÖĞÅÅË÷Òı
-	m_byLastOutPai = 255;		///×îºó´ò³öµÄÅÆ
-	m_byEndZhuaPaiPalyer = 255;		///µ±Ç°Íæ¼Ò×îºó×¥ÅÄ
-	m_byNowOutStation = 255;	///µ±Ç°³öÅÆÎ»ÖÃ
-	m_byLastOutStation = 255;	///ÉÏ´Î³öÅÆÎ»ÖÃ
-	///µ±Ç°×¥ÅÆ·½Ïò£¬true Ë³Ê±Õë£¬false ÄæÊ±Õë
+	m_byQuanFeng = 255;			///åœˆé£
+	m_bySelectIndex = 255;		///å½“å‰é€‰ä¸­æ’ç´¢å¼•
+	m_byLastOutPai = 255;		///æœ€åæ‰“å‡ºçš„ç‰Œ
+	m_byEndZhuaPaiPalyer = 255;		///å½“å‰ç©å®¶æœ€åæŠ“æ‹
+	m_byNowOutStation = 255;	///å½“å‰å‡ºç‰Œä½ç½®
+	m_byLastOutStation = 255;	///ä¸Šæ¬¡å‡ºç‰Œä½ç½®
+	///å½“å‰æŠ“ç‰Œæ–¹å‘ï¼Œtrue é¡ºæ—¶é’ˆï¼Œfalse é€†æ—¶é’ˆ
 	m_bZhuaPaiDir = true;
 	InitData();
 	LoadIni();
@@ -28,57 +28,57 @@ GameData::GameData(void)
 GameData::~GameData(void)
 {
 }
-///³õÊ¼»¯Êı¾İ
+///åˆå§‹åŒ–æ•°æ®
 void GameData::InitData()
 {
-	//¼ÇÂ¼¸ÜÅÆ×´Ì¬£¬ÓµÓÚ¸Ü¿ªºÍ¸ÜºóÅÚ
+	//è®°å½•æ ç‰ŒçŠ¶æ€ï¼Œæ‹¥äºæ å¼€å’Œæ åç‚®
 	memset(m_bGangState, 0, sizeof(m_bGangState));
-	///³ÔÅÆÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ
+	///åƒç‰Œç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®
 	temp_ChiPai.Init();
-	///ÅöÅÆÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ
+	///ç¢°ç‰Œç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®
 	temp_PengPai.Init();
-	///¸ÜÅÆÅÆÊÂ¼ş,ÁÙÊ±Êı¾İ
+	///æ ç‰Œç‰Œäº‹ä»¶,ä¸´æ—¶æ•°æ®
 	temp_GangPai.Init();
-	///ÖÀ2¿ÅÉ«×ÓÈ·¶¨ÆğÅÆÎ»ÖÃ£¨µãÊıºÍ£©ºÍÆğÅÆµã£¨×îĞ¡µã£©ÊÂ¼ş
+	///æ·2é¢—è‰²å­ç¡®å®šèµ·ç‰Œä½ç½®ï¼ˆç‚¹æ•°å’Œï¼‰å’Œèµ·ç‰Œç‚¹ï¼ˆæœ€å°ç‚¹ï¼‰äº‹ä»¶
 	T_TwoSeziDirAndGetPai.Init();
-	///·¢ÅÆÊÂ¼ş
+	///å‘ç‰Œäº‹ä»¶
 	//T_SendPai.Init();
-	///ËùÓĞÍæ¼Ò²¹»¨ÊÂ¼ş
+	///æ‰€æœ‰ç©å®¶è¡¥èŠ±äº‹ä»¶
 	//T_AllBuHua.Init();
-	///µ¥¸öÍæ¼Ò²¹»¨ÊÂ¼ş
+	///å•ä¸ªç©å®¶è¡¥èŠ±äº‹ä»¶
 	//T_OneBuHua.Init();
-	///³öÅÆÊÂ¼ş
+	///å‡ºç‰Œäº‹ä»¶
 	T_OutPai.Init();
-	///×¥ÅÆÅÆÊÂ¼ş
+	///æŠ“ç‰Œç‰Œäº‹ä»¶
 	T_ZhuaPai.Init();
-	/////³ÔÅö¸ÜºıÅÆÍ¨ÖªÊÂ¼şÅÆÊÂ¼ş
+	/////åƒç¢°æ ç³Šç‰Œé€šçŸ¥äº‹ä»¶ç‰Œäº‹ä»¶
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
-		T_CPGNotify[i].Init();//ÇåÁã
+		T_CPGNotify[i].Init();//æ¸…é›¶
 	}
-	///³ÔÅÆÅÆÊÂ¼ş
+	///åƒç‰Œç‰Œäº‹ä»¶
 	T_ChiPai.Init();
-	///ÅöÅÆÅÆÊÂ¼ş
+	///ç¢°ç‰Œç‰Œäº‹ä»¶
 	T_PengPai.Init();
-	///¸ÜÅÆÅÆÊÂ¼ş
+	///æ ç‰Œç‰Œäº‹ä»¶
 	T_GangPai.Init();
-	///ÌıÅÆÅÆÊÂ¼ş
+	///å¬ç‰Œç‰Œäº‹ä»¶
 	T_TingPai.Init();
-	///ºıÅÆÅÆÊÂ¼ş
+	///ç³Šç‰Œç‰Œäº‹ä»¶
 	T_HuPai.Init();
-	///Ëã·ÖÊÂ¼ş
+	///ç®—åˆ†äº‹ä»¶
 	T_CountFen.Init();
-	///¿ªÊ¼³öÅÆÍ¨ÖªÊÂ¼ş
+	///å¼€å§‹å‡ºç‰Œé€šçŸ¥äº‹ä»¶
 	//T_BeginOutPai.Init();
-	memset(m_byArHandPai, 255, sizeof(m_byArHandPai));			//ÊÖÅÆ²»³¬¹ı20ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));	//ÊÖÅÆÕÅÊı
-	memset(m_byArOutPai, 255, sizeof(m_byArOutPai));				//³öÅÆ²»³¬¹ı160ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));		//³öÅÆÕÅÊı
-	memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));				//»¨ÅÆ²»³¬¹ı10ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_iArMenPai, 255, sizeof(m_iArMenPai));				//ÃÅÅÆ²»³¬¹ı40ÕÅ£¬255Îª½áÊø±êÖ¾
-	memset(m_byMenPaiData, 255, sizeof(m_byMenPaiData));	//×ª»»ºóµÄÃÅÅÆÊı¾İ
-	m_StrJing.Init();//³õÊ¼»¯²ÆÉñ
-	m_MenPai.Init();//³õÊ¼»¯ÅÆ
+	memset(m_byArHandPai, 255, sizeof(m_byArHandPai));			//æ‰‹ç‰Œä¸è¶…è¿‡20å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_byArHandPaiCount, 0, sizeof(m_byArHandPaiCount));	//æ‰‹ç‰Œå¼ æ•°
+	memset(m_byArOutPai, 255, sizeof(m_byArOutPai));				//å‡ºç‰Œä¸è¶…è¿‡160å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_byArOutPaiCount, 0, sizeof(m_byArOutPaiCount));		//å‡ºç‰Œå¼ æ•°
+	memset(m_byArHuaPai, 255, sizeof(m_byArHuaPai));				//èŠ±ç‰Œä¸è¶…è¿‡10å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_iArMenPai, 255, sizeof(m_iArMenPai));				//é—¨ç‰Œä¸è¶…è¿‡40å¼ ï¼Œ255ä¸ºç»“æŸæ ‡å¿—
+	memset(m_byMenPaiData, 255, sizeof(m_byMenPaiData));	//è½¬æ¢åçš„é—¨ç‰Œæ•°æ®
+	m_StrJing.Init();//åˆå§‹åŒ–è´¢ç¥
+	m_MenPai.Init();//åˆå§‹åŒ–ç‰Œ
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
 		m_bHaveOut[i] = false;
@@ -91,89 +91,89 @@ void GameData::InitData()
 			m_UserGCPData[i][index].Init();
 		}
 	}
-	memset(m_bTing, 0, sizeof(m_bTing));				//Íæ¼ÒÊÇ·ñÌıÅÆ
-	memset(m_byTingType, 0, sizeof(m_byTingType));	//Íæ¼ÒÌıÅÆÀàĞÍ
-	memset(m_byCanOutCard, 255, sizeof(m_byCanOutCard));///Í£ÅÆ»òÆäËû²Ù×÷ºóÄÜ´ò³öµÄÅÆ
-	memset(m_byMenFeng, 255, sizeof(m_byMenFeng));	///ÃÅ·ç	
-	memset(m_bHaveOut, 0, sizeof(m_bHaveOut));			///	¼ÇÂ¼Íæ¼ÒÊÇ·ñ³ö¹ıÅÆÁË
+	memset(m_bTing, 0, sizeof(m_bTing));				//ç©å®¶æ˜¯å¦å¬ç‰Œ
+	memset(m_byTingType, 0, sizeof(m_byTingType));	//ç©å®¶å¬ç‰Œç±»å‹
+	memset(m_byCanOutCard, 255, sizeof(m_byCanOutCard));///åœç‰Œæˆ–å…¶ä»–æ“ä½œåèƒ½æ‰“å‡ºçš„ç‰Œ
+	memset(m_byMenFeng, 255, sizeof(m_byMenFeng));	///é—¨é£	
+	memset(m_bHaveOut, 0, sizeof(m_bHaveOut));			///	è®°å½•ç©å®¶æ˜¯å¦å‡ºè¿‡ç‰Œäº†
 	memset(m_byArHuaPaiCount, 0, sizeof(m_byArHuaPaiCount));
-	m_bySelectIndex = 255;				///µ±Ç°Ñ¡ÖĞÅÅË÷Òı
-	m_byLastOutPai = 255;				///×îºó´ò³öµÄÅÆ
-	m_byEndZhuaPaiPalyer = 255;			///µ±Ç°Íæ¼Ò×îºó×¥ÅÄ
-	m_byNowOutStation = 255;			///µ±Ç°³öÅÆÎ»ÖÃ
-	m_byLastOutStation = 255;			///ÉÏ´Î³öÅÆÎ»ÖÃ
-	///µ±Ç°×¥ÅÆ·½Ïò£¬true Ë³Ê±Õë£¬false ÄæÊ±Õë
+	m_bySelectIndex = 255;				///å½“å‰é€‰ä¸­æ’ç´¢å¼•
+	m_byLastOutPai = 255;				///æœ€åæ‰“å‡ºçš„ç‰Œ
+	m_byEndZhuaPaiPalyer = 255;			///å½“å‰ç©å®¶æœ€åæŠ“æ‹
+	m_byNowOutStation = 255;			///å½“å‰å‡ºç‰Œä½ç½®
+	m_byLastOutStation = 255;			///ä¸Šæ¬¡å‡ºç‰Œä½ç½®
+	///å½“å‰æŠ“ç‰Œæ–¹å‘ï¼Œtrue é¡ºæ—¶é’ˆï¼Œfalse é€†æ—¶é’ˆ
 	m_bZhuaPaiDir = true;
 
-	memset(m_byRemainMenPai, 255, sizeof(m_byRemainMenPai));//Ê£ÓàÃÅÅÆ
+	memset(m_byRemainMenPai, 255, sizeof(m_byRemainMenPai));//å‰©ä½™é—¨ç‰Œ
 	m_byRemainMenPaiCount = 0;
 	memset(m_byTingOutCardIndex, 255, sizeof(m_byTingOutCardIndex));
-	//ÒÑ¾­´ò³öÈ¥µÄÃ¿ÕÅÅÆÊıÁ¿
+	//å·²ç»æ‰“å‡ºå»çš„æ¯å¼ ç‰Œæ•°é‡
 	memset(m_byAllOutCardNum, 0, sizeof(m_byAllOutCardNum));
 }
 /*--------------------------------------------------------------------------*/
-///·şÎñÆ÷Íæ·¨ÅäÖÃ
+///æœåŠ¡å™¨ç©æ³•é…ç½®
 void GameData::LoadIni()
 {
-	//Íæ·¨ÊôĞÔ
-	//GameData::LoadIni()ÔÚCServerGameDesk::InitDeskGameStation()Ö®Ç°µ÷ÓÃ
-	m_mjRule.byAllMjCount = 136;			//Âé½«µÄÊıÁ¿ 
-	m_mjRule.bHaveWan = 1;			//ÊÇ·ñÓĞÍò
-	m_mjRule.bHaveTiao = 1;			//ÊÇ·ñÓĞÌõ
-	m_mjRule.bHaveBing = 1;			//ÊÇÊÇÓĞ±ú
-	m_mjRule.bHaveHongZhong = 1;			//ÊÇ·ñÓĞºìÖĞ
-	m_mjRule.bHaveFaCai = 1;			//ÊÇ·ñÓĞ·¢²Æ
-	m_mjRule.bHaveBaiBan = 1;			//ÊÇ·ñÓĞ°×°å
-	m_mjRule.bHaveFengPai = 1;			//ÊÇ·ñÓĞ¶«ÄÏÎ÷±±
-	m_mjRule.bHaveFlower = 0;			//ÊÇ·ñÓĞ»¨ÅÆ
-	m_mjRule.bHaveJing = 0;			//ÓĞÎŞ²ÆÉñ
-	m_mjRule.byMenPaiNum[0] = 34;			//¸÷¼ÒÃÅÅÆÊı
-	m_mjRule.byMenPaiNum[1] = 34;			//¸÷¼ÒÃÅÅÆÊı
-	m_mjRule.byMenPaiNum[2] = 34;			//¸÷¼ÒÃÅÅÆÊı
-	m_mjRule.byMenPaiNum[3] = 34;			//¸÷¼ÒÃÅÅÆÊı
-	m_mjRule.byAutoOutTime = 1;			//×Ô¶¯³öÅÆÊ±¼ä	
-	m_mjRule.byOutTime = 15;			//³öÅÆÊ±¼ä		
-	m_mjRule.byBlockTime = 15;			//À¹ÅÆË¼¿¼Ê±¼ä	
-	m_mjRule.bNetCutTuoGuan = 1;			//ÊÇ·ñ¶ÏÏßÍĞ¹Ü
-	m_mjRule.bForceTuoGuan = 1;			//ÊÇ·ñÇ¿ÍËÍĞ¹Ü
-	m_mjRule.byGamePassNum = 0;			//Á÷¾ÖÅÆÊı
-	m_mjRule.iGameBase = 1;			//»ù´¡·Ö
-	m_mjRule.bIsDuoXiang = 1;            //ÊÇ·ñ´æÔÚÒ»ÅÚ¶àÏì
-	m_mjRule.bIsSuanGangHu = 0;            //ÊÇ·ñ¼ÆËãÇÀ¸ÜºúËùµÃ¸Ü·Ö
-	m_mjRule.bChaoShiTuoGuan = 1;           //½ğ±Ò³¡³¬Ê±ÍĞ¹Ü
-	m_mjRule.bDuanXianTuoGuan = 1;          //·Ç·¿¿¨³¡£¬¶ÏÏßÊÇ·ñÍĞ¹Ü
-#ifdef _RELEASEEX //ÔËÓª°æ²»ÅäÅÆ
-	m_mjRule.bIsMatchMJ = 0;                //ÊÇ·ñÅäÅÆ
+	//ç©æ³•å±æ€§
+	//GameData::LoadIni()åœ¨CServerGameDesk::InitDeskGameStation()ä¹‹å‰è°ƒç”¨
+	m_mjRule.byAllMjCount = 136;			//éº»å°†çš„æ•°é‡ 
+	m_mjRule.bHaveWan = 1;			//æ˜¯å¦æœ‰ä¸‡
+	m_mjRule.bHaveTiao = 1;			//æ˜¯å¦æœ‰æ¡
+	m_mjRule.bHaveBing = 1;			//æ˜¯æ˜¯æœ‰æŸ„
+	m_mjRule.bHaveHongZhong = 1;			//æ˜¯å¦æœ‰çº¢ä¸­
+	m_mjRule.bHaveFaCai = 1;			//æ˜¯å¦æœ‰å‘è´¢
+	m_mjRule.bHaveBaiBan = 1;			//æ˜¯å¦æœ‰ç™½æ¿
+	m_mjRule.bHaveFengPai = 1;			//æ˜¯å¦æœ‰ä¸œå—è¥¿åŒ—
+	m_mjRule.bHaveFlower = 0;			//æ˜¯å¦æœ‰èŠ±ç‰Œ
+	m_mjRule.bHaveJing = 0;			//æœ‰æ— è´¢ç¥
+	m_mjRule.byMenPaiNum[0] = 34;			//å„å®¶é—¨ç‰Œæ•°
+	m_mjRule.byMenPaiNum[1] = 34;			//å„å®¶é—¨ç‰Œæ•°
+	m_mjRule.byMenPaiNum[2] = 34;			//å„å®¶é—¨ç‰Œæ•°
+	m_mjRule.byMenPaiNum[3] = 34;			//å„å®¶é—¨ç‰Œæ•°
+	m_mjRule.byAutoOutTime = 1;			//è‡ªåŠ¨å‡ºç‰Œæ—¶é—´	
+	m_mjRule.byOutTime = 15;			//å‡ºç‰Œæ—¶é—´		
+	m_mjRule.byBlockTime = 15;			//æ‹¦ç‰Œæ€è€ƒæ—¶é—´	
+	m_mjRule.bNetCutTuoGuan = 1;			//æ˜¯å¦æ–­çº¿æ‰˜ç®¡
+	m_mjRule.bForceTuoGuan = 1;			//æ˜¯å¦å¼ºé€€æ‰˜ç®¡
+	m_mjRule.byGamePassNum = 0;			//æµå±€ç‰Œæ•°
+	m_mjRule.iGameBase = 1;			//åŸºç¡€åˆ†
+	m_mjRule.bIsDuoXiang = 1;            //æ˜¯å¦å­˜åœ¨ä¸€ç‚®å¤šå“
+	m_mjRule.bIsSuanGangHu = 0;            //æ˜¯å¦è®¡ç®—æŠ¢æ èƒ¡æ‰€å¾—æ åˆ†
+	m_mjRule.bChaoShiTuoGuan = 1;           //é‡‘å¸åœºè¶…æ—¶æ‰˜ç®¡
+	m_mjRule.bDuanXianTuoGuan = 1;          //éæˆ¿å¡åœºï¼Œæ–­çº¿æ˜¯å¦æ‰˜ç®¡
+#ifdef _RELEASEEX //è¿è¥ç‰ˆä¸é…ç‰Œ
+	m_mjRule.bIsMatchMJ = 0;                //æ˜¯å¦é…ç‰Œ
 #else
-	m_mjRule.bIsMatchMJ = 1;                //ÊÇ·ñÅäÅÆ
+	m_mjRule.bIsMatchMJ = 1;                //æ˜¯å¦é…ç‰Œ
 #endif // _RELEASEEX
 
-	//¶¯×÷ÊôĞÔ
-	m_mjAction.bChi = 0;		//³Ô
-	m_mjAction.bChiJing = 0;        //³Ôñ®×Ó
-	m_mjAction.bChiFeng = 0;		//³Ô·çÅÆ
-	m_mjAction.bChiJian = 0;		//³ÔÖĞ·¢°×
-	m_mjAction.bPeng = 1;		//Åö
-	m_mjAction.bKan = 0;		//¿²
-	m_mjAction.bGang = 1;		//¸Ü
-	m_mjAction.bBuGang = 1;		//²¹¸Ü
+	//åŠ¨ä½œå±æ€§
+	m_mjAction.bChi = 0;		//åƒ
+	m_mjAction.bChiJing = 0;        //åƒç™å­
+	m_mjAction.bChiFeng = 0;		//åƒé£ç‰Œ
+	m_mjAction.bChiJian = 0;		//åƒä¸­å‘ç™½
+	m_mjAction.bPeng = 1;		//ç¢°
+	m_mjAction.bKan = 0;		//å
+	m_mjAction.bGang = 1;		//æ 
+	m_mjAction.bBuGang = 1;		//è¡¥æ 
 	m_mjAction.bGangAfterTing = 0;
-	m_mjAction.bTing = 1;		//Ìı
-	m_mjAction.bQiangChi = 0;		//ÇÀ³Ô(³ÔºóÌıÅÆ)
-	m_mjAction.bQxHh = 1;        //Æúºú²»ÄÜºú(Ò»È¦ÄÚ)
-	m_mjAction.bQiPeng = 1;        //ÆúÅö²»ÄÜÅö(Ò»È¦ÄÚ)
+	m_mjAction.bTing = 1;		//å¬
+	m_mjAction.bQiangChi = 0;		//æŠ¢åƒ(åƒåå¬ç‰Œ)
+	m_mjAction.bQxHh = 1;        //å¼ƒèƒ¡ä¸èƒ½èƒ¡(ä¸€åœˆå†…)
+	m_mjAction.bQiPeng = 1;        //å¼ƒç¢°ä¸èƒ½ç¢°(ä¸€åœˆå†…)
 	m_mjAction.bQiangGangHu = 1;
-	m_mjAction.bFangPao = 1;			//ÊÇ·ñÄÜµãÅÚ
-	m_mjAction.bZiMo = 1;			//ÊÇ·ñÄÜ×ÔÃş
-	m_mjAction.bBuHua = 0;			//ÊÇ·ñĞèÒª²¹»¨
+	m_mjAction.bFangPao = 1;			//æ˜¯å¦èƒ½ç‚¹ç‚®
+	m_mjAction.bZiMo = 1;			//æ˜¯å¦èƒ½è‡ªæ‘¸
+	m_mjAction.bBuHua = 0;			//æ˜¯å¦éœ€è¦è¡¥èŠ±
 }
 /*--------------------------------------------------------------------------*/
 
 
-///Ãû³Æ£ºIsHaveAHandPai
-///ÃèÊö£º¼ì²éÊÇ·ñ´æÔÚÖ¸¶¨µÄÊÖÅÆ
-///@param pai Òª¼ì²âµÄÅÆ
-///@return true ÓĞ false ÎŞ
+///åç§°ï¼šIsHaveAHandPai
+///æè¿°ï¼šæ£€æŸ¥æ˜¯å¦å­˜åœ¨æŒ‡å®šçš„æ‰‹ç‰Œ
+///@param pai è¦æ£€æµ‹çš„ç‰Œ
+///@return true æœ‰ false æ— 
 bool GameData::IsHaveAHandPai(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -186,10 +186,10 @@ bool GameData::IsHaveAHandPai(BYTE station, BYTE pai)
 	return false;
 }
 
-///Ãû³Æ£ºGetAHandPaiCount
-///ÃèÊö£º¼ì²éÊÖÅÆÖĞÄ³ÕÅÅÆµÄ¸öÊı
-///@param pai Òª¼ì²âµÄÅÆ
-///@return ÅÆÊıÁ¿
+///åç§°ï¼šGetAHandPaiCount
+///æè¿°ï¼šæ£€æŸ¥æ‰‹ç‰Œä¸­æŸå¼ ç‰Œçš„ä¸ªæ•°
+///@param pai è¦æ£€æµ‹çš„ç‰Œ
+///@return ç‰Œæ•°é‡
 int GameData::GetAHandPaiCount(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -203,10 +203,10 @@ int GameData::GetAHandPaiCount(BYTE station, BYTE pai)
 	return count;
 }
 
-///Ãû³Æ£ºGetHandPaiCount
-///ÃèÊö£º¼ì²éÊÖÅÆ¸öÊı
+///åç§°ï¼šGetHandPaiCount
+///æè¿°ï¼šæ£€æŸ¥æ‰‹ç‰Œä¸ªæ•°
 ///@param 
-///@return Íæ¼ÒÊÖÅÆµÄ×ÜÊı
+///@return ç©å®¶æ‰‹ç‰Œçš„æ€»æ•°
 int GameData::GetHandPaiCount(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -220,10 +220,10 @@ int GameData::GetHandPaiCount(BYTE station)
 	return count;
 }
 
-///Ãû³Æ£ºCopyHandPai
-///ÃèÊö£º¿½±´Íæ¼ÒµÄÊÖÅÆ
-///@param pai[] ÅÆÊı¾İ, station Î»ÖÃ, show ÊÇ·ñ¿½±´Ã÷ÅÆ
-///@return Íæ¼ÒÊÖÅÆ×ÜÊı
+///åç§°ï¼šCopyHandPai
+///æè¿°ï¼šæ‹·è´ç©å®¶çš„æ‰‹ç‰Œ
+///@param pai[] ç‰Œæ•°æ®, station ä½ç½®, show æ˜¯å¦æ‹·è´æ˜ç‰Œ
+///@return ç©å®¶æ‰‹ç‰Œæ€»æ•°
 int GameData::CopyHandPai(BYTE pai[][HAND_CARD_NUM], BYTE station, bool show)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -232,7 +232,7 @@ int GameData::CopyHandPai(BYTE pai[][HAND_CARD_NUM], BYTE station, bool show)
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
 		int count = GetHandPaiCount(station);
-		if (i == station)//×Ô¼ºµÄÅÆ
+		if (i == station)//è‡ªå·±çš„ç‰Œ
 		{
 			for (int j = 0;j < HAND_CARD_NUM;++j)
 			{
@@ -267,10 +267,10 @@ int GameData::CopyHandPai(BYTE pai[][HAND_CARD_NUM], BYTE station, bool show)
 	return 0;
 }
 
-///Ãû³Æ£ºCopyOneUserHandPai
-///ÃèÊö£º¿½±´Ä³¸öÍæ¼ÒµÄÊÖÅÆ
-///@param pai[] ÅÆÊı¾İ, station Î»ÖÃ
-///@return Íæ¼ÒÊÖÅÆ×ÜÊı
+///åç§°ï¼šCopyOneUserHandPai
+///æè¿°ï¼šæ‹·è´æŸä¸ªç©å®¶çš„æ‰‹ç‰Œ
+///@param pai[] ç‰Œæ•°æ®, station ä½ç½®
+///@return ç©å®¶æ‰‹ç‰Œæ€»æ•°
 int GameData::CopyOneUserHandPai(BYTE pai[HAND_CARD_NUM], BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -285,14 +285,14 @@ int GameData::CopyOneUserHandPai(BYTE pai[HAND_CARD_NUM], BYTE station)
 	return count;
 }
 
-///Ãû³Æ£ºSortHandPai
-///ÃèÊö£ºÊÖÅÆÅÅĞò£¬smallÊÇ·ñ´ÓĞ¡µ½´óÅÅ
-///@param big ÊÇ·ñ´Óµ½µ½Ğ¡ÅÅĞò¡£Ä¬ÈÏ´ÓĞ¡µ½´óÅÅĞò
+///åç§°ï¼šSortHandPai
+///æè¿°ï¼šæ‰‹ç‰Œæ’åºï¼Œsmallæ˜¯å¦ä»å°åˆ°å¤§æ’
+///@param big æ˜¯å¦ä»åˆ°åˆ°å°æ’åºã€‚é»˜è®¤ä»å°åˆ°å¤§æ’åº
 void GameData::SortHandPai(BYTE station, bool big)
 {
 	if (station < 0 || station >= PLAY_COUNT)
 		return;
-	///ÅÅĞò
+	///æ’åº
 	CLogicBase::SelectSort(m_byArHandPai[station], HAND_CARD_NUM, big);
 	/*BYTE HandPai[HAND_CARD_NUM];
 	for(int j=0;j<HAND_CARD_NUM;++j)
@@ -318,9 +318,9 @@ void GameData::SortHandPai(BYTE station, bool big)
 	}*/
 }
 
-///Ãû³Æ£ºAddToHandPai
-///ÃèÊö£ºÌí¼ÓÒ»ÕÅÅÆµ½ÊÖÅÆÖĞ
-///@param pai Ìí¼ÓµÄÊÖÅÆÖµ
+///åç§°ï¼šAddToHandPai
+///æè¿°ï¼šæ·»åŠ ä¸€å¼ ç‰Œåˆ°æ‰‹ç‰Œä¸­
+///@param pai æ·»åŠ çš„æ‰‹ç‰Œå€¼
 ///@return 
 void GameData::AddToHandPai(BYTE station, BYTE pai)
 {
@@ -341,9 +341,9 @@ void GameData::AddToHandPai(BYTE station, BYTE pai)
 	}
 }
 
-///Ãû³Æ£ºSetHandPaiData
-///ÃèÊö£ºÉèÖÃÊÖÅÆÊı¾İ
-///@param  pai[] ´«ÈëµÄÊÖÅÆÊı×é
+///åç§°ï¼šSetHandPaiData
+///æè¿°ï¼šè®¾ç½®æ‰‹ç‰Œæ•°æ®
+///@param  pai[] ä¼ å…¥çš„æ‰‹ç‰Œæ•°ç»„
 void GameData::SetHandPaiData(BYTE station, BYTE pai[], BYTE byCount)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -357,9 +357,9 @@ void GameData::SetHandPaiData(BYTE station, BYTE pai[], BYTE byCount)
 	m_byArHandPaiCount[station] = byCount;
 }
 
-///Ãû³Æ£ºDeleteAHandPai
-///ÃèÊö£ºÉ¾³ıÒ»ÕÅÖ¸¶¨µÄÊÖÅÆ
-///@param pai ÒªÉ¾³ıµÄÅÆ
+///åç§°ï¼šDeleteAHandPai
+///æè¿°ï¼šåˆ é™¤ä¸€å¼ æŒ‡å®šçš„æ‰‹ç‰Œ
+///@param pai è¦åˆ é™¤çš„ç‰Œ
 BYTE GameData::DeleteAHandPai(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT || !CMjRef::IsValidateMj(pai))
@@ -402,9 +402,9 @@ BYTE GameData::DeleteAHandPai(BYTE station, BYTE pai)
 	//m_byArHandPaiCount[station]=index;
 }
 
-///Ãû³Æ£ºSetHandPaiBack
-///ÃèÊö£ºÉèÖÃÊÖÅÆÅÆ±³
-///@param numÉèÖÃµÄÊıÁ¿
+///åç§°ï¼šSetHandPaiBack
+///æè¿°ï¼šè®¾ç½®æ‰‹ç‰Œç‰ŒèƒŒ
+///@param numè®¾ç½®çš„æ•°é‡
 ///@return 
 void GameData::SetHandPaiBack(BYTE station, BYTE num)
 {
@@ -417,8 +417,8 @@ void GameData::SetHandPaiBack(BYTE station, BYTE num)
 	}
 }
 
-///Ãû³Æ£ºGetLastHandPai
-///ÃèÊö£º»ñµÃ×îºóÒ»ÕÅÊÖÅÆ
+///åç§°ï¼šGetLastHandPai
+///æè¿°ï¼šè·å¾—æœ€åä¸€å¼ æ‰‹ç‰Œ
 ///@param 
 BYTE GameData::GetLastHandPai(BYTE station)
 {
@@ -434,8 +434,8 @@ BYTE GameData::GetLastHandPai(BYTE station)
 	return 255;
 }
 
-///Ãû³Æ£ºGetSelectHandPai
-///ÃèÊö£º»ñµÃÑ¡ÖĞµÄÒ»ÕÅÊÖÅÆ
+///åç§°ï¼šGetSelectHandPai
+///æè¿°ï¼šè·å¾—é€‰ä¸­çš„ä¸€å¼ æ‰‹ç‰Œ
 ///@param 
 ///@return 
 BYTE GameData::GetSelectHandPai(BYTE station)
@@ -447,10 +447,10 @@ BYTE GameData::GetSelectHandPai(BYTE station)
 	return 255;
 }
 
-///Ãû³Æ£ºIsOutPaiPeople
-///ÃèÊö£ºÊÇ·ñ³öÅÆÍæ¼Ò
+///åç§°ï¼šIsOutPaiPeople
+///æè¿°ï¼šæ˜¯å¦å‡ºç‰Œç©å®¶
 ///@param 
-///@return  true ÊÇ ,false ²»ÊÇ
+///@return  true æ˜¯ ,false ä¸æ˜¯
 bool GameData::IsOutPaiPeople(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -462,10 +462,10 @@ bool GameData::IsOutPaiPeople(BYTE station)
 	return false;
 }
 
-///Ãû³Æ£ºIsHuaPaiInHand
-///ÃèÊö£º¼ì²âÊÖÅÆÖĞÊÇ·ñ´æÔÚ»¨ÅÆ
+///åç§°ï¼šIsHuaPaiInHand
+///æè¿°ï¼šæ£€æµ‹æ‰‹ç‰Œä¸­æ˜¯å¦å­˜åœ¨èŠ±ç‰Œ
 ///@param 
-///@return  true ÊÇ ,false ²»ÊÇ
+///@return  true æ˜¯ ,false ä¸æ˜¯
 bool GameData::IsHuaPaiInHand(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -480,10 +480,10 @@ bool GameData::IsHuaPaiInHand(BYTE station)
 	return false;
 }
 
-///Ãû³Æ£ºMoveHuaPaiFormHand
-///ÃèÊö£º½«ÊÖÅÆÖĞµÄ»¨ÅÆÒÆµ½»¨ÅÆÊı×éÖĞ
+///åç§°ï¼šMoveHuaPaiFormHand
+///æè¿°ï¼šå°†æ‰‹ç‰Œä¸­çš„èŠ±ç‰Œç§»åˆ°èŠ±ç‰Œæ•°ç»„ä¸­
 ///@param 
-///@return  »¨ÅÆµÄÊıÁ¿
+///@return  èŠ±ç‰Œçš„æ•°é‡
 int GameData::MoveHuaPaiFormHand(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -505,7 +505,7 @@ int GameData::MoveHuaPaiFormHand(BYTE station)
 	return hua;
 }
 
-///Í¨¹ıË÷Òı»ñÈ¡Ò»ÕÅÊÖÅÆ
+///é€šè¿‡ç´¢å¼•è·å–ä¸€å¼ æ‰‹ç‰Œ
 BYTE GameData::GetHandPaiFromIndex(BYTE station, int index)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -515,7 +515,7 @@ BYTE GameData::GetHandPaiFromIndex(BYTE station, int index)
 	return m_byArHandPai[station][index];
 }
 
-///Í¨¹ıË÷ÒıÉèÖÃÒ»ÕÅÊÖÅÆ
+///é€šè¿‡ç´¢å¼•è®¾ç½®ä¸€å¼ æ‰‹ç‰Œ
 bool GameData::SetHandPaiFromIndex(BYTE station, int index, BYTE pai)
 {
 	if (station < 0 || station>3 || !CMjRef::IsValidateMj(pai))
@@ -526,7 +526,7 @@ bool GameData::SetHandPaiFromIndex(BYTE station, int index, BYTE pai)
 	return true;
 }
 
-///Ë÷ÒıÊÇ·ñÓĞÅÆ
+///ç´¢å¼•æ˜¯å¦æœ‰ç‰Œ
 bool GameData::IsHaveHandPaiFromIndex(BYTE station, int index)
 {
 	if (station < 0 || station>3 || index < 0 || index >= HAND_CARD_NUM)
@@ -542,10 +542,10 @@ bool GameData::IsHaveHandPaiFromIndex(BYTE station, int index)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///Ãû³Æ£ºGetUserGangNum
-///ÃèÊö£º»ñÈ¡Íæ¼Ò¸ÜÅÆµÄ¸öÊı(°µ¸Ü£¬Ã÷¸Ü£¬²¹¸Ü)
-///@param &an °µ¸ÜÊıÁ¿, &ming Ã÷¸ÜÊıÁ¿ ,  &bu ²¹¸ÜÊıÁ¿
-///@return ¸ÜÅÆµÄ×Ü¸öÊı
+///åç§°ï¼šGetUserGangNum
+///æè¿°ï¼šè·å–ç©å®¶æ ç‰Œçš„ä¸ªæ•°(æš—æ ï¼Œæ˜æ ï¼Œè¡¥æ )
+///@param &an æš—æ æ•°é‡, &ming æ˜æ æ•°é‡ ,  &bu è¡¥æ æ•°é‡
+///@return æ ç‰Œçš„æ€»ä¸ªæ•°
 int GameData::GetUserGangNum(BYTE station, BYTE &an, BYTE &ming, BYTE &bu)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -558,13 +558,13 @@ int GameData::GetUserGangNum(BYTE station, BYTE &an, BYTE &ming, BYTE &bu)
 	{
 		switch (m_UserGCPData[station][i].byType)
 		{
-		case ACTION_AN_GANG://°µ¸Ü
+		case ACTION_AN_GANG://æš—æ 
 			an++;
 			break;
-		case ACTION_BU_GANG://²¹¸Ü
+		case ACTION_BU_GANG://è¡¥æ 
 			bu++;
 			break;
-		case ACTION_MING_GANG://Ã÷¸Ü
+		case ACTION_MING_GANG://æ˜æ 
 			ming++;
 			break;
 		}
@@ -573,10 +573,10 @@ int GameData::GetUserGangNum(BYTE station, BYTE &an, BYTE &ming, BYTE &bu)
 	return all;
 }
 
-///Ãû³Æ£ºGetUserChiNum
-///ÃèÊö£ºÍæ¼Ò³ÔÅÆ´ÎÊı
-///@param station Íæ¼ÒÎ»ÖÃ
-///@return ³ÔÅÆµÄ×Ü¸öÊı
+///åç§°ï¼šGetUserChiNum
+///æè¿°ï¼šç©å®¶åƒç‰Œæ¬¡æ•°
+///@param station ç©å®¶ä½ç½®
+///@return åƒç‰Œçš„æ€»ä¸ªæ•°
 int GameData::GetUserChiNum(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -586,7 +586,7 @@ int GameData::GetUserChiNum(BYTE station)
 	{
 		switch (m_UserGCPData[station][i].byType)
 		{
-		case ACTION_CHI://³ÔÅÆ
+		case ACTION_CHI://åƒç‰Œ
 			num++;
 			break;
 		}
@@ -594,10 +594,10 @@ int GameData::GetUserChiNum(BYTE station)
 	return num;
 }
 
-///Ãû³Æ£ºGetUserPengNum
-///ÃèÊö£ºÍæ¼Ò¸ÜÅÆ´ÎÊı
-///@param station Íæ¼ÒÎ»ÖÃ
-///@return ÅöÅÆµÄ×Ü¸öÊı
+///åç§°ï¼šGetUserPengNum
+///æè¿°ï¼šç©å®¶æ ç‰Œæ¬¡æ•°
+///@param station ç©å®¶ä½ç½®
+///@return ç¢°ç‰Œçš„æ€»ä¸ªæ•°
 int GameData::GetUserPengNum(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -607,7 +607,7 @@ int GameData::GetUserPengNum(BYTE station)
 	{
 		switch (m_UserGCPData[station][i].byType)
 		{
-		case ACTION_PENG://ÅöÅÆ
+		case ACTION_PENG://ç¢°ç‰Œ
 			num++;
 			break;
 		}
@@ -615,10 +615,10 @@ int GameData::GetUserPengNum(BYTE station)
 	return num;
 }
 
-///Ãû³Æ£ºIsUserHaveGangPai
-///ÃèÊö£ºÍæ¼Ò¸ÜÁËÄ³¸öÅÆ
-///@param pai ÅÆ, &type ÀàĞÍ
-///@return  true ÊÇ ,false ²»ÊÇ
+///åç§°ï¼šIsUserHaveGangPai
+///æè¿°ï¼šç©å®¶æ äº†æŸä¸ªç‰Œ
+///@param pai ç‰Œ, &type ç±»å‹
+///@return  true æ˜¯ ,false ä¸æ˜¯
 bool GameData::IsUserHaveGangPai(BYTE station, BYTE pai, BYTE &type)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -634,10 +634,10 @@ bool GameData::IsUserHaveGangPai(BYTE station, BYTE pai, BYTE &type)
 	return false;
 }
 ///
-///Ãû³Æ£ºIsUserHavePengPai
-///ÃèÊö£ºÍæ¼ÒÊÇ·ñÅöÁËÄ³ÕÅÅÆ
-///@param pai ÅÆ
-///@return  true ÊÇ ,false ²»ÊÇ
+///åç§°ï¼šIsUserHavePengPai
+///æè¿°ï¼šç©å®¶æ˜¯å¦ç¢°äº†æŸå¼ ç‰Œ
+///@param pai ç‰Œ
+///@return  true æ˜¯ ,false ä¸æ˜¯
 bool GameData::IsUserHavePengPai(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -654,10 +654,10 @@ bool GameData::IsUserHavePengPai(BYTE station, BYTE pai)
 	return false;
 }
 
-///Ãû³Æ£ºIsUserHaveChiPai
-///ÃèÊö£ºÍæ¼ÒÊÇ·ñ³Ô¹ıÄ³ÕÅÅÆ
-///@param pai ÅÆ
-///@return  true ÊÇ ,false ²»ÊÇ
+///åç§°ï¼šIsUserHaveChiPai
+///æè¿°ï¼šç©å®¶æ˜¯å¦åƒè¿‡æŸå¼ ç‰Œ
+///@param pai ç‰Œ
+///@return  true æ˜¯ ,false ä¸æ˜¯
 bool GameData::IsUserHaveChiPai(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -672,9 +672,9 @@ bool GameData::IsUserHaveChiPai(BYTE station, BYTE pai)
 	return false;
 }
 
-///Ãû³Æ£ºAddToGCP
-///ÃèÊö£ºÌí¼ÓÒ»×éÊı¾İµ½¸Ü³ÔÅöÊı×éÖĞ
-///@param gcpData ÒªÌí¼ÓµÄ³ÔÅö¸ÜÊı¾İ
+///åç§°ï¼šAddToGCP
+///æè¿°ï¼šæ·»åŠ ä¸€ç»„æ•°æ®åˆ°æ åƒç¢°æ•°ç»„ä¸­
+///@param gcpData è¦æ·»åŠ çš„åƒç¢°æ æ•°æ®
 void GameData::AddToGCP(BYTE station, TCPGStruct *gcpData)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -696,9 +696,9 @@ void GameData::AddToGCP(BYTE station, TCPGStruct *gcpData)
 	}
 }
 
-///Ãû³Æ£ºDeleteAGCPData
-///ÃèÊö£ºÉ¾³ı¸Ü³ÔÅöÊı×éÖĞÖ¸¶¨µÄÊı¾İ×é
-///@param type ÀàĞÍ, pai ÅÆ
+///åç§°ï¼šDeleteAGCPData
+///æè¿°ï¼šåˆ é™¤æ åƒç¢°æ•°ç»„ä¸­æŒ‡å®šçš„æ•°æ®ç»„
+///@param type ç±»å‹, pai ç‰Œ
 void GameData::DeleteAGCPData(BYTE station, BYTE type, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -711,13 +711,13 @@ void GameData::DeleteAGCPData(BYTE station, BYTE type, BYTE pai)
 			break;
 		}
 	}
-	ShortGCP(station);//ÅÅĞò¸Ü³ÔÅöÊı×é
+	ShortGCP(station);//æ’åºæ åƒç¢°æ•°ç»„
 }
 
-///Ãû³Æ£ºCopyGCPData
-///ÃèÊö£º¿½±´¸Ü³ÔÅöÊı×éÖĞµÄÊı¾İ×é
-///@param gcpData ³ÔÅö¸ÜÊı×é
-///@return ³ÔÅö¸Ü¸öÊı
+///åç§°ï¼šCopyGCPData
+///æè¿°ï¼šæ‹·è´æ åƒç¢°æ•°ç»„ä¸­çš„æ•°æ®ç»„
+///@param gcpData åƒç¢°æ æ•°ç»„
+///@return åƒç¢°æ ä¸ªæ•°
 int GameData::CopyGCPData(BYTE station, TCPGStruct gcpData[])
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -730,9 +730,9 @@ int GameData::CopyGCPData(BYTE station, TCPGStruct gcpData[])
 	return GetGCPCount(station);
 }
 
-///Ãû³Æ£ºSetGCPData
-///ÃèÊö£ºÉèÖÃ¸Ü³ÔÅöÊı×éÖĞµÄÊı¾İ×é
-///@param gcpData ³ÔÅö¸ÜÊı×é
+///åç§°ï¼šSetGCPData
+///æè¿°ï¼šè®¾ç½®æ åƒç¢°æ•°ç»„ä¸­çš„æ•°æ®ç»„
+///@param gcpData åƒç¢°æ æ•°ç»„
 ///@return 
 void GameData::SetGCPData(BYTE station, TCPGStruct gcpData[])
 {
@@ -744,10 +744,10 @@ void GameData::SetGCPData(BYTE station, TCPGStruct gcpData[])
 	}
 }
 
-///Ãû³Æ£ºGetGCPCount
-///ÃèÊö£º»ñÈ¡¸Ü³ÔÅöµÄ½Úµã¸öÊı
+///åç§°ï¼šGetGCPCount
+///æè¿°ï¼šè·å–æ åƒç¢°çš„èŠ‚ç‚¹ä¸ªæ•°
 ///@param 
-///@return »ñµÃ³ÔÅö¸Ü×Ü¸öÊı
+///@return è·å¾—åƒç¢°æ æ€»ä¸ªæ•°
 int GameData::GetGCPCount(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -762,10 +762,10 @@ int GameData::GetGCPCount(BYTE station)
 	}
 	return count;
 }
-///Ãû³Æ£ºGetOnePaiGCPCount
-///ÃèÊö£º»ñÈ¡¸Ü³ÔÅöµÄÖĞÄ³ÖÖÅÆµÄÊıÁ¿
+///åç§°ï¼šGetOnePaiGCPCount
+///æè¿°ï¼šè·å–æ åƒç¢°çš„ä¸­æŸç§ç‰Œçš„æ•°é‡
 ///@param 
-///@return Ä³ÖÖÅÆµÄÊıÁ¿
+///@return æŸç§ç‰Œçš„æ•°é‡
 int GameData::GetOnePaiGCPCount(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -785,8 +785,8 @@ int GameData::GetOnePaiGCPCount(BYTE station, BYTE pai)
 	}
 	return count;
 }
-///Ãû³Æ£ºShortGCP
-///ÃèÊö£ºÅÅĞò¸Ü³ÔÅöÊı×é
+///åç§°ï¼šShortGCP
+///æè¿°ï¼šæ’åºæ åƒç¢°æ•°ç»„
 ///@param 
 void GameData::ShortGCP(BYTE station)
 {
@@ -808,8 +808,8 @@ void GameData::ShortGCP(BYTE station)
 		}
 	}
 }
-///Ãû³Æ£ºInitGCP
-///ÃèÊö£º³õÊ¼»¯¸Ü³ÔÅöÊı×é
+///åç§°ï¼šInitGCP
+///æè¿°ï¼šåˆå§‹åŒ–æ åƒç¢°æ•°ç»„
 ///@param 
 void GameData::InitGCP(BYTE station)
 {
@@ -820,11 +820,11 @@ void GameData::InitGCP(BYTE station)
 		m_UserGCPData[station][i].Init();
 	}
 }
-//////////////////³öÅÆ²Ù×÷///////////////////////////////////////////////////////////////////////////////
+//////////////////å‡ºç‰Œæ“ä½œ///////////////////////////////////////////////////////////////////////////////
 
-///Ãû³Æ£ºAddToOutPai
-///ÃèÊö£ºÌí¼ÓÒ»ÕÅÅÆµ½³öÅÆÊı×éÖĞ
-///@param pai ÅÆ
+///åç§°ï¼šAddToOutPai
+///æè¿°ï¼šæ·»åŠ ä¸€å¼ ç‰Œåˆ°å‡ºç‰Œæ•°ç»„ä¸­
+///@param pai ç‰Œ
 void GameData::AddToOutPai(BYTE station, BYTE pai, bool bTingCard)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -846,8 +846,8 @@ void GameData::AddToOutPai(BYTE station, BYTE pai, bool bTingCard)
 		}
 	}
 }
-///Ãû³Æ£ºDeleteLastOutPai
-///ÃèÊö£ºÉ¾³ı×îºóÒ»ÕÅ³öÅÆ
+///åç§°ï¼šDeleteLastOutPai
+///æè¿°ï¼šåˆ é™¤æœ€åä¸€å¼ å‡ºç‰Œ
 ///@param 
 void GameData::DeleteLastOutPai(BYTE station)
 {
@@ -863,9 +863,9 @@ void GameData::DeleteLastOutPai(BYTE station)
 	}
 }
 
-///Ãû³Æ£ºSetOutPaiData
-///ÃèÊö£ºÉèÖÃ³öÅÆÊı¾İ
-///@param pai[] ³öÅÆÊı×é
+///åç§°ï¼šSetOutPaiData
+///æè¿°ï¼šè®¾ç½®å‡ºç‰Œæ•°æ®
+///@param pai[] å‡ºç‰Œæ•°ç»„
 ///@return 
 void GameData::SetOutPaiData(BYTE station, BYTE pai)
 {
@@ -885,10 +885,10 @@ void GameData::SetOutPaiData(BYTE station, BYTE pai)
 	}
 }
 
-///Ãû³Æ£ºCopyOutPai
-///ÃèÊö£º¿½±´Íæ¼ÒµÄ³öÅÆ
-///@param pai[] ³öÅÆÊı×é
-///@return ³öÅÆµÄÕÅÊı
+///åç§°ï¼šCopyOutPai
+///æè¿°ï¼šæ‹·è´ç©å®¶çš„å‡ºç‰Œ
+///@param pai[] å‡ºç‰Œæ•°ç»„
+///@return å‡ºç‰Œçš„å¼ æ•°
 int GameData::CopyOutPai(BYTE station, BYTE pai[])
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -900,10 +900,10 @@ int GameData::CopyOutPai(BYTE station, BYTE pai[])
 	return CLogicBase::GetPaiNum(m_byArOutPai[station], OUT_CARD_NUM);
 }
 
-///Ãû³Æ£ºGetOutPaiCount
-///ÃèÊö£º»ñÈ¡Íæ¼ÒµÄ³öÅÆÊıÁ¿
+///åç§°ï¼šGetOutPaiCount
+///æè¿°ï¼šè·å–ç©å®¶çš„å‡ºç‰Œæ•°é‡
 ///@param 
-///@return ³öÅÆµÄ×ÜÊı
+///@return å‡ºç‰Œçš„æ€»æ•°
 int GameData::GetOutPaiCount(BYTE station)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -918,10 +918,10 @@ int GameData::GetOutPaiCount(BYTE station)
 	}
 	return num;
 }
-///Ãû³Æ£ºGetOutPaiCount
-///ÃèÊö£º»ñÈ¡Íæ¼ÒÄ³ÕÅÅÆµÄ³öÅÆÊıÁ¿
+///åç§°ï¼šGetOutPaiCount
+///æè¿°ï¼šè·å–ç©å®¶æŸå¼ ç‰Œçš„å‡ºç‰Œæ•°é‡
 ///@param 
-///@return Ä³ÕÅÅÆ³öÅÆµÄÊıÁ¿
+///@return æŸå¼ ç‰Œå‡ºç‰Œçš„æ•°é‡
 int GameData::GetOneOutPaiCount(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -936,11 +936,11 @@ int GameData::GetOneOutPaiCount(BYTE station, BYTE pai)
 	}
 	return num;
 }
-/////////////////////»¨ÅÆ²Ù×÷////////////////////////////////////////////////////////
+/////////////////////èŠ±ç‰Œæ“ä½œ////////////////////////////////////////////////////////
 
-///Ãû³Æ£ºAddToHuaPai
-///ÃèÊö£ºÌí¼ÓÒ»ÕÅ»¨ÅÆµ½»¨ÅÆÊı×éÖĞ
-///@param pai »¨ÅÆ
+///åç§°ï¼šAddToHuaPai
+///æè¿°ï¼šæ·»åŠ ä¸€å¼ èŠ±ç‰Œåˆ°èŠ±ç‰Œæ•°ç»„ä¸­
+///@param pai èŠ±ç‰Œ
 void GameData::AddToHuaPai(BYTE station, BYTE pai)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -956,9 +956,9 @@ void GameData::AddToHuaPai(BYTE station, BYTE pai)
 	}
 }
 
-///Ãû³Æ£ºSetHuaPaiData
-///ÃèÊö£ºÉèÖÃ»¨ÅÆÊı¾İ
-///@param pai[] »¨ÅÆÊı×é
+///åç§°ï¼šSetHuaPaiData
+///æè¿°ï¼šè®¾ç½®èŠ±ç‰Œæ•°æ®
+///@param pai[] èŠ±ç‰Œæ•°ç»„
 ///@return 
 void GameData::SetHuaPaiData(BYTE station, BYTE pai[])
 {
@@ -967,9 +967,9 @@ void GameData::SetHuaPaiData(BYTE station, BYTE pai[])
 	memcpy(m_byArHuaPai[station], pai, sizeof(m_byArHuaPai[station]));
 }
 
-///Ãû³Æ£ºCopyHuaPai
-///ÃèÊö£º¿½±´Íæ¼ÒµÄ»¨ÅÆ
-///@param pai[] »¨ÅÆÊı×é
+///åç§°ï¼šCopyHuaPai
+///æè¿°ï¼šæ‹·è´ç©å®¶çš„èŠ±ç‰Œ
+///@param pai[] èŠ±ç‰Œæ•°ç»„
 ///@return 
 int GameData::CopyHuaPai(BYTE station, BYTE pai[])
 {
@@ -987,18 +987,18 @@ int GameData::CopyHuaPai(BYTE station, BYTE pai[])
 	return count;
 }
 
-///¼ì²âÊÇ·ñ»¨ÅÆ
+///æ£€æµ‹æ˜¯å¦èŠ±ç‰Œ
 bool GameData::CheckIsHuaPai(BYTE pai)
 {
 	if (pai >= CMjEnum::MJ_TYPE_FCHUN && pai != 255)
 		return true;
 	return false;
 }
-///////////////////////ÃÅÅÆ²Ù×÷//////////////////////////////////////////////////////////////////
+///////////////////////é—¨ç‰Œæ“ä½œ//////////////////////////////////////////////////////////////////
 
-///Ãû³Æ£ºSetMenPaiData
-///ÃèÊö£ºÉèÖÃÃÅÅÆÊı¾İ
-///@param  pai[] ÃÅÅÆÊı×é
+///åç§°ï¼šSetMenPaiData
+///æè¿°ï¼šè®¾ç½®é—¨ç‰Œæ•°æ®
+///@param  pai[] é—¨ç‰Œæ•°ç»„
 ///@return 
 void GameData::SetMenPaiData(BYTE station, BYTE pai[])
 {
@@ -1006,10 +1006,10 @@ void GameData::SetMenPaiData(BYTE station, BYTE pai[])
 		return;
 	memcpy(m_iArMenPai[station], pai, sizeof(m_iArMenPai[station]));
 }
-///Ãû³Æ£ºCopyMenPai
-///ÃèÊö£º¿½±´Íæ¼ÒµÄÃÅÅÆ
-///@param  pai[][] ÃÅÅÆÊı×é
-///@return Íæ¼ÒÃÅÅÆ×ÜÊı
+///åç§°ï¼šCopyMenPai
+///æè¿°ï¼šæ‹·è´ç©å®¶çš„é—¨ç‰Œ
+///@param  pai[][] é—¨ç‰Œæ•°ç»„
+///@return ç©å®¶é—¨ç‰Œæ€»æ•°
 void GameData::CopyAllMenPai(BYTE pai[][MEN_CARD_NUM])
 {
 	for (int i = 0;i < 4;i++)
@@ -1020,10 +1020,10 @@ void GameData::CopyAllMenPai(BYTE pai[][MEN_CARD_NUM])
 		}
 	}
 }
-///Ãû³Æ£ºCopyMenPai
-///ÃèÊö£º¿½±´Íæ¼ÒµÄÃÅÅÆ
-///@param  pai[] ÃÅÅÆÊı×é
-///@return Íæ¼ÒÃÅÅÆ×ÜÊı
+///åç§°ï¼šCopyMenPai
+///æè¿°ï¼šæ‹·è´ç©å®¶çš„é—¨ç‰Œ
+///@param  pai[] é—¨ç‰Œæ•°ç»„
+///@return ç©å®¶é—¨ç‰Œæ€»æ•°
 int GameData::CopyMenPai(BYTE station, BYTE pai[])
 {
 	if (station < 0 || station >= 4)
@@ -1035,10 +1035,10 @@ int GameData::CopyMenPai(BYTE station, BYTE pai[])
 	return CLogicBase::GetPaiNum(m_iArMenPai[station], MEN_CARD_NUM);
 }
 
-///Ãû³Æ£ºChangeMenPai
-///ÃèÊö£ºÃÅÅÆ×ª»»
-///@param  pai[] ÃÅÅÆÊı×é
-///@return Íæ¼ÒÃÅÅÆ×ÜÊı
+///åç§°ï¼šChangeMenPai
+///æè¿°ï¼šé—¨ç‰Œè½¬æ¢
+///@param  pai[] é—¨ç‰Œæ•°ç»„
+///@return ç©å®¶é—¨ç‰Œæ€»æ•°
 void GameData::ChangeMenPai(int iIndex, BYTE byCard)
 {
 	int iCount_ = 0, i = 0;
@@ -1053,13 +1053,13 @@ void GameData::ChangeMenPai(int iIndex, BYTE byCard)
 	m_iArMenPai[i][m_mjRule.byMenPaiNum[i] - (iCount_ - iIndex)] = byCard;
 }
 
-//ÃèÊö£º´´½¨ÃÅÅÆ
+//æè¿°ï¼šåˆ›å»ºé—¨ç‰Œ
 void GameData::CreateMenPai()
 {
 	int iStart = 0;
 	int iEnd = m_mjRule.byMenPaiNum[0];
 	int index = 0;
-	for (int i = iStart;i < iEnd;++i)//0Î»ÖÃµÄÃÅÅÆ
+	for (int i = iStart;i < iEnd;++i)//0ä½ç½®çš„é—¨ç‰Œ
 	{
 		if (m_MenPai.byMenPai[i] != 255)
 		{
@@ -1073,7 +1073,7 @@ void GameData::CreateMenPai()
 	iStart = m_mjRule.byMenPaiNum[0];
 	iEnd = m_mjRule.byMenPaiNum[0] + m_mjRule.byMenPaiNum[1];
 	index = 0;
-	for (int i = iStart;i < iEnd;++i)//1Î»ÖÃµÄÃÅÅÆ
+	for (int i = iStart;i < iEnd;++i)//1ä½ç½®çš„é—¨ç‰Œ
 	{
 		if (m_MenPai.byMenPai[i] != 255)
 		{
@@ -1087,7 +1087,7 @@ void GameData::CreateMenPai()
 	iStart = m_mjRule.byMenPaiNum[0] + m_mjRule.byMenPaiNum[1];
 	iEnd = m_mjRule.byMenPaiNum[0] + m_mjRule.byMenPaiNum[1] + m_mjRule.byMenPaiNum[2];
 	index = 0;
-	for (int i = iStart;i < iEnd;++i)//2Î»ÖÃµÄÃÅÅÆ
+	for (int i = iStart;i < iEnd;++i)//2ä½ç½®çš„é—¨ç‰Œ
 	{
 		if (m_MenPai.byMenPai[i] != 255)
 		{
@@ -1101,7 +1101,7 @@ void GameData::CreateMenPai()
 	iStart = m_mjRule.byMenPaiNum[0] + m_mjRule.byMenPaiNum[1] + m_mjRule.byMenPaiNum[2];
 	iEnd = m_mjRule.byMenPaiNum[0] + m_mjRule.byMenPaiNum[1] + m_mjRule.byMenPaiNum[2] + m_mjRule.byMenPaiNum[3];
 	index = 0;
-	for (int i = iStart;i < iEnd;++i)//3Î»ÖÃµÄÃÅÅÆ
+	for (int i = iStart;i < iEnd;++i)//3ä½ç½®çš„é—¨ç‰Œ
 	{
 		if (m_MenPai.byMenPai[i] != 255)
 		{
@@ -1114,7 +1114,7 @@ void GameData::CreateMenPai()
 	}
 }
 
-///ÃèÊö£º»ñÈ¡Ä³Íæ¼ÒµÄÃÅÅÆÊıÁ¿
+///æè¿°ï¼šè·å–æŸç©å®¶çš„é—¨ç‰Œæ•°é‡
 int GameData::GetMenPaiCount(BYTE station)
 {
 	if (station < 0 || station >= 4)
@@ -1130,9 +1130,9 @@ int GameData::GetMenPaiCount(BYTE station)
 	return count;
 }
 
-///Ãû³Æ£ºChangeAllHandPai
-///»»ËùÓĞÊÖÅÆ
-///@param  station Î»ÖÃ, pai[] ÅÆ, countÅÆÊıÁ¿
+///åç§°ï¼šChangeAllHandPai
+///æ¢æ‰€æœ‰æ‰‹ç‰Œ
+///@param  station ä½ç½®, pai[] ç‰Œ, countç‰Œæ•°é‡
 void GameData::ChangeAllHandPai(BYTE station, BYTE pai[], BYTE count)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -1147,9 +1147,9 @@ void GameData::ChangeAllHandPai(BYTE station, BYTE pai[], BYTE count)
 	}
 }
 
-///Ãû³Æ£ºChangeAllHandPai
-///»»Ö¸¶¨ÊÖÅÆ
-///@param  station Î»ÖÃ, pai[] ÅÆ, handpai[]Òª»»µôµÄÊÖÅÆ, countÅÆÊıÁ¿
+///åç§°ï¼šChangeAllHandPai
+///æ¢æŒ‡å®šæ‰‹ç‰Œ
+///@param  station ä½ç½®, pai[] ç‰Œ, handpai[]è¦æ¢æ‰çš„æ‰‹ç‰Œ, countç‰Œæ•°é‡
 void GameData::ChangeSomeHandPai(BYTE station, BYTE pai[], BYTE handpai[], BYTE count)
 {
 	if (station < 0 || station >= PLAY_COUNT)
@@ -1166,9 +1166,9 @@ void GameData::ChangeSomeHandPai(BYTE station, BYTE pai[], BYTE handpai[], BYTE 
 	}
 }
 
-///Ãû³Æ£ºSetGameNextPai
-///ÉèÖÃÅÆÇ½µÄÏÂÒ»ÕÅÅÆ
-///@param  pai ÅÆ
+///åç§°ï¼šSetGameNextPai
+///è®¾ç½®ç‰Œå¢™çš„ä¸‹ä¸€å¼ ç‰Œ
+///@param  pai ç‰Œ
 void GameData::SetGameNextPai(BYTE pai)
 {
 	if (m_MenPai.byStartIndex == 255)

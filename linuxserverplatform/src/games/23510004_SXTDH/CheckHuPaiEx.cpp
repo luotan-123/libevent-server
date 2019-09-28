@@ -11,28 +11,28 @@ CheckHuPaiEx::CheckHuPaiEx(void)
 CheckHuPaiEx::~CheckHuPaiEx(void)
 {
 }
-//³õÊ¼»¯Êı¾İ
+//åˆå§‹åŒ–æ•°æ®
 void CheckHuPaiEx::InitData()
 {
 	CheckHuPai::InitData();
 	memset(m_iHuFenType, 0, sizeof(m_iHuFenType));
-	m_byTingMaxFan = 0;//ÌıÅÆ¿ÉÄÜµÄ×î´ó·¬
+	m_byTingMaxFan = 0;//å¬ç‰Œå¯èƒ½çš„æœ€å¤§ç•ª
 }
 
-//ºıÅÆ                                              ºúÅÆÍæ¼Ò      ·ÅÅÚÍæ¼Ò
+//ç³Šç‰Œ                                              èƒ¡ç‰Œç©å®¶      æ”¾ç‚®ç©å®¶
 bool CheckHuPaiEx::CanHu(GameDataEx *pGameData, BYTE station, BYTE byBeStation, BYTE lastpai, bool zimo)
 {
-	// Í³¼ÆÏûºÄ
-	//WAUTOCOST("CanHuºÄÊ± Íæ¼Ò%d ·ÅÅÚ:%d", station, byBeStation);
-	//·Ç×ÔÃşµÄÇé¿öÏÂ£¬Íæ¼ÒÆúºı×´Ì¬,²»ÄÜÆúÏÈºıºó
+	// ç»Ÿè®¡æ¶ˆè€—
+	//WAUTOCOST("CanHuè€—æ—¶ ç©å®¶%d æ”¾ç‚®:%d", station, byBeStation);
+	//éè‡ªæ‘¸çš„æƒ…å†µä¸‹ï¼Œç©å®¶å¼ƒç³ŠçŠ¶æ€,ä¸èƒ½å¼ƒå…ˆç³Šå
 	if (pGameData->m_mjAction.bQxHh && !zimo && pGameData->m_bQiHu[station])
 	{
 		return false;
 	}
 	bool bHu = false;
-	///Íæ¼ÒÊÇ·ñ×ÔÃşºúÅÆ
+	///ç©å®¶æ˜¯å¦è‡ªæ‘¸èƒ¡ç‰Œ
 	m_bZimo = zimo;
-	//×îºó×ÔÃş»òµãÅÚµÄÅÆ
+	//æœ€åè‡ªæ‘¸æˆ–ç‚¹ç‚®çš„ç‰Œ
 	m_byLastPai = lastpai;
 	m_byStation = station;
 	m_byBeStation = byBeStation;
@@ -46,15 +46,15 @@ bool CheckHuPaiEx::CanHu(GameDataEx *pGameData, BYTE station, BYTE byBeStation, 
 			break;
 		}
 	}
-	///´ÓĞ¡µ½´óÅÅĞò
+	///ä»å°åˆ°å¤§æ’åº
 	CLogicBase::SelectSort(m_byArHandPai, HAND_CARD_NUM, false);
-	///»ñÈ¡Ò»¸±ÊÖÅÆµÄÖØÒªÊı¾İ
+	///è·å–ä¸€å‰¯æ‰‹ç‰Œçš„é‡è¦æ•°æ®
 	ChangeHandPaiData(pGameData, m_byArHandPai);
-	//Çå³ıºıÅÆÀàĞÍ
+	//æ¸…é™¤ç³Šç‰Œç±»å‹
 	ClearHupaiType(m_byHuType);
 
-	//ÓÉÓÚÆß¶ÔºÍÊ®ÈıçÛ²¢²»ÊôÓÚÆ½ºú£¬Æß¶ÔºÍÊ®ÈıçÛ±ØĞëµ¥¶À¼ì²â
-	if (CheckQiDuiEx(pGameData)) //Íæ·¨ÓĞÆß¶ÔÔò¼ì²â£¬ÎŞÔò×¢ÊÍ
+	//ç”±äºä¸ƒå¯¹å’Œåä¸‰å¹ºå¹¶ä¸å±äºå¹³èƒ¡ï¼Œä¸ƒå¯¹å’Œåä¸‰å¹ºå¿…é¡»å•ç‹¬æ£€æµ‹
+	if (CheckQiDuiEx(pGameData)) //ç©æ³•æœ‰ä¸ƒå¯¹åˆ™æ£€æµ‹ï¼Œæ— åˆ™æ³¨é‡Š
 	{
 		bHu = true;
 		if (CheckLongQiDui(pGameData))
@@ -64,7 +64,7 @@ bool CheckHuPaiEx::CanHu(GameDataEx *pGameData, BYTE station, BYTE byBeStation, 
 		else
 			SetAHupaiType(HUPAI_TYPE_QiDui, m_byHuType);
 	}
-	if (!bHu && CheckPingHu(pGameData))//Æ½ºı×éÅÆ
+	if (!bHu && CheckPingHu(pGameData))//å¹³ç³Šç»„ç‰Œ
 	{
 		bHu = true;
 		if (CheckQiangGangHe(pGameData))
@@ -72,22 +72,22 @@ bool CheckHuPaiEx::CanHu(GameDataEx *pGameData, BYTE station, BYTE byBeStation, 
 			SetAHupaiType(HUPAI_TYPE_QiangGang, m_byHuType);
 		}
 	}
-	if (!bHu && CheckShiSanYao(pGameData)) //Ê®ÈıçÛ
+	if (!bHu && CheckShiSanYao(pGameData)) //åä¸‰å¹º
 	{
 		bHu = true;
 		SetAHupaiType(HUPAI_TYPE_ShiSanYao, m_byHuType);
 	}
 	if (bHu)
 	{
-		memcpy(pGameData->T_CountFen.byHuType[m_byStation], m_byHuType, sizeof(pGameData->T_CountFen.byHuType[m_byStation]));//ºúÅÆÀàĞÍ
+		memcpy(pGameData->T_CountFen.byHuType[m_byStation], m_byHuType, sizeof(pGameData->T_CountFen.byHuType[m_byStation]));//èƒ¡ç‰Œç±»å‹
 	}
 	return bHu;
 }
 
-//¼ÆËãºú·Ö£¬»ñÈ¡ºúÅÆÀàĞÍ
+//è®¡ç®—èƒ¡åˆ†ï¼Œè·å–èƒ¡ç‰Œç±»å‹
 void CheckHuPaiEx::CountHuFen(GameDataEx *pGameData)
 {
-	//×îºó×ÔÃş»òµãÅÚµÄÅÆ
+	//æœ€åè‡ªæ‘¸æˆ–ç‚¹ç‚®çš„ç‰Œ
 	BYTE byBeStation = pGameData->T_HuPai.byFangPao;
 	bool bZimo = pGameData->T_HuPai.bZimo;
 	BYTE byStation = pGameData->T_HuPai.byHu;
@@ -95,24 +95,24 @@ void CheckHuPaiEx::CountHuFen(GameDataEx *pGameData)
 	memset(byHuType, 255, sizeof(byHuType));
 	memset(pGameData->T_CountFen.iFanCount, 0, sizeof(pGameData->T_CountFen.iFanCount));
 	memset(m_iHuFenType, 0, sizeof(m_iHuFenType));
-	int iFanNum = 1;//·­±¶
-	int iShuFen = 0;//Êä·Ö
-	if (pGameData->T_HuPai.bZimo)//×ÔÃş
+	int iFanNum = 1;//ç¿»å€
+	int iShuFen = 0;//è¾“åˆ†
+	if (pGameData->T_HuPai.bZimo)//è‡ªæ‘¸
 	{
 		pGameData->T_CountFen.byUserNums++;
 		pGameData->T_CountFen.bIsHu[byStation] = true;
-		//Ô¤ÅĞËãºú·ÖÊ±ºò¼ì²âºúÅÆÀàĞÍ£¬ÕâÀïÖ±½ÓÓÃ¡£
+		//é¢„åˆ¤ç®—èƒ¡åˆ†æ—¶å€™æ£€æµ‹èƒ¡ç‰Œç±»å‹ï¼Œè¿™é‡Œç›´æ¥ç”¨ã€‚
 		memcpy(byHuType, pGameData->T_CountFen.byHuType[byStation], sizeof(byHuType));
 		iFanNum = GetHuTypeFans(pGameData, byHuType);
 		int iCountScore = 3;
-		if (iFanNum == 1) //×ÔÃşÆ¨ºú
+		if (iFanNum == 1) //è‡ªæ‘¸å±èƒ¡
 		{
 			iCountScore = pGameData->m_tGameRuler.iZiMoScore;
 		}
 
 		pGameData->T_CountFen.iFanCount[byStation] = iFanNum * iCountScore;
 		iShuFen = 0;
-		for (int i = 0;i < PLAY_COUNT;i++) //ÏÈËã¸÷Íæ¼ÒÊä·Ö
+		for (int i = 0;i < PLAY_COUNT;i++) //å…ˆç®—å„ç©å®¶è¾“åˆ†
 		{
 			int iFen = 0;
 			if (byStation == i)
@@ -135,15 +135,15 @@ void CheckHuPaiEx::CountHuFen(GameDataEx *pGameData)
 			{
 				pGameData->T_CountFen.byUserNums++;
 				pGameData->T_CountFen.bIsHu[i] = true;
-				//Ô¤ÅĞËãºú·ÖÊ±ºò¼ì²âºúÅÆÀàĞÍ£¬ÕâÀïÖ±½ÓÓÃ¡£
+				//é¢„åˆ¤ç®—èƒ¡åˆ†æ—¶å€™æ£€æµ‹èƒ¡ç‰Œç±»å‹ï¼Œè¿™é‡Œç›´æ¥ç”¨ã€‚
 				memcpy(byHuType, pGameData->T_CountFen.byHuType[i], sizeof(byHuType));
 				iFanNum = GetHuTypeFans(pGameData, byHuType);
 
-				if (pGameData->m_bTing[i]) //±¨Ìı3¼ÒÆ½·Ö
+				if (pGameData->m_bTing[i]) //æŠ¥å¬3å®¶å¹³åˆ†
 				{
 					pGameData->T_CountFen.iFanCount[i] = iFanNum;
 					iShuFen = 0;
-					for (int j = 0;j < PLAY_COUNT;j++) //ÏÈËã¸÷Íæ¼ÒÊä·Ö
+					for (int j = 0;j < PLAY_COUNT;j++) //å…ˆç®—å„ç©å®¶è¾“åˆ†
 					{
 						int iFen = 0;
 						if (j == i)
@@ -179,15 +179,15 @@ void CheckHuPaiEx::CountHuFen(GameDataEx *pGameData)
 		}
 	}
 
-	//Ëã·Ö¼ÆÊı
-	memcpy(pGameData->T_CountFen.iHuFenType, m_iHuFenType, sizeof(pGameData->T_CountFen.iHuFenType)); //ºú·Ö
+	//ç®—åˆ†è®¡æ•°
+	memcpy(pGameData->T_CountFen.iHuFenType, m_iHuFenType, sizeof(pGameData->T_CountFen.iHuFenType)); //èƒ¡åˆ†
 }
 
-//¸ù¾İºúÅÆÀàĞÍ£¬»ñÈ¡ºúÅÆ±¶Êı
+//æ ¹æ®èƒ¡ç‰Œç±»å‹ï¼Œè·å–èƒ¡ç‰Œå€æ•°
 int CheckHuPaiEx::GetHuTypeFans(GameDataEx *pGameData, BYTE byHuType[MAX_HUPAI_TYPE])
 {
 	int iFanNum = 1;
-	if (CheckHupaiType(HUPAI_TYPE_PingHu, byHuType) || !pGameData->m_tGameRuler.bDaHu) //Æ½ºú1·¬
+	if (CheckHupaiType(HUPAI_TYPE_PingHu, byHuType) || !pGameData->m_tGameRuler.bDaHu) //å¹³èƒ¡1ç•ª
 	{
 		return iFanNum;
 	}
@@ -195,17 +195,17 @@ int CheckHuPaiEx::GetHuTypeFans(GameDataEx *pGameData, BYTE byHuType[MAX_HUPAI_T
 	if (CheckHupaiType(HUPAI_TYPE_QiDui, byHuType) ||
 		CheckHupaiType(MJ_HUPAI_TYPE_QingYiSe, byHuType) ||
 		CheckHupaiType(MJ_HUPAI_TYPE_YI_TIAO_LONG, byHuType)
-		)//ÇåÒ»É«£¬ÆßĞ¡¶Ô£¬Ò»ÌõÁú
+		)//æ¸…ä¸€è‰²ï¼Œä¸ƒå°å¯¹ï¼Œä¸€æ¡é¾™
 	{
 		iFanNum = 3;
 	}
 
-	if (CheckHupaiType(HUPAI_TYPE_LongQiDui, byHuType))//ºÀ»ªÆß¶Ô
+	if (CheckHupaiType(HUPAI_TYPE_LongQiDui, byHuType))//è±ªåä¸ƒå¯¹
 	{
 		iFanNum = 6;
 	}
 
-	if (CheckHupaiType(MJ_HUPAI_TYPE_ShiSanYao, byHuType))//Ê®ÈıçÛ
+	if (CheckHupaiType(MJ_HUPAI_TYPE_ShiSanYao, byHuType))//åä¸‰å¹º
 	{
 		iFanNum = 9;
 	}
@@ -213,16 +213,16 @@ int CheckHuPaiEx::GetHuTypeFans(GameDataEx *pGameData, BYTE byHuType[MAX_HUPAI_T
 	return iFanNum;
 }
 
-//ÌáÈ¡ºıÅÆ
+//æå–ç³Šç‰Œ
 void CheckHuPaiEx::ExtractHu(GameDataEx *pGameData, BYTE station, BYTE byHuCard[])
 {
-	//// Í³¼ÆÏûºÄ
+	//// ç»Ÿè®¡æ¶ˆè€—
 	//LARGE_INTEGER BegainTime ;     
 	//LARGE_INTEGER EndTime ;     
 	//LARGE_INTEGER Frequency ;     
 	//QueryPerformanceFrequency(&Frequency);     
 	//QueryPerformanceCounter(&BegainTime) ;
-	m_bZimo = false;      //Íæ¼ÒÊÇ·ñ×ÔÃşºúÅÆ
+	m_bZimo = false;      //ç©å®¶æ˜¯å¦è‡ªæ‘¸èƒ¡ç‰Œ
 	m_byStation = station;
 	int iHuIndex = 0;
 	for (int i = 0;i < MAX_MJ_KIND_NUM;i++)
@@ -243,19 +243,19 @@ void CheckHuPaiEx::ExtractHu(GameDataEx *pGameData, BYTE station, BYTE byHuCard[
 			m_byArHandPai[iCardIndex++] = pGameData->m_byArHandPai[station][b];
 		}
 		m_byArHandPai[iCardIndex] = pGameData->m_byCardType[i];
-		///´ÓĞ¡µ½´óÅÅĞò
+		///ä»å°åˆ°å¤§æ’åº
 		CLogicBase::SelectSort(m_byArHandPai, HAND_CARD_NUM, false);
-		///ÅÆÊı¾İ×ª»»
+		///ç‰Œæ•°æ®è½¬æ¢
 		ChangeHandPaiData(pGameData, m_byArHandPai);
 		if (CheckQiDuiEx(pGameData))
 		{
 			bHu = true;
 		}
-		if (!bHu && CheckPingHu(pGameData))//Æ½ºı×éÅÆ
+		if (!bHu && CheckPingHu(pGameData))//å¹³ç³Šç»„ç‰Œ
 		{
 			bHu = true;
 		}
-		if (!bHu && CheckShiSanYao(pGameData)) //Ê®ÈıçÛ
+		if (!bHu && CheckShiSanYao(pGameData)) //åä¸‰å¹º
 		{
 			bHu = true;
 		}
@@ -264,16 +264,16 @@ void CheckHuPaiEx::ExtractHu(GameDataEx *pGameData, BYTE station, BYTE byHuCard[
 			byHuCard[iHuIndex++] = pGameData->m_byCardType[i];
 		}
 	}
-	////Êä³öÔËĞĞÊ±¼ä
+	////è¾“å‡ºè¿è¡Œæ—¶é—´
 	//QueryPerformanceCounter(&EndTime);
-	//GameLog::OutputFile("==ExtractHuºÄÊ±£º%.1f==",(double)( EndTime.QuadPart - BegainTime.QuadPart )/ Frequency.QuadPart * 1000000);
+	//GameLog::OutputFile("==ExtractHuè€—æ—¶ï¼š%.1f==",(double)( EndTime.QuadPart - BegainTime.QuadPart )/ Frequency.QuadPart * 1000000);
 }
 
-//´ÓÊÖÅÆÖĞ³öÒ»ÕÅÅÆ£¬È»ºóÌáÈ¡ÄÜºıµÄÅÆ
+//ä»æ‰‹ç‰Œä¸­å‡ºä¸€å¼ ç‰Œï¼Œç„¶åæå–èƒ½ç³Šçš„ç‰Œ
 bool CheckHuPaiEx::OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE byOutCanHuCard[HAND_CARD_NUM],
 	BYTE byHuCard[HAND_CARD_NUM][MAX_CANHU_CARD_NUM], BYTE byCardRemainNum[MAX_MJ_PAI])
 {
-	//// Í³¼ÆÏûºÄ
+	//// ç»Ÿè®¡æ¶ˆè€—
 	//LARGE_INTEGER BegainTime ;     
 	//LARGE_INTEGER EndTime ;     
 	//LARGE_INTEGER Frequency ;     
@@ -291,17 +291,17 @@ bool CheckHuPaiEx::OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE by
 	{
 		byTempCard[i] = pGameData->m_byArHandPai[station][i];
 	}
-	///´ÓĞ¡µ½´óÅÅĞò
+	///ä»å°åˆ°å¤§æ’åº
 	CLogicBase::SelectSort(byTempCard, HAND_CARD_NUM, false);
 	m_byStation = station;
 
-	//¿ªÊ¼¼ì²â
+	//å¼€å§‹æ£€æµ‹
 	int iCanHuCardIndex = 0;
 	for (int j = 0; j < HAND_CARD_NUM; j++)
 	{
 		if (byTempCard[j] == 255 || byTempCard[j] == byTestCard_)
 			continue;
-		//½«ÕâÕÅÅÆ´ò³ö
+		//å°†è¿™å¼ ç‰Œæ‰“å‡º
 		byTestCard_ = byTempCard[j];
 		byTempCard[j] = 255;
 		int iHuIndex = 0;
@@ -323,19 +323,19 @@ bool CheckHuPaiEx::OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE by
 				m_byArHandPai[iCardIndex++] = byTempCard[b];
 			}
 			m_byArHandPai[iCardIndex] = pGameData->m_byCardType[i];
-			///´ÓĞ¡µ½´óÅÅĞò
+			///ä»å°åˆ°å¤§æ’åº
 			CLogicBase::SelectSort(m_byArHandPai, HAND_CARD_NUM, false);
-			///ÅÆÊı¾İ×ª»»
+			///ç‰Œæ•°æ®è½¬æ¢
 			ChangeHandPaiData(pGameData, m_byArHandPai);
 			if (CheckQiDuiEx(pGameData))
 			{
 				bHu = true;
 			}
-			if (!bHu && CheckPingHu(pGameData))//Æ½ºı×éÅÆ
+			if (!bHu && CheckPingHu(pGameData))//å¹³ç³Šç»„ç‰Œ
 			{
 				bHu = true;
 			}
-			if (!bHu && CheckShiSanYao(pGameData)) //Ê®ÈıçÛ
+			if (!bHu && CheckShiSanYao(pGameData)) //åä¸‰å¹º
 			{
 				bHu = true;
 			}
@@ -350,11 +350,11 @@ bool CheckHuPaiEx::OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE by
 		{
 			iCanHuCardIndex++;
 		}
-		//»Ö¸´ÖØĞÂ¼ì²â
+		//æ¢å¤é‡æ–°æ£€æµ‹
 		byTempCard[j] = byTestCard_;
 	}
 
-	//¼ÆËãÃ¿ÕÅÅÆµÄÊ£ÓàÊıÁ¿
+	//è®¡ç®—æ¯å¼ ç‰Œçš„å‰©ä½™æ•°é‡
 	BYTE byTempAllOutCardNum[MAX_MJ_PAI];
 	memcpy(byTempAllOutCardNum, pGameData->m_byAllOutCardNum, sizeof(byTempAllOutCardNum));
 	for (int i = 0; i < HAND_CARD_NUM; i++)
@@ -383,23 +383,23 @@ bool CheckHuPaiEx::OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE by
 	{
 		bCanTing_ = true;
 	}
-	////Êä³öÔËĞĞÊ±¼ä
+	////è¾“å‡ºè¿è¡Œæ—¶é—´
 	//QueryPerformanceCounter(&EndTime);
-	//GameLog::OutputFile("==OutCardExtractHuºÄÊ±£º%.1fÎ¢Ãî==",(double)( EndTime.QuadPart - BegainTime.QuadPart )/ Frequency.QuadPart * 1000000);
+	//GameLog::OutputFile("==OutCardExtractHuè€—æ—¶ï¼š%.1få¾®å¦™==",(double)( EndTime.QuadPart - BegainTime.QuadPart )/ Frequency.QuadPart * 1000000);
 	/*CString str;
 	for (int i = 0; i < HAND_CARD_NUM; i++)
 	{
 	if (byOutCanHuCard[i] == 255)
 	continue;
 	CString str1;
-	str1.Format("$$´ò³ö(%d,%d)Ìı::",i,byOutCanHuCard[i]);
+	str1.Format("$$æ‰“å‡º(%d,%d)å¬::",i,byOutCanHuCard[i]);
 	str += str1;
 	for (int j = 0; j < MAX_MJ_KIND_NUM;j++)
 	{
 	if (byHuCard[i][j] == 255)
 	break;
 	CString str2 = "";
-	str2.Format("[ºú:%d]",byHuCard[i][j]);
+	str2.Format("[èƒ¡:%d]",byHuCard[i][j]);
 	str += str1;
 	}
 	}
@@ -407,7 +407,7 @@ bool CheckHuPaiEx::OutCardExtractHu(GameDataEx *pGameData, BYTE station, BYTE by
 	return bCanTing_;
 }
 
-//½«½«ºú
+//å°†å°†èƒ¡
 bool	CheckHuPaiEx::CheckAllJiang(GameDataEx *pGameData)
 {
 	for (int i = 0;i < m_tHuPaiStruct.count;++i)
@@ -425,7 +425,7 @@ bool	CheckHuPaiEx::CheckAllJiang(GameDataEx *pGameData)
 		pai = pGameData->m_UserGCPData[m_byStation][i].byData[0];
 		switch (pGameData->m_UserGCPData[m_byStation][i].byType)
 		{
-		case ACTION_CHI://³ÔÅÆ¶¯×÷
+		case ACTION_CHI://åƒç‰ŒåŠ¨ä½œ
 		{
 			return false;
 			break;
@@ -446,7 +446,7 @@ bool	CheckHuPaiEx::CheckAllJiang(GameDataEx *pGameData)
 	return true;
 }
 
-///¼ÆËãÆß¶ÔÖĞËÄÕÅÅÆµÄÊıÁ¿
+///è®¡ç®—ä¸ƒå¯¹ä¸­å››å¼ ç‰Œçš„æ•°é‡
 int CheckHuPaiEx::CountLongQi()
 {
 	int count = 0;
@@ -459,7 +459,7 @@ int CheckHuPaiEx::CountLongQi()
 	return count;
 }
 
-///¼ÆËãÆß¶ÔÖĞËÄÕÅÅÆµÄÊıÁ¿
+///è®¡ç®—ä¸ƒå¯¹ä¸­å››å¼ ç‰Œçš„æ•°é‡
 bool CheckHuPaiEx::CheckHuGen(BYTE lastpai)
 {
 	if (lastpai == 255)
@@ -469,10 +469,10 @@ bool CheckHuPaiEx::CheckHuGen(BYTE lastpai)
 	return false;
 }
 
-//Æß¶Ô£ºÓÉ7¸ö¶Ô×Ó×é³ÉºÍÅÆ¡£²»ÄÜÓĞ»ìÅÆ³äµ±
+//ä¸ƒå¯¹ï¼šç”±7ä¸ªå¯¹å­ç»„æˆå’Œç‰Œã€‚ä¸èƒ½æœ‰æ··ç‰Œå……å½“
 bool CheckHuPaiEx::CheckQiDuiEx(GameDataEx *pGameData)
 {
-	if (pGameData->GetGCPCount(m_byStation) > 0)//²»ÄÜÓĞ³ÔÅö¸Ü
+	if (pGameData->GetGCPCount(m_byStation) > 0)//ä¸èƒ½æœ‰åƒç¢°æ 
 	{
 		return false;
 	}
@@ -487,9 +487,9 @@ bool CheckHuPaiEx::CheckQiDuiEx(GameDataEx *pGameData)
 	return true;
 }
 
-///ÃèÊö£º¼ì²âÄÜ·ñÌıÅÆ
-///@param  handpai[] ÊÖÅÆÊı×é, pai ×îºóÒ»ÕÅÅÆ, gcpData[] ³ÔÅö¸ÜÊı×é, MainJing Õı¾«, LessJing ¸±¾«, CanOut[] ´ò³öºóÄÜÌıÅÆµÄÅÆ£¨¿ÉÒÔÓĞ¶àÕÅ£©
-///@return true ÄÜÌı£¬false ²»ÄÜÌı
+///æè¿°ï¼šæ£€æµ‹èƒ½å¦å¬ç‰Œ
+///@param  handpai[] æ‰‹ç‰Œæ•°ç»„, pai æœ€åä¸€å¼ ç‰Œ, gcpData[] åƒç¢°æ æ•°ç»„, MainJing æ­£ç²¾, LessJing å‰¯ç²¾, CanOut[] æ‰“å‡ºåèƒ½å¬ç‰Œçš„ç‰Œï¼ˆå¯ä»¥æœ‰å¤šå¼ ï¼‰
+///@return true èƒ½å¬ï¼Œfalse ä¸èƒ½å¬
 bool CheckHuPaiEx::CanTing(GameDataEx *pGameData, BYTE station, BYTE CanOut[])
 {
 	if (station<0 || station>PLAY_COUNT)
@@ -543,19 +543,19 @@ bool CheckHuPaiEx::CanTing(GameDataEx *pGameData, BYTE station, BYTE CanOut[])
 		memcpy(m_byArHandPai, byTempArHandPai, sizeof(BYTE)*temp);
 		/*m_byArHandPai[temp]=byCardType[b];
 		m_byLastPai = byCardType[b];*/
-		///´ÓĞ¡µ½´óÅÅĞò
+		///ä»å°åˆ°å¤§æ’åº
 		CLogicBase::SelectSort(m_byArHandPai, HAND_CARD_NUM, false);
-		///ÅÆÊı¾İ×ª»»
+		///ç‰Œæ•°æ®è½¬æ¢
 		ChangeHandPaiData(pGameData, m_byArHandPai);
 		m_byJingNum++;
 
-		//ºúÅÆ¼ì²â
+		//èƒ¡ç‰Œæ£€æµ‹
 		if (CheckQiDui(pGameData))
 		{
 			CanOut[iCanNum++] = byOutPai;
 			bTing = true;
 		}
-		else if (CheckPingHu(pGameData))//Æ½ºı×éÅÆ
+		else if (CheckPingHu(pGameData))//å¹³ç³Šç»„ç‰Œ
 		{
 			CanOut[iCanNum++] = byOutPai;
 			bTing = true;
@@ -566,7 +566,7 @@ bool CheckHuPaiEx::CanTing(GameDataEx *pGameData, BYTE station, BYTE CanOut[])
 	return bTing;
 }
 
-//»ñÈ¡Ò»ÕÅ¿ÉÌıµÄÅÆ
+//è·å–ä¸€å¼ å¯å¬çš„ç‰Œ
 BYTE CheckHuPaiEx::GetCanTingCard(GameDataEx *pGameData, BYTE station)
 {
 	if (station<0 || station>PLAY_COUNT)
@@ -615,12 +615,12 @@ BYTE CheckHuPaiEx::GetCanTingCard(GameDataEx *pGameData, BYTE station)
 		memcpy(m_byArHandPai, byTempArHandPai, sizeof(BYTE)*temp);
 		/*m_byArHandPai[temp]=byCardType[b];
 		m_byLastPai = byCardType[b];*/
-		///´ÓĞ¡µ½´óÅÅĞò
+		///ä»å°åˆ°å¤§æ’åº
 		CLogicBase::SelectSort(m_byArHandPai, HAND_CARD_NUM, false);
-		///ÅÆÊı¾İ×ª»»
+		///ç‰Œæ•°æ®è½¬æ¢
 		ChangeHandPaiData(pGameData, m_byArHandPai);
 		m_byJingNum++;
-		if (CheckPingHu(pGameData))//Æ½ºı×éÅÆ
+		if (CheckPingHu(pGameData))//å¹³ç³Šç»„ç‰Œ
 		{
 			return byOutPai;
 		}
@@ -629,12 +629,12 @@ BYTE CheckHuPaiEx::GetCanTingCard(GameDataEx *pGameData, BYTE station)
 	return 255;
 }
 
-//¼ì²âÁ½·ùÊÖÅÆµÄºúÅÆÊÇ·ñ¸Ä±ä
+//æ£€æµ‹ä¸¤å¹…æ‰‹ç‰Œçš„èƒ¡ç‰Œæ˜¯å¦æ”¹å˜
 bool CheckHuPaiEx::IsTingKouChange(GameDataEx *pGameData, BYTE station, BYTE byChangeCard[HAND_CARD_NUM])
 {
-	BYTE byHuCard[MAX_CANHU_CARD_NUM]; //¿ÉºúµÄÅÆ
+	BYTE byHuCard[MAX_CANHU_CARD_NUM]; //å¯èƒ¡çš„ç‰Œ
 	memset(byHuCard, 255, sizeof(byHuCard));
-	m_bZimo = false;      //Íæ¼ÒÊÇ·ñ×ÔÃşºúÅÆ
+	m_bZimo = false;      //ç©å®¶æ˜¯å¦è‡ªæ‘¸èƒ¡ç‰Œ
 	m_byStation = station;
 	int iHuIndex = 0;
 	for (int i = 0;i < MAX_MJ_KIND_NUM;i++)
@@ -655,19 +655,19 @@ bool CheckHuPaiEx::IsTingKouChange(GameDataEx *pGameData, BYTE station, BYTE byC
 			m_byArHandPai[iCardIndex++] = byChangeCard[b];
 		}
 		m_byArHandPai[iCardIndex] = pGameData->m_byCardType[i];
-		///´ÓĞ¡µ½´óÅÅĞò
+		///ä»å°åˆ°å¤§æ’åº
 		CLogicBase::SelectSort(m_byArHandPai, HAND_CARD_NUM, false);
-		///ÅÆÊı¾İ×ª»»
+		///ç‰Œæ•°æ®è½¬æ¢
 		ChangeHandPaiData(pGameData, m_byArHandPai);
 		if (CheckQiDuiEx(pGameData))
 		{
 			bHu = true;
 		}
-		if (!bHu && CheckPingHu(pGameData))//Æ½ºı×éÅÆ
+		if (!bHu && CheckPingHu(pGameData))//å¹³ç³Šç»„ç‰Œ
 		{
 			bHu = true;
 		}
-		if (!bHu && CheckShiSanYao(pGameData)) //Ê®ÈıçÛ
+		if (!bHu && CheckShiSanYao(pGameData)) //åä¸‰å¹º
 		{
 			bHu = true;
 		}
@@ -677,9 +677,9 @@ bool CheckHuPaiEx::IsTingKouChange(GameDataEx *pGameData, BYTE station, BYTE byC
 		}
 	}
 
-	//±È½ÏÁ½¸öÌıÅÆÊı×é
-	///´ÓĞ¡µ½´óÅÅĞò
-	BYTE byHuCard__[MAX_CANHU_CARD_NUM]; //¿ÉºúµÄÅÆ
+	//æ¯”è¾ƒä¸¤ä¸ªå¬ç‰Œæ•°ç»„
+	///ä»å°åˆ°å¤§æ’åº
+	BYTE byHuCard__[MAX_CANHU_CARD_NUM]; //å¯èƒ¡çš„ç‰Œ
 	memcpy(byHuCard__, pGameData->m_byOutAfterHuCard[station], sizeof(byHuCard__));
 	CLogicBase::SelectSort(byHuCard, MAX_CANHU_CARD_NUM, false);
 	CLogicBase::SelectSort(byHuCard__, MAX_CANHU_CARD_NUM, false);

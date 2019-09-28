@@ -4,251 +4,251 @@
 #include "CLogicBase.h"
 #include "mj.h"
 
-///ºıÅÆ¼ì²âÀà
+///ç³Šç‰Œæ£€æµ‹ç±»
 class CheckHuPai
 {
 public:
-	///ºıÅÆÊı½á¹¹Êı×é
+	///ç³Šç‰Œæ•°ç»“æ„æ•°ç»„
 	PingHuStruct	m_tHuPaiStruct;
-	///ºıÅÆÊı½á¹¹Êı×é
+	///ç³Šç‰Œæ•°ç»“æ„æ•°ç»„
 	PingHuStruct	m_tTempHupaistruct;
-	///ºıÅÆ¼ì²âÁÙÊ±Êı¾İ
+	///ç³Šç‰Œæ£€æµ‹ä¸´æ—¶æ•°æ®
 	CheckHuStruct	m_tHuTempData;
-	///ºıÅÆ¼ì²âÁÙÊ±Êı¾İ(ÎŞ²ÆÉñ)
+	///ç³Šç‰Œæ£€æµ‹ä¸´æ—¶æ•°æ®(æ— è´¢ç¥)
 	CheckHuStruct	m_tNoJingHuTempData;
-	///µ±Ç°¼ì²âÍæ¼ÒµÄÎ»ÖÃ
+	///å½“å‰æ£€æµ‹ç©å®¶çš„ä½ç½®
 	BYTE            m_byStation;
-	///Íæ¼ÒÊÇ·ñ×ÔÃşºúÅÆ
+	///ç©å®¶æ˜¯å¦è‡ªæ‘¸èƒ¡ç‰Œ
 	bool            m_bZimo;
-	///¾«ÅÆ×ÜÊı
+	///ç²¾ç‰Œæ€»æ•°
 	BYTE			m_byJingNum;
-	///ºıÅÆÀàĞÍ
+	///ç³Šç‰Œç±»å‹
 	BYTE			m_byHuType[MAX_HUPAI_TYPE];
-	//µ±Ç°×î´ó·¬ÊıÖµ
+	//å½“å‰æœ€å¤§ç•ªæ•°å€¼
 	int				m_iMaxFan;
-	//×îºó×ÔÃş»òµãÅÚµÄÅÆ
+	//æœ€åè‡ªæ‘¸æˆ–ç‚¹ç‚®çš„ç‰Œ
 	BYTE			m_byLastPai;
-	//·ÅÅÚÍæ¼ÒÎ»ÖÃ
+	//æ”¾ç‚®ç©å®¶ä½ç½®
 	BYTE			m_byBeStation;
-	//ÊÖÅÆ²»³¬¹ı20ÕÅ£¬0Îª½áÊø±êÖ¾
+	//æ‰‹ç‰Œä¸è¶…è¿‡20å¼ ï¼Œ0ä¸ºç»“æŸæ ‡å¿—
 	BYTE			m_byArHandPai[HAND_CARD_NUM];
-	///×éÅÆÊı¾İ
-	BYTE		   m_byShunNum;			//Ë³×ÓµÄ¸öÊı
-	BYTE           m_byShunData[MAX_CPG_NUM];//Ë³×ÓµÄÊı¾İ
-	BYTE		   m_byKeziNum;			//¿Ì×ÓµÄ¸öÊı
-	BYTE           m_byKeziData[MAX_CPG_NUM];//¿Ì×ÓµÄÊı¾İ
-	BYTE		   m_byGangNum;			//¸ÜÅÆµÄ¸öÊı
-	BYTE           m_byGangData[MAX_CPG_NUM][2];//¸ÜÅÆµÄÊı¾İ
-	BYTE		   m_byJiang;			//½«ÅÆÊı¾İ
-	BYTE		   m_byChiNum;			//³ÔÅÆµÄ¸öÊı
-	BYTE		   m_byPengNum;			//ÅöÅÆµÄ¸öÊı
-	BYTE           m_byTypeFans[MAX_HUPAI_TYPE];//ÀàĞÍ·¬Êı	
+	///ç»„ç‰Œæ•°æ®
+	BYTE		   m_byShunNum;			//é¡ºå­çš„ä¸ªæ•°
+	BYTE           m_byShunData[MAX_CPG_NUM];//é¡ºå­çš„æ•°æ®
+	BYTE		   m_byKeziNum;			//åˆ»å­çš„ä¸ªæ•°
+	BYTE           m_byKeziData[MAX_CPG_NUM];//åˆ»å­çš„æ•°æ®
+	BYTE		   m_byGangNum;			//æ ç‰Œçš„ä¸ªæ•°
+	BYTE           m_byGangData[MAX_CPG_NUM][2];//æ ç‰Œçš„æ•°æ®
+	BYTE		   m_byJiang;			//å°†ç‰Œæ•°æ®
+	BYTE		   m_byChiNum;			//åƒç‰Œçš„ä¸ªæ•°
+	BYTE		   m_byPengNum;			//ç¢°ç‰Œçš„ä¸ªæ•°
+	BYTE           m_byTypeFans[MAX_HUPAI_TYPE];//ç±»å‹ç•ªæ•°	
 
-	BYTE		   m_byHandShunNum;			//ÊÖÖĞË³×ÓµÄ¸öÊı£¬²»°üÀ¨³Ô
-	BYTE           m_byHandShunData[MAX_CPG_NUM];//Ë³×ÓµÄÊı¾İ£¬²»°üÀ¨³Ô
+	BYTE		   m_byHandShunNum;			//æ‰‹ä¸­é¡ºå­çš„ä¸ªæ•°ï¼Œä¸åŒ…æ‹¬åƒ
+	BYTE           m_byHandShunData[MAX_CPG_NUM];//é¡ºå­çš„æ•°æ®ï¼Œä¸åŒ…æ‹¬åƒ
 public:
 	CheckHuPai(void);
 	~CheckHuPai(void);
-	///³õÊ¼»¯Êı¾İ
+	///åˆå§‹åŒ–æ•°æ®
 	virtual void InitData();
 
-	//////////////////////////////////////////////////////////////////////////Æ½ºú
-	//»ñÈ¡ºúÅÆÀàĞÍ
-	///Æ½ºú£º»ñÈ¡×î´óµÄ×éºÏÅÆĞÍ
+	//////////////////////////////////////////////////////////////////////////å¹³èƒ¡
+	//è·å–èƒ¡ç‰Œç±»å‹
+	///å¹³èƒ¡ï¼šè·å–æœ€å¤§çš„ç»„åˆç‰Œå‹
 	virtual bool GetHuPaiTypes(GameDataEx *pGameData, bool zimo);
 
-	///¼ì²âÄÜ·ñÌıÅÆ
+	///æ£€æµ‹èƒ½å¦å¬ç‰Œ
 	virtual bool CanTing(GameDataEx *pGameData, BYTE station, BYTE CanOut[]);
 
-	///¼ì²âÄÜ·ñ³ÔÌıÅÆ£º³ÔºóÌıÅÆ
+	///æ£€æµ‹èƒ½å¦åƒå¬ç‰Œï¼šåƒåå¬ç‰Œ
 	virtual bool ChiTing(GameDataEx *pGameData, BYTE station, BYTE CanOut[], BYTE pai[][3]);
 
-	///¼ì²â¸ÜºóÄÜ·ñ±£´æÌıÅÆ×´Ì¬
+	///æ£€æµ‹æ åèƒ½å¦ä¿å­˜å¬ç‰ŒçŠ¶æ€
 	virtual bool GangTing(GameDataEx *pGameData, BYTE station, tagCPGNotify &cpg, BYTE ps = 255, bool CanTing[] = NULL);
 
-	//¼ì²âºıÅÆ
+	//æ£€æµ‹ç³Šç‰Œ
 	virtual bool CanHu(GameDataEx *pGameData, BYTE station, BYTE lastpai, bool zimo);
 
-	///½«³ÔÅö¸ÜÊı¾İ¼ÓÈëµ½ºıÅÆ½á¹¹ÖĞ
+	///å°†åƒç¢°æ æ•°æ®åŠ å…¥åˆ°ç³Šç‰Œç»“æ„ä¸­
 	virtual void AddGCPData(TCPGStruct gcpData[], PingHuStruct * tempstruct);
 
-	///×ª»»ÊÖÅÆÊı¾İµÄ´æ´¢·½Ê½£¬ÎªÁË·½±ãºıÅÆ¼ì²â
+	///è½¬æ¢æ‰‹ç‰Œæ•°æ®çš„å­˜å‚¨æ–¹å¼ï¼Œä¸ºäº†æ–¹ä¾¿ç³Šç‰Œæ£€æµ‹
 	virtual void ChangeHandPaiData(GameDataEx *pGameData, BYTE handpai[]);
 
-	///×ª»»ÊÖÅÆÊı¾İµÄ´æ´¢·½Ê½£¬ÎªÁË·½±ãºıÅÆ¼ì²â
+	///è½¬æ¢æ‰‹ç‰Œæ•°æ®çš„å­˜å‚¨æ–¹å¼ï¼Œä¸ºäº†æ–¹ä¾¿ç³Šç‰Œæ£€æµ‹
 	virtual void ChangeHandPaiDataEx(GameDataEx *pGameData, BYTE handpai[]);
 
-	///Ìí¼ÓÒ»ÕÅÅÆµ½ÁÙÊ±Êı×éÖĞ
+	///æ·»åŠ ä¸€å¼ ç‰Œåˆ°ä¸´æ—¶æ•°ç»„ä¸­
 	virtual void AddAPaiToArr(BYTE pai);
 
-	///Æ½ºı¼ì²â
+	///å¹³ç³Šæ£€æµ‹
 	virtual bool CheckPingHu(GameDataEx *pGameData);
 
-	///ÉèÖÃ¾«ÅÆ
+	///è®¾ç½®ç²¾ç‰Œ
 	virtual void SetJingPai();
 
-	///»Ö¸´¾«ÅÆ
+	///æ¢å¤ç²¾ç‰Œ
 	virtual void ReSetJingPai();
 
-	///Æ½ºı×éÅÆ
+	///å¹³ç³Šç»„ç‰Œ
 	virtual bool MakePingHu(GameDataEx *pGameData, CheckHuStruct &PaiData, PingHuStruct &m_tHuPaiStruct, int iJingnum = 0);
 
-	///»Ö¸´ÅÆÊı,°Ñ¼õµôµÄÅÆ»¹Ô­
+	///æ¢å¤ç‰Œæ•°,æŠŠå‡æ‰çš„ç‰Œè¿˜åŸ
 	virtual void ReSetPaiNum(BYTE num[], CheckHuStruct &TempPai);
 
-	///¼ì²âÁ¬ÅÆÊÇ·ñÍ¬Ò»»¨É«
+	///æ£€æµ‹è¿ç‰Œæ˜¯å¦åŒä¸€èŠ±è‰²
 	virtual bool CheckTongSe(BYTE pai1, BYTE pai2);
 
-	///¼ì²âÁ¬ÅÆÊÇ·ñÁ¬ÕÅ
+	///æ£€æµ‹è¿ç‰Œæ˜¯å¦è¿å¼ 
 	virtual bool CheckLianPai(GameDataEx *pGameData, BYTE pai1, BYTE pai2, BYTE num = 1);
 
-	///ÃèÊö£ºÇå³ı×éÅÆÊı¾İ
+	///æè¿°ï¼šæ¸…é™¤ç»„ç‰Œæ•°æ®
 	virtual void ClearPingHuData();
 
-	///¼ì²âÆ½ºıÊı¾İ×éºÏ£º½«ÅÆ£¬³Ô£¬Åö¸Ü£¬Ë³×Ó£¬°µ¿ÌµÈ
+	///æ£€æµ‹å¹³ç³Šæ•°æ®ç»„åˆï¼šå°†ç‰Œï¼Œåƒï¼Œç¢°æ ï¼Œé¡ºå­ï¼Œæš—åˆ»ç­‰
 	virtual void CheckPingHuData(GameDataEx *pGameData);
 
-	///Ìí¼ÓÒ»ÖÖºıÅÆÀàĞÍ
+	///æ·»åŠ ä¸€ç§ç³Šç‰Œç±»å‹
 	virtual void SetAHupaiType(BYTE type, BYTE hupai[]);
 
-	///³·ÏúÒ»ÖÖºıÅÆÀàĞÍ
+	///æ’¤é”€ä¸€ç§ç³Šç‰Œç±»å‹
 	virtual void ReSetAHupaiType(BYTE type, BYTE hupai[]);
 
-	///ÃèÊö£ºÇå³ıËùÓĞºıÅÆÀàĞÍ
+	///æè¿°ï¼šæ¸…é™¤æ‰€æœ‰ç³Šç‰Œç±»å‹
 	virtual void ClearHupaiType(BYTE hupai[]);
 
-	///¼ì²âÊÇ·ñ´æÔÚÄ³ÖÖºıÅÆÀàĞÍ
+	///æ£€æµ‹æ˜¯å¦å­˜åœ¨æŸç§ç³Šç‰Œç±»å‹
 	virtual bool CheckHupaiType(BYTE type, BYTE hupai[]);
 
-	/////////////////ÏêÏ¸ºıÅÆÀàĞÍ¼ì²â///////////////////////////////////////
-	virtual bool CheckTianHu(GameDataEx *pGameData);//Ììºı
-	virtual bool CheckDiHu(GameDataEx *pGameData);//µØºı	
+	/////////////////è¯¦ç»†ç³Šç‰Œç±»å‹æ£€æµ‹///////////////////////////////////////
+	virtual bool CheckTianHu(GameDataEx *pGameData);//å¤©ç³Š
+	virtual bool CheckDiHu(GameDataEx *pGameData);//åœ°ç³Š	
 
-	//88·¬ÅÆĞÍ£¨5ÖÖ£©
-	virtual bool CheckDaSiXi();//´óËÄÏ²
-	virtual bool CheckDaSanYuan();//´óÈıÔª
-	virtual bool CheckSiGang();//ËÄ¸Ü£¨Ê®°ËÂŞºº£©
-	virtual bool CheckJiuLianBaoDeng(GameDataEx *pGameData);//¾ÅÁ«±¦µÆ	
-	virtual bool CheckLianQiDui(GameDataEx *pGameData);//Á¬Æß¶Ô£¨Æß¶ÔµÄÌØÊâ£©
+	//88ç•ªç‰Œå‹ï¼ˆ5ç§ï¼‰
+	virtual bool CheckDaSiXi();//å¤§å››å–œ
+	virtual bool CheckDaSanYuan();//å¤§ä¸‰å…ƒ
+	virtual bool CheckSiGang();//å››æ ï¼ˆåå…«ç½—æ±‰ï¼‰
+	virtual bool CheckJiuLianBaoDeng(GameDataEx *pGameData);//ä¹è²å®ç¯	
+	virtual bool CheckLianQiDui(GameDataEx *pGameData);//è¿ä¸ƒå¯¹ï¼ˆä¸ƒå¯¹çš„ç‰¹æ®Šï¼‰
 
-	//64·¬ÅÆĞÍ£¨5ÖÖ£©
-	virtual bool CheckXiaoSiXi();//Ğ¡ËÄÏ²
-	virtual bool CheckXiaoSanYuan();//Ğ¡ÈıÔª	
-	virtual bool CheckZiYiSe(GameDataEx *pGameData);//×ÖÒ»É«	
-	virtual bool CheckSiAnKe(GameDataEx *pGameData);//ËÄ°µ¿Ì
-	virtual bool CheckYiSeShuangLongHui();//Ò»É«Ë«Áú»á	
+	//64ç•ªç‰Œå‹ï¼ˆ5ç§ï¼‰
+	virtual bool CheckXiaoSiXi();//å°å››å–œ
+	virtual bool CheckXiaoSanYuan();//å°ä¸‰å…ƒ	
+	virtual bool CheckZiYiSe(GameDataEx *pGameData);//å­—ä¸€è‰²	
+	virtual bool CheckSiAnKe(GameDataEx *pGameData);//å››æš—åˆ»
+	virtual bool CheckYiSeShuangLongHui();//ä¸€è‰²åŒé¾™ä¼š	
 
-	//48·¬ÅÆĞÍ£¨2ÖÖ£©
-	virtual bool CheckYiSeSiTongShun();//Ò»É«ËÄÍ¬Ë³
-	virtual bool CheckYiSeSiJieGao();//Ò»É«ËÄ½Ú¸ß	
+	//48ç•ªç‰Œå‹ï¼ˆ2ç§ï¼‰
+	virtual bool CheckYiSeSiTongShun();//ä¸€è‰²å››åŒé¡º
+	virtual bool CheckYiSeSiJieGao();//ä¸€è‰²å››èŠ‚é«˜	
 
-	//32·¬ÅÆĞÍ£¨3ÖÖ£©
-	virtual bool CheckYiSeSiBuGao();//Ò»É«ËÄ²½¸ß	
-	virtual bool CheckHunYaoJiu(GameDataEx *pGameData);//»ìçÛ¾Å	
-	virtual bool CheckSanGang();//Èı¸Ü
+	//32ç•ªç‰Œå‹ï¼ˆ3ç§ï¼‰
+	virtual bool CheckYiSeSiBuGao();//ä¸€è‰²å››æ­¥é«˜	
+	virtual bool CheckHunYaoJiu(GameDataEx *pGameData);//æ··å¹ºä¹	
+	virtual bool CheckSanGang();//ä¸‰æ 
 
-	//24·¬ÅÆĞÍ£¨4ÖÖ£©
-	virtual bool CheckQiDui(GameDataEx *pGameData);//Æß¶Ô
-	virtual bool CheckLongQiDui(GameDataEx *pGameData);//ÁúÆß¶Ô
-	virtual bool CheckQingYiSeQiDui(GameDataEx *pGameData);//ÇåÒ»É«Æß¶Ô
-	virtual bool CheckQingYiSe(GameDataEx *pGameData);//ÇåÒ»É«	 
-	virtual bool CheckQingYiSeYiTiaoLong(GameDataEx *pGameData);//ÇåÒ»É«Ò»ÌõÁú	 
-	virtual bool CheckYiSeSanTongShun();//Ò»É«ÈıÍ¬Ë³	
-	virtual bool CheckYiSeSanJieGao();//Ò»É«Èı½Ú¸ß	
+	//24ç•ªç‰Œå‹ï¼ˆ4ç§ï¼‰
+	virtual bool CheckQiDui(GameDataEx *pGameData);//ä¸ƒå¯¹
+	virtual bool CheckLongQiDui(GameDataEx *pGameData);//é¾™ä¸ƒå¯¹
+	virtual bool CheckQingYiSeQiDui(GameDataEx *pGameData);//æ¸…ä¸€è‰²ä¸ƒå¯¹
+	virtual bool CheckQingYiSe(GameDataEx *pGameData);//æ¸…ä¸€è‰²	 
+	virtual bool CheckQingYiSeYiTiaoLong(GameDataEx *pGameData);//æ¸…ä¸€è‰²ä¸€æ¡é¾™	 
+	virtual bool CheckYiSeSanTongShun();//ä¸€è‰²ä¸‰åŒé¡º	
+	virtual bool CheckYiSeSanJieGao();//ä¸€è‰²ä¸‰èŠ‚é«˜	
 
-	//16·¬ÅÆĞÍ£¨3ÖÖ£©
-	virtual bool CheckQingLong();//ÇåÁú	
-	virtual bool CheckYiSeSanBuGao();//Ò»É«Èı²½¸ß	
-	virtual bool CheckSanAnKe();//Èı°µ¿Ì
+	//16ç•ªç‰Œå‹ï¼ˆ3ç§ï¼‰
+	virtual bool CheckQingLong();//æ¸…é¾™	
+	virtual bool CheckYiSeSanBuGao();//ä¸€è‰²ä¸‰æ­¥é«˜	
+	virtual bool CheckSanAnKe();//ä¸‰æš—åˆ»
 
-	//12·¬ÅÆĞÍ£¨3ÖÖ£©
-	virtual bool CheckDaYuWu(GameDataEx *pGameData);//´óÓÚÎå	
-	virtual bool CheckXiaoYuWu(GameDataEx *pGameData);//Ğ¡ÓÚÎå	
-	virtual bool CheckSanFengKe();//Èı·ç¿Ì	
+	//12ç•ªç‰Œå‹ï¼ˆ3ç§ï¼‰
+	virtual bool CheckDaYuWu(GameDataEx *pGameData);//å¤§äºäº”	
+	virtual bool CheckXiaoYuWu(GameDataEx *pGameData);//å°äºäº”	
+	virtual bool CheckSanFengKe();//ä¸‰é£åˆ»	
 
-	//8·¬ÅÆĞÍ£¨4ÖÖ£©
-	virtual bool CheckMiaoShouHuiChun(GameDataEx *pGameData);//ÃîÊÖ»Ø´º	
-	virtual bool CheckHaiDiLaoYue(GameDataEx *pGameData);//º£µ×ÀÌÔÂ	
+	//8ç•ªç‰Œå‹ï¼ˆ4ç§ï¼‰
+	virtual bool CheckMiaoShouHuiChun(GameDataEx *pGameData);//å¦™æ‰‹å›æ˜¥	
+	virtual bool CheckHaiDiLaoYue(GameDataEx *pGameData);//æµ·åº•ææœˆ	
 
-	virtual bool CheckGangKai(GameDataEx *pGameData);//¸ÜÉÏ»¨
-	virtual bool CheckQiangGangHe(GameDataEx *pGameData);//ÇÀ¸ÜºÍ	
+	virtual bool CheckGangKai(GameDataEx *pGameData);//æ ä¸ŠèŠ±
+	virtual bool CheckQiangGangHe(GameDataEx *pGameData);//æŠ¢æ å’Œ	
 
-	//6·¬ÅÆĞÍ£¨5ÖÖ£©
-	virtual bool CheckPengPengHu(GameDataEx *pGameData);//ÅöÅöºÍ	
-	virtual bool CheckHunYiSe(GameDataEx *pGameData);//»ìÒ»É«	
-	virtual bool CheckQuanQiuRen(GameDataEx *pGameData);//È«ÇóÈË	
-	virtual bool CheckShuangAnKe();//Ë«°µ¸Ü	
-	virtual bool CheckShuangJianKe();//Ë«¼ı¿Ì	
+	//6ç•ªç‰Œå‹ï¼ˆ5ç§ï¼‰
+	virtual bool CheckPengPengHu(GameDataEx *pGameData);//ç¢°ç¢°å’Œ	
+	virtual bool CheckHunYiSe(GameDataEx *pGameData);//æ··ä¸€è‰²	
+	virtual bool CheckQuanQiuRen(GameDataEx *pGameData);//å…¨æ±‚äºº	
+	virtual bool CheckShuangAnKe();//åŒæš—æ 	
+	virtual bool CheckShuangJianKe();//åŒç®­åˆ»	
 
-	//4·¬ÅÆĞÍ£¨4ÖÖ£©
-	virtual bool CheckQuanDaiYao(GameDataEx *pGameData);//È«´øçÛ	
-	virtual bool CheckBuQiuRen(GameDataEx *pGameData);//²»ÇóÈË	
-	virtual bool CheckShuangMingGang();//Ë«Ã÷¸Ü	
-	virtual bool CheckHuJueZhang();//ºÍ¾øÕÅ		
+	//4ç•ªç‰Œå‹ï¼ˆ4ç§ï¼‰
+	virtual bool CheckQuanDaiYao(GameDataEx *pGameData);//å…¨å¸¦å¹º	
+	virtual bool CheckBuQiuRen(GameDataEx *pGameData);//ä¸æ±‚äºº	
+	virtual bool CheckShuangMingGang();//åŒæ˜æ 	
+	virtual bool CheckHuJueZhang();//å’Œç»å¼ 		
 
-	//2·¬ÅÆĞÍ£¨7ÖÖ£©
-	virtual bool CheckJianKe();//¼ı¿Ì
-	virtual bool CheckMenQianQing(GameDataEx *pGameData);//ÃÅÇ°Çå	
-	virtual bool CheckSiGuiYi(GameDataEx *pGameData);//ËÄ¹éÒ»	
-	virtual bool CheckShuangAnGang();//Ë«°µ¿Ì	
-	virtual bool CheckAnGang();//°µ¸Ü	
-	virtual bool CheckDuanYao(GameDataEx *pGameData);//¶ÏçÛ	
+	//2ç•ªç‰Œå‹ï¼ˆ7ç§ï¼‰
+	virtual bool CheckJianKe();//ç®­åˆ»
+	virtual bool CheckMenQianQing(GameDataEx *pGameData);//é—¨å‰æ¸…	
+	virtual bool CheckSiGuiYi(GameDataEx *pGameData);//å››å½’ä¸€	
+	virtual bool CheckShuangAnGang();//åŒæš—åˆ»	
+	virtual bool CheckAnGang();//æš—æ 	
+	virtual bool CheckDuanYao(GameDataEx *pGameData);//æ–­å¹º	
 
-	//1·¬ÅÆĞÍ£¨10ÖÖ£©
-	virtual bool CheckYiBanGao();//Ò»°ã¸ß	
-	virtual bool CheckLianLiu();//Á¬Áù	
-	virtual bool CheckLaoShaoFu();//ÀÏÉÙ¸±	
-	virtual bool CheckYaoJiuKe();//çÛ¾Å¿Ì	
-	virtual bool CheckMingGang();//Ã÷¸Ü	
-	virtual bool CheckBianZhang(GameDataEx *pGameData);//±ßÕÅ	
-	virtual bool CheckKanZhang(GameDataEx *pGameData);//¿²ÕÅ	
-	virtual bool CheckDanDiaoJiang(GameDataEx *pGameData);//µ¥µö½«	
+	//1ç•ªç‰Œå‹ï¼ˆ10ç§ï¼‰
+	virtual bool CheckYiBanGao();//ä¸€èˆ¬é«˜	
+	virtual bool CheckLianLiu();//è¿å…­	
+	virtual bool CheckLaoShaoFu();//è€å°‘å‰¯	
+	virtual bool CheckYaoJiuKe();//å¹ºä¹åˆ»	
+	virtual bool CheckMingGang();//æ˜æ 	
+	virtual bool CheckBianZhang(GameDataEx *pGameData);//è¾¹å¼ 	
+	virtual bool CheckKanZhang(GameDataEx *pGameData);//åå¼ 	
+	virtual bool CheckDanDiaoJiang(GameDataEx *pGameData);//å•é’“å°†	
 
-	//////////////////ÒÔÏÂÅÆĞÍÔÚÈ¸ÉñÖĞ²»Ëã·¬////////////////////////////////
-	virtual bool CheckGangHouPao(GameDataEx *pGameData);//¸ÜºóÅÚ
-	virtual bool CheckXiXiangFeng();//Ï²Ïà·ê
-	virtual bool CheckQueYiMen();//È±Ò»ÃÅ	
-	virtual bool CheckWuZi();//ÎŞ×Ö
-	virtual bool CheckQuanFengKe(GameDataEx *pGameData);//È¦·ç¿Ì	
-	virtual bool CheckMenFengKe();//ÃÅ·ç¿Ì	
-	virtual bool CheckShuangTongKe();//Ë«Í¬¿Ì	
-	virtual int  CheckYiSe(GameDataEx *pGameData);//Ò»É«ÅÆ¼ì²â£¨¼ì²âÊÖÅÆºÍ³ÔÅö¸ÜÅÆ£¬ÄÄÀï¶¼ÊÊÓÃ£©£º0²»ÊÇÒ»É«ÅÆ£¬1»ìÒ»É«£¬2ÇåÒ»É«£¬	
-	virtual bool CheckSanSeSanBuGao();//ÈıÉ«Èı²½¸ß	
-	virtual bool CheckWuMenQi(GameDataEx *pGameData);//ÎåÃÅÆë	
-	virtual bool CheckHuaLong();//»¨Áú	
-	virtual bool CheckTuiBuDao(GameDataEx *pGameData);//ÍÆ²»µ¹	
-	virtual bool CheckSanSeSanTongShun();//ÈıÉ«ÈıÍ¬Ë³	
-	virtual bool CheckSanSeSanJieGao();//ÈıÉ«Èı½Ú¸ß	
-	virtual bool CheckWuFanHe();//ÎŞ·¬ºÍ	
-	virtual bool CheckSanSeShuangLongHui();//ÈıÉ«Ë«Áú»á	
-	virtual bool CheckQuanDaiWu(GameDataEx *pGameData);	//È«´øÎå
-	virtual bool CheckSanTongKe();//ÈıÍ¬¿Ì		
-	virtual bool CheckQuanShuangKe();//È«Ë«¿Ì	
-	virtual bool CheckQuanDa(GameDataEx *pGameData);//È«´ó	
-	virtual bool CheckQuanZhong(GameDataEx *pGameData);//È«ÖĞ	
-	virtual bool CheckQuanXiao(GameDataEx *pGameData);//È«Ğ¡		
-	virtual bool CheckQingYaoJiu(GameDataEx *pGameData);//ÇåçÛ¾Å	
-	virtual bool CheckLvYiSe(GameDataEx *pGameData);//ÂÌÒ»É«	
+	//////////////////ä»¥ä¸‹ç‰Œå‹åœ¨é›€ç¥ä¸­ä¸ç®—ç•ª////////////////////////////////
+	virtual bool CheckGangHouPao(GameDataEx *pGameData);//æ åç‚®
+	virtual bool CheckXiXiangFeng();//å–œç›¸é€¢
+	virtual bool CheckQueYiMen();//ç¼ºä¸€é—¨	
+	virtual bool CheckWuZi();//æ— å­—
+	virtual bool CheckQuanFengKe(GameDataEx *pGameData);//åœˆé£åˆ»	
+	virtual bool CheckMenFengKe();//é—¨é£åˆ»	
+	virtual bool CheckShuangTongKe();//åŒåŒåˆ»	
+	virtual int  CheckYiSe(GameDataEx *pGameData);//ä¸€è‰²ç‰Œæ£€æµ‹ï¼ˆæ£€æµ‹æ‰‹ç‰Œå’Œåƒç¢°æ ç‰Œï¼Œå“ªé‡Œéƒ½é€‚ç”¨ï¼‰ï¼š0ä¸æ˜¯ä¸€è‰²ç‰Œï¼Œ1æ··ä¸€è‰²ï¼Œ2æ¸…ä¸€è‰²ï¼Œ	
+	virtual bool CheckSanSeSanBuGao();//ä¸‰è‰²ä¸‰æ­¥é«˜	
+	virtual bool CheckWuMenQi(GameDataEx *pGameData);//äº”é—¨é½	
+	virtual bool CheckHuaLong();//èŠ±é¾™	
+	virtual bool CheckTuiBuDao(GameDataEx *pGameData);//æ¨ä¸å€’	
+	virtual bool CheckSanSeSanTongShun();//ä¸‰è‰²ä¸‰åŒé¡º	
+	virtual bool CheckSanSeSanJieGao();//ä¸‰è‰²ä¸‰èŠ‚é«˜	
+	virtual bool CheckWuFanHe();//æ— ç•ªå’Œ	
+	virtual bool CheckSanSeShuangLongHui();//ä¸‰è‰²åŒé¾™ä¼š	
+	virtual bool CheckQuanDaiWu(GameDataEx *pGameData);	//å…¨å¸¦äº”
+	virtual bool CheckSanTongKe();//ä¸‰åŒåˆ»		
+	virtual bool CheckQuanShuangKe();//å…¨åŒåˆ»	
+	virtual bool CheckQuanDa(GameDataEx *pGameData);//å…¨å¤§	
+	virtual bool CheckQuanZhong(GameDataEx *pGameData);//å…¨ä¸­	
+	virtual bool CheckQuanXiao(GameDataEx *pGameData);//å…¨å°		
+	virtual bool CheckQingYaoJiu(GameDataEx *pGameData);//æ¸…å¹ºä¹	
+	virtual bool CheckLvYiSe(GameDataEx *pGameData);//ç»¿ä¸€è‰²	
 
-	/////////////////////////ÌØÊâÅÆĞÍ////////////////////////////////////////////////////////////
-	virtual bool CheckQuanBuKao(GameDataEx *pGameData);	//È«²»¿¿£¨¼´Ê®ÈıÀÃ£©
+	/////////////////////////ç‰¹æ®Šç‰Œå‹////////////////////////////////////////////////////////////
+	virtual bool CheckQuanBuKao(GameDataEx *pGameData);	//å…¨ä¸é ï¼ˆå³åä¸‰çƒ‚ï¼‰
 
-	virtual bool CheckZuHeLong(GameDataEx *pGameData);//×éºÏÁú	
+	virtual bool CheckZuHeLong(GameDataEx *pGameData);//ç»„åˆé¾™	
 
-	virtual bool CheckQiXingBuKao(GameDataEx *pGameData);//ÆßĞÇ²»¿¿£¨ÆßĞÇÊ®ÈıÀÃ£©	
+	virtual bool CheckQiXingBuKao(GameDataEx *pGameData);//ä¸ƒæ˜Ÿä¸é ï¼ˆä¸ƒæ˜Ÿåä¸‰çƒ‚ï¼‰	
 
-	virtual bool CheckShiSanYao(GameDataEx *pGameData);//Ê®ÈıçÛ	
+	virtual bool CheckShiSanYao(GameDataEx *pGameData);//åä¸‰å¹º	
 
-	virtual bool CheckDaPiao(GameDataEx *pGameData);//´óÆ®(Ô´×Ô½­Î÷Âé½«)	
+	virtual bool CheckDaPiao(GameDataEx *pGameData);//å¤§é£˜(æºè‡ªæ±Ÿè¥¿éº»å°†)	
 
-	virtual bool CheckJiangDui(GameDataEx *pGameData);//¼ì²â½«¶Ô£¨258ÅöÅöºú£©
+	virtual bool CheckJiangDui(GameDataEx *pGameData);//æ£€æµ‹å°†å¯¹ï¼ˆ258ç¢°ç¢°èƒ¡ï¼‰
 
-	virtual bool CheckYiJiuHu(GameDataEx *pGameData);//»ìçÛ¾Å
+	virtual bool CheckYiJiuHu(GameDataEx *pGameData);//æ··å¹ºä¹
 
-	virtual bool CheckQingYiJiuHu(GameDataEx *pGameData);//ÇåçÛ¾Å
+	virtual bool CheckQingYiJiuHu(GameDataEx *pGameData);//æ¸…å¹ºä¹
 
-	bool QiangQiangHu258(GameDataEx *pGameData);//½«Ò»É«£º£ºÊÖÉÏÈ«²¿ÊÇ258Ê±ËùºúµÄÅÆ
+	bool QiangQiangHu258(GameDataEx *pGameData);//å°†ä¸€è‰²ï¼šï¼šæ‰‹ä¸Šå…¨éƒ¨æ˜¯258æ—¶æ‰€èƒ¡çš„ç‰Œ
 
-	virtual bool CheckYiTiaoLong();//Ò»ÌõÁú£¬µ±ºúÅÆÊ±ÊÖÖĞÓĞ²»Í¬»¨É«µÄ123456789Ë³×Ó³ÆÎªÒ»ÌõÁú
+	virtual bool CheckYiTiaoLong();//ä¸€æ¡é¾™ï¼Œå½“èƒ¡ç‰Œæ—¶æ‰‹ä¸­æœ‰ä¸åŒèŠ±è‰²çš„123456789é¡ºå­ç§°ä¸ºä¸€æ¡é¾™
 };
 #endif
