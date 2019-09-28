@@ -172,7 +172,7 @@ bool CConfigManage::LoadRedisConfig()
 	CMysqlHelper::MysqlData dataSet;
 	try
 	{
-		m_pMysqlHelper->queryRecord(sql, dataSet, true);
+		m_pMysqlHelper->queryRecord(sql, dataSet);
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
@@ -476,7 +476,7 @@ bool CConfigManage::LoadBuyGameDeskConfig()
 	CMysqlHelper::MysqlData dataSet;
 	try
 	{
-		m_pMysqlHelper->queryRecord(sql, dataSet, true);
+		m_pMysqlHelper->queryRecord(sql, dataSet);
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
@@ -1197,7 +1197,7 @@ bool CConfigManage::LoadLogonBaseConfig()
 	CMysqlHelper::MysqlData dataSet;
 	try
 	{
-		m_pMysqlHelper->queryRecord(sql, dataSet, true);
+		m_pMysqlHelper->queryRecord(sql, dataSet);
 	}
 	catch (MysqlHelper_Exception& excep)
 	{

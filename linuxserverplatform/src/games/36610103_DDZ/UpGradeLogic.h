@@ -1,6 +1,7 @@
 #pragma once
 
-#include <vector>
+#include "Function.h"
+#include "UpgradeMessage.h"
 
 //操作掩码
 #define	UG_HUA_MASK					0xF0			//1111 0000
@@ -118,7 +119,7 @@ private:
 	int				m_iCondition;			//限制条件
 	BOOL			m_bKingCanReplace;		//王是否可当
 
-	DWORD           m_iCardShape;	//支持牌型
+	UINT           m_iCardShape;	//支持牌型
 	int             m_iLaiZiSize;   //癞子大小
 	CardType		m_cdType[18];
 	//函数定义
@@ -328,7 +329,7 @@ public:
 	void ResetCondition();
 
 	///设置游戏牌型
-	void SetCardShape(DWORD iCardShape){m_iCardShape=iCardShape;}
+	void SetCardShape(UINT iCardShape){m_iCardShape=iCardShape;}
 
 	/// 拖牌自动检查
 	void DragCardAutoSetValidCard(BYTE iUpCardList[], int iUpCardCount, BYTE bResult[], int & bResultCount);

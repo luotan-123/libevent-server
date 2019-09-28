@@ -1,5 +1,8 @@
 #pragma once
-#include "../GameMessage/UpGradeLogic.h"
+
+#include "UpGradeLogic.h"
+
+
 class CGameTaskLogic :public CUpGradeGameLogic
 {
 public:

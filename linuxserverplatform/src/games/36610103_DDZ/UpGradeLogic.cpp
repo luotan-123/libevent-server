@@ -1,6 +1,8 @@
-#include "StdAfx.h"
-#include "UpGradeLogic.h"
+#include "CommonHead.h"
 #include "Util.h"
+#include "UpGradeLogic.h"
+
+using namespace std;
 
 //构造函数
 CUpGradeGameLogic::CUpGradeGameLogic(void)
@@ -237,7 +239,7 @@ BYTE CUpGradeGameLogic::RandCard(BYTE iCard[], int iCardCount, int iRoomId, bool
 	BYTE iSend = 0, iStation = 0, iCardList[216], step = (bHaveKing ? 54 : 52);
 	memset(iCardList, 0, sizeof(iCardList));
 	for (int i = 0;i < iCardCount;i += step)
-		::CopyMemory(&iCardList[i], gCardArray, sizeof(gCardArray));
+		memcpy(&iCardList[i], gCardArray, sizeof(gCardArray));
 
 	BYTE temp = 0, data_ = 0;
 	int iCount = 3;
@@ -689,7 +691,7 @@ int CUpGradeGameLogic::TackOutMuchToFew(BYTE iCardList[], int iCardCount, BYTE i
 		return count;
 	for (int i = 0;i < iCount; i += iCardMuch)
 	{
-		::CopyMemory(&iDoubleBuffer[iBufferCardCount], &iBuffer[i], sizeof(BYTE)*iCardFew);
+		memcpy(&iDoubleBuffer[iBufferCardCount], &iBuffer[i], sizeof(BYTE)*iCardFew);
 		iBufferCardCount += iCardFew;
 		count++;
 	}
@@ -1391,7 +1393,7 @@ BOOL CUpGradeGameLogic::TackOutCardMoreThanLast(BYTE iHandCard[], int iHandCardC
 		if (iCount > 0)
 		{
 			BYTE Step = GetSerialByMoreThanSpecifyCard(iTempCard, iCount, iBaseCard[0], iBaseCardCount, false);
-			CopyMemory(iResultCard, &iTempCard[Step], sizeof(BYTE)*iBaseCardCount);
+			memcpy(iResultCard, &iTempCard[Step], sizeof(BYTE)*iBaseCardCount);
 
 			if (CompareOnlyOne(iBaseCard[0], iResultCard[0]))
 			{
@@ -1633,7 +1635,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		BYTE Step = GetSerialByMoreThanSpecifyCard(iTempCard, iCount, byCardTemp, 3, true);//牌面值进去
 		//if(Step == 0)
 		//	return FALSE;
-		CopyMemory(iResultCard, &iTempCard[Step], sizeof(BYTE) * 3);
+		memcpy(iResultCard, &iTempCard[Step], sizeof(BYTE) * 3);
 		//TCHAR sz[200];
 		//wsprintf(sz,"Step=%d,iBaseCount=%d",Step,iBaseCount);
 		//WriteStr(sz,7,7);
@@ -1650,7 +1652,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 	//将原值移走
 	BYTE Tmp[45];
 	int iTempCount = iCardCount;
-	::CopyMemory(Tmp, iCardList, sizeof(BYTE)*iCardCount);
+	memcpy(Tmp, iCardList, sizeof(BYTE)*iCardCount);
 	RemoveCard(iResultCard, 3, Tmp, iTempCount);
 	iTempCount -= 3;
 	int destCount = iBaseCount - 3;
@@ -1665,7 +1667,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 1);
 		if (iCount >= destCount)//查找到单牌
 		{
-			CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
+			memcpy(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 			iResultCount = iBaseCount;
 			break;
 		}
@@ -1673,7 +1675,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 2);
 		if (iCount >= destCount)
 		{
-			CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
+			memcpy(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 			iResultCount = iBaseCount;
 			break;
 		}
@@ -1682,7 +1684,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 3);
 		if (iCount < 3)//仅一三张无法拆
 			break;
-		CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
+		memcpy(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 		iResultCount = iBaseCount;
 		break;
 	}
@@ -1691,7 +1693,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 2);
 		if (iCount > 0)
 		{
-			CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
+			memcpy(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 			iResultCount = iBaseCount;
 			break;
 		}
@@ -1699,7 +1701,7 @@ BYTE CUpGradeGameLogic::TackOutThreeX(BYTE iCardList[], int iCardCount,
 		iCount = TackOutBySepcifyCardNumCount(Tmp, iTempCount, iTempCard, 3);
 		if (iCount < 3)//仅一三张无法拆
 			break;
-		CopyMemory(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
+		memcpy(&iResultCard[3], iTempCard, sizeof(BYTE)*destCount);
 		iResultCount = iBaseCount;
 		break;
 
@@ -1734,7 +1736,7 @@ BOOL  CUpGradeGameLogic::TrackOut3Sequence2Sequence(BYTE iCardList[], int iCardC
 	//将手牌复制一份(移除三顺牌)
 	BYTE TMP[45];
 	int TmpCount = iCardCount;
-	::CopyMemory(TMP, iCardList, sizeof(BYTE)*iCardCount);
+	memcpy(TMP, iCardList, sizeof(BYTE)*iCardCount);
 	RemoveCard(iResultCard, iResultCardCount, TMP, TmpCount);
 	TmpCount -= iResultCardCount;
 	destCardCount = iBaseCount - iResultCardCount;	//补牌数量
@@ -1747,7 +1749,7 @@ BOOL  CUpGradeGameLogic::TrackOut3Sequence2Sequence(BYTE iCardList[], int iCardC
 		return false;
 	//	int TwoSequenceLen = (iBaseCount- tmpbaseCardCount)/2;
 	//	tmpbaseCardCount =TackOutBySepcifyCardNumCount(TMP,TmpCount,tmpBaseCard,3);
-	::CopyMemory(&iResultCard[iResultCardCount], twoList, sizeof(BYTE)*twoCount);
+	memcpy(&iResultCard[iResultCardCount], twoList, sizeof(BYTE)*twoCount);
 	iResultCardCount += twoCount;
 	return true;
 }
@@ -1775,7 +1777,7 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 	//将手牌复制一份
 	BYTE TMP[45];
 	int TmpCount = iCardCount;
-	::CopyMemory(TMP, iCardList, sizeof(BYTE)*iCardCount);
+	memcpy(TMP, iCardList, sizeof(BYTE)*iCardCount);
 	RemoveCard(iResultCard, iResultCardCount, TMP, TmpCount);
 	TmpCount -= iResultCardCount;
 	destCardCount = iBaseCount - iResultCardCount;	//补牌数量
@@ -1788,30 +1790,30 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 		tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 1);//凑单牌
 		if (tmpbaseCardCount >= destCardCount)
 		{
-			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);//够单
+			memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);//够单
 			iResultCardCount += destCardCount;
 		}
 		else
 		{
-			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
+			memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
 			iResultCardCount += tmpbaseCardCount;
 			destCardCount -= tmpbaseCardCount;
 			tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 2);//用对牌补
 			if (tmpbaseCardCount >= destCardCount)
 			{
-				::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
+				memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
 				iResultCardCount += destCardCount;
 			}
 			else
 			{
-				::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
+				memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
 				iResultCardCount += tmpbaseCardCount;
 				destCardCount -= tmpbaseCardCount;
 				tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 3);//用三条补
 				//
 				if (tmpbaseCardCount >= destCardCount)
 				{
-					::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
+					memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
 					iResultCardCount += destCardCount;
 				}
 			}
@@ -1823,19 +1825,19 @@ BOOL  CUpGradeGameLogic::TrackOut3XSequence(BYTE iCardList[], int iCardCount, BY
 		tmpbaseCardCount = TackOutBySepcifyCardNumCount(TMP, TmpCount, tmpBaseCard, 2);//凑对牌
 		if (tmpbaseCardCount >= destCardCount)
 		{
-			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
+			memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
 			iResultCardCount += destCardCount;
 		}
 		else
 		{
-			::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
+			memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*tmpbaseCardCount);
 			iResultCardCount += tmpbaseCardCount;
 			destCardCount -= tmpbaseCardCount;
 			//tmpbaseCardCount =TackOutBySepcifyCardNumCount(TMP,TmpCount,tmpBaseCard,3);//用三条补对
 			TackOutMuchToFew(TMP, TmpCount, tmpBaseCard, tmpbaseCardCount, 3, 2);	//将手中三条拆成对来配
 			if (tmpbaseCardCount >= destCardCount)//三条拆对够补
 			{
-				::CopyMemory(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
+				memcpy(&iResultCard[iResultCardCount], tmpBaseCard, sizeof(BYTE)*destCardCount);
 				iResultCardCount += destCardCount;
 			}
 		}
@@ -1865,7 +1867,7 @@ BOOL CUpGradeGameLogic::TackOutSequence(BYTE iCardList[], int iCardCount, //手�
 	BYTE iTack[45];
 	int iTackCount = iCardCount;
 	//复制一份
-	::CopyMemory(iTack, iCardList, sizeof(BYTE)*iCardCount);
+	memcpy(iTack, iCardList, sizeof(BYTE)*iCardCount);
 	BYTE iBuffer[45];
 	int iBufferCount = 0;
 	int iBaseStart, iDestStart = 0, iDestEnd = 0;
@@ -2036,7 +2038,7 @@ BOOL CUpGradeGameLogic::TackOutStraightFlush(BYTE iCardList[], int iCardCount, B
 	BYTE iTack[45];
 	int iTackCount = iCardCount;
 	//复制一份
-	::CopyMemory(iTack, iCardList, sizeof(BYTE)*iCardCount);
+	memcpy(iTack, iCardList, sizeof(BYTE)*iCardCount);
 	BYTE iBuffer[45];
 	int iBufferCount = 0;
 	int iDestStart = 0, iDestEnd = 0;
@@ -2549,7 +2551,7 @@ BOOL CUpGradeGameLogic::TackOutAllBomb(BYTE iCardList[], int iCardCount,
 		int count = TackOutBySepcifyCardNumCount(iCardList, iCardCount, bCardBuffer, i);
 		if (count > 0)
 		{
-			::CopyMemory(&iResultCard[iResultCardCount], bCardBuffer, sizeof(BYTE)*count);
+			memcpy(&iResultCard[iResultCardCount], bCardBuffer, sizeof(BYTE)*count);
 			iResultCardCount += count;
 			break;
 		}
@@ -2571,7 +2573,7 @@ BOOL CUpGradeGameLogic::TackOutBomb(BYTE iCardList[], int iCardCount,
 		int count = TackOutBySepcifyCardNumCount(iCardList, iCardCount, bCardBuffer, i);
 		if (count > 0)
 		{
-			::CopyMemory(iResultCard, bCardBuffer, sizeof(BYTE)*i);
+			memcpy(iResultCard, bCardBuffer, sizeof(BYTE)*i);
 			iResultCardCount = i;
 			break;
 		}
@@ -2593,14 +2595,14 @@ BOOL CUpGradeGameLogic::TackOutKingBomb(BYTE iCardList[], int iCardCount, BYTE i
 	if (count != SingKing)
 		return false;
 
-	::CopyMemory(iResultCard, bCardBuf, sizeof(BYTE)*count);
+	memcpy(iResultCard, bCardBuf, sizeof(BYTE)*count);
 
 	count = TackOutBySpecifyCard(iCardList, iCardCount, bCardBuf, kingcount, 0x4f);
 	if (count != SingKing)
 	{
 		return false;
 	}
-	::CopyMemory(&(iResultCard[SingKing]), bCardBuf, sizeof(BYTE)*count);
+	memcpy(&(iResultCard[SingKing]), bCardBuf, sizeof(BYTE)*count);
 	return iResultCardCount = KING_COUNT;
 }
 ///拖动选择牌
@@ -2928,7 +2930,6 @@ void CUpGradeGameLogic::MatchMergeDDZ(BYTE byCardArray1[], int iCount1, BYTE byC
 		{
 			break;
 		}
-		srand((unsigned)GetCurrentTime() + (lAddTime++));
 		int iRandIndex = CUtil::GetRandNum() % iVecSize;
 		int iIndex = vecIndex[iRandIndex];
 		memcpy(&byList[iCount], m_cdType[iIndex].byCard, sizeof(BYTE)*m_cdType[iIndex].byNum);
@@ -2951,7 +2952,6 @@ void CUpGradeGameLogic::MatchMergeDDZ(BYTE byCardArray1[], int iCount1, BYTE byC
 	//再随机混乱
 	for (int i = 0; i < iRandCount_; i++)
 	{
-		srand((unsigned)GetCurrentTime() + (lAddTime++));
 		int iTempIndex1 = CUtil::GetRandNum() % (iCount1 + iCount2);
 		int iTempIndex2 = CUtil::GetRandNum() % (iCount1 + iCount2);
 		if (iTempIndex1 == iTempIndex2)

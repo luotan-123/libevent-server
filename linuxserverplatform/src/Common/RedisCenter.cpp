@@ -389,7 +389,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 	CMysqlHelper::MysqlData dataSet;
 	try
 	{
-		mysqlHelper.queryRecord(buf, dataSet, true);
+		mysqlHelper.queryRecord(buf, dataSet);
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
@@ -775,7 +775,7 @@ bool CRedisCenter::LoadAllUserBag()
 	CMysqlHelper::MysqlData dataSet;
 	try
 	{
-		mysqlHelper.queryRecord(buf, dataSet, true);
+		mysqlHelper.queryRecord(buf, dataSet);
 	}
 	catch (MysqlHelper_Exception& excep)
 	{

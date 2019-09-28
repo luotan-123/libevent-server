@@ -278,7 +278,7 @@ void CMysqlHelper::execute(const string& sSql)
 	}
 }
 
-bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK/* = false*/)
+bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bCharacterSet/* = false*/)
 {
 	/**
 	没有连上, 连接数据库
@@ -288,10 +288,10 @@ bool CMysqlHelper::queryRecord(const string& sSql, MysqlData& data, bool bSetGBK
 		connect();
 	}
 
-	if (bSetGBK)
+	if (bCharacterSet)
 	{
 		MYSQL_RES* pRes;
-		mysql_query(_pstMql, "SET NAMES GBK"); //设置编码格式（SET NAMES GBK也行），否则cmd下中文乱码  
+		mysql_query(_pstMql, "SET NAMES UTF8"); //设置编码格式 Windows： SET NAMES GBK，Linux ： SET NAMES UTF8
 		do
 		{
 			pRes = mysql_use_result(_pstMql);

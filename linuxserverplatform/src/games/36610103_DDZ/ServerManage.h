@@ -1,9 +1,6 @@
 #pragma once
 #include "GameDesk.h"
 #include "GameTaskLogic.h"
-#include "json/json.h"
-#include "fstream"
-#pragma comment(lib,"json_vc71_libmt.lib")
 
 //定时器 ID
 #define IDT_USER_CUT				1L										//断线定时器 ID
@@ -41,7 +38,7 @@ private:
 	UINT  m_iSendCount;    				//发牌数(48,51,DEF=100,108)
 	UINT  m_iBackCount;    				//底牌数(3,6,DEF=8,12)
 	UINT  m_iUserCount;    				//玩家手中牌数(12,13,DEF=25,27)
-	DWORD m_iCardShape;	  				//牌型
+	UINT m_iCardShape;	  				//牌型
 	//=============扩展
 	BYTE m_iThinkTime;               	//游戏思考时间
 	BYTE m_iBeginTime;               	//游戏开始时间

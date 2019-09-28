@@ -206,7 +206,7 @@ public:
 	* @throws MysqlHelper_Exception
 	* @return MysqlData类型的数据，可以根据字段获取相关信息
 	*/
-	bool queryRecord(const string& sSql, MysqlData& data, bool bSetGBK = false);
+	bool queryRecord(const string& sSql, MysqlData& data, bool bCharacterSet = false);
 
 	/**
 	* @brief 执行sql语句

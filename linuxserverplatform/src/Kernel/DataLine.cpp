@@ -76,7 +76,7 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 
 	LockObject.UnLock();
 
-	//BOOL ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//通知完成端口
+	//bool ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//通知完成端口
 	//if (ret == FALSE)
 	//{
 	//	//ERROR_LOG("CDataLine::AddData PostQueuedCompletionStatus failed err=%d", GetLastError());

@@ -1,9 +1,4 @@
-#include "StdAfx.h"
 #include "ServerManage.h"
-#include <math.h>
-#include <windows.h> 
-#include <DbgHelp.h>  
-#include <stdlib.h>  
 
 #ifndef USER_IDENTITY_TYPE_SUPER
 #define USER_IDENTITY_TYPE_SUPER 1
@@ -14,10 +9,10 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 {
 	//InitMinDump();
 	//c++ test
-	::ZeroMemory(m_iUserCardCount, sizeof(m_iUserCardCount));
-	::ZeroMemory(m_iUserCard, sizeof(m_iUserCard));
-	::ZeroMemory(m_iBackCard, sizeof(m_iBackCard));
-	::ZeroMemory(m_iDeskCard, sizeof(m_iDeskCard));
+	::bzero(m_iUserCardCount, sizeof(m_iUserCardCount));
+	::bzero(m_iUserCard, sizeof(m_iUserCard));
+	::bzero(m_iBackCard, sizeof(m_iBackCard));
+	::bzero(m_iDeskCard, sizeof(m_iDeskCard));
 
 	//已初始化
 	for (int i = 0; i < PLAY_COUNT; i++)
@@ -28,7 +23,7 @@ CServerGameDesk::CServerGameDesk(void) :CGameDesk(FULL_BEGIN)
 
 		m_bUserNetCut[i] = false;
 	}
-	::ZeroMemory(m_iLastOutCard, PLAY_COUNT * 45);
+	::bzero(m_iLastOutCard, PLAY_COUNT * 45);
 	m_iRecvMsg = 0;
 	m_iGameFlag = GS_FLAG_NORMAL;
 	m_iUpGradePeople = -1;
@@ -93,13 +88,13 @@ CServerGameDesk::~CServerGameDesk(void)
 BOOL CServerGameDesk::LoadExtIni()
 {
 	char szfile[256] = "";
-	sprintf_s(szfile, sizeof(szfile), "%s%d_s.ini", CINIFile::GetAppPath().c_str(), NAME_ID);
+	sprintf(szfile, "%s%d_s.ini", CINIFile::GetAppPath().c_str(), NAME_ID);
 	CINIFile f(szfile);
 
 	int roomType = GetRoomType();
 
 	///////////////////////////////////游戏配置///////////////////////////////////////
-	string key = TEXT("game");
+	string key = "game";
 	m_bHaveKing = f.GetKeyVal(key, "haveking", 1);
 	m_iPlayCard = f.GetKeyVal(key, "card", 1);
 	m_iPlayCount = f.GetKeyVal(key, "cardcount", 54);
@@ -140,7 +135,7 @@ BOOL CServerGameDesk::LoadExtIni()
 
 
 	//////////////////////////////////游戏时间////////////////////////////////////////
-	key = TEXT("other");
+	key = "other";
 	m_iBeginTime = f.GetKeyVal(key, "begintime", 15);
 	m_iThinkTime = f.GetKeyVal(key, "thinktime", 20);
 	m_iSendCardTime = f.GetKeyVal(key, "SendCardTime", 1);
@@ -149,7 +144,7 @@ BOOL CServerGameDesk::LoadExtIni()
 	m_iAddDoubleTime = f.GetKeyVal(key, "adddoubletime", 5);
 
 	/////////////////////////////////牌型/////////////////////////////////////////
-	key = TEXT("cardshape");
+	key = "cardshape";
 	m_iCardShape &= 0x00000000;
 	m_iCardShape |= (f.GetKeyVal(key, "one", 1) & 0xFFFFFFFF);//单张
 	m_iCardShape |= ((f.GetKeyVal(key, "two", 1) << 1) & 0xFFFFFFFF);//对
@@ -179,7 +174,7 @@ BOOL CServerGameDesk::LoadExtIni()
 //根据房间ID加载配置文件
 BOOL CServerGameDesk::LoadExtIni(int iRoomID)
 {
-	TCHAR szKey[20];
+	char szKey[20];
 	char nid[20] = "";
 	sprintf(nid, "%d", NAME_ID);
 	sprintf(szKey, "%s_%d", nid, iRoomID);
@@ -227,7 +222,7 @@ void CServerGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway)
 	{
 		UpdateCalculateBoard();
 	}
-	__super::OnDeskSuccessfulDissmiss(isDismissMidway);
+	CGameDesk::OnDeskSuccessfulDissmiss(isDismissMidway);
 }
 
 void CServerGameDesk::InitDeskGameData()
@@ -258,13 +253,13 @@ void CServerGameDesk::InitDeskGameData()
 // 玩家请求托管
 bool CServerGameDesk::OnHandleUserRequestAuto(BYTE deskStation)
 {
-	return __super::OnHandleUserRequestAuto(deskStation);
+	return CGameDesk::OnHandleUserRequestAuto(deskStation);
 }
 
 // 玩家取消托管
 bool CServerGameDesk::OnHandleUserRequestCancelAuto(BYTE deskStation)
 {
-	return __super::OnHandleUserRequestCancelAuto(deskStation);
+	return CGameDesk::OnHandleUserRequestCancelAuto(deskStation);
 }
 
 // 动态加载配置文件数据
@@ -447,7 +442,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		break;
 	}
 	}
-	return __super::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
+	return CGameDesk::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
 }
 
 //定时器消息
@@ -592,7 +587,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 		break;
 	}
 	}
-	return __super::OnTimer(uTimerID);
+	return CGameDesk::OnTimer(uTimerID);
 }
 
 //获取游戏状态信息
@@ -696,7 +691,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 		GameStation.byJiaoFenSFTime = m_iCallScoreTime + 1 - (GetCurTime() - m_iJiaoFenBeginTime) > 0 ?
 			m_iCallScoreTime + 1 - (GetCurTime() - m_iJiaoFenBeginTime) : m_iCallScoreTime;
 		int iPos = 0;
-		ZeroMemory(&GameStation.iUserCardList, sizeof(GameStation.iUserCardList));
+		bzero(&GameStation.iUserCardList, sizeof(GameStation.iUserCardList));
 		for (int i = 0; i < PLAY_COUNT; i++)
 		{
 			GameStation.iCallScore[i] = m_iCallScore[i];
@@ -704,7 +699,7 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 			/// 只发自己的手牌，Modified by zxd 20100314
 			if (bDeskStation == i || m_GameMutiple.sMingPaiMutiple[i] > 0)
 			{
-				::CopyMemory(&GameStation.iUserCardList[iPos], m_iUserCard[i], sizeof(BYTE)*m_iUserCardCount[i]);
+				memcpy(&GameStation.iUserCardList[iPos], m_iUserCard[i], sizeof(BYTE)*m_iUserCardCount[i]);
 			}
 			iPos += m_iUserCardCount[i];
 		}
@@ -767,13 +762,13 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 					GameStation.iUserDoubleValue[i] = m_iAddStation[i];
 				}
 			}
-			::CopyMemory(&GameStation.iGameBackCard, m_iBackCard, sizeof(BYTE)*m_iBackCount);
+			memcpy(&GameStation.iGameBackCard, m_iBackCard, sizeof(BYTE)*m_iBackCount);
 			GameStation.iUpGradePeople = m_iUpGradePeople;
 			break;
 		}
 		case  GS_FLAG_SHOW_CARD:
 		{
-			::CopyMemory(&GameStation.iGameBackCard, m_iBackCard, sizeof(BYTE)*m_iBackCount);
+			memcpy(&GameStation.iGameBackCard, m_iBackCard, sizeof(BYTE)*m_iBackCount);
 
 			GameStation.iUpGradePeople = m_iUpGradePeople;
 			break;
@@ -832,14 +827,14 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 		//设置各家手中牌
 		int iPos = 0;
-		ZeroMemory(&GameStation.iUserCardList, sizeof(GameStation.iUserCardList));
+		bzero(&GameStation.iUserCardList, sizeof(GameStation.iUserCardList));
 		for (int i = 0; i < PLAY_COUNT; i++)
 		{
 			//设置用户手中牌
 			GameStation.iUserCardCount[i] = m_iUserCardCount[i];
 			if (i == bDeskStation || m_GameMutiple.sMingPaiMutiple[i] > 0)
 			{
-				::CopyMemory(&GameStation.iUserCardList[iPos], m_iUserCard[i], sizeof(BYTE)*m_iUserCardCount[i]);
+				memcpy(&GameStation.iUserCardList[iPos], m_iUserCard[i], sizeof(BYTE)*m_iUserCardCount[i]);
 			}
 			iPos += m_iUserCardCount[i];
 		}
@@ -849,19 +844,19 @@ bool CServerGameDesk::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 		GameStation.iBaseOutCount = m_iBaseOutCount;
 
-		::CopyMemory(&GameStation.iBaseCardList, m_iDeskCard[m_iNowBigPeople], sizeof(BYTE)*m_iBaseOutCount);
-		::CopyMemory(&GameStation.iDeskCardCount, m_iDeskCardCount, sizeof(GameStation.iDeskCardCount));
-		::CopyMemory(GameStation.iDeskCardList, m_iDeskCard, sizeof(GameStation.iDeskCardList));
+		memcpy(&GameStation.iBaseCardList, m_iDeskCard[m_iNowBigPeople], sizeof(BYTE)*m_iBaseOutCount);
+		memcpy(&GameStation.iDeskCardCount, m_iDeskCardCount, sizeof(GameStation.iDeskCardCount));
+		memcpy(GameStation.iDeskCardList, m_iDeskCard, sizeof(GameStation.iDeskCardList));
 
-		::CopyMemory(&GameStation.iLastCardCount, m_iLastCardCount, sizeof(GameStation.iLastCardCount));
-		::CopyMemory(GameStation.iLastOutCard, m_iLastOutCard, sizeof(GameStation.iLastOutCard));
+		memcpy(&GameStation.iLastCardCount, m_iLastCardCount, sizeof(GameStation.iLastCardCount));
+		memcpy(GameStation.iLastOutCard, m_iLastOutCard, sizeof(GameStation.iLastOutCard));
 
 		//是否不出
 		GameStation.bIsPass = m_byteHitPass;
 
 		GameStation.iBackCardCount = m_iBackCount;
 
-		::CopyMemory(&GameStation.iGameBackCard, m_iBackCard, sizeof(BYTE)*m_iBackCount);
+		memcpy(&GameStation.iGameBackCard, m_iBackCard, sizeof(BYTE)*m_iBackCount);
 
 		GameStation.gameMutiple = m_GameMutiple;
 
@@ -977,7 +972,7 @@ BOOL CServerGameDesk::StartGame()
 //游戏开始
 bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 {
-	if (__super::GameBegin(bBeginFlag) == false)
+	if (CGameDesk::GameBegin(bBeginFlag) == false)
 	{
 		GameFinish(0, GF_SALE);
 		return false;
@@ -1046,7 +1041,7 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	memset(m_iLastCardCount, 0, sizeof(m_iLastCardCount));
 	m_byMaxScoreStation = 255;
 
-	::ZeroMemory(m_iLastOutCard, PLAY_COUNT * 45);
+	::bzero(m_iLastOutCard, PLAY_COUNT * 45);
 	m_bIsLastCard = false;
 	m_byteHitPass = 0;
 
@@ -1105,17 +1100,16 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 	memset(m_lastCardList, 0, sizeof(m_lastCardList));
 
 	//明牌
-	srand(GetTickCount());
 	m_bThrowoutCard = iCardArray[CUtil::GetRandNum() % (m_iSendCount/*m_iPlayCount - 3*/)];
 
 	//拷贝玩家牌数据
 	int iSendUserIndex = CUtil::GetRandNum() % PLAY_COUNT;
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
-		::CopyMemory(m_iUserCard[iSendUserIndex], &iCardArray[m_iUserCount*i], sizeof(BYTE)*m_iUserCount);
+		memcpy(m_iUserCard[iSendUserIndex], &iCardArray[m_iUserCount*i], sizeof(BYTE)*m_iUserCount);
 		iSendUserIndex = (iSendUserIndex + 1) % PLAY_COUNT;
 	}
-	::CopyMemory(m_iBackCard, &iCardArray[m_iSendCount], sizeof(BYTE)*m_iBackCount);
+	memcpy(m_iBackCard, &iCardArray[m_iSendCount], sizeof(BYTE)*m_iBackCount);
 
 	//启动机器人手牌增加程序
 	if (m_iRobotCount == 2 && m_byRobotDesk1 != 255 && m_byRobotDesk2 != 255)
@@ -1215,7 +1209,7 @@ BOOL	CServerGameDesk::SendAllCard()
 		{
 			if (i == j || m_GameMutiple.sMingPaiMutiple[j] > 0 || m_bIsRobot[i])
 			{
-				::CopyMemory(&TSendAll.iUserCardList[iTempPos], m_iUserCard[j], sizeof(BYTE)*m_iUserCardCount[j]);
+				memcpy(&TSendAll.iUserCardList[iTempPos], m_iUserCard[j], sizeof(BYTE)*m_iUserCardCount[j]);
 			}
 
 			iTempPos += m_iUserCardCount[j];
@@ -1224,7 +1218,7 @@ BOOL	CServerGameDesk::SendAllCard()
 		iPos += m_iUserCardCount[i];
 		SendGameData(i, &TSendAll, sizeof(TSendAll), MSG_MAIN_LOADER_GAME, ASS_SEND_ALL_CARD, 0);
 		//SendWatchData(i,&TSendAll,sizeof(TSendAll),MSG_MAIN_LOADER_GAME,ASS_SEND_ALL_CARD,0);
-		::ZeroMemory(&TSendAll.iUserCardList, sizeof(TSendAll.iUserCardList));
+		::bzero(&TSendAll.iUserCardList, sizeof(TSendAll.iUserCardList));
 	}
 
 	m_iSendCardPos++;
@@ -1631,9 +1625,9 @@ BOOL	CServerGameDesk::SendBackCard()
 	m_Logic.SetGameTask(BackCard.gameTask);
 	BackCard.gameTask.byBackCardMutiple = 1;//m_Logic.GetBackCardMytiple() ; 
 	m_GameMutiple.sBackCardMutiple = 1;//m_Logic.GetBackCardMytiple()  ; 
-	::CopyMemory(&m_iUserCard[m_iUpGradePeople][m_iUserCardCount[m_iUpGradePeople]], m_iBackCard, sizeof(BYTE)*BackCard.iBackCardCount);
+	memcpy(&m_iUserCard[m_iUpGradePeople][m_iUserCardCount[m_iUpGradePeople]], m_iBackCard, sizeof(BYTE)*BackCard.iBackCardCount);
 	m_iUserCardCount[m_iUpGradePeople] += BackCard.iBackCardCount;
-	::CopyMemory(BackCard.iBackCard, m_iBackCard, sizeof(BYTE)*BackCard.iBackCardCount);
+	memcpy(BackCard.iBackCard, m_iBackCard, sizeof(BYTE)*BackCard.iBackCardCount);
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
 		SendGameData(i, &BackCard, sizeof(BackCard), MSG_MAIN_LOADER_GAME, ASS_BACK_CARD_EX, 0);
@@ -1808,7 +1802,7 @@ BOOL	CServerGameDesk::UserShowCard(BYTE bDeskStation, int iValue)
 	}
 
 	ShowCardStruct showresult;
-	::ZeroMemory(&showresult, sizeof(showresult));
+	::bzero(&showresult, sizeof(showresult));
 	showresult.bDeskStation = bDeskStation;
 	showresult.iValue = iValue;
 
@@ -1946,7 +1940,7 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 		m_iUserCardCount[bDeskStation] -= iCardCount;
 		//记录出牌信息
 		m_iDeskCardCount[bDeskStation] = iCardCount;
-		::CopyMemory(m_iDeskCard[bDeskStation], iOutCard, sizeof(BYTE)*iCardCount);
+		memcpy(m_iDeskCard[bDeskStation], iOutCard, sizeof(BYTE)*iCardCount);
 		m_byPass[bDeskStation] = false;
 
 		//记录出牌
@@ -1968,13 +1962,13 @@ BOOL	CServerGameDesk::UserOutCard(BYTE bDeskStation, BYTE iOutCard[], int iCardC
 	CMD_S_OutCard UserOutResult;
 	UserOutResult.byCurOutCardStation = bDeskStation;
 	UserOutResult.byCardCount = iCardCount;
-	::CopyMemory(UserOutResult.byCardList, iOutCard, sizeof(BYTE)*iCardCount);
+	memcpy(UserOutResult.byCardList, iOutCard, sizeof(BYTE)*iCardCount);
 	UserOutResult.byHandCardCount = m_iUserCardCount[bDeskStation];
 	for (int i = 0;i < PLAY_COUNT; i++)
 	{
 		if (i == bDeskStation)
 		{
-			::CopyMemory(UserOutResult.byHandCard, m_iUserCard[bDeskStation], sizeof(BYTE)*m_iUserCardCount[bDeskStation]);
+			memcpy(UserOutResult.byHandCard, m_iUserCard[bDeskStation], sizeof(BYTE)*m_iUserCardCount[bDeskStation]);
 		}
 		else
 		{
@@ -2104,8 +2098,8 @@ BOOL CServerGameDesk::NewPlayTurn(BYTE bDeskStation)
 		m_bIsLastCard = true;
 		m_byteHitPass = 0;
 		m_iLastCardCount[i] = m_iDeskCardCount[i];
-		::CopyMemory(m_iLastOutCard[i], m_iDeskCard[i], sizeof(BYTE)*m_iLastCardCount[i]);
-		::CopyMemory(m_byLastTurnPass, m_byPass, sizeof(m_byLastTurnPass));
+		memcpy(m_iLastOutCard[i], m_iDeskCard[i], sizeof(BYTE)*m_iLastCardCount[i]);
+		memcpy(m_byLastTurnPass, m_byPass, sizeof(m_byLastTurnPass));
 	}
 	::memset(m_iDeskCardCount, 0, sizeof(m_iDeskCardCount));
 	::memset(m_byPass, 0, sizeof(m_byPass));
@@ -2240,7 +2234,7 @@ void CServerGameDesk::UpdateCalculateBoard()
 	}
 
 	// 计算抽水值
-	__super::SetDeskPercentageScore(m_tZongResult.i64WinMoney);
+	CGameDesk::SetDeskPercentageScore(m_tZongResult.i64WinMoney);
 
 	for (int i = 0; i < PLAY_COUNT; i++)
 	{
@@ -2406,7 +2400,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 						llMoney[i] = -llResNums;
 						m_bPoChan[i] = true;
 					}
-					_Int64Money += _abs64(llMoney[i]);
+					_Int64Money += llabs(llMoney[i]);
 				}
 				llMoney[m_iUpGradePeople] = _Int64Money;
 			}
@@ -2420,9 +2414,9 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 					{
 						if (i == m_iUpGradePeople)
 							continue;
-						llMoney[i] = llMoney[i] * llResNums / _abs64(llMoney[m_iUpGradePeople]);
+						llMoney[i] = llMoney[i] * llResNums / llabs(llMoney[m_iUpGradePeople]);
 					}
-					llMoney[m_iUpGradePeople] = -_abs64(llResNums);
+					llMoney[m_iUpGradePeople] = -llabs(llResNums);
 					m_bPoChan[m_iUpGradePeople] = true;
 				}
 			}
@@ -2507,7 +2501,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		//设置数据 
 		SetGameStation(GS_WAIT_ARGEE);
 		ReSetGameState(bCloseFlag);
-		__super::GameFinish(bDeskStation, GF_NORMAL);
+		CGameDesk::GameFinish(bDeskStation, GF_NORMAL);
 		return true;
 	}
 	case GF_NO_CALL_SCORE:
@@ -2573,7 +2567,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		if (!IsGoldRoom() && m_iRunGameCount >= m_iVipGameCount)
 		{
 			m_byGameEndType = 1;
-			__super::GameFinish(bDeskStation, bCloseFlag);
+			CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 		}
 		else
 		{
@@ -2609,7 +2603,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			m_byGameEndType = 1;
 			m_iVipGameCount = m_iRunGameCount;
 		}
-		__super::GameFinish(bDeskStation, bCloseFlag);
+		CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 		return true;
 	}
 	case GFF_FORCE_FINISH:		//用户断线离开
@@ -2629,13 +2623,13 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		bCloseFlag = GF_AHEAD_END;
 
 		ReSetGameState(bCloseFlag);
-		__super::GameFinish(0, bCloseFlag);
+		CGameDesk::GameFinish(0, bCloseFlag);
 		return true;
 	}
 	}
 	//重置数据
 	ReSetGameState(bCloseFlag);
-	__super::GameFinish(bDeskStation, bCloseFlag);
+	CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 
 	return true;
 }
@@ -2776,7 +2770,7 @@ BOOL CServerGameDesk::UserHaveThing(BYTE bDeskStation, char * szMessage)
 	{
 		HaveThingStruct HaveThing;
 		HaveThing.pos = bDeskStation;
-		::CopyMemory(HaveThing.szMessage, szMessage, 60 * sizeof(char));
+		memcpy(HaveThing.szMessage, szMessage, 60 * sizeof(char));
 
 		for (int i = 0; i < PLAY_COUNT; i++)
 			if (i != bDeskStation)
@@ -2894,7 +2888,7 @@ BOOL CServerGameDesk::UserAutoOutCard(BYTE bDeskStation)
 //用户断线离开
 bool CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 {
-	__super::UserNetCut(pUser);
+	CGameDesk::UserNetCut(pUser);
 
 	if (IsGoldRoom() && IsPlayGame(0) && IsAllUserOffline())
 	{
@@ -2909,7 +2903,7 @@ bool CServerGameDesk::UserLeftDesk(GameUserInfo* pUser)
 {
 	m_bUserReady[pUser->deskStation] = false;
 	m_GameMutiple.sMingPaiMutiple[pUser->deskStation] = 0;
-	return __super::UserLeftDesk(pUser);
+	return CGameDesk::UserLeftDesk(pUser);
 }
 
 //是否为未出过牌

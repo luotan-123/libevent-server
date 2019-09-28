@@ -534,8 +534,6 @@ void CGServerConnect::GetIndexByThreadID(pthread_t uThreadID, size_t& uMin, size
 
 void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 {
-	INFO_LOG("ThreadCheckConnect thread begin...");
-
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
@@ -544,6 +542,10 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 
 	//// 通知主线程读取线程参数完成
 	//SetEvent(pThis->m_hEventThread);
+
+	sleep(1);
+
+	INFO_LOG("ThreadCheckConnect thread begin...");
 
 	while (true)
 	{
@@ -588,8 +590,6 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 
 void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 {
-	INFO_LOG("CGServerConnect::ThreadRSSocket thread begin...");
-
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
@@ -599,7 +599,9 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 	//// 通知主线程读取线程参数完成
 	//SetEvent(pThis->m_hEventThread);
 
-	sleep(2);
+	sleep(3);
+
+	INFO_LOG("CGServerConnect::ThreadRSSocket thread begin...");
 
 	pthread_t threadID = GetCurrentThreadId();
 	size_t uMinIndex = 0, uMaxIndex = 0;

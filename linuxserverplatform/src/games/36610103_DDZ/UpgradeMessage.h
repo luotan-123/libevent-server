@@ -2,7 +2,7 @@
 //运营版经过编译优化，无法调试但是运行速度更快
 #pragma pack(1)
 //文件名字定义
-#define GAMENAME						TEXT("潮汕斗地主")
+#define GAMENAME						"潮汕斗地主"
 #define NAME_ID							36610103								//名字 ID
 
 //版本定义
@@ -18,8 +18,7 @@
 
 //游戏信息
 #define PLAY_COUNT						3								//游戏人数
-#define SKIN_CARD						TEXT(".\\image\\cardskin")		//共用图片文件夹
-static TCHAR szTempStr[MAX_PATH] = { 0 };//暂存字符串，用来获取 dll_name 等的时候使用
+#define SKIN_CARD						".\\image\\cardskin"			//共用图片文件夹
 #define GET_CLIENT_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".ico"))
 #define GET_SERVER_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".dll"))
 #define GET_CLIENT_BCF_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".bcf"))
@@ -177,7 +176,7 @@ struct  GameMutipleStruct
 	///获取明牌最大倍数
 	int  GetMingMaxMutiple(void)
 	{
-		int iMingMutiple = max(max(sMingPaiMutiple[0], sMingPaiMutiple[1]), sMingPaiMutiple[2]);
+		int iMingMutiple = Max_(Max_(sMingPaiMutiple[0], sMingPaiMutiple[1]), sMingPaiMutiple[2]);
 
 		return (iMingMutiple > 0 ? iMingMutiple : 1);
 	}
@@ -233,7 +232,7 @@ struct GameStation_2
 	int                 iAddDoubleLimit;             //加倍限制
 	int                 iGameMaxLimit;              ///游戏最大输赢
 
-	DWORD				iCardShape;						//牌型设置
+	UINT				iCardShape;						//牌型设置
 	//游戏倍数
 	UINT				iDeskBasePoint;					//桌面基础分
 	UINT				iRoomBasePoint;					//房间倍数
@@ -272,7 +271,7 @@ struct GameStation_3
 	UINT				iDeskBasePoint;					//桌面基础分
 	UINT				iRoomBasePoint;					//房间倍数
 
-	DWORD				iCardShape;						//牌型设置
+	UINT				iCardShape;						//牌型设置
 	int                 iGameMutiple;             ///游戏中的倍数
 	int                 iAddDoubleLimit;             //加倍限制
 	int                 iGameMaxLimit;              ///游戏最大输赢
@@ -334,7 +333,7 @@ struct GameStation_4
 	UINT				iRoomBasePoint;						//房间倍数
 
 	int                 iGameMutiple;             ///游戏中的倍数
-	DWORD				iCardShape;							//牌型设置
+	UINT				iCardShape;							//牌型设置
 	int                 iAddDoubleLimit;             //加倍限制
 	int                 iGameMaxLimit;              ///游戏最大输赢
 
@@ -439,7 +438,7 @@ struct	GameBeginStruct
 	BYTE				iPlayLimit;							//游戏总局数
 	BYTE				iBeenPlayGame;						//已经玩了多少局
 	BYTE                byUserMingBase[PLAY_COUNT];        ///玩家明牌倍数情况
-	DWORD				iCardShape;							//牌型设置
+	UINT				iCardShape;							//牌型设置
 
 	GameBeginStruct()
 	{

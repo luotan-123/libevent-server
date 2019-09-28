@@ -238,6 +238,9 @@ bool CBaseMainManage::Start()
 		throw new CException("CBaseMainManage::m_pTcpConnect.Start 连接线程函数启动失败", 0x434);
 	}
 
+	// 关联日志文件
+	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, m_InitData.uRoomID);
+
 	//////////////////////////////////建立与登录服的连接////////////////////////////////////////
 	ret = m_pGServerConnect->Start(&m_DataLine, m_InitData.uRoomID);
 	if (!ret)

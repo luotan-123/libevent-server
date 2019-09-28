@@ -73,7 +73,7 @@ int main()
 	int b = 123456;
 	unsigned long c = 123454;
 	a = Min_(b, c);
-	//GOOGLE_PROTOBUF_VERIFY_VERSION;
+	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 	//Team team;
 	//team.set_id(1);

@@ -2,6 +2,9 @@
 
 #include "KernelDefine.h"
 
+////////////////////////////////////系统函数实现/////////////////////////////////////////////
+
+
 //计算数组维数
 #define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
 

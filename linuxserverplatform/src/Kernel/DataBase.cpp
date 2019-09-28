@@ -171,8 +171,6 @@ bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandle
 //数据库处理线程
 void* CDataBaseManage::DataServiceThread(void* pThreadData)
 {
-	INFO_LOG("DataServiceThread starting...");
-
 	//数据定义
 	DBThreadParam* pData = (DBThreadParam*)pThreadData;		//线程启动数据指针
 	CDataBaseManage* pDataManage = pData->pDataManage;				//数据库管理指针
@@ -185,6 +183,10 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 
 	//数据缓存
 	BYTE					szBuffer[LD_MAX_PART];
+
+	sleep(1);
+
+	INFO_LOG("DataServiceThread starting...");
 
 	while (pDataManage->m_bRun == true)
 	{

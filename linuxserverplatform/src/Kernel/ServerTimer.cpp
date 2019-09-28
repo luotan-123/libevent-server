@@ -152,7 +152,7 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 
 	for (auto iter = param->pCServerTimer->m_timerMap.begin(); iter != param->pCServerTimer->m_timerMap.end();)
 	{
-		if ((currTime - iter->second.starttime) % iter->second.elapse == 0 && param->pCServerTimer->m_pDataLine)
+		if ((currTime >= iter->second.starttime) && (currTime - iter->second.starttime) % iter->second.elapse == 0)
 		{
 			ServerTimerLine WindowTimer;
 			WindowTimer.uTimerID = iter->first;
@@ -164,7 +164,7 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 				continue;
 			}
 		}
-	
+
 		iter++;
 	}
 
