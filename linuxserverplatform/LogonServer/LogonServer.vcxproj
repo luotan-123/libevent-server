@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{181d531f-3ef7-4eca-aba1-fbea79dfe8d2}</ProjectGuid>
+    <ProjectGuid>{cffd70ca-abc0-4f52-9beb-cb50650fdeb8}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>test</RootNamespace>
+    <RootNamespace>LogonServer</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -83,129 +83,117 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="test.pb.cc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="test.pb.h" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SharedLibrarySearchPath>
-      </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

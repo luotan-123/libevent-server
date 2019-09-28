@@ -97,12 +97,12 @@ bool CDataBaseManage::Start()
 	// 关联日志文件
 	GameLogManage()->AddLogFile(threadID, THREAD_TYPE_ASYNC, roomID);
 
-	//// 等待子线程读取线程参数
-	//WaitForSingleObject(StartEvent, INFINITE);
-
 	//ResetEvent(StartEvent);
 
 	INFO_LOG("DataBaseManage start end.");
+
+	// 等待子线程读取线程参数
+	usleep(THREAD_PARAM_WAIT_TIME);
 
 	return true;
 }

@@ -418,6 +418,9 @@ void CConfigManage::SetServiceType(int type)
 
 bool CConfigManage::ConnectToDatabase()
 {
+	CON_INFO_LOG("连接数据库中。。。[ip=%s,port=%d,dbname=%s,user=%s,passwd=%s]"
+		, m_dbConfig.ip, m_dbConfig.port, m_dbConfig.dbName, m_dbConfig.user, m_dbConfig.passwd);
+
 	m_pMysqlHelper->init(m_dbConfig.ip, m_dbConfig.user, m_dbConfig.passwd, m_dbConfig.dbName, "", m_dbConfig.port);
 	try
 	{
@@ -428,6 +431,8 @@ bool CConfigManage::ConnectToDatabase()
 		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
+
+	CON_INFO_LOG("连接数据库成功");
 
 	return true;
 }

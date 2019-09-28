@@ -236,7 +236,8 @@ bool CTcpConnect::Start(CDataLine* pDataLine, const char* ip, int port, int serv
 	m_connectServerType = serverType;
 	m_bStart = true;
 
-	Connect();
+	// 先不连接，稍后连接
+	//Connect();
 
 	return true;
 }
@@ -278,12 +279,12 @@ bool CTcpConnect::Connect()
 		msg.serverID = m_connectServerID;
 		Send(COMMON_VERIFY_MESSAGE, &msg, sizeof(msg));
 
-		return false;
+		return true;
 	}
 
 	ERROR_LOG("连接中心服务器失败，稍后会重连。ip=%s,port=%d", m_ip, m_port);
 
-	return true;
+	return false;
 }
 
 bool CTcpConnect::Send(UINT msgID, const void* pData, UINT size, int userID/* = 0*/, NetMessageHead* pNetHead/* = NULL*/)
@@ -361,12 +362,15 @@ bool CTcpConnect::CheckConnection()
 {
 	if (m_tcpClient.Enable() == false)
 	{
-		sleep(5);
 		ReStart();
-		return Connect();
+		if (!Connect())
+		{
+			sleep(5);
+			return false;
+		}
 	}
 
-	return false;
+	return true;
 }
 
 bool CTcpConnect::ReStart()

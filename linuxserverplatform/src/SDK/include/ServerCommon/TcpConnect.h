@@ -65,7 +65,7 @@ public:
 	bool Send(UINT msgID, const void* pData, UINT size, int userID = 0, NetMessageHead * pNetHead = NULL);
 
 	bool EventLoop();
-	bool CheckConnection();
+	bool CheckConnection(); //return ，连接状态：true，非连接状态：false
 
 	bool ReStart();
 private:

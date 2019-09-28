@@ -68,37 +68,33 @@ void* TimerFun(void* p)
 int main()
 {
 	printf("罗潭\n");
-	//system("sh start.sh");
-	int a = 0;
-	int b = 123456;
-	unsigned long c = 123454;
-	a = Min_(b, c);
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-	//Team team;
-	//team.set_id(1);
-	//team.set_name("Rocket");
-	//Student* s1 = team.add_student(); // 添加repeated成员
-	//s1->set_id(1);
-	//s1->set_name("Mike");
-	//s1->set_sex(BOY);
-	//Student* s2 = team.add_student();
-	//s2->set_id(2);
-	//s2->set_name("Lily");
-	//s2->set_sex(GIRL);
+	Team team;
+	team.set_id(1);
+	team.set_name("Rocket");
+	Student* s1 = team.add_student(); // 添加repeated成员
+	s1->set_id(1);
+	s1->set_name("Mike");
+	s1->set_sex(BOY);
+	Student* s2 = team.add_student();
+	s2->set_id(2);
+	s2->set_name("Lily");
+	s2->set_sex(GIRL);
 
-	//// encode --> bytes stream
-	//string out;
-	//team.SerializeToString(&out);
+	// encode --> bytes stream
+	string out;
+	team.SerializeToString(&out);
 
-	//// decode --> team structure
-	//Team t;
-	//t.ParseFromArray(out.c_str(), out.size()); // or parseFromString
-	//cout << t.DebugString() << endl;
-	//for (int i = 0; i < t.student_size(); i++) {
-	//	Student s = t.student(i); // 按索引解repeated成员
-	//	cout << s.name() << " " << s.sex() << endl;
-	//}
+	// decode --> team structure
+	Team t;
+	t.ParseFromArray(out.c_str(), out.size()); // or parseFromString
+	cout << t.DebugString() << endl;
+	for (int i = 0; i < t.student_size(); i++) {
+		Student s = t.student(i); // 按索引解repeated成员
+		cout << s.name() << " " << s.sex() << endl;
+	}
+
 
 
 	CUtil::MkdirIfNotExists("log/");
@@ -130,24 +126,19 @@ int main()
 
 
 
-	//pTime->Stop();
+	//发送邮件接口
+	MyCurl curl;
+	std::vector<std::string> vUrlHeader;
+	std::string postFields = "";
+	std::string result = "";
+	//组合生成URL
+	std::string url = "http://api.androidhive.info/volley/person_object.json";
+	curl.postUrlHttps(url, vUrlHeader, postFields, result);
+	std::cout << result << endl;
 
 
-	////发送邮件接口
-	//MyCurl curl;
-	//std::vector<std::string> vUrlHeader;
-	//std::string postFields = "";
-	//std::string result = "";
-	////组合生成URL
-	//std::string url = "http://api.androidhive.info/volley/person_object.json";
-	//curl.postUrlHttps(url, vUrlHeader, postFields, result);
-	//std::cout << result << endl;
 
-
-	/*CRedisCenter* pRedis = new CRedisCenter;
-	pRedis->Init();*/
-
-	/*string strJsonContent = "{\"role_id\": 1,\"occupation\": \"paladin\",\"camp\": \"alliance\"}";
+	string strJsonContent = "{\"role_id\": 1,\"occupation\": \"paladin\",\"camp\": \"alliance\"}";
 	int nRoleDd = 0;
 	string strOccupation = "";
 	string strCamp = "";
@@ -161,54 +152,27 @@ int main()
 	}
 	cout << "role_id is: " << nRoleDd << endl;
 	cout << "occupation is: " << strOccupation << endl;
-	cout << "camp is: " << strCamp << endl;*/
+	cout << "camp is: " << strCamp << endl;
 
-	/*LogonResponseLogon msg;
+
+	LogonResponseLogon msg;
 	strcpy(msg.name, "123456");
 	msg.money = 963852741;
 	Xor::Encrypt((unsigned char *)&msg, sizeof(msg));
-	Xor::Decrypt((unsigned char*)& msg, sizeof(msg));*/
-
-
-	/*
-	int fd = 10;
-	int ret;
-	ret = close(fd);
-	if (ret == -1)
-	{
-		SYS_ERROR_LOG("close fd");
-		CON_INFO_LOG("====");
-		CON_ERROR_LOG("====");
-	}*/
-	
+	Xor::Decrypt((unsigned char*)& msg, sizeof(msg));
 
 	
 
-	//struct timeval tv;
-	//gettimeofday(&tv, NULL);
-	//printf("second:%ld\n", tv.tv_sec);  //秒
-	//printf("millisecond:%ld\n", tv.tv_sec * 1000 + tv.tv_usec / 1000);  //毫秒
-	//printf("microsecond:%ld\n", tv.tv_sec * 1000000 + tv.tv_usec);  //微秒
+	printf("+++++++++++++++==\n"); 
+	CSignedLock lock;
+	CSignedLockObject testLock(&lock, false);
 
-	//sleep(3); // 为方便观看，让程序睡三秒后对比
-	//std::cout << "3s later:" << std::endl;
+	testLock.Lock();
+	testLock.Lock();
+	printf("+++++++++++++++==\n");
 
-	//gettimeofday(&tv, NULL);
-	//printf("second:%ld\n", tv.tv_sec);  //秒
-	//printf("millisecond:%ld\n", tv.tv_sec * 1000 + tv.tv_usec / 1000);  //毫秒
-	//printf("microsecond:%ld\n", tv.tv_sec * 1000000 + tv.tv_usec);  //微秒
-
-
-	//printf("+++++++++++++++==\n"); 
-	//CSignedLock lock;
-	//CSignedLockObject testLock(&lock, false);
-
-	//testLock.Lock();
-	//testLock.Lock();
-	//printf("+++++++++++++++==\n");
-
-	//testLock.UnLock();
-	//testLock.UnLock();
+	testLock.UnLock();
+	testLock.UnLock();
 
 	int    socket_fd, connect_fd;
 	struct sockaddr_in     servaddr;

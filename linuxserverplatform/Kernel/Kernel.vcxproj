@@ -168,7 +168,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -187,7 +187,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -206,7 +206,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -225,7 +225,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -245,7 +245,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -264,7 +264,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -283,7 +283,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -302,7 +302,7 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1.0.0 ../bin/libevent.so;</Command>
+      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

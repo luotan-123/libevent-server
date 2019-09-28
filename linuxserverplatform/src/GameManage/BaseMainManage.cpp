@@ -266,8 +266,8 @@ bool CBaseMainManage::Start()
 		throw new CException("CBaseMainManage::Start OnStart 函数错误", 0x422);
 	}
 
-	//休息一点时间
-	usleep(THREAD_ONCE_HANDLE_MSG);
+	// 等待子线程读取线程参数
+	usleep(THREAD_PARAM_WAIT_TIME);
 
 	return true;
 }
@@ -532,8 +532,8 @@ void * CBaseMainManage::TcpConnectThread(void* pThreadData)
 
 	while (pThis->m_bRun && pThis->m_pTcpConnect)
 	{
-		pTcpConnect->EventLoop();
 		pTcpConnect->CheckConnection();
+		pTcpConnect->EventLoop();
 	}
 
 	pthread_exit(NULL);
