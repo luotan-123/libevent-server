@@ -19,3 +19,8 @@ ln -s /usr/local/bin/protoc /usr/bin
 三、生成core
 1、启动程序会话执行 ：ulimit -c unlimited
 2、设置core文件名格式：echo "./core-%p-%t" >/proc/sys/kernel/core_pattern
+
+四、开机启动程序
+自己写一个shell脚本
+将写好的脚本（.sh文件）放到目录 /etc/profile.d/ 下，系统启动后就会自动执行该目录下的所有shell脚本。
+cp /home/luotan/LinuxRun/RedisGame/start-server.sh ./start-server-game.sh
