@@ -21,7 +21,9 @@
 #include "test.pb.h"
 #include "ServerTimer.h"
 #include "GameMainManage.h"
-
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace test;
 
@@ -65,8 +67,104 @@ void* TimerFun(void* p)
 	}
 }
 
+class FIFOEvent
+{
+public:
+	FIFOEvent(const char* filename);
+	~FIFOEvent(){}
+	void WaitForEvent();
+	void SetEvent();
+private:
+	const char* m_fifoName;
+};
+FIFOEvent::FIFOEvent(const char* filename)
+{
+	m_fifoName = filename;
+
+	int res = 0;
+
+	if (access(m_fifoName, F_OK) == -1)
+	{
+		res = mkfifo(m_fifoName, 0777);
+		if (res != 0)
+		{
+			printf("could not create fifo:%s\n", strerror(errno));
+			m_fifoName = NULL;
+		}
+	}
+}
+void FIFOEvent::WaitForEvent()
+{
+	if (!m_fifoName)
+	{
+		return;
+	}
+
+	int fifoFd = open(m_fifoName, O_RDONLY);
+	int res = 0;
+
+	if (fifoFd != -1)
+	{
+		char chTemp;
+		res = read(fifoFd, &chTemp, sizeof(chTemp));
+		if (res == -1)
+		{
+			printf("read error:%s\n", strerror(errno));
+		}
+
+		close(fifoFd);
+	}
+	else
+	{
+		printf("open error:%s\n", strerror(errno));
+	}
+}
+void FIFOEvent::SetEvent()
+{
+	if (!m_fifoName)
+	{
+		return;
+	}
+
+	int fifoFd = open(m_fifoName, O_WRONLY);
+	int res = 0;
+
+	if (fifoFd != -1)
+	{
+		char chTemp = 123;
+		res = write(fifoFd, &chTemp, sizeof(chTemp));
+		if (res == -1)
+		{
+			printf("write error:%s\n", strerror(errno));
+		}
+
+		close(fifoFd);
+	}
+	else
+	{
+		printf("open error:%s\n", strerror(errno));
+	}
+}
+
+void* FIFOFunc(void*param)
+{
+	printf("测试管道\n");
+	
+	FIFOEvent* p = (FIFOEvent*)param;
+
+	p->SetEvent();
+}
+
 int main()
 {
+	FIFOEvent fifo("/tmp/linuxserver-main-fifo");
+
+	// 开辟线程
+	pthread_t threadID2 = 0;
+	pthread_create(&threadID2, NULL, FIFOFunc, (void*)&fifo);
+	fifo.WaitForEvent();
+
+
 	printf("罗潭\n");
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 

@@ -14,9 +14,6 @@ CGameMainManage::CGameMainManage()
 //////////////////////////////////////////////////////////////////////
 CGameMainManage::~CGameMainManage()
 {
-	m_uDeskCount = 0;
-	SafeDeleteArray(m_pDesk);
-	SafeDeleteArray(m_pDeskArray);
 	m_uNameID = 0;
 
 	if (m_pGameUserManage)
@@ -73,7 +70,7 @@ bool CGameMainManage::OnUnInit()
 	m_uDeskCount = 0;
 
 	SafeDeleteArray(m_pDesk);
-	SafeDeleteArray(m_pDeskArray);
+	DeleteDeskObject(&m_pDeskArray);
 
 	return true;
 }

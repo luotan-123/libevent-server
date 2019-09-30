@@ -84,8 +84,11 @@ public:
 	virtual CGameDesk* GetDeskObject(int deskIdx);
 
 private:
-	//获取游戏桌子信息
+	//创建游戏桌子信息
 	virtual CGameDesk * CreateDeskObject(UINT uInitDeskCount, UINT & uDeskClassSize) = 0;
+	//删除桌子信息
+	virtual void DeleteDeskObject(CGameDesk** pCGameDesk) = 0;
+	//删除所有定时器
 	void KillAllTimer();
 	//初始化游戏桌
 	bool InitGameDesk(UINT uDeskCount, UINT	uDeskType);
@@ -306,11 +309,16 @@ protected:
 };
 
 //游戏数据管理类模板
-template <class GameDeskClass, UINT uBasePoint, UINT uLessPointTimes> class CGameMainManageTemplate : public CGameMainManage
+template <class GameDeskClass, UINT uBasePoint, UINT uLessPointTimes> 
+class CGameMainManageTemplate : public CGameMainManage
 {
 public:
 	CGameMainManageTemplate() {}
-	virtual ~CGameMainManageTemplate() {}
+	virtual ~CGameMainManageTemplate() 
+	{
+		SafeDeleteArray(m_pDesk);
+		DeleteDeskObject(&m_pDeskArray);
+	}
 
 private:
 	//获取信息函数 （必须重载）
@@ -329,33 +337,28 @@ private:
 		GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pInitData->uNameID);
 		pKernelData->uDeskPeople = pGameBaseInfo->deskPeople;
 
-		pKernelData->uMinDeskPeople = pKernelData->uDeskPeople;
-
-		//调节人数
-		if ((pInitData->uDeskCount*pGameBaseInfo->deskPeople + 50) < pInitData->uMaxPeople)
-		{
-			pInitData->uMaxPeople = pInitData->uDeskCount*pGameBaseInfo->deskPeople + 50;
-		}
-
-		//调节表名字
-		if (strcmp(pInitData->szLockTable, "N/A") == 0) pInitData->szLockTable[0] = 0;
-		if (strcmp(pInitData->szIPRuleTable, "N/A") == 0) pInitData->szIPRuleTable[0] = 0;
-		if (strcmp(pInitData->szNameRuleTable, "N/A") == 0) pInitData->szNameRuleTable[0] = 0;
-
 		return true;
 	};
 
-	//获取游戏桌子信息
+	//创建游戏桌子信息
 	virtual CGameDesk* CreateDeskObject(UINT uInitDeskCount, UINT & uDeskClassSize)
 	{
 		uDeskClassSize = sizeof(GameDeskClass);
 		return new GameDeskClass[uInitDeskCount];
 	};
+
+	//删除桌子信息
+	virtual void DeleteDeskObject(CGameDesk** pCGameDesk)
+	{
+		GameDeskClass** pGameDeskClass = (GameDeskClass**)(pCGameDesk);
+		SafeDeleteArray(*pGameDeskClass);
+	}
 };
 
 /*******************************************************************************************************/
 //游戏模块类模板
-template <class GameDeskClass, UINT uBasePoint, UINT uLessPointTimes> class CGameModuleTemplate : public IModuleManageService
+template <class GameDeskClass, UINT uBasePoint, UINT uLessPointTimes> 
+class CGameModuleTemplate : public IModuleManageService
 {
 public:
 	CGameDataBaseHandle														m_DataBaseHandle;	//数据库处理模块

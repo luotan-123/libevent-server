@@ -11,9 +11,8 @@
 struct HandleThreadStartStruct
 {
 	//变量定义
-	HANDLE								hEvent;						//启动事件
-	HANDLE								hCompletionPort;			//完成端口
-	CBaseMainManage* pMainManage;				//数据管理指针
+	CFIFOEvent* pFIFO;						//启动事件
+	CBaseMainManage* pMainManage;			//数据管理指针
 };
 
 //构造函数
@@ -186,23 +185,14 @@ bool CBaseMainManage::Start()
 
 	m_bRun = true;
 
-	////建立事件
-	//HANDLE StartEvent = CreateEvent(FALSE, true, NULL, NULL);
-
-	////建立完成端口
-	//m_hCompletePort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
-	//if (m_hCompletePort == NULL)
-	//{
-	//	throw new CException("CBaseMainManage::Start m_hCompletePort 建立失败", 0x41D);
-	//}
-	//m_DataLine.SetCompletionHandle(m_hCompletePort);
+	// 创建管道
+	CFIFOEvent fifo("/tmp/CBaseMainManage-Start-fifo");
 
 	//启动处理线程
 	pthread_t uThreadID = 0;
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
-	//ThreadStartData.hCompletionPort = m_hCompletePort;
-	//ThreadStartData.hEvent = StartEvent;
+	ThreadStartData.pFIFO = &fifo;
 	int err = pthread_create(&uThreadID, NULL, LineDataHandleThread, (void*)& ThreadStartData);
 	if (err != 0)
 	{
@@ -213,8 +203,6 @@ bool CBaseMainManage::Start()
 
 	// 关联游戏业务逻辑线程与对应日志文件
 	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
-
-	//WaitForSingleObject(StartEvent, INFINITE);
 
 	bool ret = true;
 	ret = m_SQLDataManage.Start();
@@ -267,7 +255,7 @@ bool CBaseMainManage::Start()
 	}
 
 	// 等待子线程读取线程参数
-	usleep(THREAD_PARAM_WAIT_TIME);
+	fifo.WaitForEvent();
 
 	return true;
 }
@@ -404,10 +392,10 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//线程启动数据指针
 	CBaseMainManage* pMainManage = pData->pMainManage;						//数据管理指针
 	CDataLine* m_pDataLine = &pMainManage->m_DataLine;				//数据队列指针
-	//HANDLE	hCompletionPort = pData->hCompletionPort;				//完成端口
+	CFIFOEvent* pCFIFOEvent = pData->pFIFO;
 
 	//线程数据读取完成
-	//::SetEvent(pData->hEvent);
+	pCFIFOEvent->SetEvent();
 
 	//数据缓存
 	BYTE						szBuffer[LD_MAX_PART];
@@ -508,7 +496,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 		}
 	}
 
-	//INFO_LOG("THREAD::thread LineDataHandleThread exit!!!");
+	INFO_LOG("THREAD::thread LineDataHandleThread exit!!!");
 
 	pthread_exit(NULL);
 }

@@ -74,9 +74,6 @@ struct KernelInfoStruct
 {
 	UINT						uNameID;							//游戏名字 ID 号码
 	UINT						uDeskPeople;						//游戏人数
-
-	UINT						uMinDeskPeople;						//部分游戏支持M-N个人游戏
-
 	BYTE						bMaxVer;							//软件最高版本
 	BYTE						bLessVer;							//软件最低版本
 	BYTE						bStartSQLDataBase;					//使用数据库连接

@@ -540,9 +540,6 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
-	//// 通知主线程读取线程参数完成
-	//SetEvent(pThis->m_hEventThread);
-
 	sleep(1);
 
 	INFO_LOG("ThreadCheckConnect thread begin...");
@@ -580,7 +577,7 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 		}
 
 		// 过一段时间执行一次
-		sleep(6);
+		sleep(10);
 	}
 
 	INFO_LOG("ThreadCheckConnect thread exit.");
@@ -595,9 +592,6 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 	{
 		pthread_exit(NULL);
 	}
-
-	//// 通知主线程读取线程参数完成
-	//SetEvent(pThis->m_hEventThread);
 
 	sleep(3);
 

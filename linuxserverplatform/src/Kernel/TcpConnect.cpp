@@ -365,7 +365,7 @@ bool CTcpConnect::CheckConnection()
 		ReStart();
 		if (!Connect())
 		{
-			sleep(5);
+			sleep(8);
 			return false;
 		}
 	}

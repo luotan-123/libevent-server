@@ -4,14 +4,6 @@
 #include "DataBase.h"
 
 
-//处理线程结构定义
-struct DBThreadParam
-{
-	int					hEvent;									//退出事件
-	//HANDLE					hCompletionPort;						//完成端口
-	CDataBaseManage* pDataManage;							//数据库管理类指针
-};
-
 CDataBaseManage::CDataBaseManage()
 {
 	m_bInit = false;
@@ -56,36 +48,12 @@ bool CDataBaseManage::Start()
 
 	m_bRun = true;
 
-	//建立事件
-	int StartEvent = 0;//CreateEvent(FALSE, true, NULL, NULL);
-
-	////建立完成端口
-	//m_hCompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
-	//if (m_hCompletePort == NULL)
-	//{
-	//	ERROR_LOG("CreateIoCompletionPort failed err=%d", GetLastError());
-	//	return false;
-	//}
-	//m_DataLine.SetCompletionHandle(m_hCompletePort);
-
 	SQLConnectReset();
 	//SQLConnect();
 
 	//建立数据处理线程
 	pthread_t threadID = 0;
-
-	DBThreadParam ThreadStartData;
-	ThreadStartData.pDataManage = this;
-	ThreadStartData.hEvent = StartEvent;
-	//ThreadStartData.hCompletionPort = m_hCompletePort;
-
-	int roomID = 0;
-	if (m_pInitInfo)
-	{
-		roomID = m_pInitInfo->uRoomID;
-	}
-
-	int err = pthread_create(&threadID, NULL, DataServiceThread, (void*)& ThreadStartData);
+	int err = pthread_create(&threadID, NULL, DataServiceThread, (void*)this);
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("DataServiceThread failed");
@@ -95,14 +63,14 @@ bool CDataBaseManage::Start()
 	m_hThread = threadID;
 
 	// 关联日志文件
+	int roomID = 0;
+	if (m_pInitInfo)
+	{
+		roomID = m_pInitInfo->uRoomID;
+	}
 	GameLogManage()->AddLogFile(threadID, THREAD_TYPE_ASYNC, roomID);
 
-	//ResetEvent(StartEvent);
-
 	INFO_LOG("DataBaseManage start end.");
-
-	// 等待子线程读取线程参数
-	usleep(THREAD_PARAM_WAIT_TIME);
 
 	return true;
 }
@@ -172,14 +140,9 @@ bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandle
 void* CDataBaseManage::DataServiceThread(void* pThreadData)
 {
 	//数据定义
-	DBThreadParam* pData = (DBThreadParam*)pThreadData;		//线程启动数据指针
-	CDataBaseManage* pDataManage = pData->pDataManage;				//数据库管理指针
+	CDataBaseManage* pDataManage =(CDataBaseManage*)pThreadData;//数据库管理指针
 	CDataLine* pDataLine = &pDataManage->m_DataLine;			//数据队列指针
 	IDataBaseHandleService* pHandleService = pDataManage->m_pHandleService;	//数据处理接口
-	//HANDLE					hCompletionPort = pData->hCompletionPort;			//完成端口
-
-	//线程数据读取完成
-	//::SetEvent(pData->hEvent);
 
 	//数据缓存
 	BYTE					szBuffer[LD_MAX_PART];

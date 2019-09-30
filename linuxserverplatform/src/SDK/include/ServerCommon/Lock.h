@@ -38,3 +38,15 @@ private:
 	inline void Lock() { pthread_mutex_lock(&m_csLock); }
 	inline void UnLock() { pthread_mutex_unlock(&m_csLock); }
 };
+
+/////////////////////////////管道事件///////////////////////////////////////
+class CFIFOEvent
+{
+public:
+	CFIFOEvent(const char* filename);
+	~CFIFOEvent() {}
+	void WaitForEvent();
+	void SetEvent();
+private:
+	const char* m_fifoName;
+};
