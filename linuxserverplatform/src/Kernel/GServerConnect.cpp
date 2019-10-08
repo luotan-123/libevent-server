@@ -554,26 +554,19 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 		// 获取socket数组
 		const std::vector<CGServerClient*>& vecSocket = pThis->GetSocketVec();
 
-		try
+		// 检测连接
+		for (size_t i = 0; i < vecSocket.size(); i++)
 		{
-			// 检测连接
-			for (size_t i = 0; i < vecSocket.size(); i++)
+			CGServerClient* pGServerClient = vecSocket[i];
+			if (!pGServerClient)
 			{
-				CGServerClient* pGServerClient = vecSocket[i];
-				if (!pGServerClient)
-				{
-					continue;
-				}
-
-				if (!pGServerClient->IsConnected() && pGServerClient->IsNeedReConnect())
-				{
-					pGServerClient->ReConnect();
-				}
+				continue;
 			}
-		}
-		catch (...)
-		{
-			CON_ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
+
+			if (!pGServerClient->IsConnected() && pGServerClient->IsNeedReConnect())
+			{
+				pGServerClient->ReConnect();
+			}
 		}
 
 		// 过一段时间执行一次

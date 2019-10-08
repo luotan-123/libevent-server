@@ -84,5 +84,7 @@ int main()
 	GameLogManage()->Release();
 	ConfigManage()->Release();
 
+	exit(EXIT_SUCCESS);
+
 	return 0;
 }

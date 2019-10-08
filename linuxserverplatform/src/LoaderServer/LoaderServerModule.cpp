@@ -325,11 +325,7 @@ bool CLoaderServerModule::StopGameRoom(GameRoomInitStruct* pGameRoomInfo)
 			throw "组件卸载错误";
 		}
 
-		if (pGameRoomInfo->pIManageService->DeleteService() == false)
-		{
-			throw "组件清理错误";
-		}
-
+		pGameRoomInfo->pIManageService->DeleteService();
 		pGameRoomInfo->pIManageService = NULL;
 
 		//卸载组件
