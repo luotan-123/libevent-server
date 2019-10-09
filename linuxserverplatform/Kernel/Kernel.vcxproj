@@ -47,42 +47,42 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -154,90 +154,94 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <RemotePostBuildEvent>
@@ -245,64 +249,67 @@
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../src/SDK/include/curl;../src/SDK/include/ServerCommon;../src/SDK/include/DataBase;../src/SDK/include;../src/SDK/include/libevent;../src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>../src/SDK/lib;../bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;curl;mysqlclient;event</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <RemotePostBuildEvent>
       <Command>
       </Command>
     </RemotePostBuildEvent>
     <RemotePreLinkEvent>
-      <Command>mkdir -p ../bin;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/;cp ../src/SDK/lib/libmysqlclient.so.20 ../bin/libmysqlclient.so;cp ../src/SDK/lib/libcurl.so.4 ../bin/;cp ../src/SDK/lib/libcurl.so.4 ../bin/libcurl.so;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/;cp ../src/SDK/lib/libevent-2.2.so.1 ../bin/libevent.so;</Command>
+      <Command>mkdir -p $(RemoteRootDir)/bin;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libmysqlclient.so.20 $(RemoteRootDir)/bin/libmysqlclient.so;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libcurl.so.4 $(RemoteRootDir)/bin/libcurl.so;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/;cp $(RemoteRootDir)/src/SDK/lib/libevent-2.2.so.1 $(RemoteRootDir)/bin/libevent.so;</Command>
     </RemotePreLinkEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

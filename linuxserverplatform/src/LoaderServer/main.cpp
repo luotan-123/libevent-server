@@ -43,8 +43,8 @@ int main()
 	if (!ret)
 	{
 		ERROR_LOG("load config failed");
-		std::cout << "ConfigManage::Init error!\n";
-		system("pause");
+		std::cout << "ConfigManage::Init error!\n按下一个键退出\n";
+		getchar();
 		return -1;
 	}
 

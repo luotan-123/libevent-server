@@ -55,35 +55,35 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/linuxserverplatform</RemoteRootDir>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -132,91 +132,131 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/home/luotan/linuxserverplatform/src/SDK/include/curl;/home/luotan/linuxserverplatform/src/SDK/include/ServerCommon;/home/luotan/linuxserverplatform/src/SDK/include/DataBase;/home/luotan/linuxserverplatform/src/SDK/include;/home/luotan/linuxserverplatform/src/SDK/include/libevent;/home/luotan/linuxserverplatform/src/SDK/include/redis</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>/home/luotan/linuxserverplatform/bin/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
-      <AdditionalOptions>-Wl,-rpath=/home/luotan/linuxserverplatform/bin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+    </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
