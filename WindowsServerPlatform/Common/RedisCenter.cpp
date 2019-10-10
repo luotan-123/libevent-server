@@ -126,7 +126,7 @@ int CRedisCenter::NeedLoadAllUserData()	//判断是否需要加载数据库中所有用户数据到
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return 2;
 	}
 
@@ -142,7 +142,7 @@ int CRedisCenter::NeedLoadAllUserData()	//判断是否需要加载数据库中所有用户数据到
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return 2;
 	}
 
@@ -182,7 +182,7 @@ bool CRedisCenter::LoadAllUserData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -198,7 +198,7 @@ bool CRedisCenter::LoadAllUserData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -370,7 +370,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -386,7 +386,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+			ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 			continue;
 		}
 	}
@@ -401,7 +401,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -468,7 +468,7 @@ bool CRedisCenter::LoadAllAgentUser()		//加载所有代理
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -482,7 +482,7 @@ bool CRedisCenter::LoadAllAgentUser()		//加载所有代理
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -771,7 +771,7 @@ bool CRedisCenter::LoadAllUserBag()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo);
+		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -788,7 +788,7 @@ bool CRedisCenter::LoadAllUserBag()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 

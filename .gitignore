@@ -77,3 +77,5 @@ b6672c31c95382be
 /linuxserverplatform/CenterServer/obj
 /linuxserverplatform/CenterServer/readme
 /linuxserverplatform/CenterServer/bin
+/WindowsServerPlatform/SDK/lib/Server/GameManage.lib
+/WindowsServerPlatform/SDK/lib/Server/Common.lib

@@ -73,7 +73,7 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSour
 	}
 	catch(MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("Ö´ÐÐsqlÓï¾äÊ§°Ü==>>%s",excep.errorInfo) ;
+		ERROR_LOG("Ö´ÐÐsqlÓï¾äÊ§°Ü==>>%s",excep.errorInfo.c_str()) ;
 		return -3;
 	}
 	

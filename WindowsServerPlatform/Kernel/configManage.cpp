@@ -189,7 +189,7 @@ bool CConfigManage::LoadRedisConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -263,7 +263,7 @@ bool CConfigManage::LoadTableFiledConfig()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+			ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 			return false;
 		}
 
@@ -406,7 +406,7 @@ bool CConfigManage::LoadOtherConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -437,7 +437,7 @@ bool CConfigManage::ConnectToDatabase()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("¡¨Ω” ˝æ›ø‚ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("¡¨Ω” ˝æ›ø‚ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -456,7 +456,7 @@ bool CConfigManage::LoadGameBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -492,7 +492,7 @@ bool CConfigManage::LoadBuyGameDeskConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -534,7 +534,7 @@ bool CConfigManage::LoadRoomBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
@@ -735,7 +735,7 @@ bool CConfigManage::LoadTablesPrimaryKey()
 		}
 		catch (MysqlHelper_Exception& excep)
 		{
-			ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+			ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 			return false;
 		}
 
@@ -1421,7 +1421,7 @@ bool CConfigManage::LoadLogonBaseConfig()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return false;
 	}
 

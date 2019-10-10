@@ -2926,7 +2926,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char *
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo);
+		ERROR_LOG("÷¥––sql”Ôæ‰ ß∞‹:%s", excep.errorInfo.c_str());
 		return true;
 	}
 
