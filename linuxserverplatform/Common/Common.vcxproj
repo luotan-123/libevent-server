@@ -142,6 +142,7 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLoader.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLogon.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\RedisPHP.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\tableDefine.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">

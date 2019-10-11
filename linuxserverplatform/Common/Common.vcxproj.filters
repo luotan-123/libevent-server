@@ -104,5 +104,8 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h">
       <Filter>加密工具</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\tableDefine.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

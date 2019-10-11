@@ -125,6 +125,12 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 {
 	struct TimerParam* param = (struct TimerParam*)arg;
 
+	if (param == NULL)
+	{
+		CON_ERROR_LOG("TimeoutCB 参数为空");
+		return;
+	}
+
 	// 线程终止运行
 	if (!param->pCServerTimer->m_bRun)
 	{

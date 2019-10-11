@@ -3,6 +3,9 @@
 // 登陆服务器（网关服务器）模块
 CLoaderServerModule	g_LoaderServerModule;
 
+// 命令模式
+//#define COMMAND_MODE
+
 // 处理命令
 void _HandleCommand(const std::string& command)
 {
@@ -59,6 +62,8 @@ int main()
 	// 标题（显示版本信息）
 	printf("v%d.%d.%d %s\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME);
 
+#ifdef COMMAND_MODE
+
 	// 输出可用命令
 	std::cout << "1.输入 [exit] 退出 \n2.输入 [update] 更新所有房间配置 \n";
 
@@ -75,6 +80,17 @@ int main()
 		_HandleCommand(command);
 	}
 
+#else
+
+	CON_INFO_LOG("======================Gameserver 启动成功========================================");
+
+	while (true)
+	{
+		sleep(60);
+	}
+
+#endif
+	
 	g_LoaderServerModule.StopAllRoom();
 
 	CON_INFO_LOG("========================================================================");
