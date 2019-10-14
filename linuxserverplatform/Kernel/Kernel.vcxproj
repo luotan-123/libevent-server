@@ -128,6 +128,7 @@
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp" />
     <ClCompile Include="..\src\Kernel\ServerTimer.cpp" />
     <ClCompile Include="..\src\Kernel\TcpConnect.cpp" />
+    <ClCompile Include="..\src\Kernel\TCPSocket.cpp" />
     <ClCompile Include="..\src\Kernel\Xor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +151,7 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\ServerTimer.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\TcpConnect.h" />
+    <ClInclude Include="..\src\SDK\include\ServerCommon\TCPSocket.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Xor.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">

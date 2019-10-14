@@ -60,8 +60,8 @@ int main()
 		std::cout << "没有找到任何游戏房间，请检查 roombaseinfo.serviceName名字是否正确，或者动态库名字配置错误\n";
 	}
 
-	// 标题（显示版本信息）
-	printf("v%d.%d.%d %s\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME);
+	// 标题（显示版本信息和进程id）
+	printf("v%d.%d.%d %s  processID:%d\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME, getpid());
 
 #ifdef COMMAND_MODE
 
@@ -87,7 +87,7 @@ int main()
 
 	while (true)
 	{
-		sleep(60);
+		sleep(600);
 	}
 
 #endif

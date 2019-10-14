@@ -127,7 +127,6 @@
     <ClCompile Include="..\..\src\games\36610103_DDZ\ServerManage.cpp" />
     <ClCompile Include="..\..\src\games\36610103_DDZ\UpGradeDLL.cpp" />
     <ClCompile Include="..\..\src\games\36610103_DDZ\UpGradeLogic.cpp" />
-    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\games\36610103_DDZ\GameTaskLogic.h" />

@@ -37,7 +37,6 @@
   <ItemGroup>
     <ClCompile Include="..\src\LoaderServer\LoaderServerModule.cpp" />
     <ClCompile Include="..\src\LoaderServer\main.cpp" />
-    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\LoaderServer\LoaderServerModule.h" />
