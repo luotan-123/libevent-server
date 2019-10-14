@@ -1,9 +1,6 @@
 #pragma once
 
 #include "BaseCenterServer.h"
-#include "log.h"
-#include <map>
-#include <unordered_map>
 
 // 定时器ID
 enum CenterServerTimerID
@@ -97,7 +94,7 @@ private:
 	//获取信息函数
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	//SOCKET 关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
 	//定时器消息
@@ -136,7 +133,7 @@ private: /////////////////////////内部系统////////////////////////
 
 private:
 	////////////////////////////////处理PHP服消息//////////////////////////////////////////
-	bool OnHandlePHPMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandlePHPMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 平台公告相关
 	bool OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, int size);
 	// 全服邮件通知
@@ -175,19 +172,19 @@ private:
 	bool OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx, void*pData, int size);
 
 	////////////////////////////////处理通用(网关和游戏，不包含PHP)消息//////////////////////////////////////////
-	bool OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 为每个服务器绑定socketIdx
-	bool OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 
 
 	////////////////////////////////处理大厅服消息//////////////////////////////////////////
-	bool OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 登陆服资源变化
 	bool OnHandleLogonResChangeMessage(int userID, void* pData, UINT size);
 	// 玩家上下线
-	bool OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 给其它登录服发送数据，踢掉旧服务器玩家
-	bool OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 转发消息给某个人
 	bool OnHandleLogonRelayUserMessage(NetMessageHead * pNetHead, void* pData, UINT size, int userID);
 	// 转发消息给俱乐部
@@ -199,7 +196,7 @@ private:
 
 
 	////////////////////////////////处理游戏服消息//////////////////////////////////////////
-	bool OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 游戏服资源变化（金币和钻石）
 	bool OnHandleLoaderResChangeMessage(int userID, void* pData, UINT size);
 	// 开房列表信息变化(人数变化)

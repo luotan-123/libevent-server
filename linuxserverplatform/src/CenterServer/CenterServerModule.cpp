@@ -1,4 +1,4 @@
-#include "main.h"
+#include "CommonHead.h"
 #include "CenterServerModule.h"
 
 

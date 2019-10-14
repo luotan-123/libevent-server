@@ -103,12 +103,14 @@ bool CListenSocket::Init(int port, const char *ip/* = NULL*/)
 	ret = bind(m_hSocket, (struct sockaddr*)&svrAddr, sizeof(sockaddr_in));
 	if (ret == SOCKET_ERROR)
 	{
+		SYS_ERROR_LOG("bind fail. port=%d", port);
 		return false;
 	}
 
 	ret = listen(m_hSocket, SOMAXCONN);
 	if (ret == SOCKET_ERROR)
 	{
+		SYS_ERROR_LOG("listen fail. port=%d", port);
 		return false;
 	}
 

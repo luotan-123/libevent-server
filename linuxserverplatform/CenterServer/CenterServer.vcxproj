@@ -35,7 +35,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="..\src\CenterServer\BaseCenterServer.cpp" />
+    <ClCompile Include="..\src\CenterServer\CenterServerManage.cpp" />
+    <ClCompile Include="..\src\CenterServer\CenterServerModule.cpp" />
+    <ClCompile Include="..\src\CenterServer\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\CenterServer\BaseCenterServer.h" />
+    <ClInclude Include="..\src\CenterServer\CenterServerManage.h" />
+    <ClInclude Include="..\src\CenterServer\CenterServerModule.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{04ace773-2ef6-4d6b-b7c6-2cd5439bf4db}</ProjectGuid>
@@ -114,7 +122,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -125,7 +133,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -136,7 +144,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -147,7 +155,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -158,7 +166,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -169,7 +177,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -180,7 +188,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -191,7 +199,7 @@
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>Kernel;Common;event;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>

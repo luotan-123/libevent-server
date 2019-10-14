@@ -35,3 +35,6 @@ extern pthread_t GetCurrentThreadId();
 
 //获取线程pid,内核线程id
 extern pthread_t GetCurrentSysThreadId();
+
+//根据进程名字获取进程id
+extern pid_t GetProcessPidByName(const char* procName);

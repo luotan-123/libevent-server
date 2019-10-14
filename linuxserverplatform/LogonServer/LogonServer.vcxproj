@@ -116,7 +116,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -127,7 +127,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -138,7 +138,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -149,7 +149,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -160,7 +160,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -171,7 +171,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -182,7 +182,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -193,7 +193,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>Kernel;Common;event;json;curl</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

@@ -71,3 +71,25 @@ pthread_t GetCurrentSysThreadId()
 {
 	return syscall(SYS_gettid);
 }
+
+//根据进程名字获取进程id
+pid_t GetProcessPidByName(const char* procName)
+{
+	FILE* fp = NULL;
+	char buf[NAME_MAX] = "";
+	char cmd[NAME_MAX] = "";
+	pid_t pid = -1;
+	sprintf(cmd, "pidof %s", procName);
+
+	if ((fp = popen(cmd, "r")) != NULL)
+	{
+		if (fgets(buf, 255, fp) != NULL)
+		{
+			pid = atoi(buf);
+		}
+	}
+
+	pclose(fp);
+
+	return pid;
+}

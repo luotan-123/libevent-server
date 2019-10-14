@@ -1,19 +1,7 @@
-#include "main.h"
-#include "CenterServerManage.h"
-#include "tableDefine.h"
-#include "RedisLogon.h"
-#include "ConfigManage.h"
-#include "Define.h"
+#include "CommonHead.h"
 #include "NewMessageDefine.h"
 #include "ErrorCode.h"
-#include "log.h"
-#include "InternalMessageDefine.h"
-#include "PlatformMessage.h"
-#include "Util.h"
-#include "BillManage.h"
-#include "TcpConnect.h"
-#include <array>
-#include <math.h>
+#include "CenterServerManage.h"
 
 //////////////////////////////////////////////////////////////////////
 CCenterServerManage::CCenterServerManage() : CBaseCenterServer()
@@ -33,7 +21,7 @@ CCenterServerManage::~CCenterServerManage()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CCenterServerManage::OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (!pNetHead)
 	{
@@ -159,7 +147,6 @@ bool CCenterServerManage::PreInitParameter(ManageInfoStruct * pInitData, KernelI
 
 	pInitData->uListenPort = m_nPort;
 	pInitData->uMaxPeople = m_uMaxPeople;
-	pInitData->iSocketSecretKey = SECRET_KEY;
 	memcpy(pInitData->szCenterIP, config.ip, sizeof(pInitData->szCenterIP));
 
 	return true;
@@ -521,7 +508,7 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 	{
 		if (currTime >= itr->second.startTime)
 		{
-			if (_abs64(currTime - itr->second.startTime) <= 120)
+			if (llabs(currTime - itr->second.startTime) <= 120)
 			{
 				//时间到了，可以开始比赛了
 				PlatformReqStartMatchTime msg;
@@ -580,7 +567,7 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 }
 
 /////////////////////////////////PHP/////////////////////////////////////////
-bool CCenterServerManage::OnHandlePHPMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandlePHPMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	switch (pCenterHead->msgID)
 	{
@@ -1343,13 +1330,13 @@ bool CCenterServerManage::OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx
 }
 
 ////////////////////////////////处理通用消息//////////////////////////////////////////
-bool CCenterServerManage::OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	return true;
 }
 
 // 为每个服务器绑定socketIdx
-bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (size != sizeof(PlatformCenterServerVerify))
 	{
@@ -1409,7 +1396,7 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 }
 
 ////////////////////////////////处理大厅服消息//////////////////////////////////////////
-bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	switch (pCenterHead->msgID)
 	{
@@ -1483,7 +1470,7 @@ bool CCenterServerManage::OnHandleLogonResChangeMessage(int userID, void* pData,
 }
 
 // 玩家上下线
-bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (size != sizeof(PlatformUserLogonLogout))
 	{
@@ -1539,7 +1526,7 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 }
 
 // 给其它登录服发送数据，踢掉旧服务器玩家
-bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (size != 0)
 	{
@@ -1670,7 +1657,7 @@ bool CCenterServerManage::OnHandleLogonReqDissmissDeskessage(void* pData, UINT s
 }
 
 ////////////////////////////////处理游戏服消息//////////////////////////////////////////
-bool CCenterServerManage::OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CCenterServerManage::OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	switch (pCenterHead->msgID)
 	{

@@ -188,22 +188,6 @@ bool CBaseMainManage::Start()
 	// 创建管道
 	CFIFOEvent fifo("/tmp/CBaseMainManage-Start-fifo");
 
-	//启动处理线程
-	pthread_t uThreadID = 0;
-	HandleThreadStartStruct	ThreadStartData;
-	ThreadStartData.pMainManage = this;
-	ThreadStartData.pFIFO = &fifo;
-	int err = pthread_create(&uThreadID, NULL, LineDataHandleThread, (void*)& ThreadStartData);
-	if (err != 0)
-	{
-		SYS_ERROR_LOG("LineDataHandleThread failed");
-		throw new CException("CBaseMainManage::Start LineDataHandleThread 线程启动失败", 0x41E);
-	}
-	m_hHandleThread = uThreadID;
-
-	// 关联游戏业务逻辑线程与对应日志文件
-	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
-
 	bool ret = true;
 	ret = m_SQLDataManage.Start();
 	if (!ret)
@@ -219,7 +203,7 @@ bool CBaseMainManage::Start()
 		throw new CException("CBaseMainManage::m_pTcpConnect.Start 连接模块启动失败", 0x433);
 	}
 
-	err = pthread_create(&m_connectCServerHandle, NULL, TcpConnectThread, (void*)this);
+	int err = pthread_create(&m_connectCServerHandle, NULL, TcpConnectThread, (void*)this);
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("TcpConnectThread failed");
@@ -248,6 +232,22 @@ bool CBaseMainManage::Start()
 
 	//////////////////////////////////////////////////////////////////////////
 
+	//启动处理线程
+	pthread_t uThreadID = 0;
+	HandleThreadStartStruct	ThreadStartData;
+	ThreadStartData.pMainManage = this;
+	ThreadStartData.pFIFO = &fifo;
+	err = pthread_create(&uThreadID, NULL, LineDataHandleThread, (void*)&ThreadStartData);
+	if (err != 0)
+	{
+		SYS_ERROR_LOG("LineDataHandleThread failed");
+		throw new CException("CBaseMainManage::Start LineDataHandleThread 线程启动失败", 0x41E);
+	}
+	m_hHandleThread = uThreadID;
+
+	// 关联游戏业务逻辑线程与对应日志文件
+	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
+
 	ret = OnStart();
 	if (!ret)
 	{
@@ -272,8 +272,6 @@ bool CBaseMainManage::Stop()
 
 	m_bRun = false;
 
-	//m_DataLine.SetCompletionHandle(NULL);
-
 	m_SQLDataManage.Stop();
 
 	if (m_pTcpConnect)
@@ -285,14 +283,6 @@ bool CBaseMainManage::Stop()
 	{
 		m_pGServerConnect->Stop();
 	}
-
-	////关闭完成端口
-	//if (m_hCompletePort != NULL)
-	//{
-	//	::PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
-	//	::CloseHandle(m_hCompletePort);
-	//	m_hCompletePort = NULL;
-	//}
 
 	// 关闭中心服连接线程
 	if (m_connectCServerHandle)
@@ -390,8 +380,8 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 {
 	//数据定义
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//线程启动数据指针
-	CBaseMainManage* pMainManage = pData->pMainManage;						//数据管理指针
-	CDataLine* m_pDataLine = &pMainManage->m_DataLine;				//数据队列指针
+	CBaseMainManage* pMainManage = pData->pMainManage;							//数据管理指针
+	CDataLine* m_pDataLine = &pMainManage->m_DataLine;							//数据队列指针
 	CFIFOEvent* pCFIFOEvent = pData->pFIFO;
 
 	//线程数据读取完成
@@ -495,8 +485,6 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 			}
 		}
 	}
-
-	INFO_LOG("THREAD::thread LineDataHandleThread exit!!!");
 
 	pthread_exit(NULL);
 }

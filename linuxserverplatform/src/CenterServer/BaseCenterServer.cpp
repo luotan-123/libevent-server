@@ -1,29 +1,12 @@
-#include "main.h"
+#include "CommonHead.h"
 #include "BaseCenterServer.h"
-#include "RedisLogon.h"
-#include "log.h"
-#include "InternalMessageDefine.h"
-#include "Function.h"
-#include "Util.h"
-#include "PlatformMessage.h"
 
-#pragma warning (disable: 4355)
-
-//窗口线程启动结构
-struct WindowThreadStartStruct
-{
-	//变量定义
-	HANDLE								hEvent;						//启动事件
-	BOOL								bSuccess;					//启动成功标志
-	CBaseCenterServer					* pMainManage;				//数据管理指针
-};
 
 //处理线程启动结构
 struct HandleThreadStartStruct
 {
 	//变量定义
-	HANDLE								hEvent;						//启动事件
-	HANDLE								hCompletionPort;			//完成端口
+	CFIFOEvent*							pFIFO;						//启动事件
 	CBaseCenterServer					* pMainManage;				//数据管理指针
 };
 
@@ -32,28 +15,26 @@ CBaseCenterServer::CBaseCenterServer()
 {
 	m_bInit = false;
 	m_bRun = false;
-	m_hWindow = NULL;
-	m_hHandleThread = NULL;
-	m_hWindowThread = NULL;
-	m_hCompletePort = NULL;
 	::memset(&m_DllInfo, 0, sizeof(m_DllInfo));
 	::memset(&m_InitData, 0, sizeof(m_InitData));
 	::memset(&m_KernelData, 0, sizeof(m_KernelData));
 
 	m_pRedis = NULL;
 	m_pRedisPHP = NULL;
+	m_pServerTimer = NULL;
 }
 
 CBaseCenterServer::~CBaseCenterServer()
 {
 	SAFE_DELETE(m_pRedis);
 	SAFE_DELETE(m_pRedisPHP);
+	SafeDeleteArray(m_pServerTimer);
 }
 
 //初始化函数 
 bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 {
-	INFO_LOG("BaseMainManageForC Init begin...");
+	INFO_LOG("CBaseCenterServer Init begin...");
 
 	if (m_bInit == true)
 	{
@@ -72,8 +53,6 @@ bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 		ERROR_LOG("is already been inited");
 		return false;
 	}
-
-	srand((unsigned)time(NULL));
 
 	//设置数据
 	m_InitData = *pInitData;
@@ -118,10 +97,19 @@ bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 	}
 
 	// 初始化网络
-	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort, m_InitData.iSocketSecretKey, m_InitData.szCenterIP);
+	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort, 0, m_InitData.szCenterIP);
 	if (!ret)
 	{
 		ERROR_LOG("TCPSocket Init failed");
+		return false;
+	}
+
+	int iServerTimerNums = Min_(MAX_TIMER_THRED_NUMS, ConfigManage()->GetCommonConfig().TimerThreadNumber);
+	iServerTimerNums = iServerTimerNums <= 0 ? 1 : iServerTimerNums;
+	m_pServerTimer = new CServerTimer[iServerTimerNums];
+	if (!m_pServerTimer)
+	{
+		ERROR_LOG("CServerTimer Init failed");
 		return false;
 	}
 
@@ -134,7 +122,7 @@ bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 
 	m_bInit = true;
 
-	INFO_LOG("BaseMainManageForC Init end");
+	INFO_LOG("CBaseCenterServer Init end");
 
 	return true;
 }
@@ -142,23 +130,31 @@ bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 //取消初始化函数 
 bool CBaseCenterServer::UnInit()
 {
-	////停止服务
-	//if (m_bRun)
-	//{
-	//	Stop();
-	//}
+	//停止服务
+	if (m_bRun)
+	{
+		Stop();
+	}
 
-	////调用接口
-	//OnUnInit();
+	m_bInit = false;
+	m_TCPSocket.UnInit();
 
-	//m_bInit = false;
-	//m_TCPSocket.UnInit();
-	//m_SQLDataManage.UnInit();
+	//设置数据
+	memset(&m_DllInfo, 0, sizeof(m_DllInfo));
+	memset(&m_InitData, 0, sizeof(m_InitData));
+	memset(&m_KernelData, 0, sizeof(m_KernelData));
 
-	////设置数据
-	//memset(&m_DllInfo, 0, sizeof(m_DllInfo));
-	//memset(&m_InitData, 0, sizeof(m_InitData));
-	//memset(&m_KernelData, 0, sizeof(m_KernelData));
+	//释放redis
+	m_pRedis->Stop();
+	SAFE_DELETE(m_pRedis);
+	m_pRedisPHP->Stop();
+	SAFE_DELETE(m_pRedisPHP);
+	
+	//删除定时器
+	SafeDeleteArray(m_pServerTimer);
+
+	//调用接口
+	OnUnInit();
 
 	return true;
 }
@@ -166,59 +162,19 @@ bool CBaseCenterServer::UnInit()
 //启动函数
 bool CBaseCenterServer::Start()
 {
-	INFO_LOG("BaseMainManageForC Start begin...");
+	INFO_LOG("CBaseCenterServer Start begin...");
 
 	if (m_bInit == false || m_bRun == true)
 	{
-		ERROR_LOG("BaseMainManageForC already been inited or running");
+		ERROR_LOG("CBaseCenterServer already been inited or running");
 		return false;
 	}
 
 	m_bRun = true;
-
-	//建立事件
-	HANDLE StartEvent = CreateEvent(FALSE, TRUE, NULL, NULL);
-
-	//建立完成端口
-	m_hCompletePort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
-	if (!m_hCompletePort)
-	{
-		ERROR_LOG("CreateIoCompletionPort failed err=%d", GetLastError());
-		return false;
-	}
-
-	m_DataLine.SetCompletionHandle(m_hCompletePort);
-
-	//启动处理线程
-	UINT uThreadID = 0;
-
-	HandleThreadStartStruct	ThreadStartData;
-
-	ThreadStartData.pMainManage = this;
-	ThreadStartData.hCompletionPort = m_hCompletePort;
-	ThreadStartData.hEvent = StartEvent;
-
-	m_hHandleThread = (HANDLE)_beginthreadex(NULL, 0, LineDataHandleThread, &ThreadStartData, 0, &uThreadID);
-	if (!m_hHandleThread)
-	{
-		ERROR_LOG("begin LineDataHandleThread failed");
-		return false;
-	}
-
-	// 关联大厅业务逻辑线程与对应日志文件
-	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC);
-
-	WaitForSingleObject(StartEvent, INFINITE);
-
 	bool ret = false;
 
-	//启动窗口模块
-	ret = CreateWindowsForTimer();
-	if (!ret)
-	{
-		ERROR_LOG("CreateWindowsForTimer failed");
-		return false;
-	}
+	// 创建管道
+	CFIFOEvent fifo("/tmp/CBaseCenterServer-Start-fifo");
 
 	// 启动网络模块
 	ret = m_TCPSocket.Start(SERVICE_TYPE_CENTER);
@@ -228,6 +184,32 @@ bool CBaseCenterServer::Start()
 		return false;
 	}
 
+	// 启动定时器
+	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
+	{
+		if (!m_pServerTimer[i].Start(&m_DataLine))
+		{
+			ERROR_LOG("CBaseMainManage::m_pServerTimer.Start 定时器启动失败");
+			return false;
+		}
+	}
+
+	//启动处理线程
+	pthread_t uThreadID = 0;
+	HandleThreadStartStruct	ThreadStartData;
+	ThreadStartData.pMainManage = this;
+	ThreadStartData.pFIFO = &fifo;
+	int err = pthread_create(&uThreadID, NULL, LineDataHandleThread, (void*)&ThreadStartData);
+	if (err != 0)
+	{
+		SYS_ERROR_LOG("pthread_create LineDataHandleThread failed");
+		return false;
+	}
+	m_hHandleThread = uThreadID;
+
+	// 关联大厅业务逻辑线程与对应日志文件
+	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC);
+
 	//调用接口
 	ret = OnStart();
 	if (!ret)
@@ -236,7 +218,10 @@ bool CBaseCenterServer::Start()
 		return false;
 	}
 
-	INFO_LOG("BaseMainManageForC Start end.");
+	// 等待子线程读取线程参数
+	fifo.WaitForEvent();
+
+	INFO_LOG("CBaseCenterServer Start end.");
 
 	return true;
 }
@@ -244,7 +229,7 @@ bool CBaseCenterServer::Start()
 //停止服务
 bool CBaseCenterServer::Stop()
 {
-	INFO_LOG("BaseMainManageForC Stop begin...");
+	INFO_LOG("CBaseCenterServer Stop begin...");
 
 	if (m_bRun == false)
 	{
@@ -254,49 +239,29 @@ bool CBaseCenterServer::Stop()
 
 	m_bRun = false;
 
-	m_DataLine.SetCompletionHandle(NULL);
-
 	// 先关闭网络模块
 	m_TCPSocket.Stop();
 
-	//关闭完成端口
-	if (m_hCompletePort)
-	{
-		PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
-		CloseHandle(m_hCompletePort);
-		m_hCompletePort = NULL;
-	}
-
-	// 关闭linedate线程句柄
+	//退出处理线程
 	if (m_hHandleThread)
 	{
-		WaitForSingleObject(m_hHandleThread, INFINITE);
-		CloseHandle(m_hHandleThread);
-		m_hHandleThread = NULL;
+		pthread_cancel(m_hHandleThread);
+		m_hHandleThread = 0;
 	}
+
+	//关闭定时器
+	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
+	{
+		m_pServerTimer[i].Stop();
+	}
+
+	//清理队列数据
+	m_DataLine.CleanLineData();
 
 	// 上层接口
 	OnStop();		// 主线程关闭并清理资源(这里需要依赖redis和db)
 
-	// 关闭redis
-	m_pRedis->Stop();
-	m_pRedisPHP->Stop();
-
-	//关闭窗口
-	if (m_hWindow != NULL && IsWindow(m_hWindow) == TRUE)
-	{
-		SendMessage(m_hWindow, WM_CLOSE, 0, 0);
-	}
-
-	// 等待窗口线程
-	if (m_hWindowThread)
-	{
-		WaitForSingleObject(m_hWindowThread, INFINITE);
-		CloseHandle(m_hWindowThread);
-		m_hWindowThread = NULL;
-	}
-
-	INFO_LOG("BaseMainManageForC Stop end.");
+	INFO_LOG("CBaseCenterServer Stop end.");
 
 	return true;
 }
@@ -312,7 +277,7 @@ bool CBaseCenterServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uC
 }
 
 //网络消息处理
-bool CBaseCenterServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, DWORD dwHandleID)
+bool CBaseCenterServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, UINT dwHandleID)
 {
 	if (!pNetHead)
 	{
@@ -325,124 +290,62 @@ bool CBaseCenterServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead *
 	SocketRead.uIndex = uIndex;
 	SocketRead.dwHandleID = dwHandleID;
 	SocketRead.uAccessIP = 0;		//TODO
-	SocketRead.NetMessageHead = *pNetHead;
+	SocketRead.netMessageHead = *pNetHead;
 	return m_DataLine.AddData(&SocketRead.LineHead, sizeof(SocketRead), HD_SOCKET_READ, pData, uSize) != 0;
 }
 
-//定时器通知消息
-bool CBaseCenterServer::WindowTimerMessage(UINT uTimerID)
-{
-	WindowTimerLine WindowTimer;
-	WindowTimer.uTimerID = uTimerID;
-	return (m_DataLine.AddData(&WindowTimer.LineHead, sizeof(WindowTimer), HD_TIMER_MESSAGE) != 0);
-}
-
 //设定定时器
-bool CBaseCenterServer::SetTimer(UINT uTimerID, UINT uElapse)
+bool CBaseCenterServer::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = SERVERTIMER_TYPE_PERISIST*/)
 {
-	if ((m_hWindow != NULL) && (IsWindow(m_hWindow) == TRUE))
+	if (!m_pServerTimer)
 	{
-		::SetTimer(m_hWindow, uTimerID, uElapse, NULL);
-		return true;
+		ERROR_LOG("no timer run");
+		return false;
 	}
-	return false;
+
+	int iTimerCount = GetNewArraySize(m_pServerTimer);
+	if (iTimerCount <= 0 || iTimerCount > MAX_TIMER_THRED_NUMS)
+	{
+		ERROR_LOG("timer error");
+		return false;
+	}
+
+	m_pServerTimer[uTimerID % iTimerCount].SetTimer(uTimerID, uElapse, timerType);
+
+	return true;
 }
 
 //清除定时器
 bool CBaseCenterServer::KillTimer(UINT uTimerID)
 {
-	if ((m_hWindow != NULL) && (::IsWindow(m_hWindow) == TRUE))
+	if (!m_pServerTimer)
 	{
-		::KillTimer(m_hWindow, uTimerID);
-		return true;
-	}
-	return false;
-}
-
-//创建窗口为了生成定时器
-bool CBaseCenterServer::CreateWindowsForTimer()
-{
-	if ((m_hWindow != NULL) && (::IsWindow(m_hWindow) == TRUE))
-	{
+		ERROR_LOG("no timer run");
 		return false;
 	}
 
-	//建立事件
-	HANDLE StartEvent = CreateEvent(FALSE, TRUE, NULL, NULL);
-
-	//建立线程
-	WindowThreadStartStruct ThreadData;
-
-	ThreadData.bSuccess = FALSE;
-	ThreadData.pMainManage = this;
-	ThreadData.hEvent = StartEvent;
-
-	UINT uThreadID = 0;
-	m_hWindowThread = (HANDLE)::_beginthreadex(NULL, 0, WindowMsgThread, &ThreadData, 0, &uThreadID);
-	if (m_hWindowThread == NULL)
+	int iTimerCount = GetNewArraySize(m_pServerTimer);
+	if (iTimerCount <= 0 || iTimerCount > MAX_TIMER_THRED_NUMS)
 	{
-		ERROR_LOG("_beginthreadex WindowMsgThread failed");
+		ERROR_LOG("timer error");
 		return false;
 	}
-	WaitForSingleObject(ThreadData.hEvent, INFINITE);
 
-	if (ThreadData.bSuccess == FALSE)
-	{
-		ERROR_LOG("ThreadData.bSuccess == FALSE");
-		return false;
-	}
+	m_pServerTimer[uTimerID % iTimerCount].KillTimer(uTimerID);
 
 	return true;
 }
 
 //队列数据处理线程
-unsigned __stdcall CBaseCenterServer::LineDataHandleThread(LPVOID pThreadData)
+void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 {
-	// 给主线程一点时间
-	Sleep(1);
-
-	INFO_LOG("LineDataHandleThread start...");
-
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct *)pThreadData;
-	if (!pData)
-	{
-		return -1;
-	}
-
 	CBaseCenterServer	* pThis = pData->pMainManage;
-	if (!pThis)
-	{
-		return -2;
-	}
-
 	CDataLine* pDataLine = &pThis->m_DataLine;
-	if (!pDataLine)
-	{
-		return -3;
-	}
-
-	//完成端口
-	HANDLE hCompletionPort = pData->hCompletionPort;
-	if (!hCompletionPort)
-	{
-		return -4;
-	}
-
-	//运行标志
-	bool& bRun = pThis->m_bRun;
-
-	::SetEvent(pData->hEvent);
-
-	// 初始化随机数种子
-	srand((unsigned)time(NULL));
-
-	// 初始化异常函数
-	CWin32Exception::SetWin32ExceptionFunc();
-
-	//重叠数据
-	DWORD dwThancferred = 0;
-	ULONG dwCompleteKey = 0;
-	LPOVERLAPPED OverData;
+	CFIFOEvent* pCFIFOEvent = pData->pFIFO;
+	
+	//线程数据读取完成
+	pCFIFOEvent->SetEvent();
 
 	//数据缓存
 	BYTE szBuffer[LD_MAX_PART] = "";
@@ -450,12 +353,14 @@ unsigned __stdcall CBaseCenterServer::LineDataHandleThread(LPVOID pThreadData)
 
 	while (pThis->m_bRun)
 	{
-		BOOL bSuccess = ::GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED *)&OverData, INFINITE);
-		if (bSuccess == FALSE || dwThancferred == 0)
-		{
-			//ERROR_LOG("GetQueuedCompletionStatus failed err = %d", GetLastError());
-			continue;
-		}
+		//BOOL bSuccess = ::GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED *)&OverData, INFINITE);
+		//if (bSuccess == FALSE || dwThancferred == 0)
+		//{
+		//	//ERROR_LOG("GetQueuedCompletionStatus failed err = %d", GetLastError());
+		//	continue;
+		//}
+
+		usleep(THREAD_ONCE_HANDLE_MSG);
 
 		while (pDataLine->GetDataCount())
 		{
@@ -486,18 +391,18 @@ unsigned __stdcall CBaseCenterServer::LineDataHandleThread(LPVOID pThreadData)
 					if (size < sizeof(CenterServerMessageHead))
 					{
 						ERROR_LOG("###### 包头大小错误 msgID=%d mainID=%d assistID=%d ######", pCenterServerHead->msgID,
-							pSocketRead->NetMessageHead.uMainID, pSocketRead->NetMessageHead.uAssistantID);
+							pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
 						continue;
 					}
 
 					pBuffer = (void *)(pCenterServerHead + 1);
 					size -= sizeof(CenterServerMessageHead);
 
-					bool ret = pThis->OnSocketRead(&pSocketRead->NetMessageHead, pCenterServerHead, pBuffer, size, pSocketRead->uAccessIP, pSocketRead->uIndex, pSocketRead->dwHandleID);
+					bool ret = pThis->OnSocketRead(&pSocketRead->netMessageHead, pCenterServerHead, pBuffer, size, pSocketRead->uAccessIP, pSocketRead->uIndex, pSocketRead->dwHandleID);
 					if (!ret)
 					{
 						ERROR_LOG("OnSocketRead failed msgID=%d mainID=%d assistID=%d", pCenterServerHead->msgID,
-							pSocketRead->NetMessageHead.uMainID, pSocketRead->NetMessageHead.uAssistantID);
+							pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
 						continue;
 					}
 					break;
@@ -510,7 +415,7 @@ unsigned __stdcall CBaseCenterServer::LineDataHandleThread(LPVOID pThreadData)
 				}
 				case HD_TIMER_MESSAGE:		// 定时器消息
 				{
-					WindowTimerLine * pTimerMessage = (WindowTimerLine *)pDataLineHead;
+					ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
 					pThis->OnTimerMessage(pTimerMessage->uTimerID);
 					break;
 				}
@@ -521,128 +426,19 @@ unsigned __stdcall CBaseCenterServer::LineDataHandleThread(LPVOID pThreadData)
 
 			}
 
-			catch (CWin32Exception& Win32Ex)
-			{
-				PEXCEPTION_POINTERS pEx = Win32Ex.ExceptionInformation();
-				if (pEx != NULL && pEx->ExceptionRecord != NULL)
-				{
-					CWin32Exception::OutputWin32Exception("[ CenterServer 编号：0x%x ] [ 描述：%s] [ 源代码位置：0x%x ]", pEx->ExceptionRecord->ExceptionCode,
-						CWin32Exception::GetDescByCode(pEx->ExceptionRecord->ExceptionCode), ((pEx)->ExceptionRecord)->ExceptionAddress);
-				}
-				continue;
-			}
-
 			catch (int iCode)
 			{
-				CWin32Exception::OutputWin32Exception("[ CenterServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
+				CON_ERROR_LOG("[ CenterServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
 				continue;
 			}
 
 			catch (...)
 			{
-				CWin32Exception::OutputWin32Exception("#### 未知崩溃。####");
+				CON_ERROR_LOG("#### 未知崩溃。####");
 				continue;
 			}
 		}
 	}
 
-	INFO_LOG("LineDataHandleThread exit。");
-
-	return 0;
-}
-
-//WINDOW 消息循环线程
-unsigned __stdcall CBaseCenterServer::WindowMsgThread(LPVOID pThreadData)
-{
-	WindowThreadStartStruct * pStartData = (WindowThreadStartStruct *)pThreadData;
-
-	try
-	{
-		//注册窗口类
-		LOGBRUSH		LogBrush;
-		WNDCLASS		WndClass;
-		TCHAR			szClassName[] = TEXT("CMainManageWindow");
-
-		LogBrush.lbColor = RGB(0, 0, 0);
-		LogBrush.lbStyle = BS_SOLID;
-		LogBrush.lbHatch = 0;
-		WndClass.cbClsExtra = 0;
-		WndClass.cbWndExtra = 0;
-		WndClass.hCursor = NULL;
-		WndClass.hIcon = NULL;
-		WndClass.lpszMenuName = NULL;
-		WndClass.lpfnWndProc = WindowProcFunc;
-		WndClass.lpszClassName = szClassName;
-		WndClass.style = CS_HREDRAW | CS_VREDRAW;
-		WndClass.hInstance = NULL;
-		WndClass.hbrBackground = (HBRUSH)::CreateBrushIndirect(&LogBrush);
-		::RegisterClass(&WndClass);
-
-		//建立窗口
-		pStartData->pMainManage->m_hWindow = ::CreateWindow(szClassName, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, pStartData->pMainManage);
-		if (pStartData->pMainManage->m_hWindow == NULL) throw TEXT("窗口建立失败");
-	}
-	catch (...)
-	{
-		ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
-		//启动错误
-		pStartData->bSuccess = FALSE;
-		::SetEvent(pStartData->hEvent);
-		_endthreadex(0);
-	}
-
-	//启动成功
-	pStartData->bSuccess = TRUE;
-	::SetEvent(pStartData->hEvent);
-
-	//消息循环
-	MSG	Message;
-	while (::GetMessage(&Message, NULL, 0, 0))
-	{
-		if (!::TranslateAccelerator(Message.hwnd, NULL, &Message))
-		{
-			::TranslateMessage(&Message);
-			::DispatchMessage(&Message);
-		}
-	}
-
-	return 0;
-}
-
-//窗口回调函数
-LRESULT CALLBACK CBaseCenterServer::WindowProcFunc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMsg)
-	{
-	case WM_CREATE:		//窗口建立消息
-	{
-		DWORD iIndex = TlsAlloc();
-		CBaseCenterServer * pMainManage = (CBaseCenterServer *)(((CREATESTRUCT *)lParam)->lpCreateParams);
-		TlsSetValue(iIndex, pMainManage);
-		::SetWindowLong(hWnd, GWL_USERDATA, iIndex);
-		break;
-	}
-	case WM_TIMER:		//定时器消息
-	{
-		DWORD iIndex = ::GetWindowLong(hWnd, GWL_USERDATA);
-		CBaseCenterServer * pMainManage = (CBaseCenterServer *)::TlsGetValue(iIndex);
-		if ((pMainManage != NULL) && (pMainManage->WindowTimerMessage((UINT)wParam) == false)) ::KillTimer(hWnd, (UINT)wParam);
-		break;
-	}
-	case WM_CLOSE:		//窗口关闭消息
-	{
-		DestroyWindow(hWnd);
-		break;
-	}
-	case WM_DESTROY:	//窗口关闭消息
-	{
-		DWORD iIndex = ::GetWindowLong(hWnd, GWL_USERDATA);
-		CBaseCenterServer * pMainManage = (CBaseCenterServer *)::TlsGetValue(iIndex);
-		if (pMainManage != NULL) pMainManage->m_hWindow = NULL;
-		::TlsFree(iIndex);
-		PostQuitMessage(0);
-		break;
-	}
-	}
-	return ::DefWindowProc(hWnd, uMsg, wParam, lParam);
+	pthread_exit(NULL);
 }
