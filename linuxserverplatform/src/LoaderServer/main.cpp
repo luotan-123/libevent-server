@@ -44,9 +44,7 @@ int main()
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 
 	std::cout << std::endl;
-	CON_INFO_LOG("================================================================================");
 	CON_INFO_LOG("======================Gameserver begin========================================");
-	CON_INFO_LOG("================================================================================");
 
 	bool ret = false;
 
@@ -101,9 +99,7 @@ int main()
 
 	g_LoaderServerModule.StopAllRoom();
 
-	CON_INFO_LOG("========================================================================");
 	CON_INFO_LOG("==========================Gameserver end================================");
-	CON_INFO_LOG("========================================================================");
 
 	GameLogManage()->Release();
 	ConfigManage()->Release();

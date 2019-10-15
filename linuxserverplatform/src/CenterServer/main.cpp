@@ -97,9 +97,7 @@ int main()
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 
 	std::cout << std::endl;
-	CON_INFO_LOG("================================================================================");
 	CON_INFO_LOG("======================centerserver begin========================================");
-	CON_INFO_LOG("================================================================================");
 
 	bool ret = false;
 
@@ -167,9 +165,7 @@ int main()
 
 	g_CenterServerModule.StoptService();
 
-	CON_INFO_LOG("========================================================================");
 	CON_INFO_LOG("==========================CenterServer end================================");
-	CON_INFO_LOG("========================================================================");
 
 	GameLogManage()->Release();
 	ConfigManage()->Release();
