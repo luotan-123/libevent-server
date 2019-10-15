@@ -6,4 +6,5 @@
 
 构架再好，模块内部实现更重要
 
-研究libevent
+1、优化redis键值存储  account- 改成一个哈希值    userRedSpotCount 有计划的删除键值
+2、研究libevent
