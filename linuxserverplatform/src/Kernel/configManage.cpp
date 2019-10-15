@@ -222,7 +222,7 @@ bool CConfigManage::LoadCommonConfig()
 
 	const char* pKey = "COMMON";
 
-	m_commonConfig.logLevel = file.GetKeyVal(pKey, "logLevel", LOG_LEVEL_INFO); 
+	m_commonConfig.logPath = file.GetKeyVal(pKey, "logPath", "./log/");
 	m_commonConfig.WorkThreadNumber = file.GetKeyVal(pKey, "WorkThreadNumber", 4);
 	m_commonConfig.TimerThreadNumber = file.GetKeyVal(pKey, "TimerThreadNumber", 4);
 

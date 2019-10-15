@@ -47,8 +47,8 @@ public:
 	static std::string ParseJsonValue(const std::string& src, const char* key);
 	// 是否包含敏感词
 	static bool IsContainDirtyWord(const std::string& str);
-	// 如果文件夹不存在则创建文件夹
-	static void MkdirIfNotExists(const char* dir);
+	// 如果文件夹不存在则创建文件夹，目录已经存在或者创建成功返回true，否则false
+	static bool MkdirIfNotExists(const char* dir);
 	// 字符串转换
 	static std::string Tostring(BYTE value);
 	static std::string Tostring(int value);

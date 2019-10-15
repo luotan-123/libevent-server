@@ -251,12 +251,14 @@ bool CUtil::IsContainDirtyWord(const std::string& str)
 	return false;
 }
 
-void CUtil::MkdirIfNotExists(const char * dir)
+bool CUtil::MkdirIfNotExists(const char * dir)
 {
-	if (access(dir, F_OK) == -1)
+	if (access(dir, F_OK) == -1 && mkdir(dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRWXG | S_IRWXO) == -1)
 	{
-		::mkdir(dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRWXG | S_IRWXO);
+		return false;
 	}
+
+	return true;
 }
 
 std::string CUtil::Tostring(BYTE value)

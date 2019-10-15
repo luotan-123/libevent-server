@@ -57,6 +57,8 @@ bool CServerTimer::Start(CDataLine* pDataLine)
 		return false;
 	}
 
+	INFO_LOG("CServerTimer thread end");
+
 	return true;
 }
 
@@ -127,7 +129,7 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 
 	if (param == NULL)
 	{
-		CON_ERROR_LOG("TimeoutCB 参数为空");
+		printf("TimeoutCB 参数为空");
 		return;
 	}
 

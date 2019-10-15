@@ -209,13 +209,14 @@ struct LoaderServerConfig
 // 通用配置
 struct CommonConfig
 {
-	int logLevel;
+	std::string logPath;
 	int WorkThreadNumber;
 	int TimerThreadNumber;
 
 	CommonConfig()
 	{
-		memset(this, 0, sizeof(CommonConfig));
+		WorkThreadNumber = 4;
+		TimerThreadNumber = 1;
 	}
 };
 

@@ -23,11 +23,19 @@ int main()
 	// 初始化随机数种子
 	srand((unsigned)time(NULL));
 
-	// 设置程序路径
-	//CINIFile::GetAppPath();
+	// 设置程序路径 , 创建日志目录
+	CINIFile file(CINIFile::GetAppPath() + "config.ini");
+	string logPath = file.GetKeyVal("COMMON", "logPath", "./log/");
+	if (!CUtil::MkdirIfNotExists(logPath.c_str()))
+	{
+		printf("创建日志目录失败！！！ err=%s", strerror(errno));
+		return -1;
+	}
+	GameLogManage()->SetLogPath(logPath);
 
-	CUtil::MkdirIfNotExists("log");
-	//CUtil::MkdirIfNotExists("C:\\HM-Dump-v1.0");
+	// 生成json目录和core文件目录
+	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
+	CUtil::MkdirIfNotExists(SAVE_COREFILE_PATH);
 
 	// 设置服务器类型
 	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
@@ -46,9 +54,7 @@ int main()
 	ret = ConfigManage()->Init();
 	if (!ret)
 	{
-		ERROR_LOG("load config failed");
-		std::cout << "ConfigManage::Init error!\n按下一个键退出\n";
-		getchar();
+		CON_ERROR_LOG("ConfigManage::Init error! view log file !!!");
 		return -1;
 	}
 
@@ -57,7 +63,8 @@ int main()
 	CON_INFO_LOG("启动房间数量：%d", iStartCount);
 	if (iStartCount == 0)
 	{
-		std::cout << "没有找到任何游戏房间，请检查 roombaseinfo.serviceName名字是否正确，或者动态库名字配置错误\n";
+		CON_ERROR_LOG("没有找到任何游戏房间，请检查 roombaseinfo.serviceName名字是否正确，或者动态库名字配置错误");
+		return -1;
 	}
 
 	// 标题（显示版本信息和进程id）
@@ -91,7 +98,7 @@ int main()
 	}
 
 #endif
-	
+
 	g_LoaderServerModule.StopAllRoom();
 
 	CON_INFO_LOG("========================================================================");

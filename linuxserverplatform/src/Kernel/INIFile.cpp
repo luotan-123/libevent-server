@@ -1,6 +1,5 @@
 #include "CommonHead.h"
 #include "INIFile.h"
-#include "log.h"
 
 /******************************************************************************
 * 功  能：构造函数
@@ -87,7 +86,7 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 
 	if (m_fp == NULL)
 	{
-		SYS_ERROR_LOG("open inifile %s error!", pathName);
+		printf("open inifile %s error %s", pathName, strerror(errno));
 		return INI_OPENFILE_ERROR;
 	}
 

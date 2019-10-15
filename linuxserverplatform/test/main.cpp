@@ -195,13 +195,13 @@ int main()
 
 
 
-	CUtil::MkdirIfNotExists("log/");
-	CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
-	// 设置服务器类型
-	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
-	// 关联大厅主线程的log文件
-	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
-	ConfigManage()->Init();
+	//CUtil::MkdirIfNotExists("log/");
+	//CUtil::MkdirIfNotExists(SAVE_JSON_PATH);
+	//// 设置服务器类型
+	//ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
+	//// 关联大厅主线程的log文件
+	//GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
+	//ConfigManage()->Init();
 
 
 

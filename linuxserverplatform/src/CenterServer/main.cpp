@@ -1,8 +1,11 @@
 #include "CommonHead.h"
 #include "CenterServerManage.h"
 #include "CenterServerModule.h"
+#include <fcntl.h>
+#include <sys/stat.h>
 
-#define APP_TITLE "中心服CenterServer"
+#define LOCKFILE "/var/run/LinuxCenterServer.pid"
+#define LOCKMODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 #define APP_CENTER_TITLE	"CenterServer"
 
 // 命令模式
@@ -17,26 +20,75 @@ void _HandleCommand(const std::string& command)
 	std::cout << "命令:[" << command << "]" << std::endl;
 }
 
+/* set advisory lock on file */
+int LockFile(int fd)
+{
+	struct flock fl;
+
+	fl.l_type = F_WRLCK;  /* write lock */
+	fl.l_start = 0;
+	fl.l_whence = SEEK_SET;
+	fl.l_len = 0;  //lock the whole file
+
+	return(fcntl(fd, F_SETLK, &fl));
+}
+
+int AlreadyRunning(const char* filename)
+{
+	int fd;
+	char buf[16];
+
+	fd = open(filename, O_RDWR | O_CREAT, LOCKMODE);
+	if (fd < 0)
+	{
+		printf("can't open %s: %m\n", filename);
+		return 0;
+	}
+
+	/* 先获取文件锁 */
+	if (LockFile(fd) == -1)
+	{
+		if (errno == EACCES || errno == EAGAIN)
+		{
+			printf("file: %s already locked\n", filename);
+			close(fd);
+			return 1;
+		}
+		printf("can't lock %s: %m\n", filename);
+		return 0;
+	}
+
+	/* 写入运行实例的pid */
+	ftruncate(fd, 0);
+	sprintf(buf, "%ld\n", (long)getpid());
+	write(fd, buf, strlen(buf) + 1);
+
+	return 0;
+}
+
 int main()
 {
+	if (AlreadyRunning(LOCKFILE))
+	{
+		CON_ERROR_LOG("centerserver already exists");
+		return -1;
+	}
+
 	// 初始化随机数种子
 	srand((unsigned)time(NULL));
 
-	//// 查看实例是否唯一
-	//if (GetProcessPidByName(APP_CENTER_TITLE) != -1)
-	//{
-	//	std::cout << "centerserver already exists\n";
-	//	std::cout << "按下一个键退出\n";
-	//	getchar();
-	//	return -1;
-	//}
+	// 设置程序路径 , 创建日志目录
+	CINIFile file(CINIFile::GetAppPath() + "config.ini");
+	string logPath = file.GetKeyVal("COMMON", "logPath", "./log/");
+	if (!CUtil::MkdirIfNotExists(logPath.c_str()))
+	{
+		printf("创建日志目录失败！！！ err=%s", strerror(errno));
+		return -1;
+	}
+	GameLogManage()->SetLogPath(logPath);
 
-	// 设置程序路径
-	//CINIFile::GetAppPath();
-
-	CUtil::MkdirIfNotExists("log");
-	CUtil::MkdirIfNotExists("/tmp/web/");
-	CUtil::MkdirIfNotExists("/tmp/web/json");
+	// 生成core文件目录
+	CUtil::MkdirIfNotExists(SAVE_COREFILE_PATH);
 
 	// 设置服务器类型
 	ConfigManage()->SetServiceType(SERVICE_TYPE_CENTER);
@@ -55,10 +107,7 @@ int main()
 	ret = ConfigManage()->Init();
 	if (!ret)
 	{
-		ERROR_LOG("load config failed");
-		std::cout << "ConfigManage::Init error!\n";
-		std::cout << "按下一个键退出\n";
-		getchar();
+		CON_ERROR_LOG("ConfigManage::Init error! view log file !!!");
 		return -1;
 	}
 
@@ -68,10 +117,7 @@ int main()
 	// 初始化服务
 	if (!g_CenterServerModule.InitService(&Init))
 	{
-		ERROR_LOG("InitService failed");
-		std::cout << "InitService Error !\n";
-		std::cout << "按下一个键退出\n";
-		getchar();
+		CON_ERROR_LOG("InitService Error ! view log file !!! ");
 		return -1;
 	}
 
@@ -79,15 +125,13 @@ int main()
 	UINT errCode = 0;
 	if (!g_CenterServerModule.StartService(errCode))
 	{
-		printf("Start Service Failed ,Error Code:%X\n", errCode);
-		std::cout << "按下一个键退出\n";
-		getchar();
+		CON_ERROR_LOG("Start Service Failed ,Error Code:%X . view log file !!!\n", errCode);
 		return -1;
 	}
 
 	char szBuf[256] = "";
 	sprintf(szBuf, "中央集群服务系统 启动成功 [Port:%d] [MaxPeople:%d]", g_CenterServerModule.m_CenterServerManage.m_nPort
-	, g_CenterServerModule.m_CenterServerManage.m_uMaxPeople);
+		, g_CenterServerModule.m_CenterServerManage.m_uMaxPeople);
 	std::cout << szBuf << std::endl;
 
 	// 标题（显示版本信息和进程id）

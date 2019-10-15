@@ -23,4 +23,8 @@ ln -s /usr/local/bin/protoc /usr/bin
 四、查询命令目录
 which  命令名称
 
+五、只显示目录
+1. ls -F | grep '/$'
+2.ls -l | grep '^d'
+
 

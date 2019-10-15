@@ -39,6 +39,8 @@ public:
 	// 获取指定文件的fp
 	FILE* GetLogFileFp(std::string&& strFile);
 
+	// 设置进程日志目录
+	void SetLogPath(const std::string &path);
 private:
 	// 添加中心服务器相关日志文件
 	void AddCenterLogFile(pthread_t threadID, int threadType);
@@ -59,6 +61,9 @@ private:
 
 	// 文件描述符map
 	std::map<std::string, FILE*> m_filesFpMap;
+
+	// 进程日志目录
+	std::string m_logPath;
 };
 
 #define GameLogManage()		CGameLogManage::Instance()

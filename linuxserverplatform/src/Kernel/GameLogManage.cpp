@@ -3,11 +3,12 @@
 #include "configManage.h"
 #include <sys/stat.h>
 
-static unsigned long long int g_filelogCount = 0;
+static unsigned long long int g_fileErrLogCount = 0;
+static unsigned long long int g_fileCostLogCount = 0;
 
 CGameLogManage::CGameLogManage()
 {
-
+	m_logPath = "";
 }
 
 CGameLogManage::~CGameLogManage()
@@ -53,33 +54,33 @@ void CGameLogManage::AddCenterLogFile(pthread_t threadID, int threadType)
 		return;
 	}
 
-	std::string errfileName;
-	std::string costFileName;
+	std::string errfileName = m_logPath;
+	std::string costFileName = m_logPath;
 
 	if (threadType == THREAD_TYPE_MAIN)		// 主线程
 	{
-		errfileName = "log/centerserver_sys";
-		costFileName = "log/centerserver_sys_cost";
+		errfileName += "centerserver_sys";
+		costFileName += "centerserver_sys_cost";
 	}
 	else if (threadType == THREAD_TYPE_LOGIC)
 	{
-		errfileName = "log/centerserver_err";
-		costFileName = "log/centerserver_cost";
+		errfileName += "centerserver_err";
+		costFileName += "centerserver_cost";
 	}
 	else if (threadType == THREAD_TYPE_ASYNC)
 	{
-		errfileName = "log/centerserver_async_err";
-		costFileName = "log/centerserver_async_cost";
+		errfileName += "centerserver_async_err";
+		costFileName += "centerserver_async_cost";
 	}
 	else if (threadType == THREAD_TYPE_ACCEPT)
 	{
-		errfileName = "log/centerserver_accept_err";
-		costFileName = "log/centerserver_accept_cost";
+		errfileName += "centerserver_accept_err";
+		costFileName += "centerserver_accept_cost";
 	}
 	else if (threadType == THREAD_TYPE_RECV)
 	{
-		errfileName = "log/centerserver_recv_err";
-		costFileName = "log/centerserver_recv_cost";
+		errfileName += "centerserver_recv_err";
+		costFileName += "centerserver_recv_cost";
 	}
 	else
 	{
@@ -106,33 +107,33 @@ void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
 		return;
 	}
 
-	std::string errfileName;
-	std::string costFileName;
+	std::string errfileName = m_logPath;
+	std::string costFileName = m_logPath;
 
 	if (threadType == THREAD_TYPE_MAIN)		// 主线程
 	{
-		errfileName = "log/logonserver_sys";
-		costFileName = "log/logonserver_sys_cost";
+		errfileName += "logonserver_sys";
+		costFileName += "logonserver_sys_cost";
 	}
 	else if (threadType == THREAD_TYPE_LOGIC)
 	{
-		errfileName = "log/logonserver_err";
-		costFileName = "log/logonserver_cost";
+		errfileName += "logonserver_err";
+		costFileName += "logonserver_cost";
 	}
 	else if (threadType == THREAD_TYPE_ASYNC)
 	{
-		errfileName = "log/logonserver_async_err";
-		costFileName = "log/logonserver_async_cost";
+		errfileName += "logonserver_async_err";
+		costFileName += "logonserver_async_cost";
 	}
 	else if (threadType == THREAD_TYPE_ACCEPT)
 	{
-		errfileName = "log/logonserver_accept_err";
-		costFileName = "log/logonserver_accept_cost";
+		errfileName += "logonserver_accept_err";
+		costFileName += "logonserver_accept_cost";
 	}
 	else if (threadType == THREAD_TYPE_RECV)
 	{
-		errfileName = "log/logonserver_recv_err";
-		costFileName = "log/logonserver_recv_cost";
+		errfileName += "logonserver_recv_err";
+		costFileName += "logonserver_recv_cost";
 	}
 	else
 	{
@@ -158,13 +159,13 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 		return;
 	}
 
-	std::string errfileName;
-	std::string costFileName;
+	std::string errfileName = m_logPath;
+	std::string costFileName = m_logPath;
 
 	if (threadType == THREAD_TYPE_MAIN)		// 主线程
 	{
-		errfileName = "log/loaderserver_sys";
-		costFileName = "log/loaderserver_sys_cost";
+		errfileName += "loaderserver_sys";
+		costFileName += "loaderserver_sys_cost";
 	}
 	else if (threadType == THREAD_TYPE_LOGIC)	// 逻辑线程(每个游戏都是单独的)
 	{
@@ -174,11 +175,9 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 			return;
 		}
 
-		errfileName += "log/";
 		errfileName += pRoomBaseInfo->name;
 		errfileName += "_err";
 
-		costFileName += "log/";
 		costFileName += pRoomBaseInfo->name;
 		costFileName += "_cost";
 	}
@@ -190,11 +189,9 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 			return;
 		}
 
-		errfileName += "log/";
 		errfileName += pRoomBaseInfo->name;
 		errfileName += "_async_err";
 
-		costFileName += "log/";
 		costFileName += pRoomBaseInfo->name;
 		costFileName += "_async_cost";
 	}
@@ -206,11 +203,9 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 			return;
 		}
 
-		errfileName += "log/";
 		errfileName += pRoomBaseInfo->name;
 		errfileName += "_accept_err";
 
-		costFileName += "log/";
 		costFileName += pRoomBaseInfo->name;
 		costFileName += "_accept_cost";
 	}
@@ -222,11 +217,9 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 			return;
 		}
 
-		errfileName += "log/";
 		errfileName += pRoomBaseInfo->name;
 		errfileName += "_recv_err";
 
-		costFileName += "log/";
 		costFileName += pRoomBaseInfo->name;
 		costFileName += "_recv_cost";
 	}
@@ -312,15 +305,15 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 
 	if (str == "")
 	{
-		str = "log/other_err";
+		str = m_logPath + "other_thread_err";
 	}
 
 	str += buf;
 
 	// 判断当前文件大小，超过重新生成文件
-	g_filelogCount++;
+	g_fileErrLogCount++;
 	struct stat statbuf;
-	if (g_filelogCount % 5 == 2 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
+	if (g_fileErrLogCount % 5 == 1 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
 	{
 		sprintf(buf, "%02d-%02d-%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 		iter->second.errorLog += buf;
@@ -377,15 +370,15 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 
 	if (str == "")
 	{
-		str = "log/cost";
+		str = m_logPath + "other_thread_cost";
 	}
 
 	str += buf;
 
 	// 判断当前文件大小，超过重新生成文件
-	g_filelogCount++;
+	g_fileCostLogCount++;
 	struct stat statbuf;
-	if (g_filelogCount % 5 == 2 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
+	if (g_fileCostLogCount % 5 == 1 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
 	{
 		sprintf(buf, "%02d-%02d-%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 		iter->second.costLog += buf;
@@ -425,4 +418,10 @@ FILE* CGameLogManage::GetLogFileFp(std::string&& strFile)
 	}
 
 	return NULL;
+}
+
+// 设置进程日志目录
+void CGameLogManage::SetLogPath(const std::string &path)
+{
+	m_logPath = path;
 }
