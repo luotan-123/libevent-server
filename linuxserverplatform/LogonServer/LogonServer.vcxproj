@@ -34,6 +34,23 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\LogonServer\BaseLogonServer.h" />
+    <ClInclude Include="..\src\LogonServer\GameLogonDataBase.h" />
+    <ClInclude Include="..\src\LogonServer\GameLogonManage.h" />
+    <ClInclude Include="..\src\LogonServer\GameLogonModule.h" />
+    <ClInclude Include="..\src\LogonServer\LogonGServerManage.h" />
+    <ClInclude Include="..\src\LogonServer\LogonUserManage.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\LogonServer\BaseLogonServer.cpp" />
+    <ClCompile Include="..\src\LogonServer\GameLogonDataBase.cpp" />
+    <ClCompile Include="..\src\LogonServer\GameLogonManage.cpp" />
+    <ClCompile Include="..\src\LogonServer\GameLogonModule.cpp" />
+    <ClCompile Include="..\src\LogonServer\LogonGServerManage.cpp" />
+    <ClCompile Include="..\src\LogonServer\LogonUserManage.cpp" />
+    <ClCompile Include="..\src\LogonServer\main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{cffd70ca-abc0-4f52-9beb-cb50650fdeb8}</ProjectGuid>
     <Keyword>Linux</Keyword>
@@ -106,9 +123,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
-  <ItemGroup>
-    <ClCompile Include="test.cpp" />
-  </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

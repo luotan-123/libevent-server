@@ -1,7 +1,5 @@
 #pragma once
 
-#include <map>
-#include <unordered_map>
 
 // 大厅玩家结构
 struct LogonUserInfo
@@ -32,9 +30,9 @@ public:
 	bool AddUser(int userID, LogonUserInfo* pUser);
 	void DelUser(int userID);
 	void Release();
-	std::map<int, LogonUserInfo*>& GetLogonUserInfoMap() { return m_logonUserInfoMap; }
+	std::unordered_map<int, LogonUserInfo*>& GetLogonUserInfoMap() { return m_logonUserInfoMap; }
 	UINT GetUserCount() { return m_logonUserInfoMap.size(); }
 
 private:
-	std::map<int, LogonUserInfo*> m_logonUserInfoMap;			// 大厅玩家管理器中只保存在线的玩家
+	std::unordered_map<int, LogonUserInfo*> m_logonUserInfoMap;			// 大厅玩家管理器中只保存在线的玩家
 };

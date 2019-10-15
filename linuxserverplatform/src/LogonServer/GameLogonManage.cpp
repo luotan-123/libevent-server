@@ -1,21 +1,8 @@
-#include "main.h"
-#include "GameLogonManage.h"
-#include "tableDefine.h"
-#include "RedisLogon.h"
-#include "ConfigManage.h"
-#include "Define.h"
-#include "NewMessageDefine.h"
+#include "CommonHead.h"
 #include "ErrorCode.h"
-#include "log.h"
-#include "InternalMessageDefine.h"
-#include "PlatformMessage.h"
-#include "Util.h"
-#include "MyCurl.h"
-#include "BillManage.h"
-#include "LoaderAsyncEvent.h"
 #include "json/json.h"
-#include "Function.h"
-#pragma comment(lib,"json_vc71_libmt.lib")
+#include "LoaderAsyncEvent.h"
+#include "GameLogonManage.h"
 
 // 预编译选项
 #define FRIENDSGROUP_CRATE_ROOM_MODE	// 俱乐部创建房间，房主消耗钻石
@@ -41,7 +28,7 @@ CGameLogonManage::~CGameLogonManage()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameLogonManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CGameLogonManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (!pNetHead)
 	{
@@ -314,7 +301,6 @@ bool CGameLogonManage::PreInitParameter(ManageInfoStruct * pInitData, KernelInfo
 
 	pInitData->uListenPort = m_nPort;
 	pInitData->uMaxPeople = m_uMaxPeople;
-	pInitData->iSocketSecretKey = SECRET_KEY;
 
 	return true;
 }
@@ -440,11 +426,6 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	}
 
 	const char* ip = m_TCPSocket.GetSocketIP(socketIdx);
-	if (byPlatformType != 1 && byPlatformType != 2 && CUtil::GetCertificateText())
-	{
-		ERROR_LOG("注册不通过，ip=%s", ip);
-		return false;
-	}
 
 	if (pMessage->byFastRegister == LOGON_QUICK || pMessage->byFastRegister >= LOGON_NR)
 	{
@@ -488,12 +469,8 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	}
 
 	// 先生成一个token
-	const char* token = CUtil::GetGuid();
-	if (token == NULL)
-	{
-		ERROR_LOG("CUtil::GetGuid failed");
-		return false;
-	}
+	char token[64] = "";
+	CUtil::GetUuid(token,36);
 
 	int userID = 0;
 	BYTE byPhoneFastRegister = LOGON_TEL_PHONE;
@@ -1986,7 +1963,7 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	return true;
 }
 
-bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (!pUser)
@@ -2018,7 +1995,7 @@ bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead *
 }
 
 
-bool CGameLogonManage::OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID)
+bool CGameLogonManage::OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	// 此处可以根据业务逻辑，拦截游戏消息
 	// todo:
@@ -2542,7 +2519,7 @@ void CGameLogonManage::AutoCreateNewTable(bool start)
 
 	if (start)  //创建本月的表
 	{
-		sprintf_s(date, sizeof(date), "%d%02d", sys.wYear, sys.wMonth);
+		sprintf(date, "%d%02d", sys.wYear, sys.wMonth);
 	}
 	else //创建下个月的表
 	{
@@ -2550,7 +2527,7 @@ void CGameLogonManage::AutoCreateNewTable(bool start)
 		{
 			return;
 		}
-		sprintf_s(date, sizeof(date), "%d%02d", sys.wYear, sys.wMonth == 12 ? 1 : sys.wMonth + 1);
+		sprintf(date, "%d%02d", sys.wYear, sys.wMonth == 12 ? 1 : sys.wMonth + 1);
 	}
 
 	//以下就是需要分表的表
@@ -2917,7 +2894,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char *
 	}
 
 	char sql[128] = "";
-	sprintf_s(sql, sizeof(sql), "SELECT count(*) as ipcount from userinfo where registerIP='%s'", ip);
+	sprintf(sql, "SELECT count(*) as ipcount from userinfo where registerIP='%s'", ip);
 
 	CMysqlHelper::MysqlData dataSet;
 	try
@@ -2926,7 +2903,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char *
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo);
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return true;
 	}
 
@@ -3537,7 +3514,7 @@ void CGameLogonManage::SendHTTPMessage(int userID, const std::string &url, BYTE 
 	// HTTP请求
 	LoaderAsyncHTTP asyncEvent;
 	asyncEvent.userID = userID;
-	strcpy_s(asyncEvent.url, sizeof(asyncEvent.url), url.c_str());
+	strcpy(asyncEvent.url, url.c_str());
 	asyncEvent.postType = postType;
 
 	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
@@ -3557,7 +3534,7 @@ bool CGameLogonManage::SendHTTPUserRegisterMessage(int userID)
 	}
 
 	char bufUserID[20] = "";
-	sprintf_s(bufUserID, 20, "%d", userID);
+	sprintf(bufUserID, "%d", userID);
 
 	//组合生成URL
 	std::string url = "http://";
@@ -3584,7 +3561,7 @@ bool CGameLogonManage::SendHTTPUserLogonLogout(int userID, BYTE type)
 	}*/
 
 	char bufUserID[20] = "";
-	sprintf_s(bufUserID, 20, "%d", userID);
+	sprintf(bufUserID, "%d", userID);
 
 	//组合生成URL
 	std::string url = "http://";

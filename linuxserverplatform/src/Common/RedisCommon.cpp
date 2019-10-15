@@ -17,7 +17,7 @@ bool CRedisCommon::IsAccountExists(const char* account)
 	}
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	sprintf(redisCmd, "EXISTS account-%s", account);
+	sprintf(redisCmd, "EXISTS %s|%s", TBL_NORMAL_TO_USERID, account);
 
 	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -36,7 +36,7 @@ bool CRedisCommon::IsAccountExists(const char* account)
 int CRedisCommon::GetUserIDByAccount(const char * account)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	sprintf(redisCmd, "GET account-%s", account);
+	sprintf(redisCmd, "GET %s|%s", TBL_NORMAL_TO_USERID, account);
 
 	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -1240,7 +1240,7 @@ bool CRedisCommon::FixAccountIndexInfo(const char * account, const char* passwd,
 
 	if (registerType == LOGON_NORMAL || registerType == LOGON_QUICK)	// 普通用户
 	{
-		sprintf(redisCmd, "SET account-%s %d", account, userID);
+		sprintf(redisCmd, "SET %s|%s %d", TBL_NORMAL_TO_USERID, account, userID);
 	}
 	else if (registerType == LOGON_TEL_PHONE)
 	{

@@ -61,7 +61,7 @@ public:
 	bool GetUserRedSpot(int userID, UserRedSpot &userRedSpot);
 	// 设置当前最大用户id
 	bool SetCurMaxUserID(int iUserID);
-	// 普通用户建立account-userID的索引, 第三方用户建立key-userID索引
+	// 建立key-userID索引
 	bool FixAccountIndexInfo(const char* account, const char* passwd, int userID, int registerType);
 
 	/////////////////////////////////奖池数据/////////////////////////////////////////

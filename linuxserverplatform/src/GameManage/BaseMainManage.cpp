@@ -233,20 +233,18 @@ bool CBaseMainManage::Start()
 	//////////////////////////////////////////////////////////////////////////
 
 	//启动处理线程
-	pthread_t uThreadID = 0;
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
 	ThreadStartData.pFIFO = &fifo;
-	err = pthread_create(&uThreadID, NULL, LineDataHandleThread, (void*)&ThreadStartData);
+	err = pthread_create(&m_hHandleThread, NULL, LineDataHandleThread, (void*)&ThreadStartData);
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("LineDataHandleThread failed");
 		throw new CException("CBaseMainManage::Start LineDataHandleThread 线程启动失败", 0x41E);
 	}
-	m_hHandleThread = uThreadID;
 
 	// 关联游戏业务逻辑线程与对应日志文件
-	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
+	GameLogManage()->AddLogFile(m_hHandleThread, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
 
 	ret = OnStart();
 	if (!ret)
@@ -378,6 +376,8 @@ bool CBaseMainManage::KillTimer(UINT uTimerID)
 //队列数据处理线程
 void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 {
+	INFO_LOG("LineDataHandleThread start...");
+
 	//数据定义
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//线程启动数据指针
 	CBaseMainManage* pMainManage = pData->pMainManage;							//数据管理指针
@@ -500,16 +500,10 @@ void * CBaseMainManage::TcpConnectThread(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
-	CTcpConnect* pTcpConnect = (CTcpConnect*)pThis->m_pTcpConnect;
-	if (!pTcpConnect)
-	{
-		pthread_exit(NULL);
-	}
-
 	while (pThis->m_bRun && pThis->m_pTcpConnect)
 	{
-		pTcpConnect->CheckConnection();
-		pTcpConnect->EventLoop();
+		pThis->m_pTcpConnect->CheckConnection();
+		pThis->m_pTcpConnect->EventLoop();
 	}
 
 	pthread_exit(NULL);

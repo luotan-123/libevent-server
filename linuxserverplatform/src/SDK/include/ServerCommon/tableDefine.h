@@ -10,8 +10,10 @@
 #define TBL_USER_BAG			"userBag"
 
 //////////////////////////////////账号相关redis键值(都是string类型,只存在缓存)////////////////////////////////////////
+//普通注册账号
+#define TBL_NORMAL_TO_USERID	"accountToUserID"
 //第三方账号与UID的映射表
-#define TBL_TRDUSERID			"trdUserID"                          
+#define TBL_TRDUSERID			"trdToUserID"                          
 //手机登陆映射表
 #define TBL_PHONE_TOUSERID		"phoneToUserID"
 //闲聊登陆映射表

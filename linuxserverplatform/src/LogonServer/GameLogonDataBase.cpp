@@ -1,12 +1,11 @@
-#include "main.h"
-#include "GameLogonDataBase.h"
-#include "InternalMessageDefine.h"
+#include "CommonHead.h"
 #include "log.h"
 #include "Util.h"
 #include "configManage.h"
 #include "LoaderAsyncEvent.h"
 #include "MyCurl.h"
 #include "Define.h"
+#include "GameLogonDataBase.h"
 
 CServiceDataBaseHandle::CServiceDataBaseHandle()
 {
@@ -73,7 +72,7 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSour
 	}
 	catch(MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("执行sql语句失败==>>%s",excep.errorInfo) ;
+		ERROR_LOG("执行sql语句失败==>>%s",excep.errorInfo.c_str()) ;
 		return -3;
 	}
 	
@@ -83,9 +82,9 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSour
 // HTTP请求
 int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
 {
-	if (pSourceData->DataLineHead.uSize != sizeof(LoaderAsyncHTTP))
+	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncHTTP))
 	{
-		ERROR_LOG("size is not match realsize=%d expect=%d", pSourceData->DataLineHead.uSize, sizeof(LoaderAsyncHTTP));
+		ERROR_LOG("size is not match realsize=%d expect=%d", pSourceData->dataLineHead.uSize, sizeof(LoaderAsyncHTTP));
 		return -1;
 	}
 
@@ -133,7 +132,7 @@ int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
 	{
 		//返回结果
 		char szBuffer[LD_MAX_PART] = "";
-		memcpy(szBuffer, result.c_str(), min(result.size(), LD_MAX_PART - 1));
+		memcpy(szBuffer, result.c_str(), Min_(result.size(), LD_MAX_PART - 1));
 
 		szBuffer[LD_MAX_PART - 1] = 0;
 

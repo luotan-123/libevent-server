@@ -3,8 +3,6 @@
 #include "BaseLogonServer.h"
 #include "LogonUserManage.h"
 #include "LogonGServerManage.h"
-#include "log.h"
-#include <map>
 
 // 定时器ID
 enum LogonServerTimerID
@@ -77,7 +75,7 @@ private:
 	//获取信息函数
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	//SOCKET 关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
 	//异步线程处理结果
@@ -121,9 +119,9 @@ private:
 	// 认证
 	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx);
 	// 前端 ----> 游戏服
-	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 	// 游戏服 ----> 前端
-	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, DWORD dwHandleID);
+	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
 
 public:
 	// 通过socketIdx获取socket信息

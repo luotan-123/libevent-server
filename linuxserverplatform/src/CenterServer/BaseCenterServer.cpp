@@ -15,6 +15,7 @@ CBaseCenterServer::CBaseCenterServer()
 {
 	m_bInit = false;
 	m_bRun = false;
+	m_hHandleThread = 0;
 	::memset(&m_DllInfo, 0, sizeof(m_DllInfo));
 	::memset(&m_InitData, 0, sizeof(m_InitData));
 	::memset(&m_KernelData, 0, sizeof(m_KernelData));
@@ -104,6 +105,7 @@ bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 		return false;
 	}
 
+	// 初始化定时器
 	int iServerTimerNums = Min_(MAX_TIMER_THRED_NUMS, ConfigManage()->GetCommonConfig().TimerThreadNumber);
 	iServerTimerNums = iServerTimerNums <= 0 ? 1 : iServerTimerNums;
 	m_pServerTimer = new CServerTimer[iServerTimerNums];
@@ -195,20 +197,18 @@ bool CBaseCenterServer::Start()
 	}
 
 	//启动处理线程
-	pthread_t uThreadID = 0;
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
 	ThreadStartData.pFIFO = &fifo;
-	int err = pthread_create(&uThreadID, NULL, LineDataHandleThread, (void*)&ThreadStartData);
+	int err = pthread_create(&m_hHandleThread, NULL, LineDataHandleThread, (void*)&ThreadStartData);
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("pthread_create LineDataHandleThread failed");
 		return false;
 	}
-	m_hHandleThread = uThreadID;
 
 	// 关联大厅业务逻辑线程与对应日志文件
-	GameLogManage()->AddLogFile(uThreadID, THREAD_TYPE_LOGIC);
+	GameLogManage()->AddLogFile(m_hHandleThread, THREAD_TYPE_LOGIC);
 
 	//调用接口
 	ret = OnStart();
@@ -339,6 +339,8 @@ bool CBaseCenterServer::KillTimer(UINT uTimerID)
 //队列数据处理线程
 void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 {
+	INFO_LOG("LineDataHandleThread start...");
+
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct *)pThreadData;
 	CBaseCenterServer	* pThis = pData->pMainManage;
 	CDataLine* pDataLine = &pThis->m_DataLine;

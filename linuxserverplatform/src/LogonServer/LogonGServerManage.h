@@ -1,7 +1,5 @@
 #pragma once
 
-#include <map>
-#include <unordered_map>
 
 // 大厅gserver结构
 struct LogonGServerInfo
