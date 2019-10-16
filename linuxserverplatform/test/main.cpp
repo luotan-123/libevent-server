@@ -19,6 +19,7 @@
 #include "Xor.h"
 #include "NewMessageDefine.h"
 #include "test.pb.h"
+#include "test1.pb.h"
 #include "ServerTimer.h"
 #include "GameMainManage.h"
 #include <fcntl.h>
@@ -26,6 +27,7 @@
 #include <sys/stat.h>
 
 using namespace test;
+using namespace test1;
 
 static timeval g_lasttime;
 void* TimerFun(void* p)
@@ -157,12 +159,12 @@ void* FIFOFunc(void*param)
 
 int main()
 {
-	FIFOEvent fifo("/tmp/linuxserver-main-fifo");
+	//FIFOEvent fifo("/tmp/linuxserver-main-fifo");
 
-	// 开辟线程
-	pthread_t threadID2 = 0;
-	pthread_create(&threadID2, NULL, FIFOFunc, (void*)&fifo);
-	fifo.WaitForEvent();
+	//// 开辟线程
+	//pthread_t threadID2 = 0;
+	//pthread_create(&threadID2, NULL, FIFOFunc, (void*)&fifo);
+	//fifo.WaitForEvent();
 
 
 	printf("罗潭\n");
@@ -174,15 +176,23 @@ int main()
 	Student* s1 = team.add_student(); // 添加repeated成员
 	s1->set_id(1);
 	s1->set_name("Mike");
-	s1->set_sex(BOY);
+	s1->set_sex(Sex::BOY);
 	Student* s2 = team.add_student();
 	s2->set_id(2);
 	s2->set_name("Lily");
-	s2->set_sex(GIRL);
+	s2->set_sex(Sex::GIRL);
 
 	// encode --> bytes stream
 	string out;
 	team.SerializeToString(&out);
+
+	Team1 ttt;
+	ttt.ParseFromArray(out.c_str(), out.size()); // or parseFromString
+	cout << ttt.DebugString() << endl;
+	for (int i = 0; i < ttt.student_size(); i++) {
+		Student1 s = ttt.student(i); // 按索引解repeated成员
+		cout << s.name() << " " << s.sex() << endl;
+	}
 
 	// decode --> team structure
 	Team t;
@@ -192,6 +202,8 @@ int main()
 		Student s = t.student(i); // 按索引解repeated成员
 		cout << s.name() << " " << s.sex() << endl;
 	}
+
+
 
 
 

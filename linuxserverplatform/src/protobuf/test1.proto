@@ -1,0 +1,21 @@
+syntax = "proto3";
+package test1;
+
+enum Sex1 {
+    BOY = 0;
+    GIRL = 1;
+}
+
+message Student1 {
+  int32 Id = 1;     // id
+  string Name = 2;  // name
+  Sex1 Sex = 3;
+}
+
+message Team1 {
+    int32 Id = 1;
+    string Name = 2;
+    int64 money=3;
+    repeated Student1 Student = 4;
+}
+

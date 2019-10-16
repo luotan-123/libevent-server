@@ -109,9 +109,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test.pb.cc" />
+    <ClCompile Include="test1.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.pb.h" />
+    <ClInclude Include="test1.pb.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
