@@ -16,7 +16,7 @@ CServiceDataBaseHandle::~CServiceDataBaseHandle()
 {
 }
 
-UINT CServiceDataBaseHandle::HandleDataBase(DataBaseLineHead * pSourceData)
+UINT CServiceDataBaseHandle::HandleDataBase(DataBaseLineHead* pSourceData)
 {
 	if (!pSourceData)
 	{
@@ -49,7 +49,7 @@ UINT CServiceDataBaseHandle::HandleDataBase(DataBaseLineHead * pSourceData)
 }
 
 // 执行sql语句
-int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSourceData)
+int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData)
 {
 	AUTOCOST("执行SQL语句耗时");
 
@@ -70,17 +70,17 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead * pSour
 	{
 		m_pDataBaseManage->m_pMysqlHelper->sqlExec(pMessage->sql, true);
 	}
-	catch(MysqlHelper_Exception& excep)
+	catch (MysqlHelper_Exception & excep)
 	{
-		ERROR_LOG("执行sql语句失败==>>%s",excep.errorInfo.c_str()) ;
+		ERROR_LOG("执行sql语句失败==>>%s", excep.errorInfo.c_str());
 		return -3;
 	}
-	
+
 	return 0;
 }
 
 // HTTP请求
-int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
+int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 {
 	if (pSourceData->dataLineHead.uSize != sizeof(LoaderAsyncHTTP))
 	{
@@ -127,22 +127,15 @@ int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
 		ERROR_LOG("HTTP请求失败：url=[%s],userID=[%d],ret=[%s]", pAsyncMessage->url, pAsyncMessage->userID, result.c_str());
 		return -2;
 	}
-	
-	if (result.size() < MAX_TEMP_SENDBUF_SIZE - 1)
-	{
-		//返回结果
-		char szBuffer[MAX_TEMP_SENDBUF_SIZE] = "";
-		memcpy(szBuffer, result.c_str(), Min_(result.size(), MAX_TEMP_SENDBUF_SIZE - 1));
 
-		szBuffer[MAX_TEMP_SENDBUF_SIZE - 1] = 0;
+	//返回结果
+	char* szBuffer = new char[result.size() + 1];
+	strcpy(szBuffer, result.c_str());
 
-		m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
-			result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
-	}
-	else
-	{
-		ERROR_LOG("http请求返回数据过长 size=%d", result.size());
-	}
-	
+	m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
+		result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
+
+	delete[] szBuffer;
+
 	return 0;
 }

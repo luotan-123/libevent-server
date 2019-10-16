@@ -432,8 +432,7 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 	pCFIFOEvent->SetEvent();
 
 	//数据缓存
-	BYTE szBuffer[MAX_DATALINE_SIZE] = "";
-	DataLineHead* pDataLineHead = (DataLineHead *)szBuffer;
+	DataLineHead* pDataLineHead = NULL;
 
 	while (pThis->m_bRun)
 	{
@@ -450,16 +449,13 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 		{
 			try
 			{
-				unsigned int bytes = pDataLine->GetData(pDataLineHead, sizeof(szBuffer));
-				if (bytes == 0)
+				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+				if (bytes == 0 || pDataLineHead == NULL)
 				{
 					// 取出来的数据大小为0，不太可能
-					ERROR_LOG("GetDataCount data size = 0");
+					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
 					continue;
 				}
-
-				// 置零末尾
-				szBuffer[bytes] = 0;
 
 				switch (pDataLineHead->uDataKind)
 				{
@@ -537,6 +533,11 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 					break;
 				}
 
+				// 释放内存
+				if (pDataLineHead)
+				{
+					free(pDataLineHead);
+				}
 			}
 
 			catch (int iCode)

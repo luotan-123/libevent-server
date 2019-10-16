@@ -103,7 +103,7 @@ int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceDa
 	{
 		m_pDataBaseManage->m_pMysqlHelper->sqlExec(pMessage->sql);
 	}
-	catch (MysqlHelper_Exception& excep)
+	catch (MysqlHelper_Exception & excep)
 	{
 		ERROR_LOG("执行sql语句失败==>>%s", excep.errorInfo.c_str());
 		return -3;
@@ -161,21 +161,14 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	if (result.size() < MAX_TEMP_SENDBUF_SIZE - 1)
-	{
-		//返回结果
-		char szBuffer[MAX_TEMP_SENDBUF_SIZE] = "";
-		memcpy(szBuffer, result.c_str(), Min_(result.size(), MAX_TEMP_SENDBUF_SIZE - 1));
+	//返回结果
+	char* szBuffer = new char[result.size() + 1];
+	strcpy(szBuffer, result.c_str());
 
-		szBuffer[MAX_TEMP_SENDBUF_SIZE - 1] = 0;
+	m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
+		result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
 
-		m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
-			result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
-	}
-	else
-	{
-		ERROR_LOG("http请求返回数据过长 size=%d", result.size());
-	}
+	delete[] szBuffer;
 
 	return 0;
 }

@@ -145,7 +145,7 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 	IDataBaseHandleService* pHandleService = pDataManage->m_pHandleService;	//数据处理接口
 
 	//数据缓存
-	BYTE					szBuffer[MAX_DATALINE_SIZE];
+	DataLineHead* pDataLineHead = NULL;
 
 	sleep(1);
 
@@ -160,16 +160,21 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 			try
 			{
 				//处理数据
-				unsigned int bytes = pDataLine->GetData((DataLineHead*)szBuffer, sizeof(szBuffer));
-				if (bytes < sizeof(DataBaseLineHead))
+				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+				if (bytes == 0 || pDataLineHead == NULL)
 				{
+					// 取出来的数据大小为0，不太可能
+					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
 					continue;
 				}
 
-				// 置零末尾
-				szBuffer[bytes] = 0;
+				pHandleService->HandleDataBase((DataBaseLineHead*)pDataLineHead);
 
-				pHandleService->HandleDataBase((DataBaseLineHead*)szBuffer);
+				// 释放内存
+				if (pDataLineHead)
+				{
+					free(pDataLineHead);
+				}
 			}
 			catch (...)
 			{

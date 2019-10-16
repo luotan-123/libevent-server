@@ -21,9 +21,8 @@ class CDataLine
 {
 private:
 	std::list <ListItemData*> m_DataList;
-	CSignedLock		m_csLock;				//同步锁
+	CSignedLock	m_csLock;
 
-	//HANDLE			m_hCompletionPort
 public:
 	CDataLine();
 	virtual ~CDataLine();
@@ -36,9 +35,8 @@ public:
 	//加入消息队列
 	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData = NULL, UINT uAppendAddSize = 0);
 	//提取消息数据
-	virtual UINT GetData(DataLineHead* pDataBuffer, UINT uBufferSize);
+	virtual UINT GetData(DataLineHead** pDataBuffer);
 
 public:
 	size_t GetDataCount();
 };
-

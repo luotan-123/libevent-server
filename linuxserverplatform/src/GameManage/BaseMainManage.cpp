@@ -388,8 +388,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	pCFIFOEvent->SetEvent();
 
 	//数据缓存
-	BYTE						szBuffer[MAX_DATALINE_SIZE];
-	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
+	DataLineHead* pDataLineHead = NULL;
 
 	while (pMainManage->m_bRun)
 	{
@@ -405,14 +404,13 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 		{
 			try
 			{
-				unsigned int bytes = m_pDataLine->GetData(pDataLineHead, sizeof(szBuffer));
-				if (bytes == 0)
+				unsigned int bytes = m_pDataLine->GetData(&pDataLineHead);
+				if (bytes == 0 || pDataLineHead == NULL)
 				{
+					// 取出来的数据大小为0，不太可能
+					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
 					continue;
 				}
-
-				// 置零末尾
-				szBuffer[bytes] = 0;
 
 				switch (pDataLineHead->uDataKind)
 				{
@@ -472,6 +470,12 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 				}
 				default:
 					break;
+				}
+
+				// 释放内存
+				if (pDataLineHead)
+				{
+					free(pDataLineHead);
 				}
 			}
 

@@ -15,7 +15,6 @@ const int MAX_PRIVATE_DESK_PASSWD_LEN = 20;			// 私有房最大密码长度
 const int PRIVATE_DESK_PASSWD_LEN = 6;				// 私有房密码长度
 
 const int MAX_TEMP_SENDBUF_SIZE = 8 * 1024;			// 临时发送缓冲区大小，也是单条数据包的最大长度
-const int MAX_DATALINE_SIZE = MAX_TEMP_SENDBUF_SIZE + 128;// 数据队列最大长度（包括队列头部）128是最大的队头长度，如果有更大队头，需要增加值
 const int MAX_REDIS_COMMAND_SIZE = 2048;			// redis命令缓冲区大小
 const int MAX_SQL_STATEMENT_SIZE = 2048;			// sql语句缓冲区大小
 

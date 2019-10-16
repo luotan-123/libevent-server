@@ -35,7 +35,7 @@ void* TimerFun(void* p)
 	evutil_gettimeofday(&g_lasttime, NULL);
 	CDataLine* pDataLine = (CDataLine*)p;
 	//数据缓存
-	BYTE szBuffer[MAX_DATALINE_SIZE] = "";
+	BYTE szBuffer[8192] = "";
 	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
 
 	while (true)
@@ -44,7 +44,7 @@ void* TimerFun(void* p)
 
 		while (pDataLine->GetDataCount())
 		{
-			unsigned int bytes = pDataLine->GetData(pDataLineHead, sizeof(szBuffer));
+			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
 
 			ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
 
@@ -159,6 +159,27 @@ void* FIFOFunc(void*param)
 
 int main()
 {
+	while (true)
+	{
+		sleep(1);
+
+		int switch_on = CUtil::GetRandNum()%2;
+
+		switch (switch_on)
+		{
+		case 1:
+			printf("======\n");
+			break;
+		default:
+			continue;
+			break;
+		}
+
+		printf("+++++++++++++++++ %d\n", switch_on);
+	}
+
+
+
 	//FIFOEvent fifo("/tmp/linuxserver-main-fifo");
 
 	//// 开辟线程

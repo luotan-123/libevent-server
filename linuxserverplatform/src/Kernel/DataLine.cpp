@@ -13,7 +13,7 @@ CDataLine::~CDataLine()
 	{
 		pListItem = m_DataList.front();
 		m_DataList.pop_front();
-		delete pListItem->pData;
+		free(pListItem->pData);
 		delete pListItem;
 	}
 }
@@ -32,12 +32,7 @@ Return			:指压入队列的大小
 */
 UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData, UINT uAppendAddSize)
 {
-	/*if (!m_hCompletionPort)
-	{
-		return 0;
-	}*/
-
-	if (!pDataInfo)
+	if (!pDataInfo || uAddSize == 0)
 	{
 		return 0;
 	}
@@ -54,7 +49,7 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 		pListItem->stDataHead.uSize += uAppendAddSize;
 	}
 
-	pListItem->pData = new BYTE[pListItem->stDataHead.uSize + 1];	//申请数据项内存
+	pListItem->pData = (BYTE*)malloc(pListItem->stDataHead.uSize + 1);		//申请数据项内存
 	//memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//清空内存
 	pListItem->pData[pListItem->stDataHead.uSize] = 0;				//初始化末尾
 
@@ -89,12 +84,11 @@ Function		:GetData
 Memo			:从队列中取出数据
 Parameter		:
 [OUT]		pDataBuffer	:取出数据的缓存
-[IN]		uBufferSize	:缓存大小
 Return			:取出数据的实际大小
 */
-UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
+UINT CDataLine::GetData(DataLineHead** pDataBuffer)
 {
-	//memset(pDataBuffer, 0, uBufferSize);
+	*pDataBuffer = NULL;
 
 	CSignedLockObject LockObject(&m_csLock, false);
 
@@ -114,19 +108,10 @@ UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 
 	UINT uDataSize = pListItem->stDataHead.uSize;
 
-	if (uDataSize <= MAX_DATALINE_SIZE)
-	{
-		//投递数据
-		memcpy((void*)pDataBuffer, pListItem->pData, uDataSize);
-	}
-	else
-	{
-		ERROR_LOG("### DataLine GetData fail uDataSize=%d max=%d ###", uDataSize, MAX_DATALINE_SIZE);
-		uDataSize = 0;
-	}
+	//投递数据，外部一定要释放内存，否则内存泄漏
+	*pDataBuffer = (DataLineHead*)pListItem->pData;
 
 	//删除队列中的数据
-	delete[] pListItem->pData;
 	delete pListItem;
 
 	return uDataSize;
@@ -143,7 +128,7 @@ bool CDataLine::CleanLineData()
 	{
 		pListItem = m_DataList.front();
 		m_DataList.pop_front();
-		delete pListItem->pData;
+		free(pListItem->pData);
 		delete pListItem;
 	}
 
@@ -151,7 +136,7 @@ bool CDataLine::CleanLineData()
 }
 
 // 获取队列数据数量
-size_t CDataLine::GetDataCount(void)
+size_t CDataLine::GetDataCount()
 {
 	//CSignedLockObject LockObject(&m_csLock, true);
 
