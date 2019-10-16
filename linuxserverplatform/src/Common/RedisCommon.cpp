@@ -1352,7 +1352,7 @@ int CRedisCommon::GetRandDigit(int digit)
 	}
 
 	// 头
-	int head = rand() % 9 + 1;		// 取1-9中的一个值
+	int head = CUtil::GetRandNum() % 9 + 1;		// 取1-9中的一个值
 
 	int count = digit - 1;
 	if (count == 0)
@@ -1367,7 +1367,7 @@ int CRedisCommon::GetRandDigit(int digit)
 		tailSum *= 10;
 	}
 
-	int tail = rand() % tailSum;
+	int tail = CUtil::GetRandNum() % tailSum;
 
 	int ret = head * tailSum + tail;
 

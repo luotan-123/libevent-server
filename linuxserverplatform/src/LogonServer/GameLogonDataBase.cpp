@@ -128,13 +128,13 @@ int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead * pSourceData)
 		return -2;
 	}
 	
-	if (result.size() < LD_MAX_PART - 1)
+	if (result.size() < MAX_TEMP_SENDBUF_SIZE - 1)
 	{
 		//返回结果
-		char szBuffer[LD_MAX_PART] = "";
-		memcpy(szBuffer, result.c_str(), Min_(result.size(), LD_MAX_PART - 1));
+		char szBuffer[MAX_TEMP_SENDBUF_SIZE] = "";
+		memcpy(szBuffer, result.c_str(), Min_(result.size(), MAX_TEMP_SENDBUF_SIZE - 1));
 
-		szBuffer[LD_MAX_PART - 1] = 0;
+		szBuffer[MAX_TEMP_SENDBUF_SIZE - 1] = 0;
 
 		m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
 			result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);

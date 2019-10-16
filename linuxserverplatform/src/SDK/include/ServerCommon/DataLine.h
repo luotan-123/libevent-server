@@ -6,9 +6,6 @@
 /*
 Struct		:ListItemData
 Memo		:链表项数据结构
-Author		:Fred Huang
-Add Data	:2008-3-4
-Modify Data	:none
 Parameter	:
 	stDataHead	:数据包头
 	pData		:每个链表项数据的指针，使用用new方式申请的内存，注意，在出队列时，要显式的delete 该内存

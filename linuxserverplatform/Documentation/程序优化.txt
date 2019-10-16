@@ -6,7 +6,6 @@
 
 构架再好，模块内部实现更重要
 
-1、优化redis键值存储  string类型换成hash存储   userRedSpotCount 登陆的时候删除没有小红点的键值
-2、优化处理线程处理数据包的大小，原先只有8K，优化消息队列数据大小。修改原系统随机数，使用新的随机数生成方法
-3、程序生成core文件
-4、研究libevent
+1、优化redis键值存储  string类型换成hash存储
+2、程序生成core文件
+3、研究libevent

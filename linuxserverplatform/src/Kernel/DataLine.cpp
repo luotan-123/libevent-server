@@ -22,9 +22,6 @@ CDataLine::~CDataLine()
 /*
 Function		:AddData
 Memo			:将数据压入到队列当中
-Author			:Fred Huang
-Add Data		:2008-3-4
-Modify Data		:none
 Parameter		:
 [IN]		pDataInfo	:要压入队列的数据指针
 [IN]		uAddSize	:数据大小
@@ -58,7 +55,8 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 	}
 
 	pListItem->pData = new BYTE[pListItem->stDataHead.uSize + 1];	//申请数据项内存
-	memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//清空内存
+	//memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//清空内存
+	pListItem->pData[pListItem->stDataHead.uSize] = 0;				//初始化末尾
 
 	pDataInfo->uDataKind = uDataKind;
 	pDataInfo->uSize = pListItem->stDataHead.uSize;
@@ -89,17 +87,14 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 /*
 Function		:GetData
 Memo			:从队列中取出数据
-Author			:Fred Huang
-Add Data		:2008-3-4
-Modify Data		:none
 Parameter		:
 [OUT]		pDataBuffer	:取出数据的缓存
-[IN]		uBufferSize	:缓存大小，缺省为 LD_MAX_PART = 3096
+[IN]		uBufferSize	:缓存大小
 Return			:取出数据的实际大小
 */
 UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 {
-	memset(pDataBuffer, 0, uBufferSize);
+	//memset(pDataBuffer, 0, uBufferSize);
 
 	CSignedLockObject LockObject(&m_csLock, false);
 
@@ -119,14 +114,14 @@ UINT CDataLine::GetData(DataLineHead* pDataBuffer, UINT uBufferSize)
 
 	UINT uDataSize = pListItem->stDataHead.uSize;
 
-	if (uDataSize <= LD_MAX_PART)
+	if (uDataSize <= MAX_DATALINE_SIZE)
 	{
 		//投递数据
 		memcpy((void*)pDataBuffer, pListItem->pData, uDataSize);
 	}
 	else
 	{
-		ERROR_LOG("### DataLine GetData fail uDataSize=%d max=%d ###", uDataSize, LD_MAX_PART);
+		ERROR_LOG("### DataLine GetData fail uDataSize=%d max=%d ###", uDataSize, MAX_DATALINE_SIZE);
 		uDataSize = 0;
 	}
 

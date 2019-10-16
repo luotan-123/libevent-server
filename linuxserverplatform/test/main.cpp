@@ -35,7 +35,7 @@ void* TimerFun(void* p)
 	evutil_gettimeofday(&g_lasttime, NULL);
 	CDataLine* pDataLine = (CDataLine*)p;
 	//数据缓存
-	BYTE szBuffer[LD_MAX_PART] = "";
+	BYTE szBuffer[MAX_DATALINE_SIZE] = "";
 	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
 
 	while (true)

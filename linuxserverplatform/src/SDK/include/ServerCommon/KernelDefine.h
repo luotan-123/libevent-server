@@ -8,15 +8,16 @@ const int MAX_USER_ACCOUNT_LEN = 48;		// 玩家账号最大长度
 const int MAX_USER_NAME_LEN = 64;			// 玩家昵称最大长度
 const int MAX_USER_HEADURL_LEN = 256;		// 玩家头像最大长度
 
-const int USER_MD5_PASSWD_LEN = 32;				// 密码长度(都是MD5)
-const int MAX_USER_MAD_PASSWD_SIZE = 48;		// 最大密码缓冲区大小
+const int USER_MD5_PASSWD_LEN = 32;					// 密码长度(都是MD5)
+const int MAX_USER_MAD_PASSWD_SIZE = 48;			// 最大密码缓冲区大小
 
-const int MAX_PRIVATE_DESK_PASSWD_LEN = 20;		// 私有房最大密码长度
-const int PRIVATE_DESK_PASSWD_LEN = 6;			// 私有房密码长度
+const int MAX_PRIVATE_DESK_PASSWD_LEN = 20;			// 私有房最大密码长度
+const int PRIVATE_DESK_PASSWD_LEN = 6;				// 私有房密码长度
 
-const int MAX_TEMP_SENDBUF_SIZE = 8192;			// 临时发送缓冲区大小
-const int MAX_REDIS_COMMAND_SIZE = 2048;		// redis命令缓冲区大小
-const int MAX_SQL_STATEMENT_SIZE = 2048;		// sql语句缓冲区大小
+const int MAX_TEMP_SENDBUF_SIZE = 8 * 1024;			// 临时发送缓冲区大小，也是单条数据包的最大长度
+const int MAX_DATALINE_SIZE = MAX_TEMP_SENDBUF_SIZE + 128;// 数据队列最大长度（包括队列头部）128是最大的队头长度，如果有更大队头，需要增加值
+const int MAX_REDIS_COMMAND_SIZE = 2048;			// redis命令缓冲区大小
+const int MAX_SQL_STATEMENT_SIZE = 2048;			// sql语句缓冲区大小
 
 const int MAX_IP_ADDR_SIZE = 128;		// 最大IP地址长度
 const int MAX_DB_USER_SIZE = 48;		// 最大db_user缓冲区大小
@@ -30,9 +31,8 @@ const int MAX_LOG_FILE_SIZE = 1024 * 1024 * 32;  //日子文件的最大的长�
 
 const int MAX_BANK_PASSWD_MIN_LEN = 6;	// 银行密码最小长度
 
-//////////////////////////////////////////////////////////////////////////
-//数据队列最大长度（包括队列头部），要大于 MAX_TEMP_SENDBUF_SIZE=8192
-#define LD_MAX_PART						8320
+const int MAX_TOKEN_BUF_SIZE = 48;		// token的长度
+
 
 /////////////////////////////////////////////////////////
 //web 相关

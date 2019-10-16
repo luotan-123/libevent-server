@@ -193,6 +193,7 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 	}
 
 	// 通知小红点
+	bool bHaveRedSpot = false;
 
 	if (userRedspot.friendList > 0 || userRedspot.friendNotifyList > 0)
 	{
@@ -203,6 +204,8 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 		msgFriend.notifyListRedSpotCount = userRedspot.friendNotifyList;
 
 		SendData(userID, &msgFriend, sizeof(msgFriend), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_FRIEND_REDSPOT, 0);
+
+		bHaveRedSpot = true;
 	}
 
 	if (userRedspot.FGNotifyList > 0)
@@ -214,15 +217,28 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 
 		int iSendSize = 8 + sizeof(LogonFriendsGroupPushRedSpot::MsgRedSpot) * msgFG.friendsGroupCount;
 		SendData(userID, &msgFG, iSendSize, MSG_MAIN_FRIENDSGROUP_NOTIFY, MSG_NTF_LOGON_FRIENDSGROUP_REDSPOT, 0);
+
+		bHaveRedSpot = true;
 	}
 
-	// 通知邮件小红点
-	LogonNotifyEmailRedSpot msgEmail;
+	if (userRedspot.notEMRead > 0 || userRedspot.notEMReceived > 0)
+	{
+		// 通知邮件小红点
+		LogonNotifyEmailRedSpot msgEmail;
 
-	msgEmail.notReadCount = userRedspot.notEMRead;
-	msgEmail.notReceivedCount = userRedspot.notEMReceived;
+		msgEmail.notReadCount = userRedspot.notEMRead;
+		msgEmail.notReceivedCount = userRedspot.notEMReceived;
 
-	SendData(userID, &msgEmail, sizeof(msgEmail), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_EMAIL_REDSPOT, 0);
+		SendData(userID, &msgEmail, sizeof(msgEmail), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_EMAIL_REDSPOT, 0);
+
+		bHaveRedSpot = true;
+	}
+	
+	// 没有小红点删除redis键值
+	if (!bHaveRedSpot)
+	{
+		m_pRedis->DelKey(CRedisLogon::MakeKey(TBL_USER_REDSPOT, userID).c_str());
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -469,8 +485,8 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	}
 
 	// 先生成一个token
-	char token[64] = "";
-	CUtil::GetUuid(token,36);
+	char token[MAX_TOKEN_BUF_SIZE + 1] = "";
+	CUtil::GetUuid(token, MAX_TOKEN_BUF_SIZE);
 
 	int userID = 0;
 	BYTE byPhoneFastRegister = LOGON_TEL_PHONE;

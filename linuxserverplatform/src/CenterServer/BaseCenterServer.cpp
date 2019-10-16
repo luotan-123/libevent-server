@@ -350,7 +350,7 @@ void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 	pCFIFOEvent->SetEvent();
 
 	//数据缓存
-	BYTE szBuffer[LD_MAX_PART] = "";
+	BYTE szBuffer[MAX_DATALINE_SIZE] = "";
 	DataLineHead* pDataLineHead = (DataLineHead *)szBuffer;
 
 	while (pThis->m_bRun)
@@ -375,6 +375,9 @@ void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 					ERROR_LOG("GetDataCount data size = 0");
 					continue;
 				}
+
+				// 置零末尾
+				szBuffer[bytes] = 0;
 
 				switch (pDataLineHead->uDataKind)
 				{

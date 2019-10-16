@@ -18,9 +18,6 @@ void _HandleCommand(const std::string& command)
 
 int main()
 {
-	// 初始化随机数种子
-	srand((unsigned)time(NULL));
-
 	// 设置程序路径 , 创建日志目录
 	CINIFile file(CINIFile::GetAppPath() + "config.ini");
 	string logPath = file.GetKeyVal("COMMON", "logPath", "./log/");
