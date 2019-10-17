@@ -6,4 +6,4 @@ vim /etc/ld.so.conf
 执行 root权限运行 ldconfig
 
 2、启动程序必须用shell脚本启动，方便生产core文件
-注意关闭会话无效 ulimit -c unlimited
+启动coredumpshell.sh，重启系统生效

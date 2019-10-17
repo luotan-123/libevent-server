@@ -18,10 +18,10 @@ cd /tmp && mkdir -p linuxserverplatform-corefile && chmod 777 linuxserverplatfor
 # %t – 生成core文件的时间戳(seconds since 0:00h, 1 Jan 1970)
 # %h – 主机名
 # %e – 程序文件名
-echo -e "/tmp/linuxserverplatform-corefile/core-%e-%s-%u-%g-%p-%t" > /proc/sys/kernel/core_pattern 
+echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern 
 
 # for centos7 system(update 2017.2.3 21:44)
-echo -e "/tmp/linuxserverplatform-corefile/core-%e-%s-%u-%g-%p-%t" > /etc/sysctl.conf 
+echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /etc/sysctl.conf 
 
 # suffix of the core file name
 echo -e "1" > /proc/sys/kernel/core_uses_pid 
