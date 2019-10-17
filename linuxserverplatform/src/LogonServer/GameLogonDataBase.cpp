@@ -66,6 +66,9 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourc
 		return -2;
 	}
 
+	// 根据 pMessage->bIsSelect 掉接口
+	// bIsSelect = 0 ：sqlExec   bIsSelect = 1：queryRecord
+
 	try
 	{
 		m_pDataBaseManage->m_pMysqlHelper->sqlExec(pMessage->sql, true);
@@ -73,6 +76,16 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourc
 	catch (MysqlHelper_Exception & excep)
 	{
 		ERROR_LOG("执行sql语句失败==>>%s", excep.errorInfo.c_str());
+
+		////返回结果
+		//char* szBuffer = new char[result.size() + 1];
+		//strcpy(szBuffer, result.c_str());
+
+		//m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
+		//	result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
+
+		//delete[] szBuffer;
+
 		return -3;
 	}
 

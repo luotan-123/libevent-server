@@ -128,6 +128,7 @@ struct InternalSqlStatement
 {
 	DataBaseLineHead	head;
 	char	sql[MAX_SQL_STATEMENT_SIZE];
+	bool	bIsSelect;	// 默认0：非查询性语句，错误返回字符串，1：查询语句，需要返回结果集合
 
 	InternalSqlStatement()
 	{

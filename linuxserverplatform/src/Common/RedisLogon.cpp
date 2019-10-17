@@ -187,10 +187,8 @@ int CRedisLogon::Register(const UserData& userData, BYTE registerType)
 
 int CRedisLogon::GetRelevanceTrdUid(std::string triID)
 {
-	std::string key = MakeKey(TBL_TRDUSERID, triID.c_str());
-
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	sprintf(redisCmd, "GET %s", key.c_str());
+	sprintf(redisCmd, "HGET %s %s", TBL_TRDUSERID, triID.c_str());
 
 	redisReply * pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -208,10 +206,8 @@ int CRedisLogon::GetRelevanceTrdUid(std::string triID)
 
 int CRedisLogon::GetVisitorID(std::string triID)
 {
-	std::string key = MakeKey(TBL_VISITOR_TOUSERID, triID.c_str());
-
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	sprintf(redisCmd, "GET %s", key.c_str());
+	sprintf(redisCmd, "HGET %s %s", TBL_VISITOR_TOUSERID, triID.c_str());
 
 	redisReply * pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -1070,9 +1066,8 @@ bool CRedisLogon::CountOneDayPoolInfo()
 int CRedisLogon::GetUserIDByPhone(const char* phone)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	std::string key = MakeKey(TBL_PHONE_TOUSERID, phone);
 
-	sprintf(redisCmd, "GET %s", key.c_str());
+	sprintf(redisCmd, "HGET %s %s", TBL_PHONE_TOUSERID, phone);
 
 	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -1114,9 +1109,8 @@ int  CRedisLogon::GetCurMaxUserID()
 int CRedisLogon::GetUserIDByXianLiao(const char* xianliao)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	std::string key = MakeKey(TBL_XIANLIAO_TOUSERID, xianliao);
 
-	sprintf(redisCmd, "GET %s", key.c_str());
+	sprintf(redisCmd, "HGET %s %s", TBL_XIANLIAO_TOUSERID, xianliao);
 
 	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);

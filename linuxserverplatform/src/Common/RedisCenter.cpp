@@ -646,23 +646,21 @@ bool CRedisCenter::SetUserPhone(int userID, const char* phone, bool bUnBind /*= 
 		return true;
 	}
 
-	std::string key = MakeKey(TBL_PHONE_TOUSERID, phone);
+	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
 	if (bUnBind)
 	{
-		DelKey(key.c_str());
+		sprintf(redisCmd, "HDEL %s %s", TBL_PHONE_TOUSERID, phone);
 	}
 	else
 	{
-		char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-
-		sprintf(redisCmd, "SET %s %d", key.c_str(), userID);
-
-		redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
-		REDIS_CHECKF(pReply, redisCmd);
-
-		freeReplyObject(pReply);
+		sprintf(redisCmd, "HSET %s %s %d", TBL_PHONE_TOUSERID, phone, userID);
 	}
+
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
+	REDIS_CHECKF(pReply, redisCmd);
+
+	freeReplyObject(pReply);
 
 	return true;
 }
@@ -682,7 +680,7 @@ bool CRedisCenter::SetUserXianLiao(int userID, const char* xianliao)
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
 
-	sprintf(redisCmd, "SET %s|%s %d", TBL_XIANLIAO_TOUSERID, xianliao, userID);
+	sprintf(redisCmd, "HSET %s %s %d", TBL_XIANLIAO_TOUSERID, xianliao, userID);
 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);

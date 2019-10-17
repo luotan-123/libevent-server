@@ -17,7 +17,7 @@ bool CRedisCommon::IsAccountExists(const char* account)
 	}
 
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	sprintf(redisCmd, "EXISTS %s|%s", TBL_NORMAL_TO_USERID, account);
+	sprintf(redisCmd, "HEXISTS %s %s", TBL_NORMAL_TO_USERID, account);
 
 	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -36,7 +36,7 @@ bool CRedisCommon::IsAccountExists(const char* account)
 int CRedisCommon::GetUserIDByAccount(const char * account)
 {
 	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
-	sprintf(redisCmd, "GET %s|%s", TBL_NORMAL_TO_USERID, account);
+	sprintf(redisCmd, "HGET %s %s", TBL_NORMAL_TO_USERID, account);
 
 	redisReply* pReply = (redisReply *)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
@@ -1240,19 +1240,19 @@ bool CRedisCommon::FixAccountIndexInfo(const char * account, const char* passwd,
 
 	if (registerType == LOGON_NORMAL || registerType == LOGON_QUICK)	// 普通用户
 	{
-		sprintf(redisCmd, "SET %s|%s %d", TBL_NORMAL_TO_USERID, account, userID);
+		sprintf(redisCmd, "HSET %s %s %d", TBL_NORMAL_TO_USERID, account, userID);
 	}
 	else if (registerType == LOGON_TEL_PHONE)
 	{
-		sprintf(redisCmd, "SET %s|%s %d", TBL_PHONE_TOUSERID, account, userID);
+		sprintf(redisCmd, "HSET %s %s %d", TBL_PHONE_TOUSERID, account, userID);
 	}
 	else if (registerType == LOGON_VISITOR)
 	{
-		sprintf(redisCmd, "SET %s|%s %d", TBL_VISITOR_TOUSERID, passwd, userID);
+		sprintf(redisCmd, "HSET %s %s %d", TBL_VISITOR_TOUSERID, passwd, userID);
 	}
 	else	// 第三方用户
 	{
-		sprintf(redisCmd, "SET %s|%s %d", TBL_TRDUSERID, passwd, userID);
+		sprintf(redisCmd, "HSET %s %s %d", TBL_TRDUSERID, passwd, userID);
 	}
 
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);

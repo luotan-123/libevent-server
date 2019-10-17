@@ -6,6 +6,5 @@
 
 构架再好，模块内部实现更重要
 
-1、优化redis键值存储  string类型换成hash存储
-2、程序生成core文件
-3、研究libevent
+1、程序生成core文件
+2、研究libevent
