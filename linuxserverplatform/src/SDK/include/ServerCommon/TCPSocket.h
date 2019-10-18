@@ -38,7 +38,7 @@ public:
 
 public:
 	// 初始化
-	bool Init(IServerSocketService * pService, int maxCount, int port, int secretKey, const char *ip = NULL);
+	bool Init(IServerSocketService * pService, int maxCount, int port, const char *ip = NULL);
 	// 取消初始化
 	virtual bool UnInit();
 	// 开始服务
@@ -51,16 +51,16 @@ public:
 	bool SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int handleID, unsigned int uIdentification = 0);
 	// 中心服务器发送数据
 	bool CenterServerSendData(int idx, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID);
-	// 批量发送函数
-	int SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode);
 	// 关闭连接(业务逻辑线程调用)
 	bool CloseSocket(int index);
 	// 接收关闭连接事件。
 	bool OnSocketClose(int index);
 	// 检查心跳
 	void CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeartBeatTime);
-	// 获取dataline
-	CDataLine* GetDataLine();
+	// 获取接收dataline
+	CDataLine* GetRecvDataLine();
+	// 获取发送dataline
+	CDataLine* GetSendDataLine();
 	// 获取连接ip
 	const char* GetSocketIP(int socketIdx);
 	// 获取CTCPSocket属性
@@ -73,12 +73,17 @@ private:
 	static void* ThreadAccept(void* pThreadData);
 	// SOCKET 数据接收线程
 	static void* ThreadRSSocket(void* pThreadData);
+	// SOCKET 数据发送线程
+	static void* ThreadSendMsg(void* pThreadData);
 
 private:
 	CListenSocket				m_listenSocket;
 	IServerSocketService*		m_pService;
-	UINT	m_uMaxSocket;
-	volatile bool	m_running;
+	CDataLine*					m_pSendDataLine;
+	UINT						m_uMaxSocket;
+	volatile bool				m_running;
+
+
 public:
 	unsigned int	m_iServiceType;
 };

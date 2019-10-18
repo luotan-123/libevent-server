@@ -7,9 +7,6 @@
     <Filter Include="公共定义">
       <UniqueIdentifier>{129512a9-99c3-413c-bb91-ea62b4a53114}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HTTP模块">
-      <UniqueIdentifier>{aab4321d-1407-4393-b531-fa6eb2e37a43}</UniqueIdentifier>
-    </Filter>
     <Filter Include="协议模块">
       <UniqueIdentifier>{59eaf148-c979-40e6-852e-f07878102d5c}</UniqueIdentifier>
     </Filter>
@@ -22,13 +19,16 @@
     <Filter Include="加密工具">
       <UniqueIdentifier>{9f8b593c-cdd6-437d-b468-d6e166871f1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HttpClient">
+      <UniqueIdentifier>{aab4321d-1407-4393-b531-fa6eb2e37a43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Common\Util.cpp">
       <Filter>工具类</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Common\MyCurl.cpp">
-      <Filter>HTTP模块</Filter>
+      <Filter>HttpClient</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Common\BillManage.cpp">
       <Filter>数据流水</Filter>
@@ -66,7 +66,7 @@
       <Filter>公共定义</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\MyCurl.h">
-      <Filter>HTTP模块</Filter>
+      <Filter>HttpClient</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\LoaderAsyncEvent.h">
       <Filter>协议模块</Filter>

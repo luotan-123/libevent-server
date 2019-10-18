@@ -134,6 +134,7 @@ bool CListenSocket::CloseSocket()
 CTCPSocketManage::CTCPSocketManage()
 {
 	m_pService = NULL;
+	m_pSendDataLine = NULL;
 	m_running = false;
 	m_uMaxSocket = 0;
 	m_iServiceType = 0;
@@ -144,7 +145,7 @@ CTCPSocketManage::~CTCPSocketManage()
 	
 }
 
-bool CTCPSocketManage::Init(IServerSocketService * pService, int maxCount, int port, int secretKey, const char *ip/* = NULL*/)
+bool CTCPSocketManage::Init(IServerSocketService * pService, int maxCount, int port, const char *ip/* = NULL*/)
 {
 	INFO_LOG("service TCPSocketManage init begin...");
 
@@ -238,14 +239,6 @@ bool CTCPSocketManage::CenterServerSendData(int idx, UINT msgID, void* pData, in
 	return true;
 }
 
-//批量发送函数
-int CTCPSocketManage::SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT uAssistantID, UINT uHandleCode)
-{
-	
-
-	return uSize;
-}
-
 bool CTCPSocketManage::CloseSocket(int index)
 {
 	
@@ -278,7 +271,7 @@ void CTCPSocketManage::CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeart
 	}
 }
 
-CDataLine* CTCPSocketManage::GetDataLine()
+CDataLine* CTCPSocketManage::GetRecvDataLine()
 {
 	if (m_pService)
 	{
@@ -286,6 +279,12 @@ CDataLine* CTCPSocketManage::GetDataLine()
 	}
 
 	return NULL;
+}
+
+// 获取发送dataline
+CDataLine* CTCPSocketManage::GetSendDataLine()
+{
+	return m_pSendDataLine;
 }
 
 const char* CTCPSocketManage::GetSocketIP(int socketIdx)
@@ -309,6 +308,14 @@ void* CTCPSocketManage::ThreadRSSocket(void* pData)
 	}
 
 	
+
+	return 0;
+}
+
+// SOCKET 数据发送线程
+void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
+{
+
 
 	return 0;
 }

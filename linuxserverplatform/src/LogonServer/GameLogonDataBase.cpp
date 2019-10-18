@@ -78,13 +78,8 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourc
 		ERROR_LOG("执行sql语句失败==>>%s", excep.errorInfo.c_str());
 
 		////返回结果
-		//char* szBuffer = new char[result.size() + 1];
-		//strcpy(szBuffer, result.c_str());
-
-		//m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
-		//	result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
-
-		//delete[] szBuffer;
+		//m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, result.c_str(),
+		//	result.size(), pAsyncMessage->postType, pAsyncMessage->userID);
 
 		return -3;
 	}
@@ -142,13 +137,8 @@ int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 	}
 
 	//返回结果
-	char* szBuffer = new char[result.size() + 1];
-	strcpy(szBuffer, result.c_str());
-
-	m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, szBuffer,
-		result.size() + 1, pAsyncMessage->postType, pAsyncMessage->userID);
-
-	delete[] szBuffer;
+	m_pRusultService->OnAsynThreadResultEvent(ANSY_THREAD_RESULT_TYPE_HTTP, 0, result.c_str(),
+		result.size(), pAsyncMessage->postType, pAsyncMessage->userID);
 
 	return 0;
 }

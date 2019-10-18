@@ -30,7 +30,7 @@ Parameter		:
 [IN]		pAppendAddSize	:附加数据大小，可以为0，此时实体数据为空
 Return			:指压入队列的大小
 */
-UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData, UINT uAppendAddSize)
+UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, const void* pAppendData, UINT uAppendAddSize)
 {
 	if (!pDataInfo || uAddSize == 0)
 	{

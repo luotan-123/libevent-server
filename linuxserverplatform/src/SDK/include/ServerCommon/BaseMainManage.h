@@ -51,7 +51,7 @@ public:
 	//清除定时器
 	bool KillTimer(UINT uTimerID);
 	//异步线程结果处理
-	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
+	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
 	//获取队列
 	virtual CDataLine* GetDataLine() { return &m_DataLine; }
 

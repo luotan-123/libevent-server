@@ -315,7 +315,7 @@ bool CBaseMainManage::Update()
 }
 
 //异步线程结果处理
-bool CBaseMainManage::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
+bool CBaseMainManage::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
 {
 	AsynThreadResultLine resultData;
 

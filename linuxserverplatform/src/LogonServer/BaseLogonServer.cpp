@@ -102,7 +102,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct * pInitData, IDataBaseHandleService
 	}
 
 	// 初始化网络
-	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort, 0);
+	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort);
 	if (!ret)
 	{
 		ERROR_LOG("TCPSocket Init failed");
@@ -360,7 +360,7 @@ bool CBaseLogonServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * 
 }
 
 //异步线程结果处理
-bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
+bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
 {
 	AsynThreadResultLine resultData;
 

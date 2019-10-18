@@ -6,4 +6,5 @@ vim /etc/ld.so.conf
 执行 root权限运行 ldconfig
 
 2、启动程序必须用shell脚本启动，方便生产core文件
-启动coredumpshell.sh，重启系统生效
+启动coredumpshell.sh，重启系统生效。重启后，还需要以root执行以下命令。不执行core会生成在当前目录。
+echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern

@@ -98,7 +98,7 @@ bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
 	}
 
 	// 初始化网络
-	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort, 0, m_InitData.szCenterIP);
+	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort, m_InitData.szCenterIP);
 	if (!ret)
 	{
 		ERROR_LOG("TCPSocket Init failed");

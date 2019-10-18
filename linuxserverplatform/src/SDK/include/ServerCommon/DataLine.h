@@ -33,7 +33,7 @@ public:
 	//清理所有数据
 	bool CleanLineData();
 	//加入消息队列
-	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, void* pAppendData = NULL, UINT uAppendAddSize = 0);
+	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, const void* pAppendData = NULL, UINT uAppendAddSize = 0);
 	//提取消息数据
 	virtual UINT GetData(DataLineHead** pDataBuffer);
 

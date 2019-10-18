@@ -27,4 +27,8 @@ which  命令名称
 1. ls -F | grep '/$'
 2.ls -l | grep '^d'
 
+六、去掉windows\r
+vim 命令模式下输入  :set fileformat=unix 
+
+
 
