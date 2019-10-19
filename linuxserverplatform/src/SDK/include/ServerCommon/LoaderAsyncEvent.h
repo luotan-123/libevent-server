@@ -5,8 +5,9 @@
 // 游戏服异步事件  2001-3000
 
 //////////////////////////////////////////////////////////////////////
-#define	LOADER_ASYNC_EVENT_UPLOAD_VIDEO		2001		// 上传录像
-#define	LOADER_ASYNC_EVENT_HTTP				2002		// http请求
+#define	LOADER_ASYNC_EVENT_SQL_STATEMENT	2001		// 执行sql语句
+#define	LOADER_ASYNC_EVENT_UPLOAD_VIDEO		2002		// 上传录像
+#define	LOADER_ASYNC_EVENT_HTTP				2003		// http请求
 
 //////////////////////////////////////////////////////////////////////
 #pragma pack(1)

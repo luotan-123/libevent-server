@@ -1,17 +1,5 @@
 #pragma once
 
-///开发库版本
-#define DEV_LIB_VER				5									///开发库版本
-
-///常量定义
-#define MAX_SEND_SIZE			2044								//最大消息包
-#define NET_HEAD_SIZE			sizeof(NetMessageHead)				//数据包头
-
-///支持类型定义
-#define SUP_NORMAL_GAME			0x01								///普通游戏
-#define SUP_MATCH_GAME			0x02								///比赛游戏
-#define SUP_MONEY_GAME			0x04								///金币游戏
-
 
 /********************************************************************************************/
 //	系统内核使用 （MAINID 使用 0 - 49 ）

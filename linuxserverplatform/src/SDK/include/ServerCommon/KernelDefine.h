@@ -45,7 +45,7 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 // 心跳、socket相关
 #define KEEP_ACTIVE_HEARTBEAT_COUNT				3		// 前端和服务器的心跳
 #define BINDID_SOCKET_USERID_TIME				30		// 每个连接socket，绑定玩家时间，单位秒
-#define MAX_LOGON_SERVER_COUNT					48		// 最多登陆服数量
+#define MAX_LOGON_SERVER_COUNT					128		// 最多登陆服数量
 #define INVALID_SOCKET							(-1)	// 无效的socket值
 #define SOCKET_ERROR							(-1)	// 网络接口出错返回值
 
@@ -57,8 +57,6 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 // 线程处理时间间隔 单位微妙
 #define THREAD_ONCE_DATABASE					50000   // 数据处理线程间隔
 #define THREAD_ONCE_HANDLE_MSG					20000   // 消息处理线程间隔
-#define MAX_TIMER_THRED_NUMS					4		// 定时器最大线程数量
-#define THREAD_PARAM_WAIT_TIME					30000	// 线程读取栈区参数时间
 
 /////////////////////////////////枚举模块/////////////////////////////////////////
 

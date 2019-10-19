@@ -5,7 +5,9 @@
 #include "log.h"
 #include <stdarg.h>
 #include "DataLine.h"
+#include "LoaderAsyncEvent.h"
 #include "BillManage.h"
+
 
 CBillManage::CBillManage()
 {
@@ -45,7 +47,7 @@ void CBillManage::WriteBill(CDataBaseManage* m_pDBManage, const char* pFormat, .
 	InternalSqlStatement msg;
 	memcpy(msg.sql, sql, sizeof(sql));
 
-	if (!m_pDBManage->PushLine(&msg.head, sizeof(InternalSqlStatement), DTK_GP_SQL_STATEMENT, 0, 0))
+	if (!m_pDBManage->PushLine(&msg.head, sizeof(InternalSqlStatement), LOADER_ASYNC_EVENT_SQL_STATEMENT, 0, 0))
 	{
 		ERROR_LOG("投递队列失败：%s", sql);
 	}

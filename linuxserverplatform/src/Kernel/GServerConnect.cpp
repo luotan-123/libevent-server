@@ -544,6 +544,10 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 
 	INFO_LOG("ThreadCheckConnect thread begin...");
 
+	timeval tv;
+	tv.tv_sec = 10;
+	tv.tv_usec = 0;
+
 	while (true)
 	{
 		if (!pThis->m_running)

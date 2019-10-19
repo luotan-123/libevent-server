@@ -33,7 +33,7 @@ UINT CServiceDataBaseHandle::HandleDataBase(DataBaseLineHead* pSourceData)
 
 	switch (pSourceData->uHandleKind)
 	{
-	case DTK_GP_SQL_STATEMENT:			// 处理sql语句
+	case LOADER_ASYNC_EVENT_SQL_STATEMENT:			// 处理sql语句
 	{
 		return OnHandleExecuteSQLStatement(pSourceData);
 	}

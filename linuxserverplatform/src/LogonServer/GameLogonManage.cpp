@@ -1,7 +1,6 @@
 #include "CommonHead.h"
 #include "ErrorCode.h"
 #include "json/json.h"
-#include "LoaderAsyncEvent.h"
 #include "GameLogonManage.h"
 
 // 预编译选项

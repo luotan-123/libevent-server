@@ -3,6 +3,9 @@
 #include <event2/event.h>
 #include <event2/event_struct.h>
 
+
+#define MAX_TIMER_THRED_NUMS	4		// 定时器最大线程数量
+
 enum SERVERTIMER_TYPE
 {
 	SERVERTIMER_TYPE_PERISIST = 0,		// 持久定时器

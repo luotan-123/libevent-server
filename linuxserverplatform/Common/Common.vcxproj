@@ -127,7 +127,6 @@
     <ClCompile Include="..\src\Common\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\SDK\include\redis\hiredis.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\Define.h" />
     <ClInclude Include="..\src\SDK\include\ServerCommon\ErrorCode.h" />

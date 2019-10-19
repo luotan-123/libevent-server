@@ -10,7 +10,6 @@
 #include "ErrorCode.h"
 #include "PlatformMessage.h"
 #include "json/json.h"
-#include "LoaderAsyncEvent.h"
 #include "MD5.h"
 
 using namespace std;

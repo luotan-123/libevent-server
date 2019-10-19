@@ -80,9 +80,6 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h">
       <Filter>数据流水</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SDK\include\redis\hiredis.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\RedisBase.h">
       <Filter>Redis模块</Filter>
     </ClInclude>

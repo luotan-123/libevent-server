@@ -36,6 +36,14 @@ if(!pMessage)\
 #define SAVE_JSON_PATH						"/tmp/web-json/"	// 保存json的目录
 #define SAVE_COREFILE_PATH					"/tmp/linuxserverplatform-corefile/"			// 保存corefile的目录
 
+///开发库版本
+#define DEV_LIB_VER							5									///开发库版本
+
+///支持类型定义
+#define SUP_NORMAL_GAME						0x01								///普通游戏
+#define SUP_MATCH_GAME						0x02								///比赛游戏
+#define SUP_MONEY_GAME						0x04								///金币游戏
+
 ////////////////////////////////////////////////////////////
 // 俱乐部相关
 #define GROUP_NOTIY_MSG_EXPIRE_TIME			(7*24*60*60)	// 俱乐部通知消息过期时间

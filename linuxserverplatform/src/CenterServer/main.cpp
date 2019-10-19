@@ -11,6 +11,9 @@
 // 命令模式
 //#define COMMAND_MODE
 
+// 主进程退出开关
+bool g_mainProcess = true;
+
 // 中心服务器模块
 CCenterServerModule		g_CenterServerModule;
 
@@ -153,10 +156,11 @@ int main()
 
 	CON_INFO_LOG("======================CenterServer 启动成功========================================");
 
-	while (true)
+	select(0, 0, 0, 0, 0);
+	/*while (g_mainProcess)
 	{
-		sleep(600);
-	}
+		sleep(60);
+	}*/
 
 #endif
 

@@ -6,6 +6,9 @@ CLoaderServerModule	g_LoaderServerModule;
 // 命令模式
 //#define COMMAND_MODE
 
+// 主进程退出开关
+bool g_mainProcess = true;
+
 // 处理命令
 void _HandleCommand(const std::string& command)
 {
@@ -90,10 +93,11 @@ int main()
 
 	CON_INFO_LOG("======================Gameserver 启动成功========================================");
 
-	while (true)
+	select(0, 0, 0, 0, 0);
+	/*while (g_mainProcess)
 	{
-		sleep(600);
-	}
+		sleep(60);
+	}*/
 
 #endif
 

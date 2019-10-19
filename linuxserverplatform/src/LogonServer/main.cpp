@@ -7,6 +7,9 @@
 // 命令模式
 //#define COMMAND_MODE
 
+// 主进程退出开关
+bool g_mainProcess = true;
+
 // 登陆服务器（网关服务器）模块
 CGameLogonModule	g_LogonServerModule;
 
@@ -99,10 +102,11 @@ int main()
 
 	CON_INFO_LOG("======================%s 启动成功========================================", APP_TITLE);
 
-	while (true)
+	select(0, 0, 0, 0, 0);
+	/*while (g_mainProcess)
 	{
-		sleep(600);
-	}
+		sleep(60);
+	}*/
 
 #endif
 
