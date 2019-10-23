@@ -468,6 +468,9 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 		return false;
 	}
 
+	// 统计消耗。如果有一定耗时，需要创建发送线程和发送队列，去发送数据
+	WAUTOCOST("send message cost mainID: %d assistID: %d", mainID, assistID);
+
 	// 整合一下数据
 	char buf[MAX_TEMP_SENDBUF_SIZE] = "";
 
