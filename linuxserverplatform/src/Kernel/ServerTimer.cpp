@@ -211,5 +211,7 @@ void* CServerTimer::ThreadCheckTimer(void* pThreadData)
 
 	event_base_dispatch(base);
 
+	event_base_free(base);
+
 	pthread_exit(NULL);
 }

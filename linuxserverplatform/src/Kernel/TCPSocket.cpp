@@ -7,6 +7,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
+#include <event2/bufferevent.h>
+#include <event2/buffer.h>
+#include <event2/listener.h>
+#include <event2/util.h>
+#include <event2/event.h>
 #include "TCPSocket.h"
 
 /**************************************************************************************************************/
@@ -62,6 +68,10 @@ bool CListenSocket::Init(int port, const char *ip/* = NULL*/)
 	{
 		return false;
 	}
+
+	// 设置成非阻塞
+	//fcntl(m_hSocket, F_SETFL, fcntl(m_hSocket, F_GETFL, 0) | O_NONBLOCK);
+	evutil_make_socket_nonblocking(m_hSocket);
 
 	int ret = 0;
 	int optval = 0;
