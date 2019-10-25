@@ -37,6 +37,12 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 		return 0;
 	}
 
+	if (m_DataList.size() > MAX_DATALINE_LEN)
+	{
+		ERROR_LOG("队列已满(%d)\n", MAX_DATALINE_LEN);
+		return 0;
+	}
+
 	CSignedLockObject LockObject(&m_csLock, false);
 
 	ListItemData* pListItem = new ListItemData;			//创建一个队列项
@@ -49,9 +55,8 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 		pListItem->stDataHead.uSize += uAppendAddSize;
 	}
 
-	pListItem->pData = (BYTE*)malloc(pListItem->stDataHead.uSize + 1);		//申请数据项内存
-	//memset(pListItem->pData, 0, pListItem->stDataHead.uSize + 1);	//清空内存
-	pListItem->pData[pListItem->stDataHead.uSize] = 0;				//初始化末尾
+	pListItem->pData = (BYTE*)malloc(pListItem->stDataHead.uSize + 1);	//申请数据项内存
+	pListItem->pData[pListItem->stDataHead.uSize] = 0;					//初始化末尾
 
 	pDataInfo->uDataKind = uDataKind;
 	pDataInfo->uSize = pListItem->stDataHead.uSize;

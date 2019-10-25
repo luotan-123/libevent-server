@@ -1,7 +1,7 @@
 #pragma once
 
-#define CLIENT_SOCKET_SEND_BUF	(64 * 1024)		// 发送缓冲区大小
-#define CLIENT_SOCKET_RECV_BUF  (32 * 1024)		// 接收缓冲区大小
+#define CLIENT_SOCKET_SEND_BUF	(128 * 1024)		// 发送缓冲区大小
+#define CLIENT_SOCKET_RECV_BUF  (128 * 1024)		// 接收缓冲区大小
 
 class CDataLine;
 class CTcpConnect;

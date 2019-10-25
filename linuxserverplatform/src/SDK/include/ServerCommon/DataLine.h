@@ -3,6 +3,9 @@
 #include "Lock.h"
 #include "InternalMessageDefine.h"
 
+// 消息队列最大长度
+#define MAX_DATALINE_LEN		640000
+
 /*
 Struct		:ListItemData
 Memo		:链表项数据结构
