@@ -8,5 +8,6 @@
 
 
 1、研究libevent
-方法：1、看libevent参考手册(中文版).pdf    2、要libevent的TCP模块
+方法：1、看libevent参考手册(中文版).pdf    2、弄清楚服务器支持h5的原理
 2、linux c++ 运行进程函数耗时统计
+3、gdb多线程调试

@@ -82,6 +82,11 @@ void CGameLogManage::AddCenterLogFile(pthread_t threadID, int threadType)
 		errfileName += "centerserver_recv_err";
 		costFileName += "centerserver_recv_cost";
 	}
+	else if (threadType == THREAD_TYPE_SEND)
+	{
+		errfileName += "centerserver_send_err";
+		costFileName += "centerserver_send_cost";
+	}
 	else
 	{
 		return;
@@ -134,6 +139,11 @@ void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
 	{
 		errfileName += "logonserver_recv_err";
 		costFileName += "logonserver_recv_cost";
+	}
+	else if (threadType == THREAD_TYPE_SEND)
+	{
+		errfileName += "logonserver_send_err";
+		costFileName += "logonserver_send_cost";
 	}
 	else
 	{
@@ -222,6 +232,20 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 
 		costFileName += pRoomBaseInfo->name;
 		costFileName += "_recv_cost";
+	}
+	else if (threadType == THREAD_TYPE_SEND)
+	{
+		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
+		if (!pRoomBaseInfo)
+		{
+			return;
+		}
+
+		errfileName += pRoomBaseInfo->name;
+		errfileName += "_send_err";
+
+		costFileName += pRoomBaseInfo->name;
+		costFileName += "_send_cost";
 	}
 	else
 	{

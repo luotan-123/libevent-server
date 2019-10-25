@@ -51,7 +51,7 @@ private:
 	char m_sendBuf[GSERVER_SOCKET_SEND_BUF];
 	int m_remainSendBytes;
 
-	CDataLine* m_pDataLine;			//共享的dataline对象
+	CDataLine* m_pRecvDataLine;			//共享的dataline对象
 	CSignedLock m_lock;
 	CGServerConnect* m_pCGServerConnect;		//共享管理类
 	int m_index;
@@ -67,7 +67,7 @@ public:
 	~CGServerConnect();
 
 public:
-	bool Start(CDataLine* pDataLine, int roomID);
+	bool Start(CDataLine* pDataLine, int roomID, bool bStartSendThread = false);
 	bool Stop();
 
 public:
@@ -86,12 +86,16 @@ private:
 	static void* ThreadCheckConnect(void* pThreadData);
 	// SOCKET 数据接收线程
 	static void* ThreadRSSocket(void* pThreadData);
+	// SOCKET 数据发送线程
+	static void* ThreadSendMsg(void* pThreadData);
 
 private:
 	std::vector<CGServerClient*> m_socketVec;
 	std::map<pthread_t, int> m_threadIDToIndexMap;
-	CDataLine* m_pDataLine;
+	CDataLine* m_pRecvDataLine;
+	CDataLine* m_pSendDataLine;
 	int m_roomID;
 	volatile bool m_running;
 	pthread_t	m_hThreadCheckConnect;
+	pthread_t	m_hThreadSendMsg;
 };

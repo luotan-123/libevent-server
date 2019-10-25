@@ -13,7 +13,7 @@
 // CGServerClient
 CGServerClient::CGServerClient()
 {
-	m_pDataLine = NULL;			//共享的dataline对象
+	m_pRecvDataLine = NULL;			//共享的dataline对象
 	m_pCGServerConnect = NULL;
 	m_index = 0;
 	m_port = 0;
@@ -34,7 +34,7 @@ bool CGServerClient::Init(CDataLine* pDataLine, CGServerConnect* pCGServerConnec
 		return false;
 	}
 
-	m_pDataLine = pDataLine;
+	m_pRecvDataLine = pDataLine;
 	m_pCGServerConnect = pCGServerConnect;
 	m_index = index;
 	strcpy(m_ip, ip);
@@ -111,7 +111,7 @@ bool CGServerClient::OnRead()
 		return false;
 	}
 
-	if (!m_pDataLine)
+	if (!m_pRecvDataLine)
 	{
 		return false;
 	}
@@ -163,7 +163,7 @@ bool CGServerClient::OnRead()
 			msg.uAccessIP = 0;
 			msg.netMessageHead = *pHead;
 
-			unsigned int addBytes = m_pDataLine->AddData(&msg.LineHead, sizeof(SocketReadLine), HD_SOCKET_READ, pData, realSize);
+			unsigned int addBytes = m_pRecvDataLine->AddData(&msg.LineHead, sizeof(SocketReadLine), HD_SOCKET_READ, pData, realSize);
 
 			if (addBytes == 0)
 			{
@@ -181,9 +181,14 @@ bool CGServerClient::OnRead()
 
 bool CGServerClient::Send(const void* pData, int size)
 {
-	//CSignedLockObject lock(&m_lock, true);
+	CSignedLockObject lock(&m_lock, true);
 
 	if (!pData || size <= 0)
+	{
+		return false;
+	}
+
+	if (!IsConnected())
 	{
 		return false;
 	}
@@ -195,11 +200,13 @@ bool CGServerClient::Send(const void* pData, int size)
 		bytes = send(m_socket, m_sendBuf, m_remainSendBytes, 0);
 		if (bytes == 0)
 		{
+			ERROR_LOG("send data ret = 0");
 			return false;
 		}
 
 		if (bytes < 0)
 		{
+			SYS_ERROR_LOG("send data failed");
 			break;
 		}
 
@@ -209,6 +216,7 @@ bool CGServerClient::Send(const void* pData, int size)
 
 	if (m_remainSendBytes + size >= sizeof(m_sendBuf))
 	{
+		ERROR_LOG("Send Buffer overflow. datasize=%d", size);
 		return false;
 	}
 
@@ -228,7 +236,7 @@ bool CGServerClient::Send(const void* pData, int size)
 
 bool CGServerClient::OnClose()
 {
-	//CSignedLockObject lock(&m_lock, true);
+	CSignedLockObject lock(&m_lock, true);
 
 	close(m_socket);
 
@@ -294,24 +302,29 @@ bool CGServerClient::ReConnect()
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 //CGServerConnect
 
 CGServerConnect::CGServerConnect()
 {
-	m_pDataLine = NULL;
+	m_pRecvDataLine = NULL;
+	m_pSendDataLine = NULL;
 	m_roomID = 0;
 	m_running = false;
 	m_socketVec.clear();
 	m_hThreadCheckConnect = 0;
+	m_hThreadSendMsg = 0;
 }
 
 CGServerConnect::~CGServerConnect()
 {
-
+	
 }
 
-bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
+bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThread)
 {
 	INFO_LOG("service CGServerConnect start begin...");
 
@@ -328,11 +341,8 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	}
 
 	m_running = true;
-	m_pDataLine = pDataLine;
+	m_pRecvDataLine = pDataLine;
 	m_roomID = roomID;
-
-	////建立事件
-	//m_hEventThread = ::CreateEvent(NULL, true, false, NULL);
 
 	// 分配内存
 	m_socketVec.clear();
@@ -370,10 +380,22 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 	m_hThreadCheckConnect = connectThreadID;
 	GameLogManage()->AddLogFile(connectThreadID, THREAD_TYPE_ACCEPT, roomID);
 
-	/*::WaitForSingleObject(m_hEventThread, INFINITE);
-	::ResetEvent(m_hEventThread);*/
+	// 建立发送线程
+	if (bStartSendThread)
+	{
+		//创建发送队列
+		m_pSendDataLine = new CDataLine();
 
-	// 建立收发数据线程
+		err = pthread_create(&m_hThreadSendMsg, NULL, ThreadSendMsg, (void*)this);
+		if (err != 0)
+		{
+			SYS_ERROR_LOG("ThreadSendMsg failed");
+			return false;
+		}
+		GameLogManage()->AddLogFile(m_hThreadSendMsg, THREAD_TYPE_SEND, roomID);
+	}
+	
+	// 建立接收数据线程
 	m_threadIDToIndexMap.clear();
 	for (int i = 0; i < recvThreadNumber; i++)
 	{
@@ -387,10 +409,6 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID)
 
 		m_threadIDToIndexMap.insert(std::make_pair(threadID, i));
 		GameLogManage()->AddLogFile(threadID, THREAD_TYPE_RECV, roomID);
-
-		/*	WaitForSingleObject(m_hEventThread, INFINITE);
-			ResetEvent(m_hEventThread);
-			CloseHandle(hThreadHandle);*/
 	}
 
 	INFO_LOG("service CGServerConnect start end");
@@ -420,18 +438,29 @@ bool CGServerConnect::Stop()
 		}
 	}
 
-	////关闭事件
-	//if (m_hEventThread)
-	//{
-	//	CloseHandle(m_hEventThread);
-	//	m_hEventThread = NULL;
-	//}
-
 	// 关闭检测连接线程句柄（强杀线程）
 	if (m_hThreadCheckConnect)
 	{
 		pthread_cancel(m_hThreadCheckConnect);
 		m_hThreadCheckConnect = 0;
+	}
+
+	// 关闭接收线程
+	for (auto iter = m_threadIDToIndexMap.begin(); iter != m_threadIDToIndexMap.end(); iter++)
+	{
+		pthread_cancel(iter->first);
+	}
+	m_threadIDToIndexMap.clear();
+
+	// 关闭发送线程
+	if (m_hThreadSendMsg)
+	{
+		pthread_cancel(m_hThreadSendMsg);
+		m_hThreadSendMsg = 0;
+
+		//释放内存
+		m_pSendDataLine->CleanLineData();
+		SAFE_DELETE(m_pSendDataLine);
 	}
 
 	// 释放内存
@@ -469,7 +498,7 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 	}
 
 	// 统计消耗。如果有一定耗时，需要创建发送线程和发送队列，去发送数据
-	WAUTOCOST("send message cost mainID: %d assistID: %d", mainID, assistID);
+	//WAUTOCOST("send message cost mainID: %d assistID: %d", mainID, assistID);
 
 	// 整合一下数据
 	char buf[MAX_TEMP_SENDBUF_SIZE] = "";
@@ -493,9 +522,24 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 		pos += size;
 	}
 
-	// 交给具体的socket
-	pTcpSocket->Send(buf, pos);
+	if (m_hThreadSendMsg && m_pSendDataLine)
+	{
+		SendDataLineHead lineHead;
+		lineHead.socketIndex = idx;
+		lineHead.socketFd = 0;
+		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pos);
 
+		if (addBytes == 0)
+		{
+			ERROR_LOG("投递消息失败,pos=%d", pos);
+		}
+	}
+	else
+	{
+		// 交给具体的socket
+		pTcpSocket->Send(buf, pos);
+	}
+	
 	return true;
 }
 
@@ -684,6 +728,74 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 	}
 
 	INFO_LOG("CGServerConnect::ThreadRSSocket thread Exit...");
+
+	pthread_exit(NULL);
+}
+
+void* CGServerConnect::ThreadSendMsg(void* pThreadData)
+{
+	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
+	if (!pThis)
+	{
+		pthread_exit(NULL);
+	}
+
+	CDataLine* pDataLine = pThis->m_pSendDataLine;
+
+	//数据缓存
+	DataLineHead* pDataLineHead = NULL;
+
+	sleep(3);
+
+	INFO_LOG("CGServerConnect::ThreadSendMsg thread begin...");
+
+	while (pThis->m_running)
+	{
+		usleep(THREAD_ONCE_SEND_MSG);
+
+		while (pDataLine->GetDataCount())
+		{
+			try
+			{
+				//获取数据
+				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+				if (bytes == 0 || pDataLineHead == NULL)
+				{
+					// 取出来的数据大小为0，不太可能
+					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
+					continue;
+				}
+
+				//处理数据
+				SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
+				void* pBuffer = NULL;
+				unsigned int size = pSocketSend->dataLineHead.uSize;
+
+				if (size > sizeof(SendDataLineHead))
+				{
+					pBuffer = (void*)(pSocketSend + 1);			// 移动一个SendDataLineHead
+					CGServerClient* pTcpSocket = pThis->m_socketVec[pSocketSend->socketIndex];
+					if (pTcpSocket)
+					{
+						// 交给具体的socket
+						pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead));
+					}
+				}
+
+				// 释放内存
+				if (pDataLineHead)
+				{
+					free(pDataLineHead);
+				}
+			}
+			catch (...)
+			{
+				ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
+			}
+		}
+	}
+
+	INFO_LOG("CGServerConnect::ThreadSendMsg exit.");
 
 	pthread_exit(NULL);
 }

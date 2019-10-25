@@ -159,7 +159,7 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 		{
 			try
 			{
-				//处理数据
+				//获取数据
 				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
 				if (bytes == 0 || pDataLineHead == NULL)
 				{
@@ -168,6 +168,7 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 					continue;
 				}
 
+				//处理数据
 				pHandleService->HandleDataBase((DataBaseLineHead*)pDataLineHead);
 
 				// 释放内存
@@ -179,7 +180,6 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 			catch (...)
 			{
 				ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
-				continue;
 			}
 		}
 	}

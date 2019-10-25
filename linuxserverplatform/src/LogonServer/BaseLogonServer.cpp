@@ -496,7 +496,7 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 
 					if (size > sizeof(AsynThreadResultLine))
 					{
-						pBuffer = (void *)(pDataRead + 1);			// 移动一个SocketReadLine
+						pBuffer = (void *)(pDataRead + 1);
 					}
 
 					pThis->OnAsynThreadResult(pDataRead, pBuffer, size - sizeof(AsynThreadResultLine));

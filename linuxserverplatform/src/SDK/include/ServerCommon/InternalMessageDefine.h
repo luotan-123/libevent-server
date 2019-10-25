@@ -63,6 +63,14 @@ struct DataBaseLineHead
 	UINT							dwHandleID;								///对象标识
 };
 
+//发送数据队列包头
+struct SendDataLineHead
+{
+	DataLineHead					dataLineHead;							///队列头
+	int								socketIndex;							//socket索引
+	int								socketFd;								//socket文件描述符		
+};
+
 //////////////////////////////////////////////////////////////////////////
 // 内部通信相关
 

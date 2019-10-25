@@ -214,7 +214,7 @@ bool CBaseMainManage::Start()
 	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, m_InitData.uRoomID);
 
 	//////////////////////////////////建立与登录服的连接////////////////////////////////////////
-	ret = m_pGServerConnect->Start(&m_DataLine, m_InitData.uRoomID);
+	ret = m_pGServerConnect->Start(&m_DataLine, m_InitData.uRoomID, true);
 	if (!ret)
 	{
 		throw new CException("CBaseMainManage::m_pGServerConnect.Start 连接模块启动失败", 0x433);
@@ -381,7 +381,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	//数据定义
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//线程启动数据指针
 	CBaseMainManage* pMainManage = pData->pMainManage;							//数据管理指针
-	CDataLine* m_pDataLine = &pMainManage->m_DataLine;							//数据队列指针
+	CDataLine* pDataLine = &pMainManage->m_DataLine;							//数据队列指针
 	CFIFOEvent* pCFIFOEvent = pData->pFIFO;
 
 	//线程数据读取完成
@@ -400,11 +400,11 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 		//}
 		usleep(THREAD_ONCE_HANDLE_MSG);
 
-		while (m_pDataLine->GetDataCount())
+		while (pDataLine->GetDataCount())
 		{
 			try
 			{
-				unsigned int bytes = m_pDataLine->GetData(&pDataLineHead);
+				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
 				if (bytes == 0 || pDataLineHead == NULL)
 				{
 					// 取出来的数据大小为0，不太可能
@@ -440,7 +440,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 					if (size > sizeof(AsynThreadResultLine))
 					{
-						pBuffer = (void*)(pDataRead + 1);			// 移动一个SocketReadLine
+						pBuffer = (void*)(pDataRead + 1);
 					}
 
 					pMainManage->OnAsynThreadResult(pDataRead, pBuffer, size - sizeof(AsynThreadResultLine));

@@ -55,8 +55,9 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 
 /////////////////////////////////////////////////////////
 // 线程处理时间间隔 单位微妙
-#define THREAD_ONCE_DATABASE					50000   // 数据处理线程间隔
-#define THREAD_ONCE_HANDLE_MSG					20000   // 消息处理线程间隔
+#define THREAD_ONCE_DATABASE					100000  // 异步数据处理线程间隔（服务器内部，http请求，sql语句，ftp传输，，，）
+#define THREAD_ONCE_HANDLE_MSG					20000   // 网络消息处理线程间隔（客户端发送，tcp消息、websocket消息、http消息）
+#define THREAD_ONCE_SEND_MSG					25000   // 发送网络消息线程间隔（服务器发送，tcp消息、websocket消息、http消息）
 
 /////////////////////////////////枚举模块/////////////////////////////////////////
 
@@ -86,6 +87,7 @@ enum ThreadType
 	THREAD_TYPE_ASYNC = 3,	// 异步线程
 	THREAD_TYPE_ACCEPT = 4,	// 连接线程
 	THREAD_TYPE_RECV = 5,	// 接收线程
+	THREAD_TYPE_SEND = 6,	// 发送线程
 };
 
 // 日志等级
