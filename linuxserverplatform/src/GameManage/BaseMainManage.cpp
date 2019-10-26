@@ -390,6 +390,10 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;
 
+	//cpu优化，合理使用cpu
+	long long llLastTime = GetSysMilliseconds();
+	long long llNowTime = 0, llDifTime = 0;
+
 	while (pMainManage->m_bRun)
 	{
 		////等待完成端口
@@ -398,7 +402,18 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 		//{
 		//	continue;
 		//}
-		usleep(THREAD_ONCE_HANDLE_MSG);
+
+		llNowTime = GetSysMilliseconds();
+		llDifTime = THREAD_ONCE_HANDLE_MSG + llLastTime - llNowTime;
+		if (llDifTime > THREAD_ONCE_HANDLE_MSG)
+		{
+			usleep(THREAD_ONCE_HANDLE_MSG * 1000);
+		}
+		else if (llDifTime > 0)
+		{
+			usleep((unsigned int)(llDifTime * 1000));
+		}
+		llLastTime = llNowTime;
 
 		while (pDataLine->GetDataCount())
 		{

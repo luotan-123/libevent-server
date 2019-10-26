@@ -151,9 +151,23 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 
 	INFO_LOG("DataServiceThread starting...");
 
+	//cpu优化，合理使用cpu
+	long long llLastTime = GetSysMilliseconds();
+	long long llNowTime = 0, llDifTime = 0;
+
 	while (pDataManage->m_bRun == true)
 	{
-		usleep(THREAD_ONCE_DATABASE);
+		llNowTime = GetSysMilliseconds();
+		llDifTime = THREAD_ONCE_DATABASE + llLastTime - llNowTime;
+		if (llDifTime > THREAD_ONCE_DATABASE)
+		{
+			usleep(THREAD_ONCE_DATABASE * 1000);
+		}
+		else if (llDifTime > 0)
+		{
+			usleep((unsigned int)(llDifTime * 1000));
+		}
+		llLastTime = llNowTime;
 
 		while (pDataLine->GetDataCount())
 		{

@@ -299,7 +299,7 @@ bool CTcpConnect::Send(UINT msgID, const void* pData, UINT size, int userID/* = 
 		return false;
 	}
 
-	char buf[MAX_TEMP_SENDBUF_SIZE] = "";
+	char buf[size + sizeof(PlatformMessageHead)];
 
 	// head
 	PlatformMessageHead* pHead = (PlatformMessageHead*)buf;

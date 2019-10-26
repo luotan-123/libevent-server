@@ -501,9 +501,7 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 	//WAUTOCOST("send message cost mainID: %d assistID: %d", mainID, assistID);
 
 	// 整合一下数据
-	char buf[MAX_TEMP_SENDBUF_SIZE] = "";
-
-	int pos = 0;
+	char buf[sizeof(NetMessageHead) + size];
 
 	// 拼接包头
 	NetMessageHead* pHead = (NetMessageHead*)buf;
@@ -513,13 +511,10 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 	pHead->uHandleCode = handleCode;
 	pHead->uIdentification = uIdentification;
 
-	pos += sizeof(NetMessageHead);
-
 	// 包体
 	if (pData && size > 0)
 	{
-		memcpy(buf + pos, pData, size);
-		pos += size;
+		memcpy(buf + sizeof(NetMessageHead), pData, size);
 	}
 
 	if (m_hThreadSendMsg && m_pSendDataLine)
@@ -527,17 +522,17 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 		SendDataLineHead lineHead;
 		lineHead.socketIndex = idx;
 		lineHead.socketFd = 0;
-		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pos);
+		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->uMessageSize);
 
 		if (addBytes == 0)
 		{
-			ERROR_LOG("投递消息失败,pos=%d", pos);
+			ERROR_LOG("投递消息失败,mainID=%d,assistID=%d", mainID, assistID);
 		}
 	}
 	else
 	{
 		// 交给具体的socket
-		pTcpSocket->Send(buf, pos);
+		pTcpSocket->Send(buf, pHead->uMessageSize);
 	}
 	
 	return true;
@@ -749,9 +744,23 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 
 	INFO_LOG("CGServerConnect::ThreadSendMsg thread begin...");
 
+	//cpu优化，合理使用cpu
+	long long llLastTime = GetSysMilliseconds();
+	long long llNowTime = 0, llDifTime = 0;
+
 	while (pThis->m_running)
 	{
-		usleep(THREAD_ONCE_SEND_MSG);
+		llNowTime = GetSysMilliseconds();
+		llDifTime = THREAD_ONCE_SEND_MSG + llLastTime - llNowTime;
+		if (llDifTime > THREAD_ONCE_SEND_MSG)
+		{
+			usleep(THREAD_ONCE_SEND_MSG * 1000);
+		}
+		else if (llDifTime > 0)
+		{
+			usleep((unsigned int)(llDifTime * 1000));
+		}
+		llLastTime = llNowTime;
 
 		while (pDataLine->GetDataCount())
 		{
