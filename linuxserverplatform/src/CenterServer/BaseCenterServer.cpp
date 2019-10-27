@@ -339,8 +339,6 @@ bool CBaseCenterServer::KillTimer(UINT uTimerID)
 //队列数据处理线程
 void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 {
-	INFO_LOG("LineDataHandleThread start...");
-
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct *)pThreadData;
 	CBaseCenterServer	* pThis = pData->pMainManage;
 	CDataLine* pDataLine = &pThis->m_DataLine;
@@ -348,6 +346,10 @@ void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 	
 	//线程数据读取完成
 	pCFIFOEvent->SetEvent();
+
+	sleep(1);
+
+	INFO_LOG("LineDataHandleThread start...");
 
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;

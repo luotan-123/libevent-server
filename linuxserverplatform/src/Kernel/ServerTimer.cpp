@@ -184,6 +184,7 @@ void* CServerTimer::ThreadCheckTimer(void* pThreadData)
 	CServerTimer* pThis = (CServerTimer*)pThreadData;
 	if (!pThis)
 	{
+		CON_ERROR_LOG("thread param is null");
 		pthread_exit(NULL);
 	}
 

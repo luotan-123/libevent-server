@@ -421,8 +421,6 @@ bool CBaseLogonServer::KillTimer(UINT uTimerID)
 //队列数据处理线程
 void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 {
-	INFO_LOG("LineDataHandleThread start...");
-
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct *)pThreadData;
 	CBaseLogonServer	* pThis = pData->pMainManage;
 	CDataLine* pDataLine = &pThis->m_DataLine;
@@ -430,6 +428,10 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 
 	//线程数据读取完成
 	pCFIFOEvent->SetEvent();
+
+	sleep(1);
+
+	INFO_LOG("LineDataHandleThread start...");
 
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;
@@ -578,7 +580,7 @@ void* CBaseLogonServer::TcpConnectThread(void* pThreadData)
 	CBaseLogonServer* pThis = (CBaseLogonServer*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("pThis==NULL");
+		CON_ERROR_LOG("thread param is null");
 		pthread_exit(NULL);
 	}
 

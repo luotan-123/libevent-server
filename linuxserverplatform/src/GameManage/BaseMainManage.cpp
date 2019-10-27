@@ -376,8 +376,6 @@ bool CBaseMainManage::KillTimer(UINT uTimerID)
 //队列数据处理线程
 void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 {
-	INFO_LOG("LineDataHandleThread start...");
-
 	//数据定义
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;		//线程启动数据指针
 	CBaseMainManage* pMainManage = pData->pMainManage;							//数据管理指针
@@ -386,6 +384,10 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 	//线程数据读取完成
 	pCFIFOEvent->SetEvent();
+
+	sleep(1);
+
+	INFO_LOG("LineDataHandleThread start...");
 
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;
