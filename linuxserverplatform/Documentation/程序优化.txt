@@ -1,13 +1,16 @@
 长期优化
 1、原系统long类型改成int  ，unsigned long 改成 unsigned int
 2、检查printf和sprintf函数，int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
-3、内存优化：内存越界和内存泄露
+3、内存优化：内存管理（分配内存的大小）、内存越界、内存泄露
 4、cpu优化：优化函数执行时间（算法优化），优化cpu调度（架构优化）
+
 
 构架再好，模块内部实现更重要
 
 
-1、研究libevent
-方法：1、看libevent参考手册(中文版).pdf    2、弄清楚服务器支持h5的原理
-2、linux c++ 运行进程函数耗时统计
-3、gdb多线程调试
+1、mysql分库的支持。分USER_DB和LOG_DB
+2、异步获取mysql数据库的支持，通过异步线程实现，协议用pb
+3、研究libevent，看libevent参考手册(中文版).pdf，使用libevent网络编程完成TCP模块
+4、弄清楚服务器支持h5的原理
+5、学会使用cmake生成Makefile文件
+6、对于正在运行的进程，找到办法进行函数耗时统计

@@ -524,6 +524,10 @@ void * CBaseMainManage::TcpConnectThread(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
+	sleep(1);
+
+	INFO_LOG("TcpConnectThread start...");
+
 	while (pThis->m_bRun && pThis->m_pTcpConnect)
 	{
 		pThis->m_pTcpConnect->CheckConnection();
