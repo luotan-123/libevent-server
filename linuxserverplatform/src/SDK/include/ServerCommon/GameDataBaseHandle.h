@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LoaderAsyncEvent.h"
+#include "AsyncEventMsg.h"
 
 //游戏数据库处理
 class CGameDataBaseHandle : public CDataBaseHandle
@@ -19,8 +19,4 @@ private:
 	int OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData);
 	// HTTP请求
 	int OnHandleHTTP(DataBaseLineHead* pSourceData);
-
-public:
-	int m_ErrorSQLCount;
-	time_t m_lastCheckDBConnectionTime;
 };

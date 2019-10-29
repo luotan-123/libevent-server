@@ -247,31 +247,46 @@ bool CGameMainManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, voi
 		return false;
 	}
 
-	if (pResultData->uHandleKind == ANSY_THREAD_RESULT_TYPE_DATABASE)
+	if (pResultData->uHandleKind == ASYNC_EVENT_SQL_STATEMENT)
 	{
+		switch (pResultData->uMsgID)
+		{
+		case ASYNC_MESSAGE_DATABASE_TEST:
+		{
+			AsyncEventMsg_Test allUser;
+			allUser.ParseFromArray(pData, uSize); // or parseFromString
+
+			for (int i = 0; i < allUser.user_size(); i++) {
+				AsyncEventMsg_Test_User user = allUser.user(i); // 按索引解repeated成员
+				INFO_LOG("userID=%d,name=%s,headURL=%s,money=%lld,winCount=%d",
+					user.userid(), user.name().c_str(), user.headurl().c_str(), user.money(), user.wincount());
+			}
+		}
+		break;
+		}
 
 	}
-	else if (pResultData->uHandleKind == ANSY_THREAD_RESULT_TYPE_HTTP)
+	else if (pResultData->uHandleKind == ASYNC_EVENT_HTTP)
 	{
-		char * pBuffer = (char *)pData;
+		char* pBuffer = (char*)pData;
 		if (pBuffer == NULL)
 		{
-			ERROR_LOG("请求php失败，userID=%d,postType=%d", pResultData->uHandleID, pResultData->LineHead.uDataKind);
+			ERROR_LOG("请求php失败，userID=%d,postType=%d", pResultData->uIndex, pResultData->uMsgID);
 			return false;
 		}
 
 		if (strcmp(pBuffer, "0"))
 		{
-			ERROR_LOG("请求php失败，userID=%d,postType=%d,result=%s", pResultData->uHandleID, pResultData->LineHead.uDataKind, pBuffer);
+			ERROR_LOG("请求php失败，userID=%d,postType=%d,result=%s", pResultData->uIndex, pResultData->uMsgID, pBuffer);
 			return false;
 		}
 	}
-	else if (pResultData->uHandleKind == ANSY_THREAD_RESULT_TYPE_LOG)
+	else if (pResultData->uHandleKind == ASYNC_EVENT_LOG)
 	{
 
 	}
 
-	return false;
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -3906,13 +3921,10 @@ void CGameMainManage::SendMatchGiftMail(int userID, int gameID, BYTE matchType, 
 	url += bufUserID;
 
 	//发送邮件通知
-	LoaderAsyncHTTP asyncEvent;
-	asyncEvent.userID = userID;
-	asyncEvent.postType = HTTP_POST_TYPE_MATCH_GIFT;
-
+	AsyncEventMsgHTTP asyncEvent;
 	strcpy(asyncEvent.url, url.c_str());
 
-	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
+	m_SQLDataManage.PushLine(&asyncEvent.dataLineHead, sizeof(AsyncEventMsgHTTP), ASYNC_EVENT_HTTP, userID, HTTP_POST_TYPE_MATCH_GIFT);
 }
 
 // 发送比赛失败，退报名费，以及清理比赛状态
@@ -3938,11 +3950,10 @@ void CGameMainManage::SendMatchFailMail(BYTE failReason, int userID, BYTE matchT
 			otherConfig.http, userID, gameMatchID, failReason);
 	}
 
-	LoaderAsyncHTTP asyncEvent;
-	asyncEvent.userID = userID == 0 ? gameMatchID : userID;
-	asyncEvent.postType = HTTP_POST_TYPE_MATCH_FAIL;
+	AsyncEventMsgHTTP asyncEvent;
 	memcpy(asyncEvent.url, bufURL, min(sizeof(asyncEvent.url), sizeof(bufURL)));
-	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
+
+	m_SQLDataManage.PushLine(&asyncEvent.dataLineHead, sizeof(AsyncEventMsgHTTP), ASYNC_EVENT_HTTP, userID == 0 ? gameMatchID : userID, HTTP_POST_TYPE_MATCH_FAIL);
 }
 
 // 清理比赛状态

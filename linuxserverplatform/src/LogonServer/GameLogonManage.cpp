@@ -1,7 +1,10 @@
 #include "CommonHead.h"
 #include "ErrorCode.h"
 #include "json/json.h"
+#include "AsyncEventMsg.pb.h"
 #include "GameLogonManage.h"
+
+using namespace AsyncEventMsg;
 
 // 预编译选项
 #define FRIENDSGROUP_CRATE_ROOM_MODE	// 俱乐部创建房间，房主消耗钻石
@@ -136,6 +139,13 @@ bool CGameLogonManage::OnStart()
 
 	InitRounteCheckEvent();
 
+	// 测试异步获取数据库数据的代码
+	AsyncEventMsgSqlStatement msg;
+	char sql[128] = "select userID,name,headURL,money from userInfo order by money desc limit 5";
+	memcpy(msg.sql, sql, sizeof(sql));
+	msg.bIsSelect = true;
+	m_SQLDataManage.PushLine(&msg.dataLineHead, sizeof(AsyncEventMsgSqlStatement), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, ASYNC_MESSAGE_DATABASE_TEST);
+
 	INFO_LOG("GameLogonManage OnStart end.");
 
 	return true;
@@ -248,26 +258,41 @@ bool CGameLogonManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, vo
 		return false;
 	}
 
-	if (pResultData->uHandleKind == ANSY_THREAD_RESULT_TYPE_DATABASE)
+	if (pResultData->uHandleKind == ASYNC_EVENT_SQL_STATEMENT)
 	{
+		switch (pResultData->uMsgID)
+		{
+		case ASYNC_MESSAGE_DATABASE_TEST:
+		{
+			AsyncEventMsg_Test allUser;
+			allUser.ParseFromArray(pData, uSize); // or parseFromString
+	
+			for (int i = 0; i < allUser.user_size(); i++) {
+				AsyncEventMsg_Test_User user = allUser.user(i); // 按索引解repeated成员
+				INFO_LOG("userID=%d,name=%s,headURL=%s,money=%lld,winCount=%d",
+					user.userid(), user.name().c_str(), user.headurl().c_str(), user.money(), user.wincount());
+			}
+		}
+		break;
+		}
 
 	}
-	else if (pResultData->uHandleKind == ANSY_THREAD_RESULT_TYPE_HTTP)
+	else if (pResultData->uHandleKind == ASYNC_EVENT_HTTP)
 	{
-		char * pBuffer = (char *)pData;
+		char* pBuffer = (char*)pData;
 		if (pBuffer == NULL)
 		{
-			ERROR_LOG("请求php失败，userID=%d,postType=%d", pResultData->uHandleID, pResultData->LineHead.uDataKind);
+			ERROR_LOG("请求php失败，userID=%d,postType=%d", pResultData->uIndex, pResultData->uMsgID);
 			return false;
 		}
 
 		if (strcmp(pBuffer, "0"))
 		{
-			ERROR_LOG("请求php失败，userID=%d,postType=%d,result=%s", pResultData->uHandleID, pResultData->LineHead.uDataKind, pBuffer);
+			ERROR_LOG("请求php失败，userID=%d,postType=%d,result=%s", pResultData->uIndex, pResultData->uMsgID, pBuffer);
 			return false;
 		}
 	}
-	else if (pResultData->uHandleKind == ANSY_THREAD_RESULT_TYPE_LOG)
+	else if (pResultData->uHandleKind == ASYNC_EVENT_LOG)
 	{
 
 	}
@@ -3527,12 +3552,10 @@ bool CGameLogonManage::OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT si
 void CGameLogonManage::SendHTTPMessage(int userID, const std::string &url, BYTE postType)
 {
 	// HTTP请求
-	LoaderAsyncHTTP asyncEvent;
-	asyncEvent.userID = userID;
+	AsyncEventMsgHTTP asyncEvent;
 	strcpy(asyncEvent.url, url.c_str());
-	asyncEvent.postType = postType;
 
-	m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncHTTP), LOADER_ASYNC_EVENT_HTTP, 0, 0);
+	m_SQLDataManage.PushLine(&asyncEvent.dataLineHead, sizeof(AsyncEventMsgHTTP), ASYNC_EVENT_HTTP, userID, postType);
 }
 
 bool CGameLogonManage::SendHTTPUserRegisterMessage(int userID)

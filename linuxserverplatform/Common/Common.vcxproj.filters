@@ -54,6 +54,9 @@
     <ClCompile Include="..\src\Common\MD5.cpp">
       <Filter>加密工具</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\protobuf\AsyncEventMsg.pb.cc">
+      <Filter>协议模块</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h">
@@ -67,9 +70,6 @@
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\MyCurl.h">
       <Filter>HttpClient</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\LoaderAsyncEvent.h">
-      <Filter>协议模块</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\NewMessageDefine.h">
       <Filter>协议模块</Filter>
@@ -104,5 +104,16 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\tableDefine.h">
       <Filter>Redis模块</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\AsyncEventMsg.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\protobuf\AsyncEventMsg.proto">
+      <Filter>协议模块</Filter>
+    </None>
   </ItemGroup>
 </Project>

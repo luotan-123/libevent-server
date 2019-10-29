@@ -360,17 +360,15 @@ bool CBaseLogonServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * 
 }
 
 //异步线程结果处理
-bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void * pData, UINT uResultSize, UINT uDataType, UINT uHandleID)
+bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void * pData, UINT uResultSize, UINT uIndex, UINT uMsgID)
 {
 	AsynThreadResultLine resultData;
 
 	//包装数据
-	resultData.LineHead.uSize = uResultSize;
-	resultData.LineHead.uDataKind = uDataType;
-
-	resultData.uHandleKind = uHandleKind;
 	resultData.uHandleResult = uHandleResult;
-	resultData.uHandleID = uHandleID;
+	resultData.uHandleKind = uHandleKind;
+	resultData.uIndex = uIndex;
+	resultData.uMsgID = uMsgID;
 
 	//加入队列
 	return (m_DataLine.AddData(&resultData.LineHead, sizeof(resultData), HD_ASYN_THREAD_RESULT, pData, uResultSize) != 0);

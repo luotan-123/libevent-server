@@ -9,20 +9,11 @@ CDataBaseManage::CDataBaseManage()
 	m_bInit = false;
 	m_bRun = false;
 	m_hThread = 0;
-	//m_hCompletePort = NULL;
 	m_pInitInfo = NULL;
 	m_pKernelInfo = NULL;
 	m_pHandleService = NULL;
 	m_pMysqlHelper = NULL;
-
-	m_sqlClass = 0;
-	m_nPort = 0;
-	m_bsqlInit = false;
-
-	m_host[0] = '\0';
-	m_user[0] = '\0';
-	m_name[0] = '\0';
-	m_passwd[0] = '\0';
+	
 }
 
 CDataBaseManage::~CDataBaseManage()
@@ -30,7 +21,6 @@ CDataBaseManage::~CDataBaseManage()
 	m_bInit = false;
 	m_pInitInfo = NULL;
 	m_hThread = 0;
-	//m_hCompletePort = NULL;
 	m_pKernelInfo = NULL;
 	m_pHandleService = NULL;
 }
@@ -49,7 +39,6 @@ bool CDataBaseManage::Start()
 	m_bRun = true;
 
 	SQLConnectReset();
-	//SQLConnect();
 
 	//建立数据处理线程
 	pthread_t threadID = 0;
@@ -87,17 +76,7 @@ bool CDataBaseManage::Stop()
 
 	m_bRun = false;
 
-
-	//// 先关闭完成端口
-	//if (m_hCompletePort)
-	//{
-	//	PostQueuedCompletionStatus(m_hCompletePort, 0, NULL, NULL);
-	//	CloseHandle(m_hCompletePort);
-	//	m_hCompletePort = NULL;
-	//}
-
 	// 清理dataline
-	//m_DataLine.SetCompletionHandle(NULL);
 	m_DataLine.CleanLineData();
 
 	// 关闭数据库处理线程句柄
@@ -107,13 +86,8 @@ bool CDataBaseManage::Stop()
 		m_hThread = 0;
 	}
 
-	//关闭数据库连接
-	if (m_pMysqlHelper)
-	{
-		m_pMysqlHelper->disconnect();
-		delete m_pMysqlHelper;
-		m_pMysqlHelper = NULL;
-	}
+	//关闭数据库连接，析构函数会自动释放连接
+	SafeDeleteArray(m_pMysqlHelper);
 
 	INFO_LOG("DataBaseManage stop end.");
 
@@ -127,10 +101,10 @@ bool CDataBaseManage::UnInit()
 }
 
 //加入处理队列
-bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT dwHandleID)
+bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT uMsgID)
 {
 	//处理数据
-	pData->dwHandleID = dwHandleID;
+	pData->uMsgID = uMsgID;
 	pData->uIndex = uIndex;
 	pData->uHandleKind = uHandleKind;
 	return m_DataLine.AddData(&pData->dataLineHead, uSize, 0) != 0;
@@ -206,37 +180,28 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 //重联数据库
 bool CDataBaseManage::SQLConnectReset()
 {
-	if (m_bsqlInit == false)
-	{
-		const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
-
-		m_nPort = dbConfig.port;
-
-		strcpy(m_host, dbConfig.ip);
-		strcpy(m_user, dbConfig.user);
-		strcpy(m_name, dbConfig.dbName);
-		strcpy(m_passwd, dbConfig.passwd);
-
-		m_bsqlInit = true;
-	}
-
 	if (m_pMysqlHelper)
 	{
-		delete m_pMysqlHelper;
+		SafeDeleteArray(m_pMysqlHelper);
 	}
 
-	m_pMysqlHelper = new CMysqlHelper;
+	m_pMysqlHelper = new CMysqlHelper[DB_TYPE_PHP];
 
-	//初始化mysql对象并建立连接
-	m_pMysqlHelper->init(m_host, m_user, m_passwd, m_name, "", m_nPort);
-	try
+	for (int i = 0; i < GetNewArraySize(m_pMysqlHelper); i++)
 	{
-		m_pMysqlHelper->connect();
-	}
-	catch (MysqlHelper_Exception& excep)
-	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
-		return false;
+		const DBConfig& dbConfig = ConfigManage()->GetDBConfig(i);
+
+		//初始化mysql对象并建立连接
+		m_pMysqlHelper[i].init(dbConfig.ip, dbConfig.user, dbConfig.passwd, dbConfig.dbName, "", dbConfig.port);
+		try
+		{
+			m_pMysqlHelper[i].connect();
+		}
+		catch (MysqlHelper_Exception & excep)
+		{
+			CON_ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
+			return false;
+		}
 	}
 
 	return true;
@@ -253,30 +218,35 @@ bool CDataBaseManage::CheckSQLConnect()
 	sprintf(buf, "select * from %s LIMIT 1", TBL_BASE_GAME);
 	bool bConect = false;
 
-	try
-	{
-		m_pMysqlHelper->sqlExec(buf);
-	}
-	catch (...)
-	{
-		bConect = true;
-	}
-
-	if (bConect)
+	for (int i = 0; i < GetNewArraySize(m_pMysqlHelper); i++)
 	{
 		try
 		{
-			m_pMysqlHelper->connect();
+			m_pMysqlHelper[i].sqlExec(buf);
 		}
-		catch (MysqlHelper_Exception& excep)
+		catch (...)
 		{
-			ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
-			return false;
+			bConect = true;
+		}
+
+		if (bConect)
+		{
+			try
+			{
+				m_pMysqlHelper[i].connect();
+			}
+			catch (MysqlHelper_Exception & excep)
+			{
+				CON_ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
+				return false;
+			}
 		}
 	}
-
+	
 	return true;
 }
+
+
 
 //***********************************************************************************************//
 CDataBaseHandle::CDataBaseHandle()

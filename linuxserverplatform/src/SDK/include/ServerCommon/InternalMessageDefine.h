@@ -22,9 +22,10 @@ struct DataLineHead
 struct AsynThreadResultLine
 {
 	DataLineHead						LineHead;					///队列头
-	UINT								uHandleResult;				///结果结果
-	UINT								uHandleKind;				///处理类型
-	UINT								uHandleID;					///对象标识
+	UINT								uHandleResult;				///结果结果 0:成功，非0失败
+	UINT								uHandleKind;				///处理类型 
+	UINT								uIndex;						///数据库索引或者玩家索引
+	UINT								uMsgID;						///消息id
 };
 
 //SOCKET关闭通知结构定义
@@ -59,8 +60,8 @@ struct DataBaseLineHead
 {
 	DataLineHead					dataLineHead;							///队列头
 	UINT							uHandleKind;							///处理类型
-	UINT							uIndex;									///对象索引
-	UINT							dwHandleID;								///对象标识
+	UINT							uIndex;									///数据库索引或者玩家索引
+	UINT							uMsgID;									///消息id
 };
 
 //发送数据队列包头
@@ -122,18 +123,4 @@ struct MSG_S_ConnectSuccess
 		memset(this, 0, sizeof(MSG_S_ConnectSuccess));
 	}
 };
-
-///////////////////////////////////////////////////////////////////////////////
-struct InternalSqlStatement
-{
-	DataBaseLineHead	head;
-	char	sql[MAX_SQL_STATEMENT_SIZE];
-	bool	bIsSelect;	// 默认0：非查询性语句，错误返回字符串，1：查询语句，需要返回结果集合
-
-	InternalSqlStatement()
-	{
-		memset(this, 0, sizeof(InternalSqlStatement));
-	}
-};
-
 ///////////////////////////////////////////////////////////////////////////////

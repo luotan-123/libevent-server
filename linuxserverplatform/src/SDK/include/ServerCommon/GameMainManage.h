@@ -9,10 +9,12 @@
 #include "NewMessageDefine.h"
 #include "ErrorCode.h"
 #include "PlatformMessage.h"
+#include "AsyncEventMsg.pb.h"
 #include "json/json.h"
 #include "MD5.h"
 
 using namespace std;
+using namespace AsyncEventMsg;
 
 #define TIME_SPACE						100			//游戏 ID 间隔
 #define TIME_START_ID					100			//定时器开始 ID

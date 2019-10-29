@@ -196,25 +196,4 @@ enum LogonServerSocketType
 	LOGON_SERVER_SOCKET_TYPE_GAME_SERVER = 2,	//游戏服
 };
 
-// 异步线程处理结果类型
-enum AnsyThreadResultType
-{
-	ANSY_THREAD_RESULT_TYPE_NO = 0,			//无类型
-	ANSY_THREAD_RESULT_TYPE_DATABASE = 1,	//数据库
-	ANSY_THREAD_RESULT_TYPE_HTTP = 2,		//http（https）请求
-	ANSY_THREAD_RESULT_TYPE_LOG = 3,		//日志
-};
-
-// HTTP请求类型
-enum HTTP_POST_TYPE
-{
-	HTTP_POST_TYPE_NO = 0,			//无类型
-	HTTP_POST_TYPE_REGISTER = 1,	//注册
-	HTTP_POST_TYPE_LOGON = 2,		//登陆
-	HTTP_POST_TYPE_LOGOUT = 3,		//登出
-	HTTP_POST_TYPE_REQ_DATA = 4,	//获取页面数据
-	HTTP_POST_TYPE_MATCH_GIFT = 5,	//比赛奖励
-	HTTP_POST_TYPE_MATCH_FAIL = 6,	//比赛失败
-};
-
 //////////////////////////////////////////////////////////////////////////

@@ -80,7 +80,7 @@ public:
 	//网络消息处理 
 	virtual bool OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex, UINT dwHandleID);
 	//异步线程结果处理
-	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID);
+	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uIndex, UINT uMsgID);
 
 	virtual CDataLine* GetDataLine() { return &m_DataLine; }
 

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package AsyncEventMsg;
+
+message  AsyncEventMsg_Test_User{
+  int32 userID = 1;
+  string name = 2;
+  string headURL = 3;
+  int64 money = 4;
+  int32 winCount = 5;
+}
+
+message AsyncEventMsg_Test {
+    repeated AsyncEventMsg_Test_User user = 1;
+}
+

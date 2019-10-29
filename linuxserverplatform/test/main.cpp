@@ -19,7 +19,6 @@
 #include "Xor.h"
 #include "NewMessageDefine.h"
 #include "test.pb.h"
-#include "test1.pb.h"
 #include "ServerTimer.h"
 #include "GameMainManage.h"
 #include <fcntl.h>
@@ -27,7 +26,6 @@
 #include <sys/stat.h>
 
 using namespace test;
-using namespace test1;
 
 static timeval g_lasttime;
 void* TimerFun(void* p)
@@ -206,14 +204,6 @@ int main()
 	// encode --> bytes stream
 	string out;
 	team.SerializeToString(&out);
-
-	Team1 ttt;
-	ttt.ParseFromArray(out.c_str(), out.size()); // or parseFromString
-	cout << ttt.DebugString() << endl;
-	for (int i = 0; i < ttt.student_size(); i++) {
-		Student1 s = ttt.student(i); // 按索引解repeated成员
-		cout << s.name() << " " << s.sex() << endl;
-	}
 
 	// decode --> team structure
 	Team t;

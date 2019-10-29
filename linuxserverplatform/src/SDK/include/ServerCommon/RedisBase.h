@@ -7,7 +7,7 @@
 #include "DataBase.h"
 #include "BillManage.h"
 #include "Util.h"
-#include "LoaderAsyncEvent.h"
+#include "AsyncEventMsg.h"
 
 // redis命令单词数量，实际上redis可以存储2^32-1个key-value
 #define MAX_REDIS_CMD_WORD_COUNT	512		

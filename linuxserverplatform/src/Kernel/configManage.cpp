@@ -144,22 +144,56 @@ bool CConfigManage::LoadDBConfig()
 	string path = CINIFile::GetAppPath();
 	CINIFile file(path + "config.ini");
 
-	string key = "DB";
+	string key = "COMMON_DB";
 	string ret;
 
 	ret = file.GetKeyVal(key, "ip", "127.0.0.1");
-	strncpy(m_dbConfig.ip, ret.c_str(), sizeof(m_dbConfig.ip) - 1);
+	strncpy(m_dbConfig[DB_TYPE_COMMON].ip, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_COMMON].ip) - 1);
 
-	ret = file.GetKeyVal(key, "user", "sa");
-	strncpy(m_dbConfig.user, ret.c_str(), sizeof(m_dbConfig.user) - 1);
+	ret = file.GetKeyVal(key, "user", "root");
+	strncpy(m_dbConfig[DB_TYPE_COMMON].user, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_COMMON].user) - 1);
 
 	ret = file.GetKeyVal(key, "passwd", "123456");
-	strncpy(m_dbConfig.passwd, ret.c_str(), sizeof(m_dbConfig.passwd) - 1);
+	strncpy(m_dbConfig[DB_TYPE_COMMON].passwd, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_COMMON].passwd) - 1);
 
 	ret = file.GetKeyVal(key, "dbName", "HM");
-	strncpy(m_dbConfig.dbName, ret.c_str(), sizeof(m_dbConfig.dbName) - 1);
+	strncpy(m_dbConfig[DB_TYPE_COMMON].dbName, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_COMMON].dbName) - 1);
 
-	m_dbConfig.port = file.GetKeyVal(key, "port", 1433);
+	m_dbConfig[DB_TYPE_COMMON].port = file.GetKeyVal(key, "port", 3306);
+
+
+	key = "LOG_DB";
+
+	ret = file.GetKeyVal(key, "ip", "127.0.0.1");
+	strncpy(m_dbConfig[DB_TYPE_LOG].ip, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_LOG].ip) - 1);
+
+	ret = file.GetKeyVal(key, "user", "root");
+	strncpy(m_dbConfig[DB_TYPE_LOG].user, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_LOG].user) - 1);
+
+	ret = file.GetKeyVal(key, "passwd", "123456");
+	strncpy(m_dbConfig[DB_TYPE_LOG].passwd, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_LOG].passwd) - 1);
+
+	ret = file.GetKeyVal(key, "dbName", "HM");
+	strncpy(m_dbConfig[DB_TYPE_LOG].dbName, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_LOG].dbName) - 1);
+
+	m_dbConfig[DB_TYPE_LOG].port = file.GetKeyVal(key, "port", 3306);
+
+
+	key = "PHP_DB";
+
+	ret = file.GetKeyVal(key, "ip", "127.0.0.1");
+	strncpy(m_dbConfig[DB_TYPE_PHP].ip, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_PHP].ip) - 1);
+
+	ret = file.GetKeyVal(key, "user", "root");
+	strncpy(m_dbConfig[DB_TYPE_PHP].user, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_PHP].user) - 1);
+
+	ret = file.GetKeyVal(key, "passwd", "123456");
+	strncpy(m_dbConfig[DB_TYPE_PHP].passwd, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_PHP].passwd) - 1);
+
+	ret = file.GetKeyVal(key, "dbName", "HM");
+	strncpy(m_dbConfig[DB_TYPE_PHP].dbName, ret.c_str(), sizeof(m_dbConfig[DB_TYPE_PHP].dbName) - 1);
+
+	m_dbConfig[DB_TYPE_PHP].port = file.GetKeyVal(key, "port", 3306);
 
 	return true;
 }
@@ -419,9 +453,11 @@ void CConfigManage::SetServiceType(int type)
 bool CConfigManage::ConnectToDatabase()
 {
 	CON_INFO_LOG("连接数据库中。。。[ip=%s,port=%d,dbname=%s,user=%s,passwd=%s]"
-		, m_dbConfig.ip, m_dbConfig.port, m_dbConfig.dbName, m_dbConfig.user, m_dbConfig.passwd);
+		, m_dbConfig[DB_TYPE_COMMON].ip, m_dbConfig[DB_TYPE_COMMON].port,
+		m_dbConfig[DB_TYPE_COMMON].dbName, m_dbConfig[DB_TYPE_COMMON].user, m_dbConfig[DB_TYPE_COMMON].passwd);
 
-	m_pMysqlHelper->init(m_dbConfig.ip, m_dbConfig.user, m_dbConfig.passwd, m_dbConfig.dbName, "", m_dbConfig.port);
+	m_pMysqlHelper->init(m_dbConfig[DB_TYPE_COMMON].ip, m_dbConfig[DB_TYPE_COMMON].user, 
+		m_dbConfig[DB_TYPE_COMMON].passwd, m_dbConfig[DB_TYPE_COMMON].dbName, "", m_dbConfig[DB_TYPE_COMMON].port);
 	try
 	{
 		m_pMysqlHelper->connect();
@@ -719,7 +755,7 @@ bool CConfigManage::LoadTablesPrimaryKey()
 		}
 
 		char buf[MAX_SQL_STATEMENT_SIZE] = "";
-		sprintf(buf, "SELECT column_name FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` WHERE table_name='%s' AND CONSTRAINT_SCHEMA='%s' AND constraint_name='PRIMARY'", tblName, m_dbConfig.dbName);
+		sprintf(buf, "SELECT column_name FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` WHERE table_name='%s' AND CONSTRAINT_SCHEMA='%s' AND constraint_name='PRIMARY'", tblName, m_dbConfig[DB_TYPE_COMMON].dbName);
 
 		CMysqlHelper::MysqlData dataSet;
 		try
@@ -743,9 +779,14 @@ bool CConfigManage::LoadTablesPrimaryKey()
 	return true;
 }
 
-const DBConfig& CConfigManage::GetDBConfig()
+const DBConfig& CConfigManage::GetDBConfig(int dbType)
 {
-	return m_dbConfig;
+	if (dbType < 0 || dbType >= DB_TYPE_MAX)
+	{
+		dbType = 0;
+	}
+
+	return m_dbConfig[dbType];
 }
 
 const RedisConfig& CConfigManage::GetRedisConfig(int redisTypeID)

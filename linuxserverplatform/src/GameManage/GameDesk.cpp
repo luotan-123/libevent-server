@@ -5765,9 +5765,9 @@ bool CGameDesk::AddDeskGrade(const char *pVideoCode, const char * gameData, cons
 
 	if (pVideoCode && strlen(pVideoCode) != 0)
 	{
-		LoaderAsyncUploadVideo asyncEvent;
+		AsyncEventMsgUploadVideo asyncEvent;
 		strcpy(asyncEvent.videoCode, pVideoCode);
-		m_pDataManage->m_SQLDataManage.PushLine(&asyncEvent.dataBaseHead, sizeof(LoaderAsyncUploadVideo), LOADER_ASYNC_EVENT_UPLOAD_VIDEO, 0, 0);
+		m_pDataManage->m_SQLDataManage.PushLine(&asyncEvent.dataLineHead, sizeof(AsyncEventMsgUploadVideo), ASYNC_EVENT_UPLOAD_VIDEO, 0, 0);
 	}
 
 	GameGradeInfo gameGradeInfo;

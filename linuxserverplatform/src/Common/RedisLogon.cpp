@@ -612,11 +612,11 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 	}
 
 	// 将sql语句push到异步处理线程
-	InternalSqlStatement msg;
+	AsyncEventMsgSqlStatement msg;
 
 	memcpy(msg.sql, sql, sizeof(sql));
 
-	m_pDBManage->PushLine(&msg.head, sizeof(InternalSqlStatement), LOADER_ASYNC_EVENT_SQL_STATEMENT, 0, 0);
+	m_pDBManage->PushLine(&msg.dataLineHead, sizeof(AsyncEventMsgSqlStatement), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, 0);
 
 	freeReplyObject(pReply);
 

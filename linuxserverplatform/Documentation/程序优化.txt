@@ -8,9 +8,8 @@
 构架再好，模块内部实现更重要
 
 
-1、mysql分库的支持。分USER_DB和LOG_DB
-2、异步获取mysql数据库的支持，通过异步线程实现，协议用pb
-3、研究libevent，看libevent参考手册(中文版).pdf，使用libevent网络编程完成TCP模块
-4、弄清楚服务器支持h5的原理
-5、学会使用cmake生成Makefile文件
-6、对于正在运行的进程，找到办法进行函数耗时统计
+
+1、使用libevent网络编程完成TCP模块
+2、弄清楚服务器支持h5的原理
+3、学会使用cmake生成Makefile文件
+4、对于正在运行的进程，找到办法进行函数耗时统计

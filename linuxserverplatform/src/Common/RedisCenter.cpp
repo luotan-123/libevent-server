@@ -109,7 +109,7 @@ bool CRedisCenter::Stop()
 
 int CRedisCenter::NeedLoadAllUserData()	//判断是否需要加载数据库中所有用户数据到redis
 {
-	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
+	const DBConfig& dbConfig = ConfigManage()->GetDBConfig(DB_TYPE_COMMON);
 
 	//初始化mysql对象并建立连接
 	CMysqlHelper mysqlHelper;
@@ -164,7 +164,7 @@ bool CRedisCenter::LoadAllUserData()
 	AUTOCOST("LoadAllUserData 耗时");
 
 	int currMaxUserID = -1;
-	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
+	const DBConfig& dbConfig = ConfigManage()->GetDBConfig(DB_TYPE_COMMON);
 
 	//初始化mysql对象并建立连接
 	CMysqlHelper mysqlHelper;
@@ -351,7 +351,7 @@ bool CRedisCenter::LoadAllUserData()
 
 bool CRedisCenter::LoadAllRewardsPoolData()
 {
-	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
+	const DBConfig& dbConfig = ConfigManage()->GetDBConfig(DB_TYPE_COMMON);
 
 	//初始化mysql对象并建立连接
 	CMysqlHelper mysqlHelper;
@@ -448,7 +448,7 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 
 bool CRedisCenter::LoadAllAgentUser()		//加载所有代理
 {
-	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
+	const DBConfig& dbConfig = ConfigManage()->GetDBConfig(DB_TYPE_PHP);
 
 	//初始化mysql对象并建立连接
 	CMysqlHelper mysqlHelper;
@@ -749,7 +749,7 @@ bool CRedisCenter::SetUserSealTime(int userID, int time)
 
 bool CRedisCenter::LoadAllUserBag()
 {
-	const DBConfig& dbConfig = ConfigManage()->GetDBConfig();
+	const DBConfig& dbConfig = ConfigManage()->GetDBConfig(DB_TYPE_COMMON);
 
 	//初始化mysql对象并建立连接
 	CMysqlHelper mysqlHelper;

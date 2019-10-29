@@ -535,7 +535,7 @@ private:
 	bool LoadRedisConfig();
 public:
 	// 获取DB配置
-	const DBConfig& GetDBConfig();
+	const DBConfig& GetDBConfig(int dbType);
 	// 获取centerserver配置
 	const CenterServerConfig& GetCenterServerConfig();
 	// 获取logonserver配置
@@ -591,7 +591,7 @@ public:
 	static bool sqlGetValue(std::map<std::string, std::string>& data, const char* szFieldName, char szBuffer[], UINT uSize);
 public:
 	// DB配置
-	DBConfig m_dbConfig;
+	DBConfig m_dbConfig[DBType::DB_TYPE_MAX];
 	// 中心服务器配置
 	CenterServerConfig m_centerServerConfig;
 	// 大厅服务器配置

@@ -32,7 +32,7 @@ class IAsynThreadResultService
 	///接口函数
 public:
 	///异步线程结果处理
-	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uDataType, UINT uHandleID) = 0;
+	virtual bool OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uIndex, UINT uMsgID) = 0;
 };
 
 ///数据库处理服务接口

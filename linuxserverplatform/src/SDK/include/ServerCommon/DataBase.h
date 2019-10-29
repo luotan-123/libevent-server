@@ -14,15 +14,15 @@ class CDataBaseManage;
 class CDataBaseManage
 {
 public:
-	KernelInfoStruct* m_pKernelInfo;	// 内核数据
-	ManageInfoStruct* m_pInitInfo;		// 初始化数据指针
-	CDataLine	m_DataLine;				// 数据队列
-	CMysqlHelper* m_pMysqlHelper;		// 数据库模块
+	KernelInfoStruct* m_pKernelInfo;// 内核数据
+	ManageInfoStruct* m_pInitInfo;	// 初始化数据指针
+	CDataLine	m_DataLine;			// 数据队列
+	CMysqlHelper* m_pMysqlHelper;	// 数据库模块
+
 protected:
-	pthread_t	m_hThread;			// 线程句柄
-	//HANDLE	m_hCompletePort;	// 完成端口
-	bool	m_bInit;			// 初始化标志
-	bool	m_bRun;				// 运行标志
+	pthread_t	m_hThread;		// 线程句柄
+	bool		m_bInit;		// 初始化标志
+	bool		m_bRun;			// 运行标志
 	IDataBaseHandleService* m_pHandleService;	// 数据处理接口
 
 public:
@@ -39,23 +39,13 @@ public:
 	//停止服务
 	bool Stop();
 	//加入处理队列
-	bool PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT dwHandleID);
+	bool PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandleKind, UINT uIndex, UINT uMsgID);
 
 public:
 	//检测数据连接
 	bool CheckSQLConnect();
 	//重联数据库
 	bool SQLConnectReset();
-
-	int		m_sqlClass;
-
-	ushort	m_nPort;
-	bool    m_bsqlInit;
-
-	char	m_host[128];
-	char	m_passwd[48];
-	char	m_user[48];
-	char	m_name[48];
 
 private:
 	//数据库处理线程
