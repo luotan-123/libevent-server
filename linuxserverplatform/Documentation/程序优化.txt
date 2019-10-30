@@ -1,8 +1,8 @@
 长期优化
 1、原系统long类型改成int  ，unsigned long 改成 unsigned int
 2、检查printf和sprintf函数，int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
-3、内存优化：内存管理（分配内存的大小）、内存越界、内存泄露
-4、cpu优化：优化函数执行时间（算法优化），优化cpu调度（架构优化）
+3、内存优化：自己分配内存、内存越界检查、内存泄露检查
+4、cpu优化：一少、一多策略。少指的是执行cpu时间少（算法时间复杂度），多指的是多利用cpu执行，并发或者并行执行（并发执行）
 
 
 构架再好，模块内部实现更重要
