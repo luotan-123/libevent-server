@@ -17,9 +17,6 @@
 
 /**************************************************************************************************************/
 
-const int SOCKET_SEND_BUF_SIZE = 128 * 1024;	// TCP发送缓冲区大小
-const int SOCKET_RECV_BUF_SIZE = 128 * 1024;	// TCP接收缓冲区大小
-
 //通用变量的定义
 const int ERROR_SERVICE_FULL = 15;			// 服务器人数已满
 const unsigned int MSG_MAIN_TEST = 1;		// 测试消息

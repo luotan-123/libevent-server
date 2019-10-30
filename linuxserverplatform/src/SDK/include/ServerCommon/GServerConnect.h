@@ -1,8 +1,10 @@
 #pragma once
 
-#define GSERVER_SOCKET_SEND_BUF		(128 * 1024)		// 发送缓冲区大小
-#define GSERVER_SOCKET_RECV_BUF		(128 * 1024)		// 接收缓冲区大小
-#define MAX_RECONNECT_COUNT			5					// 最多重连次数，0：无限重连
+#include "KernelDefine.h"
+
+const int GSERVER_SOCKET_SEND_BUF = MAX_TEMP_SENDBUF_SIZE * 10;		// 应用层发送缓冲区大小
+const int GSERVER_SOCKET_RECV_BUF = MAX_TEMP_SENDBUF_SIZE * 20;		// 应用层接收缓冲区大小
+#define MAX_RECONNECT_COUNT			5								// 最多重连次数，0：无限重连
 
 class CDataLine;
 class CGServerConnect;

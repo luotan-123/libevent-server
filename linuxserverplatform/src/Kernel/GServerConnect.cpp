@@ -62,26 +62,7 @@ bool CGServerClient::Connect()
 	svrAddr.sin_addr.s_addr = inet_addr(m_ip);
 	svrAddr.sin_port = htons((uint16_t)m_port);
 
-	int ret = 0;
-	int optval = 0;
-
-	optval = GSERVER_SOCKET_RECV_BUF;
-	ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char*)& optval, sizeof(optval));
-	if (ret == -1)
-	{
-		SYS_ERROR_LOG("setsockopt SO_RCVBUF ERROR");
-		return false;
-	}
-
-	optval = GSERVER_SOCKET_SEND_BUF;
-	ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char*)& optval, sizeof(optval));
-	if (ret == -1)
-	{
-		SYS_ERROR_LOG("setsockopt SO_SNDBUF ERROR");
-		return false;
-	}
-
-	ret = connect(sock, (sockaddr*)& svrAddr, sizeof(sockaddr_in));
+	int ret = connect(sock, (sockaddr*)& svrAddr, sizeof(sockaddr_in));
 	if (ret == 0)
 	{
 		m_isConnected = true;

@@ -1,5 +1,11 @@
 #pragma once
 
+#include "KernelDefine.h"
+
+// 常量定义
+const int SOCKET_SEND_BUF_SIZE = MAX_TEMP_SENDBUF_SIZE * 8;		// TCP发送缓冲区最小值
+const int SOCKET_RECV_BUF_SIZE = MAX_TEMP_SENDBUF_SIZE * 8;		// TCP接收缓冲区最小值
+
 // 别名定义
 typedef int SOCKET;
 

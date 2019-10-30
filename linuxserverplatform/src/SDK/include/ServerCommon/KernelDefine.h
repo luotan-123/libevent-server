@@ -14,7 +14,8 @@ const int MAX_USER_MAD_PASSWD_SIZE = 48;			// 最大密码缓冲区大小
 const int MAX_PRIVATE_DESK_PASSWD_LEN = 20;			// 私有房最大密码长度
 const int PRIVATE_DESK_PASSWD_LEN = 6;				// 私有房密码长度
 
-const int MAX_TEMP_SENDBUF_SIZE = 8 * 1024;			// 临时发送缓冲区大小，也是单条数据包的最大长度
+const int MAX_TEMP_SENDBUF_SIZE = 8 * 1024;			// 临时发送缓冲区大小，也是单条数据包的最大长度，可以改成16K
+
 const int MAX_REDIS_COMMAND_SIZE = 2048;			// redis命令缓冲区大小
 const int MAX_SQL_STATEMENT_SIZE = 2048;			// sql语句缓冲区大小
 
@@ -110,20 +111,5 @@ enum DBType
 	DB_TYPE_PHP,						//PHP数据库，主要存放php相关的表
 	DB_TYPE_MAX,						//总数据库最大索引
 };
-
-//////////////////////////////////////////////////////////////////////////
-
-//时间参数
-typedef struct _SYSTEMTIME {
-	int wYear;
-	int wMonth;
-	int wDayOfWeek;
-	int wDay;
-	int wHour;
-	int wMinute;
-	int wSecond;
-	int wMilliseconds;
-	long lMicroseconds;
-} SYSTEMTIME, * PSYSTEMTIME, * LPSYSTEMTIME;
 
 //////////////////////////////////////////////////////////////////////////
