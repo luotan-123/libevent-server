@@ -1,1 +1,0 @@
-pscp -l root -pw 123456 -r E:\luotan\mygit\projects\linuxserverplatform\src 192.168.198.121:/home/luotan/linuxserverplatform/
