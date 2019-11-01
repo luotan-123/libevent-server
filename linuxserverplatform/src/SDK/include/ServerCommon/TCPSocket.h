@@ -89,8 +89,6 @@ public:
 	const std::unordered_map<int, TCPSocketInfo>& GetSocketMap();
 	// 获取连接ip
 	const char* GetSocketIP(int index);
-	// 获取TCPSocketInfo属性
-	void GetTCPSocketInfo(UINT uIndex, bool& bIsConnect, time_t& llAcceptMsgTime, time_t& llLastRecvMsgTime);
 	// 获取bufferevent
 	bufferevent* GetTCPBufferEvent(int index);
 	// 添加TCPSocketInfo
@@ -103,6 +101,8 @@ public:
 	static bool DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int index, NetMessageHead* pHead, void* pData, int size);
 	// 设置tcp收发缓冲区
 	static void SetTcpRcvSndBUF(int fd, int rcvBufSize, int sndBufSize);
+	// 设置应用层单次读取数据包的大小 bufferevent_set_max_single_read
+	static void SetMaxSingleReadAndWrite(bufferevent* bev, int rcvBufSize, int sndBufSize);
 
 	// 线程函数
 private:

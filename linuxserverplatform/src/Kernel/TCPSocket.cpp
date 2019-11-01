@@ -138,6 +138,12 @@ bool CTCPSocketManage::Stop()
 	m_running = false;
 	m_uCurSocketSize = 0;
 
+	event_base_loopbreak(m_listenerBase);
+	for (size_t i = 0; i < m_workBaseVec.size(); i++)
+	{
+		event_base_loopbreak(m_workBaseVec[i].base);
+	}
+
 	INFO_LOG("service TCPSocketManage stop end...");
 
 	return true;
@@ -303,19 +309,6 @@ const char* CTCPSocketManage::GetSocketIP(int index)
 	}
 
 	return iter->second.ip;
-}
-
-void CTCPSocketManage::GetTCPSocketInfo(UINT uIndex, bool& bIsConnect, time_t& llAcceptMsgTime, time_t& llLastRecvMsgTime)
-{
-	auto iter = m_socketInfoMap.find(uIndex);
-	if (iter == m_socketInfoMap.end())
-	{
-		return;
-	}
-
-	bIsConnect = iter->second.isConnect;
-	llAcceptMsgTime = iter->second.acceptMsgTime;
-	llLastRecvMsgTime = iter->second.lastRecvMsgTime;
 }
 
 bufferevent* CTCPSocketManage::GetTCPBufferEvent(int index)
@@ -502,12 +495,26 @@ void CTCPSocketManage::SetTcpRcvSndBUF(int fd, int rcvBufSize, int sndBufSize)
 	}
 }
 
+void CTCPSocketManage::SetMaxSingleReadAndWrite(bufferevent* bev, int rcvBufSize, int sndBufSize)
+{
+	if (bufferevent_get_max_single_read(bev) < rcvBufSize &&
+		bufferevent_set_max_single_read(bev, rcvBufSize) < 0)
+	{
+		ERROR_LOG("bufferevent_set_max_single_read fail,bev=%p", bev);
+	}
+
+	/*if (bufferevent_set_max_single_write(bev, sndBufSize) < 0)
+	{
+		ERROR_LOG("bufferevent_set_max_single_write fail,fd=%d", fd);
+	}*/
+}
+
 void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 {
 	CTCPSocketManage* pThis = (CTCPSocketManage*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 
@@ -611,6 +618,11 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 
 	evconnlistener_free(listener);
 	event_base_free(pThis->m_listenerBase);
+	for (int i = 0; i < workBaseCount; i++)
+	{
+		event_base_free(pThis->m_workBaseVec[i].base);
+		event_free(pThis->m_workBaseVec[i].event);
+	}
 
 	INFO_LOG("ThreadAccept thread exit.");
 
@@ -622,7 +634,7 @@ void* CTCPSocketManage::ThreadRSSocket(void* pThreadData)
 	RecvThreadParam* param = (RecvThreadParam*)pThreadData;
 	if (!param)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 
@@ -637,7 +649,7 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 	CTCPSocketManage* pThis = (CTCPSocketManage*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 
@@ -897,22 +909,15 @@ void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 			return;
 		}
 
-		// 设置应用层收发缓冲区
-		if (bufferevent_set_max_single_read(bev, SOCKET_RECV_BUF_SIZE) < 0)
-		{
-			ERROR_LOG("bufferevent_set_max_single_read fail,fd=%d", fd);
-		}
-		/*if (bufferevent_set_max_single_write(bev, SOCKET_SEND_BUF_SIZE) < 0)
-		{
-			ERROR_LOG("bufferevent_set_max_single_write fail,fd=%d", fd);
-		}*/
+		// 设置应用层收发数据包，单次大小
+		SetMaxSingleReadAndWrite(bev, SOCKET_RECV_BUF_SIZE, SOCKET_SEND_BUF_SIZE);
 
 		// 添加事件，并设置好回调函数
 		bufferevent_setcb(bev, ReadCB, NULL, EventCB, pThis);
 		if (bufferevent_enable(bev, EV_READ | EV_ET) < 0)
 		{
 			ERROR_LOG("add event fail!!!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
-			bufferevent_free(bev);
+			pThis->CloseSocket(fd);
 			return;
 		}
 

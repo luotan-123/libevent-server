@@ -578,7 +578,7 @@ void* CBaseLogonServer::TcpConnectThread(void* pThreadData)
 	CBaseLogonServer* pThis = (CBaseLogonServer*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 

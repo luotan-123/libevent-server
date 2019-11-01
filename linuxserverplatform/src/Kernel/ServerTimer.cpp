@@ -184,7 +184,7 @@ void* CServerTimer::ThreadCheckTimer(void* pThreadData)
 	CServerTimer* pThis = (CServerTimer*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 

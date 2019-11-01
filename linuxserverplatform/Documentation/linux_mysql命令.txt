@@ -20,3 +20,4 @@ lower_case_table_names=1
 1、关闭防火墙
 service iptables stop
 service firewalld stop
+systemctl disable firewalld  防止开机启动

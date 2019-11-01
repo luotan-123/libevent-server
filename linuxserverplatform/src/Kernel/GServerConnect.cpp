@@ -564,7 +564,7 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 
@@ -615,7 +615,7 @@ void* CGServerConnect::ThreadRSSocket(void* pThreadData)
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 
@@ -719,7 +719,7 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 	CGServerConnect* pThis = (CGServerConnect*)pThreadData;
 	if (!pThis)
 	{
-		CON_ERROR_LOG("thread param is null");
+		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";
 		pthread_exit(NULL);
 	}
 
