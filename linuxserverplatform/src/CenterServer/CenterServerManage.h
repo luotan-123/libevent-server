@@ -69,7 +69,7 @@ public:
 	UINT						m_uMaxPeople;			//支持最大分布式连接数量
 
 private:
-	std::vector<ServerBaseInfo>					m_socketToServerVec;	// socketIdx到服务器ID的映射(key=socketIdx,value=ServerBaseInfo)
+	std::unordered_map<UINT, ServerBaseInfo>	m_socketToServerMap;	// socketIdx到服务器ID的映射(key=socketIdx,value=ServerBaseInfo)
 	std::map<ServerBaseInfo, UINT>				m_serverToSocketMap;	// 服务器到socketIdx的映射  (key=ServerBaseInfo,value=socketIdx)
 	std::vector<UINT>							m_logonGroupSocket;		// 登陆服集群(value=socketIdx)
 	std::map<int, CenterUserInfo>				m_centerUserInfoMap;	// 集群系统在线玩家(只统计登录服的)

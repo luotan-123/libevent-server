@@ -44,19 +44,19 @@ struct LogonServerSocket
 class CGameLogonManage : public CBaseLogonServer
 {
 public:
-	UINT						m_nPort;					//登陆服务器端口
-	UINT						m_uMaxPeople;				//支持最大人数（包括gserver数量）
+	UINT						m_nPort;				//登陆服务器端口
+	UINT						m_uMaxPeople;			//支持最大人数（包括gserver数量）
 
 private:
-	CLogonUserManage*				m_pUserManage;			// 玩家管理器
-	CLogonGServerManage*			m_pGServerManage;		// 游戏服管理器
-	std::vector<LogonServerSocket>	m_socketInfoVec;		// socket索引和identityID的映射表
-	std::vector<int>				m_buyRoomVec;
-	time_t							m_lastNormalTimerTime;
-	time_t							m_lastSendHeartBeatTime;// 上次发送心跳时间
+	CLogonUserManage*			m_pUserManage;			// 玩家管理器
+	CLogonGServerManage*		m_pGServerManage;		// 游戏服管理器
+	std::unordered_map<int,LogonServerSocket>	m_socketInfoMap;// socket索引和identityID的映射表
+	std::vector<int>			m_buyRoomVec;
+	time_t						m_lastNormalTimerTime;
+	time_t						m_lastSendHeartBeatTime;// 上次发送心跳时间
 
 private:
-	std::set<UINT>					m_scoketMatch;			// 在比赛场相关页面的玩家
+	std::set<UINT>				m_scoketMatch;			// 在比赛场相关页面的玩家
 
 public:
 	CGameLogonManage();

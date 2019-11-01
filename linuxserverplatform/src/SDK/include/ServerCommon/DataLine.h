@@ -4,7 +4,7 @@
 #include "InternalMessageDefine.h"
 
 // 消息队列最大长度
-#define MAX_DATALINE_LEN		640000
+#define MAX_DATALINE_LEN		1280000
 
 /*
 Struct		:ListItemData

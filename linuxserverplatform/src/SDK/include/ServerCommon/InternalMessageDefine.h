@@ -68,15 +68,8 @@ struct DataBaseLineHead
 struct SendDataLineHead
 {
 	DataLineHead					dataLineHead;							///队列头
-	int								socketIndex;							//socket索引
-	int								socketFd;								//socket文件描述符		
+	int								socketIndex;							///socket索引或者文件描述符	
 };
-
-//////////////////////////////////////////////////////////////////////////
-// 内部通信相关
-
-// 内部通信验证协议
-const int COMMON_VERIFY_MESSAGE = 20190601;
 
 // dataline 平台数据头
 struct PlatformDataLineHead
@@ -85,6 +78,12 @@ struct PlatformDataLineHead
 	PlatformMessageHead platformMessageHead;
 	int	socketIdx;
 };
+
+//////////////////////////////////////////////////////////////////////////
+// 内部通信相关
+
+// 内部通信验证协议
+const int COMMON_VERIFY_MESSAGE = 20191101;
 
 // 中心服认证
 struct PlatformCenterServerVerify
@@ -110,17 +109,4 @@ struct PlatformLogonServerVerify
 	}
 };
 
-///连接成功消息 
-struct MSG_S_ConnectSuccess
-{
-	BYTE						bMaxVer;							///最新版本号码
-	BYTE						bLessVer;							///最低版本号码
-	BYTE						bReserve[2];						///保留字段
-	UINT						iCheckCode;							///加密后的校验码，由客户端解密在包头中返回
-
-	MSG_S_ConnectSuccess()
-	{
-		memset(this, 0, sizeof(MSG_S_ConnectSuccess));
-	}
-};
 ///////////////////////////////////////////////////////////////////////////////

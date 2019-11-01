@@ -62,7 +62,7 @@ bool CGServerClient::Connect()
 	svrAddr.sin_addr.s_addr = inet_addr(m_ip);
 	svrAddr.sin_port = htons((uint16_t)m_port);
 
-	int ret = connect(sock, (sockaddr*)& svrAddr, sizeof(sockaddr_in));
+	int ret = connect(sock, (sockaddr*)&svrAddr, sizeof(sockaddr_in));
 	if (ret == 0)
 	{
 		m_isConnected = true;
@@ -150,6 +150,10 @@ bool CGServerClient::OnRead()
 			{
 				ERROR_LOG("投递消息失败,size=%d", realSize);
 			}
+		}
+		else // 回复心跳
+		{
+			m_pCGServerConnect->SendData(m_index, NULL, 0, pHead->uMainID, pHead->uAssistantID, pHead->uHandleCode, pHead->uIdentification);
 		}
 
 		// 有内存重叠的时候，不能用memcpy 只能用memmove
@@ -302,7 +306,7 @@ CGServerConnect::CGServerConnect()
 
 CGServerConnect::~CGServerConnect()
 {
-	
+
 }
 
 bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThread)
@@ -375,7 +379,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThr
 		}
 		GameLogManage()->AddLogFile(m_hThreadSendMsg, THREAD_TYPE_SEND, roomID);
 	}
-	
+
 	// 建立接收数据线程
 	m_threadIDToIndexMap.clear();
 	for (int i = 0; i < recvThreadNumber; i++)
@@ -502,12 +506,12 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 	{
 		SendDataLineHead lineHead;
 		lineHead.socketIndex = idx;
-		lineHead.socketFd = 0;
 		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->uMessageSize);
 
 		if (addBytes == 0)
 		{
 			ERROR_LOG("投递消息失败,mainID=%d,assistID=%d", mainID, assistID);
+			return false;
 		}
 	}
 	else
@@ -515,7 +519,7 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 		// 交给具体的socket
 		pTcpSocket->Send(buf, pHead->uMessageSize);
 	}
-	
+
 	return true;
 }
 

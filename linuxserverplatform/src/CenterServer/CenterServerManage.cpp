@@ -63,12 +63,6 @@ bool CCenterServerManage::OnStart()
 {
 	INFO_LOG("CenterServerManage OnStart begin...");
 
-	//为socketIdx重新分配内存
-	if (m_socketToServerVec.size() != m_InitData.uMaxPeople)
-	{
-		m_socketToServerVec.resize(m_InitData.uMaxPeople);
-	}
-
 	//清理所有在线用户
 	if (m_pRedis)
 	{
@@ -127,7 +121,7 @@ bool CCenterServerManage::OnTimerMessage(UINT uTimerID)
 //////////////////////////////////////////////////////////////////////
 bool CCenterServerManage::OnStop()
 {
-	m_socketToServerVec.clear();
+	m_socketToServerMap.clear();
 
 	return true;
 }
@@ -165,26 +159,26 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 	}
 
 	// 考虑到PHP，这里不生成日志
-	if (socketIdx >= m_socketToServerVec.size() || m_socketToServerVec[socketIdx].serverType == SERVICE_TYPE_BEGIN)
+	auto itrSocketToServerMap = m_socketToServerMap.find(socketIdx);
+	if (itrSocketToServerMap == m_socketToServerMap.end())
 	{
-		return true;
+		return false;
 	}
 
-	ServerBaseInfo serverInfo = m_socketToServerVec[socketIdx];
+	ServerBaseInfo serverInfo = itrSocketToServerMap->second;
 
 	// 删除这个索引
-	m_socketToServerVec[socketIdx].serverType = SERVICE_TYPE_BEGIN;
-	m_socketToServerVec[socketIdx].serverID = 0;
+	m_socketToServerMap.erase(itrSocketToServerMap);
 
-	auto itrServerToScoket = m_serverToSocketMap.find(serverInfo);
-	if (itrServerToScoket == m_serverToSocketMap.end())
+	auto itrServerToSocket = m_serverToSocketMap.find(serverInfo);
+	if (itrServerToSocket == m_serverToSocketMap.end())
 	{
 		ERROR_LOG("服务器信息不存在 serverType=%d,serverID=%d", serverInfo.serverType, serverInfo.serverID);
 		return false;
 	}
 
 	// 删除这个服务器
-	m_serverToSocketMap.erase(itrServerToScoket);
+	m_serverToSocketMap.erase(itrServerToSocket);
 
 	if (!m_pRedis)
 	{
@@ -458,16 +452,21 @@ void CCenterServerManage::RoutineCheckUnbindIDSocket()
 {
 	time_t currTime = time(NULL);
 
-	for (size_t i = 0; i < m_InitData.uMaxPeople; i++)
+	const std::unordered_map<int, TCPSocketInfo>& socketInfoMap = m_TCPSocket.GetSocketMap();
+
+	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
 	{
-		bool bIsConnect = false;
-		time_t llAcceptMsgTime = 0, llLastRecvMsgTime = 0;
-		m_TCPSocket.GetTCPSocketInfo(i, bIsConnect, llAcceptMsgTime, llLastRecvMsgTime);
+		bool bIsConnect = iter->second.isConnect;
+		time_t llAcceptMsgTime = iter->second.acceptMsgTime, llLastRecvMsgTime = iter->second.lastRecvMsgTime;
 
 		// 清理不绑定的socket
-		if (bIsConnect && currTime - llLastRecvMsgTime > CONNECT_TIME_SECS && m_socketToServerVec[i].serverType == SERVICE_TYPE_BEGIN)
+		if (bIsConnect && currTime - llLastRecvMsgTime > CONNECT_TIME_SECS)
 		{
-			m_TCPSocket.CloseSocket(i);
+			auto itrSocketToServerMap = m_socketToServerMap.find(iter->first);
+			if (itrSocketToServerMap == m_socketToServerMap.end() || itrSocketToServerMap->second.serverType == SERVICE_TYPE_BEGIN)
+			{
+				m_TCPSocket.CloseSocket(iter->first);
+			}
 		}
 	}
 }
@@ -1366,14 +1365,7 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 		return false;
 	}
 
-	if (m_socketToServerVec.size() != m_InitData.uMaxPeople)
-	{
-		WARNNING_LOG("#### 服务器启动过快，内存还没有分配,serverType=%d,serverID=%d,uIndex=%d,size=%d  ####",
-			pMessage->serverType, pMessage->serverID, uIndex, m_socketToServerVec.size());
-		m_socketToServerVec.resize(m_InitData.uMaxPeople);
-	}
-
-	m_socketToServerVec[uIndex] = serverInfo;
+	m_socketToServerMap[uIndex] = serverInfo;
 	m_serverToSocketMap.insert(std::make_pair(serverInfo, uIndex));
 
 	//发送当前服务器集群，发送编号和数量，以及主要服务器编号
@@ -1483,14 +1475,16 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 		return false;
 	}
 
-	if (uIndex >= m_socketToServerVec.size())
+	auto itrSocketToServerMap = m_socketToServerMap.find(uIndex);
+	if (itrSocketToServerMap == m_socketToServerMap.end())
 	{
-		ERROR_LOG("#### redis移除在线玩家失败 m_socketToServerVec中登陆服索引不存在 uIndex = %d ####", uIndex);
+		ERROR_LOG("#### redis移除在线玩家失败 m_socketToServerMap中登陆服索引不存在 uIndex = %d ####", uIndex);
 		return false;
 	}
-	if (m_socketToServerVec[uIndex].serverType != SERVICE_TYPE_LOGON)
+
+	if (itrSocketToServerMap->second.serverType != SERVICE_TYPE_LOGON)
 	{
-		ERROR_LOG("#### redis移除在线玩家失败 serverType=%d 错误####", m_socketToServerVec[uIndex].serverType);
+		ERROR_LOG("#### redis移除在线玩家失败 serverType=%d 错误####", itrSocketToServerMap->second.serverType);
 		return false;
 	}
 

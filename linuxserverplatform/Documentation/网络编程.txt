@@ -8,8 +8,20 @@ linux客户端socket没必要设置收发缓冲区，当连接成功服务器，系统会设置一个很大值
 cat /proc/sys/net/ipv4/tcp_rmem cat /proc/sys/net/ipv4/tcp_wmem
 
 3、如果bufferevent的读缓冲区有数据没有读取完，回调函数是否一直执行？
+答案：不会一直触发
+
 4、不能设置成边缘触发，因为担心会有单个数据包服务器不能及时处理？
+答案：bufferevent_enable可以很方便设置边缘触发，目前没有发现异样
+
 5、event_base_loop循环的时候，其它线程是否可以添加事件，线程安全？
+答案：可以通过创建一对连接的socket进行通信，来跨平台添加事件
+
 6、libevent能多线程编程？
+答案：可以很好的高并发编程
+
 7、libevent确定是否可以像epoll，设置最大监听文件描述符大小
+答案：不可以，libevent默认值是32000，在epoll_init函数中有
+
 8、bufferevent如何用线程锁
+evbuffer_lock(input); 
+evbuffer_unlock(input);

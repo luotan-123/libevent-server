@@ -20,7 +20,6 @@
 #include "NewMessageDefine.h"
 #include "test.pb.h"
 #include "ServerTimer.h"
-#include "GameMainManage.h"
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>

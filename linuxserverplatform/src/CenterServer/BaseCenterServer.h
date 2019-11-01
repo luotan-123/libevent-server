@@ -6,9 +6,9 @@
 #include "TcpConnect.h"
 #include "ServerTimer.h"
 #include "GServerConnect.h"
-#include "TCPSocket.h"
 #include "INIFile.h"
 #include "Exception.h"
+#include "TCPSocket.h"
 #include "PlatformMessage.h"
 
 

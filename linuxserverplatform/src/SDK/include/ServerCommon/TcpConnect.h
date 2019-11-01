@@ -1,9 +1,7 @@
 #pragma once
 
-#include "KernelDefine.h"
-
-const int CLIENT_SOCKET_SEND_BUF = MAX_TEMP_SENDBUF_SIZE * 10;		// 应用层发送缓冲区大小
-const int CLIENT_SOCKET_RECV_BUF = MAX_TEMP_SENDBUF_SIZE * 20;		// 应用层接收缓冲区大小
+const int CLIENT_SOCKET_SEND_BUF = 64 * 1024;		// 应用层发送缓冲区大小
+const int CLIENT_SOCKET_RECV_BUF = 256 * 1024;		// 应用层接收缓冲区大小
 
 class CDataLine;
 class CTcpConnect;

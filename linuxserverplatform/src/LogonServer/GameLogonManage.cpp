@@ -90,8 +90,7 @@ bool CGameLogonManage::OnStart()
 	INFO_LOG("GameLogonManage OnStart begin...");
 
 	//初始化socket
-	m_socketInfoVec.clear();
-	m_socketInfoVec.resize(m_InitData.uMaxPeople);
+	m_socketInfoMap.clear();
 
 	if (m_pRedis)
 	{
@@ -314,7 +313,7 @@ bool CGameLogonManage::OnStop()
 		m_pGServerManage->Release();
 	}
 
-	m_socketInfoVec.clear();
+	m_socketInfoMap.clear();
 
 	return true;
 }
@@ -497,14 +496,14 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 	if (accountLen < 1 || accountLen >= sizeof(pMessage->szAccount))
 	{
 		ERROR_LOG("账号长度异常 pMessage->szAccount=%s,len=%d", pMessage->szAccount, accountLen);
-		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, handleID);
+		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, 0);
 		return false;
 	}
 
 	if (strlen(pMessage->szPswd) != USER_MD5_PASSWD_LEN)
 	{
 		ERROR_LOG("密码长度不正确:pMessage->szPswd=%s", pMessage->szPswd);
-		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_PASSWD_FALSE, handleID);
+		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_PASSWD_FALSE, 0);
 		return false;
 	}
 
@@ -522,25 +521,25 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		{
 			if (accountLen < MIN_USER_ACCOUNT_LEN || accountLen >= MAX_USER_ACCOUNT_LEN)
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, 0);
 				return false;
 			}
 
 			if (CUtil::IsContainDirtyWord(pMessage->szAccount) == true)
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_HAVE_DIRTYWORD, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_HAVE_DIRTYWORD, 0);
 				return true;
 			}
 
 			if (strstr(pMessage->szAccount, "Phone") != NULL)	//Phone起头的字符用于qq和微信，不允许注册
 			{
-				m_TCPSocket.SendData(socketIdx, pMessage, sizeof(*pMessage), MSG_MAIN_LOGON_REGISTER, assistID, ERROR_HAVE_DIRTYWORD, handleID);
+				m_TCPSocket.SendData(socketIdx, pMessage, sizeof(*pMessage), MSG_MAIN_LOGON_REGISTER, assistID, ERROR_HAVE_DIRTYWORD, 0);
 				return true;
 			}
 
 			if (m_pRedis->IsAccountExists(pMessage->szAccount))
 			{
-				m_TCPSocket.SendData(socketIdx, pMessage, sizeof(*pMessage), MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_EXISTS, handleID);
+				m_TCPSocket.SendData(socketIdx, pMessage, sizeof(*pMessage), MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_EXISTS, 0);
 				return true;
 			}
 		}
@@ -551,7 +550,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 			userID = m_pRedis->GetUserIDByAccount(pMessage->szAccount);
 			if (userID <= 0)
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOTEXISTS, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOTEXISTS, 0);
 				return true;
 			}
 
@@ -563,7 +562,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 
 			if (strcmp(pMessage->szAccount, userData.account))
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, 0);
 				return true;
 			}
 
@@ -583,7 +582,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 			userID = m_pRedis->GetUserIDByPhone(pMessage->szAccount);
 			if (userID <= 0)
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_PHONE_NO_BIND, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_PHONE_NO_BIND, 0);
 				return true;
 			}
 
@@ -595,7 +594,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 
 			if (strcmp(pMessage->szAccount, userData.phone))
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, 0);
 				return true;
 			}
 
@@ -623,7 +622,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 			userID = m_pRedis->GetUserIDByXianLiao(pMessage->szAccount);
 			if (userID <= 0)
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_XIANLIAO_NO_BIND, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_XIANLIAO_NO_BIND, 0);
 				return true;
 			}
 
@@ -635,7 +634,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 
 			if (strcmp(pMessage->szAccount, userData.xianliao))
 			{
-				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, handleID);
+				m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_REGISTER, assistID, ERROR_ACCOUNT_NOT_MATCH, 0);
 				return true;
 			}
 
@@ -748,7 +747,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 		msg.byFastRegister = newUserData.registerType;
 	}
 
-	m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_REGISTER, assistID, 0, handleID);
+	m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_REGISTER, assistID, 0, 0);
 
 	return true;
 }
@@ -758,7 +757,7 @@ bool CGameLogonManage::OnHandleUserLogonMessage(int assistID, void* pData, int s
 {
 	if (assistID == MSG_ASS_LOGON_LOGON)
 	{
-		return OnHanleUserLogon(pData, size, accessIP, socketIdx, handleID);
+		return OnHanleUserLogon(pData, size, accessIP, socketIdx, 0);
 	}
 
 	return true;
@@ -802,7 +801,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	/*if (!userData.isVirtual && strlen(userData.macAddr) > 0 && strcmp(userData.macAddr, pMessage->szMacAddr))
 	{
 		ERROR_LOG("物理地址不匹配:new=%s,old=%s,userID=%d,ip=%s", pMessage->szMacAddr, userData.macAddr, userID, ip);
-		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_MAC_NOTMATCH, handleID);
+		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_MAC_NOTMATCH, 0);
 		return false;
 	}*/
 
@@ -813,7 +812,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		m_pRedis->GetServerStatus(serverStatus);
 		if (serverStatus == SERVER_PLATFROM_STATUS_CLOSE)
 		{
-			m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_SERVER_CLOSE, handleID);
+			m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_SERVER_CLOSE, 0);
 			return true;
 		}
 	}
@@ -893,7 +892,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 			LogonResponseFail msg;
 			msg.byType = 0;
 			msg.iRemainTime = userData.sealFinishTime < 0 ? -1 : userData.sealFinishTime - iCurTime;
-			m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_ACCOUNT_SEAL, handleID);
+			m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_ACCOUNT_SEAL, 0);
 			return false;
 		}
 	}
@@ -901,7 +900,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	// 检查token
 	if (!userData.isVirtual && strcmp(pMessage->szToken, userData.token))
 	{
-		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_ROOM_TOKEN_NOTMATCH, handleID);
+		m_TCPSocket.SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, ERROR_ROOM_TOKEN_NOTMATCH, 0);
 		ERROR_LOG("token error userID=%d", userID);
 		return false;
 	}
@@ -914,7 +913,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		if (strcmp(pMessage->szMacAddr, userData.macAddr))
 		{
 			// 不同设备
-			m_TCPSocket.SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0, handleID);
+			m_TCPSocket.SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0, 0);
 		}
 		m_TCPSocket.CloseSocket(oldSocketIdx);
 		DelSocketIdx(oldSocketIdx);
@@ -972,7 +971,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	pUser->isVirtual = userData.isVirtual;
 
 	// 将玩家的socketIdx和userID关联
-	m_socketInfoVec[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_USER, userID);
+	m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_USER, userID);
 
 	// 向中心服发送消息
 	PlatformUserLogonLogout logonToCenterUserStatus;
@@ -1008,7 +1007,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	msg.matchStatus = userData.matchType == MATCH_TYPE_PEOPLE ? userData.matchStatus : USER_MATCH_STATUS_NORMAL;
 
 	// 登录成功
-	m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, 0, handleID);
+	m_TCPSocket.SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_LOGON, MSG_ASS_LOGON_LOGON, 0, 0);
 
 	// 添加在线玩家，向中心服务器发送消息
 	m_pRedis->AddOnlineUser(userID, userData.isVirtual);
@@ -1996,7 +1995,7 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	}
 
 	// socketIdx和gserver关联
-	m_socketInfoVec[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->roomID);
+	m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->roomID);
 
 	INFO_LOG("【roomID=%d】游戏服连接本服", pMessage->roomID);
 
@@ -2051,9 +2050,10 @@ bool CGameLogonManage::OnHandleGServerToUserMessage(int roomID, NetMessageHead *
 //////////////////////////////////////////////////////////////////////////
 LogonServerSocket CGameLogonManage::GetIdentityIDBySocketIdx(int socketIdx)
 {
-	if (socketIdx >= 0 && socketIdx < (int)m_socketInfoVec.size())
+	auto iter = m_socketInfoMap.find(socketIdx);
+	if (iter != m_socketInfoMap.end())
 	{
-		return m_socketInfoVec[socketIdx];
+		return iter->second;
 	}
 
 	return LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_NO, 0);
@@ -2062,10 +2062,10 @@ LogonServerSocket CGameLogonManage::GetIdentityIDBySocketIdx(int socketIdx)
 // 删除socketIdx索引
 void CGameLogonManage::DelSocketIdx(int socketIdx)
 {
-	if (socketIdx >= 0 && socketIdx < (int)m_socketInfoVec.size())
+	auto iter = m_socketInfoMap.find(socketIdx);
+	if (iter != m_socketInfoMap.end())
 	{
-		m_socketInfoVec[socketIdx].type = LOGON_SERVER_SOCKET_TYPE_NO;
-		m_socketInfoVec[socketIdx].identityID = 0;
+		m_socketInfoMap.erase(iter);
 	}
 }
 
@@ -2096,11 +2096,11 @@ bool CGameLogonManage::SendData(int userID, void * pData, int size, unsigned int
 
 bool CGameLogonManage::SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode)
 {
-	for (size_t i = 0; i < m_InitData.uMaxPeople; i++)
+	for (auto iter = m_socketInfoMap.begin(); iter != m_socketInfoMap.end(); iter++)
 	{
-		if (GetIdentityIDBySocketIdx(i).type == LOGON_SERVER_SOCKET_TYPE_USER)
+		if (iter->second.type == LOGON_SERVER_SOCKET_TYPE_USER)
 		{
-			m_TCPSocket.SendData(i, pData, uSize, uMainID, bAssistantID, 0, 0, 0);
+			m_TCPSocket.SendData(iter->first, pData, uSize, uMainID, bAssistantID, 0, 0, 0);
 		}
 	}
 
@@ -2179,29 +2179,31 @@ void CGameLogonManage::CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeart
 	int negativeCount = 0;
 	time_t currTime = time(NULL);
 
-	for (size_t i = 0; i < m_InitData.uMaxPeople; i++)
+	const std::unordered_map<int, TCPSocketInfo>& socketInfoMap = m_TCPSocket.GetSocketMap();
+
+	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
 	{
-		LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(i);
-		if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER)
+		/*LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(iter->first);
+		if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER 
+			|| socketInfo.type == LOGON_SERVER_SOCKET_TYPE_NO)
 		{
 			continue;
-		}
+		}*/
 
-		bool bIsConnect = false;
-		time_t llAcceptMsgTime = 0, llLastRecvMsgTime = 0;
-		m_TCPSocket.GetTCPSocketInfo(i, bIsConnect, llAcceptMsgTime, llLastRecvMsgTime);
-
+		bool bIsConnect = iter->second.isConnect;
+		time_t llAcceptMsgTime = iter->second.acceptMsgTime, llLastRecvMsgTime = iter->second.lastRecvMsgTime;
+		
 		if (bIsConnect)
 		{
 			if ((currTime - llLastRecvMsgTime) >= (iHeartBeatTime * (KEEP_ACTIVE_HEARTBEAT_COUNT - 1) + currTime - llLastSendHeartBeatTime))
 			{
-				m_TCPSocket.OnSocketClose(i);
+				m_TCPSocket.OnSocketClose(iter->first);
 				negativeCount++;
 			}
 			else
 			{
 				// 发送心跳
-				m_TCPSocket.SendData(i, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0);
+				m_TCPSocket.SendData(iter->first, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0);
 				avtiveCount++;
 			}
 		}
@@ -2224,20 +2226,20 @@ void CGameLogonManage::RountineSaveRedisDataToDB(bool updateAll)
 void CGameLogonManage::RoutineCheckUnbindIDSocket()
 {
 	time_t currTime = time(NULL);
-	bool bRecord = false;
 
 	// 检查未绑定userID的异常socket
-	for (size_t i = 0; i < m_InitData.uMaxPeople; i++)
+	const std::unordered_map<int, TCPSocketInfo>& socketInfoMap = m_TCPSocket.GetSocketMap();
+
+	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
 	{
-		bool bIsConnect = false;
-		time_t llAcceptMsgTime = 0, llLastRecvMsgTime = 0;
-		m_TCPSocket.GetTCPSocketInfo(i, bIsConnect, llAcceptMsgTime, llLastRecvMsgTime);
+		bool bIsConnect = iter->second.isConnect;
+		time_t llAcceptMsgTime = iter->second.acceptMsgTime, llLastRecvMsgTime = iter->second.lastRecvMsgTime;
 
 		// 没有绑定userID的socket
-		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME && GetIdentityIDBySocketIdx(i).type <= 0)
+		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME && GetIdentityIDBySocketIdx(iter->first).type <= 0)
 		{
-			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, m_TCPSocket.GetSocketIP(i));
-			m_TCPSocket.CloseSocket(i);
+			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, m_TCPSocket.GetSocketIP(iter->first));
+			m_TCPSocket.CloseSocket(iter->first);
 		}
 	}
 }
