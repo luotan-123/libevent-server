@@ -1154,14 +1154,15 @@ bool CRedisLogon::IsDistributedSystemCalculate(long long calcID)
 }
 
 // 设置登录服人数
-bool CRedisLogon::SetLogonServerCurrPeopleCount(int logonID, int peopleCount)
+bool CRedisLogon::SetLogonServerCurrPeopleCount(int logonID, UINT peopleCount, UINT socketCount)
 {
 	if (logonID <= 0)
 	{
 		return false;
 	}
 
-	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HSET %s|%d curPeople %d", TBL_BASE_LOGON, logonID, peopleCount);
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HMSET %s|%d curPeople %u socketCount %u",
+		TBL_BASE_LOGON, logonID, peopleCount, socketCount);
 	if (!pReply)
 	{
 		return false;

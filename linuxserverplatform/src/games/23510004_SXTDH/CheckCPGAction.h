@@ -1,7 +1,7 @@
 #ifndef CHECKCPGACTION_H
 #define CHECKCPGACTION_H
 #include "GameDataEx.h"
-#include "mj.h"
+
 ///吃碰杠检测类
 class CheckCPGAction
 {

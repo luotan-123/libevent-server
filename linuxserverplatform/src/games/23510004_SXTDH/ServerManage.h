@@ -1,15 +1,8 @@
 #pragma once
-#include "StdAfx.h"
-#include "MJ/GameDataEx.h"
-#include "MJ/CheckHuPaiEx.h"
-#include "MJ/CheckCPGActionEx.h"
-#include "iostream"
-#include "string"
-#include "json/json.h"
-#include "fstream"
-#pragma comment(lib,"json_vc71_libmt.lib")
-#pragma warning(disable:4305)
-#pragma warning(disable:4309)
+
+#include "GameDataEx.h"
+#include "CheckHuPaiEx.h"
+#include "CheckCPGActionEx.h"
 
 //此处添加游戏定时器：游戏定时器
 //特别注意定时器的ID范围1-50

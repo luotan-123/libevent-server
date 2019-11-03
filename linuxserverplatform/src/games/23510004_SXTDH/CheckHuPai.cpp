@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "CheckHuPai.h"
 
 CheckHuPai::CheckHuPai(void)

@@ -2,6 +2,7 @@
 #include "ErrorCode.h"
 #include "json/json.h"
 #include "AsyncEventMsg.pb.h"
+#include <arpa/inet.h>
 #include "GameLogonManage.h"
 
 using namespace AsyncEventMsg;
@@ -350,7 +351,8 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 {
 	AUTOCOST("socketIdx = %d", socketIdx);
 
-	std::string ip = m_TCPSocket.GetSocketIP(socketIdx);
+	in_addr ip_;  ip_.s_addr = uAccessIP;
+	std::string ip = inet_ntoa(ip_);
 
 	// 取socket信息
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
@@ -430,6 +432,10 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 
 		// 清理玩家内存
 		m_pUserManage->DelUser(userID);
+
+		// redis记录数据
+		m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID,
+			m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
 
 		//退出比赛场页面
 		m_scoketMatch.erase(socketIdx);
@@ -949,7 +955,9 @@ bool CGameLogonManage::OnHanleUserLogon(void* pData, int size, unsigned long acc
 	}
 	if (!userData.isVirtual)
 	{
-		cmdLine += " IsOnline 1";
+		cmdLine += " IsOnline 1 ";
+		cmdLine += " lastCalcOnlineToTime ";
+		cmdLine += CUtil::Tostring(currTime);
 	}
 	m_pRedis->SetUserInfo(userID, cmdLine);
 
@@ -1005,7 +1013,8 @@ bool CGameLogonManage::OnHanleUserLogon(void* pData, int size, unsigned long acc
 
 	// 添加在线玩家，向中心服务器发送消息
 	m_pRedis->AddOnlineUser(userID, userData.isVirtual);
-	m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID, m_pUserManage->GetUserCount());
+	m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID,
+		m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
 
 	// 通知玩家信息
 	OnUserLogon(userData);
@@ -1017,9 +1026,7 @@ bool CGameLogonManage::OnHanleUserLogon(void* pData, int size, unsigned long acc
 		ConfigManage()->GetTableNameByDate(TBL_STATI_LOGON_LOGOUT, tableName, sizeof(tableName));
 
 		BillManage()->WriteBill(&m_SQLDataManage, "INSERT INTO %s (userID,type,time,ip,platformType,macAddr) VALUES (%d,%d,%d,'%s',%d,'%s')",
-			tableName, userID, 1, (int)currTime, m_TCPSocket.GetSocketIP(socketIdx), byPlatformType, pMessage->szMacAddr);
-
-		m_pRedis->SetUserResNums(userID, "lastCalcOnlineToTime", currTime);
+			tableName, userID, 1, (int)currTime, ip, byPlatformType, pMessage->szMacAddr);
 	}
 
 	return true;
@@ -1991,6 +1998,10 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	// socketIdx和gserver关联
 	m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->roomID);
 
+	// 记录到redis
+	m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID,
+		m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
+
 	INFO_LOG("【roomID=%d】游戏服连接本服", pMessage->roomID);
 
 	return true;
@@ -2233,7 +2244,7 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 		// 没有绑定userID的socket
 		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME&& GetIdentityIDBySocketIdx(iter->first).type <= 0)
 		{
-			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, m_TCPSocket.GetSocketIP(iter->first));
+			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, iter->second.ip);
 			m_TCPSocket.CloseSocket(iter->first);
 		}
 	}
@@ -3588,12 +3599,6 @@ bool CGameLogonManage::SendHTTPUserLogonLogout(int userID, BYTE type)
 	{
 		return false;
 	}
-
-	/*OtherConfig otherConfig;
-	if (!m_pRedis->GetOtherConfig(otherConfig))
-	{
-		otherConfig = ConfigManage()->GetOtherConfig();
-	}*/
 
 	char bufUserID[20] = "";
 	sprintf(bufUserID, "%d", userID);

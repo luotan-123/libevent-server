@@ -1,8 +1,9 @@
 #ifndef MJ_MESSAGE_H
 #define MJ_MESSAGE_H
 #include "mj.h"
-#include "../../GameMessage/upgrademessage.h"
+#include "upgrademessage.h"
 #include "CLogicBase.h"
+
 #pragma pack(1) //1字节对齐 
 
 /*--------------------------------------------------------------------*/

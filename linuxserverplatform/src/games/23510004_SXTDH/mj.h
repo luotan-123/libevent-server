@@ -1,5 +1,8 @@
 #ifndef MJ_H
 #define MJ_H
+
+#include "GameDesk.h"
+
 #define MAKE_A_MJ(hs,pd)  ( (hs) * 10 +(pd))
 #define MAX_MJ_KIND_NUM		34		//最大麻将种类数量
 #define MAX_MJ_HUA_NUM		8		//花牌种类数量

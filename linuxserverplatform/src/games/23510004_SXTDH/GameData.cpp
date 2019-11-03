@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "GameData.h"
+
 GameData::GameData(void)
 {
 	memset(m_byArHandPai, 255, sizeof(m_byArHandPai));	/// 手牌不超过20张，255为结束标志

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Server/MJ/mj.h"
+#include "mj.h"
 
 /*------------------------------------------------------------------------------------------------------*/
 //支持类型
@@ -13,11 +13,10 @@
 #define ASS_VERSION						15		// 辅助版本号,?号
 /*------------------------------------------------------------------------------------------------------*/
 //文件名字定义
-#define GAMENAME						TEXT("山西推到胡")
+#define GAMENAME						"山西推到胡"
 #define NAME_ID						    23510004  		// 名字 ID
 
 /*------------------------------------------------------------------------------------------------------*/
-static TCHAR szTempStr[MAX_PATH] =		{0};/** 暂存字符串，用来获取 dll_name 等的时候使用 */
 #define GET_CLIENT_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".ico"))
 #define GET_SERVER_DLL_NAME(A)			(sprintf(A,"%d",NAME_ID),strcat(A,".dll"))
 #define GET_SKIN_FOLDER(A)				(sprintf(A,"%d",NAME_ID),strcat(A,""))

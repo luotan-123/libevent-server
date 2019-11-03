@@ -1,7 +1,8 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
-#include "Mj_Message.h"
+
 #include "mj.h"
+#include "Mj_Message.h"
 #include "CLogicBase.h"
 ///游戏数据管理类:配置数据，游戏基本数据等，对数据进行插入修改等动作
 class GameData

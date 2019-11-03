@@ -368,6 +368,8 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 {
 	CSignedLockObject LockObject(&m_csSocketMapLock, false);
 
+	ULONG uAccessIP = 0;
+
 	// 加锁
 	LockObject.Lock();
 
@@ -383,6 +385,7 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 		return;
 	}
 
+	uAccessIP = inet_addr(iter->second.ip);
 	iter->second.isConnect = false;
 	m_uCurSocketSize--;
 
@@ -409,7 +412,7 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 	// 回调业务层
 	if (m_pService)
 	{
-		m_pService->OnSocketCloseEvent(0, index, 0);
+		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)iter->second.acceptMsgTime);
 	}
 
 	CON_INFO_LOG("close socket. ip=%s port=%d,fd=%d,bufferevent=%p,isClientAutoClose:%d,acceptTime=%lld",

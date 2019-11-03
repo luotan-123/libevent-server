@@ -1,10 +1,8 @@
-#include "stdafx.h"
 #include "CheckHuPaiEx.h"
 using namespace std;
 
 CheckHuPaiEx::CheckHuPaiEx(void)
 {
-	CheckHuPai::CheckHuPai();
 	InitData();
 }
 

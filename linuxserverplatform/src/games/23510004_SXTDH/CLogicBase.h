@@ -311,23 +311,5 @@ public:
 			HeapSortSmall(a, length);
 		}
 	}
-
-	/**
-	* @brief 获取运行程序所在路径名，字符串末尾不加反斜杠
-	*/
-	static char * G_GetAppPath()
-	{
-		static char s_Path[MAX_PATH];
-		static bool s_bIsReady = false;
-		if (!s_bIsReady)
-		{
-			ZeroMemory(s_Path, sizeof(s_Path));
-			DWORD dwLength = GetModuleFileNameA(GetModuleHandle(NULL), s_Path, sizeof(s_Path));
-			char *p = /*_tcsrchr*/strrchr(s_Path, '\\');
-			*p = '\0';
-			s_bIsReady = true;
-		}
-		return s_Path;
-	}
 };
 #endif

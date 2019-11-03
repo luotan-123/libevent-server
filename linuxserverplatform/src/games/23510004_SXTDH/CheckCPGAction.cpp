@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "CheckCPGAction.h"
+
 CheckCPGAction::CheckCPGAction(void)
 {
 }

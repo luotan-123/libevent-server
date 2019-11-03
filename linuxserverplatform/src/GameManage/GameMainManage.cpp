@@ -1536,11 +1536,11 @@ bool CGameMainManage::OnHandleUserRequestMatchSit(int userID, void* pData, int s
 				int iRealPeopleCount = pGameDesk->GetRealPeople();
 				unsigned int uRobotPeopleCount = pGameDesk->GetRobotPeople();
 
-				/*if (pUser->isVirtual && iRealPeopleCount <= 0)
+				if (pUser->isVirtual && iRealPeopleCount <= 0 && CUtil::GetRandNum() % 100 < 85)
 				{
 					iSearchCount++;
 					continue;
-				}*/
+				}
 
 				if (pUser->isVirtual && pRoomBaseInfo->robotCount > 0 && uRobotPeopleCount >= pRoomBaseInfo->robotCount)
 				{

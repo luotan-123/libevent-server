@@ -1,8 +1,9 @@
 #ifndef CHECKHUPAI_H
 #define CHECKHUPAI_H
+
+#include "mj.h"
 #include "GameDataEx.h"
 #include "CLogicBase.h"
-#include "mj.h"
 
 ///糊牌检测类
 class CheckHuPai

@@ -1,9 +1,7 @@
-#include "stdafx.h"
 #include "GameDataEx.h"
 
 GameDataEx::GameDataEx(void)
 {
-	GameData::GameData();
 	//memset(m_byDingQue, 255, sizeof(m_byDingQue));
 	//memset(m_iGangScore, 0, sizeof(m_iGangScore));
 	memset(m_bIsHu, false, sizeof(m_bIsHu));
@@ -340,7 +338,6 @@ bool GameDataEx::DisPatchCard()
 		return false;
 	}
 	///打乱牌
-	srand(GetTickCount());
 	BYTE temp = 255, data = 0;
 	int iCount = 2;
 	while (--iCount)
@@ -485,7 +482,6 @@ BYTE GameDataEx::GetNextStation(BYTE station, bool shun)
 //配牌
 BYTE GameDataEx::MatchMJ()
 {
-	CString lw;
 	if (!m_mjRule.bIsMatchMJ)
 	{
 		return 255;

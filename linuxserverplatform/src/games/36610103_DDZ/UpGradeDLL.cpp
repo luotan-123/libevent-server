@@ -17,9 +17,6 @@ extern "C"  BOOL GetServiceInfo(ServerDllInfoStruct * pServiceInfo, UINT uVer)
 	pServiceInfo->uDeskPeople=PLAY_COUNT;
 	pServiceInfo->uSupportType=SUPPER_TYPE;
 	strcpy(pServiceInfo->szGameName,GAMENAME);
-	///lstrcpy(pServiceInfo->szGameTable,GAME_TABLE_NAME);
-	///lstrcpy(pServiceInfo->szDLLFileName,SERVER_DLL_NAME);
-	strcpy(pServiceInfo->szWriter,"  ");//龙浩天"));
 	strcpy(pServiceInfo->szDllNote,"牌类 -- 斗地主游戏组件");
 	return TRUE;
 }

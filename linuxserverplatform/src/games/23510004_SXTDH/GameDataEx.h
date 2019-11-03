@@ -1,7 +1,6 @@
 #ifndef GAMEDATAEX_H
 #define GAMEDATAEX_H
 #include "GameData.h"
-#include <vector>
 
 ///游戏数据管理类
 class GameDataEx : public GameData

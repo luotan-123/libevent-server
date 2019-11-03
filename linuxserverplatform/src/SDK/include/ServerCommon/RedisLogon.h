@@ -48,7 +48,7 @@ public:
 	int GetUserIDByXianLiao(const char* xianliao);
 
 	// 设置登录服人数
-	bool SetLogonServerCurrPeopleCount(int logonID, int peopleCount);
+	bool SetLogonServerCurrPeopleCount(int logonID, UINT peopleCount, UINT socketCount);
 
 	///////////////////////////////////战绩模块///////////////////////////////////////
 	bool GetGradeSimpleInfo(long long id, PrivateDeskGradeSimpleInfo& simpleInfoVec);

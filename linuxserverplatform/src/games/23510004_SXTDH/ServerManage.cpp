@@ -1,6 +1,4 @@
-#include "StdAfx.h"
 #include "ServerManage.h"
-#include <shlobj.h>
 
 //全局变量
 bool CServerGameDesk::gOutMessageSize = true;
@@ -39,10 +37,12 @@ bool CServerGameDesk::InitDeskGameStation()
 void CServerGameDesk::LoadDynamicConfig()
 {
 	//加载房间设置
-	CString s = CINIFile::GetAppPath();/////本地路径
-	CINIFile f(s + SKIN_FOLDER + _T("_s.ini"));
-	CString sKey;
-	sKey = TEXT("game");
+	char szfile[256] = "";
+	sprintf(szfile, "%s%d_s.ini", CINIFile::GetAppPath().c_str(), NAME_ID);
+	CINIFile f(szfile);
+
+	string sKey;
+	sKey = "game";
 
 	m_GameData.m_mjRule.byBlockTime = f.GetKeyVal(sKey, "BlockTime", 15);
 	m_GameData.m_mjRule.byOutTime = f.GetKeyVal(sKey, "OutTime", 15);
@@ -52,7 +52,9 @@ void CServerGameDesk::LoadDynamicConfig()
 	if (IsGoldRoom() && m_pDataManage)
 	{
 		//根据不同场不同玩法
-		sKey.Format("%d_%d", NAME_ID, m_pDataManage->m_InitData.uRoomID);
+		char buf[128] = "";
+		sprintf(buf, "%d_%d", NAME_ID, m_pDataManage->m_InitData.uRoomID);
+		sKey = buf;
 		m_GameData.m_tGameRuler.bDaHu = f.GetKeyVal(sKey, "bDaHu", m_GameData.m_tGameRuler.bDaHu) == 0 ? false : true;
 		m_GameData.m_tGameRuler.bBaoTing = f.GetKeyVal(sKey, "bBaoTing", m_GameData.m_tGameRuler.bBaoTing) == 0 ? false : true;
 		m_GameData.m_tGameRuler.iZiMoScore = f.GetKeyVal(sKey, "iZiMoScore", m_GameData.m_tGameRuler.iZiMoScore);
@@ -68,28 +70,28 @@ void CServerGameDesk::LoadDynamicConfig()
 */
 bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 {
-	if (__super::GameBegin(bBeginFlag) == false)
+	if (CGameDesk::GameBegin(bBeginFlag) == false)
 	{
 		GameFinish(0, GF_SALE);
 		return false;
 	}
-	if (IsGoldRoom()) //金币场全是机器人不开始游戏
-	{
-		int iRobotCount = 0;
-		for (int i = 0;i < PLAY_COUNT;i++)
-		{
-			GameUserInfo user;
-			if (GetUserData(i, user) && user.isVirtual)
-			{
-				iRobotCount++;
-			}
-		}
-		if (iRobotCount >= PLAY_COUNT)
-		{
-			GameFinish(0, GF_SALE);
-			return false;
-		}
-	}
+	//if (IsGoldRoom()) //金币场全是机器人不开始游戏
+	//{
+	//	int iRobotCount = 0;
+	//	for (int i = 0;i < PLAY_COUNT;i++)
+	//	{
+	//		GameUserInfo user;
+	//		if (GetUserData(i, user) && user.isVirtual)
+	//		{
+	//			iRobotCount++;
+	//		}
+	//	}
+	//	if (iRobotCount >= PLAY_COUNT)
+	//	{
+	//		GameFinish(0, GF_SALE);
+	//		return false;
+	//	}
+	//}
 	m_GameData.InitData();
 	m_CPGData.InitData();
 	m_CheckHuData.InitData();
@@ -387,17 +389,10 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		memcpy(GameEnd.countHuFen, m_GameData.m_countHuFen, sizeof(GameEnd.countHuFen));
 
 		//总分
-		CString lwlog;
-		lwlog.Format("=======%s算分========\n", GAMENAME);
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
 			m_GameData.T_CountFen.iZongFen[i] = iHuZongFen[i] + iGangZongFen[i];
-			CString str_;
-			str_.Format("==========[玩家%d]--->[胡分：%3d] [杠分：%3d]  [番：%2d] [总分:%3d] ==========\n", i,
-				iHuZongFen[i], iGangZongFen[i], m_GameData.T_CountFen.iFanCount[i], m_GameData.T_CountFen.iZongFen[i]);
-			lwlog += str_;
 		}
-		GameLog::OutputFile(lwlog);
 
 		GameEnd.bZimo = m_GameData.T_HuPai.bZimo;				//是否自摸
 		GameEnd.bIsLiuJu = m_GameData.T_HuPai.bIsLiuJu;		//是否流局
@@ -548,7 +543,7 @@ bool CServerGameDesk::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 	// 重置数据
 	SetGameStation(GS_STATUS_FREE);
 	ReSetGameState(bCloseFlag);
-	return __super::GameFinish(bDeskStation, bCloseFlag);
+	return CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 }
 /*-----------------------------------------------------------------------------------*/
 /**
@@ -899,7 +894,7 @@ bool CServerGameDesk::OnTimer(UINT uTimerID)
 			}
 		}
 	}
-	return __super::OnTimer(uTimerID);
+	return CGameDesk::OnTimer(uTimerID);
 }
 
 //桌子成功解散
@@ -908,7 +903,7 @@ void CServerGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway)
 	if (m_iPlayingCount > 0)  //大于一局才发大结算
 	{
 		// 计算抽水值
-		__super::SetDeskPercentageScore(m_tZongResult.llGameScore);
+		CGameDesk::SetDeskPercentageScore(m_tZongResult.llGameScore);
 
 		for (int i = 0;i < PLAY_COUNT;i++)
 		{
@@ -916,19 +911,19 @@ void CServerGameDesk::OnDeskSuccessfulDissmiss(bool isDismissMidway)
 			//SendWatchData(i,&m_tZongResult,sizeof(m_tZongResult), MSG_MAIN_LOADER_GAME, S_C_GAME_END_ALL, 0);
 		}
 	}
-	return __super::OnDeskSuccessfulDissmiss(isDismissMidway);
+	return CGameDesk::OnDeskSuccessfulDissmiss(isDismissMidway);
 }
 
 // 玩家请求托管
 bool CServerGameDesk::OnHandleUserRequestAuto(BYTE deskStation)
 {
-	return __super::OnHandleUserRequestAuto(deskStation);
+	return CGameDesk::OnHandleUserRequestAuto(deskStation);
 }
 
 // 玩家取消托管
 bool CServerGameDesk::OnHandleUserRequestCancelAuto(BYTE deskStation)
 {
-	return __super::OnHandleUserRequestCancelAuto(deskStation);
+	return CGameDesk::OnHandleUserRequestCancelAuto(deskStation);
 }
 
 //初始化游戏数据，房卡场非正常结算的时候调用
@@ -1000,7 +995,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 			return true;
 		}
 		m_bAgree[bDeskStation] = true;
-		return __super::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
+		return CGameDesk::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
 	}
 	case C_S_OUT_CARD:		//出牌消息
 	{
@@ -1063,7 +1058,7 @@ bool CServerGameDesk::HandleNotifyMessage(BYTE bDeskStation, unsigned int assist
 		break;
 	}
 	}
-	return __super::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
+	return CGameDesk::HandleNotifyMessage(bDeskStation, assistID, pData, size, bWatchUser);
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -1083,14 +1078,14 @@ bool CServerGameDesk::UserLeftDesk(GameUserInfo* pUser)
 	}
 	m_bAgree[pUser->deskStation] = false;
 	//m_bSuperFlag[pUser->deskStation]=false;
-	return __super::UserLeftDesk(pUser);
+	return CGameDesk::UserLeftDesk(pUser);
 }
 
 /*-----------------------------------------------------------------------------------*/
 //用户断线离开
 bool	CServerGameDesk::UserNetCut(GameUserInfo *pUser)
 {
-	__super::UserNetCut(pUser);
+	CGameDesk::UserNetCut(pUser);
 	////金币场，断线托管
 	//CMD_C_Trustee Data;
 	//Data.bTrustee = true;
@@ -3286,7 +3281,7 @@ bool CServerGameDesk::HandCard()
 	//读取超端数据
 	char cFileName[64];
 	memset(cFileName, 0, sizeof(cFileName));
-	sprintf_s(cFileName, 64, "C:/web/json/%d.json", NAME_ID);
+	sprintf(cFileName, "%s%d.json", SAVE_JSON_PATH, NAME_ID);
 	ifstream fin;
 	fin.open(cFileName);
 	if (!fin.is_open())
@@ -3306,8 +3301,6 @@ bool CServerGameDesk::HandCard()
 	{
 		return false;
 	}
-
-	CString lwlog;
 
 	//获取手牌数据
 	int iCardCount[PLAY_COUNT];
@@ -3528,11 +3521,10 @@ void CServerGameDesk::GetSpecialRule()
 				m_GameData.m_tGameRuler.iZiMoScore = 3;
 			}
 		}
-		CString str;
-		str.Format("规则：%s\n====[大胡%d] [报听%d] [风牌%d] [只能自摸胡%d] [自摸分数%d]===",
+		
+		INFO_LOG("规则：%s\n====[大胡%d] [报听%d] [风牌%d] [只能自摸胡%d] [自摸分数%d]===",
 			m_szGameRules, m_GameData.m_tGameRuler.bDaHu, m_GameData.m_tGameRuler.bBaoTing,
 			m_GameData.m_tGameRuler.bFenPai, m_GameData.m_tGameRuler.bZhiZiMo, m_GameData.m_tGameRuler.iZiMoScore);
-		GameLog::OutputFile(str);
 
 		//if (IsFriendRoom()) // 金币房设置踢人下限
 		//{
