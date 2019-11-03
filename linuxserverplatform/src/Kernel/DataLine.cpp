@@ -4,6 +4,8 @@
 
 CDataLine::CDataLine()
 {
+	m_DataListSize = 0;
+	m_DataList.clear();
 }
 
 CDataLine::~CDataLine()
@@ -37,7 +39,7 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 		return 0;
 	}
 
-	if (m_DataList.size() > MAX_DATALINE_LEN)
+	if (m_DataListSize > MAX_DATALINE_LEN)
 	{
 		ERROR_LOG("队列已满(%d)\n", MAX_DATALINE_LEN);
 		return 0;
@@ -72,13 +74,9 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 
 	m_DataList.push_back(pListItem);								//加到队列尾部
 
-	LockObject.UnLock();
+	m_DataListSize++;
 
-	//bool ret = PostQueuedCompletionStatus(m_hCompletionPort, pListItem->stDataHead.uSize, NULL, NULL);	//通知完成端口
-	//if (ret == FALSE)
-	//{
-	//	//ERROR_LOG("CDataLine::AddData PostQueuedCompletionStatus failed err=%d", GetLastError());
-	//}
+	LockObject.UnLock();
 
 	return pListItem->stDataHead.uSize;		//返回大小
 }
@@ -100,7 +98,7 @@ UINT CDataLine::GetData(DataLineHead** pDataBuffer)
 	LockObject.Lock();
 
 	//如果队列是空的，直接返回
-	if (m_DataList.size() <= 0)
+	if (m_DataListSize <= 0)
 	{
 		return 0;
 	}
@@ -108,6 +106,8 @@ UINT CDataLine::GetData(DataLineHead** pDataBuffer)
 	//取数据
 	ListItemData* pListItem = m_DataList.front();
 	m_DataList.pop_front();
+
+	m_DataListSize--;
 
 	LockObject.UnLock();
 
@@ -136,6 +136,7 @@ bool CDataLine::CleanLineData()
 		free(pListItem->pData);
 		delete pListItem;
 	}
+	m_DataListSize = 0;
 
 	return true;
 }
@@ -145,5 +146,7 @@ size_t CDataLine::GetDataCount()
 {
 	//CSignedLockObject LockObject(&m_csLock, true);
 
-	return m_DataList.size();
+	return m_DataListSize;
+
+	//return m_DataList.size();
 }

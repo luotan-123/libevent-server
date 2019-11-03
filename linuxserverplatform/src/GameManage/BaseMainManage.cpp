@@ -396,13 +396,6 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 	while (pMainManage->m_bRun)
 	{
-		////等待完成端口
-		//bSuccess = ::GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED*)& OverData, INFINITE);
-		//if (bSuccess == FALSE || dwThancferred == 0)
-		//{
-		//	continue;
-		//}
-
 		llNowTime = GetSysMilliseconds();
 		llDifTime = THREAD_ONCE_HANDLE_MSG + llLastTime - llNowTime;
 		if (llDifTime > THREAD_ONCE_HANDLE_MSG)

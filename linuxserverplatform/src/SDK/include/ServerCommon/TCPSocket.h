@@ -11,21 +11,21 @@
 const int SOCKET_SEND_BUF_SIZE = MAX_TEMP_SENDBUF_SIZE * 8;		// TCP发送缓冲区最小值
 const int SOCKET_RECV_BUF_SIZE = MAX_TEMP_SENDBUF_SIZE * 8;		// TCP接收缓冲区最小值
 const int MAX_EVBUFFER_WRITE_SIZE = 1024 * 1024;				// 应用层发送缓冲区的最大值
+const int MAX_POST_CONNECTED_COUNT = 128;						// 连接线程投递到接收线程socket最大数量
 
 #pragma pack(1)
 
 // TCP信息
 struct TCPSocketInfo
 {
-	bool isConnect;
+	volatile bool isConnect;
 	time_t acceptMsgTime;
-	time_t lastRecvMsgTime;
+	volatile time_t lastRecvMsgTime;
 	time_t lastSendMsgTime;
 	bufferevent* bev;
 	char ip[48];
 	unsigned short port;
 	int acceptFd;			//自己的socket
-	int recvThreadIndex;	//socket属于的线程索引
 
 	TCPSocketInfo()
 	{
@@ -37,7 +37,7 @@ struct TCPSocketInfo
 struct WorkThreadInfo
 {
 	struct event_base* base;
-	struct event *event;   //read_fd的读事件
+	struct event* event;   //read_fd的读事件
 	int read_fd;
 	int write_fd;
 	WorkThreadInfo()
@@ -48,9 +48,6 @@ struct WorkThreadInfo
 
 #pragma pack()
 
-//CloseSocket和OnSocketClose区别：
-//1、CloseSocket 立马调用close函数
-//2、OnSocketClose 延时调用close函数
 class CTCPSocketManage
 {
 public:
@@ -75,16 +72,12 @@ public:
 	bool CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID);
 	// 关闭连接(业务逻辑线程调用)
 	bool CloseSocket(int index);
-	// 接收关闭连接事件。
-	bool OnSocketClose(int index);
 	// 获取接收dataline
 	CDataLine* GetRecvDataLine();
 	// 获取发送dataline
 	CDataLine* GetSendDataLine();
 	// 获取当前socket连接总数
 	UINT GetCurSocketSize();
-	// 获取最大连接总数
-	UINT GetMaxSocketSize();
 	// 获取socketmap
 	const std::unordered_map<int, TCPSocketInfo>& GetSocketMap();
 	// 获取连接ip
@@ -125,7 +118,8 @@ private:
 	static void AcceptErrorCB(struct evconnlistener* listener, void*);
 	// 新的连接到来，ThreadRSSocket线程函数
 	static void ThreadLibeventProcess(int readfd, short which, void* arg);
-
+	// libEvent日志回调函数
+	static void EventLog(int severity, const char* msg);
 private:
 	event_base* m_listenerBase;
 	std::vector<WorkThreadInfo> m_workBaseVec;

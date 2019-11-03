@@ -1003,11 +1003,11 @@ bool	CServerGameDesk::GameBegin(BYTE bBeginFlag)
 				m_bIsRobot[i] = false;
 			}
 		}
-		if (m_iRobotCount >= PLAY_COUNT)
+		/*if (m_iRobotCount >= PLAY_COUNT)
 		{
 			GameFinish(0, GF_SALE);
 			return false;
-		}
+		}*/
 	}
 	if (m_bRetryStart)
 	{

@@ -44,6 +44,7 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 
 /////////////////////////////////////////////////////////
 // 心跳、socket相关
+#define CHECK_HEAETBEAT_SECS					15		// 心跳定时器时间(s)
 #define KEEP_ACTIVE_HEARTBEAT_COUNT				3		// 前端和服务器的心跳
 #define BINDID_SOCKET_USERID_TIME				30		// 每个连接socket，绑定玩家时间，单位秒
 #define MAX_LOGON_SERVER_COUNT					128		// 最多登陆服数量

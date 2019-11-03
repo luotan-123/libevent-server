@@ -23,6 +23,7 @@ struct ListItemData
 class CDataLine
 {
 private:
+	volatile size_t m_DataListSize;
 	std::list <ListItemData*> m_DataList;
 	CSignedLock	m_csLock;
 
@@ -31,15 +32,12 @@ public:
 	virtual ~CDataLine();
 
 public:
-	//获取锁
-	CSignedLock* GetLock() { return &m_csLock; }
 	//清理所有数据
 	bool CleanLineData();
 	//加入消息队列
 	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, const void* pAppendData = NULL, UINT uAppendAddSize = 0);
 	//提取消息数据
 	virtual UINT GetData(DataLineHead** pDataBuffer);
-
-public:
+	//获取队列大小
 	size_t GetDataCount();
 };

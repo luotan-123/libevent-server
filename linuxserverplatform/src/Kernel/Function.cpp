@@ -2,7 +2,6 @@
 #include <sys/syscall.h>
 #include "Function.h"
 
-//获取动态数组指针大小
 int GetNewArraySize(void* pArray)
 {
 	if (pArray == NULL)
@@ -21,7 +20,6 @@ int GetNewArraySize(void* pArray)
 	return iSize;
 }
 
-// 获取系统时间
 void GetLocalTime(SYSTEMTIME* sysTime)
 {
 	if (!sysTime)
@@ -52,7 +50,6 @@ void GetLocalTime(SYSTEMTIME* sysTime)
 	sysTime->lMicroseconds = tv.tv_usec;
 }
 
-//获取时间戳（单位：毫秒）
 long long GetSysMilliseconds()
 {
 	struct timeval tv;
@@ -61,7 +58,6 @@ long long GetSysMilliseconds()
 	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
-//获取线程pid
 pthread_t GetCurrentThreadId()
 {
 	return pthread_self();
@@ -72,7 +68,6 @@ pthread_t GetCurrentSysThreadId()
 	return syscall(SYS_gettid);
 }
 
-//根据进程名字获取进程id
 pid_t GetProcessPidByName(const char* procName)
 {
 	FILE* fp = NULL;

@@ -5,6 +5,7 @@
 #include "configManage.h"
 #include "DataLine.h"
 #include "Xor.h"
+#include "event2/thread.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -68,6 +69,16 @@ bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int po
 
 	m_socketInfoMap.clear();
 	m_workBaseVec.clear();
+
+	// 设置libevent日志回调函数
+	event_set_log_callback(EventLog);
+
+	// 初始化线程
+	if (evthread_use_pthreads() < 0)
+	{
+		CON_ERROR_LOG("evthread_use_pthreads fail");
+		return false;
+	}
 
 	INFO_LOG("service TCPSocketManage init end.");
 
@@ -259,17 +270,6 @@ bool CTCPSocketManage::CloseSocket(int index)
 	return true;
 }
 
-bool CTCPSocketManage::OnSocketClose(int index)
-{
-	if (!m_pService)
-	{
-		return false;
-	}
-
-	// 回调业务层
-	return m_pService->OnSocketCloseEvent(0, index, 0);
-}
-
 CDataLine* CTCPSocketManage::GetRecvDataLine()
 {
 	if (m_pService)
@@ -288,11 +288,6 @@ CDataLine* CTCPSocketManage::GetSendDataLine()
 UINT CTCPSocketManage::GetCurSocketSize()
 {
 	return m_uCurSocketSize;
-}
-
-UINT CTCPSocketManage::GetMaxSocketSize()
-{
-	return m_uMaxSocketSize;
 }
 
 const std::unordered_map<int, TCPSocketInfo>& CTCPSocketManage::GetSocketMap()
@@ -394,27 +389,31 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 	int fd = bufferevent_getfd(iter->second.bev);
 	if (fd == index)
 	{
-		// 服务器发起FIN包
+		// 服务器主动发起FIN包
 		if (!isClientAutoClose)
 		{
-			evutil_closesocket(fd);
-			bufferevent_setfd(iter->second.bev, -1);
+			close(fd);
+			bufferevent_disable(iter->second.bev, EV_READ | EV_ET);
 		}
 
 		bufferevent_free(iter->second.bev);
 	}
 	else
 	{
-		CON_ERROR_LOG("##### 重要错误：index=%d,fd=%d", index, fd);
+		CON_ERROR_LOG("######### 重要错误：index=%d,fd=%d ############", index, fd);
 	}
 
 	// 解锁
 	LockObject.UnLock();
 
-	OnSocketClose(index);
+	// 回调业务层
+	if (m_pService)
+	{
+		m_pService->OnSocketCloseEvent(0, index, 0);
+	}
 
-	CON_INFO_LOG("close socket. ip=%s port=%d,fd=%d,bufferevent=%p,isClientAutoClose:%d",
-		iter->second.ip, iter->second.port, fd, iter->second.bev, isClientAutoClose);
+	CON_INFO_LOG("close socket. ip=%s port=%d,fd=%d,bufferevent=%p,isClientAutoClose:%d,acceptTime=%lld",
+		iter->second.ip, iter->second.port, fd, iter->second.bev, isClientAutoClose, iter->second.acceptMsgTime);
 }
 
 bool CTCPSocketManage::DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int index, NetMessageHead* pHead, void* pData, int size)
@@ -429,8 +428,6 @@ bool CTCPSocketManage::DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int i
 	{
 		return false;
 	}
-
-	pCTCPSocketManage->SetTCPSocketRecvTime(index, time(NULL), 0);
 
 	if (pHead->uMainID == MSG_MAIN_TEST) //心跳包
 	{
@@ -533,69 +530,6 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 		exit(1);
 	}
 
-	// 获取接收线程池数量
-	const CommonConfig& commonConfig = ConfigManage()->GetCommonConfig();
-	int workBaseCount = commonConfig.WorkThreadNumber;
-	if (workBaseCount <= 1)
-	{
-		workBaseCount = 4;
-	}
-
-	// 初始工作线程信息
-	RecvThreadParam param[workBaseCount];
-	for (int i = 0; i < workBaseCount; i++)
-	{
-		WorkThreadInfo workInfo;
-		int fd[2];
-		int ret = socketpair(AF_LOCAL, SOCK_STREAM, 0, fd);
-		if (ret == -1) {
-			SYS_ERROR_LOG("socketpair");
-			exit(1);
-		}
-
-		workInfo.read_fd = fd[0];
-		workInfo.write_fd = fd[1];
-
-		workInfo.base = event_base_new();
-		if (!workInfo.base)
-		{
-			CON_ERROR_LOG("Could not initialize libevent!");
-			exit(1);
-		}
-
-		workInfo.event = event_new(workInfo.base, workInfo.read_fd, EV_READ | EV_PERSIST, ThreadLibeventProcess, pThis);
-		if (!workInfo.event)
-		{
-			CON_ERROR_LOG("Could not create event!");
-			exit(1);
-		}
-
-		if (event_add(workInfo.event, NULL) < 0)
-		{
-			CON_ERROR_LOG("event_add ERROR");
-			exit(1);
-		}
-
-		pThis->m_workBaseVec.push_back(workInfo);
-
-		param[i].index = i;
-		param[i].pCTCPSocketManage = pThis;
-	}
-
-	// 开辟工作线程池
-	for (int i = 0; i < workBaseCount; i++)
-	{
-		pthread_t threadID = 0;
-		int err = pthread_create(&threadID, NULL, ThreadRSSocket, (void*)&param[i]);
-		if (err != 0)
-		{
-			SYS_ERROR_LOG("ThreadRSSocket failed");
-			exit(1);
-		}
-
-		GameLogManage()->AddLogFile(threadID, THREAD_TYPE_RECV);
-	}
-
 	// 开始监听
 	memset(&sin, 0, sizeof(sin));
 	sin.sin_family = AF_INET;
@@ -613,6 +547,73 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 	}
 
 	evconnlistener_set_error_cb(listener, AcceptErrorCB);
+
+	// 获取接收线程池数量
+	const CommonConfig& commonConfig = ConfigManage()->GetCommonConfig();
+	int workBaseCount = commonConfig.WorkThreadNumber;
+	if (workBaseCount <= 1)
+	{
+		workBaseCount = 4;
+	}
+
+	// 初始工作线程信息
+	RecvThreadParam param[workBaseCount];
+	int socketPairBufSize = sizeof(TCPSocketInfo) * MAX_POST_CONNECTED_COUNT;
+	for (int i = 0; i < workBaseCount; i++)
+	{
+		param[i].index = i;
+		param[i].pCTCPSocketManage = pThis;
+
+		WorkThreadInfo workInfo;
+		int fd[2];
+		int ret = socketpair(AF_LOCAL, SOCK_STREAM, 0, fd);
+		if (ret == -1) {
+			SYS_ERROR_LOG("socketpair");
+			exit(1);
+		}
+
+		workInfo.read_fd = fd[0];
+		workInfo.write_fd = fd[1];
+
+		SetTcpRcvSndBUF(workInfo.read_fd, socketPairBufSize, socketPairBufSize);
+		SetTcpRcvSndBUF(workInfo.write_fd, socketPairBufSize, socketPairBufSize);
+
+		workInfo.base = event_base_new();
+		if (!workInfo.base)
+		{
+			CON_ERROR_LOG("Could not initialize libevent!");
+			exit(1);
+		}
+
+		workInfo.event = event_new(workInfo.base, workInfo.read_fd, EV_READ, ThreadLibeventProcess, (void*)&param[i]);
+		if (!workInfo.event)
+		{
+			CON_ERROR_LOG("Could not create event!");
+			exit(1);
+		}
+
+		if (event_add(workInfo.event, NULL) < 0)
+		{
+			CON_ERROR_LOG("event_add ERROR");
+			exit(1);
+		}
+
+		pThis->m_workBaseVec.push_back(workInfo);
+	}
+
+	// 开辟工作线程池
+	for (int i = 0; i < workBaseCount; i++)
+	{
+		pthread_t threadID = 0;
+		int err = pthread_create(&threadID, NULL, ThreadRSSocket, (void*)&param[i]);
+		if (err != 0)
+		{
+			SYS_ERROR_LOG("ThreadRSSocket failed");
+			exit(1);
+		}
+
+		GameLogManage()->AddLogFile(threadID, THREAD_TYPE_RECV);
+	}
 
 	event_base_dispatch(pThis->m_listenerBase);
 
@@ -720,7 +721,8 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 							else
 							{
 								// 设置发送时间
-								//pThis->SetTCPSocketRecvTime(pSocketSend->socketIndex, 0, time(NULL));
+								// time_t currTime = time(NULL);
+								//pThis->SetTCPSocketRecvTime(pSocketSend->socketIndex, 0, currTime);
 							}
 						}
 					}
@@ -762,9 +764,9 @@ void CTCPSocketManage::ListenerCB(evconnlistener* listener, evutil_socket_t fd, 
 	tcpInfo.isConnect = true;
 	tcpInfo.acceptFd = fd;
 
-	if (pThis->GetCurSocketSize() >= pThis->GetMaxSocketSize())
+	if (pThis->GetCurSocketSize() >= pThis->m_uMaxSocketSize)
 	{
-		ERROR_LOG("服务器已经满：fd=%d %u/%u", fd, pThis->GetCurSocketSize(), pThis->GetMaxSocketSize());
+		ERROR_LOG("服务器已经满：fd=%d %u/%u", fd, pThis->GetCurSocketSize(), pThis->m_uMaxSocketSize);
 
 		// 分配失败
 		NetMessageHead netHead;
@@ -786,11 +788,15 @@ void CTCPSocketManage::ListenerCB(evconnlistener* listener, evutil_socket_t fd, 
 
 	// memcached中线程负载均衡算法
 	static int lastThreadIndex = 0;
-	tcpInfo.recvThreadIndex = lastThreadIndex % pThis->m_workBaseVec.size();
-	lastThreadIndex = (lastThreadIndex + 1) % pThis->m_workBaseVec.size();
+	lastThreadIndex = lastThreadIndex % pThis->m_workBaseVec.size();
 
 	// 投递到接收线程
-	write(pThis->m_workBaseVec[tcpInfo.recvThreadIndex].write_fd, &tcpInfo, sizeof(tcpInfo));
+	if (write(pThis->m_workBaseVec[lastThreadIndex].write_fd, &tcpInfo, sizeof(tcpInfo)) < sizeof(tcpInfo))
+	{
+		ERROR_LOG("投递连接消息失败,fd=%d", fd);
+	}
+
+	lastThreadIndex++;
 }
 
 void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
@@ -857,6 +863,8 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 {
 	CTCPSocketManage* pThis = (CTCPSocketManage*)data;
 
+	int fd = bufferevent_getfd(bev);
+
 	if (events & BEV_EVENT_EOF)
 	{
 		// 正常结束
@@ -865,48 +873,59 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	{
 		// windows正常结束
 	}
+	else if (events & BEV_EVENT_TIMEOUT) // 长时间没有收到，客户端发过来的数据，读取数据超时
+	{
+		CON_INFO_LOG("心跳踢人 fd=%d,bufferevent=%p", fd, bev);
+	}
 	else
 	{
 		SYS_ERROR_LOG("Got an error on the connection,events=%d", events);
 	}
 
-	pThis->RemoveTCPSocketStatus(bufferevent_getfd(bev), true);
+	pThis->RemoveTCPSocketStatus(fd, true);
 }
 
 void CTCPSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)
 {
-	ERROR_LOG("accept error:%s", evutil_socket_error_to_string(EVUTIL_SOCKET_ERROR()));
+	CON_ERROR_LOG("accept error:%s", evutil_socket_error_to_string(EVUTIL_SOCKET_ERROR()));
 }
 
 void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 {
-	CTCPSocketManage* pThis = (CTCPSocketManage*)arg;
+	RecvThreadParam* param = (RecvThreadParam*)arg;
+	CTCPSocketManage* pThis = param->pCTCPSocketManage;
+	int threadIndex = param->index;
+	if (threadIndex < 0 || threadIndex >= pThis->m_workBaseVec.size() || readfd != pThis->m_workBaseVec[threadIndex].read_fd)
+	{
+		CON_ERROR_LOG("######  threadIndex = %d", threadIndex);
+		exit(1);
+	}
 
-	char buf[sizeof(TCPSocketInfo) * 128] = "";
+	char buf[sizeof(TCPSocketInfo) * MAX_POST_CONNECTED_COUNT] = "";
 
 	int realAllSize = read(readfd, buf, sizeof(buf));
 	if (realAllSize < sizeof(TCPSocketInfo) || realAllSize % sizeof(TCPSocketInfo) != 0)
 	{
-		ERROR_LOG("ThreadLibeventProcess error size=%d,sizeof(TCPSocketInfo)=%lld", realAllSize, sizeof(TCPSocketInfo));
+		CON_ERROR_LOG("#### ThreadLibeventProcess error size=%d,sizeof(TCPSocketInfo)=%lld  ######", realAllSize, sizeof(TCPSocketInfo));
+		event_add(pThis->m_workBaseVec[threadIndex].event, NULL);
 		return;
 	}
 
 	int countAcceptCount = realAllSize / sizeof(TCPSocketInfo);
-
 	for (int i = 0; i < countAcceptCount; i++)
 	{
 		TCPSocketInfo* pTCPSocketInfo = (TCPSocketInfo*)(buf + i * sizeof(TCPSocketInfo));
 
-		struct event_base* base = pThis->m_workBaseVec[pTCPSocketInfo->recvThreadIndex].base;
-		struct bufferevent* bev;
+		struct event_base* base = pThis->m_workBaseVec[threadIndex].base;
+		struct bufferevent* bev = NULL;
 		int fd = pTCPSocketInfo->acceptFd;
 
-		bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
+		bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
 		if (!bev)
 		{
 			ERROR_LOG("Error constructing bufferevent!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
 			close(fd);
-			return;
+			continue;
 		}
 
 		// 设置应用层收发数据包，单次大小
@@ -918,12 +937,44 @@ void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 		{
 			ERROR_LOG("add event fail!!!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
 			pThis->CloseSocket(fd);
-			return;
+			continue;
 		}
 
-		pTCPSocketInfo->bev = bev;
+		// 设置读超时，当做心跳。网关服务器才需要
+		if (pThis->m_iServiceType == SERVICE_TYPE_LOGON)
+		{
+			timeval tvRead;
+			tvRead.tv_sec = CHECK_HEAETBEAT_SECS * KEEP_ACTIVE_HEARTBEAT_COUNT;
+			tvRead.tv_usec = 0;
+			bufferevent_set_timeouts(bev, &tvRead, NULL);
+		}
 
 		// 保存信息
+		pTCPSocketInfo->bev = bev;
 		pThis->AddTCPSocketInfo(fd, *pTCPSocketInfo);
+	}
+
+	event_add(pThis->m_workBaseVec[threadIndex].event, NULL);
+}
+
+void CTCPSocketManage::EventLog(int severity, const char* msg)
+{
+	switch (severity)
+	{
+	case EVENT_LOG_DEBUG:
+		CON_INFO_LOG("libevent[debug]:%s", msg);
+		break;
+	case EVENT_LOG_MSG:
+		CON_INFO_LOG("libevent[msg]:%s", msg);
+		break;
+	case EVENT_LOG_WARN:
+		CON_INFO_LOG("libevent[warn]:%s", msg);
+		break;
+	case EVENT_LOG_ERR:
+		CON_ERROR_LOG("########## libevent内核错误:%s ##########", msg);
+		break;
+	default:
+		CON_INFO_LOG("libevent:%s", msg);
+		break;
 	}
 }

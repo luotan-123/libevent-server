@@ -30,7 +30,7 @@ CGameLogonManage::~CGameLogonManage()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameLogonManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CGameLogonManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	if (!pNetHead)
 	{
@@ -190,7 +190,7 @@ bool CGameLogonManage::OnTimerMessage(UINT uTimerID)
 	return false;
 }
 
-void CGameLogonManage::NotifyUserInfo(const UserData &userData)
+void CGameLogonManage::NotifyUserInfo(const UserData& userData)
 {
 	int userID = userData.userID;
 
@@ -241,7 +241,7 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 
 		bHaveRedSpot = true;
 	}
-	
+
 	// 没有小红点删除redis键值
 	if (!bHaveRedSpot)
 	{
@@ -250,7 +250,7 @@ void CGameLogonManage::NotifyUserInfo(const UserData &userData)
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameLogonManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize)
+bool CGameLogonManage::OnAsynThreadResult(AsynThreadResultLine* pResultData, void* pData, UINT uSize)
 {
 	if (!pResultData)
 	{
@@ -265,7 +265,7 @@ bool CGameLogonManage::OnAsynThreadResult(AsynThreadResultLine * pResultData, vo
 		{
 			AsyncEventMsg_Test allUser;
 			allUser.ParseFromArray(pData, uSize); // or parseFromString
-	
+
 			for (int i = 0; i < allUser.user_size(); i++) {
 				AsyncEventMsg_Test_User user = allUser.user(i); // 按索引解repeated成员
 				INFO_LOG("userID=%d,name=%s,headURL=%s,money=%lld,winCount=%d",
@@ -319,7 +319,7 @@ bool CGameLogonManage::OnStop()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameLogonManage::PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData)
+bool CGameLogonManage::PreInitParameter(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData)
 {
 	if (!pInitData || !pKernelData)
 	{
@@ -350,13 +350,7 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 {
 	AUTOCOST("socketIdx = %d", socketIdx);
 
-	// 先关闭这个连接
 	std::string ip = m_TCPSocket.GetSocketIP(socketIdx);
-
-	if (!m_TCPSocket.CloseSocket(socketIdx))
-	{
-		return false;
-	}
 
 	// 取socket信息
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
@@ -764,14 +758,14 @@ bool CGameLogonManage::OnHandleUserLogonMessage(int assistID, void* pData, int s
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID)
+bool CGameLogonManage::OnHanleUserLogon(void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID)
 {
 	if (size != sizeof(LogonRequestLogon) && size != sizeof(LogonRequestLogon) - 1)
 	{
 		return false;
 	}
 
-	LogonRequestLogon* pMessage = (LogonRequestLogon *)pData;
+	LogonRequestLogon* pMessage = (LogonRequestLogon*)pData;
 	if (!pMessage)
 	{
 		return false;
@@ -849,7 +843,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 			ERROR_LOG("user money is not enough usermoney=%lld minMoney=%d", userData.money, pRoomBaseInfo->minPoint);
 			bCanSit = false;
 		}
-		else if (pRoomBaseInfo->minPoint > 0 && pRoomBaseInfo->maxPoint > pRoomBaseInfo->minPoint && userData.money > pRoomBaseInfo->maxPoint)
+		else if (pRoomBaseInfo->minPoint > 0 && pRoomBaseInfo->maxPoint > pRoomBaseInfo->minPoint&& userData.money > pRoomBaseInfo->maxPoint)
 		{
 			ERROR_LOG("user money is too much usermoney=%lld maxMoney=%d", userData.money, pRoomBaseInfo->maxPoint);
 			bCanSit = false;
@@ -876,7 +870,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 		int iCurTime = (int)currTime;
 		if (iCurTime >= userData.sealFinishTime && userData.sealFinishTime > 0) //解封时间到了，解封账号
 		{
-			int iStatus = userData.status^USER_IDENTITY_TYPE_SEAL;
+			int iStatus = userData.status ^ USER_IDENTITY_TYPE_SEAL;
 			std::string cmdLine;
 			char statusBuff[60] = { 0 };
 			memset(statusBuff, 0, sizeof(statusBuff));
@@ -1031,7 +1025,7 @@ bool CGameLogonManage::OnHanleUserLogon(void * pData, int size, unsigned long ac
 	return true;
 }
 //////////////////////////////////////////////////////////////////////
-bool CGameLogonManage::OnHandleGameDeskMessage(int assistID, void * pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID)
+bool CGameLogonManage::OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID)
 {
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.type != LOGON_SERVER_SOCKET_TYPE_USER)
@@ -1115,7 +1109,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		return true;
 	}
 
-	GameBaseInfo * pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pMessage->gameID);
+	GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pMessage->gameID);
 	if (!pGameBaseInfo)
 	{
 		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG);
@@ -1161,7 +1155,7 @@ bool CGameLogonManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	}
 
 	// 俱乐部vip房间只能俱乐部创建
-	if (friendsGroupID > 0 && friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT  && pRoomBaseInfo->type != ROOM_TYPE_FG_VIP)
+	if (friendsGroupID > 0 && friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT&& pRoomBaseInfo->type != ROOM_TYPE_FG_VIP)
 	{
 		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
 		return true;
@@ -1785,7 +1779,7 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	return true;
 }
 
-bool CGameLogonManage::OnHandleOtherMessage(int assistID, void * pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID)
+bool CGameLogonManage::OnHandleOtherMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID)
 {
 	LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.type != LOGON_SERVER_SOCKET_TYPE_USER)
@@ -2002,7 +1996,7 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	return true;
 }
 
-bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead* pNetHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (!pUser)
@@ -2034,7 +2028,7 @@ bool CGameLogonManage::OnHandleGServerToGameMessage(int userID, NetMessageHead *
 }
 
 
-bool CGameLogonManage::OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CGameLogonManage::OnHandleGServerToUserMessage(int roomID, NetMessageHead* pNetHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
 {
 	// 此处可以根据业务逻辑，拦截游戏消息
 	// todo:
@@ -2069,7 +2063,7 @@ void CGameLogonManage::DelSocketIdx(int socketIdx)
 	}
 }
 
-bool CGameLogonManage::SendData(int userID, void * pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification/* = 0*/)
+bool CGameLogonManage::SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification/* = 0*/)
 {
 	LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
 	if (!pUser)
@@ -2094,7 +2088,7 @@ bool CGameLogonManage::SendData(int userID, void * pData, int size, unsigned int
 	return true;
 }
 
-bool CGameLogonManage::SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode)
+bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode)
 {
 	for (auto iter = m_socketInfoMap.begin(); iter != m_socketInfoMap.end(); iter++)
 	{
@@ -2184,35 +2178,36 @@ void CGameLogonManage::CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeart
 	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
 	{
 		/*LogonServerSocket socketInfo = GetIdentityIDBySocketIdx(iter->first);
-		if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER 
+		if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER
 			|| socketInfo.type == LOGON_SERVER_SOCKET_TYPE_NO)
 		{
 			continue;
 		}*/
 
-		bool bIsConnect = iter->second.isConnect;
-		time_t llAcceptMsgTime = iter->second.acceptMsgTime, llLastRecvMsgTime = iter->second.lastRecvMsgTime;
-		
-		if (bIsConnect)
+		if (iter->second.isConnect)
 		{
-			if ((currTime - llLastRecvMsgTime) >= (iHeartBeatTime * (KEEP_ACTIVE_HEARTBEAT_COUNT - 1) + currTime - llLastSendHeartBeatTime))
-			{
-				m_TCPSocket.OnSocketClose(iter->first);
-				negativeCount++;
-			}
-			else
-			{
-				// 发送心跳
-				m_TCPSocket.SendData(iter->first, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0);
-				avtiveCount++;
-			}
+			m_TCPSocket.SendData(iter->first, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0);
+
+			//if ((currTime - iter->second.lastRecvMsgTime) >= (iHeartBeatTime * (KEEP_ACTIVE_HEARTBEAT_COUNT - 1) + currTime - llLastSendHeartBeatTime + 1))
+			//{
+			//	m_TCPSocket.CloseSocket(iter->first);
+			//	negativeCount++;
+			//	CON_INFO_LOG("心跳踢人 currTime = %lld,lastRecvMsgTime=%lld,acceptMsgTime=%lld,ip=%s:%d",
+			//		currTime, iter->second.lastRecvMsgTime, iter->second.acceptMsgTime, iter->second.ip, iter->second.port);
+			//}
+			//else
+			//{
+			//	// 发送心跳
+			//	m_TCPSocket.SendData(iter->first, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0);
+			//	avtiveCount++;
+			//}
 		}
 	}
 
-	if (negativeCount > 0)
+	/*if (negativeCount > 0)
 	{
 		INFO_LOG("avtiveCount=%d negativeCount=%d", avtiveCount, negativeCount);
-	}
+	}*/
 }
 
 void CGameLogonManage::RountineSaveRedisDataToDB(bool updateAll)
@@ -2233,10 +2228,10 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
 	{
 		bool bIsConnect = iter->second.isConnect;
-		time_t llAcceptMsgTime = iter->second.acceptMsgTime, llLastRecvMsgTime = iter->second.lastRecvMsgTime;
+		time_t llAcceptMsgTime = iter->second.acceptMsgTime;
 
 		// 没有绑定userID的socket
-		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME && GetIdentityIDBySocketIdx(iter->first).type <= 0)
+		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME&& GetIdentityIDBySocketIdx(iter->first).type <= 0)
 		{
 			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, m_TCPSocket.GetSocketIP(iter->first));
 			m_TCPSocket.CloseSocket(iter->first);
@@ -2403,7 +2398,7 @@ void CGameLogonManage::CleanAllUserMoneyJewelsRank()
 	m_pRedis->ClearAllUserRanking(TBL_RANKING_JEWELS);
 }
 
-void CGameLogonManage::OnUserLogon(const UserData &userData)
+void CGameLogonManage::OnUserLogon(const UserData& userData)
 {
 	if (userData.isVirtual)
 	{
@@ -2425,7 +2420,7 @@ void CGameLogonManage::OnUserLogout(int userID)
 
 }
 
-void CGameLogonManage::OnUserRegister(const UserData &userData)
+void CGameLogonManage::OnUserRegister(const UserData& userData)
 {
 	// 往数据库中立马插入一个玩家
 	char key[48] = "";
@@ -2644,7 +2639,7 @@ bool CGameLogonManage::IsRoomIDServerExists(int roomID)
 }
 
 // 自动开房
-bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
+bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk& deskInfo)
 {
 	int userID = deskInfo.userID;
 
@@ -2655,7 +2650,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 		return false;
 	}
 
-	GameBaseInfo * pGameBaseInfo = ConfigManage()->GetGameBaseInfo(deskInfo.gameID);
+	GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(deskInfo.gameID);
 	if (!pGameBaseInfo)
 	{
 		return false;
@@ -2923,7 +2918,7 @@ bool CGameLogonManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo)
 }
 
 // 判断此ip是否可以注册
-bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char * ip)
+bool CGameLogonManage::IsIpRegister(const OtherConfig& otherConfig, const char* ip)
 {
 	if (!ip)
 	{
@@ -2943,7 +2938,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig &otherConfig, const char *
 	{
 		m_SQLDataManage.m_pMysqlHelper->queryRecord(sql, dataSet);
 	}
-	catch (MysqlHelper_Exception& excep)
+	catch (MysqlHelper_Exception & excep)
 	{
 		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
 		return true;
@@ -3013,7 +3008,7 @@ std::string CGameLogonManage::GetRandHeadURLBySex(BYTE sex)
 }
 
 ////////////////////////////////处理中心服消息//////////////////////////////////////////
-bool CGameLogonManage::OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID)
+bool CGameLogonManage::OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID)
 {
 	switch (msgID)
 	{
@@ -3201,7 +3196,7 @@ bool CGameLogonManage::OnCenterKickUserMessage(void* pData, int size, int userID
 	if (pUser)
 	{
 		INFO_LOG("收到中心服踢人消息,userID=%d", userID);
-		return m_TCPSocket.OnSocketClose(pUser->socketIdx);
+		return m_TCPSocket.CloseSocket(pUser->socketIdx);
 	}
 
 	return true;
@@ -3379,7 +3374,7 @@ bool CGameLogonManage::OnCenterSendHornMessage(void* pData, UINT size)
 }
 
 // 向某个玩家推送消息
-bool CGameLogonManage::OnCenterNotifyUserMessage(NetMessageHead * pNetHead, void* pData, int size, int userID)
+bool CGameLogonManage::OnCenterNotifyUserMessage(NetMessageHead* pNetHead, void* pData, int size, int userID)
 {
 	// 直接发送数据给用户
 	SendData(userID, pData, size, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode);
@@ -3551,7 +3546,7 @@ bool CGameLogonManage::OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT si
 
 
 //////////////////////////////////////////////////////////////////////////
-void CGameLogonManage::SendHTTPMessage(int userID, const std::string &url, BYTE postType)
+void CGameLogonManage::SendHTTPMessage(int userID, const std::string& url, BYTE postType)
 {
 	// HTTP请求
 	AsyncEventMsgHTTP asyncEvent;

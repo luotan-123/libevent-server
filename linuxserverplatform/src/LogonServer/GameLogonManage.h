@@ -16,7 +16,6 @@ enum LogonServerTimerID
 	LOGON_TIMER_END,
 };
 
-const int CHECK_HEAETBEAT_SECS = 15;				// 心跳定时器时间(s)
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
 const int ROUTINE_CHECK_UNBINDID_SOCKET = 41;		// 定期检查未登录的连接(s)

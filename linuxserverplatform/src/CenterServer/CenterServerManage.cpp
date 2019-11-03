@@ -152,12 +152,6 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 {
 	AUTOCOST("处理子系统退出集群耗时：socketIdx = %d", socketIdx);
 
-	// 先关闭这个连接
-	if (!m_TCPSocket.CloseSocket(socketIdx))
-	{
-		return false;
-	}
-
 	// 考虑到PHP，这里不生成日志
 	auto itrSocketToServerMap = m_socketToServerMap.find(socketIdx);
 	if (itrSocketToServerMap == m_socketToServerMap.end())

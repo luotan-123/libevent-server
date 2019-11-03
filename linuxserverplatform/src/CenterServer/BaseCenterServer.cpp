@@ -360,13 +360,6 @@ void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 
 	while (pThis->m_bRun)
 	{
-		//BOOL bSuccess = ::GetQueuedCompletionStatus(hCompletionPort, &dwThancferred, &dwCompleteKey, (LPOVERLAPPED *)&OverData, INFINITE);
-		//if (bSuccess == FALSE || dwThancferred == 0)
-		//{
-		//	//ERROR_LOG("GetQueuedCompletionStatus failed err = %d", GetLastError());
-		//	continue;
-		//}
-
 		llNowTime = GetSysMilliseconds();
 		llDifTime = THREAD_ONCE_HANDLE_MSG + llLastTime - llNowTime;
 		if (llDifTime > THREAD_ONCE_HANDLE_MSG)
