@@ -1,6 +1,5 @@
 #include "CommonHead.h"
 #include "basemessage.h"
-#include "Lock.h"
 #include "log.h"
 #include "configManage.h"
 #include "DataLine.h"

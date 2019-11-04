@@ -33,12 +33,7 @@ void CConfigManage::Release()
 
 	curl_global_cleanup();
 
-	if (m_pMysqlHelper)
-	{
-		delete m_pMysqlHelper;
-		m_pMysqlHelper = NULL;
-	}
-
+	SafeDelete(m_pMysqlHelper);
 }
 
 bool CConfigManage::Init()
@@ -132,7 +127,7 @@ bool CConfigManage::Init()
 	}
 
 	//断开与数据库的连接
-	m_pMysqlHelper->disconnect();
+	SafeDelete(m_pMysqlHelper);
 
 	INFO_LOG("configManage Init end.");
 

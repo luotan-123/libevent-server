@@ -18,8 +18,8 @@ CGameLogManage::~CGameLogManage()
 
 CGameLogManage* CGameLogManage::Instance()
 {
-	static CGameLogManage mgr;
-	return &mgr;
+	static CGameLogManage g_mgr;
+	return &g_mgr;
 }
 
 void CGameLogManage::Release()
@@ -261,6 +261,8 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 
 void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/* = 0*/)
 {
+	CSignedLockObject LockObject(&m_csLock, true);
+
 	int serviceType = ConfigManage()->m_serviceType;
 	if (serviceType <= SERVICE_TYPE_BEGIN || serviceType >= SERVICE_TYPE_END)
 	{
@@ -413,6 +415,8 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 
 bool CGameLogManage::AddLogFileFp(std::string strFile, FILE* fp)
 {
+	CSignedLockObject LockObject(&m_csLock, true);
+
 	if (strFile == "" || !fp)
 	{
 		return false;

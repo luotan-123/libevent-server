@@ -1,5 +1,4 @@
 #pragma once
-#include "GameDesk.h"
 #include "GameTaskLogic.h"
 
 //定时器 ID

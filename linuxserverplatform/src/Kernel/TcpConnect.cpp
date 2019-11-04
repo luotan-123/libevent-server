@@ -1,6 +1,5 @@
 #include "CommonHead.h"
 #include "basemessage.h"
-#include "Lock.h"
 #include "log.h"
 #include "DataLine.h"
 #include <sys/socket.h>

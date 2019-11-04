@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GameDesk.h"
 #include "Function.h"
 #include "UpgradeMessage.h"
 

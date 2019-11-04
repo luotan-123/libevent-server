@@ -1,4 +1,3 @@
-#include "CommonHead.h"
 #include "GameTaskLogic.h"
 
 const  BYTE  byCardShape[MAX_CARD_SHAPE] = {UG_ONLY_ONE ,UG_DOUBLE ,UG_STRAIGHT,UG_THREE_ONE ,UG_THREE_TWO , UG_DOUBLE_SEQUENCE,UG_THREE_ONE_SEQUENCE ,UG_BOMB }  ; 

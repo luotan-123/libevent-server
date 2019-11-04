@@ -1,5 +1,3 @@
-#include "CommonHead.h"
-#include "Util.h"
 #include "UpGradeLogic.h"
 
 using namespace std;

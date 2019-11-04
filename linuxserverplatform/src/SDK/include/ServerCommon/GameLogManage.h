@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include "Function.h"
+#include "Lock.h"
 
 struct ThreadLogFiles
 {
@@ -64,6 +65,9 @@ private:
 
 	// 进程日志目录
 	std::string m_logPath;
+
+	// 线程锁
+	CSignedLock	m_csLock;
 };
 
 #define GameLogManage()		CGameLogManage::Instance()
