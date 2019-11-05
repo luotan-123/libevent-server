@@ -2976,7 +2976,7 @@ void CGameLogonManage::DeleteExpireFile()
 {
 	char delJsonPath[128] = "";
 
-	sprintf(delJsonPath, "%s%s", SAVE_JSON_PATH, "DeleteJson.bat");
+	sprintf(delJsonPath, "%s%s", SAVE_JSON_PATH, "deletejson.sh");
 	system(delJsonPath);
 }
 
