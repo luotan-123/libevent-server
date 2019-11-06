@@ -1,0 +1,6 @@
+1、git创建本地分支
+git checkout -b tianhe
+2、创建远程分支
+ git push origin tianhe:tianhe
+3、本地分支关联远程分支
+git branch --set-upstream-to=origin/tianhe tianhe
