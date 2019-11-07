@@ -49,14 +49,6 @@ public:
 	static bool IsContainDirtyWord(const std::string& str);
 	// 如果文件夹不存在则创建文件夹，目录已经存在或者创建成功返回true，否则false
 	static bool MkdirIfNotExists(const char* dir);
-	// 字符串转换
-	static std::string Tostring(BYTE value);
-	static std::string Tostring(int value);
-	static std::string Tostring(unsigned int value);
-	static std::string Tostring(long value);
-	static std::string Tostring(size_t value);
-	static std::string Tostring(long long value);
-	static std::string Tostring(double value);
 	// 替换字符串
 	static void ReplaceStr(char str[], int count, char src, char dst);
 	// 字符串解析函数

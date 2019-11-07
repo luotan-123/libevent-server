@@ -654,12 +654,12 @@ bool CRedisLoader::SaveFGDeskRoom(const PrivateDeskInfo &privateDeskInfo)
 
 	//保存牌桌数据
 	std::unordered_map<std::string, std::string> umap;
-	umap["userID"] = CUtil::Tostring(privateDeskInfo.masterID);
-	umap["friendsGroupID"] = CUtil::Tostring(privateDeskInfo.friendsGroupID);
-	umap["friendsGroupDeskNumber"] = CUtil::Tostring(privateDeskInfo.friendsGroupDeskNumber);
-	umap["roomType"] = CUtil::Tostring(pRoomBaseInfo->type);
-	umap["gameID"] = CUtil::Tostring(pRoomBaseInfo->gameID);
-	umap["maxCount"] = CUtil::Tostring(privateDeskInfo.buyGameCount);
+	umap["userID"] = std::to_string(privateDeskInfo.masterID);
+	umap["friendsGroupID"] = std::to_string(privateDeskInfo.friendsGroupID);
+	umap["friendsGroupDeskNumber"] = std::to_string(privateDeskInfo.friendsGroupDeskNumber);
+	umap["roomType"] = std::to_string(pRoomBaseInfo->type);
+	umap["gameID"] = std::to_string(pRoomBaseInfo->gameID);
+	umap["maxCount"] = std::to_string(privateDeskInfo.buyGameCount);
 	umap["gameRules"] = privateDeskInfo.gameRules;
 
 	char assistantKey[64] = "";

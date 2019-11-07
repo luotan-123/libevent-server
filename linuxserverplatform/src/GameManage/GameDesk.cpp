@@ -3752,7 +3752,7 @@ bool CGameDesk::MoneySitDeskLogic(GameUserInfo* pUser)
 		std::unordered_map<std::string, std::string> umap;
 		umap["name"] = pUser->name;
 		umap["headURL"] = pUser->headURL;
-		umap["sex"] = CUtil::Tostring(pUser->sex);
+		umap["sex"] = std::to_string(pUser->sex);
 		umap["logonIP"] = pUser->ip;
 		umap["address"] = pUser->address;
 		umap["Lng"] = pUser->longitude;

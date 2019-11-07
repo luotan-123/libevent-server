@@ -294,10 +294,10 @@ private:
 
 	//比赛场相关
 public:
-	std::map<long long, std::list<int> >				m_matchGameDeskMap;	// 每个比赛，包含的桌子索引
-	std::map<long long, std::vector<MatchUserInfo> >	m_matchUserMap;		// 每个比赛，参赛的玩家
-	std::map<long long, int>							m_matchMainIDMap;	// 每场比赛，所属的大ID
-	std::map<long long, BYTE>							m_matchTypeMap;		// 每场比赛，比赛类型 MatchType
+	std::unordered_map<long long, std::list<int> >				m_matchGameDeskMap;	// 每个比赛，包含的桌子索引
+	std::unordered_map<long long, std::vector<MatchUserInfo> >	m_matchUserMap;		// 每个比赛，参赛的玩家
+	std::unordered_map<long long, int>							m_matchMainIDMap;	// 每场比赛，所属的大ID
+	std::unordered_map<long long, BYTE>							m_matchTypeMap;		// 每场比赛，比赛类型 MatchType
 
 public:
 	UINT				m_uNameID;							// 游戏名字 ID 号码

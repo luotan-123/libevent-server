@@ -680,7 +680,7 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 #ifdef HAOTIAN
 			std::unordered_map<std::string, std::string> umap;
 			umap["headURL"] = newUserData.headURL;
-			umap["sex"] = CUtil::Tostring(newUserData.sex >= 2 ? 0 : newUserData.sex);
+			umap["sex"] = std::to_string(newUserData.sex >= 2 ? 0 : newUserData.sex);
 			umap["name"] = newUserData.name;
 			umap["accountInfo"] = newUserData.accountInfo;
 			m_pRedis->hmset(TBL_USER, newUserData.userID, umap);
@@ -957,7 +957,7 @@ bool CGameLogonManage::OnHanleUserLogon(void* pData, int size, unsigned long acc
 	{
 		cmdLine += " IsOnline 1 ";
 		cmdLine += " lastCalcOnlineToTime ";
-		cmdLine += CUtil::Tostring(currTime);
+		cmdLine += std::to_string(currTime);
 	}
 	m_pRedis->SetUserInfo(userID, cmdLine);
 

@@ -54,14 +54,14 @@ private:
 
 private:
 	// 游戏日志文件map
-	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_loaderLogFilesMap;
+	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_loaderLogFilesMap;
 	// 大厅日志文件map
-	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_logonLogFilesMap;
+	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_logonLogFilesMap;
 	// 中心服日志文件map
-	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_centerLogFilesMap;
+	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_centerLogFilesMap;
 
 	// 文件描述符map
-	std::map<std::string, FILE*> m_filesFpMap;
+	std::unordered_map<std::string, FILE*> m_filesFpMap;
 
 	// 进程日志目录
 	std::string m_logPath;

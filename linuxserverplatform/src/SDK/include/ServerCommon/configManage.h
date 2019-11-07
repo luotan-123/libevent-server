@@ -615,7 +615,7 @@ public:
 
 public:
 	// 游戏基础信息																	
-	std::map<int, GameBaseInfo> m_gameBaseInfoMap;
+	std::unordered_map<int, GameBaseInfo> m_gameBaseInfoMap;
 	// 房间配置
 	std::map<int, RoomBaseInfo> m_roomBaseInfoMap;
 	// 购买游戏桌子消耗信息(房卡配置)
@@ -627,13 +627,13 @@ public:
 	// 大厅服配置
 	std::map<int, LogonBaseInfo> m_logonBaseInfoMap;
 	// 数据表字段相关信息(基础配置表不需要)
-	std::map<std::string, std::vector<FieldDescriptor> > m_tableFieldDescMap;
+	std::unordered_map<std::string, std::vector<FieldDescriptor> > m_tableFieldDescMap;
 
 public:
 	std::vector<RobotPositionInfo> m_robotPositionInfoVec;
 	std::vector<std::string> m_dirtyWordsVec;
-	std::map<std::string, std::string> m_tablePrimaryKeyMap;
-	std::map<std::string, int> m_nickName;
+	std::unordered_map<std::string, std::string> m_tablePrimaryKeyMap;
+	std::unordered_map<std::string, int> m_nickName;
 private:
 	CMysqlHelper* m_pMysqlHelper;		// 数据库模块
 private:

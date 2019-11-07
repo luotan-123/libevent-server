@@ -292,7 +292,7 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 	}
 
 	std::string str = "";
-	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
+	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
 
 	if (serviceType == SERVICE_TYPE_LOGON)
 	{
@@ -357,7 +357,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	}
 
 	std::string str = "";
-	std::map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
+	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
 
 	if (serviceType == SERVICE_TYPE_LOGON)
 	{

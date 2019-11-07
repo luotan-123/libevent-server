@@ -261,62 +261,6 @@ bool CUtil::MkdirIfNotExists(const char * dir)
 	return true;
 }
 
-std::string CUtil::Tostring(BYTE value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%d", value);
-
-	return std::string(buf);
-}
-
-std::string CUtil::Tostring(int value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%d", value);
-
-	return std::string(buf);
-}
-
-std::string CUtil::Tostring(unsigned int value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%u", value);
-
-	return std::string(buf);
-}
-
-std::string CUtil::Tostring(long value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%ld", value);
-
-	return std::string(buf);
-}
-
-std::string CUtil::Tostring(size_t value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%lu", value);
-
-	return std::string(buf);
-}
-
-std::string CUtil::Tostring(long long value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%lld", value);
-
-	return std::string(buf);
-}
-
-std::string CUtil::Tostring(double value)
-{
-	char buf[128] = "";
-	sprintf(buf, "%.10f", value);
-
-	return std::string(buf);
-}
-
 //替换字符串
 void CUtil::ReplaceStr(char str[], int count, char src, char dst)
 {

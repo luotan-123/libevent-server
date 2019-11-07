@@ -104,53 +104,53 @@ int CRedisLogon::Register(const UserData& userData, BYTE registerType)
 
 	std::unordered_map<std::string, std::string> umap;
 
-	umap["userID"] = CUtil::Tostring(newUserID);
+	umap["userID"] = std::to_string(newUserID);
 	umap["account"] = strAccount;
 	umap["passwd"] = userData.passwd;
 	umap["name"] = registerType == LOGON_VISITOR ? temp : userData.name;
 	umap["phone"] = userData.phone;
-	umap["sex"] = CUtil::Tostring(userData.sex);
+	umap["sex"] = std::to_string(userData.sex);
 	umap["mail"] = userData.mail;
-	umap["money"] = CUtil::Tostring(userData.money);
-	umap["bankMoney"] = CUtil::Tostring(userData.bankMoney);
+	umap["money"] = std::to_string(userData.money);
+	umap["bankMoney"] = std::to_string(userData.bankMoney);
 	umap["bankPasswd"] = userData.bankPasswd;
-	umap["jewels"] = CUtil::Tostring(userData.jewels);
-	umap["roomID"] = CUtil::Tostring(userData.roomID);
-	umap["deskIdx"] = CUtil::Tostring(userData.deskIdx);
+	umap["jewels"] = std::to_string(userData.jewels);
+	umap["roomID"] = std::to_string(userData.roomID);
+	umap["deskIdx"] = std::to_string(userData.deskIdx);
 	umap["logonIP"] = userData.logonIP;
 	umap["headURL"] = userData.headURL;
-	umap["winCount"] = CUtil::Tostring(userData.winCount);
+	umap["winCount"] = std::to_string(userData.winCount);
 	umap["macAddr"] = userData.macAddr;
 	umap["token"] = userData.token;
-	umap["isVirtual"] = CUtil::Tostring(userData.isVirtual);
-	umap["status"] = CUtil::Tostring(userData.status);
-	umap["reqSupportTimes"] = CUtil::Tostring(userData.reqSupportTimes);
-	umap["lastReqSupportDate"] = CUtil::Tostring(userData.lastReqSupportDate);
-	umap["registerTime"] = CUtil::Tostring(userData.registerTime);
+	umap["isVirtual"] = std::to_string(userData.isVirtual);
+	umap["status"] = std::to_string(userData.status);
+	umap["reqSupportTimes"] = std::to_string(userData.reqSupportTimes);
+	umap["lastReqSupportDate"] = std::to_string(userData.lastReqSupportDate);
+	umap["registerTime"] = std::to_string(userData.registerTime);
 	umap["registerIP"] = userData.registerIP;
-	umap["registerType"] = CUtil::Tostring(userData.registerType);
-	umap["buyingDeskCount"] = CUtil::Tostring(userData.buyingDeskCount);
-	umap["lastCrossDayTime"] = CUtil::Tostring(userData.lastCrossDayTime);
-	umap["totalGameCount"] = CUtil::Tostring(userData.totalGameCount);
-	umap["sealFinishTime"] = CUtil::Tostring(userData.sealFinishTime);
+	umap["registerType"] = std::to_string(userData.registerType);
+	umap["buyingDeskCount"] = std::to_string(userData.buyingDeskCount);
+	umap["lastCrossDayTime"] = std::to_string(userData.lastCrossDayTime);
+	umap["totalGameCount"] = std::to_string(userData.totalGameCount);
+	umap["sealFinishTime"] = std::to_string(userData.sealFinishTime);
 	umap["wechat"] = userData.wechat;
 	umap["phonePasswd"] = userData.phonePasswd;
 	umap["accountInfo"] = userData.accountInfo;
-	umap["totalGameWinCount"] = CUtil::Tostring(userData.totalGameWinCount);
+	umap["totalGameWinCount"] = std::to_string(userData.totalGameWinCount);
 	umap["Lng"] = userData.Lng;
 	umap["Lat"] = userData.Lat;
 	umap["address"] = userData.address;
-	umap["lastCalcOnlineToTime"] = CUtil::Tostring(userData.lastCalcOnlineToTime);
-	umap["allOnlineToTime"] = CUtil::Tostring(userData.allOnlineToTime);
-	umap["IsOnline"] = CUtil::Tostring(userData.IsOnline);
+	umap["lastCalcOnlineToTime"] = std::to_string(userData.lastCalcOnlineToTime);
+	umap["allOnlineToTime"] = std::to_string(userData.allOnlineToTime);
+	umap["IsOnline"] = std::to_string(userData.IsOnline);
 	umap["motto"] = userData.motto;
 	umap["xianliao"] = userData.xianliao;
-	umap["controlParam"] = CUtil::Tostring(userData.controlParam);
-	umap["ModifyInformationCount"] = CUtil::Tostring(userData.ModifyInformationCount);
-	umap["matchType"] = CUtil::Tostring(userData.matchType);
-	umap["combineMatchID"] = CUtil::Tostring(userData.combineMatchID);
-	umap["matchStatus"] = CUtil::Tostring(userData.matchStatus);
-	umap["curMatchRank"] = CUtil::Tostring(userData.curMatchRank);
+	umap["controlParam"] = std::to_string(userData.controlParam);
+	umap["ModifyInformationCount"] = std::to_string(userData.ModifyInformationCount);
+	umap["matchType"] = std::to_string(userData.matchType);
+	umap["combineMatchID"] = std::to_string(userData.combineMatchID);
+	umap["matchStatus"] = std::to_string(userData.matchStatus);
+	umap["curMatchRank"] = std::to_string(userData.curMatchRank);
 
 	if (!hmset(TBL_USER, newUserID, umap))
 	{
@@ -160,18 +160,18 @@ int CRedisLogon::Register(const UserData& userData, BYTE registerType)
 
 	//建立背包表
 	std::unordered_map<std::string, std::string> mmap;
-	mmap["userID"] = CUtil::Tostring(newUserID);
-	mmap["skillFrozen"] = CUtil::Tostring(0);
-	mmap["skillLocking"] = CUtil::Tostring(0);
-	mmap["redBag"] = CUtil::Tostring(0);
-	mmap["phoneBillCard1"] = CUtil::Tostring(0);
-	mmap["phoneBillCard5"] = CUtil::Tostring(0);
-	mmap["goldenArmor"] = CUtil::Tostring(0);
-	mmap["mechatroPioneer"] = CUtil::Tostring(0);
-	mmap["deepSeaArtillery"] = CUtil::Tostring(0);
-	mmap["octopusCannon"] = CUtil::Tostring(0);
-	mmap["goldenDragon"] = CUtil::Tostring(0);
-	mmap["lavaArmor"] = CUtil::Tostring(0);
+	mmap["userID"] = std::to_string(newUserID);
+	mmap["skillFrozen"] = std::to_string(0);
+	mmap["skillLocking"] = std::to_string(0);
+	mmap["redBag"] = std::to_string(0);
+	mmap["phoneBillCard1"] = std::to_string(0);
+	mmap["phoneBillCard5"] = std::to_string(0);
+	mmap["goldenArmor"] = std::to_string(0);
+	mmap["mechatroPioneer"] = std::to_string(0);
+	mmap["deepSeaArtillery"] = std::to_string(0);
+	mmap["octopusCannon"] = std::to_string(0);
+	mmap["goldenDragon"] = std::to_string(0);
+	mmap["lavaArmor"] = std::to_string(0);
 
 	if (!hmset(TBL_USER_BAG, newUserID, mmap))
 	{

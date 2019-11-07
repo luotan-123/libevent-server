@@ -277,53 +277,53 @@ bool CRedisCenter::LoadAllUserData()
 
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["userID"] = CUtil::Tostring(userData.userID);
+		umap["userID"] = std::to_string(userData.userID);
 		umap["account"] = userData.account;
 		umap["passwd"] = userData.passwd;
 		umap["name"] = userData.name;
 		umap["phone"] = userData.phone;
-		umap["sex"] = CUtil::Tostring(userData.sex);
+		umap["sex"] = std::to_string(userData.sex);
 		umap["mail"] = userData.mail;
-		umap["money"] = CUtil::Tostring(userData.money);
-		umap["bankMoney"] = CUtil::Tostring(userData.bankMoney);
+		umap["money"] = std::to_string(userData.money);
+		umap["bankMoney"] = std::to_string(userData.bankMoney);
 		umap["bankPasswd"] = userData.bankPasswd;
-		umap["jewels"] = CUtil::Tostring(userData.jewels);
-		umap["roomID"] = "0";//CUtil::Tostring(userData.roomID);
-		umap["deskIdx"] = CUtil::Tostring(INVALID_DESKIDX);//userData.deskIdx);
+		umap["jewels"] = std::to_string(userData.jewels);
+		umap["roomID"] = "0";//std::to_string(userData.roomID);
+		umap["deskIdx"] = std::to_string(INVALID_DESKIDX);//userData.deskIdx);
 		umap["logonIP"] = userData.logonIP;
 		umap["headURL"] = userData.headURL;
-		umap["winCount"] = CUtil::Tostring(userData.winCount);
+		umap["winCount"] = std::to_string(userData.winCount);
 		umap["macAddr"] = userData.macAddr;
 		umap["token"] = userData.token;
-		umap["isVirtual"] = CUtil::Tostring(userData.isVirtual);
-		umap["status"] = CUtil::Tostring(userData.status);
-		umap["reqSupportTimes"] = CUtil::Tostring(userData.reqSupportTimes);
-		umap["lastReqSupportDate"] = CUtil::Tostring(userData.lastReqSupportDate);
-		umap["registerTime"] = CUtil::Tostring(userData.registerTime);
+		umap["isVirtual"] = std::to_string(userData.isVirtual);
+		umap["status"] = std::to_string(userData.status);
+		umap["reqSupportTimes"] = std::to_string(userData.reqSupportTimes);
+		umap["lastReqSupportDate"] = std::to_string(userData.lastReqSupportDate);
+		umap["registerTime"] = std::to_string(userData.registerTime);
 		umap["registerIP"] = userData.registerIP;
-		umap["registerType"] = CUtil::Tostring(userData.registerType);
-		umap["buyingDeskCount"] = CUtil::Tostring(userData.buyingDeskCount);
-		umap["lastCrossDayTime"] = CUtil::Tostring(userData.lastCrossDayTime);
-		umap["totalGameCount"] = CUtil::Tostring(userData.totalGameCount);
-		umap["sealFinishTime"] = CUtil::Tostring(userData.sealFinishTime);
+		umap["registerType"] = std::to_string(userData.registerType);
+		umap["buyingDeskCount"] = std::to_string(userData.buyingDeskCount);
+		umap["lastCrossDayTime"] = std::to_string(userData.lastCrossDayTime);
+		umap["totalGameCount"] = std::to_string(userData.totalGameCount);
+		umap["sealFinishTime"] = std::to_string(userData.sealFinishTime);
 		umap["phonePasswd"] = userData.phonePasswd;
 		umap["wechat"] = userData.wechat;
 		umap["accountInfo"] = userData.accountInfo;
-		umap["totalGameWinCount"] = CUtil::Tostring(userData.totalGameWinCount);
+		umap["totalGameWinCount"] = std::to_string(userData.totalGameWinCount);
 		umap["Lng"] = userData.Lng;
 		umap["Lat"] = userData.Lat;
 		umap["address"] = userData.address;
-		umap["lastCalcOnlineToTime"] = CUtil::Tostring(userData.lastCalcOnlineToTime);
-		umap["allOnlineToTime"] = CUtil::Tostring(userData.allOnlineToTime);
-		umap["IsOnline"] = CUtil::Tostring(userData.IsOnline);
+		umap["lastCalcOnlineToTime"] = std::to_string(userData.lastCalcOnlineToTime);
+		umap["allOnlineToTime"] = std::to_string(userData.allOnlineToTime);
+		umap["IsOnline"] = std::to_string(userData.IsOnline);
 		umap["motto"] = userData.motto;
 		umap["xianliao"] = userData.xianliao;
-		umap["controlParam"] = CUtil::Tostring(userData.controlParam);
-		umap["ModifyInformationCount"] = CUtil::Tostring(userData.ModifyInformationCount);
-		umap["matchType"] = CUtil::Tostring(userData.matchType);
-		umap["combineMatchID"] = CUtil::Tostring(userData.combineMatchID);
-		umap["matchStatus"] = CUtil::Tostring(userData.matchStatus);
-		umap["curMatchRank"] = CUtil::Tostring(userData.curMatchRank);
+		umap["controlParam"] = std::to_string(userData.controlParam);
+		umap["ModifyInformationCount"] = std::to_string(userData.ModifyInformationCount);
+		umap["matchType"] = std::to_string(userData.matchType);
+		umap["combineMatchID"] = std::to_string(userData.combineMatchID);
+		umap["matchStatus"] = std::to_string(userData.matchStatus);
+		umap["curMatchRank"] = std::to_string(userData.curMatchRank);
 
 		if (hmset(TBL_USER, userData.userID, umap) == false)
 		{
@@ -423,18 +423,18 @@ bool CRedisCenter::LoadAllRewardsPoolData()
 
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["roomID"] = CUtil::Tostring(poolData.roomID);
-		umap["poolMoney"] = CUtil::Tostring(poolData.poolMoney);
-		umap["gameWinMoney"] = CUtil::Tostring(poolData.gameWinMoney);
-		umap["percentageWinMoney"] = CUtil::Tostring(poolData.percentageWinMoney);
-		umap["otherWinMoney"] = CUtil::Tostring(poolData.otherWinMoney);
-		umap["allGameWinMoney"] = CUtil::Tostring(poolData.allGameWinMoney);
-		umap["allPercentageWinMoney"] = CUtil::Tostring(poolData.allPercentageWinMoney);
-		umap["allOtherWinMoney"] = CUtil::Tostring(poolData.allOtherWinMoney);
-		umap["platformCtrlType"] = CUtil::Tostring(poolData.platformCtrlType);
-		umap["platformCtrlPercent"] = CUtil::Tostring(poolData.platformCtrlPercent);
-		umap["realPeopleFailPercent"] = CUtil::Tostring(poolData.realPeopleFailPercent);
-		umap["realPeopleWinPercent"] = CUtil::Tostring(poolData.realPeopleWinPercent);
+		umap["roomID"] = std::to_string(poolData.roomID);
+		umap["poolMoney"] = std::to_string(poolData.poolMoney);
+		umap["gameWinMoney"] = std::to_string(poolData.gameWinMoney);
+		umap["percentageWinMoney"] = std::to_string(poolData.percentageWinMoney);
+		umap["otherWinMoney"] = std::to_string(poolData.otherWinMoney);
+		umap["allGameWinMoney"] = std::to_string(poolData.allGameWinMoney);
+		umap["allPercentageWinMoney"] = std::to_string(poolData.allPercentageWinMoney);
+		umap["allOtherWinMoney"] = std::to_string(poolData.allOtherWinMoney);
+		umap["platformCtrlType"] = std::to_string(poolData.platformCtrlType);
+		umap["platformCtrlPercent"] = std::to_string(poolData.platformCtrlPercent);
+		umap["realPeopleFailPercent"] = std::to_string(poolData.realPeopleFailPercent);
+		umap["realPeopleWinPercent"] = std::to_string(poolData.realPeopleWinPercent);
 		umap["detailInfo"] = poolData.detailInfo;
 
 		if (!hmset(TBL_REWARDS_POOL, poolData.roomID, umap))
@@ -486,7 +486,7 @@ bool CRedisCenter::LoadAllAgentUser()		//加载所有代理
 		if (userID > 0)
 		{
 			// 写入redis中
-			AddKeyToSet(TBL_WEB_AGENTMEMBER, CUtil::Tostring(userID).c_str());
+			AddKeyToSet(TBL_WEB_AGENTMEMBER, std::to_string(userID).c_str());
 		}
 	}
 
@@ -500,11 +500,11 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 	{
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["logonID"] = CUtil::Tostring(itr->second.logonID);
+		umap["logonID"] = std::to_string(itr->second.logonID);
 		umap["ip"] = itr->second.ip;
 		umap["intranetIP"] = itr->second.intranetIP;
-		umap["port"] = CUtil::Tostring(itr->second.port);
-		umap["maxPeople"] = CUtil::Tostring(itr->second.maxPeople);
+		umap["port"] = std::to_string(itr->second.port);
+		umap["maxPeople"] = std::to_string(itr->second.maxPeople);
 		umap["curPeople"] = "0";
 
 		hmset(TBL_BASE_LOGON, itr->first, umap);
@@ -518,54 +518,54 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 	const FtpConfig ftpConfig = ConfigManage()->GetFtpConfig();
 
 	std::unordered_map<std::string, std::string> umapOtherConfig;
-	umapOtherConfig["supportTimesEveryDay"] = CUtil::Tostring(otherConfig.supportTimesEveryDay);
-	umapOtherConfig["supportMinLimitMoney"] = CUtil::Tostring(otherConfig.supportMinLimitMoney);
-	umapOtherConfig["supportMoneyCount"] = CUtil::Tostring(otherConfig.supportMoneyCount);
-	umapOtherConfig["registerGiveMoney"] = CUtil::Tostring(otherConfig.registerGiveMoney);
-	umapOtherConfig["registerGiveJewels"] = CUtil::Tostring(otherConfig.registerGiveJewels);
-	umapOtherConfig["logonGiveMoneyEveryDay"] = CUtil::Tostring(otherConfig.logonGiveMoneyEveryDay);
-	umapOtherConfig["sendHornCostJewels"] = CUtil::Tostring(otherConfig.sendHornCostJewels);
-	umapOtherConfig["useMagicExpressCostMoney"] = CUtil::Tostring(otherConfig.useMagicExpressCostMoney);
-	umapOtherConfig["buyingDeskCount"] = CUtil::Tostring(otherConfig.buyingDeskCount);
-	umapOtherConfig["friendRewardMoney"] = CUtil::Tostring(otherConfig.friendRewardMoney);
-	umapOtherConfig["friendRewardMoneyCount"] = CUtil::Tostring(otherConfig.friendRewardMoneyCount);
-	umapOtherConfig["friendTakeRewardMoneyCount"] = CUtil::Tostring(otherConfig.friendTakeRewardMoneyCount);
+	umapOtherConfig["supportTimesEveryDay"] = std::to_string(otherConfig.supportTimesEveryDay);
+	umapOtherConfig["supportMinLimitMoney"] = std::to_string(otherConfig.supportMinLimitMoney);
+	umapOtherConfig["supportMoneyCount"] = std::to_string(otherConfig.supportMoneyCount);
+	umapOtherConfig["registerGiveMoney"] = std::to_string(otherConfig.registerGiveMoney);
+	umapOtherConfig["registerGiveJewels"] = std::to_string(otherConfig.registerGiveJewels);
+	umapOtherConfig["logonGiveMoneyEveryDay"] = std::to_string(otherConfig.logonGiveMoneyEveryDay);
+	umapOtherConfig["sendHornCostJewels"] = std::to_string(otherConfig.sendHornCostJewels);
+	umapOtherConfig["useMagicExpressCostMoney"] = std::to_string(otherConfig.useMagicExpressCostMoney);
+	umapOtherConfig["buyingDeskCount"] = std::to_string(otherConfig.buyingDeskCount);
+	umapOtherConfig["friendRewardMoney"] = std::to_string(otherConfig.friendRewardMoney);
+	umapOtherConfig["friendRewardMoneyCount"] = std::to_string(otherConfig.friendRewardMoneyCount);
+	umapOtherConfig["friendTakeRewardMoneyCount"] = std::to_string(otherConfig.friendTakeRewardMoneyCount);
 	umapOtherConfig["ftpIP"] = ftpConfig.ftpIP;
 	umapOtherConfig["ftpUser"] = ftpConfig.ftpUser;
 	umapOtherConfig["ftpPasswd"] = ftpConfig.ftpPasswd;
-	umapOtherConfig["byIsIPRegisterLimit"] = CUtil::Tostring(otherConfig.byIsIPRegisterLimit);
-	umapOtherConfig["IPRegisterLimitCount"] = CUtil::Tostring(otherConfig.IPRegisterLimitCount);
-	umapOtherConfig["byIsDistributedTable"] = CUtil::Tostring(otherConfig.byIsDistributedTable);
+	umapOtherConfig["byIsIPRegisterLimit"] = std::to_string(otherConfig.byIsIPRegisterLimit);
+	umapOtherConfig["IPRegisterLimitCount"] = std::to_string(otherConfig.IPRegisterLimitCount);
+	umapOtherConfig["byIsDistributedTable"] = std::to_string(otherConfig.byIsDistributedTable);
 	umapOtherConfig["http"] = otherConfig.http;
-	umapOtherConfig["byIsOneToOne"] = CUtil::Tostring(otherConfig.byIsOneToOne);
+	umapOtherConfig["byIsOneToOne"] = std::to_string(otherConfig.byIsOneToOne);
 	hmset(TBL_BASE_OTHER_CONFIG, SYSTEM_CONFIG_TYPE_OTHER, umapOtherConfig);
 
 	std::unordered_map<std::string, std::string> umapBankConfig;
-	umapBankConfig["bankMinSaveMoney"] = CUtil::Tostring(bankConfig.minSaveMoney);
-	umapBankConfig["bankSaveMoneyMuti"] = CUtil::Tostring(bankConfig.saveMoneyMuti);
-	umapBankConfig["bankMinTakeMoney"] = CUtil::Tostring(bankConfig.minTakeMoney);
-	umapBankConfig["bankTakeMoneyMuti"] = CUtil::Tostring(bankConfig.takeMoneyMuti);
-	umapBankConfig["bankMinTransfer"] = CUtil::Tostring(bankConfig.minTransferMoney);
-	umapBankConfig["bankTransferMuti"] = CUtil::Tostring(bankConfig.transferMoneyMuti);
+	umapBankConfig["bankMinSaveMoney"] = std::to_string(bankConfig.minSaveMoney);
+	umapBankConfig["bankSaveMoneyMuti"] = std::to_string(bankConfig.saveMoneyMuti);
+	umapBankConfig["bankMinTakeMoney"] = std::to_string(bankConfig.minTakeMoney);
+	umapBankConfig["bankTakeMoneyMuti"] = std::to_string(bankConfig.takeMoneyMuti);
+	umapBankConfig["bankMinTransfer"] = std::to_string(bankConfig.minTransferMoney);
+	umapBankConfig["bankTransferMuti"] = std::to_string(bankConfig.transferMoneyMuti);
 	hmset(TBL_BASE_OTHER_CONFIG, SYSTEM_CONFIG_TYPE_BANK, umapBankConfig);
 
 	std::unordered_map<std::string, std::string> umapSendGiftConfig;
-	umapSendGiftConfig["sendGiftMyLimitMoney"] = CUtil::Tostring(sendGiftConfig.myLimitMoney);
-	umapSendGiftConfig["sendGiftMyLimitJewels"] = CUtil::Tostring(sendGiftConfig.myLimitJewels);
-	umapSendGiftConfig["sendGiftMinMoney"] = CUtil::Tostring(sendGiftConfig.sendMinMoney);
-	umapSendGiftConfig["sendGiftMinJewels"] = CUtil::Tostring(sendGiftConfig.sendMinJewels);
-	umapSendGiftConfig["sendGiftRate"] = CUtil::Tostring(sendGiftConfig.rate);
+	umapSendGiftConfig["sendGiftMyLimitMoney"] = std::to_string(sendGiftConfig.myLimitMoney);
+	umapSendGiftConfig["sendGiftMyLimitJewels"] = std::to_string(sendGiftConfig.myLimitJewels);
+	umapSendGiftConfig["sendGiftMinMoney"] = std::to_string(sendGiftConfig.sendMinMoney);
+	umapSendGiftConfig["sendGiftMinJewels"] = std::to_string(sendGiftConfig.sendMinJewels);
+	umapSendGiftConfig["sendGiftRate"] = std::to_string(sendGiftConfig.rate);
 	hmset(TBL_BASE_OTHER_CONFIG, SYSTEM_CONFIG_TYPE_SENDGIFT, umapSendGiftConfig);
 
 	std::unordered_map<std::string, std::string> umapFriendsGroupConfig;
-	umapFriendsGroupConfig["groupCreateCount"] = CUtil::Tostring(fgConfig.groupCreateCount);
-	umapFriendsGroupConfig["groupMemberCount"] = CUtil::Tostring(fgConfig.groupMemberCount);
-	umapFriendsGroupConfig["groupJoinCount"] = CUtil::Tostring(fgConfig.groupJoinCount);
-	umapFriendsGroupConfig["groupManageRoomCount"] = CUtil::Tostring(fgConfig.groupManageRoomCount);
-	umapFriendsGroupConfig["groupRoomCount"] = CUtil::Tostring(fgConfig.groupRoomCount);
-	umapFriendsGroupConfig["groupAllAlterNameCount"] = CUtil::Tostring(fgConfig.groupAllAlterNameCount);
-	umapFriendsGroupConfig["groupEveAlterNameCount"] = CUtil::Tostring(fgConfig.groupEveAlterNameCount);
-	umapFriendsGroupConfig["groupTransferCount"] = CUtil::Tostring(fgConfig.groupTransferCount);
+	umapFriendsGroupConfig["groupCreateCount"] = std::to_string(fgConfig.groupCreateCount);
+	umapFriendsGroupConfig["groupMemberCount"] = std::to_string(fgConfig.groupMemberCount);
+	umapFriendsGroupConfig["groupJoinCount"] = std::to_string(fgConfig.groupJoinCount);
+	umapFriendsGroupConfig["groupManageRoomCount"] = std::to_string(fgConfig.groupManageRoomCount);
+	umapFriendsGroupConfig["groupRoomCount"] = std::to_string(fgConfig.groupRoomCount);
+	umapFriendsGroupConfig["groupAllAlterNameCount"] = std::to_string(fgConfig.groupAllAlterNameCount);
+	umapFriendsGroupConfig["groupEveAlterNameCount"] = std::to_string(fgConfig.groupEveAlterNameCount);
+	umapFriendsGroupConfig["groupTransferCount"] = std::to_string(fgConfig.groupTransferCount);
 	hmset(TBL_BASE_OTHER_CONFIG, SYSTEM_CONFIG_TYPE_FG, umapFriendsGroupConfig);
 
 	// 把gameBaseInfo 加载到内存
@@ -573,14 +573,14 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 	{
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["gameID"] = CUtil::Tostring(itr->second.gameID);
+		umap["gameID"] = std::to_string(itr->second.gameID);
 		umap["name"] = itr->second.name;
-		umap["deskPeople"] = CUtil::Tostring(itr->second.deskPeople);
+		umap["deskPeople"] = std::to_string(itr->second.deskPeople);
 		umap["dllName"] = itr->second.dllName;
-		umap["watcherCount"] = CUtil::Tostring(itr->second.watcherCount);
-		umap["canWatch"] = CUtil::Tostring(itr->second.canWatch);
-		umap["canCombineDesk"] = CUtil::Tostring(itr->second.canCombineDesk);
-		umap["multiPeopleGame"] = CUtil::Tostring(itr->second.multiPeopleGame);
+		umap["watcherCount"] = std::to_string(itr->second.watcherCount);
+		umap["canWatch"] = std::to_string(itr->second.canWatch);
+		umap["canCombineDesk"] = std::to_string(itr->second.canCombineDesk);
+		umap["multiPeopleGame"] = std::to_string(itr->second.multiPeopleGame);
 
 		hmset(TBL_BASE_GAME, itr->first, umap);
 	}
@@ -590,14 +590,14 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 	{
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["gameID"] = CUtil::Tostring(itr->second.gameID);
-		umap["count"] = CUtil::Tostring(itr->second.count);
-		umap["roomType"] = CUtil::Tostring(itr->second.roomType);
-		umap["costResType"] = CUtil::Tostring(itr->second.costResType);
-		umap["costNums"] = CUtil::Tostring(itr->second.costNums);
-		umap["AAcostNums"] = CUtil::Tostring(itr->second.AAcostNums);
-		umap["otherCostNums"] = CUtil::Tostring(itr->second.otherCostNums);
-		umap["peopleCount"] = CUtil::Tostring(itr->second.peopleCount);
+		umap["gameID"] = std::to_string(itr->second.gameID);
+		umap["count"] = std::to_string(itr->second.count);
+		umap["roomType"] = std::to_string(itr->second.roomType);
+		umap["costResType"] = std::to_string(itr->second.costResType);
+		umap["costNums"] = std::to_string(itr->second.costNums);
+		umap["AAcostNums"] = std::to_string(itr->second.AAcostNums);
+		umap["otherCostNums"] = std::to_string(itr->second.otherCostNums);
+		umap["peopleCount"] = std::to_string(itr->second.peopleCount);
 
 		// 组合键值
 		char key[64] = "";
@@ -610,22 +610,22 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 	{
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["roomID"] = CUtil::Tostring(itr->second.roomID);
-		umap["gameID"] = CUtil::Tostring(itr->second.gameID);
+		umap["roomID"] = std::to_string(itr->second.roomID);
+		umap["gameID"] = std::to_string(itr->second.gameID);
 		umap["name"] = itr->second.name;
 		umap["serviceName"] = itr->second.serviceName;
-		umap["type"] = CUtil::Tostring(itr->second.type);
-		umap["sort"] = CUtil::Tostring(itr->second.sort);
-		umap["deskCount"] = CUtil::Tostring(itr->second.deskCount);
-		umap["minPoint"] = CUtil::Tostring(itr->second.minPoint);
-		umap["maxPoint"] = CUtil::Tostring(itr->second.maxPoint);
-		umap["basePoint"] = CUtil::Tostring(itr->second.basePoint);
-		umap["gameBeginCostMoney"] = CUtil::Tostring(itr->second.gameBeginCostMoney);
+		umap["type"] = std::to_string(itr->second.type);
+		umap["sort"] = std::to_string(itr->second.sort);
+		umap["deskCount"] = std::to_string(itr->second.deskCount);
+		umap["minPoint"] = std::to_string(itr->second.minPoint);
+		umap["maxPoint"] = std::to_string(itr->second.maxPoint);
+		umap["basePoint"] = std::to_string(itr->second.basePoint);
+		umap["gameBeginCostMoney"] = std::to_string(itr->second.gameBeginCostMoney);
 		umap["describe"] = itr->second.describe;
-		umap["roomSign"] = CUtil::Tostring(itr->second.roomSign);
-		umap["robotCount"] = CUtil::Tostring(itr->second.robotCount);
+		umap["roomSign"] = std::to_string(itr->second.roomSign);
+		umap["robotCount"] = std::to_string(itr->second.robotCount);
 		umap["currPeopleCount"] = "0";
-		umap["level"] = CUtil::Tostring(itr->second.level);
+		umap["level"] = std::to_string(itr->second.level);
 		umap["configInfo"] = itr->second.configInfo;
 
 		hmset(TBL_BASE_ROOM, itr->first, umap);
@@ -806,18 +806,18 @@ bool CRedisCenter::LoadAllUserBag()
 
 		std::unordered_map<std::string, std::string> umap;
 
-		umap["userID"] = CUtil::Tostring(userbag.userID);
-		umap["skillFrozen"] = CUtil::Tostring(userbag.skillFrozen);
-		umap["skillLocking"] = CUtil::Tostring(userbag.skillLocking);
-		umap["redBag"] = CUtil::Tostring(userbag.redBag);
-		umap["phoneBillCard1"] = CUtil::Tostring(userbag.phoneBillCard1);
-		umap["phoneBillCard5"] = CUtil::Tostring(userbag.phoneBillCard5);
-		umap["goldenArmor"] = CUtil::Tostring(userbag.goldenArmor);
-		umap["mechatroPioneer"] = CUtil::Tostring(userbag.mechatroPioneer);
-		umap["deepSeaArtillery"] = CUtil::Tostring(userbag.deepSeaArtillery);
-		umap["octopusCannon"] = CUtil::Tostring(userbag.octopusCannon);
-		umap["goldenDragon"] = CUtil::Tostring(userbag.goldenDragon);
-		umap["lavaArmor"] = CUtil::Tostring(userbag.lavaArmor);
+		umap["userID"] = std::to_string(userbag.userID);
+		umap["skillFrozen"] = std::to_string(userbag.skillFrozen);
+		umap["skillLocking"] = std::to_string(userbag.skillLocking);
+		umap["redBag"] = std::to_string(userbag.redBag);
+		umap["phoneBillCard1"] = std::to_string(userbag.phoneBillCard1);
+		umap["phoneBillCard5"] = std::to_string(userbag.phoneBillCard5);
+		umap["goldenArmor"] = std::to_string(userbag.goldenArmor);
+		umap["mechatroPioneer"] = std::to_string(userbag.mechatroPioneer);
+		umap["deepSeaArtillery"] = std::to_string(userbag.deepSeaArtillery);
+		umap["octopusCannon"] = std::to_string(userbag.octopusCannon);
+		umap["goldenDragon"] = std::to_string(userbag.goldenDragon);
+		umap["lavaArmor"] = std::to_string(userbag.lavaArmor);
 
 		if (!hmset(TBL_REWARDS_POOL, userbag.userID, umap))
 		{

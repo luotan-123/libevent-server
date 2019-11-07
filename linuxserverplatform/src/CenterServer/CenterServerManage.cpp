@@ -957,7 +957,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 	}
 
 	std::unordered_map<std::string, std::string> umap;
-	umap["status"] = CUtil::Tostring(iStatus);
+	umap["status"] = std::to_string(iStatus);
 
 	if (!m_pRedis->hmset(TBL_USER, userID, umap))
 	{
