@@ -665,7 +665,7 @@ bool CRedisPHP::LoadAllMatchInfo(std::map<long long, MatchInfo> & matchInfoMap)
 		if (matchInfo.matchStatus == MATCH_STATUS_SIGN_UP)
 		{
 			//加入到内存
-			matchInfoMap.insert(std::make_pair(matchInfo.startTime, matchInfo));
+			matchInfoMap.emplace(matchInfo.startTime, matchInfo);
 		}
 	}
 
