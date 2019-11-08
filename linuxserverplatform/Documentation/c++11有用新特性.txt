@@ -16,7 +16,7 @@ result res  {1，'a'，1.0};
 return res;
 2.2、hash正式进入stl
 unordered_map、unordered_set、unordered_multimap、unordered_multiset
-2.3、emplace
+2.3、emplace 少调用一次拷贝构造函数
 std::map<int, int> myMap;
 myMap[1] = 5; myMap.emplace(6666, 9999999);
 2.4、shrink_to_fit()
@@ -28,5 +28,9 @@ std::cout << "after shrink_to_fit: " << v.capacity() << std::endl;
 
 3、类
 std::move()配合右值引用使用
+std::unordered_map<int,std::vector<A> > ltmap;
+std::vector<A> aVec = { a,a,a };
+ltmap.insert(std::make_pair(0, aVec));
+ltmap.emplace(1, std::move(aVec));
 继承：子类的虚函数多态实现要加override显式的表明，否则会让人误认为是子类自己的虚函数；
 不让子类多态实现的虚函数也要记得加入final；
