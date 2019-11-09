@@ -4,9 +4,6 @@
     <Filter Include="公共定义">
       <UniqueIdentifier>{d131a880-b1e4-412c-a527-326c19ef00f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="线程锁">
-      <UniqueIdentifier>{82a5bb52-2846-4b6f-b921-9803fbb1eeb5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="消息队列">
       <UniqueIdentifier>{ca5daa82-77eb-4881-bb31-854d251f443a}</UniqueIdentifier>
     </Filter>
@@ -34,13 +31,16 @@
     <Filter Include="定时器">
       <UniqueIdentifier>{61be5d14-46de-4bb2-8623-37457f3a0e5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="线程锁和条件变量">
+      <UniqueIdentifier>{82a5bb52-2846-4b6f-b921-9803fbb1eeb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h">
       <Filter>公共定义</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\Lock.h">
-      <Filter>线程锁</Filter>
+      <Filter>线程锁和条件变量</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h">
       <Filter>数据库模块</Filter>
@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
-      <Filter>线程锁</Filter>
+      <Filter>线程锁和条件变量</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp">
       <Filter>数据库模块</Filter>

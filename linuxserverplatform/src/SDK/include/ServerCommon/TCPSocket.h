@@ -33,6 +33,41 @@ struct TCPSocketInfo
 	}
 };
 
+// socket简单信息
+struct SocketSimpleInfo
+{
+	unsigned int socketIdx;
+	void* pBufferevent;
+
+	SocketSimpleInfo()
+	{
+		socketIdx = -1;
+		pBufferevent = nullptr;
+	}
+
+	SocketSimpleInfo(unsigned int socketIdx, void* pBufferevent)
+	{
+		this->socketIdx = socketIdx;
+		this->pBufferevent = pBufferevent;
+	}
+
+	bool operator<(const SocketSimpleInfo& info)const
+	{
+		if (socketIdx < info.socketIdx)
+		{
+			return true;
+		}
+		else if (socketIdx == info.socketIdx)
+		{
+			if (pBufferevent < info.pBufferevent)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
 // 工作线程信息
 struct WorkThreadInfo
 {
@@ -67,9 +102,11 @@ public:
 
 public:
 	// 发送数据函数
-	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, unsigned int uIdentification = 0);
+	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification = 0);
+	// 发送数据函数
+	bool SendData(void* pBufferevent, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, unsigned int uIdentification = 0);
 	// 中心服务器发送数据
-	bool CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID);
+	bool CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent);
 	// 关闭连接(业务逻辑线程调用)
 	bool CloseSocket(int index);
 	// 获取接收dataline
@@ -91,7 +128,8 @@ public:
 	// 设置tcp为未连接状态
 	void RemoveTCPSocketStatus(int index, bool isClientAutoClose = false);
 	// 派发数据包
-	static bool DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int index, NetMessageHead* pHead, void* pData, int size);
+	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
+
 	// 设置tcp收发缓冲区
 	static void SetTcpRcvSndBUF(int fd, int rcvBufSize, int sndBufSize);
 	// 设置应用层单次读取数据包的大小 bufferevent_set_max_single_read
@@ -120,6 +158,7 @@ private:
 	static void ThreadLibeventProcess(int readfd, short which, void* arg);
 	// libEvent日志回调函数
 	static void EventLog(int severity, const char* msg);
+
 private:
 	event_base* m_listenerBase;
 	std::vector<WorkThreadInfo> m_workBaseVec;

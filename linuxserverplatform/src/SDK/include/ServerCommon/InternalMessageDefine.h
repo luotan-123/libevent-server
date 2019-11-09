@@ -11,11 +11,18 @@
 #define HD_TIMER_MESSAGE				4							//定时器消息处理
 #define HD_PLATFORM_SOCKET_READ			5							//中心服读取事件处理
 
+#pragma pack(1)
+
 //数据队列信息头
 struct DataLineHead
 {
 	UINT						uSize;								//数据大小
 	UINT						uDataKind;							//数据类型
+	DataLineHead()
+	{
+		uSize = 0;
+		uDataKind = 0;
+	}
 };
 
 ///异步线程结果消息结构定义
@@ -26,6 +33,10 @@ struct AsynThreadResultLine
 	UINT								uHandleKind;				///处理类型 
 	UINT								uIndex;						///数据库索引或者玩家索引
 	UINT								uMsgID;						///消息id
+	AsynThreadResultLine()
+	{
+		memset(this, 0, sizeof(AsynThreadResultLine));
+	}
 };
 
 //SOCKET关闭通知结构定义
@@ -35,6 +46,10 @@ struct SocketCloseLine
 	UINT								uIndex;						//SOCKT 索引
 	ULONG								uAccessIP;					//SOCKET IP
 	UINT								uConnectTime;				//连接时间
+	SocketCloseLine()
+	{
+		memset(this, 0, sizeof(SocketCloseLine));
+	}
 };
 
 //SOCKET读取通知结构定义
@@ -45,7 +60,11 @@ struct SocketReadLine
 	UINT								uHandleSize;				//数据包处理大小
 	UINT								uIndex;						//SOCKET 索引
 	ULONG								uAccessIP;					//SOCKET IP
-	UINT								dwHandleID;					//SOCKET 处理 ID
+	void*								pBufferevent;				//bufferevent	
+	SocketReadLine()
+	{
+		memset(this, 0, sizeof(SocketReadLine));
+	}
 };
 
 //定时器消息结构定义
@@ -53,6 +72,10 @@ struct ServerTimerLine
 {
 	DataLineHead						LineHead;					//队列头
 	UINT								uTimerID;					//定时器 ID
+	ServerTimerLine()
+	{
+		memset(this, 0, sizeof(ServerTimerLine));
+	}
 };
 
 //数据库数据包头结构
@@ -62,13 +85,22 @@ struct DataBaseLineHead
 	UINT							uHandleKind;							///处理类型
 	UINT							uIndex;									///数据库索引或者玩家索引
 	UINT							uMsgID;									///消息id
+	DataBaseLineHead()
+	{
+		memset(this, 0, sizeof(DataBaseLineHead));
+	}
 };
 
 //发送数据队列包头
 struct SendDataLineHead
 {
 	DataLineHead					dataLineHead;							///队列头
-	int								socketIndex;							///socket索引或者文件描述符	
+	int								socketIndex;							///socket索引或者文件描述符
+	void*							pBufferevent;							///bufferevent		
+	SendDataLineHead()
+	{
+		memset(this, 0, sizeof(SendDataLineHead));
+	}
 };
 
 // dataline 平台数据头
@@ -77,6 +109,10 @@ struct PlatformDataLineHead
 	DataLineHead lineHead;
 	PlatformMessageHead platformMessageHead;
 	int	socketIdx;
+	PlatformDataLineHead()
+	{
+		memset(this, 0, sizeof(PlatformDataLineHead));
+	}
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -108,5 +144,7 @@ struct PlatformLogonServerVerify
 		memset(this, 0, sizeof(PlatformCenterServerVerify));
 	}
 };
+
+#pragma pack()
 
 ///////////////////////////////////////////////////////////////////////////////

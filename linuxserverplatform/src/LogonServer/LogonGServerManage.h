@@ -6,11 +6,13 @@ struct LogonGServerInfo
 {
 	int roomID;
 	int socketIdx;
-	
+	void* pBufferevent;
+
 	LogonGServerInfo()
 	{
 		roomID = 0;
 		socketIdx = -1;
+		pBufferevent = nullptr;
 	}
 };
 

@@ -4,7 +4,6 @@
 ///服务接口定义
 /********************************************************************************************/
 
-class CTCPSocket;					///<SOCKET 类
 class CDataBaseManage;				///<数据库模块类
 struct NetMessageHead;				///<网络数据包头
 struct ManageInfoStruct;			///<初始化信息结构
@@ -21,7 +20,7 @@ public:
 	//网络关闭处理
 	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime) = 0;
 	//网络消息处理
-	virtual bool OnSocketReadEvent(CTCPSocket* pSocket, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex, UINT dwHandleID) = 0;
+	virtual bool OnSocketReadEvent(void* pBufferevent, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex) = 0;
 	// 获取dataline
 	virtual CDataLine* GetDataLine() = 0;
 };

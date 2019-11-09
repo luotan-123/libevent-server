@@ -224,10 +224,10 @@ bool CRedisCommon::GetUserData(int userID, UserData& userData)
 		{
 			memcpy(userData.address, value, Min_(strlen(value), sizeof(userData.address)));
 		}
-		else if (!strcmp(field, "lastCalcOnlineToTime"))
+		/*else if (!strcmp(field, "lastCalcOnlineToTime"))
 		{
 			userData.lastCalcOnlineToTime = atoll(value);
-		}
+		}*/
 		else if (!strcmp(field, "allOnlineToTime"))
 		{
 			userData.allOnlineToTime = atoll(value);

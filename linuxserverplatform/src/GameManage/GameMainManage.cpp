@@ -155,7 +155,7 @@ bool CGameMainManage::OnUpdate()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	if (!pNetHead)
 	{
@@ -221,7 +221,7 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 	}
 	case MSG_MAIN_LOADER_MATCH:
 	{
-		return OnHandleMatchMessage(userID, pNetHead->uAssistantID, pData, uSize, dwHandleID);
+		return OnHandleMatchMessage(userID, pNetHead->uAssistantID, pData, uSize);
 	}
 	default:
 		break;
@@ -1971,13 +1971,13 @@ bool CGameMainManage::OnHandleVoiceAndTalkMessage(int userID, unsigned int assis
 }
 
 //////////////////////////////////////////////////////////////////////////
-bool CGameMainManage::OnHandleMatchMessage(int userID, unsigned int assistID, void* pData, int size, long handleID)
+bool CGameMainManage::OnHandleMatchMessage(int userID, unsigned int assistID, void* pData, int size)
 {
 	switch (assistID)
 	{
 	case MSG_ASS_LOADER_MATCH_ALL_DESK_DATA:
 	{
-		return OnHandleMatchAllDeskStatusMessage(userID, pData, size, handleID);
+		return OnHandleMatchAllDeskStatusMessage(userID, pData, size);
 	}
 	case MSG_ASS_LOADER_MATCH_ENTER_WATCH_DESK:
 	{
@@ -1994,7 +1994,7 @@ bool CGameMainManage::OnHandleMatchMessage(int userID, unsigned int assistID, vo
 	return false;
 }
 
-bool CGameMainManage::OnHandleMatchAllDeskStatusMessage(int userID, void* pData, int size, long handleID)
+bool CGameMainManage::OnHandleMatchAllDeskStatusMessage(int userID, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, LoaderRequestMatchAllDeskDataInfo, pData, size);
 

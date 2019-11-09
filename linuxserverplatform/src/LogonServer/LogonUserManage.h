@@ -8,6 +8,8 @@ struct LogonUserInfo
 	int socketIdx;
 	BYTE isVirtual;
 	int roomID;
+	void* pBufferevent;
+	time_t logonTime;
 
 	LogonUserInfo()
 	{
@@ -15,6 +17,8 @@ struct LogonUserInfo
 		socketIdx = -1;
 		isVirtual = 0;
 		roomID = 0;
+		pBufferevent = nullptr;
+		logonTime = 0;
 	}
 };
 

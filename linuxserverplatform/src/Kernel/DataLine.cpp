@@ -78,6 +78,9 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 
 	LockObject.UnLock();
 
+	// 通知条件变量
+	m_csLock.Notify();
+
 	return pListItem->stDataHead.uSize;		//返回大小
 }
 
@@ -96,6 +99,12 @@ UINT CDataLine::GetData(DataLineHead** pDataBuffer)
 	CSignedLockObject LockObject(&m_csLock, false);
 
 	LockObject.Lock();
+
+	//进入挂起状态
+	if (m_DataListSize <= 0)
+	{
+		m_csLock.Wait();
+	}
 
 	//如果队列是空的，直接返回
 	if (m_DataListSize <= 0)
@@ -144,9 +153,5 @@ bool CDataLine::CleanLineData()
 // 获取队列数据数量
 size_t CDataLine::GetDataCount()
 {
-	//CSignedLockObject LockObject(&m_csLock, true);
-
 	return m_DataListSize;
-
-	//return m_DataList.size();
 }

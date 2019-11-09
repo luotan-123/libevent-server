@@ -390,114 +390,94 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;
 
-	//cpu优化，合理使用cpu
-	long long llLastTime = GetSysMilliseconds();
-	long long llNowTime = 0, llDifTime = 0;
-
 	while (pMainManage->m_bRun)
 	{
-		llNowTime = GetSysMilliseconds();
-		llDifTime = THREAD_ONCE_HANDLE_MSG + llLastTime - llNowTime;
-		if (llDifTime > THREAD_ONCE_HANDLE_MSG)
+		try
 		{
-			usleep(THREAD_ONCE_HANDLE_MSG * 1000);
-		}
-		else if (llDifTime > 0)
-		{
-			usleep((unsigned int)(llDifTime * 1000));
-		}
-		llLastTime = llNowTime;
-
-		while (pDataLine->GetDataCount())
-		{
-			try
+			//获取数据
+			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+			if (bytes == 0 || pDataLineHead == NULL)
 			{
-				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-				if (bytes == 0 || pDataLineHead == NULL)
-				{
-					// 取出来的数据大小为0，不太可能
-					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
-					continue;
-				}
-
-				switch (pDataLineHead->uDataKind)
-				{
-				case HD_SOCKET_READ://SOCKET数据读取
-				{
-					SocketReadLine* pSocketRead = (SocketReadLine*)pDataLineHead;
-					if (pMainManage->OnSocketRead(&pSocketRead->netMessageHead,
-						pSocketRead->uHandleSize ? pSocketRead + 1 : NULL,
-						pSocketRead->uHandleSize, pSocketRead->uAccessIP,
-						pSocketRead->uIndex, pSocketRead->dwHandleID) == false)
-					{
-						//ERROR_LOG("OnSocketRead failed mainID=%d assistID=%d", pSocketRead->NetMessageHead.uMainID, pSocketRead->NetMessageHead.uAssistantID);
-					}
-					break;
-				}
-				case HD_ASYN_THREAD_RESULT://异步线程处理结果
-				{
-					AsynThreadResultLine* pDataRead = (AsynThreadResultLine*)pDataLineHead;
-					void* pBuffer = NULL;
-					unsigned int size = pDataRead->LineHead.uSize;
-
-					if (size < sizeof(AsynThreadResultLine))
-					{
-						ERROR_LOG("AsynThreadResultLine data error !!!");
-						break;
-					}
-
-					if (size > sizeof(AsynThreadResultLine))
-					{
-						pBuffer = (void*)(pDataRead + 1);
-					}
-
-					pMainManage->OnAsynThreadResult(pDataRead, pBuffer, size - sizeof(AsynThreadResultLine));
-
-					break;
-				}
-				case HD_TIMER_MESSAGE://定时器消息
-				{
-					ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
-					pMainManage->OnTimerMessage(pTimerMessage->uTimerID);
-					break;
-				}
-				case HD_PLATFORM_SOCKET_READ:	// 中心服务器发过来的消息
-				{
-					PlatformDataLineHead* pPlaformMessageHead = (PlatformDataLineHead*)pDataLineHead;
-					int sizeCenterMsg = pPlaformMessageHead->platformMessageHead.MainHead.uMessageSize - sizeof(PlatformMessageHead);
-					UINT msgID = pPlaformMessageHead->platformMessageHead.AssHead.msgID;
-					int userID = pPlaformMessageHead->platformMessageHead.AssHead.userID;
-					void* pBuffer = NULL;
-					if (sizeCenterMsg > 0)
-					{
-						pBuffer = (void*)(pPlaformMessageHead + 1);
-					}
-
-					pMainManage->OnCenterServerMessage(msgID, &pPlaformMessageHead->platformMessageHead.MainHead, pBuffer, sizeCenterMsg, userID);
-					break;
-				}
-				default:
-					break;
-				}
-
-				// 释放内存
-				if (pDataLineHead)
-				{
-					free(pDataLineHead);
-				}
-			}
-
-			catch (int iCode)
-			{
-				CON_ERROR_LOG("[ LoaderServer 编号：%d ] [ 描述：如果有core文件，请查看core文件 ] [ 源代码位置：未知 ]", iCode);
 				continue;
 			}
 
-			catch (...)
+			switch (pDataLineHead->uDataKind)
 			{
-				CON_ERROR_LOG("#### 未知崩溃。####");
-				continue;
+			case HD_SOCKET_READ://SOCKET数据读取
+			{
+				SocketReadLine* pSocketRead = (SocketReadLine*)pDataLineHead;
+				if (pMainManage->OnSocketRead(&pSocketRead->netMessageHead,
+					pSocketRead->uHandleSize ? pSocketRead + 1 : NULL,
+					pSocketRead->uHandleSize, pSocketRead->uAccessIP,
+					pSocketRead->uIndex, pSocketRead->pBufferevent) == false)
+				{
+					//ERROR_LOG("OnSocketRead failed mainID=%d assistID=%d", pSocketRead->NetMessageHead.uMainID, pSocketRead->NetMessageHead.uAssistantID);
+				}
+				break;
 			}
+			case HD_ASYN_THREAD_RESULT://异步线程处理结果
+			{
+				AsynThreadResultLine* pDataRead = (AsynThreadResultLine*)pDataLineHead;
+				void* pBuffer = NULL;
+				unsigned int size = pDataRead->LineHead.uSize;
+
+				if (size < sizeof(AsynThreadResultLine))
+				{
+					ERROR_LOG("AsynThreadResultLine data error !!!");
+					break;
+				}
+
+				if (size > sizeof(AsynThreadResultLine))
+				{
+					pBuffer = (void*)(pDataRead + 1);
+				}
+
+				pMainManage->OnAsynThreadResult(pDataRead, pBuffer, size - sizeof(AsynThreadResultLine));
+
+				break;
+			}
+			case HD_TIMER_MESSAGE://定时器消息
+			{
+				ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
+				pMainManage->OnTimerMessage(pTimerMessage->uTimerID);
+				break;
+			}
+			case HD_PLATFORM_SOCKET_READ:	// 中心服务器发过来的消息
+			{
+				PlatformDataLineHead* pPlaformMessageHead = (PlatformDataLineHead*)pDataLineHead;
+				int sizeCenterMsg = pPlaformMessageHead->platformMessageHead.MainHead.uMessageSize - sizeof(PlatformMessageHead);
+				UINT msgID = pPlaformMessageHead->platformMessageHead.AssHead.msgID;
+				int userID = pPlaformMessageHead->platformMessageHead.AssHead.userID;
+				void* pBuffer = NULL;
+				if (sizeCenterMsg > 0)
+				{
+					pBuffer = (void*)(pPlaformMessageHead + 1);
+				}
+
+				pMainManage->OnCenterServerMessage(msgID, &pPlaformMessageHead->platformMessageHead.MainHead, pBuffer, sizeCenterMsg, userID);
+				break;
+			}
+			default:
+				break;
+			}
+
+			// 释放内存
+			if (pDataLineHead)
+			{
+				free(pDataLineHead);
+			}
+		}
+
+		catch (int iCode)
+		{
+			CON_ERROR_LOG("[ LoaderServer 编号：%d ] [ 描述：如果有core文件，请查看core文件 ] [ 源代码位置：未知 ]", iCode);
+			continue;
+		}
+
+		catch (...)
+		{
+			CON_ERROR_LOG("#### 未知崩溃。####");
+			continue;
 		}
 	}
 
@@ -506,7 +486,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 
 //////////////////////////////////////////////////////////////////////////
 // 中心服连接线程
-void * CBaseMainManage::TcpConnectThread(void* pThreadData)
+void* CBaseMainManage::TcpConnectThread(void* pThreadData)
 {
 	CBaseMainManage* pThis = (CBaseMainManage*)pThreadData;
 	if (!pThis)

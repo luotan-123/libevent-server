@@ -26,17 +26,20 @@ struct LogonServerSocket
 {
 	BYTE type;			// 两种类型的socket 1：玩家的socket，2：游戏服的socket
 	int identityID;		// 玩家id或者roomID
+	void* pBufferevent;
 
 	LogonServerSocket()
 	{
 		type = LOGON_SERVER_SOCKET_TYPE_NO;
 		identityID = 0;
+		pBufferevent = nullptr;
 	}
 
-	LogonServerSocket(BYTE type, int identityID)
+	LogonServerSocket(BYTE type, int identityID, void* pBufferevent)
 	{
 		this->type = type;
 		this->identityID = identityID;
+		this->pBufferevent = pBufferevent;
 	}
 };
 
@@ -55,7 +58,7 @@ private:
 	time_t						m_lastSendHeartBeatTime;// 上次发送心跳时间
 
 private:
-	std::set<UINT>				m_scoketMatch;			// 在比赛场相关页面的玩家
+	std::set<void*>				m_scoketMatch;			// 在比赛场相关页面的玩家
 
 public:
 	CGameLogonManage();
@@ -74,7 +77,7 @@ private:
 	//获取信息函数
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
 	//SOCKET 关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
 	//异步线程处理结果
@@ -87,21 +90,21 @@ private:
 	void NotifyUserInfo(const UserData &userData);
 private:
 	// 玩家注册相关
-	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
+	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
 
 	// 玩家登陆相关
-	bool OnHandleUserLogonMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
+	bool OnHandleUserLogonMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
 
-	bool OnHanleUserLogon(void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
+	bool OnHanleUserLogon(void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
 
 	// 桌子相关
-	bool OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
+	bool OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
 
 	bool OnHandleUserBuyDesk(int userID, void* pData, int size);
 	bool OnHandleUserEnterDesk(int userID, void* pData, int size);
 
 	// 其他相关
-	bool OnHandleOtherMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, long handleID);
+	bool OnHandleOtherMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
 
 	//刷新个人信息
 	bool OnHandleUserInfoFlush(int userID, void* pData, int size);
@@ -110,17 +113,17 @@ private:
 	// 请求玩家信息
 	bool OnHandleReqUserInfo(int userID, void* pData, int size);
 	// 请求进入比赛场页面
-	bool OnHandleJoinMatchScene(UINT uIndex);
+	bool OnHandleJoinMatchScene(void* pBufferevent);
 	// 请求退出比赛场页面
-	bool OnHandleExitMatchScene(UINT uIndex);
+	bool OnHandleExitMatchScene(void* pBufferevent);
 
 	//////////////////////////////游戏服相关////////////////////////////////////////////
 	// 认证
-	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx);
+	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx, void* pBufferevent);
 	// 前端 ----> 游戏服
-	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
+	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
 	// 游戏服 ----> 前端
-	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
+	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
 
 public:
 	// 通过socketIdx获取socket信息

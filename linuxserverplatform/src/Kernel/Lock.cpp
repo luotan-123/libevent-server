@@ -53,6 +53,9 @@ CSignedLock::CSignedLock()
 	pthread_mutexattr_settype(&m_attr, PTHREAD_MUTEX_RECURSIVE_NP);
 
 	pthread_mutex_init(&m_csLock, &m_attr);
+
+	// 初始化条件变量
+	pthread_cond_init(&m_cond, NULL);
 }
 
 CSignedLock::~CSignedLock()
@@ -60,6 +63,8 @@ CSignedLock::~CSignedLock()
 	pthread_mutex_destroy(&m_csLock);
 
 	pthread_mutexattr_destroy(&m_attr);
+
+	pthread_cond_destroy(&m_cond);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

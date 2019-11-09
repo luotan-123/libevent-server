@@ -96,7 +96,7 @@ void CGameLogManage::AddCenterLogFile(pthread_t threadID, int threadType)
 	logs.errorLog = errfileName;
 	logs.costLog = costFileName;
 
-	m_centerLogFilesMap.insert(std::make_pair(threadID, logs));
+	m_centerLogFilesMap.emplace(threadID, logs);
 }
 
 void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
@@ -154,7 +154,7 @@ void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
 	logs.errorLog = errfileName;
 	logs.costLog = costFileName;
 
-	m_logonLogFilesMap.insert(std::make_pair(threadID, logs));
+	m_logonLogFilesMap.emplace(threadID, logs);
 }
 
 void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int roomID)
@@ -256,7 +256,7 @@ void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int ro
 	logs.errorLog = errfileName;
 	logs.costLog = costFileName;
 
-	m_loaderLogFilesMap.insert(std::make_pair(threadID, logs));
+	m_loaderLogFilesMap.emplace(threadID, logs);
 }
 
 void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/* = 0*/)
@@ -427,7 +427,7 @@ bool CGameLogManage::AddLogFileFp(std::string strFile, FILE* fp)
 		return false;
 	}
 
-	m_filesFpMap.insert(std::make_pair(strFile, fp));
+	m_filesFpMap.emplace(strFile, fp);
 
 	return true;
 }

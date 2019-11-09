@@ -338,7 +338,7 @@ bool CConfigManage::LoadTableFiledConfig()
 			return false;
 		}
 
-		m_tableFieldDescMap.insert(std::make_pair(std::string(tblName), vec));
+		m_tableFieldDescMap.emplace(tblName, std::move(vec));
 	}
 
 	return true;
@@ -497,7 +497,7 @@ bool CConfigManage::LoadGameBaseConfig()
 		sqlGetValue(dataSet[i], "canCombineDesk", gameInfo.canCombineDesk);
 		sqlGetValue(dataSet[i], "multiPeopleGame", gameInfo.multiPeopleGame);
 
-		m_gameBaseInfoMap.insert(std::make_pair(gameInfo.gameID, gameInfo));
+		m_gameBaseInfoMap.emplace(gameInfo.gameID, gameInfo);
 
 	}
 
@@ -583,7 +583,7 @@ bool CConfigManage::LoadRoomBaseConfig()
 		sqlGetValue(dataSet[i], "level", roomBaseInfo.level);
 		sqlGetValue(dataSet[i], "configInfo", roomBaseInfo.configInfo, sizeof(roomBaseInfo.configInfo));
 
-		m_roomBaseInfoMap.insert(std::make_pair(roomBaseInfo.roomID, roomBaseInfo));
+		m_roomBaseInfoMap.emplace(roomBaseInfo.roomID, roomBaseInfo);
 
 		m_buyRoomInfoMap[BuyRoomInfoKey(roomBaseInfo.gameID, roomBaseInfo.type)].push_back(roomBaseInfo.roomID);
 	}
@@ -1265,7 +1265,7 @@ bool CConfigManage::LoadLogonBaseConfig()
 		}
 
 		m_logonPortSet.insert(configInfo);
-		m_logonBaseInfoMap.insert(std::make_pair(logonBaseInfo.logonID, logonBaseInfo));
+		m_logonBaseInfoMap.emplace(logonBaseInfo.logonID, logonBaseInfo);
 	}
 
 	if (m_logonBaseInfoMap.size() > MAX_LOGON_SERVER_COUNT)

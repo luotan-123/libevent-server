@@ -34,3 +34,35 @@ ltmap.insert(std::make_pair(0, aVec));
 ltmap.emplace(1, std::move(aVec));
 继承：子类的虚函数多态实现要加override显式的表明，否则会让人误认为是子类自己的虚函数；
 不让子类多态实现的虚函数也要记得加入final；
+
+4、函数式编程
+4.1、函数指针
+void readcb(std::function<int(int, int)> fun, void* param)
+
+5、动态指针
+void fun()
+{
+	std::unique_ptr<TestClass> p(new TestClass);
+}
+
+6、多线程与互斥同步(互斥锁，条件变量)
+std::mutex mtx; // 全局互斥锁.
+std::condition_variable cv; // 全局条件变量.
+bool ready = false; // 全局标志位.
+void do_print_id(int id)
+{
+	std::unique_lock <std::mutex> lck(mtx);
+	while (!ready) // 如果标志位不为 true, 则等待...
+		cv.wait(lck); // 当前线程被阻塞, 当全局标志位变为 true 之后,
+}
+int main()
+{
+	std::thread threads[10];
+	for (int i = 0; i < 10; ++i)
+		threads[i] = std::thread(do_print_id, i);
+
+	for (auto& th : threads)
+		th.join();
+
+	return 0;
+}

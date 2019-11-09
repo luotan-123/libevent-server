@@ -13,7 +13,7 @@ CDataBaseManage::CDataBaseManage()
 	m_pKernelInfo = NULL;
 	m_pHandleService = NULL;
 	m_pMysqlHelper = NULL;
-	
+
 }
 
 CDataBaseManage::~CDataBaseManage()
@@ -114,7 +114,7 @@ bool CDataBaseManage::PushLine(DataBaseLineHead* pData, UINT uSize, UINT uHandle
 void* CDataBaseManage::DataServiceThread(void* pThreadData)
 {
 	//数据定义
-	CDataBaseManage* pDataManage =(CDataBaseManage*)pThreadData;//数据库管理指针
+	CDataBaseManage* pDataManage = (CDataBaseManage*)pThreadData;//数据库管理指针
 	CDataLine* pDataLine = &pDataManage->m_DataLine;			//数据队列指针
 	IDataBaseHandleService* pHandleService = pDataManage->m_pHandleService;	//数据处理接口
 
@@ -125,50 +125,29 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 
 	INFO_LOG("DataServiceThread starting...");
 
-	//cpu优化，合理使用cpu
-	long long llLastTime = GetSysMilliseconds();
-	long long llNowTime = 0, llDifTime = 0;
-
 	while (pDataManage->m_bRun == true)
 	{
-		llNowTime = GetSysMilliseconds();
-		llDifTime = THREAD_ONCE_DATABASE + llLastTime - llNowTime;
-		if (llDifTime > THREAD_ONCE_DATABASE)
+		try
 		{
-			usleep(THREAD_ONCE_DATABASE * 1000);
-		}
-		else if (llDifTime > 0)
-		{
-			usleep((unsigned int)(llDifTime * 1000));
-		}
-		llLastTime = llNowTime;
-
-		while (pDataLine->GetDataCount())
-		{
-			try
+			//获取数据
+			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+			if (bytes == 0 || pDataLineHead == NULL)
 			{
-				//获取数据
-				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-				if (bytes == 0 || pDataLineHead == NULL)
-				{
-					// 取出来的数据大小为0，不太可能
-					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
-					continue;
-				}
-
-				//处理数据
-				pHandleService->HandleDataBase((DataBaseLineHead*)pDataLineHead);
-
-				// 释放内存
-				if (pDataLineHead)
-				{
-					free(pDataLineHead);
-				}
+				continue;
 			}
-			catch (...)
+
+			//处理数据
+			pHandleService->HandleDataBase((DataBaseLineHead*)pDataLineHead);
+
+			// 释放内存
+			if (pDataLineHead)
 			{
-				ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
+				free(pDataLineHead);
 			}
+		}
+		catch (...)
+		{
+			ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 		}
 	}
 
@@ -242,7 +221,7 @@ bool CDataBaseManage::CheckSQLConnect()
 			}
 		}
 	}
-	
+
 	return true;
 }
 

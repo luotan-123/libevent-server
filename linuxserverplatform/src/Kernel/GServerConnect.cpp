@@ -139,7 +139,7 @@ bool CGServerClient::OnRead()
 
 			msg.uHandleSize = realSize;
 			msg.uIndex = m_index;
-			msg.dwHandleID = 0;
+			msg.pBufferevent = nullptr;
 			msg.uAccessIP = 0;
 			msg.netMessageHead = *pHead;
 
@@ -731,63 +731,42 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 
 	INFO_LOG("CGServerConnect::ThreadSendMsg thread begin...");
 
-	//cpu优化，合理使用cpu
-	long long llLastTime = GetSysMilliseconds();
-	long long llNowTime = 0, llDifTime = 0;
-
 	while (pThis->m_running)
 	{
-		llNowTime = GetSysMilliseconds();
-		llDifTime = THREAD_ONCE_SEND_MSG + llLastTime - llNowTime;
-		if (llDifTime > THREAD_ONCE_SEND_MSG)
+		try
 		{
-			usleep(THREAD_ONCE_SEND_MSG * 1000);
-		}
-		else if (llDifTime > 0)
-		{
-			usleep((unsigned int)(llDifTime * 1000));
-		}
-		llLastTime = llNowTime;
-
-		while (pDataLine->GetDataCount())
-		{
-			try
+			//获取数据
+			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+			if (bytes == 0 || pDataLineHead == NULL)
 			{
-				//获取数据
-				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-				if (bytes == 0 || pDataLineHead == NULL)
-				{
-					// 取出来的数据大小为0，不太可能
-					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
-					continue;
-				}
+				continue;
+			}
 
-				//处理数据
-				SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
-				void* pBuffer = NULL;
-				unsigned int size = pSocketSend->dataLineHead.uSize;
+			//处理数据
+			SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
+			void* pBuffer = NULL;
+			unsigned int size = pSocketSend->dataLineHead.uSize;
 
-				if (size > sizeof(SendDataLineHead))
+			if (size > sizeof(SendDataLineHead))
+			{
+				pBuffer = (void*)(pSocketSend + 1);			// 移动一个SendDataLineHead
+				CGServerClient* pTcpSocket = pThis->m_socketVec[pSocketSend->socketIndex];
+				if (pTcpSocket)
 				{
-					pBuffer = (void*)(pSocketSend + 1);			// 移动一个SendDataLineHead
-					CGServerClient* pTcpSocket = pThis->m_socketVec[pSocketSend->socketIndex];
-					if (pTcpSocket)
-					{
-						// 交给具体的socket
-						pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead));
-					}
-				}
-
-				// 释放内存
-				if (pDataLineHead)
-				{
-					free(pDataLineHead);
+					// 交给具体的socket
+					pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead));
 				}
 			}
-			catch (...)
+
+			// 释放内存
+			if (pDataLineHead)
 			{
-				ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
+				free(pDataLineHead);
 			}
+		}
+		catch (...)
+		{
+			ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 		}
 	}
 

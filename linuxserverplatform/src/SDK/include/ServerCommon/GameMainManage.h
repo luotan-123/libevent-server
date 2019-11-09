@@ -72,7 +72,7 @@ private:
 private:
 	//服务扩展接口函数 （本处理线程调用）
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
 	//SOCKET 关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
 	//异步线程处理结果
@@ -146,9 +146,9 @@ private:
 
 	//////////////////////////////////////////////////////////////////////////
 	//比赛场消息
-	bool OnHandleMatchMessage(int userID, unsigned int assistID, void* pData, int size, long handleID);
+	bool OnHandleMatchMessage(int userID, unsigned int assistID, void* pData, int size);
 	//请求所有桌子状态
-	bool OnHandleMatchAllDeskStatusMessage(int userID, void* pData, int size, long handleID);
+	bool OnHandleMatchAllDeskStatusMessage(int userID, void* pData, int size);
 	//旁观其它桌子
 	bool OnHandleMatchEnterWatchDeskMessage(int userID, void* pData, int size);
 	//退出旁观

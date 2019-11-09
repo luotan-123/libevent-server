@@ -27,44 +27,6 @@
 using namespace test;
 
 static timeval g_lasttime;
-void* TimerFun(void* p)
-{
-	evutil_gettimeofday(&g_lasttime, NULL);
-	CDataLine* pDataLine = (CDataLine*)p;
-	//数据缓存
-	BYTE szBuffer[8192] = "";
-	DataLineHead* pDataLineHead = (DataLineHead*)szBuffer;
-
-	while (true)
-	{
-		usleep(20000);
-
-		while (pDataLine->GetDataCount())
-		{
-			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-
-			ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
-
-			/*if (pTimerMessage->uTimerID == 123456)
-			{*/
-				struct timeval newtime, difference;
-				double elapsed;
-				evutil_gettimeofday(&newtime, NULL);
-				evutil_timersub(&newtime, &g_lasttime, &difference);
-				elapsed = difference.tv_sec +
-					(difference.tv_usec / 1.0e6);
-
-
-
-				printf("timeout_cb called at %ld: %.3f seconds elapsed. timer %u \n",
-					newtime.tv_sec, elapsed, pTimerMessage->uTimerID);
-				g_lasttime = newtime;
-			//}
-			
-		}
-
-	}
-}
 
 class FIFOEvent
 {
@@ -154,28 +116,67 @@ void* FIFOFunc(void*param)
 	p->SetEvent();
 }
 
-int main()
+CSignedLock	m_csLock;
+
+void fun()
 {
+	
+	int i = 0;
+
+	for (i = 0; i < 1000000; i++)
+	{
+		m_csLock.Notify();
+	}
+
+	printf("%d=======\n", i);
+}
+
+void* Thread(void*p)
+{
+
+	std::list<int> liii;
+
+	int sssss = liii.front();
+	liii.pop_front();
+
+	CSignedLockObject LockObject(&m_csLock, false);
+
+	int count = 0;
 	while (true)
 	{
-		sleep(1);
+		LockObject.Lock();
 
-		int switch_on = CUtil::GetRandNum()%2;
+		m_csLock.Wait();
 
-		switch (switch_on)
+		count++;
+		if (count > 30000)
 		{
-		case 1:
-			printf("======\n");
-			break;
-		default:
-			continue;
 			break;
 		}
 
-		printf("+++++++++++++++++ %d\n", switch_on);
+		LockObject.UnLock();
 	}
 
+	printf("%d=========\n", count);
+}
 
+int main()
+{
+	pthread_t ssss = 0;
+	pthread_create(&ssss, NULL, Thread, NULL);
+
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+
+	// 记录开始时间
+	long long m_beginTime = tv.tv_sec * 1000000 + tv.tv_usec;
+
+	fun();
+
+	gettimeofday(&tv, NULL);
+	long long m_endTime = tv.tv_sec * 1000000 + tv.tv_usec;
+
+	printf("%lld\n", m_endTime - m_beginTime);
 
 	//FIFOEvent fifo("/tmp/linuxserver-main-fifo");
 
@@ -186,6 +187,10 @@ int main()
 
 
 	printf("罗潭\n");
+
+	m_csLock.Notify();
+
+
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 	Team team;
@@ -224,26 +229,6 @@ int main()
 	//// 关联大厅主线程的log文件
 	//GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 	//ConfigManage()->Init();
-
-
-
-	CGServerConnect ddd;
-	CDataLine *dataline = new CDataLine;
-	//ddd.Start(&dataline, 38);
-	CServerTimer *pTime = new CServerTimer;
-	pTime->Start(dataline);
-	pTime->SetTimer(654321, 1700);
-	pTime->SetTimer(123456, 2100, SERVERTIMER_TYPE_SINGLE);
-	evutil_gettimeofday(&g_lasttime, NULL);
-	printf("currtime %ld\n", g_lasttime.tv_sec);
-	// 开辟线程
-	pthread_t threadID1 = 0;
-	int err = pthread_create(&threadID1, NULL, TimerFun, (void*)dataline);
-	if (err != 0)
-	{
-		SYS_ERROR_LOG("ThreadCheckTimer failed");
-	}
-
 
 
 	//发送邮件接口

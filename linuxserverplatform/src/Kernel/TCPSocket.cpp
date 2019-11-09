@@ -159,7 +159,7 @@ bool CTCPSocketManage::Stop()
 	return true;
 }
 
-bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, unsigned int uIdentification/* = 0*/)
+bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification/* = 0*/)
 {
 	if (index < 0)
 	{
@@ -170,6 +170,12 @@ bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, in
 	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(NetMessageHead))
 	{
 		ERROR_LOG("invalid message size size=%d", size);
+		return false;
+	}
+
+	if (!pBufferevent)
+	{
+		ERROR_LOG("pBufferevent =NULL");
 		return false;
 	}
 
@@ -201,6 +207,7 @@ bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, in
 	{
 		SendDataLineHead lineHead;
 		lineHead.socketIndex = index;
+		lineHead.pBufferevent = pBufferevent;
 		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->uMessageSize);
 
 		if (addBytes == 0)
@@ -213,7 +220,62 @@ bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, in
 	return true;
 }
 
-bool CTCPSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID)
+bool CTCPSocketManage::SendData(void* pBufferevent, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, unsigned int uIdentification)
+{
+	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(NetMessageHead))
+	{
+		ERROR_LOG("invalid message size size=%d", size);
+		return false;
+	}
+
+	if (!pBufferevent)
+	{
+		ERROR_LOG("pBufferevent =NULL");
+		return false;
+	}
+
+	// 整合一下数据
+	char buf[sizeof(NetMessageHead) + size];
+
+	// 拼接包头
+	NetMessageHead* pHead = (NetMessageHead*)buf;
+	pHead->uMainID = mainID;
+	pHead->uAssistantID = assistID;
+	pHead->uMessageSize = sizeof(NetMessageHead) + size;
+	pHead->uHandleCode = handleCode;
+	pHead->uIdentification = uIdentification;
+
+	// 包体
+	if (pData && size > 0)
+	{
+		memcpy(buf + sizeof(NetMessageHead), pData, size);
+	}
+
+	// 数据加密
+	if (encrypted)
+	{
+		Xor::Encrypt((uint8_t*)(buf + sizeof(NetMessageHead)), size);
+	}
+
+	// 投递到发送队列
+	if (m_pSendDataLine)
+	{
+		SendDataLineHead lineHead;
+		lineHead.socketIndex = -1;
+		lineHead.pBufferevent = pBufferevent;
+		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->uMessageSize);
+
+		if (addBytes == 0)
+		{
+			ERROR_LOG("投递消息失败,mainID=%d,assistID=%d", mainID, assistID);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool CTCPSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent)
 {
 	if (index < 0)
 	{
@@ -224,6 +286,12 @@ bool CTCPSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, 
 	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(PlatformMessageHead))
 	{
 		ERROR_LOG("invalid message size size=%d", size);
+		return false;
+	}
+
+	if (!pBufferevent)
+	{
+		ERROR_LOG("pBufferevent =NULL");
 		return false;
 	}
 
@@ -250,6 +318,7 @@ bool CTCPSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, 
 	{
 		SendDataLineHead lineHead;
 		lineHead.socketIndex = index;
+		lineHead.pBufferevent = pBufferevent;
 		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->MainHead.uMessageSize);
 
 		if (addBytes == 0)
@@ -323,17 +392,17 @@ bufferevent* CTCPSocketManage::GetTCPBufferEvent(int index)
 
 void CTCPSocketManage::AddTCPSocketInfo(int index, const TCPSocketInfo& info)
 {
-	CON_INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", info.ip, info.port, index, info.bev);
-
 	// 发送连接成功消息
 	if (m_iServiceType == SERVICE_TYPE_CENTER)
 	{
-		CenterServerSendData(index, 0, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0);
+		CenterServerSendData(index, 0, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, info.bev);
 	}
 	else
 	{
-		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0);
+		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, info.bev);
 	}
+
+	CON_INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", info.ip, info.port, index, info.bev);
 
 	CSignedLockObject LockObject(&m_csSocketMapLock, true);
 
@@ -418,14 +487,14 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 		iter->second.ip, iter->second.port, fd, iter->second.bev, isClientAutoClose, iter->second.acceptMsgTime);
 }
 
-bool CTCPSocketManage::DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int index, NetMessageHead* pHead, void* pData, int size)
+bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size)
 {
-	if (!pHead || !pCTCPSocketManage)
+	if (!pHead || !pBufferevent)
 	{
 		return false;
 	}
 
-	CDataLine* pDataLine = pCTCPSocketManage->GetRecvDataLine();
+	CDataLine* pDataLine = GetRecvDataLine();
 	if (!pDataLine)
 	{
 		return false;
@@ -438,13 +507,14 @@ bool CTCPSocketManage::DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int i
 
 	if (pHead->uMainID == MSG_MAIN_CONECT) //测试连接包
 	{
-		CDataLine* pSendDataLine = pCTCPSocketManage->GetSendDataLine();
+		CDataLine* pSendDataLine = GetSendDataLine();
 
 		// 投递到发送队列
 		if (pSendDataLine)
 		{
 			SendDataLineHead lineHead;
 			lineHead.socketIndex = index;
+			lineHead.pBufferevent = pBufferevent;
 			unsigned int addBytes = pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, pHead, sizeof(NetMessageHead));
 
 			if (addBytes == 0)
@@ -460,7 +530,7 @@ bool CTCPSocketManage::DispatchPacket(CTCPSocketManage* pCTCPSocketManage, int i
 
 	msg.uHandleSize = size;
 	msg.uIndex = index;
-	msg.dwHandleID = 0;
+	msg.pBufferevent = pBufferevent;
 	msg.uAccessIP = 0;
 	msg.netMessageHead = *pHead;
 
@@ -544,7 +614,7 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 		sizeof(sin));
 
 	if (!listener) {
-		CON_ERROR_LOG("Could not create a listener!");
+		printf("Could not create a listener! 尝试换个端口或者稍等一会。");
 		exit(1);
 	}
 
@@ -665,86 +735,65 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 
 	INFO_LOG("CTCPSocketManage::ThreadSendMsg thread begin...");
 
-	//cpu优化，合理使用cpu
-	long long llLastTime = GetSysMilliseconds();
-	long long llNowTime = 0, llDifTime = 0;
-
 	while (pThis->m_running)
 	{
-		llNowTime = GetSysMilliseconds();
-		llDifTime = THREAD_ONCE_SEND_MSG + llLastTime - llNowTime;
-		if (llDifTime > THREAD_ONCE_SEND_MSG)
+		try
 		{
-			usleep(THREAD_ONCE_SEND_MSG * 1000);
-		}
-		else if (llDifTime > 0)
-		{
-			usleep((unsigned int)(llDifTime * 1000));
-		}
-		llLastTime = llNowTime;
-
-		while (pDataLine->GetDataCount())
-		{
-			try
+			//获取数据
+			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+			if (bytes == 0 || pDataLineHead == NULL)
 			{
-				//获取数据
-				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-				if (bytes == 0 || pDataLineHead == NULL)
+				continue;
+			}
+
+			//处理数据
+			SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
+			void* pBuffer = NULL;
+			unsigned int size = pSocketSend->dataLineHead.uSize;
+
+			if (size > sizeof(SendDataLineHead))
+			{
+				pBuffer = (void*)(pSocketSend + 1);			// 移动一个SendDataLineHead
+
+				bufferevent* bev = (bufferevent*)pSocketSend->pBufferevent;
+				if (bev)
 				{
-					// 取出来的数据大小为0，不太可能
-					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
-					continue;
-				}
-
-				//处理数据
-				SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
-				void* pBuffer = NULL;
-				unsigned int size = pSocketSend->dataLineHead.uSize;
-
-				if (size > sizeof(SendDataLineHead))
-				{
-					pBuffer = (void*)(pSocketSend + 1);			// 移动一个SendDataLineHead
-
-					bufferevent* bev = pThis->GetTCPBufferEvent(pSocketSend->socketIndex);
-					if (bev)
+					struct evbuffer* output = bufferevent_get_output(bev);
+					size_t outputLen = evbuffer_get_length(output);
+					if (outputLen > MAX_EVBUFFER_WRITE_SIZE)
 					{
-						struct evbuffer* output = bufferevent_get_output(bev);
-						size_t outputLen = evbuffer_get_length(output);
-						if (outputLen > MAX_EVBUFFER_WRITE_SIZE)
-						{
-							ERROR_LOG("发送数据失败，缓冲区太大，socketfd=%d,size=%lld", pSocketSend->socketIndex, outputLen);
-						}
-						else
-						{
-							if (bufferevent_write(bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
-							{
-								ERROR_LOG("发送数据失败，socketfd=%d", pSocketSend->socketIndex);
-							}
-							else
-							{
-								// 设置发送时间
-								// time_t currTime = time(NULL);
-								//pThis->SetTCPSocketRecvTime(pSocketSend->socketIndex, 0, currTime);
-							}
-						}
+						ERROR_LOG("发送数据失败，缓冲区太大，bev=%p,socketfd=%d,size=%lld", bev, pSocketSend->socketIndex, outputLen);
 					}
 					else
 					{
-						//ERROR_LOG("发送数据失败，连接可能关闭，socketfd=%d", pSocketSend->socketIndex);
+						if (bufferevent_write(bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
+						{
+							ERROR_LOG("发送数据失败，bev=%p,socketfd=%d", bev, pSocketSend->socketIndex);
+						}
+						else
+						{
+							// 设置发送时间
+							// time_t currTime = time(NULL);
+							//pThis->SetTCPSocketRecvTime(pSocketSend->socketIndex, 0, currTime);
+						}
 					}
-
 				}
-
-				// 释放内存
-				if (pDataLineHead)
+				else
 				{
-					free(pDataLineHead);
+					ERROR_LOG("发送数据失败，pBufferevent=NULL，或者连接关闭,socketfd=%d", pSocketSend->socketIndex);
 				}
+
 			}
-			catch (...)
+
+			// 释放内存
+			if (pDataLineHead)
 			{
-				ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
+				free(pDataLineHead);
 			}
+		}
+		catch (...)
+		{
+			ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
 		}
 	}
 
@@ -851,7 +900,7 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 		}
 
 		// 派发数据
-		DispatchPacket(pThis, fd, pNetHead, pData, realSize);
+		pThis->DispatchPacket(bev, fd, pNetHead, pData, realSize);
 
 		handleRemainSize -= messageSize;
 

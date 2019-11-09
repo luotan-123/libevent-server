@@ -29,10 +29,16 @@ class CSignedLock
 private:
 	pthread_mutex_t	m_csLock;
 	pthread_mutexattr_t m_attr;
+	pthread_cond_t  m_cond;
 
 public:
 	CSignedLock();
 	~CSignedLock();
+
+	void Notify() { pthread_cond_signal(&m_cond); }
+	void NotifyAll() { pthread_cond_broadcast(&m_cond); }
+	void Wait() { pthread_cond_wait(&m_cond, &m_csLock); }
+	void TimedWait(const struct timespec* abstime) { pthread_cond_timedwait(&m_cond, &m_csLock, abstime); }
 
 private:
 	inline void Lock() { pthread_mutex_lock(&m_csLock); }

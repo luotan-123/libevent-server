@@ -6,8 +6,8 @@
 struct HandleThreadStartStruct
 {
 	//变量定义
-	CFIFOEvent*							pFIFO;						//启动事件
-	CBaseCenterServer					* pMainManage;				//数据管理指针
+	CFIFOEvent* pFIFO;						//启动事件
+	CBaseCenterServer* pMainManage;				//数据管理指针
 };
 
 /*****************************************************************************************************************/
@@ -33,7 +33,7 @@ CBaseCenterServer::~CBaseCenterServer()
 }
 
 //初始化函数 
-bool CBaseCenterServer::Init(ManageInfoStruct * pInitData)
+bool CBaseCenterServer::Init(ManageInfoStruct* pInitData)
 {
 	INFO_LOG("CBaseCenterServer Init begin...");
 
@@ -151,7 +151,7 @@ bool CBaseCenterServer::UnInit()
 	SAFE_DELETE(m_pRedis);
 	m_pRedisPHP->Stop();
 	SAFE_DELETE(m_pRedisPHP);
-	
+
 	//删除定时器
 	SafeDeleteArray(m_pServerTimer);
 
@@ -277,7 +277,7 @@ bool CBaseCenterServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uC
 }
 
 //网络消息处理
-bool CBaseCenterServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex, UINT dwHandleID)
+bool CBaseCenterServer::OnSocketReadEvent(void* pBufferevent, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
 {
 	if (!pNetHead)
 	{
@@ -288,7 +288,7 @@ bool CBaseCenterServer::OnSocketReadEvent(CTCPSocket * pSocket, NetMessageHead *
 
 	SocketRead.uHandleSize = uSize;
 	SocketRead.uIndex = uIndex;
-	SocketRead.dwHandleID = dwHandleID;
+	SocketRead.pBufferevent = pBufferevent;
 	SocketRead.uAccessIP = 0;		//TODO
 	SocketRead.netMessageHead = *pNetHead;
 	return m_DataLine.AddData(&SocketRead.LineHead, sizeof(SocketRead), HD_SOCKET_READ, pData, uSize) != 0;
@@ -339,11 +339,11 @@ bool CBaseCenterServer::KillTimer(UINT uTimerID)
 //队列数据处理线程
 void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 {
-	HandleThreadStartStruct* pData = (HandleThreadStartStruct *)pThreadData;
-	CBaseCenterServer	* pThis = pData->pMainManage;
+	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;
+	CBaseCenterServer* pThis = pData->pMainManage;
 	CDataLine* pDataLine = &pThis->m_DataLine;
 	CFIFOEvent* pCFIFOEvent = pData->pFIFO;
-	
+
 	//线程数据读取完成
 	pCFIFOEvent->SetEvent();
 
@@ -354,103 +354,83 @@ void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;
 
-	//cpu优化，合理使用cpu
-	long long llLastTime = GetSysMilliseconds();
-	long long llNowTime = 0, llDifTime = 0;
-
 	while (pThis->m_bRun)
 	{
-		llNowTime = GetSysMilliseconds();
-		llDifTime = THREAD_ONCE_HANDLE_MSG + llLastTime - llNowTime;
-		if (llDifTime > THREAD_ONCE_HANDLE_MSG)
+		try
 		{
-			usleep(THREAD_ONCE_HANDLE_MSG * 1000);
-		}
-		else if (llDifTime > 0)
-		{
-			usleep((unsigned int)(llDifTime*1000));
-		}
-		llLastTime = llNowTime;
-
-		while (pDataLine->GetDataCount())
-		{
-			try
+			//获取数据
+			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+			if (bytes == 0 || pDataLineHead == NULL)
 			{
-				unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-				if (bytes == 0 || pDataLineHead == NULL)
-				{
-					// 取出来的数据大小为0，不太可能
-					ERROR_LOG("bytes == 0 || pDataLineHead == NULL");
-					continue;
-				}
-
-				switch (pDataLineHead->uDataKind)
-				{
-				case HD_SOCKET_READ:		// socket 数据读取
-				{
-					SocketReadLine * pSocketRead = (SocketReadLine *)pDataLineHead;
-					void* pBuffer = NULL;
-					unsigned int size = pSocketRead->uHandleSize;
-					if (size > 0)
-					{
-						pBuffer = (void *)(pSocketRead + 1);			// 移动一个SocketReadLine
-					}
-
-					//解析中心服务器包头
-					CenterServerMessageHead * pCenterServerHead = (CenterServerMessageHead *)pBuffer;
-					if (size < sizeof(CenterServerMessageHead))
-					{
-						ERROR_LOG("###### 包头大小错误 msgID=%d mainID=%d assistID=%d ######", pCenterServerHead->msgID,
-							pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
-						break;
-					}
-
-					pBuffer = (void *)(pCenterServerHead + 1);
-					size -= sizeof(CenterServerMessageHead);
-
-					bool ret = pThis->OnSocketRead(&pSocketRead->netMessageHead, pCenterServerHead, pBuffer, size, pSocketRead->uAccessIP, pSocketRead->uIndex, pSocketRead->dwHandleID);
-					if (!ret)
-					{
-						ERROR_LOG("OnSocketRead failed msgID=%d mainID=%d assistID=%d", pCenterServerHead->msgID,
-							pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
-					}
-					break;
-				}
-				case HD_SOCKET_CLOSE:		// socket 关闭
-				{
-					SocketCloseLine * pSocketClose = (SocketCloseLine *)pDataLineHead;
-					pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime);
-					break;
-				}
-				case HD_TIMER_MESSAGE:		// 定时器消息
-				{
-					ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
-					pThis->OnTimerMessage(pTimerMessage->uTimerID);
-					break;
-				}
-				default:
-					ERROR_LOG("HD_PLATFORM_SOCKET_READ invalid linedata type, type=%d", pDataLineHead->uDataKind);
-					break;
-				}
-
-				// 释放内存
-				if (pDataLineHead)
-				{
-					free(pDataLineHead);
-				}
-			}
-
-			catch (int iCode)
-			{
-				CON_ERROR_LOG("[ CenterServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
 				continue;
 			}
 
-			catch (...)
+			switch (pDataLineHead->uDataKind)
 			{
-				CON_ERROR_LOG("#### 未知崩溃。####");
-				continue;
+			case HD_SOCKET_READ:		// socket 数据读取
+			{
+				SocketReadLine* pSocketRead = (SocketReadLine*)pDataLineHead;
+				void* pBuffer = NULL;
+				unsigned int size = pSocketRead->uHandleSize;
+				if (size > 0)
+				{
+					pBuffer = (void*)(pSocketRead + 1);			// 移动一个SocketReadLine
+				}
+
+				//解析中心服务器包头
+				CenterServerMessageHead* pCenterServerHead = (CenterServerMessageHead*)pBuffer;
+				if (size < sizeof(CenterServerMessageHead))
+				{
+					ERROR_LOG("###### 包头大小错误 msgID=%d mainID=%d assistID=%d ######", pCenterServerHead->msgID,
+						pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
+					break;
+				}
+
+				pBuffer = (void*)(pCenterServerHead + 1);
+				size -= sizeof(CenterServerMessageHead);
+
+				bool ret = pThis->OnSocketRead(&pSocketRead->netMessageHead, pCenterServerHead, pBuffer, size, pSocketRead->uAccessIP, pSocketRead->uIndex, pSocketRead->pBufferevent);
+				if (!ret)
+				{
+					ERROR_LOG("OnSocketRead failed msgID=%d mainID=%d assistID=%d", pCenterServerHead->msgID,
+						pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
+				}
+				break;
 			}
+			case HD_SOCKET_CLOSE:		// socket 关闭
+			{
+				SocketCloseLine* pSocketClose = (SocketCloseLine*)pDataLineHead;
+				pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime);
+				break;
+			}
+			case HD_TIMER_MESSAGE:		// 定时器消息
+			{
+				ServerTimerLine* pTimerMessage = (ServerTimerLine*)pDataLineHead;
+				pThis->OnTimerMessage(pTimerMessage->uTimerID);
+				break;
+			}
+			default:
+				ERROR_LOG("HD_PLATFORM_SOCKET_READ invalid linedata type, type=%d", pDataLineHead->uDataKind);
+				break;
+			}
+
+			// 释放内存
+			if (pDataLineHead)
+			{
+				free(pDataLineHead);
+			}
+		}
+
+		catch (int iCode)
+		{
+			CON_ERROR_LOG("[ CenterServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
+			continue;
+		}
+
+		catch (...)
+		{
+			CON_ERROR_LOG("#### 未知崩溃。####");
+			continue;
 		}
 	}
 

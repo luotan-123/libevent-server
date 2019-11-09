@@ -21,7 +21,7 @@ CCenterServerManage::~CCenterServerManage()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CCenterServerManage::OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnSocketRead(NetMessageHead* pNetHead, CenterServerMessageHead* pCenterHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	if (!pNetHead)
 	{
@@ -32,23 +32,23 @@ bool CCenterServerManage::OnSocketRead(NetMessageHead * pNetHead, CenterServerMe
 
 	if (pCenterHead->msgID == COMMON_VERIFY_MESSAGE)
 	{
-		return OnHandleCommonServerVerifyMessage(pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandleCommonServerVerifyMessage(pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	else if (CENTER_MESSAGE_COMMON_BEGIN < pCenterHead->msgID && pCenterHead->msgID < CENTER_MESSAGE_COMMON_END)
 	{
-		return OnHandleCommonMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandleCommonMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	else if (CENTER_MESSAGE_LOGON_BEGIN < pCenterHead->msgID && pCenterHead->msgID < CENTER_MESSAGE_LOGON_END)
 	{
-		return OnHandleLogonMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandleLogonMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	else if (CENTER_MESSAGE_LOADER_BEGIN < pCenterHead->msgID && pCenterHead->msgID < CENTER_MESSAGE_LOADER_END)
 	{
-		return OnHandleLoaderMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandleLoaderMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	else if (PLATFORM_MESSAGE_BEGIN < pCenterHead->msgID && pCenterHead->msgID < PLATFORM_MESSAGE_END)
 	{
-		return OnHandlePHPMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandlePHPMessage(pNetHead, pCenterHead, pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	else
 	{
@@ -127,7 +127,7 @@ bool CCenterServerManage::OnStop()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CCenterServerManage::PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData)
+bool CCenterServerManage::PreInitParameter(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData)
 {
 	if (!pInitData || !pKernelData)
 	{
@@ -185,7 +185,7 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		auto itrVecLogonGroup = m_logonGroupSocket.begin();
 		for (; itrVecLogonGroup != m_logonGroupSocket.end(); itrVecLogonGroup++)
 		{
-			if (*itrVecLogonGroup == socketIdx)
+			if (itrVecLogonGroup->socketIdx == socketIdx)
 			{
 				break;
 			}
@@ -229,7 +229,7 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 }
 
 //////////////////////////////发送数据(登陆服发送)////////////////////////////////////////////
-bool CCenterServerManage::SendData(int userID, UINT msgID, void * pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode)
+bool CCenterServerManage::SendData(int userID, UINT msgID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode)
 {
 	auto itr = m_centerUserInfoMap.find(userID);
 	if (itr == m_centerUserInfoMap.end())
@@ -238,7 +238,7 @@ bool CCenterServerManage::SendData(int userID, UINT msgID, void * pData, int siz
 		return true;
 	}
 
-	int ret = m_TCPSocket.CenterServerSendData(itr->second.socketIdx, msgID, pData, size, mainID, assistID, handleCode, userID);
+	int ret = m_TCPSocket.CenterServerSendData(itr->second.socketIdx, msgID, pData, size, mainID, assistID, handleCode, userID, itr->second.pBufferevent);
 	if (ret <= 0)
 	{
 		ERROR_LOG("##发送数据失败：msgID=%d##", msgID);
@@ -249,7 +249,7 @@ bool CCenterServerManage::SendData(int userID, UINT msgID, void * pData, int siz
 }
 
 // 向服务器发送数据
-bool CCenterServerManage::SendData(ServerBaseInfo * pServer, UINT msgID, void* pData, UINT size, int userID /*= 0*/, UINT mainID/* = 0*/, UINT assistID /*= 0*/, UINT handleCode/* = 0*/)
+bool CCenterServerManage::SendData(ServerBaseInfo* pServer, UINT msgID, void* pData, UINT size, int userID /*= 0*/, UINT mainID/* = 0*/, UINT assistID /*= 0*/, UINT handleCode/* = 0*/)
 {
 	if (!pServer)
 	{
@@ -263,7 +263,7 @@ bool CCenterServerManage::SendData(ServerBaseInfo * pServer, UINT msgID, void* p
 		return false;
 	}
 
-	int ret = m_TCPSocket.CenterServerSendData(itr->second, msgID, pData, size, mainID, assistID, handleCode, userID);
+	int ret = m_TCPSocket.CenterServerSendData(itr->second.socketIdx, msgID, pData, size, mainID, assistID, handleCode, userID, itr->second.pBufferevent);
 	if (ret <= 0)
 	{
 		ERROR_LOG("##发送数据失败：msgID=%d,mainID=%d,assistID=%d##", msgID, mainID, assistID);
@@ -274,9 +274,9 @@ bool CCenterServerManage::SendData(ServerBaseInfo * pServer, UINT msgID, void* p
 }
 
 // 向服务器发送数据
-bool CCenterServerManage::SendData(UINT uScoketIndex, UINT msgID, void* pData, UINT size, UINT handleCode/* = 0*/)
+bool CCenterServerManage::SendData(UINT uScoketIndex, UINT msgID, void* pData, UINT size, UINT handleCode, void* pBufferevent)
 {
-	int	ret = m_TCPSocket.CenterServerSendData(uScoketIndex, msgID, pData, size, 0, 0, handleCode, 0);
+	int	ret = m_TCPSocket.CenterServerSendData(uScoketIndex, msgID, pData, size, 0, 0, handleCode, 0, pBufferevent);
 	if (ret <= 0)
 	{
 		ERROR_LOG("##发送数据失败：uScoketIndex = %d msgID=%d ##", uScoketIndex, msgID);
@@ -353,12 +353,12 @@ void CCenterServerManage::SendDistributedSystemInfo()
 		msg.logonGroupIndex = i;
 		msg.mainLogonGroupIndex = iMainLogonServer;
 
-		SendData(m_logonGroupSocket[i], CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO, &msg, sizeof(msg));
+		SendData(m_logonGroupSocket[i].socketIdx, CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO, &msg, sizeof(msg), 0, m_logonGroupSocket[i].pBufferevent);
 	}
 }
 
 // 比赛即将开始，给所有报名玩家发送消息通知
-void CCenterServerManage::SendNotifyMatchStart(const MatchInfo &matchInfo)
+void CCenterServerManage::SendNotifyMatchStart(const MatchInfo& matchInfo)
 {
 	//获取比赛人数
 	std::vector<MatchUserInfo> vecPeople;
@@ -493,7 +493,7 @@ bool CCenterServerManage::IsUserOnline(int userID)
 }
 
 // 检查定时赛
-void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
+void CCenterServerManage::CheckTimeMatch(const time_t& currTime)
 {
 	std::vector<int> matchRoomVec;
 
@@ -560,7 +560,7 @@ void CCenterServerManage::CheckTimeMatch(const time_t &currTime)
 }
 
 /////////////////////////////////PHP/////////////////////////////////////////
-bool CCenterServerManage::OnHandlePHPMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandlePHPMessage(NetMessageHead* pNetHead, CenterServerMessageHead* pCenterHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	switch (pCenterHead->msgID)
 	{
@@ -649,24 +649,24 @@ bool CCenterServerManage::OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, 
 {
 	if (size != sizeof(PlatformNoticeMessage))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_NOTICE, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_NOTICE, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformNoticeMessage* pMessage = (PlatformNoticeMessage*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_NOTICE, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_NOTICE, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	//给所有登录服发公告
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_NOTICE, pData, size);
+		SendData(m_logonGroupSocket[i].socketIdx, PLATFORM_MESSAGE_NOTICE, pData, size, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_NOTICE, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_NOTICE, NULL, 0, PF_SUCCESS);
 
 	return true;
 }
@@ -674,45 +674,45 @@ bool CCenterServerManage::OnHandlePHPNoticeMessage(UINT socketIdx, void* pData, 
 // 全服邮件通知
 bool CCenterServerManage::OnHandlePHPAllUserMailMessage(UINT socketIdx, void* pData, int size)
 {
-	SendData(socketIdx, PLATFORM_MESSAGE_REQ_ALL_USER_MAIL, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_REQ_ALL_USER_MAIL, NULL, 0, PF_SUCCESS);
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_REQ_ALL_USER_MAIL, NULL, 0);
+		SendData(m_logonGroupSocket[i].socketIdx, PLATFORM_MESSAGE_REQ_ALL_USER_MAIL, NULL, 0, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
 	return true;
 }
 
 //将reids数据保存db中
-bool CCenterServerManage::OnHandlePHPCloseServerMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPCloseServerMessage(UINT socketIdx, void* pData, int size)
 {
 	if (size != sizeof(PlatformCloseServerMessage))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformCloseServerMessage* pMessage = (PlatformCloseServerMessage*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	if (!m_pRedis)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_REDIS_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_REDIS_NULL);
 		return false;
 	}
 
 	if (pMessage->status != SERVER_PLATFROM_STATUS_CLOSE && pMessage->status != SERVER_PLATFROM_STATUS_TEST)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_CLOSE_STATUS_ERR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_CLOSE_STATUS_ERR);
 		return false;
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, PF_SUCCESS);
 
 	m_pRedis->SetServerStatus(pMessage->status);
 
@@ -720,7 +720,7 @@ bool CCenterServerManage::OnHandlePHPCloseServerMessage(UINT socketIdx, void*pDa
 
 	for (auto itr = m_serverToSocketMap.begin(); itr != m_serverToSocketMap.end(); itr++)
 	{
-		SendData(itr->second, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0);
+		SendData(itr->second.socketIdx, PLATFORM_MESSAGE_CLOSE_SERVER, NULL, 0, 0, itr->second.pBufferevent);
 	}
 
 	////清理所有在线玩家
@@ -730,17 +730,17 @@ bool CCenterServerManage::OnHandlePHPCloseServerMessage(UINT socketIdx, void*pDa
 }
 
 //从reids中读取数据恢复
-bool CCenterServerManage::OnHandlePHPOpenServerMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPOpenServerMessage(UINT socketIdx, void* pData, int size)
 {
 	if (size != 0)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	if (!m_pRedis)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, PF_REDIS_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, PF_REDIS_NULL);
 		return false;
 	}
 
@@ -748,61 +748,61 @@ bool CCenterServerManage::OnHandlePHPOpenServerMessage(UINT socketIdx, void*pDat
 
 	m_pRedis->SetServerStatus(SERVER_PLATFROM_STATUS_NORMAL);
 
-	SendData(socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, PF_SUCCESS);
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0);
+		SendData(m_logonGroupSocket[i].socketIdx, PLATFORM_MESSAGE_OPEN_SERVER, NULL, 0, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
 	return true;
 }
 
 // 发送喇叭
-bool CCenterServerManage::OnHandlePHPHornMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPHornMessage(UINT socketIdx, void* pData, int size)
 {
 	if (size != sizeof(PlatformHorn))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_SEND_HORN, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_SEND_HORN, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformHorn* pMessage = (PlatformHorn*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_SEND_HORN, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_SEND_HORN, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_SEND_HORN, pData, size);
+		SendData(m_logonGroupSocket[i].socketIdx, PLATFORM_MESSAGE_SEND_HORN, pData, size, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_SEND_HORN, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_SEND_HORN, NULL, 0, PF_SUCCESS);
 
 	return true;
 }
 
 // 解散桌子
-bool CCenterServerManage::OnHandlePHPDissmissDeskMessage(UINT socketIdx, UINT msgID, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPDissmissDeskMessage(UINT socketIdx, UINT msgID, void* pData, int size)
 {
 	if (size != sizeof(PlatformDissmissDesk))
 	{
-		SendData(socketIdx, msgID, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, msgID, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformDissmissDesk* pMessage = (PlatformDissmissDesk*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, msgID, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, msgID, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	if (pMessage->deskMixID <= 0 || pMessage->roomID <= 0)
 	{
-		SendData(socketIdx, msgID, NULL, 0, PF_DISSMISS_DESK_ERR);
+		//SendData(socketIdx, msgID, NULL, 0, PF_DISSMISS_DESK_ERR);
 		return false;
 	}
 
@@ -812,28 +812,28 @@ bool CCenterServerManage::OnHandlePHPDissmissDeskMessage(UINT socketIdx, UINT ms
 
 	if (!SendData(&serverInfo, msgID, pData, size))
 	{
-		SendData(socketIdx, msgID, NULL, 0, PF_SEND_DATA_ERR);
+		//SendData(socketIdx, msgID, NULL, 0, PF_SEND_DATA_ERR);
 		return false;
 	}
 
-	SendData(socketIdx, msgID, NULL, 0, PF_DISSMISS_DESK_ERR);
+	//SendData(socketIdx, msgID, NULL, 0, PF_DISSMISS_DESK_ERR);
 
 	return true;
 }
 
 // 通知某个人资源变化
-bool CCenterServerManage::OnHandlePHPNotifyResChangeMessage(UINT socketIdx, int userID, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPNotifyResChangeMessage(UINT socketIdx, int userID, void* pData, int size)
 {
 	if (size != sizeof(PlatformResourceChange))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RESOURCE_CHANGE, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RESOURCE_CHANGE, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformResourceChange* pMessage = (PlatformResourceChange*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RESOURCE_CHANGE, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RESOURCE_CHANGE, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
@@ -843,13 +843,13 @@ bool CCenterServerManage::OnHandlePHPNotifyResChangeMessage(UINT socketIdx, int 
 }
 
 // 向某个玩家推送消息
-bool CCenterServerManage::OnHandlePHPNotifyOneUserMessage(UINT socketIdx, int userID, void*pData, int size, unsigned int mainID, unsigned int assistID)
+bool CCenterServerManage::OnHandlePHPNotifyOneUserMessage(UINT socketIdx, int userID, void* pData, int size, unsigned int mainID, unsigned int assistID)
 {
 	return SendData(userID, PLATFORM_MESSAGE_NOTIFY_USERID, pData, size, mainID, assistID, 0);
 }
 
 // 向俱乐部玩家推送消息
-bool CCenterServerManage::OnHandlePHPNotifyFGMessage(UINT socketIdx, int friendsGroupID, void*pData, int size, unsigned int mainID, unsigned int assistID)
+bool CCenterServerManage::OnHandlePHPNotifyFGMessage(UINT socketIdx, int friendsGroupID, void* pData, int size, unsigned int mainID, unsigned int assistID)
 {
 	if (!m_pRedisPHP)
 	{
@@ -878,33 +878,33 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 {
 	if (size != sizeof(PlatformIdentUser))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformIdentUser* pMessage = (PlatformIdentUser*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	if (!m_pRedis)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_REDIS_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_REDIS_NULL);
 		return false;
 	}
 
 	if (pMessage->statusValue <= 0)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_NOUSER);
+		//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_NOUSER);
 		return false;
 	}
 
 	UserData userData;
 	if (!m_pRedis->GetUserData(userID, userData))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_NOUSER);
+		//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_NOUSER);
 		ERROR_LOG("GetUserData failed userID:%d", userID);
 		return false;
 	}
@@ -913,24 +913,24 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 	if (pMessage->type == 1) //设置
 	{
 		iStatus = userData.status | pMessage->statusValue;
-		if (pMessage->statusValue == USER_IDENTITY_TYPE_WIN && (userData.status&USER_IDENTITY_TYPE_FAIL) == USER_IDENTITY_TYPE_FAIL)
+		if (pMessage->statusValue == USER_IDENTITY_TYPE_WIN && (userData.status & USER_IDENTITY_TYPE_FAIL) == USER_IDENTITY_TYPE_FAIL)
 		{
 			iStatus = iStatus ^ USER_IDENTITY_TYPE_FAIL;
 		}
-		else if (pMessage->statusValue == USER_IDENTITY_TYPE_FAIL && (userData.status&USER_IDENTITY_TYPE_WIN) == USER_IDENTITY_TYPE_WIN)
+		else if (pMessage->statusValue == USER_IDENTITY_TYPE_FAIL && (userData.status & USER_IDENTITY_TYPE_WIN) == USER_IDENTITY_TYPE_WIN)
 		{
 			iStatus = iStatus ^ USER_IDENTITY_TYPE_WIN;
 		}
 	}
 	else //取消
 	{
-		if ((userData.status&pMessage->statusValue) == pMessage->statusValue)
+		if ((userData.status & pMessage->statusValue) == pMessage->statusValue)
 		{
-			iStatus = userData.status^pMessage->statusValue;
+			iStatus = userData.status ^ pMessage->statusValue;
 		}
 		else
 		{
-			SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SUCCESS);
+			//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SUCCESS);
 			return true;
 		}
 	}
@@ -964,7 +964,7 @@ bool CCenterServerManage::OnHandlePHPSetUserMessage(UINT socketIdx, int userID, 
 		ERROR_LOG("设置玩家身份失败:userID=%d", userID);
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_IDENTUSER, NULL, 0, PF_SUCCESS);
 
 	return true;
 }
@@ -974,21 +974,21 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedspotMessage(UINT socketIdx, in
 {
 	if (size != sizeof(PlatformPHPRedSpotNotify))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformPHPRedSpotNotify* pMessage = (PlatformPHPRedSpotNotify*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	UserRedSpot userRedspot;
 	if (!m_pRedis->GetUserRedSpot(userID, userRedspot))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_REDSPOT_NOT_EXIST);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_REDSPOT_NOT_EXIST);
 		return true;
 	}
 
@@ -1021,11 +1021,11 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedspotMessage(UINT socketIdx, in
 	}
 	else
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_SEND_DATA_ERR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_SEND_DATA_ERR);
 		return true;
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_RED_SPOT, NULL, 0, PF_SUCCESS);
 
 	return true;
 }
@@ -1035,20 +1035,20 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedFGspotMessage(UINT socketIdx, 
 {
 	if (size != sizeof(PlatformPHPRedSpotNotify))
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_SIZEERROR);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_SIZEERROR);
 		return false;
 	}
 
 	PlatformPHPRedSpotNotify* pMessage = (PlatformPHPRedSpotNotify*)pData;
 	if (!pMessage)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
 	if (pMessage->redspotType != PlatformPHPRedSpotNotify::PHP_REDSPOT_TYPE_FG)
 	{
-		SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_DATA_NULL);
+		//SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_DATA_NULL);
 		return false;
 	}
 
@@ -1060,7 +1060,7 @@ bool CCenterServerManage::OnHandlePHPNotifyUserRedFGspotMessage(UINT socketIdx, 
 		return false;
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_RED_FG_SPOT, NULL, 0, PF_SUCCESS);
 
 	for (size_t i = 0; i < m_memberUserIDVec.size(); i++)
 	{
@@ -1146,30 +1146,32 @@ bool CCenterServerManage::OnHandlePHPPhoneInfoMessage(UINT socketIdx, void* pDat
 	userData.registerType = LOGON_TEL_PHONE;
 	userData.registerTime = (int)time(NULL);
 
-	SendData(m_logonGroupSocket[CUtil::GetRandNum() % m_logonGroupSocket.size()], PLATFORM_MESSAGE_PHONE_INFO, &userData, sizeof(userData));
+	int iTempIndex = CUtil::GetRandNum() % m_logonGroupSocket.size();
+
+	SendData(m_logonGroupSocket[iTempIndex].socketIdx, PLATFORM_MESSAGE_PHONE_INFO, &userData, sizeof(userData), 0, m_logonGroupSocket[iTempIndex].pBufferevent);
 
 	return true;
 }
 
 // 有人报名或者退出比赛（实时赛）
-bool CCenterServerManage::OnHandlePHPSignUpMatchMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPSignUpMatchMessage(UINT socketIdx, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchPeople, pData, size);
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_SIGN_UP_MATCH_PEOPLE, pData, size);
+		SendData(m_logonGroupSocket[i].socketIdx, PLATFORM_MESSAGE_SIGN_UP_MATCH_PEOPLE, pData, size, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
 	return true;
 }
 
 // 请求开始比赛
-bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPReqStartMatchPeople, pData, size);
 
-	GameBaseInfo * pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pMessage->gameID);
+	GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pMessage->gameID);
 	if (!pGameBaseInfo)
 	{
 		ERROR_LOG("没有配置该游戏，gameID=%d", pMessage->gameID);
@@ -1222,13 +1224,13 @@ bool CCenterServerManage::OnHandlePHPReqStartMatchMessage(UINT socketIdx, void*p
 		ERROR_LOG("向游戏服发送数据失败 roomID=%d", roomID);
 	}
 
-	SendData(socketIdx, PLATFORM_MESSAGE_START_MATCH_PEOPLE, NULL, 0, PF_SUCCESS);
+	//SendData(socketIdx, PLATFORM_MESSAGE_START_MATCH_PEOPLE, NULL, 0, PF_SUCCESS);
 
 	return true;
 }
 
 // 创建、修改、删除，一个定时赛
-bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPModifyTimeMatch, pData, size);
 
@@ -1310,26 +1312,26 @@ bool CCenterServerManage::OnHandlePHPReqModifyTimeMatchMessage(UINT socketIdx, v
 }
 
 // 玩家报名或者退出报名（定时赛）
-bool CCenterServerManage::OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx, void*pData, int size)
+bool CCenterServerManage::OnHandlePHPTimeMatchPeopleChangeMessage(UINT socketIdx, void* pData, int size)
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchTime, pData, size);
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], PLATFORM_MESSAGE_SIGN_UP_MATCH_TIME, pData, size);
+		SendData(m_logonGroupSocket[i].socketIdx, PLATFORM_MESSAGE_SIGN_UP_MATCH_TIME, pData, size, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
 	return true;
 }
 
 ////////////////////////////////处理通用消息//////////////////////////////////////////
-bool CCenterServerManage::OnHandleCommonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandleCommonMessage(NetMessageHead* pNetHead, CenterServerMessageHead* pCenterHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	return true;
 }
 
 // 为每个服务器绑定socketIdx
-bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	if (size != sizeof(PlatformCenterServerVerify))
 	{
@@ -1355,19 +1357,22 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 	if (m_serverToSocketMap.find(serverInfo) != m_serverToSocketMap.end())
 	{
 		ERROR_LOG("####登录服ID重复,pMessage->serverID = %d####", pMessage->serverID);
-		SendData(uIndex, CENTER_MESSAGE_COMMON_REPEAT_ID, NULL, 0);
+		SendData(uIndex, CENTER_MESSAGE_COMMON_REPEAT_ID, NULL, 0, 0, pBufferevent);
 		return false;
 	}
 
 	m_socketToServerMap[uIndex] = serverInfo;
-	m_serverToSocketMap.insert(std::make_pair(serverInfo, uIndex));
+	SocketSimpleInfo socketInfo;
+	socketInfo.socketIdx = uIndex;
+	socketInfo.pBufferevent = pBufferevent;
+	m_serverToSocketMap.insert(std::make_pair(serverInfo, socketInfo));
 
 	//发送当前服务器集群，发送编号和数量，以及主要服务器编号
 	if (pMessage->serverType == SERVICE_TYPE_LOGON)   //登录服
 	{
 		m_pRedis->SetLogonServerStatus(serverInfo.serverID, 1);
 
-		m_logonGroupSocket.push_back(uIndex);
+		m_logonGroupSocket.emplace_back(uIndex, pBufferevent);
 
 		SendDistributedSystemInfo();
 	}
@@ -1382,7 +1387,7 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 }
 
 ////////////////////////////////处理大厅服消息//////////////////////////////////////////
-bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead* pNetHead, CenterServerMessageHead* pCenterHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	switch (pCenterHead->msgID)
 	{
@@ -1392,11 +1397,11 @@ bool CCenterServerManage::OnHandleLogonMessage(NetMessageHead * pNetHead, Center
 	}
 	case CENTER_MESSAGE_LOGON_USER_LOGON_OUT:
 	{
-		return OnHandleLogonUserStatusMessage(pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandleLogonUserStatusMessage(pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	case CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON:
 	{
-		return OnHandleLogonRepeatUserMessage(pCenterHead, pData, uSize, uAccessIP, uIndex, dwHandleID);
+		return OnHandleLogonRepeatUserMessage(pCenterHead, pData, uSize, uAccessIP, uIndex, pBufferevent);
 	}
 	case CENTER_MESSAGE_LOGON_RELAY_USER_MSG:
 	{
@@ -1456,7 +1461,7 @@ bool CCenterServerManage::OnHandleLogonResChangeMessage(int userID, void* pData,
 }
 
 // 玩家上下线
-bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	if (size != sizeof(PlatformUserLogonLogout))
 	{
@@ -1488,6 +1493,7 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 		userInfo.userID = pMessage->userID;
 		userInfo.socketIdx = uIndex;
 		userInfo.isVirtual = pMessage->isVirtual;
+		userInfo.pBufferevent = pBufferevent;
 
 		m_centerUserInfoMap[pMessage->userID] = userInfo;
 	}
@@ -1514,7 +1520,7 @@ bool CCenterServerManage::OnHandleLogonUserStatusMessage(void* pData, UINT size,
 }
 
 // 给其它登录服发送数据，踢掉旧服务器玩家
-bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead * pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead* pCenterHead, void* pData, UINT size, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	if (size != 0)
 	{
@@ -1538,19 +1544,19 @@ bool CCenterServerManage::OnHandleLogonRepeatUserMessage(CenterServerMessageHead
 	PlatformRepeatUserLogon msg;
 	msg.userID = pCenterHead->userID;
 
-	SendData(itr->second.socketIdx, CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON, &msg, sizeof(msg));
+	SendData(itr->second.socketIdx, CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON, &msg, sizeof(msg), 0, itr->second.pBufferevent);
 
 	return true;
 }
 
 // 转发消息给某个人
-bool CCenterServerManage::OnHandleLogonRelayUserMessage(NetMessageHead * pNetHead, void* pData, UINT size, int userID)
+bool CCenterServerManage::OnHandleLogonRelayUserMessage(NetMessageHead* pNetHead, void* pData, UINT size, int userID)
 {
 	return SendData(userID, PLATFORM_MESSAGE_NOTIFY_USERID, pData, size, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode);
 }
 
 // 转发消息给俱乐部
-bool CCenterServerManage::OnHandleLogonRelayFGMessage(NetMessageHead * pNetHead, void* pData, UINT size, int friendsGroupID)
+bool CCenterServerManage::OnHandleLogonRelayFGMessage(NetMessageHead* pNetHead, void* pData, UINT size, int friendsGroupID)
 {
 	if (!m_pRedisPHP)
 	{
@@ -1645,7 +1651,7 @@ bool CCenterServerManage::OnHandleLogonReqDissmissDeskessage(void* pData, UINT s
 }
 
 ////////////////////////////////处理游戏服消息//////////////////////////////////////////
-bool CCenterServerManage::OnHandleLoaderMessage(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID)
+bool CCenterServerManage::OnHandleLoaderMessage(NetMessageHead* pNetHead, CenterServerMessageHead* pCenterHead, void* pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
 {
 	switch (pCenterHead->msgID)
 	{
@@ -1861,17 +1867,21 @@ bool CCenterServerManage::OnHandleLoaderDeskDissmissMessage(void* pData, UINT si
 		memcpy(autoCreateMsg.gameRules, pMessage->gameRules, sizeof(autoCreateMsg.gameRules));
 
 		UINT uSendSocketIdx = 0;
+		void* pBufferevent = nullptr;
 		auto itr = m_centerUserInfoMap.find(masterID);
 		if (itr == m_centerUserInfoMap.end()) // 房主不在，随机选择服务器
 		{
-			uSendSocketIdx = m_logonGroupSocket[CUtil::GetRandNum() % m_logonGroupSocket.size()];
+			int iTempIndex = CUtil::GetRandNum() % m_logonGroupSocket.size();
+			uSendSocketIdx = m_logonGroupSocket[iTempIndex].socketIdx;
+			pBufferevent = m_logonGroupSocket[iTempIndex].pBufferevent;
 		}
 		else // 房主存在，自动开房任务交给房主的登陆服
 		{
 			uSendSocketIdx = itr->second.socketIdx;
+			pBufferevent = itr->second.pBufferevent;
 		}
 
-		SendData(uSendSocketIdx, CENTER_MESSAGE_COMMON_AUTO_CREATEROOM, &autoCreateMsg, sizeof(autoCreateMsg));
+		SendData(uSendSocketIdx, CENTER_MESSAGE_COMMON_AUTO_CREATEROOM, &autoCreateMsg, sizeof(autoCreateMsg), 0, pBufferevent);
 	}
 
 	return true;
@@ -1967,7 +1977,7 @@ bool CCenterServerManage::OnHandleLoaderRewardMessage(void* pData, UINT size)
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], CENTER_MESSAGE_LOADER_REWARD_ACTIVITY, pData, size);
+		SendData(m_logonGroupSocket[i].socketIdx, CENTER_MESSAGE_LOADER_REWARD_ACTIVITY, pData, size, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
 	return true;
@@ -1980,7 +1990,7 @@ bool CCenterServerManage::OnHandleLoaderNotifyStartMatchMessage(void* pData, UIN
 
 	for (size_t i = 0; i < m_logonGroupSocket.size(); i++)
 	{
-		SendData(m_logonGroupSocket[i], CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH, pData, size);
+		SendData(m_logonGroupSocket[i].socketIdx, CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH, pData, size, 0, m_logonGroupSocket[i].pBufferevent);
 	}
 
 	return true;

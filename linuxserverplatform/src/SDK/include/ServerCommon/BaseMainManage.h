@@ -70,7 +70,7 @@ private:
 	//数据管理刷新模块
 	virtual bool OnUpdate() { return true; }
 	//socket数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, UINT dwHandleID) = 0;
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent) = 0;
 	//socket关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime) = 0;
 	//异步线程处理结果
