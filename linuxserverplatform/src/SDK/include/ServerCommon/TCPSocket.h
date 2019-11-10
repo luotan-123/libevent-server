@@ -20,12 +20,11 @@ struct TCPSocketInfo
 {
 	volatile bool isConnect;
 	time_t acceptMsgTime;
-	volatile time_t lastRecvMsgTime;
-	time_t lastSendMsgTime;
-	bufferevent* bev;
-	char ip[48];
+	char ip[MAX_NUM_IP_ADDR_SIZE];
 	unsigned short port;
 	int acceptFd;			//自己的socket
+	bufferevent* bev;
+	CSignedLock* lock;
 
 	TCPSocketInfo()
 	{
@@ -123,8 +122,6 @@ public:
 	bufferevent* GetTCPBufferEvent(int index);
 	// 添加TCPSocketInfo
 	void AddTCPSocketInfo(int index, const TCPSocketInfo& info);
-	// 设置recvMsgTime
-	bool SetTCPSocketRecvTime(int index, const time_t& llLastRecvMsgTime, const time_t& llLastSendMsgTime);
 	// 设置tcp为未连接状态
 	void RemoveTCPSocketStatus(int index, bool isClientAutoClose = false);
 	// 派发数据包
@@ -167,10 +164,12 @@ private:
 	volatile bool				m_running;
 	UINT						m_uMaxSocketSize; // libevent 单线程默认的32000
 	volatile UINT				m_uCurSocketSize;
-	std::unordered_map<int, TCPSocketInfo> m_socketInfoMap;  // 键值：fd文件描述符
-	CSignedLock					m_csSocketMapLock;
 	char						m_bindIP[48];
 	unsigned short				m_port;
+	CSignedLock					m_csSocketInfoLock;
+	std::unordered_map<int, TCPSocketInfo> m_socketInfoMap;  // 键值：fd文件描述符
+	std::unordered_map<void*, int> m_bufferToSocketIndexMap;
+	std::vector<TCPSocketInfo>	m_socketInfoVec;
 
 public:
 	unsigned int	m_iServiceType;

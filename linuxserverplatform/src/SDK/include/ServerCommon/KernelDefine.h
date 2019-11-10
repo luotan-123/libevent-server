@@ -20,6 +20,7 @@ const int MAX_REDIS_COMMAND_SIZE = 2048;			// redis命令缓冲区大小
 const int MAX_SQL_STATEMENT_SIZE = 2048;			// sql语句缓冲区大小
 
 const int MAX_IP_ADDR_SIZE = 128;		// 最大IP地址长度
+const int MAX_NUM_IP_ADDR_SIZE = 48;	// 最大数字IP地址长度
 const int MAX_DB_USER_SIZE = 48;		// 最大db_user缓冲区大小
 const int MAX_DB_PASSWD_SIZE = 48;		// 最大db_passwd缓冲区大小
 const int MAX_DB_NAME_SIZE = 48;		// 最大db_name缓冲区大小

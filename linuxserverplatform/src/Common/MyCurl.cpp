@@ -252,7 +252,7 @@ int MyCurl::postUrlHttps(const string &url, const vector<string> &vUrlHeader, co
 			}
 			curl_easy_cleanup(curl);
 
-			CON_ERROR_LOG(" curl error %s\n", curl_easy_strerror(res));
+			ERROR_LOG(" curl error %s\n", curl_easy_strerror(res));
 
 			return -1;
 		}
@@ -351,7 +351,7 @@ int MyCurl::uploadUrl(const char *videocode, int gameID, int timeout, int tries)
 		if (r == CURLE_OK)
 			return 1;
 		else {
-			CON_ERROR_LOG(" curl error %s\n", curl_easy_strerror(r));
+			ERROR_LOG(" curl error %s\n", curl_easy_strerror(r));
 			return 0;
 		}
 	}

@@ -402,39 +402,18 @@ void CTCPSocketManage::AddTCPSocketInfo(int index, const TCPSocketInfo& info)
 		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, info.bev);
 	}
 
-	CON_INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", info.ip, info.port, index, info.bev);
+	INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", info.ip, info.port, index, info.bev);
 
-	CSignedLockObject LockObject(&m_csSocketMapLock, true);
+	CSignedLockObject LockObject(&m_csSocketInfoLock, true);
 
 	m_socketInfoMap[index] = info;
 
 	m_uCurSocketSize++;
 }
 
-bool CTCPSocketManage::SetTCPSocketRecvTime(int index, const time_t& llLastRecvMsgTime, const time_t& llLastSendMsgTime)
-{
-	auto iter = m_socketInfoMap.find(index);
-	if (iter == m_socketInfoMap.end())
-	{
-		return false;
-	}
-
-	if (llLastRecvMsgTime)
-	{
-		iter->second.lastRecvMsgTime = llLastRecvMsgTime;
-	}
-
-	if (llLastSendMsgTime)
-	{
-		iter->second.lastSendMsgTime = llLastSendMsgTime;
-	}
-
-	return true;
-}
-
 void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/* = false*/)
 {
-	CSignedLockObject LockObject(&m_csSocketMapLock, false);
+	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
 
 	ULONG uAccessIP = 0;
 
@@ -457,22 +436,14 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 	iter->second.isConnect = false;
 	m_uCurSocketSize--;
 
-	int fd = bufferevent_getfd(iter->second.bev);
-	if (fd == index)
+	// 服务器主动发起FIN包
+	if (!isClientAutoClose)
 	{
-		// 服务器主动发起FIN包
-		if (!isClientAutoClose)
-		{
-			close(fd);
-			bufferevent_disable(iter->second.bev, EV_READ | EV_ET);
-		}
+		close(index);
+		bufferevent_disable(iter->second.bev, EV_READ | EV_ET);
+	}
 
-		bufferevent_free(iter->second.bev);
-	}
-	else
-	{
-		CON_ERROR_LOG("######### 重要错误：index=%d,fd=%d ############", index, fd);
-	}
+	bufferevent_free(iter->second.bev);
 
 	// 解锁
 	LockObject.UnLock();
@@ -483,8 +454,8 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)iter->second.acceptMsgTime);
 	}
 
-	CON_INFO_LOG("close socket. ip=%s port=%d,fd=%d,bufferevent=%p,isClientAutoClose:%d,acceptTime=%lld",
-		iter->second.ip, iter->second.port, fd, iter->second.bev, isClientAutoClose, iter->second.acceptMsgTime);
+	INFO_LOG("close socket. ip=%s port=%d,fd=%d,bufferevent=%p,isClientAutoClose:%d,acceptTime=%lld",
+		iter->second.ip, iter->second.port, index, iter->second.bev, isClientAutoClose, iter->second.acceptMsgTime);
 }
 
 bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size)
@@ -630,7 +601,7 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 
 	// 初始工作线程信息
 	RecvThreadParam param[workBaseCount];
-	int socketPairBufSize = sizeof(TCPSocketInfo) * MAX_POST_CONNECTED_COUNT;
+	int socketPairBufSize = sizeof(PlatformSocketInfo) * MAX_POST_CONNECTED_COUNT;
 	for (int i = 0; i < workBaseCount; i++)
 	{
 		param[i].index = i;
@@ -737,63 +708,43 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 
 	while (pThis->m_running)
 	{
-		try
+		//获取数据
+		unsigned int bytes = pDataLine->GetData(&pDataLineHead);
+		if (bytes == 0 || pDataLineHead == NULL)
 		{
-			//获取数据
-			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-			if (bytes == 0 || pDataLineHead == NULL)
+			continue;
+		}
+
+		//处理数据
+		SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
+		void* pBuffer = (void*)(pSocketSend + 1);
+		size_t size = pSocketSend->dataLineHead.uSize;
+		int fd = pSocketSend->socketIndex;
+
+		bufferevent* bev = (bufferevent*)pSocketSend->pBufferevent;
+
+		if (size > sizeof(SendDataLineHead) && bev)
+		{
+			struct evbuffer* output = bufferevent_get_output(bev);
+			if (output)
 			{
-				continue;
-			}
-
-			//处理数据
-			SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
-			void* pBuffer = NULL;
-			unsigned int size = pSocketSend->dataLineHead.uSize;
-
-			if (size > sizeof(SendDataLineHead))
-			{
-				pBuffer = (void*)(pSocketSend + 1);			// 移动一个SendDataLineHead
-
-				bufferevent* bev = (bufferevent*)pSocketSend->pBufferevent;
-				if (bev)
+				bufferevent_data_cb readcb = (bufferevent_data_cb)0x01;
+				bufferevent_getcb(bev, &readcb, NULL, NULL, NULL);
+				if (readcb && bufferevent_write(bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
 				{
-					struct evbuffer* output = bufferevent_get_output(bev);
-					size_t outputLen = evbuffer_get_length(output);
-					if (outputLen > MAX_EVBUFFER_WRITE_SIZE)
-					{
-						ERROR_LOG("发送数据失败，缓冲区太大，bev=%p,socketfd=%d,size=%lld", bev, pSocketSend->socketIndex, outputLen);
-					}
-					else
-					{
-						if (bufferevent_write(bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
-						{
-							ERROR_LOG("发送数据失败，bev=%p,socketfd=%d", bev, pSocketSend->socketIndex);
-						}
-						else
-						{
-							// 设置发送时间
-							// time_t currTime = time(NULL);
-							//pThis->SetTCPSocketRecvTime(pSocketSend->socketIndex, 0, currTime);
-						}
-					}
+					ERROR_LOG("发送数据失败，bev=%p,socketfd=%d", bev, fd);
 				}
-				else
-				{
-					ERROR_LOG("发送数据失败，pBufferevent=NULL，或者连接关闭,socketfd=%d", pSocketSend->socketIndex);
-				}
-
-			}
-
-			// 释放内存
-			if (pDataLineHead)
-			{
-				free(pDataLineHead);
 			}
 		}
-		catch (...)
+		else
 		{
-			ERROR_LOG("CATCH:%s with %s\n", __FILE__, __FUNCTION__);
+			ERROR_LOG("发送数据失败，bev=%p,socketfd=%d", bev, fd);
+		}
+
+		// 释放内存
+		if (pDataLineHead)
+		{
+			free(pDataLineHead);
 		}
 	}
 
@@ -808,11 +759,10 @@ void CTCPSocketManage::ListenerCB(evconnlistener* listener, evutil_socket_t fd, 
 
 	// 获取连接信息
 	struct sockaddr_in* addrClient = (struct sockaddr_in*)sa;
-	TCPSocketInfo tcpInfo;
-	tcpInfo.acceptMsgTime = tcpInfo.lastRecvMsgTime = tcpInfo.lastSendMsgTime = time(NULL);
+	PlatformSocketInfo tcpInfo;
+	tcpInfo.acceptMsgTime = time(NULL);
 	strcpy(tcpInfo.ip, inet_ntoa(addrClient->sin_addr));
 	tcpInfo.port = ntohs(addrClient->sin_port);
-	tcpInfo.isConnect = true;
 	tcpInfo.acceptFd = fd;
 
 	if (pThis->GetCurSocketSize() >= pThis->m_uMaxSocketSize)
@@ -926,7 +876,7 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	}
 	else if (events & BEV_EVENT_TIMEOUT) // 长时间没有收到，客户端发过来的数据，读取数据超时
 	{
-		CON_INFO_LOG("心跳踢人 fd=%d,bufferevent=%p", fd, bev);
+		INFO_LOG("心跳踢人 fd=%d,bufferevent=%p", fd, bev);
 	}
 	else
 	{
@@ -938,7 +888,7 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 
 void CTCPSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)
 {
-	CON_ERROR_LOG("accept error:%s", evutil_socket_error_to_string(EVUTIL_SOCKET_ERROR()));
+	ERROR_LOG("accept error:%s", evutil_socket_error_to_string(EVUTIL_SOCKET_ERROR()));
 }
 
 void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
@@ -952,20 +902,20 @@ void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 		exit(1);
 	}
 
-	char buf[sizeof(TCPSocketInfo) * MAX_POST_CONNECTED_COUNT] = "";
+	char buf[sizeof(PlatformSocketInfo) * MAX_POST_CONNECTED_COUNT] = "";
 
 	int realAllSize = read(readfd, buf, sizeof(buf));
-	if (realAllSize < sizeof(TCPSocketInfo) || realAllSize % sizeof(TCPSocketInfo) != 0)
+	if (realAllSize < sizeof(PlatformSocketInfo) || realAllSize % sizeof(PlatformSocketInfo) != 0)
 	{
-		CON_ERROR_LOG("#### ThreadLibeventProcess error size=%d,sizeof(TCPSocketInfo)=%lld  ######", realAllSize, sizeof(TCPSocketInfo));
+		ERROR_LOG("#### ThreadLibeventProcess error size=%d,sizeof(PlatformSocketInfo)=%lld  ######", realAllSize, sizeof(PlatformSocketInfo));
 		event_add(pThis->m_workBaseVec[threadIndex].event, NULL);
 		return;
 	}
 
-	int countAcceptCount = realAllSize / sizeof(TCPSocketInfo);
+	int countAcceptCount = realAllSize / sizeof(PlatformSocketInfo);
 	for (int i = 0; i < countAcceptCount; i++)
 	{
-		TCPSocketInfo* pTCPSocketInfo = (TCPSocketInfo*)(buf + i * sizeof(TCPSocketInfo));
+		PlatformSocketInfo* pTCPSocketInfo = (PlatformSocketInfo*)(buf + i * sizeof(PlatformSocketInfo));
 
 		struct event_base* base = pThis->m_workBaseVec[threadIndex].base;
 		struct bufferevent* bev = NULL;
@@ -1001,8 +951,14 @@ void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 		}
 
 		// 保存信息
-		pTCPSocketInfo->bev = bev;
-		pThis->AddTCPSocketInfo(fd, *pTCPSocketInfo);
+		TCPSocketInfo tcpInfo;
+		memcpy(tcpInfo.ip, pTCPSocketInfo->ip, sizeof(tcpInfo.ip));
+		tcpInfo.acceptFd = pTCPSocketInfo->acceptFd;
+		tcpInfo.acceptMsgTime = pTCPSocketInfo->acceptMsgTime;
+		tcpInfo.bev = bev;
+		tcpInfo.isConnect = true;
+		tcpInfo.port = pTCPSocketInfo->port;
+		pThis->AddTCPSocketInfo(fd, tcpInfo);
 	}
 
 	event_add(pThis->m_workBaseVec[threadIndex].event, NULL);
@@ -1013,19 +969,19 @@ void CTCPSocketManage::EventLog(int severity, const char* msg)
 	switch (severity)
 	{
 	case EVENT_LOG_DEBUG:
-		CON_INFO_LOG("libevent[debug]:%s", msg);
+		INFO_LOG("libevent[debug]:%s", msg);
 		break;
 	case EVENT_LOG_MSG:
-		CON_INFO_LOG("libevent[msg]:%s", msg);
+		INFO_LOG("libevent[msg]:%s", msg);
 		break;
 	case EVENT_LOG_WARN:
-		CON_INFO_LOG("libevent[warn]:%s", msg);
+		INFO_LOG("libevent[warn]:%s", msg);
 		break;
 	case EVENT_LOG_ERR:
-		CON_ERROR_LOG("########## libevent内核错误:%s ##########", msg);
+		ERROR_LOG("########## libevent内核错误:%s ##########", msg);
 		break;
 	default:
-		CON_INFO_LOG("libevent:%s", msg);
+		INFO_LOG("libevent:%s", msg);
 		break;
 	}
 }

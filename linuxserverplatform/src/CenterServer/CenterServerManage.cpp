@@ -451,10 +451,10 @@ void CCenterServerManage::RoutineCheckUnbindIDSocket()
 	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
 	{
 		bool bIsConnect = iter->second.isConnect;
-		time_t llAcceptMsgTime = iter->second.acceptMsgTime, llLastRecvMsgTime = iter->second.lastRecvMsgTime;
+		time_t llAcceptMsgTime = iter->second.acceptMsgTime;
 
 		// 清理不绑定的socket
-		if (bIsConnect && currTime - llLastRecvMsgTime > CONNECT_TIME_SECS)
+		if (bIsConnect && currTime - llAcceptMsgTime > CONNECT_TIME_SECS)
 		{
 			auto itrSocketToServerMap = m_socketToServerMap.find(iter->first);
 			if (itrSocketToServerMap == m_socketToServerMap.end() || itrSocketToServerMap->second.serverType == SERVICE_TYPE_BEGIN)

@@ -530,13 +530,13 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 
 		catch (int iCode)
 		{
-			CON_ERROR_LOG("[ LogonServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
+			ERROR_LOG("[ LogonServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
 			continue;
 		}
 
 		catch (...)
 		{
-			CON_ERROR_LOG("#### 未知崩溃。####");
+			ERROR_LOG("#### 未知崩溃。####");
 			continue;
 		}
 	}

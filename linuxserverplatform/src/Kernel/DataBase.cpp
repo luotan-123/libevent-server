@@ -178,7 +178,7 @@ bool CDataBaseManage::SQLConnectReset()
 		}
 		catch (MysqlHelper_Exception & excep)
 		{
-			CON_ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
+			ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 			return false;
 		}
 	}
@@ -216,7 +216,7 @@ bool CDataBaseManage::CheckSQLConnect()
 			}
 			catch (MysqlHelper_Exception & excep)
 			{
-				CON_ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
+				ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
 				return false;
 			}
 		}

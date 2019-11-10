@@ -145,6 +145,20 @@ struct PlatformLogonServerVerify
 	}
 };
 
+// 登陆服认证
+struct PlatformSocketInfo
+{
+	time_t acceptMsgTime;
+	char ip[MAX_NUM_IP_ADDR_SIZE];
+	unsigned short port;
+	int acceptFd;			//自己的socket
+
+	PlatformSocketInfo()
+	{
+		memset(this, 0, sizeof(PlatformSocketInfo));
+	}
+};
+
 #pragma pack()
 
 ///////////////////////////////////////////////////////////////////////////////
