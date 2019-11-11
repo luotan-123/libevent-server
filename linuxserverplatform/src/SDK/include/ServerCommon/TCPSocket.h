@@ -102,8 +102,6 @@ public:
 public:
 	// 发送数据函数
 	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification = 0);
-	// 发送数据函数
-	bool SendData(void* pBufferevent, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, unsigned int uIdentification = 0);
 	// 中心服务器发送数据
 	bool CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent);
 	// 关闭连接(业务逻辑线程调用)
@@ -114,19 +112,22 @@ public:
 	CDataLine* GetSendDataLine();
 	// 获取当前socket连接总数
 	UINT GetCurSocketSize();
-	// 获取socketmap
-	const std::unordered_map<int, TCPSocketInfo>& GetSocketMap();
+	// 判断socket是否连接
+	bool IsConnected(int index);
+	// 获取socketSet
+	void GetSocketSet(std::vector<UINT>& vec);
 	// 获取连接ip
 	const char* GetSocketIP(int index);
-	// 获取bufferevent
-	bufferevent* GetTCPBufferEvent(int index);
+	// 获取TcpSocketInfo
+	const TCPSocketInfo* GetTCPSocketInfo(int index);
+	// 分配socketIndex算法
+	int GetSocketIndex();
 	// 添加TCPSocketInfo
-	void AddTCPSocketInfo(int index, const TCPSocketInfo& info);
+	void AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo);
 	// 设置tcp为未连接状态
 	void RemoveTCPSocketStatus(int index, bool isClientAutoClose = false);
 	// 派发数据包
 	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
-
 	// 设置tcp收发缓冲区
 	static void SetTcpRcvSndBUF(int fd, int rcvBufSize, int sndBufSize);
 	// 设置应用层单次读取数据包的大小 bufferevent_set_max_single_read
@@ -166,10 +167,12 @@ private:
 	volatile UINT				m_uCurSocketSize;
 	char						m_bindIP[48];
 	unsigned short				m_port;
+
+	// 内核管理socket模块
 	CSignedLock					m_csSocketInfoLock;
-	std::unordered_map<int, TCPSocketInfo> m_socketInfoMap;  // 键值：fd文件描述符
-	std::unordered_map<void*, int> m_bufferToSocketIndexMap;
 	std::vector<TCPSocketInfo>	m_socketInfoVec;
+	volatile UINT				m_uCurSocketIndex;
+	std::set<UINT>				m_heartBeatSocketSet;
 
 public:
 	unsigned int	m_iServiceType;

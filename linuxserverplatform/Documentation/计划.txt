@@ -1,4 +1,5 @@
 1、linux项目makefile的编写
 2、部署服务器shell，开启关闭服务器进程的shell
-3、go语言初步接触
-4、支持http协议、websocket协议。
+3、gdb输出更多信息，比如输出堆信息
+4、go、python语言初步接触
+5、支持http协议、websocket协议。

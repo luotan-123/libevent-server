@@ -41,6 +41,7 @@ CTCPSocketManage::CTCPSocketManage()
 	m_iServiceType = 0;
 	memset(m_bindIP, 0, sizeof(m_bindIP));
 	m_port = 0;
+	m_uCurSocketIndex = 0;
 }
 
 CTCPSocketManage::~CTCPSocketManage()
@@ -79,6 +80,9 @@ bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int po
 		return false;
 	}
 
+	// 初始化分配内存
+	m_socketInfoVec.resize(m_uMaxSocketSize * 2);
+
 	INFO_LOG("service TCPSocketManage init end.");
 
 	return true;
@@ -104,6 +108,8 @@ bool CTCPSocketManage::Start(int serverType)
 	m_running = true;
 	m_iServiceType = serverType;
 	m_uCurSocketSize = 0;
+	m_heartBeatSocketSet.clear();
+	m_uCurSocketIndex = 0;
 
 	// 创建发送队列
 	if (m_pSendDataLine == NULL)
@@ -147,11 +153,20 @@ bool CTCPSocketManage::Stop()
 
 	m_running = false;
 	m_uCurSocketSize = 0;
+	m_uCurSocketIndex = 0;
 
 	event_base_loopbreak(m_listenerBase);
 	for (size_t i = 0; i < m_workBaseVec.size(); i++)
 	{
 		event_base_loopbreak(m_workBaseVec[i].base);
+	}
+
+	for (size_t i = 0; i < m_socketInfoVec.size(); i++)
+	{
+		if (m_socketInfoVec[i].lock)
+		{
+			SafeDelete(m_socketInfoVec[i].lock);
+		}
 	}
 
 	INFO_LOG("service TCPSocketManage stop end...");
@@ -161,21 +176,15 @@ bool CTCPSocketManage::Stop()
 
 bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification/* = 0*/)
 {
-	if (index < 0)
+	if (!IsConnected(index))
 	{
-		ERROR_LOG("invalid socketIdx, index=%d, mainID=%d assistID=%d", index, mainID, assistID);
+		ERROR_LOG("socketIdx close, index=%d, mainID=%d assistID=%d", index, mainID, assistID);
 		return false;
 	}
 
 	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(NetMessageHead))
 	{
 		ERROR_LOG("invalid message size size=%d", size);
-		return false;
-	}
-
-	if (!pBufferevent)
-	{
-		ERROR_LOG("pBufferevent =NULL");
 		return false;
 	}
 
@@ -220,78 +229,17 @@ bool CTCPSocketManage::SendData(int index, void* pData, int size, int mainID, in
 	return true;
 }
 
-bool CTCPSocketManage::SendData(void* pBufferevent, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, unsigned int uIdentification)
-{
-	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(NetMessageHead))
-	{
-		ERROR_LOG("invalid message size size=%d", size);
-		return false;
-	}
-
-	if (!pBufferevent)
-	{
-		ERROR_LOG("pBufferevent =NULL");
-		return false;
-	}
-
-	// 整合一下数据
-	char buf[sizeof(NetMessageHead) + size];
-
-	// 拼接包头
-	NetMessageHead* pHead = (NetMessageHead*)buf;
-	pHead->uMainID = mainID;
-	pHead->uAssistantID = assistID;
-	pHead->uMessageSize = sizeof(NetMessageHead) + size;
-	pHead->uHandleCode = handleCode;
-	pHead->uIdentification = uIdentification;
-
-	// 包体
-	if (pData && size > 0)
-	{
-		memcpy(buf + sizeof(NetMessageHead), pData, size);
-	}
-
-	// 数据加密
-	if (encrypted)
-	{
-		Xor::Encrypt((uint8_t*)(buf + sizeof(NetMessageHead)), size);
-	}
-
-	// 投递到发送队列
-	if (m_pSendDataLine)
-	{
-		SendDataLineHead lineHead;
-		lineHead.socketIndex = -1;
-		lineHead.pBufferevent = pBufferevent;
-		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->uMessageSize);
-
-		if (addBytes == 0)
-		{
-			ERROR_LOG("投递消息失败,mainID=%d,assistID=%d", mainID, assistID);
-			return false;
-		}
-	}
-
-	return true;
-}
-
 bool CTCPSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent)
 {
-	if (index < 0)
+	if (!IsConnected(index))
 	{
-		ERROR_LOG("invalid socketIdx, index=%d, mainID=%d assistID=%d", index, mainID, assistID);
+		ERROR_LOG("socketIdx close, index=%d, mainID=%d assistID=%d", index, mainID, assistID);
 		return false;
 	}
 
 	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(PlatformMessageHead))
 	{
 		ERROR_LOG("invalid message size size=%d", size);
-		return false;
-	}
-
-	if (!pBufferevent)
-	{
-		ERROR_LOG("pBufferevent =NULL");
 		return false;
 	}
 
@@ -358,57 +306,136 @@ UINT CTCPSocketManage::GetCurSocketSize()
 	return m_uCurSocketSize;
 }
 
-const std::unordered_map<int, TCPSocketInfo>& CTCPSocketManage::GetSocketMap()
+bool CTCPSocketManage::IsConnected(int index)
 {
-	return m_socketInfoMap;
+	if (index < 0 || index >= m_socketInfoVec.size())
+	{
+		return false;
+	}
+
+	return m_socketInfoVec[index].isConnect;
+}
+
+void CTCPSocketManage::GetSocketSet(std::vector<UINT>& vec)
+{
+	vec.clear();
+
+	CSignedLockObject LockObject(&m_csSocketInfoLock, true);
+
+	for (auto iter = m_heartBeatSocketSet.begin(); iter != m_heartBeatSocketSet.end(); iter++)
+	{
+		vec.push_back(*iter);
+	}
 }
 
 const char* CTCPSocketManage::GetSocketIP(int index)
 {
-	auto iter = m_socketInfoMap.find(index);
-	if (iter == m_socketInfoMap.end())
+	if (index < 0 || index >= m_socketInfoVec.size())
 	{
 		return NULL;
 	}
 
-	return iter->second.ip;
+	return m_socketInfoVec[index].ip;
 }
 
-bufferevent* CTCPSocketManage::GetTCPBufferEvent(int index)
+const TCPSocketInfo* CTCPSocketManage::GetTCPSocketInfo(int index)
 {
-	auto iter = m_socketInfoMap.find(index);
-	if (iter == m_socketInfoMap.end())
+	if (index < 0 || index >= m_socketInfoVec.size())
 	{
 		return NULL;
 	}
 
-	if (iter->second.isConnect)
-	{
-		return iter->second.bev;
-	}
-
-	return NULL;
+	return &m_socketInfoVec[index];
 }
 
-void CTCPSocketManage::AddTCPSocketInfo(int index, const TCPSocketInfo& info)
+int CTCPSocketManage::GetSocketIndex()
 {
+
+
+
+	return -1;
+}
+
+void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo)
+{
+	struct event_base* base = m_workBaseVec[threadIndex].base;
+	struct bufferevent* bev = NULL;
+	int fd = pTCPSocketInfo->acceptFd;
+
+	// 分配索引算法
+	int index = GetSocketIndex();
+	if (index < 0)
+	{
+		ERROR_LOG("分配索引失败！！！,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
+		close(fd);
+		return;
+	}
+
+	bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
+	if (!bev)
+	{
+		ERROR_LOG("Error constructing bufferevent!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
+		close(fd);
+		return;
+	}
+
+	// 设置应用层收发数据包，单次大小
+	SetMaxSingleReadAndWrite(bev, SOCKET_RECV_BUF_SIZE, SOCKET_SEND_BUF_SIZE);
+
+	// 生成回调函数参数，调用bufferevent_free要释放内存，否则内存泄露
+	RecvThreadParam* pRecvThreadParam = new RecvThreadParam;
+	pRecvThreadParam->pCTCPSocketManage = this;
+	pRecvThreadParam->index = index;
+
+	// 添加事件，并设置好回调函数
+	bufferevent_setcb(bev, ReadCB, NULL, EventCB, (void*)pRecvThreadParam);
+	if (bufferevent_enable(bev, EV_READ | EV_ET) < 0)
+	{
+		ERROR_LOG("add event fail!!!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
+		CloseSocket(fd);
+		return;
+	}
+
+	// 设置读超时，当做心跳。网关服务器才需要
+	if (pThis->m_iServiceType == SERVICE_TYPE_LOGON)
+	{
+		timeval tvRead;
+		tvRead.tv_sec = CHECK_HEAETBEAT_SECS * KEEP_ACTIVE_HEARTBEAT_COUNT;
+		tvRead.tv_usec = 0;
+		bufferevent_set_timeouts(bev, &tvRead, NULL);
+	}
+
+	// 保存信息
+	TCPSocketInfo tcpInfo;
+	memcpy(tcpInfo.ip, pTCPSocketInfo->ip, sizeof(tcpInfo.ip));
+	tcpInfo.acceptFd = pTCPSocketInfo->acceptFd;
+	tcpInfo.acceptMsgTime = pTCPSocketInfo->acceptMsgTime;
+	tcpInfo.bev = bev;
+	tcpInfo.isConnect = true;
+	tcpInfo.port = pTCPSocketInfo->port;
+	tcpInfo.lock = new CSignedLock;
+
+	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
+	LockObject.Lock();
+
+	m_socketInfoVec[index] = tcpInfo;
+	m_heartBeatSocketSet.insert((UINT)index);
+
+	m_uCurSocketSize++;
+
+	LockObject.UnLock();
+
 	// 发送连接成功消息
 	if (m_iServiceType == SERVICE_TYPE_CENTER)
 	{
-		CenterServerSendData(index, 0, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, info.bev);
+		CenterServerSendData(index, 0, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, tcpInfo.bev);
 	}
 	else
 	{
-		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, info.bev);
+		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, tcpInfo.bev);
 	}
 
-	INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", info.ip, info.port, index, info.bev);
-
-	CSignedLockObject LockObject(&m_csSocketInfoLock, true);
-
-	m_socketInfoMap[index] = info;
-
-	m_uCurSocketSize++;
+	INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", tcpInfo.ip, tcpInfo.port, tcpInfo, tcpInfo.bev);
 }
 
 void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/* = false*/)
@@ -917,48 +944,8 @@ void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 	{
 		PlatformSocketInfo* pTCPSocketInfo = (PlatformSocketInfo*)(buf + i * sizeof(PlatformSocketInfo));
 
-		struct event_base* base = pThis->m_workBaseVec[threadIndex].base;
-		struct bufferevent* bev = NULL;
-		int fd = pTCPSocketInfo->acceptFd;
-
-		bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
-		if (!bev)
-		{
-			ERROR_LOG("Error constructing bufferevent!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
-			close(fd);
-			continue;
-		}
-
-		// 设置应用层收发数据包，单次大小
-		SetMaxSingleReadAndWrite(bev, SOCKET_RECV_BUF_SIZE, SOCKET_SEND_BUF_SIZE);
-
-		// 添加事件，并设置好回调函数
-		bufferevent_setcb(bev, ReadCB, NULL, EventCB, pThis);
-		if (bufferevent_enable(bev, EV_READ | EV_ET) < 0)
-		{
-			ERROR_LOG("add event fail!!!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
-			pThis->CloseSocket(fd);
-			continue;
-		}
-
-		// 设置读超时，当做心跳。网关服务器才需要
-		if (pThis->m_iServiceType == SERVICE_TYPE_LOGON)
-		{
-			timeval tvRead;
-			tvRead.tv_sec = CHECK_HEAETBEAT_SECS * KEEP_ACTIVE_HEARTBEAT_COUNT;
-			tvRead.tv_usec = 0;
-			bufferevent_set_timeouts(bev, &tvRead, NULL);
-		}
-
-		// 保存信息
-		TCPSocketInfo tcpInfo;
-		memcpy(tcpInfo.ip, pTCPSocketInfo->ip, sizeof(tcpInfo.ip));
-		tcpInfo.acceptFd = pTCPSocketInfo->acceptFd;
-		tcpInfo.acceptMsgTime = pTCPSocketInfo->acceptMsgTime;
-		tcpInfo.bev = bev;
-		tcpInfo.isConnect = true;
-		tcpInfo.port = pTCPSocketInfo->port;
-		pThis->AddTCPSocketInfo(fd, tcpInfo);
+		// 处理连接
+		pThis->AddTCPSocketInfo(threadIndex, pTCPSocketInfo);
 	}
 
 	event_add(pThis->m_workBaseVec[threadIndex].event, NULL);
