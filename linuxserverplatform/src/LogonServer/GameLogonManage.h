@@ -18,7 +18,7 @@ enum LogonServerTimerID
 
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
-const int ROUTINE_CHECK_UNBINDID_SOCKET = 41;		// 定期检查未登录的连接(s)
+const int ROUTINE_CHECK_UNBINDID_SOCKET = 59;		// 定期检查未登录的连接(s)
 const int NORMAL_TIMER_SECS = 2;					// 通用定时器(s)
 
 // 登陆服socket
@@ -56,9 +56,10 @@ private:
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
 	time_t						m_lastSendHeartBeatTime;// 上次发送心跳时间
+	std::vector<UINT>			m_socketIndexVec;		// socket索引
 
 private:
-	std::set<void*>				m_scoketMatch;			// 在比赛场相关页面的玩家
+	std::set<UINT>				m_scoketMatch;			// 在比赛场相关页面的玩家
 
 public:
 	CGameLogonManage();
@@ -113,9 +114,9 @@ private:
 	// 请求玩家信息
 	bool OnHandleReqUserInfo(int userID, void* pData, int size);
 	// 请求进入比赛场页面
-	bool OnHandleJoinMatchScene(void* pBufferevent);
+	bool OnHandleJoinMatchScene(UINT index);
 	// 请求退出比赛场页面
-	bool OnHandleExitMatchScene(void* pBufferevent);
+	bool OnHandleExitMatchScene(UINT index);
 
 	//////////////////////////////游戏服相关////////////////////////////////////////////
 	// 认证

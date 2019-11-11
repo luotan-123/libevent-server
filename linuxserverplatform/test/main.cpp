@@ -163,7 +163,7 @@ void* Thread(void*p)
 int main()
 {
 	CSignedLock lock_;
-	printf("lock_ = %\n", sizeof(lock_));
+	printf("lock_ = %lld\n", sizeof(lock_));
 	pthread_t ssss = 0;
 	pthread_create(&ssss, NULL, Thread, NULL);
 

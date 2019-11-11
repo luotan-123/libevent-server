@@ -67,7 +67,6 @@ bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int po
 	}
 	m_port = port;
 
-	m_socketInfoMap.clear();
 	m_workBaseVec.clear();
 
 	// 设置libevent日志回调函数
@@ -350,10 +349,27 @@ const TCPSocketInfo* CTCPSocketManage::GetTCPSocketInfo(int index)
 
 int CTCPSocketManage::GetSocketIndex()
 {
+	CSignedLockObject LockObject(&m_csSocketInfoLock, true);
 
+	m_uCurSocketIndex = m_uCurSocketIndex % m_socketInfoVec.size();
+	int index = -1;
 
+	for (int iCount = 0; iCount < m_uMaxSocketSize * 2; iCount++)
+	{
+		if (!m_socketInfoVec[m_uCurSocketIndex].isConnect)
+		{
+			index = m_uCurSocketIndex;
+			m_uCurSocketIndex++;
+			break;
+		}
+	}
 
-	return -1;
+	if (index >= m_socketInfoVec.size())
+	{
+		return -1;
+	}
+
+	return index;
 }
 
 void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo)
@@ -366,7 +382,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 	int index = GetSocketIndex();
 	if (index < 0)
 	{
-		ERROR_LOG("分配索引失败！！！,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
+		ERROR_LOG("分配索引失败！！！fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
 		close(fd);
 		return;
 	}
@@ -392,12 +408,14 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 	if (bufferevent_enable(bev, EV_READ | EV_ET) < 0)
 	{
 		ERROR_LOG("add event fail!!!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
-		CloseSocket(fd);
+		close(fd);
+		bufferevent_free(bev);
+		SafeDelete(pRecvThreadParam);
 		return;
 	}
 
 	// 设置读超时，当做心跳。网关服务器才需要
-	if (pThis->m_iServiceType == SERVICE_TYPE_LOGON)
+	if (m_iServiceType == SERVICE_TYPE_LOGON)
 	{
 		timeval tvRead;
 		tvRead.tv_sec = CHECK_HEAETBEAT_SECS * KEEP_ACTIVE_HEARTBEAT_COUNT;
@@ -413,10 +431,22 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 	tcpInfo.bev = bev;
 	tcpInfo.isConnect = true;
 	tcpInfo.port = pTCPSocketInfo->port;
-	tcpInfo.lock = new CSignedLock;
+	if (!tcpInfo.lock)
+	{
+		tcpInfo.lock = new CSignedLock;
+	}
 
 	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
 	LockObject.Lock();
+
+	if (m_socketInfoVec[index].isConnect)
+	{
+		ERROR_LOG("分配索引失败,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
+		close(fd);
+		bufferevent_free(bev);
+		SafeDelete(pRecvThreadParam);
+		return;
+	}
 
 	m_socketInfoVec[index] = tcpInfo;
 	m_heartBeatSocketSet.insert((UINT)index);
@@ -435,59 +465,85 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, tcpInfo.bev);
 	}
 
-	INFO_LOG("client connect .ip=%s port=%d fd=%d bufferevent=%p", tcpInfo.ip, tcpInfo.port, tcpInfo, tcpInfo.bev);
+	CON_INFO_LOG("client connect [ip=%s port=%d index=%d fd=%d bufferevent=%p]",
+		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, tcpInfo.bev);
 }
 
 void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/* = false*/)
 {
-	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
+	if (index < 0 || index >= m_socketInfoVec.size())
+	{
+		ERROR_LOG("index=%d 超出范围", index);
+		return;
+	}
 
 	ULONG uAccessIP = 0;
+
+	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
 
 	// 加锁
 	LockObject.Lock();
 
-	auto iter = m_socketInfoMap.find(index);
-	if (iter == m_socketInfoMap.end())
-	{
-		return;
-	}
+	auto& tcpInfo = m_socketInfoVec[index];
 
 	// 重复调用
-	if (!iter->second.isConnect)
+	if (!tcpInfo.isConnect)
 	{
 		return;
 	}
 
-	uAccessIP = inet_addr(iter->second.ip);
-	iter->second.isConnect = false;
+	// 如果锁没有分配内存，就分配
+	if (!tcpInfo.lock)
+	{
+		tcpInfo.lock = new CSignedLock;
+	}
+
+	uAccessIP = inet_addr(tcpInfo.ip);
 	m_uCurSocketSize--;
+	m_heartBeatSocketSet.erase((UINT)index);
+
+	// 释放参数内存
+	RecvThreadParam* pRecvThreadParam = (RecvThreadParam*)0x01;
+	bufferevent_getcb(tcpInfo.bev, NULL, NULL, NULL, (void**)&pRecvThreadParam);
+	if (pRecvThreadParam)
+	{
+		SafeDelete(pRecvThreadParam);
+	}
 
 	// 服务器主动发起FIN包
 	if (!isClientAutoClose)
 	{
-		close(index);
-		bufferevent_disable(iter->second.bev, EV_READ | EV_ET);
+		close(tcpInfo.acceptFd);
 	}
 
-	bufferevent_free(iter->second.bev);
+	// 和发送线程相关的锁
+	CSignedLockObject LockSendMsgObject(tcpInfo.lock, false);
 
-	// 解锁
+	LockSendMsgObject.Lock();
+
+	tcpInfo.isConnect = false;
+	bufferevent_free(tcpInfo.bev);
+	tcpInfo.bev = nullptr;
+
+	// 解锁发送线程
+	LockSendMsgObject.UnLock();
+
+	// 解锁多线程
 	LockObject.UnLock();
 
 	// 回调业务层
 	if (m_pService)
 	{
-		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)iter->second.acceptMsgTime);
+		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime);
 	}
 
-	INFO_LOG("close socket. ip=%s port=%d,fd=%d,bufferevent=%p,isClientAutoClose:%d,acceptTime=%lld",
-		iter->second.ip, iter->second.port, index, iter->second.bev, isClientAutoClose, iter->second.acceptMsgTime);
+	CON_INFO_LOG("close [ip=%s port=%d index=%d fd=%d isClientAutoClose:%d acceptTime=%lld]",
+		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, isClientAutoClose, tcpInfo.acceptMsgTime);
 }
 
 bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size)
 {
-	if (!pHead || !pBufferevent)
+	if (!pHead)
 	{
 		return false;
 	}
@@ -746,26 +802,31 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 		SendDataLineHead* pSocketSend = (SendDataLineHead*)pDataLineHead;
 		void* pBuffer = (void*)(pSocketSend + 1);
 		size_t size = pSocketSend->dataLineHead.uSize;
-		int fd = pSocketSend->socketIndex;
+		int index = pSocketSend->socketIndex;
 
-		bufferevent* bev = (bufferevent*)pSocketSend->pBufferevent;
-
-		if (size > sizeof(SendDataLineHead) && bev)
+		if (size > sizeof(SendDataLineHead) && index >= 0 && index < pThis->m_socketInfoVec.size())
 		{
-			struct evbuffer* output = bufferevent_get_output(bev);
-			if (output)
+			auto& tcpInfo = pThis->m_socketInfoVec[index];
+			if (tcpInfo.lock)
 			{
-				bufferevent_data_cb readcb = (bufferevent_data_cb)0x01;
-				bufferevent_getcb(bev, &readcb, NULL, NULL, NULL);
-				if (readcb && bufferevent_write(bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
+				CSignedLockObject LockSendMsgObject(tcpInfo.lock, false);
+				LockSendMsgObject.Lock();
+
+				if (tcpInfo.isConnect && tcpInfo.bev)
 				{
-					ERROR_LOG("发送数据失败，bev=%p,socketfd=%d", bev, fd);
+					if (bufferevent_write(tcpInfo.bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
+					{
+						ERROR_LOG("发送数据失败，index=%d socketfd=%d bev=%p,", index, tcpInfo.acceptFd, tcpInfo.bev);
+					}
 				}
+
+				// 解锁发送线程
+				LockSendMsgObject.UnLock();
 			}
 		}
 		else
 		{
-			ERROR_LOG("发送数据失败，bev=%p,socketfd=%d", bev, fd);
+			ERROR_LOG("发送数据失败，index=%d 超出范围", index);
 		}
 
 		// 释放内存
@@ -829,9 +890,11 @@ void CTCPSocketManage::ListenerCB(evconnlistener* listener, evutil_socket_t fd, 
 
 void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 {
-	CTCPSocketManage* pThis = (CTCPSocketManage*)data;
+	RecvThreadParam* param = (RecvThreadParam*)data;
+	CTCPSocketManage* pThis = param->pCTCPSocketManage;
+	int index = param->index;
+
 	struct evbuffer* input = bufferevent_get_input(bev);
-	int fd = bufferevent_getfd(bev);
 
 	size_t maxSingleRead = Min_(evbuffer_get_length(input), SOCKET_RECV_BUF_SIZE);
 
@@ -849,13 +912,23 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 	// 解出包头
 	NetMessageHead* pNetHead = (NetMessageHead*)buf;
 
+	// 错误判断
+	if (handleRemainSize >= sizeof(NetMessageHead) && pNetHead->uMessageSize > SOCKET_RECV_BUF_SIZE)
+	{
+		// 消息格式不正确
+		pThis->CloseSocket(index);
+		ERROR_LOG("消息格式不正确,index=%d", index);
+		return;
+	}
+
+	// 粘包处理
 	while (handleRemainSize >= sizeof(NetMessageHead) && handleRemainSize >= pNetHead->uMessageSize)
 	{
 		unsigned int messageSize = pNetHead->uMessageSize;
 		if (messageSize > MAX_TEMP_SENDBUF_SIZE)
 		{
 			// 消息格式不正确
-			pThis->CloseSocket(fd);
+			pThis->CloseSocket(index);
 			ERROR_LOG("消息格式不正确");
 			return;
 		}
@@ -864,7 +937,7 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 		if (realSize < 0)
 		{
 			// 数据包不够包头
-			pThis->CloseSocket(fd);
+			pThis->CloseSocket(index);
 			ERROR_LOG("数据包不够包头");
 			return;
 		}
@@ -877,7 +950,7 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 		}
 
 		// 派发数据
-		pThis->DispatchPacket(bev, fd, pNetHead, pData, realSize);
+		pThis->DispatchPacket(bev, index, pNetHead, pData, realSize);
 
 		handleRemainSize -= messageSize;
 
@@ -889,9 +962,9 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 
 void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 {
-	CTCPSocketManage* pThis = (CTCPSocketManage*)data;
-
-	int fd = bufferevent_getfd(bev);
+	RecvThreadParam* param = (RecvThreadParam*)data;
+	CTCPSocketManage* pThis = param->pCTCPSocketManage;
+	int index = param->index;
 
 	if (events & BEV_EVENT_EOF)
 	{
@@ -903,14 +976,14 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	}
 	else if (events & BEV_EVENT_TIMEOUT) // 长时间没有收到，客户端发过来的数据，读取数据超时
 	{
-		INFO_LOG("心跳踢人 fd=%d,bufferevent=%p", fd, bev);
+		INFO_LOG("心跳踢人 index=%d fd=%d", index, pThis->m_socketInfoVec[index].acceptFd);
 	}
 	else
 	{
 		SYS_ERROR_LOG("Got an error on the connection,events=%d", events);
 	}
 
-	pThis->RemoveTCPSocketStatus(fd, true);
+	pThis->RemoveTCPSocketStatus(index, true);
 }
 
 void CTCPSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)

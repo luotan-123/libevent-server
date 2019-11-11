@@ -74,6 +74,8 @@ bool CCenterServerManage::OnStart()
 
 	m_lastNormalTimerTime = time(NULL);
 
+	m_socketIndexVec.resize(m_uMaxPeople);
+
 	//// 测试redis读写速度
 	//m_pRedis->TestRedis("CenterServer-GameRedis-Speed");
 	//m_pRedisPHP->TestRedis("CenterServer-PHPRedis-Speed");
@@ -446,20 +448,20 @@ void CCenterServerManage::RoutineCheckUnbindIDSocket()
 {
 	time_t currTime = time(NULL);
 
-	const std::unordered_map<int, TCPSocketInfo>& socketInfoMap = m_TCPSocket.GetSocketMap();
+	m_TCPSocket.GetSocketSet(m_socketIndexVec);
 
-	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
+	for (int i = 0; i < m_socketIndexVec.size(); i++)
 	{
-		bool bIsConnect = iter->second.isConnect;
-		time_t llAcceptMsgTime = iter->second.acceptMsgTime;
+		int index = m_socketIndexVec[i];
+		time_t llAcceptMsgTime = m_TCPSocket.GetTCPSocketInfo(index)->acceptMsgTime;
 
 		// 清理不绑定的socket
-		if (bIsConnect && currTime - llAcceptMsgTime > CONNECT_TIME_SECS)
+		if (currTime - llAcceptMsgTime > CONNECT_TIME_SECS)
 		{
-			auto itrSocketToServerMap = m_socketToServerMap.find(iter->first);
+			auto itrSocketToServerMap = m_socketToServerMap.find(index);
 			if (itrSocketToServerMap == m_socketToServerMap.end() || itrSocketToServerMap->second.serverType == SERVICE_TYPE_BEGIN)
 			{
-				m_TCPSocket.CloseSocket(iter->first);
+				m_TCPSocket.CloseSocket(index);
 			}
 		}
 	}

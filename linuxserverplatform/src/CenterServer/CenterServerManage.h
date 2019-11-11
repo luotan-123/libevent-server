@@ -14,7 +14,7 @@ enum CenterServerTimerID
 };
 
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
-const int ROUTINE_CHECK_UNBINDID_SOCKET = 53;		// 定期清理连接(s)
+const int ROUTINE_CHECK_UNBINDID_SOCKET = 59;		// 定期清理连接(s)
 const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
 const int CHECK_REDIS_LOAD_MATCH_INFO = 1200;		// 加载比赛信息(s)
 
@@ -78,6 +78,7 @@ private:
 	std::vector<int>								m_memberUserIDVec;		// 临时保存的俱乐部成员
 	time_t											m_lastNormalTimerTime;
 	std::map<long long, MatchInfo>					m_timeMatchInfoMap;		// 定时赛信息，根据比赛开始时间排序。tips：所有定时赛比赛开始时间不能相同
+	std::vector<UINT>								m_socketIndexVec;		// socket索引
 
 public:
 	CCenterServerManage();

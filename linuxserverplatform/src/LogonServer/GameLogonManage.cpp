@@ -137,6 +137,7 @@ bool CGameLogonManage::OnStart()
 
 	m_lastNormalTimerTime = time(NULL);
 	m_lastSendHeartBeatTime = 0;
+	m_socketIndexVec.resize(m_uMaxPeople);
 
 	InitRounteCheckEvent();
 
@@ -433,7 +434,7 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 			m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
 
 		//退出比赛场页面
-		m_scoketMatch.erase(socketInfo.pBufferevent);
+		m_scoketMatch.erase(socketIdx);
 	}
 
 	return true;
@@ -1813,11 +1814,11 @@ bool CGameLogonManage::OnHandleOtherMessage(int assistID, void* pData, int size,
 	}
 	case MSG_ASS_LOGON_OTHER_JOIN_MATCH_SCENE:
 	{
-		return OnHandleJoinMatchScene(pBufferevent);
+		return OnHandleJoinMatchScene(socketIdx);
 	}
 	case MSG_ASS_LOGON_OTHER_EXIT_MATCH_SCENE:
 	{
-		return OnHandleExitMatchScene(pBufferevent);
+		return OnHandleExitMatchScene(socketIdx);
 	}
 	default:
 		break;
@@ -1934,17 +1935,17 @@ bool CGameLogonManage::OnHandleReqUserInfo(int userID, void* pData, int size)
 }
 
 // 请求进入比赛场页面
-bool CGameLogonManage::OnHandleJoinMatchScene(void* pBufferevent)
+bool CGameLogonManage::OnHandleJoinMatchScene(UINT index)
 {
-	m_scoketMatch.insert(pBufferevent);
+	m_scoketMatch.insert(index);
 
 	return true;
 }
 
 // 请求退出比赛场页面
-bool CGameLogonManage::OnHandleExitMatchScene(void* pBufferevent)
+bool CGameLogonManage::OnHandleExitMatchScene(UINT index)
 {
-	m_scoketMatch.erase(pBufferevent);
+	m_scoketMatch.erase(index);
 
 	return true;
 }
@@ -2096,7 +2097,7 @@ bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT
 	{
 		if (iter->second.type == LOGON_SERVER_SOCKET_TYPE_USER)
 		{
-			m_TCPSocket.SendData(iter->second.pBufferevent, pData, uSize, uMainID, bAssistantID, 0, 0);
+			m_TCPSocket.SendData(iter->first, pData, uSize, uMainID, bAssistantID, 0, 0, iter->second.pBufferevent);
 		}
 	}
 
@@ -2171,19 +2172,11 @@ void CGameLogonManage::CheckRedisConnection()
 
 void CGameLogonManage::CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeartBeatTime)
 {
-	int avtiveCount = 0;
-	int negativeCount = 0;
-	time_t currTime = time(NULL);
+	m_TCPSocket.GetSocketSet(m_socketIndexVec);
 
-	const std::unordered_map<int, TCPSocketInfo>& socketInfoMap = m_TCPSocket.GetSocketMap();
-
-	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
+	for (int i = 0; i < m_socketIndexVec.size(); i++)
 	{
-		if (iter->second.isConnect)
-		{
-			m_TCPSocket.SendData(iter->second.bev, NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0,0);
-
-		}
+		m_TCPSocket.SendData(m_socketIndexVec[i], NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, 0, NULL);
 	}
 }
 
@@ -2199,19 +2192,24 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 {
 	time_t currTime = time(NULL);
 
-	// 检查未绑定userID的异常socket
-	const std::unordered_map<int, TCPSocketInfo>& socketInfoMap = m_TCPSocket.GetSocketMap();
+	m_TCPSocket.GetSocketSet(m_socketIndexVec);
 
-	for (auto iter = socketInfoMap.begin(); iter != socketInfoMap.end(); iter++)
+	for (int i = 0; i < m_socketIndexVec.size(); i++)
 	{
-		bool bIsConnect = iter->second.isConnect;
-		time_t llAcceptMsgTime = iter->second.acceptMsgTime;
+		int index = m_socketIndexVec[i];
+		const TCPSocketInfo* pTCPSocketInfo = m_TCPSocket.GetTCPSocketInfo(index);
+		if (!pTCPSocketInfo)
+		{
+			continue;
+		}
+
+		time_t llAcceptMsgTime = pTCPSocketInfo->acceptMsgTime;
 
 		// 没有绑定userID的socket
-		if (bIsConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME&& GetIdentityIDBySocketIdx(iter->first).type <= 0)
+		if (currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME&& GetIdentityIDBySocketIdx(index).type <= 0)
 		{
-			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, iter->second.ip);
-			m_TCPSocket.CloseSocket(iter->first);
+			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, pTCPSocketInfo->ip);
+			m_TCPSocket.CloseSocket(index);
 		}
 	}
 }
@@ -3144,7 +3142,7 @@ bool CGameLogonManage::OnCenterKickOldUserMessage(void* pData, UINT size)
 		int oldSocketIdx = pUser->socketIdx;
 
 		// 不同设备
-		m_TCPSocket.SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0,0,pUser->pBufferevent);
+		m_TCPSocket.SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0, 0, pUser->pBufferevent);
 		//m_TCPSocket.CloseSocket(oldSocketIdx);
 
 		// 清理玩家内存
@@ -3469,7 +3467,7 @@ bool CGameLogonManage::OnCenterSignUpMatchMessage(void* pData, UINT size)
 
 	for (auto itr = m_scoketMatch.begin(); itr != m_scoketMatch.end(); itr++)
 	{
-		m_TCPSocket.SendData(*itr, &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_PEOPLE, 0, 0);
+		m_TCPSocket.SendData(*itr, &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_PEOPLE, 0, 0, NULL);
 	}
 
 	return true;
@@ -3509,7 +3507,7 @@ bool CGameLogonManage::OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT si
 
 	for (auto itr = m_scoketMatch.begin(); itr != m_scoketMatch.end(); itr++)
 	{
-		m_TCPSocket.SendData(*itr, &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_TIME, 0, 0);
+		m_TCPSocket.SendData(*itr, &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_TIME, 0, 0, NULL);
 	}
 
 	return true;
