@@ -116,6 +116,8 @@ public:
 	bool IsConnected(int index);
 	// 获取socketSet
 	void GetSocketSet(std::vector<UINT>& vec);
+	// 获取socketVector
+	const std::vector<TCPSocketInfo>& GetSocketVector();
 	// 获取连接ip
 	const char* GetSocketIP(int index);
 	// 获取TcpSocketInfo

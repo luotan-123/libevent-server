@@ -327,6 +327,11 @@ void CTCPSocketManage::GetSocketSet(std::vector<UINT>& vec)
 	}
 }
 
+const std::vector<TCPSocketInfo>& CTCPSocketManage::GetSocketVector()
+{
+	return m_socketInfoVec;
+}
+
 const char* CTCPSocketManage::GetSocketIP(int index)
 {
 	if (index < 0 || index >= m_socketInfoVec.size())
