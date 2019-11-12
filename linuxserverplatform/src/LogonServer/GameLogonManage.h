@@ -12,6 +12,7 @@ enum LogonServerTimerID
 	LOGON_TIMER_CHECK_REDIS_CONNECTION,			// redis连接性
 	LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET,	// 定期检查没有绑定玩家ID的无效连接
 	LOGON_TIMER_ROUTINE_SAVE_REDIS,				// 定期存储redis数据
+	LOGON_TIMER_SAVE_SOCKET_COUNT,				// 定期保存网关socket数量
 	LOGON_TIMER_NORMAL,							// 通用定时器(s)
 	LOGON_TIMER_END,
 };
@@ -19,6 +20,7 @@ enum LogonServerTimerID
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
 const int ROUTINE_CHECK_UNBINDID_SOCKET = 59;		// 定期检查未登录的连接(s)
+const int CHECK_SAVE_SOCKET_COUNT = 13;				// 定期保存网关socket数量(s)
 const int NORMAL_TIMER_SECS = 2;					// 通用定时器(s)
 
 // 登陆服socket

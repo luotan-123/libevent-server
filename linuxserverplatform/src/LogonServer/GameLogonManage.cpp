@@ -174,6 +174,14 @@ bool CGameLogonManage::OnTimerMessage(UINT uTimerID)
 		RoutineCheckUnbindIDSocket();
 		return true;
 	}
+	case LOGON_TIMER_SAVE_SOCKET_COUNT:
+	{
+		// redis记录数据
+		m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID,
+			m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
+
+		return true;
+	}
 	case LOGON_TIMER_NORMAL:
 	{
 		OnNormalTimer();
@@ -428,10 +436,6 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 
 		// 清理玩家内存
 		m_pUserManage->DelUser(userID);
-
-		// redis记录数据
-		m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID,
-			m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
 
 		//退出比赛场页面
 		m_scoketMatch.erase(socketIdx);
@@ -1996,10 +2000,6 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	// socketIdx和gserver关联
 	m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->roomID, pBufferevent);
 
-	// 记录到redis
-	m_pRedis->SetLogonServerCurrPeopleCount(ConfigManage()->GetLogonServerConfig().logonID,
-		m_pUserManage->GetUserCount(), m_TCPSocket.GetCurSocketSize());
-
 	INFO_LOG("【roomID=%d】游戏服连接本服", pMessage->roomID);
 
 	return true;
@@ -2142,6 +2142,9 @@ void CGameLogonManage::InitRounteCheckEvent()
 
 	// 设置定期清理未登录的连接
 	//SetTimer(LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET, ROUTINE_CHECK_UNBINDID_SOCKET * 1000);
+
+	// 设置存储网关socket定时器
+	SetTimer(LOGON_TIMER_SAVE_SOCKET_COUNT, CHECK_SAVE_SOCKET_COUNT * 1000);
 
 	// 设置通用定时器
 	SetTimer(LOGON_TIMER_NORMAL, NORMAL_TIMER_SECS * 1000);
