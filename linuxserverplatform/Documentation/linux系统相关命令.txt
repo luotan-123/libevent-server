@@ -17,8 +17,7 @@ ln -s /usr/local/bin/protoc /usr/bin
 
 
 三、生成core
-1、启动程序会话执行 ：ulimit -c unlimited
-2、设置core文件名格式：echo "./core-%p-%t" >/proc/sys/kernel/core_pattern
+1、执行coredumpshell.sh 脚本
 
 四、查询命令目录
 which  命令名称
@@ -29,6 +28,10 @@ which  命令名称
 
 六、去掉windows\r
 vim 命令模式下输入  :set fileformat=unix 
+
+七、gdb输出堆信息
+frame 8   (8是堆的层次)
+p pThis->m_bRun
 
 
 

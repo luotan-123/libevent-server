@@ -855,7 +855,7 @@ void CTCPSocketManage::ListenerCB(evconnlistener* listener, evutil_socket_t fd, 
 
 	if (pThis->GetCurSocketSize() >= pThis->m_uMaxSocketSize)
 	{
-		ERROR_LOG("服务器已经满：fd=%d %u/%u", fd, pThis->GetCurSocketSize(), pThis->m_uMaxSocketSize);
+		ERROR_LOG("服务器已经满：fd=%d [ip:%s %d][人数：%u/%u]", fd, tcpInfo.ip, tcpInfo.port, pThis->GetCurSocketSize(), pThis->m_uMaxSocketSize);
 
 		// 分配失败
 		NetMessageHead netHead;
