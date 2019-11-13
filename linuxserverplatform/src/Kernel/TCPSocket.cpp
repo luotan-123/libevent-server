@@ -392,7 +392,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		return;
 	}
 
-	bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
+	bev = bufferevent_socket_new(base, fd, /*BEV_OPT_CLOSE_ON_FREE |*/ BEV_OPT_THREADSAFE);
 	if (!bev)
 	{
 		ERROR_LOG("Error constructing bufferevent!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
@@ -515,11 +515,11 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 		SafeDelete(pRecvThreadParam);
 	}
 
-	// 服务器主动发起FIN包
-	if (!isClientAutoClose)
-	{
-		close(tcpInfo.acceptFd);
-	}
+	//// 服务器主动发起FIN包
+	//if (!isClientAutoClose)
+	//{
+	//	close(tcpInfo.acceptFd);
+	//}
 
 	// 和发送线程相关的锁
 	CSignedLockObject LockSendMsgObject(tcpInfo.lock, false);
@@ -535,6 +535,9 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 
 	// 解锁多线程
 	LockObject.UnLock();
+
+	// 如果没有设置BEV_OPT_CLOSE_ON_FREE 选项，则关闭socket
+	close(tcpInfo.acceptFd);
 
 	// 回调业务层
 	if (m_pService)
