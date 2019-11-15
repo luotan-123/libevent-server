@@ -2,3 +2,4 @@
 2、部署服务器shell，开启关闭服务器进程的shell
 3、go、python语言初步接触
 4、支持http协议、websocket协议。
+5、实现c++和lua之间的相互调用
