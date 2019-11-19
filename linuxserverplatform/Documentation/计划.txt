@@ -1,5 +1,10 @@
-1、linux项目makefile的编写
+1、支持http协议、websocket协议。
 2、部署服务器shell，开启关闭服务器进程的shell
 3、go、python语言初步接触
-4、支持http协议、websocket协议。
-5、实现c++和lua之间的相互调用
+4、实现c++和lua之间的相互调用
+5、linux项目makefile的编写
+
+redis
+1、无序集合和有序集合是什么数据结构
+2、redis如何定位数据被修改，如何定位哪个指令执行最频繁
+3、了解redis穿透
