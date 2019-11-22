@@ -469,7 +469,7 @@ void CCenterServerManage::RoutineCheckUnbindIDSocket()
 
 void CCenterServerManage::OnServerCrossDay()
 {
-	AUTOCOST("OnServerCrossDay");
+	AUTOCOSTONCE("OnServerCrossDay");
 	INFO_LOG("OnServerCrossDay");
 
 	// 每天发送一次集群信息
@@ -478,7 +478,7 @@ void CCenterServerManage::OnServerCrossDay()
 
 void CCenterServerManage::OnServerCrossWeek()
 {
-	AUTOCOST("OnServerCrossWeek");
+	AUTOCOSTONCE("OnServerCrossWeek");
 	INFO_LOG("OnServerCrossWeek");
 
 }

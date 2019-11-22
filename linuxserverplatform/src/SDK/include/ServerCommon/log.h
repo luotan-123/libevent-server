@@ -39,24 +39,45 @@ private:
 	int	 m_line;
 };
 
+// 统计单位
+struct AutoCostInfo
+{
+	unsigned long long curCount;
+	unsigned long long allCount;
+	unsigned long long curCostTime;
+	unsigned long long allCostTime;
+
+	AutoCostInfo()
+	{
+		curCount = 0;
+		allCount = 0;
+		allCostTime = 0;
+		curCostTime = 0;
+	}
+};
+
 // 统计函数耗时
 class CAutoLogCost
 {
 public:
-	CAutoLogCost(const char* pLogFile, const char* pFuncName, int microSecs, const char* format, ...);
+	CAutoLogCost(const char* pLogFile, const char* pFuncName, int microSecs, bool once, const char* format, ...);
 	~CAutoLogCost();
 
 private:
 	int m_microSecs;
 	long long m_beginTime;
+	bool m_bIsOnce;
 
 	char m_logFile[MAX_FILE_NAME_SIZE];
-	char m_funcName[MAX_FUNC_NAME_SIZE];
 	char m_buf[MAX_LOG_BUF_SIZE];
+	char m_key[MAX_COST_BUF_SIZE];
+
+	static std::unordered_map<std::string, AutoCostInfo> g_costMap;
 };
 
-#define	AUTOLOG()		CAutoLog autolog(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), __FILE__, __FUNCTION__, __LINE__);
-#define AUTOCOST(...)	CAutoLogCost logCost(GameLogManage()->GetCostLog(GetCurrentThreadId()).c_str(), __FUNCTION__, MIN_STATISTICS_FUNC_COST_TIME, __VA_ARGS__);
+// 性能统计
+#define AUTOCOSTONCE(...)	CAutoLogCost logCost(GameLogManage()->GetCostLog(GetCurrentThreadId()).c_str(), __FUNCTION__, MIN_STATISTICS_FUNC_COST_TIME, true, __VA_ARGS__);
+#define AUTOCOST(...)		CAutoLogCost logCost(GameLogManage()->GetCostLog(GetCurrentThreadId()).c_str(), __FUNCTION__, ALL_STATISTICS_FUNC_COST_TIME, false, __VA_ARGS__);
 
 // 输出错误消息 【只输出到文件系统】
 #define ERROR_LOG(...)	{ CLog::Write(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }
@@ -75,9 +96,3 @@ private:
 
 // 输出系统错误信息，strerror(errno)函数全局的，调用SYS_ERROR_LOG之前，不能调用其它系统函数
 #define SYS_ERROR_LOG(...)	{ CLog::WriteSysErr(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR_SYS, __FILE__, __LINE__, __FUNCTION__,strerror(errno), __VA_ARGS__); }
-
-// 兼容以前的代码
-#define WAUTOLOG()		AUTOLOG()
-#define WAUTOCOST(...)	AUTOCOST(__VA_ARGS__)
-#define WERROR_LOG(...)	ERROR_LOG(__VA_ARGS__)
-#define WINFO_LOG(...)	INFO_LOG(__VA_ARGS__)

@@ -38,7 +38,7 @@ void CConfigManage::Release()
 
 bool CConfigManage::Init()
 {
-	AUTOCOST("CConfigManage::Init()");
+	AUTOCOSTONCE("CConfigManage::Init()");
 	INFO_LOG("configManage Init begin...");
 
 	// 初始化curl
@@ -346,7 +346,7 @@ bool CConfigManage::LoadTableFiledConfig()
 
 bool CConfigManage::LoadBaseConfig()
 {
-	AUTOCOST("LoadBaseConfig");
+	AUTOCOSTONCE("LoadBaseConfig");
 
 	// 加载redis配置
 	bool ret = LoadRedisConfig();
@@ -593,7 +593,7 @@ bool CConfigManage::LoadRoomBaseConfig()
 
 bool CConfigManage::LoadRobotPositionConfig()
 {
-	AUTOCOST("LoadRobotPositionConfig");
+	AUTOCOSTONCE("LoadRobotPositionConfig");
 
 	FILE* fp = fopen("robotPosition.txt", "r+");
 	if (!fp)
@@ -675,7 +675,7 @@ bool CConfigManage::LoadRobotPositionConfig()
 
 bool CConfigManage::LoadDirtyWordsConfig()
 {
-	AUTOCOST("LoadDirtyWordsConfig");
+	AUTOCOSTONCE("LoadDirtyWordsConfig");
 
 	FILE* fp = fopen("dirtywords.txt", "r+");
 	if (!fp)

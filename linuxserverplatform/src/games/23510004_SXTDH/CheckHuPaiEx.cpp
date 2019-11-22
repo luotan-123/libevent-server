@@ -21,7 +21,7 @@ void CheckHuPaiEx::InitData()
 bool CheckHuPaiEx::CanHu(GameDataEx *pGameData, BYTE station, BYTE byBeStation, BYTE lastpai, bool zimo)
 {
 	// 统计消耗
-	//WAUTOCOST("CanHu耗时 玩家%d 放炮:%d", station, byBeStation);
+	//AUTOCOST("CanHu耗时 玩家%d 放炮:%d", station, byBeStation);
 	//非自摸的情况下，玩家弃糊状态,不能弃先糊后
 	if (pGameData->m_mjAction.bQxHh && !zimo && pGameData->m_bQiHu[station])
 	{

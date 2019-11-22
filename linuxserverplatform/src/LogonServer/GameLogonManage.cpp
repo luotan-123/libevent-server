@@ -2292,7 +2292,7 @@ void CGameLogonManage::NotifyResourceChange(int userID, int resourceType, long l
 
 void CGameLogonManage::OnServerCrossDay()
 {
-	AUTOCOST("OnServerCrossDay");
+	AUTOCOSTONCE("OnServerCrossDay");
 	INFO_LOG("OnServerCrossDay");
 
 	if (!m_pRedis || !m_pRedisPHP)
@@ -2336,7 +2336,7 @@ void CGameLogonManage::OnServerCrossDay()
 // 凌晨12点
 void CGameLogonManage::OnServerCrossDay12Hour()
 {
-	AUTOCOST("OnServerCrossDay12Hour");
+	AUTOCOSTONCE("OnServerCrossDay12Hour");
 
 	if (m_pRedis)
 	{
@@ -2346,7 +2346,7 @@ void CGameLogonManage::OnServerCrossDay12Hour()
 
 void CGameLogonManage::OnServerCrossWeek()
 {
-	AUTOCOST("OnServerCrossWeek");
+	AUTOCOSTONCE("OnServerCrossWeek");
 	INFO_LOG("OnServerCrossWeek");
 
 	//分布式处理
@@ -3288,7 +3288,7 @@ bool CGameLogonManage::OnCenterOpenServerMessage(void* pData, int size)
 		return false;
 	}
 
-	AUTOCOST("开服耗时，数据恢复");
+	AUTOCOSTONCE("开服耗时，数据恢复");
 
 	int iAllData = 0, iSaveData = 0;
 

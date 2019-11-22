@@ -12,7 +12,7 @@ CRedisCenter::~CRedisCenter()
 
 bool CRedisCenter::Init()
 {
-	AUTOCOST("CRedisCenter::Init() 耗时");
+	AUTOCOSTONCE("CRedisCenter::Init() 耗时");
 
 	timeval tv = { 3, 0 };
 
@@ -161,7 +161,7 @@ int CRedisCenter::NeedLoadAllUserData()	//判断是否需要加载数据库中�
 
 bool CRedisCenter::LoadAllUserData()
 {
-	AUTOCOST("LoadAllUserData 耗时");
+	AUTOCOSTONCE("LoadAllUserData 耗时");
 
 	int currMaxUserID = -1;
 	const DBConfig& dbConfig = ConfigManage()->GetDBConfig(DB_TYPE_COMMON);

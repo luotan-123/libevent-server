@@ -163,7 +163,7 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 	}
 
 	// 统计消耗
-	WAUTOCOST("statistics message cost mainID: %d assistID: %d", pNetHead->uMainID, pNetHead->uAssistantID);
+	AUTOCOST("statistics message cost mainID: %d assistID: %d", pNetHead->uMainID, pNetHead->uAssistantID);
 
 	int userID = pNetHead->uIdentification;
 	if (userID <= 0)
@@ -304,7 +304,7 @@ CGameDesk* CGameMainManage::GetDeskObject(int deskIdx)
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnTimerMessage(UINT uTimerID)
 {
-	WAUTOCOST("（timerID: %d ）定时器耗时 ", uTimerID);
+	AUTOCOST("（timerID: %d ）定时器耗时 ", uTimerID);
 
 	//游戏定时器
 	if (uTimerID >= TIME_START_ID)
@@ -2929,7 +2929,7 @@ bool CGameMainManage::OnCenterMessageReloadGameConfig(void* pData, int size)
 bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 {
 	// 统计消耗
-	WAUTOCOST("PHP请求开始比赛耗时：");
+	AUTOCOST("PHP请求开始比赛耗时：");
 
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPReqStartMatchPeople, pData, size);
 
@@ -3105,7 +3105,7 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 {
 	// 统计消耗
-	WAUTOCOST("定时赛开始比赛耗时：");
+	AUTOCOST("定时赛开始比赛耗时：");
 
 	SAFECHECK_MESSAGE(pMessage, PlatformReqStartMatchTime, pData, size);
 
@@ -3581,7 +3581,7 @@ void CGameMainManage::MatchDeskFinish(long long llPartOfMatchID, int deskIdx)
 void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRound, int iMaxMatchRound)
 {
 	// 统计消耗
-	WAUTOCOST("进入下一轮比赛耗时：");
+	AUTOCOST("进入下一轮比赛耗时：");
 
 	std::vector<MatchUserInfo> &vecPeople = m_matchUserMap[llPartOfMatchID];
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];
@@ -3727,7 +3727,7 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, int iMaxMatchRound)
 {
 	// 统计消耗
-	WAUTOCOST("比赛结束耗时：");
+	AUTOCOST("比赛结束耗时：");
 
 	std::vector<MatchUserInfo> &vecPeople = m_matchUserMap[llPartOfMatchID];
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];

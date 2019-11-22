@@ -3,6 +3,8 @@
 #include "configManage.h"
 #include <stdarg.h>
 
+std::unordered_map<std::string, AutoCostInfo> CAutoLogCost::g_costMap;
+
 CLog::CLog()
 {
 }
@@ -235,14 +237,17 @@ CAutoLog::~CAutoLog()
 	CLog::Write(m_logFile, LOG_LEVEL_INFO, m_fileName, m_line, m_funcName, "AUTOLOG End。");
 }
 
-CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int microSecs, const char* pFormat, ...)
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int microSecs, bool once, const char* pFormat, ...)
 {
-	memset(m_buf, 0, sizeof(m_buf));
-	memset(m_logFile, 0, sizeof(m_logFile));
-	memset(m_funcName, 0, sizeof(m_funcName));
-
+	m_logFile[0] = 0;
+	m_buf[0] = 0;
+	m_key[0] = 0;
 	m_microSecs = microSecs;
+	m_bIsOnce = once;
 
+	// 时间
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 
@@ -259,28 +264,30 @@ CAutoLogCost::CAutoLogCost(const char* plogFile, const char* pFuncName, int micr
 		strcpy(m_logFile, "cost.log");
 	}
 
-	//////// 组成buf，缓存起来
-	// 时间
-	SYSTEMTIME sysTime;
-	GetLocalTime(&sysTime);
+	// 时间搓和函数名
+	sprintf(m_buf + strlen(m_buf), "%ld func=%s ", tv.tv_sec, pFuncName);
 
-	int millisecs = sysTime.wSecond * 1000 + sysTime.wMilliseconds;
-
-	sprintf(m_buf, "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
+	// pid
+	sprintf(m_key, "pid=%ld ", GetCurrentSysThreadId());
 
 	// 变长参数
 	va_list args;
 	va_start(args, pFormat);
 
-	vsprintf(m_buf + strlen(m_buf), pFormat, args);
+	vsprintf(m_key + strlen(m_key), pFormat, args);
+
 	va_end(args);
 
-	// 函数名
-	sprintf(m_buf + strlen(m_buf), " %s ", pFuncName);
+	sprintf(m_buf + strlen(m_buf), " %s", m_key);
 }
 
 CAutoLogCost::~CAutoLogCost()
 {
+	if (m_key[0] == 0)
+	{
+		return;
+	}
+
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 
@@ -288,9 +295,49 @@ CAutoLogCost::~CAutoLogCost()
 	long long endTime = tv.tv_sec * 1000000 + tv.tv_usec;
 	long long costTime = endTime - m_beginTime;
 
-	if (costTime >= m_microSecs)
+	if (m_bIsOnce)
 	{
-		sprintf(m_buf + strlen(m_buf), "costTime:[%lldus]\n", costTime);
+		if (costTime >= m_microSecs)
+		{
+			sprintf(m_buf + strlen(m_buf), " costTime:[%lldus]\n", costTime);
+			CLog::Write(m_logFile, m_buf);
+		}
+		return;
+	}
+
+	auto iter = g_costMap.find(m_key);
+	if (iter == g_costMap.end())
+	{
+		AutoCostInfo info;
+
+		info.curCount++;
+		info.allCount++;
+		info.curCostTime += costTime;
+		info.allCostTime += costTime;
+
+		g_costMap.emplace(m_key, info);
+
+		iter = g_costMap.find(m_key);
+		if (iter == g_costMap.end())
+		{
+			return;
+		}
+	}
+	else
+	{
+		iter->second.curCount++;
+		iter->second.allCount++;
+		iter->second.curCostTime += costTime;
+		iter->second.allCostTime += costTime;
+	}
+
+	if (iter->second.curCostTime >= m_microSecs)
+	{
+		sprintf(m_buf + strlen(m_buf), " ave=[call:%llu cost_time:%llu] all=[all_call:%llu all_cost_time:%llu]\n",
+			iter->second.curCount, iter->second.curCostTime, iter->second.allCount, iter->second.allCostTime);
 		CLog::Write(m_logFile, m_buf);
+
+		iter->second.curCount = 0;
+		iter->second.curCostTime = 0;
 	}
 }

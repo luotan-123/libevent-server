@@ -387,28 +387,32 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 		}
 	}
 
-	// 根据日期生成最终的文件
-	SYSTEMTIME sysTime;
-	GetLocalTime(&sysTime);
-
-	char buf[128] = "";
-	sprintf(buf, "_%04d-%02d-%02d.log", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-
 	if (str == "")
 	{
-		str = m_logPath + "other_thread_cost";
+		str = m_logPath + "other_thread_cost.log";
 	}
-
-	str += buf;
-
-	// 判断当前文件大小，超过重新生成文件
-	g_fileCostLogCount++;
-	struct stat statbuf;
-	if (g_fileCostLogCount % 5 == 1 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
+	else
 	{
-		sprintf(buf, "%02d-%02d-%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
-		iter->second.costLog += buf;
+		str += ".log";
 	}
+
+	//// 根据日期生成最终的文件
+	//SYSTEMTIME sysTime;
+	//GetLocalTime(&sysTime);
+
+	//char buf[128] = "";
+	//sprintf(buf, "_%04d-%02d-%02d.log", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+
+	//str += buf;
+
+	//// 判断当前文件大小，超过重新生成文件
+	//g_fileCostLogCount++;
+	//struct stat statbuf;
+	//if (g_fileCostLogCount % 5 == 1 && stat(str.c_str(), &statbuf) == 0 && statbuf.st_size > MAX_LOG_FILE_SIZE)
+	//{
+	//	sprintf(buf, "%02d-%02d-%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
+	//	iter->second.costLog += buf;
+	//}
 
 	return str;
 }
@@ -449,7 +453,7 @@ FILE* CGameLogManage::GetLogFileFp(std::string&& strFile)
 }
 
 // 设置进程日志目录
-void CGameLogManage::SetLogPath(const std::string &path)
+void CGameLogManage::SetLogPath(const std::string& path)
 {
 	m_logPath = path;
 }

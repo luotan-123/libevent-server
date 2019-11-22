@@ -6,8 +6,6 @@
 #include "DataLine.h"
 #include "Exception.h"
 
-class CDataLine;
-
 // 数据库处理类
 class CHttpServer
 {

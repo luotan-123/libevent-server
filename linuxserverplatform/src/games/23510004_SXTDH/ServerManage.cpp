@@ -2021,7 +2021,7 @@ bool CServerGameDesk::OnGang(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 bool CServerGameDesk::OnHu(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 {
 	// 统计消耗
-	//WAUTOCOST("OnHu 耗时统计玩家%d", byDeskStation);
+	//AUTOCOST("OnHu 耗时统计玩家%d", byDeskStation);
 	if (!m_GameData.T_CPGNotify[byDeskStation].bHu)
 	{
 		return true;
@@ -2581,7 +2581,7 @@ bool CServerGameDesk::OnPass(BYTE byDeskStation, CMD_C_OperateCard *pAction)
 bool CServerGameDesk::CheckAction(int iStation, BYTE byCard, BYTE byType)
 {
 	// 统计消耗
-	//WAUTOCOST("CheckAction 耗时统计玩家%d", iStation);
+	//AUTOCOST("CheckAction 耗时统计玩家%d", iStation);
 	for (int i = 0;i < PLAY_COUNT;++i)
 	{
 		m_GameData.T_CPGNotify[i].Init();//清零

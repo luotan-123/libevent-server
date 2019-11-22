@@ -200,7 +200,7 @@ void CheckCPGActionEx::CountGangFen(GameDataEx *pGameData, int iStation, int iBe
 void CheckCPGActionEx::CountGangFenEx(GameDataEx *pGameData)
 {
 	//// 统计消耗
-	////WAUTOCOST("CountGangFenEx 耗时统计");
+	////AUTOCOST("CountGangFenEx 耗时统计");
 	//memset(pGameData->m_iGangScore,0,sizeof(pGameData->m_iGangScore));
 	//for (int j = 0;j<5;j++)
 	//{
