@@ -5,6 +5,7 @@
 5、给linux框架做抗压力测试
 6、实现c++和lua之间的相互调用
 7、linux项目makefile的编写
+暂时不做
 8、对gserver和gate-logon-server做QBS统计
 完成了处理数据的qbs
 9、可以利用消息中间件kafka来解耦实现lua开发游戏
@@ -15,4 +16,4 @@ redis
 1、无序集合和有序集合是什么数据结构
 答案：官方文档里面有
 2、redis如何定位数据被修改，如何定位哪个指令执行最频繁
-答案：由于redis操作键值是程序内部的，可以统计redis键值访问频率
+答案：info commandstats

@@ -60,7 +60,7 @@ int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("上传录像json耗时: %s", pAsyncMessage->videoCode);
+	AUTOCOST("上传录像json耗时");
 
 	if (!m_pInitInfo)
 	{
@@ -180,7 +180,7 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("HTTP请求: userID=%d", pAsyncMessage->dataLineHead.uIndex);
+	AUTOCOST("HTTP请求");
 
 	//发送邮件接口
 	MyCurl curl;

@@ -38,8 +38,6 @@ bool CGameLogonManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT 
 		return false;
 	}
 
-	AUTOCOST("statistics message cost mainID: %d assistID: %d uIdentification: %d", pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uIdentification);
-
 	switch (pNetHead->uMainID)
 	{
 	case MSG_MAIN_LOGON_REGISTER:
@@ -156,7 +154,8 @@ bool CGameLogonManage::OnStart()
 //////////////////////////////////////////////////////////////////////
 bool CGameLogonManage::OnTimerMessage(UINT uTimerID)
 {
-	AUTOCOST("定时器耗时timerID = %d", uTimerID);
+	AUTOCOST("timerID=%d", uTimerID);
+
 	switch (uTimerID)
 	{
 	case LOGON_TIMER_CHECK_REDIS_CONNECTION:
@@ -359,7 +358,7 @@ bool CGameLogonManage::PreInitParameter(ManageInfoStruct* pInitData, KernelInfoS
 // 走到这里的一般是底层通知业务层关闭(比如客户端断线，或者主动关闭socket之类)
 bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime)
 {
-	AUTOCOST("socketIdx = %d", socketIdx);
+	AUTOCOST("close socket");
 
 	in_addr ip_;  ip_.s_addr = uAccessIP;
 	std::string ip = inet_ntoa(ip_);
@@ -447,6 +446,8 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 //////////////////////////////////////////////////////////////////////
 bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent)
 {
+	AUTOCOST("Register message cost assistID: %d", assistID);
+
 	if (size != sizeof(LogonRequestRegister) && size != sizeof(LogonRequestRegister) - 1)
 	{
 		return false;
@@ -755,6 +756,8 @@ bool CGameLogonManage::OnHandleUserRegister(unsigned int assistID, void* pData, 
 //////////////////////////////////////////////////////////////////////
 bool CGameLogonManage::OnHandleUserLogonMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent)
 {
+	AUTOCOST("logon message cost assistID: %d", assistID);
+
 	if (assistID == MSG_ASS_LOGON_LOGON)
 	{
 		return OnHanleUserLogon(pData, size, accessIP, socketIdx, pBufferevent);
@@ -1034,6 +1037,8 @@ bool CGameLogonManage::OnHanleUserLogon(void* pData, int size, unsigned long acc
 //////////////////////////////////////////////////////////////////////
 bool CGameLogonManage::OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent)
 {
+	AUTOCOST("GameDesk message cost assistID: %d", assistID);
+
 	const LogonServerSocket&& socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.type != LOGON_SERVER_SOCKET_TYPE_USER)
 	{
@@ -1788,6 +1793,8 @@ bool CGameLogonManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 
 bool CGameLogonManage::OnHandleOtherMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent)
 {
+	AUTOCOST("other message cost assistID: %d", assistID);
+
 	const LogonServerSocket&& socketInfo = GetIdentityIDBySocketIdx(socketIdx);
 	if (socketInfo.type != LOGON_SERVER_SOCKET_TYPE_USER)
 	{

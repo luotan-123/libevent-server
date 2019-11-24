@@ -163,7 +163,7 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 	}
 
 	// 统计消耗
-	AUTOCOST("statistics message cost mainID: %d assistID: %d", pNetHead->uMainID, pNetHead->uAssistantID);
+	AUTOCOST("message cost mainID: %d assistID: %d", pNetHead->uMainID, pNetHead->uAssistantID);
 
 	int userID = pNetHead->uIdentification;
 	if (userID <= 0)
@@ -304,7 +304,7 @@ CGameDesk* CGameMainManage::GetDeskObject(int deskIdx)
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnTimerMessage(UINT uTimerID)
 {
-	AUTOCOST("（timerID: %d ）定时器耗时 ", uTimerID);
+	AUTOCOST("timerID=%d", uTimerID);
 
 	//游戏定时器
 	if (uTimerID >= TIME_START_ID)
@@ -2679,6 +2679,8 @@ void CGameMainManage::SendRewardActivityNotify(const char * rewardMsg)
 
 bool CGameMainManage::OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID)
 {
+	AUTOCOST("CenterServer message cost msgID: %u", msgID);
+
 	switch (msgID)
 	{
 	case CENTER_MESSAGE_COMMON_RESOURCE_CHANGE:
@@ -2928,9 +2930,6 @@ bool CGameMainManage::OnCenterMessageReloadGameConfig(void* pData, int size)
 // 开始比赛(实时赛)
 bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 {
-	// 统计消耗
-	AUTOCOST("PHP请求开始比赛耗时：");
-
 	SAFECHECK_MESSAGE(pMessage, PlatformPHPReqStartMatchPeople, pData, size);
 
 	if (!m_pRedis)
@@ -3104,9 +3103,6 @@ bool CGameMainManage::OnCenterMessageStartMatchPeople(void* pData, int size)
 // 开始比赛(定时赛)
 bool CGameMainManage::OnCenterMessageStartMatchTime(void* pData, int size)
 {
-	// 统计消耗
-	AUTOCOST("定时赛开始比赛耗时：");
-
 	SAFECHECK_MESSAGE(pMessage, PlatformReqStartMatchTime, pData, size);
 
 	time_t currTime = time(NULL);
@@ -3580,9 +3576,6 @@ void CGameMainManage::MatchDeskFinish(long long llPartOfMatchID, int deskIdx)
 // 比赛进入下一轮
 void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRound, int iMaxMatchRound)
 {
-	// 统计消耗
-	AUTOCOST("进入下一轮比赛耗时：");
-
 	std::vector<MatchUserInfo> &vecPeople = m_matchUserMap[llPartOfMatchID];
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];
 	BYTE matchType = m_matchTypeMap[llPartOfMatchID];
@@ -3726,9 +3719,6 @@ void CGameMainManage::MatchNextRound(long long llPartOfMatchID, int iCurMatchRou
 // 比赛结束
 void CGameMainManage::MatchEnd(long long llPartOfMatchID, int iCurMatchRound, int iMaxMatchRound)
 {
-	// 统计消耗
-	AUTOCOST("比赛结束耗时：");
-
 	std::vector<MatchUserInfo> &vecPeople = m_matchUserMap[llPartOfMatchID];
 	std::list<int> &deskList = m_matchGameDeskMap[llPartOfMatchID];
 	BYTE matchType = m_matchTypeMap[llPartOfMatchID];

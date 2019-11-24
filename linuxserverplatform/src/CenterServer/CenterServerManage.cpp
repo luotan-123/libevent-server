@@ -28,7 +28,7 @@ bool CCenterServerManage::OnSocketRead(NetMessageHead* pNetHead, CenterServerMes
 		return false;
 	}
 
-	AUTOCOST("中心服务器消息耗时 msgID: %d mainID: %d assistID: %d uIndex: %d", pCenterHead->msgID, pNetHead->uMainID, pNetHead->uAssistantID, uIndex);
+	AUTOCOST("msgID: %d mainID: %d assistID: %d", pCenterHead->msgID, pNetHead->uMainID, pNetHead->uAssistantID, uIndex);
 
 	if (pCenterHead->msgID == COMMON_VERIFY_MESSAGE)
 	{
@@ -90,7 +90,8 @@ bool CCenterServerManage::OnStart()
 //////////////////////////////////////////////////////////////////////
 bool CCenterServerManage::OnTimerMessage(UINT uTimerID)
 {
-	AUTOCOST("定时器耗时timerID = %d", uTimerID);
+	AUTOCOST("timerID = %d", uTimerID);
+
 	switch (uTimerID)
 	{
 	case CENTER_TIMER_CHECK_REDIS_CONNECTION:
@@ -152,8 +153,6 @@ bool CCenterServerManage::PreInitParameter(ManageInfoStruct* pInitData, KernelIn
 // 走到这里的一般是底层通知业务层关闭(比如客户端断线，或者主动关闭socket之类)
 bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime)
 {
-	AUTOCOST("处理子系统退出集群耗时：socketIdx = %d", socketIdx);
-
 	// 考虑到PHP，这里不生成日志
 	auto itrSocketToServerMap = m_socketToServerMap.find(socketIdx);
 	if (itrSocketToServerMap == m_socketToServerMap.end())

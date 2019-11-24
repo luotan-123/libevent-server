@@ -148,7 +148,7 @@ int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("HTTP请求: userID=%d", pAsyncMessage->dataLineHead.uIndex);
+	AUTOCOST("HTTP请求");
 
 	//发送邮件接口
 	MyCurl curl;
