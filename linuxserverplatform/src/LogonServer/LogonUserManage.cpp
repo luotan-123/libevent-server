@@ -1,6 +1,5 @@
 #include "CommonHead.h"
 #include "log.h"
-#include "Function.h"
 #include "LogonUserManage.h"
 
 CLogonUserManage::CLogonUserManage()

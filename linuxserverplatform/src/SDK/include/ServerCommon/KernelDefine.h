@@ -53,7 +53,7 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 #define SOCKET_ERROR							(-1)	// 网络接口出错返回值
 
 /////////////////////////////////////////////////////////
-// 耗时统计
+// 性能测试
 const int MAX_COST_BUF_SIZE = 256;						// 缓冲区长度
 #define ALL_STATISTICS_FUNC_COST_TIME			2000000	// 调用接口的总耗时，超过这个时间就输出日志(us)
 #define MIN_STATISTICS_FUNC_COST_TIME			100000	// 调用接口的总耗时，超过这个时间就输出日志(us)，针对只调用一次的函数

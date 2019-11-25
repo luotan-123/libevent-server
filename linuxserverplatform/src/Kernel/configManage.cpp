@@ -3,7 +3,6 @@
 #include "INIFile.h"
 #include "Exception.h"
 #include "curl.h"
-#include "KernelDefine.h"
 #include "log.h"
 #include "MysqlHelper.h"
 

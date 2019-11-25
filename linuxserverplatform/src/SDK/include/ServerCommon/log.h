@@ -1,6 +1,5 @@
 #pragma once
 
-#include "KernelDefine.h"
 #include "GameLogManage.h"
 #include <string>
 #include <array>

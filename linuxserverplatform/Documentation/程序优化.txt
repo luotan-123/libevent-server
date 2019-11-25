@@ -1,7 +1,7 @@
 长期优化
 1、原系统long类型改成int  ，unsigned long 改成 unsigned int
 2、检查printf和sprintf函数，int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
-3、内存优化：自己分配内存、内存越界检查、内存泄露检查
+3、内存优化：自己分配内存、内存越界检查、内存泄露检查、暂时可以不用考虑内存碎片优化
 4、cpu优化：一少、一多策略。少指的是执行cpu时间少（算法时间复杂度，代码优化），多指的是多利用cpu执行，并发或者并行执行（并发执行）
 5、优化代码，增加更多c++11新特性
 

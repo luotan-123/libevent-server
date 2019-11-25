@@ -1,5 +1,4 @@
 #include "CommonHead.h"
-#include "KernelDefine.h"
 #include "configManage.h"
 #include "log.h"
 #include <sys/stat.h>

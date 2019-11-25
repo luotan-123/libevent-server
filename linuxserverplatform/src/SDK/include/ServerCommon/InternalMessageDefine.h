@@ -2,7 +2,7 @@
 
 #include "Interface.h"
 #include "basemessage.h"
-#include "KernelDefine.h"
+#include "Function.h"
 
 //处理类型定义
 #define HD_SOCKET_READ					1							//SOCKET 读取事件处理			
@@ -145,7 +145,7 @@ struct PlatformLogonServerVerify
 	}
 };
 
-// 登陆服认证
+// 投递soket
 struct PlatformSocketInfo
 {
 	time_t acceptMsgTime;

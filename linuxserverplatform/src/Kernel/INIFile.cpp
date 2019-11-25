@@ -1,4 +1,5 @@
 #include "CommonHead.h"
+#include "Function.h"
 #include "INIFile.h"
 
 /******************************************************************************

@@ -1,7 +1,6 @@
 #include "CommonHead.h"
 #include "DataLine.h"
 #include "log.h"
-#include "Function.h"
 #include "ServerTimer.h"
 
 
