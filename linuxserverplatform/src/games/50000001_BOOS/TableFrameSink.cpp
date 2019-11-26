@@ -6,73 +6,73 @@
 
 ////////////////////////////////////////////////////////////////////////////////// 
 ////////////////////////////////////////////////////////////////////////////////// 
-//¶¨Ê±Æ÷
-// ÓãÓÎÊ±¼ä
-#define IDI_FISH_CREATE				10									// ÓãÓÎÊ±¼ä
-#define IDI_DELAY					11									// ÑÓ³ÙÊ±¼ä
-#define IDI_SECOND					12									// Ãë¼ÆÊ±
-#define TIME_FUSH_BOSS				13									//BOSSË¢ĞÂ¹«¸æ
-#define TIME_WRITE_SCORE            14                                 //ÑÓÊ±Ğ´·Ö¶¨Ê±Æ÷
+//å®šæ—¶å™¨
+// é±¼æ¸¸æ—¶é—´
+#define IDI_FISH_CREATE				10									// é±¼æ¸¸æ—¶é—´
+#define IDI_DELAY					11									// å»¶è¿Ÿæ—¶é—´
+#define IDI_SECOND					12									// ç§’è®¡æ—¶
+#define TIME_FUSH_BOSS				13									//BOSSåˆ·æ–°å…¬å‘Š
+#define TIME_WRITE_SCORE            14                                 //å»¶æ—¶å†™åˆ†å®šæ—¶å™¨
 
-#define TIME_DELAY					10000								// ÑÓ³ÙÊ±¼ä
-
-
+#define TIME_DELAY					10000								// å»¶è¿Ÿæ—¶é—´
 
 
 
 
-// ÏûÏ¢¶¨Òå
+
+
+// æ¶ˆæ¯å®šä¹‰
 #define	IPC_PACKAGE					4096 
 
-// ÓãÎ»ÖÃĞÅÏ¢
-#define FISH_POS_NEXT				0									// ÏÂÒ»¸ö
-#define FISH_POS_DELETE				1									// É¾³ıµ±Ç°
-#define FISH_POS_NORMAL				2									// Õı³£
+// é±¼ä½ç½®ä¿¡æ¯
+#define FISH_POS_NEXT				0									// ä¸‹ä¸€ä¸ª
+#define FISH_POS_DELETE				1									// åˆ é™¤å½“å‰
+#define FISH_POS_NORMAL				2									// æ­£å¸¸
 
-// ¶ÈÊı×ª»¡¶È
+// åº¦æ•°è½¬å¼§åº¦
 #define AngleToRadian( Angle )     ( (float)(Angle) / 360.f ) * ( GL_PI * 2 )
 
-// ¼ÇÂ¼×ª»»
+// è®°å½•è½¬æ¢
 #define NumberToString( String, nSize, Number )	 tchar String[nSize] = { _T("") }; _sntprintf( String, nSize, TEXT("%I64d"), (LONGLONG)Number );	
 
 ////////////////////////////////////////////////////////////////////////////////// 
 
-CWHArray< tagFishPath * >	CTableFrameSink::m_ArrayFishPathPositive;			// ÓãÂ·¾¶±£´æ(Õı)
+CWHArray< tagFishPath * >	CTableFrameSink::m_ArrayFishPathPositive;			// é±¼è·¯å¾„ä¿å­˜(æ­£)
 
-// ¿â´æ¿ØÖÆ
+// åº“å­˜æ§åˆ¶
 LONGLONG					CTableFrameSink::m_nRoomWrite = 0;
 double						CTableFrameSink::m_dDartStock = 0.0;
-double						CTableFrameSink::m_dWholeTax[Multiple_Max] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };	// È«²¿Ë°ÊÕ
-double						CTableFrameSink::m_dRoomStock[Multiple_Max] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };	// ·¿¼ä¿â´æ
+double						CTableFrameSink::m_dWholeTax[Multiple_Max] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };	// å…¨éƒ¨ç¨æ”¶
+double						CTableFrameSink::m_dRoomStock[Multiple_Max] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };	// æˆ¿é—´åº“å­˜
 double *					CTableFrameSink::m_pdTableStock[Multiple_Max] = { NULL, NULL, NULL, NULL, NULL, NULL };
 //CMapPersonalDifficulty		CTableFrameSink::m_MapPersonalDifficulty;
 
 double CTableFrameSink::m_dTaxRatio;
-// ¿ÕÏä¼¸ÂÊ
+// ç©ºç®±å‡ ç‡
 int CTableFrameSink::m_nNullChance;
-// ÔùËÍ¼¸ÂÊ
+// èµ é€å‡ ç‡
 int CTableFrameSink::m_nGiftChance[5];
-// ÔùËÍ½ğ±Ò
+// èµ é€é‡‘å¸
 int CTableFrameSink::m_nGiftScore[5];
-// ¼ÓËÙ¼¸ÂÊ
+// åŠ é€Ÿå‡ ç‡
 int CTableFrameSink::m_nSpeedChance;
-// ¼ÓËÙÊ±¼ä
+// åŠ é€Ÿæ—¶é—´
 int CTableFrameSink::m_nSpeedTime;
-// ¼¤¹â¼¸ÂÊ
+// æ¿€å…‰å‡ ç‡
 int CTableFrameSink::m_nLaserChance;
-// ¼¤¹âÊ±¼ä
+// æ¿€å…‰æ—¶é—´
 int CTableFrameSink::m_nLaserTime;
-// ²¹¸øÌõ¼ş
+// è¡¥ç»™æ¡ä»¶
 int CTableFrameSink::m_nSupplyCondition[2];
-// ×Óµ¯ÀäÈ´
+// å­å¼¹å†·å´
 int CTableFrameSink::m_nBulletCoolingTime;
-// ×Óµ¯ËÙ¶È
+// å­å¼¹é€Ÿåº¦
 int CTableFrameSink::m_nBulletVelocity;
-// ³¡¾°Î¬³ÖÊ±¼ä
+// åœºæ™¯ç»´æŒæ—¶é—´
 int CTableFrameSink::m_nSceneTime;
-// ´´½¨ÓãÊıÁ¿
+// åˆ›å»ºé±¼æ•°é‡
 int CTableFrameSink::m_nCreateCount;
-//ÓãÅäÖÃ(±¶Êı)
+//é±¼é…ç½®(å€æ•°)
 int CTableFrameSink::m_nDifficultyStart[Difficulty_Type];
 int CTableFrameSink::m_nRoomDifficultyCount[Difficulty_Max];
 int CTableFrameSink::m_nTableDifficultyCount[Difficulty_Max];
@@ -81,13 +81,13 @@ double CTableFrameSink::m_dRoomDifficultyValue[Difficulty_Max];
 double CTableFrameSink::m_dTableDifficultyValue[Difficulty_Max];
 double CTableFrameSink::m_dPlayDifficultyValue[Difficulty_Max];
 tagCustomRule CTableFrameSink::m_CustomRule;
-// ±¬Õ¨±ÈÀı
+// çˆ†ç‚¸æ¯”ä¾‹
 int CTableFrameSink::m_nExplosionProportion;
-// ±¬Õ¨Æô¶¯
+// çˆ†ç‚¸å¯åŠ¨
 int CTableFrameSink::m_nExplosionStart;
-// ±¬Õ¨Ìõ¼ş
+// çˆ†ç‚¸æ¡ä»¶
 LONGLONG CTableFrameSink::m_lExplosionCondition;
-// Ìõ¼şÀàĞÍ
+// æ¡ä»¶ç±»å‹
 EnumExplosionConditionType CTableFrameSink::m_nExplosionConditionType;
 CMap<uint, uint, LONGLONG, LONGLONG> CTableFrameSink::m_MapPlayExplosionCondition;
 LONGLONG CTableFrameSink::m_lStockInitial;
@@ -97,10 +97,10 @@ LONGLONG CTableFrameSink::m_lStockCurrent;
 
 
 
-// ÈÕÖ¾¼ÇÂ¼
+// æ—¥å¿—è®°å½•
 char g_szStockFileName[MAX_PATH] = { "" };
 
-//³õÊ¼»¯ÓÎÏ·
+//åˆå§‹åŒ–æ¸¸æˆ
 bool CTableFrameSink::InitDeskGameStation()
 {
 	AllocConsole();
@@ -111,20 +111,20 @@ bool CTableFrameSink::InitDeskGameStation()
 	return true;
 }
 
-// ¹¹Ôìº¯Êı
+// æ„é€ å‡½æ•°
 CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 {
 
-	// ÓÎÏ·±äÁ¿
+	// æ¸¸æˆå˜é‡
 	m_bFirstTime = true;
 	m_bFishSwimming = false;
 	m_nAppearFishCount = 0;
 	ZeroMemory( m_nFishMultiple, sizeof(m_nFishMultiple) );
 	
-	// ´´½¨ĞÅÏ¢
+	// åˆ›å»ºä¿¡æ¯
 	m_nCreateCount = 0;
 
-	// ³¡¾°ĞÅÏ¢
+	// åœºæ™¯ä¿¡æ¯
 	m_bCompetitionRoom = false;
 	m_bTimedCompetitionRoom = false;
 	m_cbBackIndex = 0;
@@ -132,14 +132,14 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	m_nSceneTime = 0;
 	m_nSceneBegin = 0;
 
-	// ·¿¼ä±¶Êı
+	// æˆ¿é—´å€æ•°
 	ZeroMemory(m_nMultipleValue, sizeof(m_nMultipleValue));
 
-	// ×Óµ¯
+	// å­å¼¹
 	m_nBulletVelocity = 10000;
 	m_nBulletCoolingTime = 100;
 	
-	// Íæ¼ÒĞÅÏ¢
+	// ç©å®¶ä¿¡æ¯
 	ZeroMemory(m_dwPlayID,sizeof(m_dwPlayID));
 	ZeroMemory(m_lPlayScore,sizeof(m_lPlayScore));
 	ZeroMemory(m_lPlayStartScore,sizeof(m_lPlayStartScore));
@@ -152,7 +152,7 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	ZeroMemory(m_lPlayFishCount,sizeof(m_lPlayFishCount));
 	ZeroMemory(m_nMultipleIndex,sizeof(m_nMultipleIndex));
 
-	// Íæ¼Ò²¹¸ø
+	// ç©å®¶è¡¥ç»™
 	ZeroMemory(m_nSupplyCondition,sizeof(m_nSupplyCondition));
 	ZeroMemory(m_nSupplyValue,sizeof(m_nSupplyValue));
 	ZeroMemory(m_nEnergyValue,sizeof(m_nEnergyValue));
@@ -160,15 +160,15 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	ZeroMemory(m_nLaserPlayTime,sizeof(m_nLaserPlayTime));
 	ZeroMemory(m_nSpeedPlayTime,sizeof(m_nSpeedPlayTime));
 
-	// ÓãĞÅÏ¢
+	// é±¼ä¿¡æ¯
 	m_nStartTime = 0;
 
-	// ÕóÁĞ
+	// é˜µåˆ—
 	m_nFishTeamTime = 0;
 	m_nFishKingTime = 30;
 	ZeroMemory(m_nFishKing, sizeof(m_nFishKing));
 
-	// ²¹¸øÏä¿ØÖÆ
+	// è¡¥ç»™ç®±æ§åˆ¶
 	m_nLaserTime = 0;
 	m_nLaserChance = 0;
 	m_nSpeedTime = 0;
@@ -177,7 +177,7 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	ZeroMemory(m_nGiftChance, sizeof(m_nGiftChance));
 	m_nNullChance = 0;
 
-	// ¿â´æ
+	// åº“å­˜
 	m_dTaxRatio = 0.0;
 	ZeroMemory(m_dPlayStock, sizeof(m_dPlayStock));
 
@@ -185,17 +185,17 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	return;
 }
 
-// Îö¹¹º¯Êı
+// ææ„å‡½æ•°
 CTableFrameSink::~CTableFrameSink()
 {
-	// ÊÍ·Å½Ó¿Ú
+	// é‡Šæ”¾æ¥å£
 //	ReleaseInterface( m_hControlInst, m_pIServerControl );
 	for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 		SafeDeleteArray( m_pdTableStock[nIndex] );
 	
 }
 
-// ÊÍ·Å¶ÔÏó
+// é‡Šæ”¾å¯¹è±¡
 VOID CTableFrameSink::Release()
 {
 	for( INT_PTR i = 0; i < m_ArrayFishPathPositive.GetCount(); ++i )
@@ -228,7 +228,7 @@ void CTableFrameSink::IniConfig()
 	m_bFushBoss = false;
 	m_bIsFushBoss = false;
 	m_bIsFushBegin = false;
-	//·¿¼ä±¶Êı
+	//æˆ¿é—´å€æ•°
 	m_nMultipleValue[0] = 1;
 	m_nMultipleValue[1] = 10;
 	m_nMultipleValue[2] = 100;
@@ -236,7 +236,7 @@ void CTableFrameSink::IniConfig()
 	m_nMultipleValue[4] = 1000;
 	m_nMultipleValue[5] = 5000;
 
-	//·¿¼ä¿â´æ ÔİÊ±Ã»ÓÃ
+	//æˆ¿é—´åº“å­˜ æš‚æ—¶æ²¡ç”¨
 	for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 	{
 		m_dRoomStock[nIndex] =(10 *(double)m_nMultipleValue[nIndex]);
@@ -244,12 +244,12 @@ void CTableFrameSink::IniConfig()
 		m_lStockCurrent += (10* (LONGLONG)m_nMultipleValue[nIndex]);
 	}
 
-	//ÄÑ¶ÈÀàĞÍ
-	m_nDifficultyStart[0] = TRUE;   //·¿¼äÄÑ¶È¿ªÆô
-	m_nDifficultyStart[1] = false;  //×À×ÓÄÑ¶È
-	m_nDifficultyStart[1] = false;  //ÒÎ×ÓÄÑ¶È
+	//éš¾åº¦ç±»å‹
+	m_nDifficultyStart[0] = TRUE;   //æˆ¿é—´éš¾åº¦å¼€å¯
+	m_nDifficultyStart[1] = false;  //æ¡Œå­éš¾åº¦
+	m_nDifficultyStart[1] = false;  //æ¤…å­éš¾åº¦
 
-	//·¿¼äÄÑ¶È
+	//æˆ¿é—´éš¾åº¦
 	m_nRoomDifficultyCount[0] = 50;
 	m_nRoomDifficultyCount[1] = 100;
 	m_nRoomDifficultyCount[2] = 200;
@@ -261,7 +261,7 @@ void CTableFrameSink::IniConfig()
 	m_nRoomDifficultyCount[8] = 6000;
 	m_nRoomDifficultyCount[9] = 10000;
 
-	//×À×ÓÄÑ¶È
+	//æ¡Œå­éš¾åº¦
 	m_nTableDifficultyCount[0] = 50;
 	m_nTableDifficultyCount[1] = 100;
 	m_nTableDifficultyCount[2] = 200;
@@ -273,7 +273,7 @@ void CTableFrameSink::IniConfig()
 	m_nTableDifficultyCount[8] = 6000;
 	m_nTableDifficultyCount[9] = 10000;
 
-	//ÒÎ×ÓÄÑ¶È
+	//æ¤…å­éš¾åº¦
 	m_nPlayDifficultyCount[0] = -10000;
 	m_nPlayDifficultyCount[1] = -1000;
 	m_nPlayDifficultyCount[2] = -200;
@@ -285,7 +285,7 @@ void CTableFrameSink::IniConfig()
 	m_nPlayDifficultyCount[8] = 5000;
 	m_nPlayDifficultyCount[9] = 10000;
 
-	//·¿¼äÄÑ¶ÈÏµÊı(ÓÃµ½ÓĞÓÃ)
+	//æˆ¿é—´éš¾åº¦ç³»æ•°(ç”¨åˆ°æœ‰ç”¨)
 	m_dRoomDifficultyValue[0] = 0.05;
 	m_dRoomDifficultyValue[1] = 0.15;
 	m_dRoomDifficultyValue[2] = 0.25;
@@ -297,7 +297,7 @@ void CTableFrameSink::IniConfig()
 	m_dRoomDifficultyValue[8] = 2.50;
 	m_dRoomDifficultyValue[9] = 3.50;
 
-	//×À×ÓÄÑ¶ÈÏµÊı
+	//æ¡Œå­éš¾åº¦ç³»æ•°
 	m_dTableDifficultyValue[0] = 0.05;
 	m_dTableDifficultyValue[1] = 0.15;
 	m_dTableDifficultyValue[2] = 0.25;
@@ -309,7 +309,7 @@ void CTableFrameSink::IniConfig()
 	m_dTableDifficultyValue[8] = 3.00;
 	m_dTableDifficultyValue[9] = 3.50;
 
-	//ÒÎ×ÓÄÑ¶ÈÏµÊı
+	//æ¤…å­éš¾åº¦ç³»æ•°
 	m_dPlayDifficultyValue[0] = 2.50;
 	m_dPlayDifficultyValue[1] = 2.15;
 	m_dPlayDifficultyValue[2] = 1.75;
@@ -321,18 +321,18 @@ void CTableFrameSink::IniConfig()
 	m_dPlayDifficultyValue[8] = 0.15;
 	m_dPlayDifficultyValue[9] = 0.10;
 
-	//³éË®±ÈÀı
+	//æŠ½æ°´æ¯”ä¾‹
 	m_dTaxRatio = 0.3;
 
-	//³¡¾°ÅäÖÃ
+	//åœºæ™¯é…ç½®
 	m_nCreateCount = 12; 
 	m_nSceneTime = 60 * 8;
 
-	// ×Óµ¯ĞÅÏ¢
+	// å­å¼¹ä¿¡æ¯
 	m_nBulletCoolingTime = 150;
 	m_nBulletVelocity = 15000;
 
-	// »î¶¯ÅäÖÃ
+	// æ´»åŠ¨é…ç½®
 	m_nSupplyCondition[0] = 500;
 	m_nSupplyCondition[1] = 700;
 	m_nLaserTime = 30;
@@ -351,7 +351,7 @@ void CTableFrameSink::IniConfig()
 	m_nGiftChance[4] = 5;
 	m_nNullChance = 5;
 
-     //ÓãÅäÖÃ
+     //é±¼é…ç½®
 	m_nFishMultiple[0][0] = 2;
 	m_nFishMultiple[0][1] = 2;
 	m_nFishMultiple[1][0] = 3;
@@ -403,7 +403,7 @@ void CTableFrameSink::IniConfig()
 	m_nFishMultiple[24][0] = 0;
 	m_nFishMultiple[24][1] = 0;
 
-	// ±¬Õ¨ÅäÖÃ
+	// çˆ†ç‚¸é…ç½®
 	m_nExplosionProportion = 50;
 	m_nExplosionStart = 5000;
 	m_lExplosionCondition = 3000;
@@ -411,11 +411,11 @@ void CTableFrameSink::IniConfig()
 	m_nExplosionProportion = max(m_nExplosionProportion, 0);
 	m_nExplosionProportion = min(m_nExplosionProportion, 1000);
 
-	// ÖĞ½±ÅäÖÃ
+	// ä¸­å¥–é…ç½®
 	m_nAwardMinMultiple = 50;
 	m_bAwardChatBox = true;
 
-	// Ìí¼Ó×À×Ó¿â´æ
+	// æ·»åŠ æ¡Œå­åº“å­˜
 	for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 	{
 		if (m_pdTableStock[nIndex] == NULL)
@@ -429,19 +429,19 @@ void CTableFrameSink::IniConfig()
 
 #ifdef _DEBUG
 
-	// ²âÊÔ¸ø±¬Õ¨
+	// æµ‹è¯•ç»™çˆ†ç‚¸
 	int nMultipleMax = 0;
 	for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 	{
 		nMultipleMax = max(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 	}
 
-	// ´´½¨·ÉïÚ
+	// åˆ›å»ºé£é•–
 	m_dDartStock = nMultipleMax * 5000;
 
 #endif
 
-	// »ñÈ¡µ±Ç°Â·¾¶
+	// è·å–å½“å‰è·¯å¾„
 	TCHAR szDirectoryPath[MAX_PATH + 1] = { _T("") };
 	GetModuleFileName(NULL, szDirectoryPath, MAX_PATH);
 	PathRemoveFileSpec(szDirectoryPath);
@@ -461,23 +461,23 @@ void CTableFrameSink::IniConfig()
 	{
 		return;
 	}
-	// ¶ÁÈ¡ÓãÂ·¾¶
+	// è¯»å–é±¼è·¯å¾„
 	if (m_ArrayFishPathPositive.GetCount() == 0)
 	{
-		// ´ò¿ªÅäÖÃ
+		// æ‰“å¼€é…ç½®
 		tchar szFishMermaidPath[MAX_PATH] = _T("");
 		_sntprintf(szFishMermaidPath, MAX_PATH, TEXT("%s\\FishLKConfig\\FishLKPath.pat"), szDirectoryPath);
 
-		// ÔØÈëÂ·¾¶
+		// è½½å…¥è·¯å¾„
 		CStdioFile myFile;
 		BOOL bOpen = myFile.Open(szFishMermaidPath, CFile::modeNoTruncate | CFile::modeReadWrite);
 		if (bOpen == FALSE)
 		{
-			AfxMessageBox(TEXT("ÎÄ¼ş FishLKConfig\\FishLKPath.pat ¶ÁÈ¡Ê§°Ü£¡"));
+			AfxMessageBox(TEXT("æ–‡ä»¶ FishLKConfig\\FishLKPath.pat è¯»å–å¤±è´¥ï¼"));
 			return;
 		}
 
-		// ¶ÁÈ¡ĞÅÏ¢
+		// è¯»å–ä¿¡æ¯
 		CString strReadPrior;
 		int nStrCount = 10;
 		int nPathCount = 0;
@@ -486,10 +486,10 @@ void CTableFrameSink::IniConfig()
 		int jD = 0;
 		while (myFile.ReadString(strReadPrior))
 		{
-			// ÅĞ¶ÏÊÇ·ñÃ÷ÎÄ
+			// åˆ¤æ–­æ˜¯å¦æ˜æ–‡
 			if (bBeging && strReadPrior.GetLength() == 9)
 			{
-				// Í·ĞÅÏ¢±È½Ï
+				// å¤´ä¿¡æ¯æ¯”è¾ƒ
 				TCHAR cHand[9] = { 1, 9, 8, 9, 7, 3, 2, 2, 'S' };
 				for (; jD < strReadPrior.GetLength() && jD < 9; ++jD)
 				{
@@ -508,10 +508,10 @@ void CTableFrameSink::IniConfig()
 			}
 			bBeging = FALSE;
 
-			// ×îºóĞÅÏ¢
+			// æœ€åä¿¡æ¯
 			CString strRead;
 
-			// ±»¼ÓÃÜ
+			// è¢«åŠ å¯†
 			if (bHand)
 			{
 				int nPriorCount = strReadPrior.GetLength();
@@ -535,7 +535,7 @@ void CTableFrameSink::IniConfig()
 			}
 
 
-			// ×ª»»¶à×Ö½Ú
+			// è½¬æ¢å¤šå­—èŠ‚
 			CHAR szReadByte[1024];
 			strcpy(szReadByte, (LPCTSTR)strRead);
 
@@ -545,7 +545,7 @@ void CTableFrameSink::IniConfig()
 				int nPathCountT = 0;
 				sscanf(szReadByte, "B PathIndex:%d PathCount:%d", &nPathIndexT, &nPathCountT);
 
-				// ±£´æ³É½Úµã
+				// ä¿å­˜æˆèŠ‚ç‚¹
 				tagFishPath* pNode = new tagFishPath;
 				m_ArrayFishPathPositive.Add(pNode);
 			}
@@ -560,7 +560,7 @@ void CTableFrameSink::IniConfig()
 					&BeginPoint.x, &BeginPoint.y, &EndPoint.x, &EndPoint.y,
 					&KeyOne.x, &KeyOne.y, &KeyTwo.x, &KeyTwo.y, &nTime);
 
-				// ±£´æ³É½Úµã
+				// ä¿å­˜æˆèŠ‚ç‚¹
 				tagBezierPoint* pFishPath = new tagBezierPoint;
 				pFishPath->BeginPoint = BeginPoint;
 				pFishPath->EndPoint = EndPoint;
@@ -571,7 +571,7 @@ void CTableFrameSink::IniConfig()
 			}
 			else if (strRead == TEXT("End"))
 			{
-				// ÊıÁ¿Ôö¼Ó
+				// æ•°é‡å¢åŠ 
 				nPathCount++;
 			}
 			else
@@ -587,7 +587,7 @@ void CTableFrameSink::IniConfig()
 
 
 
-	// Íæ¼ÒÎ»ÖÃ
+	// ç©å®¶ä½ç½®
 	m_PointPlay[S_TOP_LEFT].x = 230;
 	m_PointPlay[S_TOP_LEFT].y = 50;
 	m_PointPlay[S_TOP_CENTER].x = DEFAULE_WIDTH / 2;
@@ -603,33 +603,33 @@ void CTableFrameSink::IniConfig()
 	return;
 }
 
-// ÅäÖÃ×À×Ó
+// é…ç½®æ¡Œå­
 void CTableFrameSink::LoadDynamicConfig()
 {
 	CString nameID;
 	nameID.Format("%d", NAME_ID);
 	CINIFile f(CINIFile::GetAppPath() + nameID + "_s.ini");
 	CString key = TEXT("game");
-	//»ñÈ¡±¶ÂÊ
+	//è·å–å€ç‡
 	int Multiple = GetPlatformMultiple();
 
-	//×Óµ¯¼ä¸ô
+	//å­å¼¹é—´éš”
 	m_nBulletCoolingTime = f.GetKeyVal(key, "nBulletCoolingTime", 150);
-	//×Óµ¯ËÙ¶È
+	//å­å¼¹é€Ÿåº¦
 	m_nBulletVelocity = f.GetKeyVal(key, "nBulletVelocity", 15000);
-	//´´½¨ÓãÊıÁ¿
+	//åˆ›å»ºé±¼æ•°é‡
 	m_nCreateCount = f.GetKeyVal(key, "nCreateCount", 12);
-	//³¡¾°Î¬³ÖÊ±¼ä
+	//åœºæ™¯ç»´æŒæ—¶é—´
 	m_nSceneTime = f.GetKeyVal(key, "nSceneTime", 480);
-	//Ôö¼ÓÈËÊıÓãÔö¼ÓÊıÁ¿
+	//å¢åŠ äººæ•°é±¼å¢åŠ æ•°é‡
 	m_iAddFinshCount = f.GetKeyVal(key, "AddFinshCount", 6);
-	//ÓãÈºÊıÁ¿
+	//é±¼ç¾¤æ•°é‡
 	m_iFinshLeve = f.GetKeyVal(key, "FinshLeve", 3);
-	//ÊÇ·ñ¿ªÆô²»²Ù×÷»á±»Ìß³ö
+	//æ˜¯å¦å¼€å¯ä¸æ“ä½œä¼šè¢«è¸¢å‡º
 	m_IsOpenTick = f.GetKeyVal(key, "IsOpenTick", 1);
-	//Íæ¼Ò¶à¾Ã²»²Ù×÷»á±»Ìß³ö·¿¼ä(Ãë)
+	//ç©å®¶å¤šä¹…ä¸æ“ä½œä¼šè¢«è¸¢å‡ºæˆ¿é—´(ç§’)
 	m_iTickTime = f.GetKeyVal(key, "TickTime", 120);
-	//´óÓÚ¶àÉÙË÷ÒıµÄÓã¿ÉÒÔ±¬³öÌØÊâµÀ¾ß
+	//å¤§äºå¤šå°‘ç´¢å¼•çš„é±¼å¯ä»¥çˆ†å‡ºç‰¹æ®Šé“å…·
 	m_ipropNum = f.GetKeyVal(key, "propNum", 23);
 	m_iBingDong = f.GetKeyVal(key, "BingDong", 20);
 	m_iLocking = f.GetKeyVal(key, "Locking", 20);
@@ -640,20 +640,20 @@ void CTableFrameSink::LoadDynamicConfig()
 	{
 		m_iFinshLeve = 3;
 	}
-	//´óÓãÈºÊÇ·ñ¿ªÆô
+	//å¤§é±¼ç¾¤æ˜¯å¦å¼€å¯
 	m_bOpenShoalFish= f.GetKeyVal(key, "OpenFishShoal", 1);
-	//´óÓãÈºÊıÁ¿
+	//å¤§é±¼ç¾¤æ•°é‡
 	m_iFishShoalLev = f.GetKeyVal(key, "FishShoalLev", 10);
-	//Ğ¡ÓÚ´Î±¶Êı²»¹«¸æ
+	//å°äºæ¬¡å€æ•°ä¸å…¬å‘Š
 	m_nAwardMinMultiple = f.GetKeyVal(key, "AwardMinMultiple", 30);
 
-	//ÓãÕóÀàĞÍ
+	//é±¼é˜µç±»å‹
 	m_iFinshGroup = f.GetKeyVal(key, "FinshGroup", 255);
 	if (m_iFinshGroup < 0 || m_iFinshGroup > 4)
 	{
 		m_iFinshGroup = 255;
 	}
-	//Ğ¡ÓãÓãÈº´´½¨¼¸ÂÊ
+	//å°é±¼é±¼ç¾¤åˆ›å»ºå‡ ç‡
 	m_iCreatJiLv = f.GetKeyVal(key, "CreatJiLv", 10);
 	if (m_iCreatJiLv < 0 || m_iCreatJiLv >= 90)
 	{
@@ -682,7 +682,7 @@ void CTableFrameSink::LoadDynamicConfig()
 	m_dRoomDifficultyValue[8] = f.GetKeyVal(key, "dRoomDifficultyValue_1_8", 250);
 	m_dRoomDifficultyValue[9] = f.GetKeyVal(key, "dRoomDifficultyValue_1_9", 350);
 
-	//¸öÈËÄÑ¶ÈÏµÊı
+	//ä¸ªäººéš¾åº¦ç³»æ•°
 	m_dPlayDifficultyValue[9] = f.GetKeyVal(key, "dPlayDifficultyValue_1_9", 250);
 	m_dPlayDifficultyValue[8] = f.GetKeyVal(key, "dPlayDifficultyValue_1_8", 215);
 	m_dPlayDifficultyValue[7] = f.GetKeyVal(key, "dPlayDifficultyValue_1_7", 175);
@@ -1039,86 +1039,86 @@ void CTableFrameSink::LoadDynamicConfig()
 	return;
 }
 
-// ¸´Î»×À×Ó
+// å¤ä½æ¡Œå­
 VOID CTableFrameSink::RepositionSink()
 {
 	return;
 }
 
 
-// ÓÎÏ·½áÊø
+// æ¸¸æˆç»“æŸ
 bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 {
-	// ½âÉ¢Ğ´·Ö
+	// è§£æ•£å†™åˆ†
 	if (bCloseFlag == GF_NORMAL)
 	{
-		//ÉèÖÃ×´Ì¬
+		//è®¾ç½®çŠ¶æ€
 		SetGameStation(GAME_STATUS_FREE);
 
-		// Çå¿ÕÍæ¼Ò
+		// æ¸…ç©ºç©å®¶
 		for ( int nSite = 0; nSite < PlayChair_Max; ++nSite )
 		{
-			// ÅĞ¶ÏÓÃ»§
+			// åˆ¤æ–­ç”¨æˆ·
 			long userID = GetUserIDByDeskStation(nSite);
 			if( userID > 0 )
 			{
-				// Íæ¼ÒÖ¸Õë
+				// ç©å®¶æŒ‡é’ˆ
 				GameUserInfo UserInfo;
 				GetUserData(nSite,UserInfo);
 
-				// Ğ´·Ö
+				// å†™åˆ†
 				LONGLONG lScore = ( m_lPlayScore[nSite] - m_lPlayStartScore[nSite] );
 				if ( lScore != 0 )
 				{
-					// »ı·ÖÎª¸º£¬ ²»ÄÜ³¬¹ı×î´ó·ÖÊı
+					// ç§¯åˆ†ä¸ºè´Ÿï¼Œ ä¸èƒ½è¶…è¿‡æœ€å¤§åˆ†æ•°
 					if ( lScore < 0 && (-lScore) > UserInfo.money)
 					{
 						lScore = -UserInfo.money;
 					}
 				}
 
-				// ÓÎÏ·Ê±¼ä
+				// æ¸¸æˆæ—¶é—´
 				DWORD dwEndTime = (DWORD)time(NULL) - m_nPlayDownTime[nSite];
 
 				ChangeUserPoint(nSite, lScore, m_lplayCutMoney[nSite]);
 
 				m_lplayCutMoney[nSite] = 0;
 
-				// ±£´æĞ´·Ö
+				// ä¿å­˜å†™åˆ†
 				m_nRoomWrite += (-lScore);
 
-				// ¹éÁã
+				// å½’é›¶
 				InitializePlayer(nSite);
 			}
 		}
 
-		// È«¾Ö±¬Õ¨»¹Ô­
+		// å…¨å±€çˆ†ç‚¸è¿˜åŸ
 		if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
 		{
-			// ×î´ó±¶Êı
+			// æœ€å¤§å€æ•°
 			int nMultipleMax = 0;
 			for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 			{
 				nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 			}
 
-			// ·ÉïÚÏûºÄ
+			// é£é•–æ¶ˆè€—
 			m_dDartStock += nMultipleMax * m_nExplosionStart;
 		}
 
-		// ¼ÇÂ¼¿â´æ
+		// è®°å½•åº“å­˜
 		//FishMermaidStock();
 
-		// É¾³ı¶¨Ê±Æ÷
+		// åˆ é™¤å®šæ—¶å™¨
 		KillTimer(IDI_FISH_CREATE);
 		KillTimer(IDI_DELAY);
 		KillTimer(IDI_SECOND);
 		KillTimer(TIME_WRITE_SCORE);
-		//Çå¿ÕÍæ¼ÒµÄËùÓĞ¸öÈË¿ØÖÆ
-		//É¾³ıÈ«²¿¸öÈËÄÑ¶È
+		//æ¸…ç©ºç©å®¶çš„æ‰€æœ‰ä¸ªäººæ§åˆ¶
+		//åˆ é™¤å…¨éƒ¨ä¸ªäººéš¾åº¦
 		ClearPersonalDifficulty();
 
-		// ÓãĞÅÏ¢
+		// é±¼ä¿¡æ¯
 		m_ArrayFishInfo.RemoveAll();
 		m_cbBackIndex = 0;
 		m_nAppearFishCount = 0;
@@ -1126,7 +1126,7 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		m_bBackExchange = FALSE;
 		m_nStartTime = 0;
 
-		// ÕóÁĞ
+		// é˜µåˆ—
 		m_nFishTeamTime = 0;
 		m_nFishKingTime = 30;
 		ZeroMemory(m_nFishKing, sizeof(m_nFishKing));
@@ -1134,10 +1134,10 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		IsBegin = false;
 		return __super::GameFinish(bDeskStation, bCloseFlag);
 	}
-	// Çå¿ÕÍæ¼Ò
+	// æ¸…ç©ºç©å®¶
 	for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
 	{
-		// ¹éÁã
+		// å½’é›¶
 		InitializePlayer(nSite);
 	}
 
@@ -1145,7 +1145,7 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 	return __super::GameFinish(bDeskStation, bCloseFlag);
 }
 
- //·¢ËÍ³¡¾°
+ //å‘é€åœºæ™¯
 bool CTableFrameSink::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser)
 {
 
@@ -1159,7 +1159,7 @@ bool CTableFrameSink::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 
 
 
-			// »ù±¾ĞÅÏ¢
+			// åŸºæœ¬ä¿¡æ¯
 			GameScene Scene;
 			ZeroMemory(&Scene, sizeof(Scene));
 			Scene.lPlayScore = m_lPlayScore[bDeskStation];
@@ -1176,21 +1176,21 @@ bool CTableFrameSink::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 			Scene.bUnlimitedRebound = false;
 			//_sntprintf(Scene.szBrowseUrl, CountArray(Scene.szBrowseUrl), TEXT("%s/Pay/PayIndex.aspx"),szPlatformLink);
 			SendGameStation(bDeskStation, uSocketID, bWatchUser, &Scene, sizeof(Scene));
-			//printf("×Óµ¯ËÙ¶È:%d,ÀäÈ´:%d", Scene.nBulletVelocity, Scene.nBulletCoolingTime);
-			// ·¢ËÍÓãĞÅÏ¢
+			//printf("å­å¼¹é€Ÿåº¦:%d,å†·å´:%d", Scene.nBulletVelocity, Scene.nBulletCoolingTime);
+			// å‘é€é±¼ä¿¡æ¯
 			DWORD dwTime = timeGetTime();
 			DWORD Time = dwTime - m_nStartTime;
 		//	printf("%d,%d,%d\n", Time, dwTime, m_nStartTime);
-			// Ê±¼äÍ¬²½
+			// æ—¶é—´åŒæ­¥
 			CMD_S_Synchronous CMDSSynchronous;
 			CMDSSynchronous.nOffSetTime = dwTime - m_nStartTime;
 			//printf("%d,%d,%d\n", CMDSSynchronous.nOffSetTime, dwTime, m_nStartTime);
 		     SendTableData(bDeskStation, SUB_S_SYNCHRONOUS, &CMDSSynchronous, sizeof(CMDSSynchronous));
 
-			//// ·¢ËÍÓã
+			//// å‘é€é±¼
 			//for( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
 			//{
-			//	 ·¢ËÍĞÅÏ¢
+			//	 å‘é€ä¿¡æ¯
 			//	SendFish( m_ArrayFishInfo.GetAt( nIndex) );
 			//}
 			//
@@ -1201,18 +1201,18 @@ bool CTableFrameSink::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 	return true;
 }
 
-// ¶¨Ê±Æ÷ÊÂ¼ş
+// å®šæ—¶å™¨äº‹ä»¶
 bool CTableFrameSink::OnTimer(UINT uTimerID)
 {
 	switch (uTimerID)
 	{
-		// ´´½¨Óã¶¨Ê±
+		// åˆ›å»ºé±¼å®šæ—¶
 	case IDI_FISH_CREATE:
 		{
-			// ¹Ø±Õ¶¨Ê±Æ÷
+			// å…³é—­å®šæ—¶å™¨
 		KillTimer(IDI_FISH_CREATE);
 			
-			// ¼ì²âÊÇ·ñÓĞÈË
+			// æ£€æµ‹æ˜¯å¦æœ‰äºº
 			bool bHavePeople = false;
 			for ( WORD i = 0; i < PlayChair_Max; ++i )
 			{
@@ -1225,27 +1225,27 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				break;
 			}
 			
-			// ÎŞÈË·µ»Ø
+			// æ— äººè¿”å›
 			if ( !bHavePeople )
 			{
-				// È«¾Ö±¬Õ¨»¹Ô­
+				// å…¨å±€çˆ†ç‚¸è¿˜åŸ
 				if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
 				{
-					// ×î´ó±¶Êı
+					// æœ€å¤§å€æ•°
 					int nMultipleMax = 0;
 					for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 					{
 						nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 					}
 
-					// ·ÉïÚÏûºÄ
+					// é£é•–æ¶ˆè€—
 					m_dDartStock += nMultipleMax * m_nExplosionStart;
 				}
 
-				// ÓãĞÅÏ¢
+				// é±¼ä¿¡æ¯
 				m_ArrayFishInfo.RemoveAll();
 
-				// ÉèÖÃĞÅÏ¢
+				// è®¾ç½®ä¿¡æ¯
 				m_cbBackIndex = 0;
 				m_nAppearFishCount = 0;
 				m_bFishSwimming = FALSE;
@@ -1256,112 +1256,112 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				return true;
 			}
 
-			// ¼ÆËãµ±Ç°Óã
+			// è®¡ç®—å½“å‰é±¼
 			int nFishIndex = 0;
 			while ( nFishIndex < m_ArrayFishInfo.GetCount() )
 			{
-				// »ñÈ¡ÓãĞÅÏ¢
+				// è·å–é±¼ä¿¡æ¯
 				tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
 
-				// ¼ÆËãÓãÎ»ÖÃ
+				// è®¡ç®—é±¼ä½ç½®
 				CDoublePoint PointFish;
 				if( FishMove(PointFish, TFishInfo) == FishMoveType_Delete )
 				{
-					// ÖØĞÂ´´½¨
+					// é‡æ–°åˆ›å»º
 					if( TFishInfo.bRepeatCreate && !m_bBackExchange )
 					{
-						// ÖØĞÂÉú³ÉÓã
+						// é‡æ–°ç”Ÿæˆé±¼
 						ResetFish( TFishInfo );
 
-						// ÏÂÒ»Ìõ
+						// ä¸‹ä¸€æ¡
 						++nFishIndex;
 					}
 					else
 					{
 
-						// ºĞ×Ó±¬Õ¨
+						// ç›’å­çˆ†ç‚¸
 						if( TFishInfo.nFishType == FishType_BaoXiang && TFishInfo.wHitChair != INVALID_CHAIR )
 						{
-							// »î¶¯ÖØÔØ
+							// æ´»åŠ¨é‡è½½
 							m_bPlaySupply[TFishInfo.wHitChair] = false;
 						}
 
-						// È«¾Ö±¬Õ¨»¹Ô­
+						// å…¨å±€çˆ†ç‚¸è¿˜åŸ
 						if ( TFishInfo.nFishType == FishType_BaoZhaFeiBiao )
 						{
-							// ×î´ó±¶Êı
+							// æœ€å¤§å€æ•°
 							int nMultipleMax = 0;
 							for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 							{
 								nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 							}
 
-							// ·ÉïÚÏûºÄ
+							// é£é•–æ¶ˆè€—
 							m_dDartStock += nMultipleMax * m_nExplosionStart;
 						}
 
-						// É¾³ıÓã
+						// åˆ é™¤é±¼
 						m_ArrayFishInfo.RemoveAt( nFishIndex );
 
-						// ¼ÌĞø
+						// ç»§ç»­
 						continue;
 					}
 				}
 
-				// ÏÂÒ»Ìõ
+				// ä¸‹ä¸€æ¡
 				++nFishIndex;
 			}
 
-			// µ±Ç°Ê±¼ä
+			// å½“å‰æ—¶é—´
 			const uint nCurrentTime = timeGetTime();
 
-			// »»µØÍ¼
+			// æ¢åœ°å›¾
 			if( !m_bBackExchange && nCurrentTime - m_nSceneBegin > (uint)m_nSceneTime * 1000 && !m_bFushSence)
 			{
 				m_bBackExchange = TRUE;
 				m_nSceneBegin = nCurrentTime;
 			}
 
-			// µÈ´ı»»µØÍ¼ ²»Ìí¼ÓÓã
+			// ç­‰å¾…æ¢åœ°å›¾ ä¸æ·»åŠ é±¼
 			if ( !m_bBackExchange )
 			{
-				// Ìí¼ÓÓã
+				// æ·»åŠ é±¼
 				if ( m_nAppearFishCount == 0 && !m_bBackExchange && !m_bFirstTime )
 				{
-					// ´´½¨ÕóÁĞ
+					// åˆ›å»ºé˜µåˆ—
 					DWORD GroupTime = GroupOfFish();
 					m_nFishTeamTime = GetTickCount() + GroupTime;
-					//BOSSÊ±¼äÈ¥³ıÓãÕóÊ±¼ä
+					//BOSSæ—¶é—´å»é™¤é±¼é˜µæ—¶é—´
 					m_FishKingTime += GroupTime;
 				}
 				else if ( !m_bBackExchange && ( GetTickCount() > m_nFishTeamTime || m_ArrayFishInfo.GetCount() == 0 ) )
 				{
-					// ¹ıÂËµÚÒ»´Î
+					// è¿‡æ»¤ç¬¬ä¸€æ¬¡
 					m_bFirstTime = false;
 
-					// ´´½¨ÓãÈº
+					// åˆ›å»ºé±¼ç¾¤
 					InitializationFishpond();
 
-					// ×î´ó±¶Êı
+					// æœ€å¤§å€æ•°
 					int nMultipleMax = 0;
 					for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 					{
 						nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 					}
 
-					// ´´½¨·ÉïÚ
+					// åˆ›å»ºé£é•–
 					if( m_dDartStock >= nMultipleMax * m_nExplosionStart && GetFishCount(FishType_BaoZhaFeiBiao) == 0 )
 					{
-						// ·ÉïÚÏûºÄ
+						// é£é•–æ¶ˆè€—
 						m_dDartStock -= nMultipleMax * m_nExplosionStart;
 
-						// ´´½¨·ÉïÚ
+						// åˆ›å»ºé£é•–
 						CreateFish( 1, FishType_BaoZhaFeiBiao );
 					}
 				}
 			}
 	
-			// »»³¡¾°·¢ËÍÏûÏ¢
+			// æ¢åœºæ™¯å‘é€æ¶ˆæ¯
 			BOOL bChangeScene = FALSE;
 			if ( m_bBackExchange && m_ArrayFishInfo.GetCount() < 5 )
 			{
@@ -1370,18 +1370,18 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				bChangeScene = TRUE;
 				m_nAppearFishCount = 0;
 
-				// Óã¿ìËÙÏûÏ¢
+				// é±¼å¿«é€Ÿæ¶ˆæ¯
 				FishFastMove();
 
-				// »»Í¼ÏûÏ¢
+				// æ¢å›¾æ¶ˆæ¯
 				CMD_S_ExchangeScene ExchangeScene;
 				ExchangeScene.cbBackIndex = m_cbBackIndex;
 
-				// ·¢ËÍÏûÏ¢
+				// å‘é€æ¶ˆæ¯
 				SendTableData(INVALID_CHAIR, SUB_S_EXCHANGE_SCENE, &ExchangeScene, sizeof(ExchangeScene) );
 			}
 
-			// Æô¶¯¶¨Ê±Æ÷
+			// å¯åŠ¨å®šæ—¶å™¨
 			if ( bChangeScene )
 			{
 				SetTimer(IDI_FISH_CREATE, 5000);
@@ -1392,13 +1392,13 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 			}
 		}
 		return true;
-		// ÑÓ³Ù¶¨Ê±
+		// å»¶è¿Ÿå®šæ—¶
 	case IDI_DELAY:
 		{
-			// ¹Ø±Õ¶¨Ê±Æ÷
+			// å…³é—­å®šæ—¶å™¨
 			KillTimer(IDI_DELAY);
 
-			// ¼ì²âÊÇ·ñÓĞÈË
+			// æ£€æµ‹æ˜¯å¦æœ‰äºº
 			bool bHavePeople = false;
 			GameUserInfo *GameUser = NULL;
 			for ( WORD i = 0; i < PlayChair_Max; ++i )
@@ -1406,13 +1406,13 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				GameUser = GetTableUserItem(i);
 				if (GameUser == NULL) continue;
 
-				// ¿ªÆô¶¨Ê±Æ÷
+				// å¼€å¯å®šæ—¶å™¨
 				bHavePeople = true;
 				SetTimer(IDI_DELAY, TIME_DELAY);
 				break;
 			}
 
-			// ·¢ËÍÏûÏ¢
+			// å‘é€æ¶ˆæ¯
 			for (WORD i = 0; i < PlayChair_Max && bHavePeople; ++i )
 			{
 				//IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem( i );
@@ -1426,13 +1426,13 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 		}
 		return true;
 
-		// ÃëÖÓ¶¨Ê±
+		// ç§’é’Ÿå®šæ—¶
 	case IDI_SECOND:
 		{
-			// ¹Ø±Õ¶¨Ê±Æ÷
+			// å…³é—­å®šæ—¶å™¨
 			KillTimer(IDI_SECOND);
 
-			// ¼ì²âÊÇ·ñÓĞÈË
+			// æ£€æµ‹æ˜¯å¦æœ‰äºº
 			bool bHavePeople = false;
 			WORD wSite = INVALID_CHAIR;
 			GameUserInfo *GameUser = NULL;
@@ -1441,24 +1441,24 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				GameUser = GetTableUserItem(i);
 				if (GameUser == NULL) continue;
 
-				// ¿ªÆô¶¨Ê±Æ÷
+				// å¼€å¯å®šæ—¶å™¨
 				bHavePeople = true;
 				SetTimer(IDI_SECOND, 1000);
 				wSite = i;
 				break;
 			}
 			
-			// ÎŞÈËÎŞ±¶Êı
+			// æ— äººæ— å€æ•°
 			if( !bHavePeople )
 				return true;
 
-			// ¼õÉÙÓãÕóÊ±¼ä
+			// å‡å°‘é±¼é˜µæ—¶é—´
 			if ( m_nFishKingTime > 0 )
 			{
 				m_nFishKingTime--;
 			}
 
-			// ¼õÉÙÓãÕóÊ±¼ä
+			// å‡å°‘é±¼é˜µæ—¶é—´
 			for( int nIndex = 0; nIndex < CountArray(m_nFishKing); ++nIndex )
 			{
 				if ( m_nFishKing[nIndex] > 0 )
@@ -1467,11 +1467,11 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				}
 			}
 
-			// ÓÎÏ·Ê±¼ä
+			// æ¸¸æˆæ—¶é—´
 			DWORD dwCurrentime = (DWORD)time(NULL);
 
 			uint NowTime = timeGetTime();
-			//ÅĞ¶ÏÍæ¼Ò¶à³¤Ê±¼ä²»²Ù×÷
+			//åˆ¤æ–­ç©å®¶å¤šé•¿æ—¶é—´ä¸æ“ä½œ
 			//if (m_IsOpenTick)
 			//{
 			//	for (int i = 0; i < PLAY_COUNT; i++)
@@ -1480,7 +1480,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 
 			//		if (NowTime - m_iOptionTime[i] > m_iTickTime * 1000)
 			//		{
-			//			//µ÷ÓÃÌß³ö¸ÃÍæ¼Ò
+			//			//è°ƒç”¨è¸¢å‡ºè¯¥ç©å®¶
 			//			KickOutUser(i);
 			//		}
 			//	}
@@ -1495,83 +1495,83 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 
 				}
 			}
-			// »úÆ÷ÈËÓÎÏ·Ê±¼ä
+			// æœºå™¨äººæ¸¸æˆæ—¶é—´
 			for( int nSite = 0; nSite < PlayChair_Max; ++nSite )
 			{
-				// Íæ¼Ò½Ó¿Ú
+				// ç©å®¶æ¥å£
 				//IServerUserItem * pServerRobot = m_pITableFrame->GetTableUserItem(nSite);
 
 				if (IsAndroidUser(nSite))
 				{
-					//³¬Ê±²»²Ù×÷Ìß³ö
+					//è¶…æ—¶ä¸æ“ä½œè¸¢å‡º
 					if (NowTime - m_iOptionTime[nSite] > m_iRobotTickTime * 1000)
 					{
-						printf("»úÆ÷ÈË²»²Ù×÷Ìß³ö\n");
-						//µ÷ÓÃÌß³ö¸ÃÍæ¼Ò
+						printf("æœºå™¨äººä¸æ“ä½œè¸¢å‡º\n");
+						//è°ƒç”¨è¸¢å‡ºè¯¥ç©å®¶
 						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
 					}
 
 					if (dwCurrentime - m_nPlayDownTime[nSite] > m_nRobotPlayTime[nSite])
 					{
-						printf("»úÆ÷ÈËÓÎÏ·³¬Ê±±»Ìß³ö:%d\n", m_nRobotPlayTime[nSite]);
-						//µ÷ÓÃÌß³ö¸ÃÍæ¼Ò
+						printf("æœºå™¨äººæ¸¸æˆè¶…æ—¶è¢«è¸¢å‡º:%d\n", m_nRobotPlayTime[nSite]);
+						//è°ƒç”¨è¸¢å‡ºè¯¥ç©å®¶
 						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
 					}
 					else if(m_lPlayScore[nSite] < m_nMultipleValue[m_nMultipleIndex[nSite]])
 					{
-						printf("»úÆ÷ÈËÇ®²»×ã±»Ìß³ö£¬·¿¼äµÈ¼¶£º%d**:%lld", GetRoomLevel(), m_lPlayScore[nSite]);
+						printf("æœºå™¨äººé’±ä¸è¶³è¢«è¸¢å‡ºï¼Œæˆ¿é—´ç­‰çº§ï¼š%d**:%lld", GetRoomLevel(), m_lPlayScore[nSite]);
 						printf(",%d,%d\n", m_nMultipleIndex[nSite], m_nMultipleValue[m_nMultipleIndex[nSite]]);
-						//µ÷ÓÃÌß³ö¸ÃÍæ¼Ò
+						//è°ƒç”¨è¸¢å‡ºè¯¥ç©å®¶
 						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
 					}
 				}
 			}
 			return true;
 		}
-	case TIME_WRITE_SCORE: //¶¨Ê±Ğ´·Ö
+	case TIME_WRITE_SCORE: //å®šæ—¶å†™åˆ†
 		{
-			//¹Ø±Õ¶¨Ê±Æ÷
+			//å…³é—­å®šæ—¶å™¨
 			KillTimer(TIME_WRITE_SCORE);
-			// ¼ì²âÊÇ·ñÓĞÈË
+			// æ£€æµ‹æ˜¯å¦æœ‰äºº
 			for (WORD i = 0; i < PlayChair_Max; ++i)
 			{
 				long  userid = GetUserIDByDeskStation(i);
 				if (userid <= 0) continue;
 
-				//ÓĞÈËÄÇÃ´¾Í½áËãÒ»ÏÂ
+				//æœ‰äººé‚£ä¹ˆå°±ç»“ç®—ä¸€ä¸‹
 				GameUserInfo UserInfo;
 				GetUserData(i, UserInfo);
 
-				// Ğ´·Ö
+				// å†™åˆ†
 				LONGLONG lScore = (m_lPlayScore[i] - m_lPlayStartScore[i]);
 				if (lScore != 0)
 				{
-					// »ı·ÖÎª¸º£¬ ²»ÄÜ³¬¹ı×î´ó·ÖÊı
+					// ç§¯åˆ†ä¸ºè´Ÿï¼Œ ä¸èƒ½è¶…è¿‡æœ€å¤§åˆ†æ•°
 					if (lScore < 0 && (-lScore) > UserInfo.money)
 					{
 						lScore = -UserInfo.money;
 					}
 				}
 
-				// ÓÎÏ·Ê±¼ä
+				// æ¸¸æˆæ—¶é—´
 				DWORD dwEndTime = (DWORD)time(NULL) - m_nPlayDownTime[i];
 				ChangeUserPoint(i, lScore, m_lplayCutMoney[i]);
 				m_lplayCutMoney[i] = 0;
 
-				//³õÊ¼»¯·Ö
+				//åˆå§‹åŒ–åˆ†
 				GetUserData(i, UserInfo);
 				m_lPlayScore[i] = UserInfo.money;
 				m_lPlayStartScore[i] = UserInfo.money;
 
-				//¸üĞÂÍæ¼ÒµÄ¸öÈËÄÑ¶È
-				//ÉèÖÃÍæ¼Ò¸öÈËÄÑ¶È
+				//æ›´æ–°ç©å®¶çš„ä¸ªäººéš¾åº¦
+				//è®¾ç½®ç©å®¶ä¸ªäººéš¾åº¦
 				long Userid = GetUserIDByDeskStation(i);
 				if (Userid > 0)
 				{
 					
-					// ¸öÈËÄÑ¶È
+					// ä¸ªäººéš¾åº¦
 					int UserDifficulty = GetUserControlParam(i);
-					//printf("Íæ¼Ò£º%d,¸öÈËÄÑ¶È£º%d\n", Userid, UserDifficulty);
+					//printf("ç©å®¶ï¼š%d,ä¸ªäººéš¾åº¦ï¼š%d\n", Userid, UserDifficulty);
 					double dGameDifficulty = 0;
 					if (UserDifficulty >= 0 && UserDifficulty < 1000)
 					{
@@ -1582,11 +1582,11 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 					{
 						dGameDifficulty = m_dPlayDifficultyValue[9];
 					}
-				//	printf("ÉèÖÃ¸öÈËÄÑ¶È£º%llf", dGameDifficulty);
+				//	printf("è®¾ç½®ä¸ªäººéš¾åº¦ï¼š%llf", dGameDifficulty);
 					SetPersonalDifficulty(Userid, dGameDifficulty);
 				}
 
-				// ±£´æĞ´·Ö
+				// ä¿å­˜å†™åˆ†
 				m_nRoomWrite += (-lScore);		
 			}
 			SetTimer(TIME_WRITE_SCORE, 30000);
@@ -1604,23 +1604,23 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 }
 
 
-//¿ò¼ÜÏûÏ¢´¦Àíº¯Êı
+//æ¡†æ¶æ¶ˆæ¯å¤„ç†å‡½æ•°
 bool CTableFrameSink::HandleFrameMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser)
 {
 	return __super::HandleFrameMessage(bDeskStation, assistID, pData, size, bWatchUser);
 }
 
 
-// ÓÎÏ·ÏûÏ¢
+// æ¸¸æˆæ¶ˆæ¯
 bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistID, void* pData, int size, bool bWatchUser)
 {
-	// Òì³£¼ì²â
+	// å¼‚å¸¸æ£€æµ‹
 	try
 	{
-		//¼ÇÂ¼Íæ¼Ò²Ù×÷Ê±¼ä
+		//è®°å½•ç©å®¶æ“ä½œæ—¶é—´
 		m_iOptionTime[deskStation] = timeGetTime();
 
-		// ÏûÏ¢´¦Àí
+		// æ¶ˆæ¯å¤„ç†
 		bool bSuccess = false;
 		switch(assistID)
 		{
@@ -1656,15 +1656,15 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 			break;
 		}
 
-		// ÅĞ¶ÏÖ´ĞĞ×´¿ö
+		// åˆ¤æ–­æ‰§è¡ŒçŠ¶å†µ
 		if( !bSuccess )
-			DebugPrintf( " %dÖ´ĞĞÏûÏ¢ [ %d ] Ê§°Ü£¡", GetUserIDByDeskStation(deskStation),assistID);
+			DebugPrintf( " %dæ‰§è¡Œæ¶ˆæ¯ [ %d ] å¤±è´¥ï¼", GetUserIDByDeskStation(deskStation),assistID);
 
 		return __super::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 	}
 	catch ( CException * pException )
 	{
-		// »ñÈ¡´íÎóĞÅÏ¢
+		// è·å–é”™è¯¯ä¿¡æ¯
 		tchar szErrorMessage[1024] = { _T("") };
 		pException->GetErrorMessage(szErrorMessage, 1024);
 		pException->Delete();
@@ -1674,18 +1674,18 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 	}
 	catch ( ... )
 	{
-		DebugPrintf("ÑÏÖØ´íÎó Ö´ĞĞÏûÏ¢ [ %d ] Ê§°Ü£¡", assistID);
+		DebugPrintf("ä¸¥é‡é”™è¯¯ æ‰§è¡Œæ¶ˆæ¯ [ %d ] å¤±è´¥ï¼", assistID);
 		return true;
 	}
 	return __super::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 }
 
  
- //ÓÃ»§×øÏÂ
+ //ç”¨æˆ·åä¸‹
 bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 {
 
-	// ¼ÇÂ¼¿â´æ
+	// è®°å½•åº“å­˜
 	//FishMermaidStock();
 	bool bHavePeople = false;
 	for (int i = 0;i<PlayChair_Max;i++)
@@ -1698,69 +1698,69 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 
 		break;
 	}
-	//Ã»ÈË»òÕß»úÆ÷ÈËÖ±½Ó½áÊø
+	//æ²¡äººæˆ–è€…æœºå™¨äººç›´æ¥ç»“æŸ
 	//if (!bHavePeople)
 	//{
 	//	GameFinish(0, GF_NORMAL);
 	//}
 
 	SetGameStation(GAME_STATUS_PLAY);
-	// Æô¶¯²¶Óã
+	// å¯åŠ¨æ•é±¼
 	if( !m_bFishSwimming)
 	{
-		// ÉèÖÃÖÖ×Ó
+		// è®¾ç½®ç§å­
 		srand(GetTickCount());
 
-		// µÚÒ»´Î
+		// ç¬¬ä¸€æ¬¡
 		m_bFirstTime = TRUE;
 
-		// ÉèÖÃÊ±¼ä
+		// è®¾ç½®æ—¶é—´
 		m_bFishSwimming = TRUE;
 
-		// ¿ªÆô¶¨Ê±Æ÷
+		// å¼€å¯å®šæ—¶å™¨
 		SetTimer(IDI_FISH_CREATE, 100);
 
-		// ÑÓ³Ù¶¨Ê±
+		// å»¶è¿Ÿå®šæ—¶
 		SetTimer(IDI_DELAY, TIME_DELAY);
 
-		// Ãë¶¨Ê±
+		// ç§’å®šæ—¶
 		SetTimer(IDI_SECOND, 1000);
 	
-		// ±£´æÊ±¼ä
+		// ä¿å­˜æ—¶é—´
 		m_nStartTime = timeGetTime();
 		m_nSceneBegin = m_nStartTime;
 	}
-	//¼ÇÂ¼Íæ¼Ò×øÏÂÊ±¼ä
+	//è®°å½•ç©å®¶åä¸‹æ—¶é—´
 	m_iOptionTime[deskStation] = timeGetTime();
 
-	//»ñÈ¡Íæ¼ÒĞÅÏ¢
+	//è·å–ç©å®¶ä¿¡æ¯
 	GameUserInfo UserData;
 	GetUserData(deskStation, UserData);
-	// ÊôĞÔÉèÖÃ
+	// å±æ€§è®¾ç½®
 	if( m_dwPlayID[deskStation] == 0 )
 	{
-		// ³õÊ¼»¯Íæ¼Ò
+		// åˆå§‹åŒ–ç©å®¶
 		InitializePlayer(deskStation);
 
-		// ¸üĞÂÍæ¼ÒĞÅÏ¢
+		// æ›´æ–°ç©å®¶ä¿¡æ¯
 		m_dwPlayID[deskStation] = GetUserIDByDeskStation(deskStation);
 		m_lPlayScore[deskStation] = (LONGLONG)UserData.money;
 		m_lPlayStartScore[deskStation] = m_lPlayScore[deskStation];
 		m_nPlayDownTime[deskStation] = (DWORD)time(NULL);
 		m_nRobotPlayTime[deskStation] = ( (rand()%15) + 15 ) * 60;
 
-		//ÉèÖÃÍæ¼Ò¸öÈËÄÑ¶È
+		//è®¾ç½®ç©å®¶ä¸ªäººéš¾åº¦
 		long Userid = GetUserIDByDeskStation(deskStation);
 		if (Userid > 0)
 		{
-			// ¸öÈËÄÑ¶È
+			// ä¸ªäººéš¾åº¦
 			int UserDifficulty = GetUserControlParam(deskStation);
 			double dGameDifficulty = 0;
 			if (UserDifficulty >= 0 && UserDifficulty < 1000)
 			{
 				int Lev = UserDifficulty / 100;
 				dGameDifficulty = m_dPlayDifficultyValue[Lev];
-				//printf("¸öÈËÄÑ¶È:%d,ÄÑ¶ÈµÈ¼¶:%d,ÄÑ¶ÈÏµÊı%lf\n", UserDifficulty, Lev, RoomDifficultyCount[Lev]);
+				//printf("ä¸ªäººéš¾åº¦:%d,éš¾åº¦ç­‰çº§:%d,éš¾åº¦ç³»æ•°%lf\n", UserDifficulty, Lev, RoomDifficultyCount[Lev]);
 			}
 			else if (UserDifficulty >= 1000)
 			{
@@ -1769,86 +1769,86 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 			SetPersonalDifficulty(Userid, dGameDifficulty);
 		}
 	}
-	// ÉèÖÃ×´Ì¬
+	// è®¾ç½®çŠ¶æ€
 	if (!IsBegin)
 	{
 		IsBegin = true;
 
-		// ¿ªÊ¼ÓÎÏ·
+		// å¼€å§‹æ¸¸æˆ
 		GameBegin(0);
 	}
 	return true;
 }
 
-// ÓÃ»§ÆğÁ¢
+// ç”¨æˆ·èµ·ç«‹
 bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 {
 		
-	// ¼ì²âÊÇ·ñÓĞÈË
+	// æ£€æµ‹æ˜¯å¦æœ‰äºº
 	for ( WORD i = 0; i < PlayChair_Max; ++i )
 	{
 	   if (pUser->deskStation == i) continue;
 		long  userid = GetUserIDByDeskStation(i);
 		if (userid <= 0) continue;
 
-		//ÓĞÈËÄÇÃ´¾Í½áËãÒ»ÏÂ
-		// ÅĞ¶ÏÓÃ»§
+		//æœ‰äººé‚£ä¹ˆå°±ç»“ç®—ä¸€ä¸‹
+		// åˆ¤æ–­ç”¨æˆ·
 		long PlayeruserID = pUser->userID;
 		if (PlayeruserID > 0)
 		{
-			// Íæ¼ÒÖ¸Õë
+			// ç©å®¶æŒ‡é’ˆ
 			//IServerUserItem * pIServerDismiss = m_pITableFrame->GetTableUserItem(nSite);
 			GameUserInfo UserInfo;
 			GetUserData(pUser->deskStation, UserInfo);
 
-			// Ğ´·Ö
+			// å†™åˆ†
 			LONGLONG lScore = (m_lPlayScore[pUser->deskStation] - m_lPlayStartScore[pUser->deskStation]);
 			if (lScore != 0)
 			{
-				// »ı·ÖÎª¸º£¬ ²»ÄÜ³¬¹ı×î´ó·ÖÊı
+				// ç§¯åˆ†ä¸ºè´Ÿï¼Œ ä¸èƒ½è¶…è¿‡æœ€å¤§åˆ†æ•°
 				if (lScore < 0 && (-lScore) > UserInfo.money)
 				{
 					lScore = -UserInfo.money;
 				}
 			}
 
-			// ÓÎÏ·Ê±¼ä
+			// æ¸¸æˆæ—¶é—´
 			DWORD dwEndTime = (DWORD)time(NULL) - m_nPlayDownTime[pUser->deskStation];
 
 			ChangeUserPoint(pUser->deskStation, lScore, m_lplayCutMoney[i]);
 			m_lplayCutMoney[i] = 0;
 
-			// ±£´æĞ´·Ö
+			// ä¿å­˜å†™åˆ†
 			m_nRoomWrite += (-lScore);
-			// Çå¿ÕÍæ¼ÒĞÅÏ¢
+			// æ¸…ç©ºç©å®¶ä¿¡æ¯
 			InitializePlayer(pUser->deskStation);
 
 		}
 		return __super::UserLeftDesk(pUser);
 	}
 
-	// É¾³ı¶¨Ê±Æ÷
+	// åˆ é™¤å®šæ—¶å™¨
 	KillTimer(IDI_FISH_CREATE);
 	KillTimer(IDI_DELAY);
 	KillTimer(IDI_SECOND);
-	//É¾³ı¸öÈËÄÑ¶È
+	//åˆ é™¤ä¸ªäººéš¾åº¦
 	DeletePersonalDifficulty(pUser->userID);
 
-	// È«¾Ö±¬Õ¨»¹Ô­
+	// å…¨å±€çˆ†ç‚¸è¿˜åŸ
 	if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
 	{
-		// ×î´ó±¶Êı
+		// æœ€å¤§å€æ•°
 		int nMultipleMax = 0;
 		for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 		{
 			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 		}
 
-		// ·ÉïÚÏûºÄ
+		// é£é•–æ¶ˆè€—
 		m_dDartStock += nMultipleMax * m_nExplosionStart;
 	}
 
-	// ÓãĞÅÏ¢
+	// é±¼ä¿¡æ¯
 	m_ArrayFishInfo.RemoveAll();
 	m_cbBackIndex = 0;
 	m_nAppearFishCount = 0;
@@ -1856,31 +1856,31 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 	m_bBackExchange = FALSE;
 	m_nStartTime = 0;
 
-	// ÕóÁĞ
+	// é˜µåˆ—
 	m_nFishTeamTime = 0;
 	m_nFishKingTime = 30;
 	ZeroMemory(m_nFishKing, sizeof(m_nFishKing));
 
 	if (IsBegin)
 	{
-		// ½áÊøÓÎÏ·
+		// ç»“æŸæ¸¸æˆ
 		GameFinish(pUser->deskStation, GF_NORMAL);
 	}
 
 	return __super::UserLeftDesk(pUser);
 }
 
-// ·µ»ØÅäÖÃ
+// è¿”å›é…ç½®
 void CTableFrameSink::GetCustomRule( tagCustomRule & nConfigInfo )
 {
-	// ¸üĞÂÊıÖµ
+	// æ›´æ–°æ•°å€¼
 	CopyMemory( &nConfigInfo, &m_CustomRule, sizeof(tagCustomRule) );
 }
 
-// ÉèÖÃÅäÖÃ
+// è®¾ç½®é…ç½®
 void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile )
 {
-	// ¸üĞÂÊıÖµ
+	// æ›´æ–°æ•°å€¼
 	CopyMemory( &m_CustomRule, &nConfigInfo, sizeof(tagCustomRule) );
 	CRedisLoader* pRedis = m_pDataManage->GetRedis();
 	RoomBaseInfo roomBasekInfo;
@@ -1897,32 +1897,32 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	{
 		return;
 	}
-	// ±£´æĞÅÏ¢
+	// ä¿å­˜ä¿¡æ¯
 	if ( bSaveFile )
 	{
-		// »ñÈ¡µ±Ç°Â·¾¶
+		// è·å–å½“å‰è·¯å¾„
 		TCHAR szDirectoryPath[MAX_PATH + 1] = { _T("") }; 
 		GetModuleFileName(NULL, szDirectoryPath, MAX_PATH); 
 		PathRemoveFileSpec(szDirectoryPath);
 
-		// ´ò¿ªÅäÖÃ
+		// æ‰“å¼€é…ç½®
 		tchar szConfigPath[MAX_PATH] = _T("");
 		_sntprintf(szConfigPath, MAX_PATH, TEXT("%s\\FishLKConfig\\%s.fdx"), szDirectoryPath, pRoomBaseInfo->name);
 		file * pFile = NULL;
 		pFile = fopen( CT2A(szConfigPath), "wb+" );
 		if ( pFile != NULL )
 		{
-			// ±£´æÅäÖÃ
+			// ä¿å­˜é…ç½®
 			fwrite( &m_CustomRule, sizeof(m_CustomRule), 1, pFile );
 			fflush( pFile );
 			fclose( pFile );
 		}
 	}
 
-	// ±¶ÊıÅäÖÃ
+	// å€æ•°é…ç½®
 	CopyMemory( m_nMultipleValue, nConfigInfo.nMultipleValue, sizeof(m_nMultipleValue) ); 
 
-	// ¿â´æ¼ÆËã
+	// åº“å­˜è®¡ç®—
 	LONGLONG lStockSetAmount = 0;
 	for( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 	{
@@ -1937,22 +1937,22 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	CopyMemory(m_dTableDifficultyValue, nConfigInfo.dTableDifficultyValue, sizeof(m_dTableDifficultyValue)); 
 	CopyMemory(m_dPlayDifficultyValue, nConfigInfo.dPlayDifficultyValue, sizeof(m_dPlayDifficultyValue)); 
 
-	// ¿â´æ¸üĞÂ
+	// åº“å­˜æ›´æ–°
 	m_lStockInitial = m_lStockInitial + (lStockSetAmount - m_lStockCurrent);
 	m_lStockCurrent = lStockSetAmount;
 
-	// ¿ØÖÆÅäÖÃ
+	// æ§åˆ¶é…ç½®
 	m_dTaxRatio = min( (double)nConfigInfo.nTaxRatio / 1000.0, 0.90 );
 
-	// ³¡¾°ÅäÖÃ
+	// åœºæ™¯é…ç½®
 	m_nCreateCount = nConfigInfo.nCreateCount;
 	m_nSceneTime = nConfigInfo.nSceneTime;
 
-	// ×Óµ¯ĞÅÏ¢
+	// å­å¼¹ä¿¡æ¯
 	m_nBulletCoolingTime = nConfigInfo.nBulletCoolingTime;
 	m_nBulletVelocity = nConfigInfo.nBulletVelocity;
 
-	// »î¶¯ÅäÖÃ
+	// æ´»åŠ¨é…ç½®
 	CopyMemory(m_nSupplyCondition, nConfigInfo.nSupplyCondition, sizeof(m_nSupplyCondition)); 
 	m_nLaserTime = nConfigInfo.nLaserTime;
 	m_nLaserChance = nConfigInfo.nLaserChance;
@@ -1962,10 +1962,10 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	CopyMemory(m_nGiftChance, nConfigInfo.nGiftChance, sizeof(m_nGiftChance)); 
 	m_nNullChance = max(nConfigInfo.nNullChance, 2);
 
-	// ÓãÅäÖÃ
+	// é±¼é…ç½®
 	CopyMemory(m_nFishMultiple, nConfigInfo.nCatchFishMultiple, sizeof(m_nFishMultiple)); 
 
-	// ±¬Õ¨ÅäÖÃ
+	// çˆ†ç‚¸é…ç½®
 	m_nExplosionProportion = nConfigInfo.nExplosionProportion;
 	m_nExplosionStart = nConfigInfo.nExplosionStart;
 	m_lExplosionCondition = nConfigInfo.lExplosionCondition;
@@ -1973,18 +1973,18 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	m_nExplosionProportion = max( m_nExplosionProportion, 0 );
 	m_nExplosionProportion = min( m_nExplosionProportion, 1000 );
 
-	// ¸üĞÂĞÅÏ¢
+	// æ›´æ–°ä¿¡æ¯
 	CMD_S_UpdateGame CMDSUpdateGame;
 	CopyMemory( CMDSUpdateGame.nMultipleValue, m_nMultipleValue, sizeof(CMDSUpdateGame.nMultipleValue) );
 	CopyMemory( CMDSUpdateGame.nCatchFishMultiple, m_nFishMultiple, sizeof(CMDSUpdateGame.nCatchFishMultiple) );
 	CMDSUpdateGame.nBulletVelocity = m_nBulletVelocity;
 	CMDSUpdateGame.nBulletCoolingTime = m_nBulletCoolingTime;
 
-	// È«·¿¼ä·¢ËÍ
+	// å…¨æˆ¿é—´å‘é€
 	SendTableData(INVALID_CHAIR, SUB_S_UPDATE_GAME, &CMDSUpdateGame, sizeof(CMD_S_UpdateGame) );
 }
 
-// ·µ»Ø¸öÈËÄÑ¶È
+// è¿”å›ä¸ªäººéš¾åº¦
 void CTableFrameSink::GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty )
 {
 	POSITION Pos = m_MapPersonalDifficulty.GetStartPosition();
@@ -1996,52 +1996,52 @@ void CTableFrameSink::GetPersonalDifficulty( CMapPersonalDifficulty & MapPersona
 		MapPersonalDifficulty.SetAt( lPlayID, dPersonalDifficulty );
 	}
 }
-//»ñÈ¡Íæ¼ÒµÄÄÑ¶È
+//è·å–ç©å®¶çš„éš¾åº¦
 void CTableFrameSink::GetUserDifficulty(unsigned long lPlayID, double& dPersonalDifficulty)
 {
 	m_MapPersonalDifficulty.Lookup(lPlayID, dPersonalDifficulty);
 }
-// ÉèÖÃ¸öÈËÄÑ¶È
+// è®¾ç½®ä¸ªäººéš¾åº¦
 void CTableFrameSink::SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty )
 {
 	m_MapPersonalDifficulty.SetAt( lPlayID, dPersonalDifficulty );
 }
 
-// É¾³ı¸öÈËÄÑ¶È
+// åˆ é™¤ä¸ªäººéš¾åº¦
 void CTableFrameSink::DeletePersonalDifficulty( unsigned long lPlayID )
 {
 	m_MapPersonalDifficulty.RemoveKey( lPlayID );
 }
 
-// Çå¿Õ¸öÈËÄÑ¶È
+// æ¸…ç©ºä¸ªäººéš¾åº¦
 void CTableFrameSink::ClearPersonalDifficulty()
 {
 	m_MapPersonalDifficulty.RemoveAll();
 }
 
-// »ñÈ¡¿â´æ
+// è·å–åº“å­˜
 void CTableFrameSink::GetStock( LONGLONG & lStockInitial, LONGLONG & lStockCurrent )
 {
 	lStockInitial = m_lStockInitial;
 	lStockCurrent = m_lStockCurrent;
 }
 
-// ÉèÖÃ×À×Ó¿â´æ
+// è®¾ç½®æ¡Œå­åº“å­˜
 bool CTableFrameSink::SetTableStock( unsigned short TableID, int nTableStock )
 {
-	// ÅĞ¶ÏÓĞĞ§
+	// åˆ¤æ–­æœ‰æ•ˆ
 	//if( TableID >= m_pGameServiceOption->wTableCount )
 	//{
 	//	return false;
 	//}
 
-	// ÉèÖÃ¿â´æ
+	// è®¾ç½®åº“å­˜
 	for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 	{
-		// ×À×Ó¿â´æ
+		// æ¡Œå­åº“å­˜
 		double & dTableStock = _TableStock(TableID, nIndex);
 
-		// ÉèÖÃ¿â´æ
+		// è®¾ç½®åº“å­˜
 		dTableStock = nTableStock * m_nMultipleValue[nIndex];
 	}
 
@@ -2050,27 +2050,27 @@ bool CTableFrameSink::SetTableStock( unsigned short TableID, int nTableStock )
 
 
 
-// ²¶ÓãÊÂ¼ş
+// æ•é±¼äº‹ä»¶
 bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WORD wDataSize )
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	ASSERT(wDataSize==sizeof(CMD_C_CatchFish));
 	if (wDataSize!=sizeof(CMD_C_CatchFish)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
 		return true;
 	}
-	// ÏûÏ¢´¦Àí
+	// æ¶ˆæ¯å¤„ç†
 	CMD_C_CatchFish * pCatchFish = (CMD_C_CatchFish *)pBuffer;
 	if (!pCatchFish)
 	{
-		DebugPrintf("´íÎó£ºÍæ¼Ò:%d,OnSubCatchFish£¨²¶ÓãÊÂ¼ş£©¿ÕÊı¾İ°ü",GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯ï¼šç©å®¶:%d,OnSubCatchFishï¼ˆæ•é±¼äº‹ä»¶ï¼‰ç©ºæ•°æ®åŒ…",GetUserIDByDeskStation(deskStation));
 		return false;
 	}
-	// ¶¨Òå±äÁ¿
+	// å®šä¹‰å˜é‡
 	//WORD wChairID = pIServerUserItem->GetChairID();
 
-	// ²éÕÒ×Óµ¯
+	// æŸ¥æ‰¾å­å¼¹
 	map<int, tagFireInfo>::iterator itr = m_ArrayBulletKey[deskStation].find(pCatchFish->nBulletKey);
 
 	if( itr == m_ArrayBulletKey[deskStation].end() )
@@ -2080,14 +2080,14 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 		return true;
 	}
 
-	// »ñÈ¡×Óµ¯ĞÅÏ¢
+	// è·å–å­å¼¹ä¿¡æ¯
 	tagFireInfo & TFireInfo = itr->second;
 
-	// ×Óµ¯²ğ·Ö
+	// å­å¼¹æ‹†åˆ†
 	int nBulletSplit = 0;
 	for ( int nIndex = 0; nIndex < FishCatch_Max; ++nIndex )
 	{
-		// ÓĞĞ§²¶»ñ
+		// æœ‰æ•ˆæ•è·
 		if ( pCatchFish->nFishKey[nIndex] != 0 )
 		{
 			
@@ -2095,32 +2095,32 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 		}
 	}
 
-	// ¼ÆËã²¶»ñ
+	// è®¡ç®—æ•è·
 	for ( int nIndex = 0; nIndex < FishCatch_Max; ++nIndex )
 	{
-		// ÓĞĞ§²¶»ñ
+		// æœ‰æ•ˆæ•è·
 		if ( pCatchFish->nFishKey[nIndex] != 0 )
 		{
-			// ÓãĞÅÏ¢
+			// é±¼ä¿¡æ¯
 			bool				bRealKill = false;
 			byte				nFishType = FishType_Max;				
 			EnumFishState		nFishState = FishState_Normal;
 
-			// »ñÈ¡ÓãĞÅÏ¢
+			// è·å–é±¼ä¿¡æ¯
 			for( int nDeathIndex = 0; nDeathIndex < m_ArrayFishInfo.GetCount(); nDeathIndex++ )
 			{
-				// »ñÈ¡ÓãĞÅÏ¢
+				// è·å–é±¼ä¿¡æ¯
 				tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
 
-				// ²¶»ñÓã
+				// æ•è·é±¼
 				if ( TFishInfo.nFishKey == pCatchFish->nFishKey[nIndex] )
 				{
-					//printf("²¶ÖĞÓãµÄkey:%d\n", pCatchFish->nFishKey[nIndex]);
-					// ±£´æĞÅÏ¢
+					//printf("æ•ä¸­é±¼çš„key:%d\n", pCatchFish->nFishKey[nIndex]);
+					// ä¿å­˜ä¿¡æ¯
 					nFishType = TFishInfo.nFishType;
 					nFishState = TFishInfo.nFishState;
 
-					// ÓĞĞ§»÷É±
+					// æœ‰æ•ˆå‡»æ€
 					if( TFishInfo.wHitChair == deskStation || TFishInfo.wHitChair == INVALID_CHAIR )
 					{
 						bRealKill = true;
@@ -2130,40 +2130,40 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 				}
 			}
 
-			// ÓĞĞ§»÷É±
+			// æœ‰æ•ˆå‡»æ€
 			if ( bRealKill )
 			{
-				// ¼ÆËã²¶»ñÊıÁ¿
+				// è®¡ç®—æ•è·æ•°é‡
 				LONGLONG lCatchScore = PlayCatchFish(deskStation, nBulletSplit, pCatchFish->nFishKey[nIndex], TFireInfo.nMultipleIndex, EPCT_Bullet);
 
-				// ÅĞ¶ÏÓãĞÅÏ¢
+				// åˆ¤æ–­é±¼ä¿¡æ¯
 				if(nFishState >= FishType_BChuiTouSha /*nFishState == FishState_Killer || nFishType == FishType_BaoZhaFeiBiao || nFishType == FishType_ZhongYiTang */)
 				{
 					
-					// ´ó±¶·¢ËÍĞÅÏ¢
+					// å¤§å€å‘é€ä¿¡æ¯
 					int nCatchMultiple = (int)(lCatchScore / m_nMultipleValue[TFireInfo.nMultipleIndex]);
 					SendAwardTip(deskStation, nFishType, nCatchMultiple, lCatchScore, EST_Cold);
-					//printf("ÓĞĞ§»÷É±·¢ËÍ:%d\n", nCatchMultiple);
+					//printf("æœ‰æ•ˆå‡»æ€å‘é€:%d\n", nCatchMultiple);
 				}
 			}
 		}
 	}
 
-	// É¾³ı×Óµ¯
+	// åˆ é™¤å­å¼¹
 	m_ArrayBulletKey[deskStation].erase(itr);
 
 	return true;
 }
 
 
-// ¿ª»ğ
+// å¼€ç«
 bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDataSize)
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	static int paoCount;
 	if (IsAndroidUser(deskStation))
 	{
-		printf("»úÆ÷ÈË¿ªÅÚ:%d\n", paoCount);
+		printf("æœºå™¨äººå¼€ç‚®:%d\n", paoCount);
 		paoCount++;
 	}
 	if (paoCount > 999)
@@ -2174,21 +2174,21 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	if (wDataSize!=sizeof(CMD_C_Fire)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("Íæ¼ÒID²»´æÔÚ");
+		DebugPrintf("ç©å®¶IDä¸å­˜åœ¨");
 		return true;
 	}
-	// ÏûÏ¢´¦Àí
+	// æ¶ˆæ¯å¤„ç†
 	CMD_C_Fire * pFire = (CMD_C_Fire *)pBuffer;
 	if (!pFire)
 	{
-		DebugPrintf("´íÎó£ºÍæ¼Ò%d,OnSubFire·¢ËÍ¿ÕÊı¾İ°ü", GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯ï¼šç©å®¶%d,OnSubFireå‘é€ç©ºæ•°æ®åŒ…", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 
-	// ¶¨Òå±äÁ¿
+	// å®šä¹‰å˜é‡
 	//WORD wChairID = pIServerUserItem->GetChairID();
 
-	// ÎŞĞ§±¶Êı
+	// æ— æ•ˆå€æ•°
 	if ( pFire->nMultipleIndex != m_nMultipleIndex[deskStation] )
 	{
 		ASSERT(FALSE);
@@ -2196,27 +2196,27 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 		return true;
 	}
 
-	// ×Óµ¯²Ù×÷ĞÅÏ¢
+	// å­å¼¹æ“ä½œä¿¡æ¯
 	int nBulletScore = 0;
 	byte cbBulletIndex = 0;
 	LONGLONG lBulletInvest = 0;
 	lBulletInvest = m_nMultipleValue[m_nMultipleIndex[deskStation]] * QianPao_Bullet;
-	//printf("·¿¼äµÈ¼¶:%d,´òÅÚ±¶Êı:%d,%d,%lld\n",GetRoomLevel() ,m_nMultipleIndex[deskStation], m_nMultipleValue[m_nMultipleIndex[deskStation]], lBulletInvest);
-	// ¿Û³ı½ğ±Ò
+	//printf("æˆ¿é—´ç­‰çº§:%d,æ‰“ç‚®å€æ•°:%d,%d,%lld\n",GetRoomLevel() ,m_nMultipleIndex[deskStation], m_nMultipleValue[m_nMultipleIndex[deskStation]], lBulletInvest);
+	// æ‰£é™¤é‡‘å¸
 	if ( m_lPlayScore[deskStation] < lBulletInvest )
 	{
-	//	FishMermaidLogo( _T("ÆÕÍ¨×Óµ¯½ğ±Ò¿Û³ıÊ§°Ü %d, [P %I64d] [L %I64d]"), ( pIServerUserItem->IsAndroidUser() ? 1 : 0 ), m_lPlayScore[wChairID], lBulletInvest );
+	//	FishMermaidLogo( _T("æ™®é€šå­å¼¹é‡‘å¸æ‰£é™¤å¤±è´¥ %d, [P %I64d] [L %I64d]"), ( pIServerUserItem->IsAndroidUser() ? 1 : 0 ), m_lPlayScore[wChairID], lBulletInvest );
 
 		ASSERT( FALSE );
 
 		return true;
 	}
 
-	// ĞŞ¸Ä¿ªÅÚ
+	// ä¿®æ”¹å¼€ç‚®
 	LONGLONG lPlayExplosionCondition = 0;
 	m_MapPlayExplosionCondition.Lookup(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
 	
-	// Î´Âú×ãÌõ¼ş
+	// æœªæ»¡è¶³æ¡ä»¶
 	if ( lPlayExplosionCondition < m_lExplosionCondition )
 	{
 		if( m_nExplosionConditionType == ExplosionConditionType_Gun )
@@ -2231,28 +2231,28 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 		}
 	}
 
-	// ĞŞ¸Ä½ğ±Ò
+	// ä¿®æ”¹é‡‘å¸
 	m_lPlayScore[deskStation] -= lBulletInvest;
 
-	// ¼ÇÂ¼ÏûºÄ
+	// è®°å½•æ¶ˆè€—
 	nBulletScore = (int)lBulletInvest;
 	m_lFireCount[deskStation] += 1;
 	m_lBulletConsume[deskStation] += (long)lBulletInvest;
 
-	// Ìí¼ÓÄÜÁ¿
+	// æ·»åŠ èƒ½é‡
 	if ( !m_bPlaySupply[deskStation] )
 		m_nEnergyValue[deskStation] += 1;
 	
-	// ¹Ï·ÖÊÕÈë
+	// ç“œåˆ†æ”¶å…¥
 	PlayerConsume(deskStation, m_nMultipleIndex[deskStation], lBulletInvest );
 
-	// Ìí¼Ó×Óµ¯
+	// æ·»åŠ å­å¼¹
 	tagFireInfo FireInfo;
 	FireInfo.nMultipleIndex = m_nMultipleIndex[deskStation];
 	FireInfo.dBulletInvest = (double)lBulletInvest;
 	m_ArrayBulletKey[deskStation].insert( map<int, tagFireInfo>::value_type(pFire->nBulletKey, FireInfo) );
-	//printf("×Óµ¯¹Ø¼üÖµ:%d,±¶ÊıË÷Òı:%d,×Óµ¯ÊÕÈë:%d", pFire->nBulletKey, FireInfo.nMultipleIndex, FireInfo.dBulletInvest);
-	// ÉèÖÃĞÅÏ¢
+	//printf("å­å¼¹å…³é”®å€¼:%d,å€æ•°ç´¢å¼•:%d,å­å¼¹æ”¶å…¥:%d", pFire->nBulletKey, FireInfo.nMultipleIndex, FireInfo.dBulletInvest);
+	// è®¾ç½®ä¿¡æ¯
 	CMD_S_Fire CMDSFire;
 	CMDSFire.wChairID = deskStation;
 	CMDSFire.nBulletScore = nBulletScore;
@@ -2267,25 +2267,25 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 		SendTableData(i, SUB_S_FIRE, &CMDSFire, sizeof(CMDSFire));
 	}
 
-	// ²¹¸øÏäÅĞ¶Ï(ÔİÊ±Î´¿ª·Å)
+	// è¡¥ç»™ç®±åˆ¤æ–­(æš‚æ—¶æœªå¼€æ”¾)
 	if ( false && !m_bPlaySupply[deskStation] && m_nSupplyValue[deskStation] != 0 && m_nEnergyValue[deskStation] >= m_nSupplyValue[deskStation] && !m_bBackExchange )
 	{
-		// Éú³ÉÂ·¾¶
+		// ç”Ÿæˆè·¯å¾„
 		uint nPathIndex = deskStation;
 
-		// ´´½¨²¹¸øÏä
+		// åˆ›å»ºè¡¥ç»™ç®±
 		CreateFish( 1, FishType_BaoXiang, nPathIndex, 0, 0, 0.f, false, false, KillerType_No, deskStation, CShortPoint(0, 0), 0.f, false );
 
-		// Çå¿ÕÄÜÁ¿
+		// æ¸…ç©ºèƒ½é‡
 		m_nEnergyValue[deskStation] = 0;
 
-		// ²¹¸ø·¢ËÍ
+		// è¡¥ç»™å‘é€
 		m_bPlaySupply[deskStation] = true;
 
-		// ¸üĞÂÊıÁ¿
+		// æ›´æ–°æ•°é‡
 		m_nSupplyValue[deskStation] = RAND_EQUAL_MIN_MAX(m_nSupplyCondition[0], m_nSupplyCondition[1]);
 
-		// ·¢ËÍÌáÊ¾ÏûÏ¢
+		// å‘é€æç¤ºæ¶ˆæ¯
 		CMD_S_SupplyTip CMDSSupplyTip;
 		CMDSSupplyTip.wChairID = deskStation;
 		SendTableData(INVALID_CHAIR, SUB_S_SUPPLY_TIP, &CMDSSupplyTip, sizeof(CMDSSupplyTip) );
@@ -2294,57 +2294,57 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	return true;
 }
 
-// ×¼±¸¼¤¹â
+// å‡†å¤‡æ¿€å…‰
 bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WORD wDataSize)
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	ASSERT(wDataSize==sizeof(CMD_C_BeginLaser));
 	if (wDataSize!=sizeof(CMD_C_BeginLaser) ) return false;
 
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("´íÎó£ºÍæ¼Ò²»´æÔÚ");
+		DebugPrintf("é”™è¯¯ï¼šç©å®¶ä¸å­˜åœ¨");
 		return false;
 	}
-	// ¼¤¹âÊıÖµÅĞ¶Ï
+	// æ¿€å…‰æ•°å€¼åˆ¤æ–­
 	//if ( m_nLaserPlayTime[pIServerUserItem->GetChairID()] <= 0 )
 	//{
-	//	FishMermaidLogo( _T("¼¤¹âÊ¹ÓÃ³¬Ê± - 1¡£") );
+	//	FishMermaidLogo( _T("æ¿€å…‰ä½¿ç”¨è¶…æ—¶ - 1ã€‚") );
 
 	//	ASSERT(FALSE);
 
 	//	return true;
 	//}
 
-	// ÏûÏ¢´¦Àí
+	// æ¶ˆæ¯å¤„ç†
 	CMD_C_BeginLaser * pBeginLaser = (CMD_C_BeginLaser *)pBuffer;
 	if (!pBeginLaser)
 	{
-		DebugPrintf("´íÎó:Íæ¼Ò%d£¬OnSubBeginLaser´æÔÚ¿ÕÖ¸Õë", GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯:ç©å®¶%dï¼ŒOnSubBeginLaserå­˜åœ¨ç©ºæŒ‡é’ˆ", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
-	// ·¢ËÍÏûÏ¢
+	// å‘é€æ¶ˆæ¯
 	CMD_S_BeginLaser BeginLaser;
 	BeginLaser.wChairID = deskStation;
 	BeginLaser.ptPos = pBeginLaser->ptPos;
 
-	// ·¢ËÍÏûÏ¢
+	// å‘é€æ¶ˆæ¯
 	SendTableData(INVALID_CHAIR, SUB_S_BEGIN_LASER, &BeginLaser, sizeof(BeginLaser) );
 
 	return true;
 }
 
-// ¼¤¹â
+// æ¿€å…‰
 bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wDataSize)
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	ASSERT(wDataSize==sizeof(CMD_C_Laser));
 	if (wDataSize!=sizeof(CMD_C_Laser)) return false;
 
-	// ¼¤¹âÊıÖµÅĞ¶Ï
+	// æ¿€å…‰æ•°å€¼åˆ¤æ–­
 	//if ( m_nLaserPlayTime[pIServerUserItem->GetChairID()] <= 0 )
 	//{
-	//	FishMermaidLogo( _T("¼¤¹âÊ¹ÓÃ³¬Ê± - 2¡£") );
+	//	FishMermaidLogo( _T("æ¿€å…‰ä½¿ç”¨è¶…æ—¶ - 2ã€‚") );
 
 	//	ASSERT(FALSE);
 
@@ -2352,36 +2352,36 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	//}
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("´íÎó£ºÕÒ²»µ½Íæ¼Ò%d", deskStation);
+		DebugPrintf("é”™è¯¯ï¼šæ‰¾ä¸åˆ°ç©å®¶%d", deskStation);
 		return false;
 	}
-	// ÏûÏ¢´¦Àí
+	// æ¶ˆæ¯å¤„ç†
 	CMD_C_Laser * pLaser = (CMD_C_Laser *)pBuffer;
 
 	if (!pLaser)
 	{
-		DebugPrintf("´íÎó£ºÍæ¼Ò :%d,OnSubLaser¿ÕÖ¸Õë", GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯ï¼šç©å®¶ :%d,OnSubLaserç©ºæŒ‡é’ˆ", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
-	// ¶¨Òå±äÁ¿
+	// å®šä¹‰å˜é‡
 	CMD_S_Laser Laser;
 	WORD wChairID = deskStation;
 
-	// ÉèÖÃĞÅÏ¢
+	// è®¾ç½®ä¿¡æ¯
 	Laser.wChairID = deskStation;
 	Laser.ptPos = pLaser->ptEndPos;
 
-	// ¼¤¹âÍê±Ï
+	// æ¿€å…‰å®Œæ¯•
 	m_nLaserPlayTime[deskStation] = 0;
 
-	// ·¢ËÍÏûÏ¢
+	// å‘é€æ¶ˆæ¯
 	SendTableData(INVALID_CHAIR, SUB_S_LASER, &Laser, sizeof(Laser) );
 
-	// ½Ç¼ÆËã
+	// è§’è®¡ç®—
 	FLOAT fRadian = atan2((FLOAT)( pLaser->ptEndPos.y - pLaser->ptBeginPos.y ) , (FLOAT)( pLaser->ptBeginPos.x - pLaser->ptEndPos.x ));
 	fRadian = -fRadian - GL_PI / 2;
 
-	// Éú³É¼¤¹â·¶Î§
+	// ç”Ÿæˆæ¿€å…‰èŒƒå›´
 	CFloatVector2 FVBullet;
 	CFloatRotate  FRBullet;
 	CPolygonShape SPBullet;
@@ -2394,24 +2394,24 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	FVLaser[3].Set( -50, 0 );
 	SPBullet.Set( FVLaser, 4 );
 
-	// ¼ÆËã²¶»ñ
+	// è®¡ç®—æ•è·
 	CWHArray< uint > ArrayFishCatchKey;
 	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
 	{
-		// »ñÈ¡ĞÅÏ¢
+		// è·å–ä¿¡æ¯
 		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt( nFishIndex );
 
-		// ¼ÆËãÓãÎ»ÖÃ
+		// è®¡ç®—é±¼ä½ç½®
 		CDoublePoint PointFish;
 		if( FishMove( PointFish, TFishInfo, pLaser->unLossTime ) == FishMoveType_Normal )
 		{
-			// ÎŞĞ§Î»ÖÃ
+			// æ— æ•ˆä½ç½®
 			if ( PointFish.x < 0 || PointFish.x > DEFAULE_WIDTH || PointFish.y < 0 || PointFish.y > DEFAULE_HEIGHT )
 			{
 				continue;
 			}
 
-			// ±È½ÏÎ»ÖÃ
+			// æ¯”è¾ƒä½ç½®
 			if( SPBullet.PointInShape( CFloatTransform( FVBullet, FRBullet ), CFloatVector2(PointFish.x, PointFish.y) ) )
 			{
 				ArrayFishCatchKey.Add( TFishInfo.nFishKey );
@@ -2419,73 +2419,73 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 		}
 	}
 
-	// ¼ÆËã²¶»ñÊıÁ¿
+	// è®¡ç®—æ•è·æ•°é‡
 	LONGLONG lCatchScore = 0;
 
-	// ¼ÆËã²¶»ñ
+	// è®¡ç®—æ•è·
 	for ( int nFishCatchKeyIndex = 0; nFishCatchKeyIndex < ArrayFishCatchKey.GetCount(); nFishCatchKeyIndex++ )
 	{
-		// ¼ÆËã²¶»ñ
+		// è®¡ç®—æ•è·
 		lCatchScore += PlayCatchFish(deskStation, (int)ArrayFishCatchKey.GetCount(), ArrayFishCatchKey[nFishCatchKeyIndex], m_nMultipleIndex[deskStation], EPCT_Laser);
 	}
 
-	// ´ó±¶·¢ËÍĞÅÏ¢
+	// å¤§å€å‘é€ä¿¡æ¯
 	int nCatchMultiple = (int)(lCatchScore / m_nMultipleValue[m_nMultipleIndex[deskStation]]);
 	SendAwardTip(deskStation, 0, nCatchMultiple, lCatchScore, EST_Laser);
-	//printf("´ó±¶·¢ËÍ:%d\n", nCatchMultiple);
+	//printf("å¤§å€å‘é€:%d\n", nCatchMultiple);
 	return true;
 }
 
-// ÑÓ³Ù
+// å»¶è¿Ÿ
 bool CTableFrameSink::OnSubDelay(BYTE deskStation, const void * pBuffer, WORD wDataSize)
 {
 	ASSERT(wDataSize == 0);
 	if (wDataSize != 0) return false;
 
-	// ¶¨Òå±äÁ¿
+	// å®šä¹‰å˜é‡
 	WORD wChairID = deskStation;
 
-	// ¶¨ÒåÏûÏ¢
+	// å®šä¹‰æ¶ˆæ¯
 	CMD_S_Delay Delay;
 
-	// ¼ÆËãÑÓ³Ù
+	// è®¡ç®—å»¶è¿Ÿ
 	DWORD dwTime = timeGetTime();
 	if ( dwTime < m_nPlayDelay[deskStation] )
 		Delay.nDelay = ULONG_MAX - m_nPlayDelay[deskStation] + dwTime;
 	else
 		Delay.nDelay = dwTime - m_nPlayDelay[deskStation];
 
-	// ÉèÖÃÎ»ÖÃ
+	// è®¾ç½®ä½ç½®
 	Delay.wChairID = deskStation;
 
-	// »úÆ÷ÈËËæ»úÑÓÊ±
+	// æœºå™¨äººéšæœºå»¶æ—¶
 	if( IsAndroidUser(deskStation) )
 	{
 		Delay.nDelay = rand()%50 + 50;
 	}
 
-	// ·¢ËÍÏûÏ¢
+	// å‘é€æ¶ˆæ¯
 	SendTableData(INVALID_CHAIR, SUB_S_DELAY, &Delay, sizeof(CMD_S_Delay) );
 
 	return true;
 }
 
 
-// ÓïÒô
+// è¯­éŸ³
 bool CTableFrameSink::OnSubSpeech(BYTE deskStation, const void * pBuffer, WORD wDataSize)
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	ASSERT(wDataSize==sizeof(CMD_C_Speech));
 	if (wDataSize!=sizeof(CMD_C_Speech)) return false;
 
-	//// ÏûÏ¢´¦Àí
+	//// æ¶ˆæ¯å¤„ç†
 	//CMD_C_Speech * pSpeech = (CMD_C_Speech *)pBuffer;
 
-	//// ÅĞ¶ÏĞÅÏ¢
+	//// åˆ¤æ–­ä¿¡æ¯
 	//if ( pSpeech->nSpeechIndex >= SPEECH_INDEX_MAX )
 	//	return true;
 	//
-	//// ·¢ËÍÏûÏ¢
+	//// å‘é€æ¶ˆæ¯
 	//CMD_S_Speech Speech;
 	//Speech.wChairID = pIServerUserItem->GetChairID();
 	//Speech.nSpeechIndex = pSpeech->nSpeechIndex;
@@ -2494,51 +2494,51 @@ bool CTableFrameSink::OnSubSpeech(BYTE deskStation, const void * pBuffer, WORD w
 	return true;
 }
 
-// ±¶ÊıÑ¡Ôñ
+// å€æ•°é€‰æ‹©
 bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD wDataSize)
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	ASSERT(wDataSize==sizeof(CMD_C_Multiple));
 	if (wDataSize!=sizeof(CMD_C_Multiple)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("´íÎó:Íæ¼Ò%d²»´æÔÚ!", deskStation);
+		DebugPrintf("é”™è¯¯:ç©å®¶%dä¸å­˜åœ¨!", deskStation);
 		return false;
 	}
-	// ÏûÏ¢´¦Àí
+	// æ¶ˆæ¯å¤„ç†
 	CMD_C_Multiple * pMultiple = (CMD_C_Multiple *)pBuffer;
 	if (!pMultiple)
 	{
-		DebugPrintf("´íÎó:Íæ¼Ò%d,±¶ÊıÑ¡ÔñOnSubMultiple¿ÕÖ¸Õë", GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯:ç©å®¶%d,å€æ•°é€‰æ‹©OnSubMultipleç©ºæŒ‡é’ˆ", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
-	// ¶¨Òå±äÁ¿
+	// å®šä¹‰å˜é‡
 	WORD wChairID = deskStation;
 
-	// ÅĞ¶ÏĞÅÏ¢
+	// åˆ¤æ–­ä¿¡æ¯
 	if ( pMultiple->nMultipleIndex >= Multiple_Max || pMultiple->nMultipleIndex < 0 )
 	{
-		DebugPrintf("Íæ¼Ò%dÉèÖÃ±¶ÊıÊ§°Ü, ³¬¹ıÓĞĞ§Öµ¡£", deskStation);
+		DebugPrintf("ç©å®¶%dè®¾ç½®å€æ•°å¤±è´¥, è¶…è¿‡æœ‰æ•ˆå€¼ã€‚", deskStation);
 
 		ASSERT(FALSE);
 
 		return false;
 	}
 
-	// ¼¤¹âºÍ±¦Ïä¹ıÂË
+	// æ¿€å…‰å’Œå®ç®±è¿‡æ»¤
 	if ( m_nLaserPlayTime[deskStation] > 0 || m_bPlaySupply[deskStation] )
 	{
-		DebugPrintf("»î¶¯ÆÚ¼ä£¬Íæ¼Ò%d,ID:%dÉèÖÃ±¶ÊıÎŞĞ§,¼¤¹â£º%d,²¹¸øÏä:%d¡£", deskStation, GetUserIDByDeskStation(deskStation), m_nLaserPlayTime[deskStation], m_bPlaySupply[deskStation]);
+		DebugPrintf("æ´»åŠ¨æœŸé—´ï¼Œç©å®¶%d,ID:%dè®¾ç½®å€æ•°æ— æ•ˆ,æ¿€å…‰ï¼š%d,è¡¥ç»™ç®±:%dã€‚", deskStation, GetUserIDByDeskStation(deskStation), m_nLaserPlayTime[deskStation], m_bPlaySupply[deskStation]);
 
 		ASSERT(FALSE);
 
 		return true;
 	}
 
-	// ÉèÖÃ±äÁ¿
+	// è®¾ç½®å˜é‡
 	m_nMultipleIndex[deskStation] = pMultiple->nMultipleIndex;
 
-	// ·¢ËÍÏûÏ¢
+	// å‘é€æ¶ˆæ¯
 	CMD_S_Multiple Multiple;
 	Multiple.wChairID = deskStation;
 	Multiple.nMultipleIndex = pMultiple->nMultipleIndex;
@@ -2547,32 +2547,32 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	return true;
 }
 
-// ¿ØÖÆĞÅÏ¢
+// æ§åˆ¶ä¿¡æ¯
 bool CTableFrameSink::OnSubControl(BYTE deskStation, VOID * pData, WORD wDataSize )
 {
-	// Ğ§ÑéÊı¾İ
+	// æ•ˆéªŒæ•°æ®
 	ASSERT(wDataSize==sizeof(CMD_C_Control));
 	if (wDataSize!=sizeof(CMD_C_Control)) return false;
 
-	// ¶¨Òå±äÁ¿
+	// å®šä¹‰å˜é‡
 	CMD_C_Control * pControl = (CMD_C_Control*)pData;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("´íÎó:Íæ¼Ò%d²»´æÔÚ!", deskStation);
+		DebugPrintf("é”™è¯¯:ç©å®¶%dä¸å­˜åœ¨!", deskStation);
 		return false;
 	}
 	if (!pControl)
 	{
-		DebugPrintf("´íÎó:Íæ¼Ò%d,¿ØÖÆĞÅÏ¢OnSubControl¿ÕÖ¸Õë", GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯:ç©å®¶%d,æ§åˆ¶ä¿¡æ¯OnSubControlç©ºæŒ‡é’ˆ", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
-	// ÅĞ¶ÏÈ¨ÏŞ
+	// åˆ¤æ–­æƒé™
 	//if( !CUserRight::IsGameCheatUser(pIServerUserItem->GetUserRight()) )
 	return true;
 
 }
 
-// ´´½¨Óã
+// åˆ›å»ºé±¼
 uint CTableFrameSink::CreateFishEx( byte cbCount, 
 								   byte cbFishType /*= FishType_Max*/, 
 								   tagBezierPoint TBezierPoint[BEZIER_POINT_MAX] /*= NULL*/, 
@@ -2588,7 +2588,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 								   float fInitialAngle /*= 0.f*/, 
 								   bool bRepeatCreate /*= true */ )
 {
-	// ÎŞĞ§Â·¾¶
+	// æ— æ•ˆè·¯å¾„
 	if ( TBezierPoint == NULL || nBezierCount == 0 )
 	{
 		//_Assert( false );
@@ -2596,7 +2596,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 		return 0;
 	}
 
-	// Íæ¼ÒÊıÁ¿
+	// ç©å®¶æ•°é‡
 	int nPlayCount = 0;
 	for( int nSite = 0; nSite < PlayChair_Max; ++nSite )
 	{
@@ -2604,10 +2604,10 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			nPlayCount++;
 	}
 
-	// ´´½¨ÖÖÀà
+	// åˆ›å»ºç§ç±»
 	if ( cbFishType == FishType_Max )
 	{
-		// ´óÓã¼¸ÂÊ
+		// å¤§é±¼å‡ ç‡
 		int ChuiTouSha = 4;
 		int JinJuChiSha = 4;
 		int JinKuiJiaYu = 4;
@@ -2656,9 +2656,9 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			HuaFei1 = 0;
 			HuaFei2 = 0;
 		}
-		// Ëæ»úÓã
+		// éšæœºé±¼
 		cbFishType = RandomArea(FishType_Normal_Max, 2, 5, 5, 20, 20, 20, 20, 20, 10, 10, 10, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, ChuiTouSha, JinJuChiSha, JinKuiJiaYu, JinChuiTouSha, JinShaYu, JinHuSha, 0,HongBao, HuaFei1,HuaFei2);
-		//ÓãÍõË¢ĞÂÊ±¼ä
+		//é±¼ç‹åˆ·æ–°æ—¶é—´
 		if (m_FishKingTime == 0)
 		{
 			m_FishKingTime = timeGetTime();
@@ -2690,38 +2690,38 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 		}
 	}
 
-	// Óã·ÖÊı
+	// é±¼åˆ†æ•°
 	int nFishScore = 0;
 	RAND_MIN_MAX(nFishScore, m_nFishMultiple[cbFishType][0], m_nFishMultiple[cbFishType][1] );
 
-	//  ±¦Ïä±£´æµ±Ç°±¶Êı
+	//  å®ç®±ä¿å­˜å½“å‰å€æ•°
 	if ( cbFishType == FishType_BaoXiang && wHitChair != INVALID_CHAIR )
 	{
 		nFishScore = m_nMultipleValue[m_nMultipleIndex[wHitChair]];
 	}
 
-	// ÓÎ¶¯Ê±¼ä
+	// æ¸¸åŠ¨æ—¶é—´
 	uint unSwimmiTime = 0;
 	for( int nBezierIndex = 0; nBezierIndex < nBezierCount; ++nBezierIndex )
 		unSwimmiTime += TBezierPoint[nBezierIndex].Time;
 
-	// É±ÊÖÓãÏŞÖÆ
+	// æ€æ‰‹é±¼é™åˆ¶
 	int nKillerIndex = int_max;
 	if( nKillerType == KillerType_One && cbFishType < FishType_Small_Max )
 	{
 		nKillerIndex = rand()%cbCount;
 	}
 
-	// ËÀÍö¼¸ÂÊ
+	// æ­»äº¡å‡ ç‡
 	double dCurChance = 0.0;
 
-	// Ñ­»·´´½¨
+	// å¾ªç¯åˆ›å»º
 	int nIndex = 0;
 	const uint unCurrentTime = timeGetTime();
 	ASSERT( unCurrentTime >= m_nStartTime );
 	while ( nIndex < cbCount )
 	{
-		// ÌØÊâÓã
+		// ç‰¹æ®Šé±¼
 		bool bSpecial = false;				
 		if( GetFishSpecialCount() < 2 && bCanSpecial && m_nFishKingTime == 0 && m_nFishKing[cbFishType] == 0 && cbFishType < FishType_Small_Max && nFishScore > 0 && nFishScore <= 10 && RandomArea(2, 3, 19) == 0 )
 		{
@@ -2730,14 +2730,14 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			bSpecial = true;
 		}
 
-		// Í£ÁôÓãÓã
+		// åœç•™é±¼é±¼
 		bool bAquatic = false;	
 		if( bCanAquatic && nFishScore < 20 && RandomArea(2, 1, 30) == 0 && cbFishType != FishType_BaoXiang )
 		{
 			bAquatic = true;
 		}
 
-		// »ù±¾ĞÅÏ¢
+		// åŸºæœ¬ä¿¡æ¯
 		tagFishInfo FishInfo;
 		FishInfo.nFishKey = max( 1, m_nAppearFishCount + 1);
 		FishInfo.nFishType = cbFishType;
@@ -2771,16 +2771,16 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			FishInfo.nFishState = FishState_Normal;
 		}
 
-		// ÓãÊıÔö¼Ó
+		// é±¼æ•°å¢åŠ 
 		m_nAppearFishCount++;
 
-		// Ìí¼ÓÊı¾İ
+		// æ·»åŠ æ•°æ®
 		m_ArrayFishInfo.Add(FishInfo);
 
-		// ·¢ËÍÓãĞÅÏ¢
+		// å‘é€é±¼ä¿¡æ¯
 		SendFish(FishInfo);
 
-		// ÏÂÒ»¸ö
+		// ä¸‹ä¸€ä¸ª
 		nIndex++;
 	}
 
@@ -2788,7 +2788,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 }
 
 
-// ´´½¨Óã
+// åˆ›å»ºé±¼
 uint CTableFrameSink::CreateFish( byte cbCount, 
 								  byte cbFishType		/* = FishType_Max */, 
 								  uint nPathIndex		/* = uint_max */,
@@ -2804,33 +2804,33 @@ uint CTableFrameSink::CreateFish( byte cbCount,
 								  bool bRepeatCreate /*= true*/)
 {
 
-	// Ëæ»úÂ·¾¶
+	// éšæœºè·¯å¾„
 	int nBezierCount = 0;
 	tagBezierPoint TBezierPoint[BEZIER_POINT_MAX];
 	if ( (int64)nPathIndex >= m_ArrayFishPathPositive.GetCount() )
 	{
-		// ÎŞÖ¸¶¨
+		// æ— æŒ‡å®š
 		RandomPath( cbFishType, TBezierPoint, nBezierCount );
 	}
 	else
 	{
-		// »ñÈ¡¹Ì¶¨Â·¾¶
+		// è·å–å›ºå®šè·¯å¾„
 		ASSERT(nPathIndex < (uint)m_ArrayFishPathPositive.GetCount() );
 		CWHArray< tagBezierPoint * > * pArrayBezierPoint = &(m_ArrayFishPathPositive[nPathIndex]->ArrayBezierPoint);
 
-		// ¸³ÖµÂ·¾¶
+		// èµ‹å€¼è·¯å¾„
 		ASSERT( pArrayBezierPoint->GetCount() > 0 && pArrayBezierPoint->GetCount() <= BEZIER_POINT_MAX );
 		nBezierCount = (int)pArrayBezierPoint->GetCount();
 		for ( int nIndex = 0; nIndex < nBezierCount; ++nIndex )
 		{
-			// »ñÈ¡Â·¾¶
+			// è·å–è·¯å¾„
 			tagBezierPoint * pBezierPoint = pArrayBezierPoint->GetAt(nIndex);
 			if (!pBezierPoint)
 			{
-				DebugPrintf("´íÎó:»ñÈ¡ÓãÂ·¾¶´íÎó");
+				DebugPrintf("é”™è¯¯:è·å–é±¼è·¯å¾„é”™è¯¯");
 				return false;
 			}
-			// ¸³ÖµĞÅÏ¢
+			// èµ‹å€¼ä¿¡æ¯
 			CopyMemory( &TBezierPoint[nIndex], pBezierPoint, sizeof(tagBezierPoint) );
 		}
 	}
@@ -2838,15 +2838,15 @@ uint CTableFrameSink::CreateFish( byte cbCount,
 	return CreateFishEx( cbCount, cbFishType, TBezierPoint, nBezierCount, unCreateTime, unIntervalTime, fRotateAngle, bCanSpecial, bCanAquatic, nKillerType, wHitChair, PointOffSet, fInitialAngle, bRepeatCreate );
 }
 
-// ´´½¨Óã
+// åˆ›å»ºé±¼
 uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
 {
-	// µ±Ç°Ê±¼ä
+	// å½“å‰æ—¶é—´
 	int nIndex = 0;
 	const uint nCurrentTime = timeGetTime();
 	ASSERT( nCurrentTime >= m_nStartTime );
 
-	// »ù±¾ĞÅÏ¢
+	// åŸºæœ¬ä¿¡æ¯
 	tagFishInfo TFishCreateInfo;
 	TFishCreateInfo.nFishKey = max( 1, m_nAppearFishCount + 1);
 	TFishCreateInfo.nFishType = TFishInfo.nFishType;
@@ -2863,10 +2863,10 @@ uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
 	TFishCreateInfo.fInitialAngle = TFishInfo.fInitialAngle;
 	//TFishCreateInfo.PSFish.Set( MonsterVec[TFishInfo.nFishType], MONSTER_VEC );
 
-	// ĞŞ¸ÄÂ·¾¶
+	// ä¿®æ”¹è·¯å¾„
 	for ( int nIndex = TFishInfo.nBezierCount - 1, nAntiIndex = 0; nIndex >= 0; --nIndex, ++nAntiIndex )
 	{
-		// ĞŞ¸ÄÂ·¾¶ĞÅÏ¢
+		// ä¿®æ”¹è·¯å¾„ä¿¡æ¯
 		TFishCreateInfo.TBezierPoint[nAntiIndex].BeginPoint = TFishInfo.TBezierPoint[nIndex].EndPoint;
 		TFishCreateInfo.TBezierPoint[nAntiIndex].EndPoint = TFishInfo.TBezierPoint[nIndex].BeginPoint;
 		TFishCreateInfo.TBezierPoint[nAntiIndex].KeyOne = TFishInfo.TBezierPoint[nIndex].KeyTwo;
@@ -2874,26 +2874,26 @@ uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
 		TFishCreateInfo.TBezierPoint[nAntiIndex].Time = TFishInfo.TBezierPoint[nIndex].Time;
 	}
 
-	// ¸üĞÂÓã
+	// æ›´æ–°é±¼
 	TFishInfo = TFishCreateInfo;
 
-	// ÓãÊıÔö¼Ó
+	// é±¼æ•°å¢åŠ 
 	m_nAppearFishCount++;
 
-	// ·¢ËÍÓãĞÅÏ¢
+	// å‘é€é±¼ä¿¡æ¯
 	SendFish(TFishCreateInfo);
 
 	return nCurrentTime - m_nStartTime + TFishInfo.unOverTime;
 }
 
 
-// Ëæ»úÂ·¾¶
+// éšæœºè·¯å¾„
 void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX], int & nBezierCount )
 {
 	// BOSS
 	if (m_bIsFushBoss && cbFishType >= FishType_Moderate_Max)
 	{
-		// ´´½¨Â·¾¶
+		// åˆ›å»ºè·¯å¾„
 		TBezierPoint[0].BeginPoint.x = -200;
 		TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX(100, 700);
 		TBezierPoint[0].EndPoint.x = 1480;
@@ -2904,12 +2904,12 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX(100, 800);
 		TBezierPoint[0].Time = 30000;
 
-		// Â·¾¶ÊıÁ¿
+		// è·¯å¾„æ•°é‡
 		nBezierCount = 1;
 	}
 	else if( cbFishType >= FishType_Moderate_Max )
 	{
-		// ´´½¨Â·¾¶
+		// åˆ›å»ºè·¯å¾„
 		TBezierPoint[0].BeginPoint.x = -200;
 		TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX( 100, 700 );
 		TBezierPoint[0].EndPoint.x = 1480;
@@ -2920,13 +2920,13 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 0, 800 );
 		TBezierPoint[0].Time = 30000;
 
-		// Â·¾¶ÊıÁ¿
+		// è·¯å¾„æ•°é‡
 		nBezierCount = 1;
 	}
-	// ÖĞÓã
+	// ä¸­é±¼
 	else if( cbFishType >= FishType_Small_Max )
 	{
-		// ´´½¨Â·¾¶
+		// åˆ›å»ºè·¯å¾„
 		if ( RAND_TRUE_FALSE(50, 50) )
 		{
 			TBezierPoint[0].BeginPoint.x = -200;
@@ -2948,17 +2948,17 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 200, 600 );
 		TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX( 15000, 23000 );
 
-		// Â·¾¶ÊıÁ¿
+		// è·¯å¾„æ•°é‡
 		nBezierCount = 1;
 	}
-	// Ğ¡Óã
+	// å°é±¼
 	else
 	{
 
-		// µÚÒ»ÖÖÄ£Ê½
+		// ç¬¬ä¸€ç§æ¨¡å¼
 		if ( RAND_TRUE_FALSE(20, 80) )
 		{
-			// ´´½¨Â·¾¶
+			// åˆ›å»ºè·¯å¾„
 			if ( RAND_TRUE_FALSE(50, 50) )
 			{
 				TBezierPoint[0].BeginPoint.x = -200;
@@ -2980,13 +2980,13 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 			TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 200, 600 );
 			TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX( 10000, 15000 );
 
-			// Â·¾¶ÊıÁ¿
+			// è·¯å¾„æ•°é‡
 			nBezierCount = 1;
 		}
-		// µÚ¶şÖÖÄ£Ê½
+		// ç¬¬äºŒç§æ¨¡å¼
 		else
 		{
-			// ´´½¨Â·¾¶
+			// åˆ›å»ºè·¯å¾„
 			if ( RAND_TRUE_FALSE(50, 50) )
 			{
 				TBezierPoint[0].BeginPoint.x = -200;
@@ -3019,19 +3019,19 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 			TBezierPoint[1].KeyTwo.y = RAND_EQUAL_MIN_MAX( 0, 800 );
 			TBezierPoint[1].Time = RAND_EQUAL_MIN_MAX( 7000, 15000 );
 
-			// Â·¾¶ÊıÁ¿
+			// è·¯å¾„æ•°é‡
 			nBezierCount = 2;
 		}
 	}
 
-	// Ëæ»ú·´×ªÂ·¾¶
+	// éšæœºåè½¬è·¯å¾„
 	if( RAND_TRUE_FALSE(50, 50) )
 	{
-		// ±éÀúÂ·¾¶
+		// éå†è·¯å¾„
 		tagBezierPoint TBezierPointAnti[BEZIER_POINT_MAX];
 		for ( int nIndex = nBezierCount - 1, nAntiIndex = 0; nIndex >= 0; --nIndex, ++nAntiIndex )
 		{
-			// ĞŞ¸ÄÂ·¾¶ĞÅÏ¢
+			// ä¿®æ”¹è·¯å¾„ä¿¡æ¯
 			TBezierPointAnti[nAntiIndex].BeginPoint = TBezierPoint[nIndex].EndPoint;
 			TBezierPointAnti[nAntiIndex].EndPoint = TBezierPoint[nIndex].BeginPoint;
 			TBezierPointAnti[nAntiIndex].KeyOne = TBezierPoint[nIndex].KeyTwo;
@@ -3042,10 +3042,10 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 	}
 }
 
-// ·¢ËÍÓãĞÅÏ¢
+// å‘é€é±¼ä¿¡æ¯
 void CTableFrameSink::SendFish( tagFishInfo & TFishInfo )
 {
-	// ¹¹ÔìÏûÏ¢
+	// æ„é€ æ¶ˆæ¯
 	CMD_S_FishCreate FishCreate;
 	FishCreate.nFishKey = TFishInfo.nFishKey;
 	FishCreate.unCreateTime = TFishInfo.unCreateTime;
@@ -3057,48 +3057,48 @@ void CTableFrameSink::SendFish( tagFishInfo & TFishInfo )
 	FishCreate.nBezierCount = TFishInfo.nBezierCount;
 	FishCreate.fInitialAngle = TFishInfo.fInitialAngle;
 	CopyMemory( &FishCreate.TBezierPoint, &TFishInfo.TBezierPoint, sizeof(FishCreate.TBezierPoint) );
-	//printf("´´½¨ÓãÊ±¼ä:%d", FishCreate.unCreateTime);
-	// ·¢ËÍÏûÏ¢
+	//printf("åˆ›å»ºé±¼æ—¶é—´:%d", FishCreate.unCreateTime);
+	// å‘é€æ¶ˆæ¯
 	SendTableData(INVALID_CHAIR, SUB_S_CREATE_FISHS, &FishCreate, sizeof(CMD_S_FishCreate) );
 
-	// ·¢ËÍÍ£ÁôÏûÏ¢
+	// å‘é€åœç•™æ¶ˆæ¯
 	for( int nIndex = 0; nIndex < TFishInfo.ArrayStayInfo.GetCount(); ++nIndex )
 	{
-		// »ñÈ¡Í£ÁôĞÅÏ¢
+		// è·å–åœç•™ä¿¡æ¯
 		tagStayInfo & TStayInfo = TFishInfo.ArrayStayInfo.GetAt( nIndex );
 
-		// ¶¨ÒåÏûÏ¢
+		// å®šä¹‰æ¶ˆæ¯
 		CMD_S_StayFish CMDSStayFish;
 		CMDSStayFish.nFishKey = TFishInfo.nFishKey;
 		CMDSStayFish.nStayStart = TStayInfo.nStayStart;
 		CMDSStayFish.nStayTime = TStayInfo.nStayTime;
 
-		// ·¢ËÍÏûÏ¢
+		// å‘é€æ¶ˆæ¯
 		SendTableData(INVALID_CHAIR, SUB_S_STAY_FISH, &CMDSStayFish, sizeof(CMD_S_StayFish));
 	}
 }
 
-// ÌØÊâÓãÕó
+// ç‰¹æ®Šé±¼é˜µ
 uint CTableFrameSink::SpecialFishMatrix( byte cbFishType, CDoublePoint PointFish )
 {
-	// ÓãÎ»ÖÃ
+	// é±¼ä½ç½®
 	int nPathIndex = RAND_TRUE_FALSE(50, 50) ? 6 : 7;
 
-	// Æ«ÒÆÎ»ÖÃ
+	// åç§»ä½ç½®
 	CShortPoint PointOffSet;
 	tagBezierPoint * pBezierPoint = m_ArrayFishPathPositive.GetAt(nPathIndex)->ArrayBezierPoint.GetAt(0);
 	if (!pBezierPoint)
 	{
-		DebugPrintf("´íÎó:ÌØÊâÓãÕó»ñÈ¡´íÎó");
+		DebugPrintf("é”™è¯¯:ç‰¹æ®Šé±¼é˜µè·å–é”™è¯¯");
 		return false;
 	}
 	PointOffSet.x = (short)(PointFish.x - pBezierPoint->BeginPoint.x);
 	PointOffSet.y = (short)(PointFish.y - pBezierPoint->BeginPoint.y);
 
-	// É±ÊÖÓã
+	// æ€æ‰‹é±¼
 	bool bCreateKiller = false;
 
-	// 36¸ö
+	// 36ä¸ª
 	int nCountMax = 36;
 	if (m_iFishShoalLev > 0 && m_iFishShoalLev <50)
 	{
@@ -3106,17 +3106,17 @@ uint CTableFrameSink::SpecialFishMatrix( byte cbFishType, CDoublePoint PointFish
 	}
 	for( int nCount = 0; nCount < nCountMax; ++nCount )
 	{
-		// ´´½¨É±ÊÖ
+		// åˆ›å»ºæ€æ‰‹
 		bool bKiller = !bCreateKiller && (RandomArea( 2, 2, nCountMax - nCount - 1 ) == 0);
 		if ( bKiller ) bCreateKiller = true;
 
-		// ´´½¨3È¦Óã
+		// åˆ›å»º3åœˆé±¼
 		CreateFish( 3, cbFishType, nPathIndex, 0, 1000, GL_PI * 2.f / nCountMax * nCount, false, false, bKiller ? KillerType_One : KillerType_No, INVALID_CHAIR, PointOffSet, 0.f, false );
 	}
 
 	return 0;
 }
-// ÓãÈº½¨Á¢
+// é±¼ç¾¤å»ºç«‹
 uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 {
 	BYTE Grop = rand() % 5;
@@ -3124,13 +3124,13 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 	{
 		Grop = m_iFinshGroup;
 	}
-	//DebugPrintf("´´½¨ÓãÕóÀàĞÍ£º%d,ÓãÕóµÈ¼¶:%d", Grop, m_iFinshLeve);
-	// ÅĞ¶ÏÖÖÀà
+	//DebugPrintf("åˆ›å»ºé±¼é˜µç±»å‹ï¼š%d,é±¼é˜µç­‰çº§:%d", Grop, m_iFinshLeve);
+	// åˆ¤æ–­ç§ç±»
 	switch(Grop)
 	{
 	case 0:
 		{
-			// ´´½¨´ó
+			// åˆ›å»ºå¤§
 			int nFishTime[10] = {0, 3000, 6000, 9000, 12000, 15500, 18000, 22000, 27500, 32000 };
 			for ( int nFishIndex = FishType_BDengLongYu; nFishIndex <= FishType_BMoGuiYu; ++nFishIndex )
 			{
@@ -3138,7 +3138,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 				CreateFish( 1, nFishIndex, 9, nFishTime[nFishIndex - FishType_BDengLongYu], 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(0, -50), 0.f, false );
 			}
 			int nFishCount = 32;
-			// ´´½¨Óã
+			// åˆ›å»ºé±¼
 			if (m_iFinshLeve == 3)
 			{
 				nFishCount = 32;
@@ -3181,7 +3181,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 	case 1:
 		{
 
-			// ´´½¨´ó
+			// åˆ›å»ºå¤§
 			CreateFish( 1, FishType_BMoGuiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(640, 400), 0.f, false );
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(440, 400), 0.f, false );
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(840, 400), GL_PI, false );
@@ -3225,7 +3225,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(966, 573), AngleToRadian(150), false );
 
 
-			//ÏÂ±ßÒ»ÅÅµÄÓã
+			//ä¸‹è¾¹ä¸€æ’çš„é±¼
 			//CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(413, 125), 0.f, false );
 
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(518, 125), 0.f, false );	
@@ -3236,7 +3236,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 
 			//CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(869, 125), 0.f, false );	
 
-			//ÉÏ±ßÒ»ÅÅ
+			//ä¸Šè¾¹ä¸€æ’
 		//	CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(413, 672), GL_PI, false );
 
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(490, 672), GL_PI, false );	
@@ -3246,7 +3246,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(800, 672), GL_PI, false );	
 	
 		//	CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(869, 672), GL_PI, false );	
-			//»¡ĞÎ
+			//å¼§å½¢
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(365, 129), AngleToRadian(-10), false );
 
 			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(237, 190), AngleToRadian(-40), false );
@@ -3461,7 +3461,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 		return 45000;
 	case 2:
 		{
-			// ´´½¨Ğ¡Óã
+			// åˆ›å»ºå°é±¼
 			byte cbFishSmallIndex[3] = { FishType_BXiaoHuangYu, FishType_BHaiMa, FishType_BCaiBanYu };
 			uint unFishCount[3] = { 72, 48, 32 };
 			uint unFishSmallCreateTime[3] = { 0, 1000, 2000 };
@@ -3480,14 +3480,14 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 				unFishCount[1] = 18;
 				unFishCount[2] = 12;
 			}
-			// ¼òµ¥ÓãÕó
+			// ç®€å•é±¼é˜µ
 			for( int nIndex = 0; nIndex < 3; ++nIndex )
 			{
 				CircleOfFish( cbFishSmallIndex[nIndex], unFishCount[nIndex], 8, unFishSmallCreateTime[nIndex], fFishSmallRadius[nIndex], fFishSmallIntervalTime[nIndex] );
 				CircleOfFish( cbFishSmallIndex[nIndex], unFishCount[nIndex], 9, unFishSmallCreateTime[nIndex], fFishSmallRadius[nIndex], fFishSmallIntervalTime[nIndex] );
 			}
 
-			// ´´½¨ÖĞÓã
+			// åˆ›å»ºä¸­é±¼
 			byte cbFishBigIndex = ( rand() % 6 ) + FishType_BNianYu;
 			CreateFish( 1, cbFishBigIndex, 8, 4500, 0, 0.f, false, false );
 			CreateFish( 1, cbFishBigIndex, 9, 4500, 0, 0.f, false, false );
@@ -3495,14 +3495,14 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 		return 17000 + 6000;
 	case 3:
 		{
-			// ´´½¨BOSS
+			// åˆ›å»ºBOSS
 			CreateFish( 1, ( rand() % 4 ) + FishType_BMoGuiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH / 2, DEFAULE_HEIGHT / 2), 0.f, false );
 
-			// ÓãÎ»ÖÃ
+			// é±¼ä½ç½®
 			int nPathIndex6 = 6;
 			int nPathIndex7 = 7;
 
-			// Æ«ÒÆÎ»ÖÃ
+			// åç§»ä½ç½®
 			CShortPoint PointOffSet6;
 			CShortPoint PointOffSet7;
 			tagBezierPoint * pBezierPoint6 = m_ArrayFishPathPositive.GetAt(nPathIndex6)->ArrayBezierPoint.GetAt(0);
@@ -3512,7 +3512,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			PointOffSet7.x = (short)(DEFAULE_WIDTH / 2 - pBezierPoint7->BeginPoint.x);
 			PointOffSet7.y = (short)(DEFAULE_HEIGHT / 2 - pBezierPoint7->BeginPoint.y);
 
-			// 36¸ö
+			// 36ä¸ª
 			int nCountMax = 36;
 			if (m_iFinshLeve == 2)
 			{
@@ -3524,7 +3524,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			}
 			for( int nCount = 0; nCount < nCountMax; ++nCount )
 			{
-				// ´´½¨5È¦Óã
+				// åˆ›å»º5åœˆé±¼
 				CreateFish( 1, FishType_BBXiaoChouYu, nPathIndex7, 0, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false );
 				CreateFish( 1, FishType_BHaiLuo, nPathIndex6, 3000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet6, 0.f, false );
 				CreateFish( 1, FishType_BHongWeiYu, nPathIndex7, 6000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false );
@@ -3536,12 +3536,12 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 		return 45000;
 	case 4:
 		{
-			// ´´½¨BOSS
+			// åˆ›å»ºBOSS
 			byte cbFishBigIndex = ( rand() % 4 ) + FishType_BMoGuiYu;
 			CreateFish( 1, cbFishBigIndex, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(318, 400), 0.f, false );
 			CreateFish( 1, cbFishBigIndex, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(957, 400), 0.f, false );
 
-			// ´´½¨Óã
+			// åˆ›å»ºé±¼
 			int nCountMax = 18;
 			if (m_iFinshLeve == 2)
 			{
@@ -3558,7 +3558,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 				CreateFish( 1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 140) ), fAngle + GL_PI, false );
 			}
 
-			// ´´½¨Óã
+			// åˆ›å»ºé±¼
 			nCountMax = 36;
 			if (m_iFinshLeve == 2)
 			{
@@ -3575,7 +3575,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 				CreateFish( 1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 225) ), fAngle + GL_PI, false );
 			}
 
-			// ´´½¨Óã
+			// åˆ›å»ºé±¼
 			nCountMax = 72;
 			if (m_iFinshLeve == 2)
 			{
@@ -3599,10 +3599,10 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 }
 
 
-// Ô²È¦Óã
+// åœ†åœˆé±¼
 uint CTableFrameSink::CircleOfFish( byte cbFishType, int nFishCount, int nPathIndex, uint unCreateTime, uint nRadius, uint unIntervalTime )
 {
-	// ´´½¨Óã
+	// åˆ›å»ºé±¼
 	for( int nIndex = 0; nIndex < nFishCount; ++nIndex )
 	{
 		float fRadius = (float)nRadius;
@@ -3615,7 +3615,7 @@ uint CTableFrameSink::CircleOfFish( byte cbFishType, int nFishCount, int nPathIn
 }
 
 
-// »ñÈ¡Â·¾¶Ê±¼ä
+// è·å–è·¯å¾„æ—¶é—´
 uint CTableFrameSink::PathTime( tagFishPath * pFishPath )
 {
 	uint unTime = 0;
@@ -3626,41 +3626,41 @@ uint CTableFrameSink::PathTime( tagFishPath * pFishPath )
 	return unTime;
 }
 
-// ¼ÆËãµ±Ç°ÓãÎ»ÖÃ
+// è®¡ç®—å½“å‰é±¼ä½ç½®
 EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & TFish, uint nCustomLossTime /*= uint_max*/ )
 {
-	// ÅĞ¶Ïµ±Ç°Ê±¼ä
+	// åˆ¤æ–­å½“å‰æ—¶é—´
 	uint nCurrentTime = timeGetTime();
 
-	// Á÷ÊÅÊ±¼ä
+	// æµé€æ—¶é—´
 	uint nLossTime = nCurrentTime - m_nStartTime;
 
-	// ¸üĞÂÊ±¼ä
+	// æ›´æ–°æ—¶é—´
 	if ( nCustomLossTime != uint_max )
 	{
 		nLossTime = nCustomLossTime;
 	}
 
-	// Î´µ½´´½¨Ê±¼ä
+	// æœªåˆ°åˆ›å»ºæ—¶é—´
 	if ( nLossTime < TFish.unCreateTime )
 	{
 		return FishMoveType_Next;
 	}
 
-	// ÒÔÇ°Í£ÁôÊ±¼ä
+	// ä»¥å‰åœç•™æ—¶é—´
 	uint nBeforeStayTime = 0;
 
-	// Í£ÁôÊ±¼ä
+	// åœç•™æ—¶é—´
 	for( int nStayIndex = 0; nStayIndex < TFish.ArrayStayInfo.GetCount(); ++nStayIndex )
 	{
-		// »ñÈ¡ĞÅÏ¢
+		// è·å–ä¿¡æ¯
 		tagStayInfo & nStayInfo = TFish.ArrayStayInfo.GetAt(nStayIndex);
 
-		// »ñÈ¡Ê±¼ä
+		// è·å–æ—¶é—´
 		uint nStayStart = nStayInfo.nStayStart;				
 		uint nStayTime = nStayInfo.nStayTime;
 
-		// ±È½ÏĞÅÏ¢
+		// æ¯”è¾ƒä¿¡æ¯
 		if( nLossTime <= nStayStart )
 		{
 			break;
@@ -3677,29 +3677,29 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 		}
 	}
 
-	// ¼õÈ¥Ê±¼ä
+	// å‡å»æ—¶é—´
 	nBeforeStayTime -= nBeforeStayTime;
 
-	// ÓÎ¶¯Ê±¼ä
+	// æ¸¸åŠ¨æ—¶é—´
 	uint unSwimTime = nLossTime - TFish.unCreateTime;
 	uint unSwimCurTime = unSwimTime;
 	uint unAllTime = 0;
 	int  nMoveIndex = 0;
 	bool bSuccess = false;
 
-	// »ñÈ¡ÓÎ¶¯Ë÷Òı
+	// è·å–æ¸¸åŠ¨ç´¢å¼•
 	for ( int nBezierIndex = 0; nBezierIndex < TFish.nBezierCount ; ++nBezierIndex )
 	{
-		// »ñÈ¡ĞÅÏ¢
+		// è·å–ä¿¡æ¯
 		tagBezierPoint * pBezierPoint = &TFish.TBezierPoint[nBezierIndex];
 		if (!pBezierPoint)
 		{
-			DebugPrintf("´íÎó:FishMove»ñÈ¡ÓãĞÅÏ¢´íÎó");
+			DebugPrintf("é”™è¯¯:FishMoveè·å–é±¼ä¿¡æ¯é”™è¯¯");
 		}
-		// Â·¾¶ºÄÊ±
+		// è·¯å¾„è€—æ—¶
 		unAllTime += pBezierPoint->Time;
 
-		// ²éÕÒµ±Ç°Â·¾¶
+		// æŸ¥æ‰¾å½“å‰è·¯å¾„
 		if ( unSwimTime <= unAllTime )
 		{
 			nMoveIndex = nBezierIndex;
@@ -3707,56 +3707,56 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 			break;
 		}
 
-		// ¼ÆËãµ±Ç°Ê±¼ä
+		// è®¡ç®—å½“å‰æ—¶é—´
 		unSwimCurTime -= pBezierPoint->Time;
 	}
 
-	// Â·¾¶½áÊø
+	// è·¯å¾„ç»“æŸ
 	if ( !bSuccess )
 	{
 		return FishMoveType_Delete;
 	}
 
-	// ¼ÆËã±´Èû¶û
+	// è®¡ç®—è´å¡å°”
 	double dProportion = (double)(unSwimCurTime)/(double)(TFish.TBezierPoint[nMoveIndex].Time);
 	CDoublePoint ptPosition(0.0, 0.0);
 	ptPosition = PointOnCubicBezier( &TFish.TBezierPoint[nMoveIndex], dProportion );
 
-	// ¼ÆËãĞı×ª
+	// è®¡ç®—æ—‹è½¬
 	ptPos = Rotate(TFish.TBezierPoint[0].BeginPoint, TFish.fRotateAngle, ptPosition );
 
-	// Æ«ÒÆ
+	// åç§»
 	ptPos.x += TFish.PointOffSet.x;
 	ptPos.y += TFish.PointOffSet.y;
 
 	return FishMoveType_Normal;
 }
 
-// Óã¿ìËÙÏûÏ¢
+// é±¼å¿«é€Ÿæ¶ˆæ¯
 void CTableFrameSink::FishFastMove()
 {
-	// È«¾Ö±¬Õ¨»¹Ô­
+	// å…¨å±€çˆ†ç‚¸è¿˜åŸ
 	if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
 	{
-		// ×î´ó±¶Êı
+		// æœ€å¤§å€æ•°
 		int nMultipleMax = 0;
 		for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 		{
 			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 		}
 
-		// ·ÉïÚÏûºÄ
+		// é£é•–æ¶ˆè€—
 		m_dDartStock += nMultipleMax * m_nExplosionStart;
 	}
 
-	// Çå³ıÓã
+	// æ¸…é™¤é±¼
 	m_nFishTeamTime = 0;
 	m_ArrayFishInfo.RemoveAll();
 
-	// Çå¿Õ±¦ÏäĞÅÏ¢
+	// æ¸…ç©ºå®ç®±ä¿¡æ¯
 	for ( int nSite = 0; nSite < PlayChair_Max; ++nSite )
 	{
-		// ±¦ÏäÆô¶¯ÖĞ
+		// å®ç®±å¯åŠ¨ä¸­
 		if( m_bPlaySupply[nSite] )
 		{
 			m_nEnergyValue[nSite] = 0;
@@ -3764,18 +3764,18 @@ void CTableFrameSink::FishFastMove()
 		}
 	}
 
-	// ¸üĞÂÊ±¼ä
+	// æ›´æ–°æ—¶é—´
 	m_nStartTime = timeGetTime();
 }
 
-// »ñÈ¡ÓãÊıÁ¿
+// è·å–é±¼æ•°é‡
 uint CTableFrameSink::GetFishCount( uint nType )
 {
-	// ÅĞ¶ÏÀàĞÍ
+	// åˆ¤æ–­ç±»å‹
 	if( nType >= FishType_Max )
 		return 0;
 
-	// ÓãÊıÁ¿
+	// é±¼æ•°é‡
 	uint nFishCount = 0;
 	for ( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
 	{
@@ -3788,10 +3788,10 @@ uint CTableFrameSink::GetFishCount( uint nType )
 	return nFishCount;
 }
 
-// »ñÈ¡ÌØÊâÓãÊıÁ¿
+// è·å–ç‰¹æ®Šé±¼æ•°é‡
 uint CTableFrameSink::GetFishSpecialCount()
 {
-	// ÓãÊıÁ¿
+	// é±¼æ•°é‡
 	uint nFishCount = 0;
 	for ( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
 	{
@@ -3804,75 +3804,75 @@ uint CTableFrameSink::GetFishSpecialCount()
 	return nFishCount;
 }
 
-// Óã±ù¶³
+// é±¼å†°å†»
 void CTableFrameSink::FishFreeze( uint unLossTime )
 {
-	// ÉèÖÃÍ£Áô
+	// è®¾ç½®åœç•™
 	uint nStayStart = unLossTime;
 	uint nStayTime = 5000;
 
-	// ÓãĞÅÏ¢
+	// é±¼ä¿¡æ¯
 	for( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
 	{
-		// »ñÈ¡ÓãĞÅÏ¢
+		// è·å–é±¼ä¿¡æ¯
 		tagFishInfo & TFish = m_ArrayFishInfo.GetAt(nIndex);
 
-		// Î´µ½Ê±¼ä
+		// æœªåˆ°æ—¶é—´
 		if ( nStayStart < TFish.unCreateTime )
 		{
 			continue;
 		}
 
-		// »ñÈ¡ÓãÊı¾İ
+		// è·å–é±¼æ•°æ®
 		CArrayStay & ArrayStayInfo = TFish.ArrayStayInfo;
 
-		// ¶Ô±È×îºóÒ»¸ö
+		// å¯¹æ¯”æœ€åä¸€ä¸ª
 		bool bUpLast = false;
 		if ( ArrayStayInfo.GetCount() > 0 )
 		{
-			// »ñÈ¡×îºóÒ»¸ö
+			// è·å–æœ€åä¸€ä¸ª
 			tagStayInfo & nStaylast = ArrayStayInfo.GetAt( ArrayStayInfo.GetCount() - 1 );
 
-			// ÏàÍ¬Ê±¼ä
+			// ç›¸åŒæ—¶é—´
 			if ( nStaylast.nStayStart + nStaylast.nStayTime >= nStayStart )
 			{
-				// ¸üĞÂÊ±¼ä
+				// æ›´æ–°æ—¶é—´
 				nStaylast.nStayTime = nStayStart - nStaylast.nStayStart + 5000;
 
-				// ¸üĞÂĞÅÏ¢
+				// æ›´æ–°ä¿¡æ¯
 				bUpLast = true;
 				nStayStart = nStaylast.nStayStart;
 				nStayTime = nStaylast.nStayTime;
 			}
 		}
 	
-		// Ìí¼ÓĞÅÏ¢
+		// æ·»åŠ ä¿¡æ¯
 		if( !bUpLast )
 		{
-			// ÉèÖÃĞÅÏ¢
+			// è®¾ç½®ä¿¡æ¯
 			tagStayInfo nStayInfo;
 			nStayInfo.nStayStart = nStayStart;
 			nStayInfo.nStayTime = nStayTime;
 
-			// Ìí¼ÓĞÅÏ¢
+			// æ·»åŠ ä¿¡æ¯
 			ArrayStayInfo.Add(nStayInfo);
 		}
 
-		// ¶¨ÒåÏûÏ¢
+		// å®šä¹‰æ¶ˆæ¯
 		CMD_S_StayFish CMDSStayFish;
 		CMDSStayFish.nFishKey = TFish.nFishKey;
 		CMDSStayFish.nStayStart = nStayStart;
 		CMDSStayFish.nStayTime = nStayTime;
 
-		// ·¢ËÍÏûÏ¢
+		// å‘é€æ¶ˆæ¯
 		SendTableData(INVALID_CHAIR, SUB_S_STAY_FISH, &CMDSStayFish, sizeof(CMD_S_StayFish));
 	}
 }
 
-// ·¢ËÍÏûÏ¢
+// å‘é€æ¶ˆæ¯
 bool CTableFrameSink::SendTableData(WORD wChairID, WORD wSubCmdID, VOID * pData, WORD wDataSize, unsigned int handleCode/* = 0*/)
 {
-	// ÅĞ¶Ï×À×Ó
+	// åˆ¤æ–­æ¡Œå­
 	if (wChairID == INVALID_CHAIR)
 	{
 		for (int i = 0; i < PLAY_COUNT; i++)
@@ -3888,14 +3888,14 @@ bool CTableFrameSink::SendTableData(WORD wChairID, WORD wSubCmdID, VOID * pData,
 	return SendGameData(wChairID, pData, wDataSize, MSG_MAIN_LOADER_GAME, wSubCmdID, handleCode);
 }
 
-// ·¢ËÍ½±ÀøÌáÊ¾
+// å‘é€å¥–åŠ±æç¤º
 bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMultiple, LONGLONG lFishScore, EnumScoreType nScoreType )
 {
-	// ÓĞĞ§±¶Êı²Å·¢ËÍ
+	// æœ‰æ•ˆå€æ•°æ‰å‘é€
 	if ( nFishMultiple <= 0 || lFishScore <= 0 )
 		return false;
 
-	// »ñÈ¡Íæ¼Ò
+	// è·å–ç©å®¶
 	//IServerUserItem * pIServerUserItem = m_pITableFrame->GetTableUserItem(wChairID);
 	//if( pIServerUserItem == NULL )
 	//	return false;
@@ -3914,16 +3914,16 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 	{
 		return false;
 	}
-	// ±ÈÈü·¿¼ä²»·¢ËÍ
+	// æ¯”èµ›æˆ¿é—´ä¸å‘é€
 	if ( m_bCompetitionRoom )
 		return true;
 
-	// ±¶ÊıÌ«Ğ¡
-//	printf("±¶Êı´óĞ¡:%d,%d\n", nFishMultiple, m_nAwardMinMultiple);
+	// å€æ•°å¤ªå°
+//	printf("å€æ•°å¤§å°:%d,%d\n", nFishMultiple, m_nAwardMinMultiple);
 	if (nFishMultiple < m_nAwardMinMultiple)
 		return true;
 
-	// ÉùÃ÷ÏûÏ¢
+	// å£°æ˜æ¶ˆæ¯
 	//CMD_S_AwardTip CMDSAwardTip;
 	//CMDSAwardTip.wTableID = /*pIServerUserItem->GetTableID()*/ 1;
 	//CMDSAwardTip.wChairID = wChairID;
@@ -3933,20 +3933,20 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 	//CMDSAwardTip.lFishScore = lFishScore;
 	//CMDSAwardTip.nScoreType = nScoreType;
 
-	//// ·¢ËÍÏûÏ¢
+	//// å‘é€æ¶ˆæ¯
 	//SendTableData(INVALID_CHAIR, SUB_S_AWARD_TIP, &CMDSAwardTip, sizeof(CMD_S_AwardTip) );
 
-	// ·¢ËÍ×À×ÓÏûÏ¢
+	// å‘é€æ¡Œå­æ¶ˆæ¯
 	if( m_bAwardChatBox && nFishMultiple >= m_nAwardMinMultiple && lFishScore >= 0 )
 	{
-		// ÓãĞÅÏ¢
+		// é±¼ä¿¡æ¯
 		tchar szFishName[FishType_Max][11] = {
-			_T("Ğ¡»ÆÓã"), _T("Ğ¡ÇàÓã"), _T("²Ê°ßÓã"), _T("º£Âí"), _T("Ğ¡³óÓã"),
-			_T("ºìÎ²Óã"), _T("º£Âİ"), _T("º£ÂİĞ·"), _T("Éºº÷Óã"), _T("ºì½ğÓã"),
-			_T("À¶Î²Óã"), _T("µÆÁıÓã"), _T("ÆøÅİÓã"), _T("ÂÌÉ«ÆøÅİÓã"), _T("¿ø¼×Óã"),
-			_T("öóÓã"), _T("ÎÚ¹ê"), _T("Ä§¹íÓã"), _T("½£Óã"), _T("º£ëà"),
-			_T("µçÓã"), _T("¾¨Óã"), _T("öèÓã"), _T("»Æ½ğ´¸Í·öè"), _T("»Æ½ğ¾Ş³ßöè"),
-			_T("»Æ½ğ¿ø¼×Óã"), _T("»Æ½ğ´¸Í·öè"), _T("»Æ½ğ¾¨Óã"), _T("»Æ½ğ»¢¾¨"), _T("Ê·Ç°¾Şöù") };
+			_T("å°é»„é±¼"), _T("å°é’é±¼"), _T("å½©æ–‘é±¼"), _T("æµ·é©¬"), _T("å°ä¸‘é±¼"),
+			_T("çº¢å°¾é±¼"), _T("æµ·èº"), _T("æµ·èºèŸ¹"), _T("çŠç‘šé±¼"), _T("çº¢é‡‘é±¼"),
+			_T("è“å°¾é±¼"), _T("ç¯ç¬¼é±¼"), _T("æ°”æ³¡é±¼"), _T("ç»¿è‰²æ°”æ³¡é±¼"), _T("ç›”ç”²é±¼"),
+			_T("é²¶é±¼"), _T("ä¹Œé¾Ÿ"), _T("é­”é¬¼é±¼"), _T("å‰‘é±¼"), _T("æµ·è±š"),
+			_T("ç”µé±¼"), _T("é²¸é±¼"), _T("é²¨é±¼"), _T("é»„é‡‘é”¤å¤´é²¨"), _T("é»„é‡‘å·¨å°ºé²¨"),
+			_T("é»„é‡‘ç›”ç”²é±¼"), _T("é»„é‡‘é”¤å¤´é²¨"), _T("é»„é‡‘é²¸é±¼"), _T("é»„é‡‘è™é²¸"), _T("å²å‰å·¨é³„") };
 
 
 		GameUserInfo data;
@@ -3957,76 +3957,76 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 		}
 
 
-		// ×À×ÓĞÅÏ¢
+		// æ¡Œå­ä¿¡æ¯
 		CString StrTable;
 
-		// Éú³ÉĞÅÏ¢
+		// ç”Ÿæˆä¿¡æ¯
 		CString StrAwardTip;
 		//if (GetRoomLevel() <= 1)
 		//{
-		//	StrAwardTip.Format(_T("¹§Ï²Íæ¼Ò#FF0000 | ¡¾%s¡¿#00FAFA | ÔÚ¡¾BOOSÀ´ÁË³õ¼¶³¡¡¿²¶»ñÁË#FF12FA | ¡¾%s¡¿#FFFAFA | »ñµÃ#FFFA12 | ½ğ±Ò#I1 | %d #C1£¡"),
+		//	StrAwardTip.Format(_T("æ­å–œç©å®¶#FF0000 | ã€%sã€‘#00FAFA | åœ¨ã€BOOSæ¥äº†åˆçº§åœºã€‘æ•è·äº†#FF12FA | ã€%sã€‘#FFFAFA | è·å¾—#FFFA12 | é‡‘å¸#I1 | %d #C1ï¼"),
 		//		data.name, szFishName[nFishType], /*nFishMultiple,*/ lFishScore);
 		//}
 		//else if (GetRoomLevel() == 2)
 		//{
-		//	StrAwardTip.Format(_T("¹§Ï²Íæ¼Ò#FF0000 | ¡¾%s¡¿#00FAFA | ÔÚ¡¾BOOSÀ´ÁËÖĞ¼¶³¡¡¿²¶»ñÁË#FF12FA | ¡¾%s¡¿#FFFAFA | »ñµÃ#FFFA12 | ½ğ±Ò#I1 | %d #C1£¡"),
+		//	StrAwardTip.Format(_T("æ­å–œç©å®¶#FF0000 | ã€%sã€‘#00FAFA | åœ¨ã€BOOSæ¥äº†ä¸­çº§åœºã€‘æ•è·äº†#FF12FA | ã€%sã€‘#FFFAFA | è·å¾—#FFFA12 | é‡‘å¸#I1 | %d #C1ï¼"),
 		//		data.name, szFishName[nFishType], /*nFishMultiple,*/ lFishScore);
 		//}
 		//else if (GetRoomLevel() == 3)
 		//{
-		//	StrAwardTip.Format(_T("¹§Ï²Íæ¼Ò#FF0000 | ¡¾%s¡¿#00FAFA | ÔÚ¡¾BOOSÀ´ÁË¸ß¼¶³¡¡¿²¶»ñÁË#FF12FA | ¡¾%s¡¿#FFFAFA | »ñµÃ#FFFA12 | ½ğ±Ò#I1 | %d #C1£¡"),
+		//	StrAwardTip.Format(_T("æ­å–œç©å®¶#FF0000 | ã€%sã€‘#00FAFA | åœ¨ã€BOOSæ¥äº†é«˜çº§åœºã€‘æ•è·äº†#FF12FA | ã€%sã€‘#FFFAFA | è·å¾—#FFFA12 | é‡‘å¸#I1 | %d #C1ï¼"),
 		//		data.name, szFishName[nFishType], /*nFishMultiple,*/ lFishScore);
 		//}
 		//else
 		//{
-		//»ñÈ¡±¶ÂÊ
+		//è·å–å€ç‡
 		int Multiple = 1;
 		if (Multiple <= 0)
 		{
 			Multiple = 1;
 		}
-			StrAwardTip.Format(_T("¹§Ï²Íæ¼Ò#FF0000|¡¾%s¡¿#00FAFA|ÔÚ¡¾´òBOOS¡¿²¶»ñÁË#FF12FA|¡¾%s¡¿#FFFAFA|»ñµÃ#FFFA12|½ğ±Ò#I1|%2f #C1"),
+			StrAwardTip.Format(_T("æ­å–œç©å®¶#FF0000|ã€%sã€‘#00FAFA|åœ¨ã€æ‰“BOOSã€‘æ•è·äº†#FF12FA|ã€%sã€‘#FFFAFA|è·å¾—#FFFA12|é‡‘å¸#I1|%2f #C1"),
 				data.name, szFishName[nFishType], /*nFishMultiple,*/ (double)(lFishScore)/ Multiple);
 		//}
 
 		
-		// ½ğ±Ò²¶»ñ
+		// é‡‘å¸æ•è·
 		//if( nScoreType == EST_Cold )
 		//{
-		//	StrAwardTip.Format( _T("%sÍæ¼Ò %s ²¶ÖĞÁË%s£¬»ñµÃ %d±¶ %I64d·ÖÊı£¡"), pRoomBaseInfo->name, data.name, szFishName[nFishType], nFishMultiple, lFishScore);
+		//	StrAwardTip.Format( _T("%sç©å®¶ %s æ•ä¸­äº†%sï¼Œè·å¾— %då€ %I64dåˆ†æ•°ï¼"), pRoomBaseInfo->name, data.name, szFishName[nFishType], nFishMultiple, lFishScore);
 		//}
 		//else if ( nScoreType == EST_Laser )
 		//{
-		//	StrAwardTip.Format( _T("%sÍæ¼Ò %s Ê¹ÓÃ¼¤¹â£¬»ñµÃ %d±¶ %I64d·ÖÊı£¡"), StrTable, CMDSAwardTip.szPlayName, nFishMultiple, lFishScore);
+		//	StrAwardTip.Format( _T("%sç©å®¶ %s ä½¿ç”¨æ¿€å…‰ï¼Œè·å¾— %då€ %I64dåˆ†æ•°ï¼"), StrTable, CMDSAwardTip.szPlayName, nFishMultiple, lFishScore);
 		//}
 
-		//// Ä©Î²ÌáÊ¾
+		//// æœ«å°¾æç¤º
 		//if ( nFishMultiple >= 500 )
 		//{
-		//	StrAwardTip += _T("³¬ÉñÁË£¡£¡£¡");
+		//	StrAwardTip += _T("è¶…ç¥äº†ï¼ï¼ï¼");
 		//}
 		//else if ( nFishType == FishType_BaoXiang )
 		//{
-		//	StrAwardTip += _T("ÔËÆø±¬±í£¡£¡£¡");
+		//	StrAwardTip += _T("è¿æ°”çˆ†è¡¨ï¼ï¼ï¼");
 		//}
 		//else
 		//{
-		//	StrAwardTip += _T("ÊµÁ¦³¬Èº£¡£¡£¡");
+		//	StrAwardTip += _T("å®åŠ›è¶…ç¾¤ï¼ï¼ï¼");
 		//}
 		m_pDataManage->SendRewardActivityNotify(StrAwardTip);
 		//printf("%s\n", StrAwardTip);
-		// ·¢ËÍÏûÏ¢
+		// å‘é€æ¶ˆæ¯
 	//	m_pITableFrame->SendRoomMessage( NULL, StrAwardTip, SMT_CHAT );
 	}
 
 	return true;
 }
 
-// ³õÊ¼»¯Óã³Ø
+// åˆå§‹åŒ–é±¼æ± 
 void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 {
 
-	// Íæ¼ÒÊıÁ¿
+	// ç©å®¶æ•°é‡
 	int nPlayCount = 0;
 	for( int nSite = 0; nSite < PlayChair_Max; ++nSite )
 	{
@@ -4034,7 +4034,7 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 			nPlayCount++;
 	}
 
-	// ¸üĞÂÊıÁ¿
+	// æ›´æ–°æ•°é‡
 	int nCreateCount = 0;
 	if (nPlayCount > 1)
 	{
@@ -4046,38 +4046,38 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 	}
 	
 	
-	// »ñÈ¡ÓĞĞ§ÊıÁ¿
+	// è·å–æœ‰æ•ˆæ•°é‡
 	int nValidCount = 0;
 	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
 	{
 		nValidCount += (m_ArrayFishInfo.GetAt(nFishIndex).bRepeatCreate) ? 1 : 0;
 	}
 
-	// ÅĞ¶ÏÊıÁ¿
+	// åˆ¤æ–­æ•°é‡
 	if( nValidCount > nCreateCount )
 	{
 		return;
 	}
 
-	// ´´½¨Ê±¼ä
+	// åˆ›å»ºæ—¶é—´
 	uint unCreateTime = nBeginTime;
 
-	// Ğ¡ÓãÈº
+	// å°é±¼ç¾¤
 	if( (m_nAppearFishCount % 16) == 0 )
 	{
-		// Ğ¡ÓãÊıÁ¿
+		// å°é±¼æ•°é‡
 		int nNumber = (rand() % 3) + 3;
 		byte cbFishType = RandomArea(6, 21, 19, 18, 16,13,12);
 
-		// Õı³£ÓãÈº
+		// æ­£å¸¸é±¼ç¾¤
 		if ( rand() % 2 == 0 )
 		{
 			CreateFish( nNumber, cbFishType, uint_max, unCreateTime, 1000, 0.f, true, true, KillerType_No, INVALID_CHAIR, CShortPoint(0, 0), 0.f, false );
 		}
-		// ±¬Õ¨ÓãÈº
+		// çˆ†ç‚¸é±¼ç¾¤
 		else
 		{
-			// Ëæ»úÂ·¾¶
+			// éšæœºè·¯å¾„
 			int nBezierCount = 0;
 			tagBezierPoint TBezierPoint[BEZIER_POINT_MAX];
 			RandomPath( cbFishType, TBezierPoint, nBezierCount );
@@ -4087,7 +4087,7 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 			CreateFishEx( 1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(0, -50), 0.f, false );
 		}
 	}
-	// µ¥ÌõÓã
+	// å•æ¡é±¼
 	else
 	{
 		if (rand()%100 < m_iCreatJiLv)
@@ -4102,13 +4102,13 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 	}
 }
 
-// ²¶»ñµ½Óã
+// æ•è·åˆ°é±¼
 LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint nFishCatchKey, int nMultipleIndex, EnumPlayCatchType nPlayCatchType )
 {
-	// ÔİÎŞ±¶Êı
+	// æš‚æ— å€æ•°
 	if( nMultipleIndex == Multiple_Max )
 	{
-		_Assert( false && "²¶»ñÓã±¶ÊıÒì³£¡£" );
+		_Assert( false && "æ•è·é±¼å€æ•°å¼‚å¸¸ã€‚" );
 
 		return 0;
 	}
@@ -4116,199 +4116,199 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	{
 		return 0;
 	}
-	// ËÀÓãĞÅÏ¢
+	// æ­»é±¼ä¿¡æ¯
 	int nDeathScore = 0;
 	int nDeathCount = 0;
 
-	// ¸üĞÂ·ÖÊı¼¸ÂÊ
+	// æ›´æ–°åˆ†æ•°å‡ ç‡
 	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
 	{
-		// »ñÈ¡ĞÅÏ¢
+		// è·å–ä¿¡æ¯
 		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
 
-		// ¸üĞÂ·ÖÊı¼¸ÂÊ
+		// æ›´æ–°åˆ†æ•°å‡ ç‡
 		TFishInfo.nScoreChance = TFishInfo.nFishScore;
 	}
 
-	// ±éÀúÓã
+	// éå†é±¼
 	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
 	{
-		// »ñÈ¡ĞÅÏ¢
+		// è·å–ä¿¡æ¯
 		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
 
-		// ·Ç²¶»ñÓã
+		// éæ•è·é±¼
 		if ( TFishInfo.nFishKey != nFishCatchKey )
 		{
 			continue;
 		}
 
-		// ĞŞ¸ÄĞÅÏ¢
+		// ä¿®æ”¹ä¿¡æ¯
 		nDeathScore += TFishInfo.nFishScore;
 		nDeathCount += 1;
 
-		// ÌØÊâÓã¹ıÂË
+		// ç‰¹æ®Šé±¼è¿‡æ»¤
 		if ( TFishInfo.nFishState != FishState_Killer /*&& TFishInfo.nFishType != FishType_ZhongYiTang*/ )
 		{
-			// ·µ»Ø
+			// è¿”å›
 			break;
 		}
 
-		// ÓĞĞ§Î»ÖÃ
+		// æœ‰æ•ˆä½ç½®
 		CDoublePoint PointFish;
 		if ( FishMove( PointFish, TFishInfo ) != FishMoveType_Normal )
 		{
-			// ·µ»Ø
+			// è¿”å›
 			break;
 		}
 
-		// ¼ÆËãÖÜ±ßÓã
+		// è®¡ç®—å‘¨è¾¹é±¼
 		for( int nFishPeripheryIndex = 0; nFishPeripheryIndex < m_ArrayFishInfo.GetCount(); ++nFishPeripheryIndex )
 		{
-			// »ñÈ¡ĞÅÏ¢
+			// è·å–ä¿¡æ¯
 			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nFishPeripheryIndex);
 
-			// ÖØ¸´±È½Ï
+			// é‡å¤æ¯”è¾ƒ
 			if ( TPeripheryInfo.nFishKey == nFishCatchKey )
 			{
 				continue;
 			}
 
-			// ÓĞĞ§Î»ÖÃ
+			// æœ‰æ•ˆä½ç½®
 			CDoublePoint PointPeriphery;
 			if ( FishMove( PointPeriphery, TPeripheryInfo ) != FishMoveType_Normal )
 			{
 				continue;
 			}
 
-			// Á¬´øÓã
+			// è¿å¸¦é±¼
 			bool bRelatedFish = false;
 
-			// É±ÊÖÓã
+			// æ€æ‰‹é±¼
 			if ( TFishInfo.nFishState == FishState_Killer )
 			{
-				// Í¬ÀàÓã
+				// åŒç±»é±¼
 				bRelatedFish = TFishInfo.nFishType == TPeripheryInfo.nFishType;
 			}
 			//else if ( TFishInfo.nFishType == FishType_ZhongYiTang )
 			//{
-			//	// ¶Ì¾àÀë
+			//	// çŸ­è·ç¦»
 			//	bRelatedFish = DistanceOfPoint(PointFish, PointPeriphery) < 300.0;
 			//}
 
-			// ÓĞĞ§Á¬´ø
+			// æœ‰æ•ˆè¿å¸¦
 			if( bRelatedFish )
 			{
-				// ĞŞ¸Ä¼¸ÂÊ
+				// ä¿®æ”¹å‡ ç‡
 				TFishInfo.nScoreChance += TPeripheryInfo.nFishScore;
 
-				// Ìí¼Ó·ÖÊı
+				// æ·»åŠ åˆ†æ•°
 				nDeathScore += TPeripheryInfo.nFishScore;
 				nDeathCount += 1;
 			}
 		}
 
-		// ·µ»Ø
+		// è¿”å›
 		break;
 	}
 
-	// ÎŞĞ§²¶»ñ
+	// æ— æ•ˆæ•è·
 	if( nDeathScore == 0 || nDeathCount == 0 )
 	{
 		return 0;
 	}
 
-	// Íæ¼ÒÖ¸Õë
+	// ç©å®¶æŒ‡é’ˆ
 	//IServerUserItem * pIServerUserItem = m_pITableFrame->GetTableUserItem( wChairID );
 	
-	// ÄÑ¶ÈÖµ
+	// éš¾åº¦å€¼
 	double dModifyChance = DifficultyGame( wChairID, nMultipleIndex );
-	//printf("²¶µ½Óã:Ë÷Òı%d,×ÜÄÑ¶È%llf\n", nMultipleIndex, dModifyChance);
-	// ·ÖÊıĞÅÏ¢
+	//printf("æ•åˆ°é±¼:ç´¢å¼•%d,æ€»éš¾åº¦%llf\n", nMultipleIndex, dModifyChance);
+	// åˆ†æ•°ä¿¡æ¯
 	double dBulletScore = static_cast<double>(m_nMultipleValue[nMultipleIndex] * QianPao_Bullet);
 	double dDeathScore = static_cast<double>(m_nMultipleValue[nMultipleIndex] * nDeathScore);
 
-	// ¼¸ÂÊĞÅÏ¢
+	// å‡ ç‡ä¿¡æ¯
 	nBulletSplit = max( 1, nBulletSplit );
 	double dAppendChance = dBulletScore / (double)nBulletSplit / dDeathScore;
 	double dBulletScale = (double)QianPao_Bullet / (double)nBulletSplit / (double)nDeathCount;
 
-	// ²¶»ñ×Ü·ÖÊı
+	// æ•è·æ€»åˆ†æ•°
 	LONGLONG lTotalCatchScore = 0;
 
-	// É±ÊÖÓã
+	// æ€æ‰‹é±¼
 	bool bFishKiller = false;
 	byte nFishTypeKiller = FishType_Invalid;
 
-	// ÌØÊâÓã
+	// ç‰¹æ®Šé±¼
 	bool bFishSpecial = false;
 	byte cbFishTypeSpecial = 0;
 	CDoublePoint PointSpecial;
 
-	// Í£ÁôÓãËÀÍö
+	// åœç•™é±¼æ­»äº¡
 	bool bStayFish = false;
 
-	// È«ÆÁËÀÍö
+	// å…¨å±æ­»äº¡
 	bool bFishFullScreen = false;
 
-	// ±¬Õ¨ÓãËÀÍö
+	// çˆ†ç‚¸é±¼æ­»äº¡
 	bool bFishExplosion = false;
 	CDoublePoint PointExplosion;
 
-	// ²¶»ñÓãÊı¾İ
+	// æ•è·é±¼æ•°æ®
 	Static CWHArray< tagCatchInfo > ArrayCatchFishInfo;	
 	ArrayCatchFishInfo.RemoveAll();
 
-	// ·ÀÖ¹¸ºÊı, Ôö¼ÓÄÑ¶È
+	// é˜²æ­¢è´Ÿæ•°, å¢åŠ éš¾åº¦
 	//if ( m_dRoomStock[nMultipleIndex] < dDeathScore )
 	//{
 	//	dModifyChance = min( 0.15, dModifyChance );
 	//}
 
-	//// ¸ºÊıÌ«À÷º¦
+	//// è´Ÿæ•°å¤ªå‰å®³
 	//if ( m_dRoomStock[nMultipleIndex] < -100 * m_nMultipleValue[nMultipleIndex] )
 	//{
 	//	dModifyChance = min( 0.05, dModifyChance );
 	//}
 
-	// »úÆ÷ÈËÄ¬ÈÏÄÑ¶È
+	// æœºå™¨äººé»˜è®¤éš¾åº¦
 	if ( IsAndroidUser(wChairID) )
 	{
-		// Ä¬ÈÏÄÑ¶È
+		// é»˜è®¤éš¾åº¦
 		dModifyChance = 1.0;
 
-		// ×î´ó±¶Êı
+		// æœ€å¤§å€æ•°
 		int nMultipleMax = 0;
 		for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 		{
 			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nIndex] );
 		}
 
-		// »úÆ÷ÈËÓ®µÃÌ«¶à
+		// æœºå™¨äººèµ¢å¾—å¤ªå¤š
 		if ( m_lPlayScore[wChairID] - m_lPlayStartScore[wChairID] > 2000 * nMultipleMax )
 		{
 			dModifyChance = 0.5;
 		}
 	}
 
-	// ±ÈÈü·¿¼äÍ³Ò»ÄÑ¶È
+	// æ¯”èµ›æˆ¿é—´ç»Ÿä¸€éš¾åº¦
 	if( m_bCompetitionRoom )
 	{
 		dModifyChance = max(1.2, dModifyChance);
 	}
 
-	// ±éÀúÓã
+	// éå†é±¼
 	for( int nDeathIndex = 0; nDeathIndex < m_ArrayFishInfo.GetCount(); nDeathIndex++ )
 	{
-		// »ñÈ¡ÓãĞÅÏ¢
+		// è·å–é±¼ä¿¡æ¯
 		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
 
-		// ·Ç²¶»ñÓã
+		// éæ•è·é±¼
 		if ( TFishInfo.nFishKey != nFishCatchKey )
 		{
 			continue;
 		}
 
-		// È«¾Ö±¬Õ¨ÅĞ¶Ï
+		// å…¨å±€çˆ†ç‚¸åˆ¤æ–­
 		LONGLONG lPlayExplosionCondition = 0;
 		m_MapPlayExplosionCondition.Lookup( GetUserIDByDeskStation(wChairID), lPlayExplosionCondition );
 		if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao && lPlayExplosionCondition < m_lExplosionCondition )
@@ -4316,174 +4316,174 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 			continue;
 		}
 
-		// ÌØÊâ±ØËÀ
+		// ç‰¹æ®Šå¿…æ­»
 		bool bSpecialDie = false;
 
-		// Èç¹ûÊÇ±¦Ïä, ±¦Ïä¼¸ÂÊÖ±½Ó20%
+		// å¦‚æœæ˜¯å®ç®±, å®ç®±å‡ ç‡ç›´æ¥20%
 		if ( TFishInfo.nFishType == FishType_BaoXiang && RAND_TRUE_FALSE(20, 80) )
 		{
 			bSpecialDie = true;
 		}
 
-		// Èç¹ûÊÇ¼¤¹â±ØÖĞ
+		// å¦‚æœæ˜¯æ¿€å…‰å¿…ä¸­
 		if ( nPlayCatchType == EPCT_Laser )
 		{
 			bSpecialDie = true;
 		}
 
-		// ²¶»ñ¼¸ÂÊ
+		// æ•è·å‡ ç‡
 		int nCaptureChance = (int)(dBulletScale * 100.0 * dModifyChance);
 		double dWillBeIn = 1.2 / dModifyChance;
 
-		// ÓÅ»¯¼¸ÂÊ
+		// ä¼˜åŒ–å‡ ç‡
 		nCaptureChance = max( nCaptureChance, 1 );
 
-		// ·ÇÌØÊâ´¦Àí, ÏµÍ³·ÀÖ¹¸ºÊı
+		// éç‰¹æ®Šå¤„ç†, ç³»ç»Ÿé˜²æ­¢è´Ÿæ•°
 		//if ( !bSpecialDie && m_dRoomStock[nMultipleIndex] < dDeathScore && !m_bCompetitionRoom )
 		//{
 		//	dWillBeIn = max( 2.0, dWillBeIn );
 		//	nCaptureChance = 1;
 		//}
 
-		// Ìí¼Ó»ùÊı
+		// æ·»åŠ åŸºæ•°
 		TFishInfo.dCurChance += dAppendChance;
 
-		// ²¶»ñµ½Óã
+		// æ•è·åˆ°é±¼
 		if ( bSpecialDie || TFishInfo.dCurChance > dWillBeIn || ( RAND_TRUE_FALSE( nCaptureChance, TFishInfo.nScoreChance * 100 ) ) )
 		{
-			// ²¶»ñ±¬Õ¨Óã
+			// æ•è·çˆ†ç‚¸é±¼
 			if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao )
 			{
-				// Çå¿ÕÊı¾İ
+				// æ¸…ç©ºæ•°æ®
 				m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(wChairID), 0 );
 			}
 
-			// ²¶»ñÖĞÓã
+			// æ•è·ä¸­é±¼
 			lTotalCatchScore += CatchInFish( wChairID, nMultipleIndex, nPlayCatchType, TFishInfo, ArrayCatchFishInfo );
 
-			// ¼ÇÂ¼É±ÊÖÓã
+			// è®°å½•æ€æ‰‹é±¼
 			if ( TFishInfo.nFishState == FishState_Killer && !bFishKiller )
 			{
-				// ¼ÇÂ¼ĞÅÏ¢
+				// è®°å½•ä¿¡æ¯
 				CDoublePoint PointKeller;
 				bFishKiller = (FishMove( PointKeller, TFishInfo ) == FishMoveType_Normal);
 				nFishTypeKiller = TFishInfo.nFishType;
 			}
 
-			// ¼ÇÂ¼ÓãÍõ
+			// è®°å½•é±¼ç‹
 			if ( TFishInfo.nFishState == FishState_King && !bFishSpecial )
 			{
-				// ¼ÇÂ¼ĞÅÏ¢
+				// è®°å½•ä¿¡æ¯
 				bFishSpecial = (FishMove( PointSpecial, TFishInfo ) == FishMoveType_Normal);
 				cbFishTypeSpecial = TFishInfo.nFishType;
 			}
 
-			// ¼ÇÂ¼Í£ÁôÓã
+			// è®°å½•åœç•™é±¼
 			//if ( TFishInfo.nFishType == FishType_ShuiHuZhuan && !bStayFish )
 			//{
-			//	// ¼ÇÂ¼ĞÅÏ¢
+			//	// è®°å½•ä¿¡æ¯
 			//	CDoublePoint PointStay;
 			//	bStayFish = (FishMove( PointStay, TFishInfo ) == FishMoveType_Normal);
 			//}
 
-			//// ¼ÇÂ¼È«ÆÁ±¬Õ¨
+			//// è®°å½•å…¨å±çˆ†ç‚¸
 			//if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao && !bFishFullScreen )
 			//{
-			//	// ¼ÇÂ¼ĞÅÏ¢
+			//	// è®°å½•ä¿¡æ¯
 			//	CDoublePoint PointFullScreen;
 			//	bFishFullScreen = (FishMove( PointFullScreen, TFishInfo ) == FishMoveType_Normal);
 			//}
 
-			//// ¼ÇÂ¼±¬Õ¨Óã
+			//// è®°å½•çˆ†ç‚¸é±¼
 			//if ( TFishInfo.nFishType == FishType_ZhongYiTang && !bFishExplosion )
 			//{
-			//	// ¼ÇÂ¼ĞÅÏ¢
+			//	// è®°å½•ä¿¡æ¯
 			//	bFishExplosion = (FishMove( PointExplosion, TFishInfo ) == FishMoveType_Normal);
 			//}
 
-			// É¾³ıÓã
+			// åˆ é™¤é±¼
 			m_ArrayFishInfo.RemoveAt(nDeathIndex);
 		}
 
-		// ÍË³ö
+		// é€€å‡º
 		break;
 	}
 
-	// É±ÊÖÓã¼ÆËã
+	// æ€æ‰‹é±¼è®¡ç®—
 	if ( bFishKiller )
 	{
-		// ±éÀúÓã
+		// éå†é±¼
 		int nDeathIndex = 0; 
 		while( nDeathIndex < m_ArrayFishInfo.GetCount() )
 		{
-			// »ñÈ¡ĞÅÏ¢
+			// è·å–ä¿¡æ¯
 			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
 
-			// ÖÜ±ßÓã¾àÀë
+			// å‘¨è¾¹é±¼è·ç¦»
 			CDoublePoint PointPeriphery;
 			if( FishMove( PointPeriphery, TPeripheryInfo ) == FishMoveType_Normal && nFishTypeKiller == TPeripheryInfo.nFishType )
 			{
-				// ²¶»ñÖĞÓã
+				// æ•è·ä¸­é±¼
 				lTotalCatchScore += CatchInFish( wChairID, nMultipleIndex, EPCT_Killer, TPeripheryInfo, ArrayCatchFishInfo );
 
-				// É¾³ıÓã
+				// åˆ é™¤é±¼
 				m_ArrayFishInfo.RemoveAt(nDeathIndex);
 
-				// ¼ÌĞø
+				// ç»§ç»­
 				continue;
 			}
 
-			// ÏÂÒ»¸ö
+			// ä¸‹ä¸€ä¸ª
 			++nDeathIndex;
 		}
 	}
 
-	// ÌØÊâÓã¼ÆËã
+	// ç‰¹æ®Šé±¼è®¡ç®—
 	if ( bFishSpecial && m_bOpenShoalFish)
 	{
-		// ´´½¨ÓãÕó
+		// åˆ›å»ºé±¼é˜µ
 		SpecialFishMatrix( cbFishTypeSpecial, PointSpecial );
 	}
 
-	// È«ÆÁ±¬Õ¨
+	// å…¨å±çˆ†ç‚¸
 	if ( bFishFullScreen )
 	{
-		// ±éÀúÓã
+		// éå†é±¼
 		LONGLONG lFishFullScreenScore = 0;
 		int nDeathIndex = 0; 
 		while( nDeathIndex < m_ArrayFishInfo.GetCount() )
 		{
-			// »ñÈ¡ĞÅÏ¢
+			// è·å–ä¿¡æ¯
 			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
 
-			// ÖÜ±ßÓã¾àÀë
+			// å‘¨è¾¹é±¼è·ç¦»
 			CDoublePoint PointPeriphery;
 			if( FishMove( PointPeriphery, TPeripheryInfo ) == FishMoveType_Normal && PointPeriphery.x > 0 && PointPeriphery.x < DEFAULE_WIDTH && PointPeriphery.y > 0 && PointPeriphery.y < DEFAULE_HEIGHT )
 			{
-				// ²¶»ñÖĞÓã
+				// æ•è·ä¸­é±¼
 				LONGLONG lCatchScore = CatchInFish( wChairID, nMultipleIndex, EPCT_FullScreen, TPeripheryInfo, ArrayCatchFishInfo );
 				lTotalCatchScore += lCatchScore;
 				lFishFullScreenScore += lCatchScore;
 
-				// É¾³ıÓã
+				// åˆ é™¤é±¼
 				m_ArrayFishInfo.RemoveAt(nDeathIndex);
 
-				// ¼ÌĞø
+				// ç»§ç»­
 				continue;
 			}
 
-			// ÏÂÒ»¸ö
+			// ä¸‹ä¸€ä¸ª
 			++nDeathIndex;
 		}
 
-		// ×î´ó±¶Êı
+		// æœ€å¤§å€æ•°
 		int nMultipleMax = 0;
 		for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 		{
 			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nIndex] );
 		}
 
-		// »¹Ô­·ÖÊı
+		// è¿˜åŸåˆ†æ•°
 		if( !IsAndroidUser(wChairID) )
 		{
 			m_dDartStock += nMultipleMax * m_nExplosionStart - lFishFullScreenScore;
@@ -4495,55 +4495,55 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		}
 	}
 
-	// ¾Ö²¿±¬Õ¨
+	// å±€éƒ¨çˆ†ç‚¸
 	if( bFishExplosion )
 	{
-		// ±éÀúÓã
+		// éå†é±¼
 		int nDeathIndex = 0; 
 		while( nDeathIndex < m_ArrayFishInfo.GetCount() )
 		{
-			// »ñÈ¡ĞÅÏ¢
+			// è·å–ä¿¡æ¯
 			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
 
-			// ÖÜ±ßÓã¾àÀë
+			// å‘¨è¾¹é±¼è·ç¦»
 			CDoublePoint PointPeriphery;
 			if( FishMove( PointPeriphery, TPeripheryInfo ) == FishMoveType_Normal && DistanceOfPoint(PointExplosion, PointPeriphery) < 300.0 && TPeripheryInfo.nFishType != FishType_BaoZhaFeiBiao )
 			{
-				// ²¶»ñÖĞÓã
+				// æ•è·ä¸­é±¼
 				lTotalCatchScore += CatchInFish( wChairID, nMultipleIndex, EPCT_Explosion, TPeripheryInfo, ArrayCatchFishInfo );
 
-				// É¾³ıÓã
+				// åˆ é™¤é±¼
 				m_ArrayFishInfo.RemoveAt(nDeathIndex);
 
-				// ¼ÌĞø
+				// ç»§ç»­
 				continue;
 			}
 
-			// ÏÂÒ»¸ö
+			// ä¸‹ä¸€ä¸ª
 			++nDeathIndex;
 		}
 	}
 
-	// ·¢ËÍ²¶»ñÏûÏ¢
+	// å‘é€æ•è·æ¶ˆæ¯
 	SendCatchFish( wChairID, ArrayCatchFishInfo );
 
-	// Í£ÁôÏûÏ¢
+	// åœç•™æ¶ˆæ¯
 	if ( bStayFish )
 	{
 		//FishFreeze( timeGetTime() - m_nStartTime );
 	}
 
-	// ·µ»ØĞÅÏ¢
+	// è¿”å›ä¿¡æ¯
 	return lTotalCatchScore;
 }
 
-// ±È½ÏÓã
+// æ¯”è¾ƒé±¼
 bool CTableFrameSink::ISFishCatchKey( uint nFishKey, CWHArray< uint > & ArrayFishCatchKey )
 {
-	// ±éÀú²¶»ñ
+	// éå†æ•è·
 	for ( int nCatchIndex = 0; nCatchIndex < ArrayFishCatchKey.GetCount(); ++nCatchIndex )
 	{
-		// ÅĞ¶ÏÓĞĞ§²¶»ñ
+		// åˆ¤æ–­æœ‰æ•ˆæ•è·
 		if ( ArrayFishCatchKey[nCatchIndex] != 0 && ArrayFishCatchKey[nCatchIndex] == nFishKey )
 		{
 			return true;
@@ -4553,25 +4553,25 @@ bool CTableFrameSink::ISFishCatchKey( uint nFishKey, CWHArray< uint > & ArrayFis
 	return false;
 }
 
-// ²¶ÖĞÓã
+// æ•ä¸­é±¼
 LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPlayCatchType nPlayCatchType, tagFishInfo & TFishInfo, CWHArray< tagCatchInfo > & ArrayCatchFishInfo )
 {
-	// Óã·ÖÊı
+	// é±¼åˆ†æ•°
 	int nFishScore = TFishInfo.nFishScore;
 
-	// Ìí¼ÓË®²İ
+	// æ·»åŠ æ°´è‰
 	if( TFishInfo.nFishState == FishState_Aquatic )
 	{
 		nFishScore += 8;
 	}
 
-	// ºĞ×Ó±¬Õ¨
+	// ç›’å­çˆ†ç‚¸
 	if( TFishInfo.nFishType == FishType_BaoXiang )
 	{
 		nFishScore = 0;
 	}
 
-	//Èç¹ûÊÇµÀ¾ßÖ±½Ó¼ÓÈë±³°ü
+	//å¦‚æœæ˜¯é“å…·ç›´æ¥åŠ å…¥èƒŒåŒ…
 	if (TFishInfo.nFishType == FishType_Hong_Bao)
 	{
 		nFishScore = 0;
@@ -4608,43 +4608,43 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 			}
 		}	
 	}
-	// ²¶»ñĞÅÏ¢
+	// æ•è·ä¿¡æ¯
 	LONGLONG lCatchScore = (LONGLONG)((LONGLONG)nFishScore * (LONGLONG)m_nMultipleValue[nMultipleIndex]);
 
-	// Íæ¼ÒÊÕÈë
+	// ç©å®¶æ”¶å…¥
 	PlayerIncome( wChairID, nMultipleIndex, lCatchScore );
 
-	// ºĞ×Ó±¬Õ¨
+	// ç›’å­çˆ†ç‚¸
 	if( TFishInfo.nFishType == FishType_BaoXiang )
 	{
-		// »î¶¯ÖØÔØ
+		// æ´»åŠ¨é‡è½½
 		m_bPlaySupply[wChairID] = false;
 
-		// Èç¹ûÊÇ»úÆ÷ÈË£¬¾Í²»Òª³öÏÖ¼¤¹â
+		// å¦‚æœæ˜¯æœºå™¨äººï¼Œå°±ä¸è¦å‡ºç°æ¿€å…‰
 		int nLaserChance = m_nLaserChance;
 		if ( IsAndroidUser(wChairID) )
 		{
 			nLaserChance = 0;
 		}
 
-		// ²¹¸ø»î¶¯
+		// è¡¥ç»™æ´»åŠ¨
 		int nBoxActivity = RandomArea(8, nLaserChance, m_nSpeedChance, m_nGiftChance[0], m_nGiftChance[1], m_nGiftChance[2], m_nGiftChance[3], m_nGiftChance[4], m_nNullChance);
 
-		// Èç¹û¿â´æÎª¹ıµÍ£¬Ö»³öÇ¿»¯Àà
+		// å¦‚æœåº“å­˜ä¸ºè¿‡ä½ï¼Œåªå‡ºå¼ºåŒ–ç±»
 		//if( m_dRoomStock[nMultipleIndex] < m_nMultipleValue[nMultipleIndex] * 100.0 )
 		//{
 		//	nBoxActivity = RandomArea(8, 0, m_nSpeedChance, 0, 0, 0, 0, 0, m_nNullChance);
 		//}
 
-		// ÅĞ¶Ï»î¶¯
+		// åˆ¤æ–­æ´»åŠ¨
 		switch (nBoxActivity)
 		{
-		case 0:	// ¼¤¹â
+		case 0:	// æ¿€å…‰
 			{
-				// ¸üĞÂ¼¤¹âÊ±¼ä£¨5ÃëÎó²îÊ±¼ä£©
+				// æ›´æ–°æ¿€å…‰æ—¶é—´ï¼ˆ5ç§’è¯¯å·®æ—¶é—´ï¼‰
 				m_nLaserPlayTime[wChairID] = m_nLaserTime + 5;
 
-				// ·¢ËÍ¼¤¹âÏûÏ¢
+				// å‘é€æ¿€å…‰æ¶ˆæ¯
 				CMD_S_Supply CMDSSupply;
 				CMDSSupply.wChairID = wChairID;
 				CMDSSupply.lSupplyCount = m_nLaserTime;
@@ -4652,12 +4652,12 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
 			}
 			break;
-		case 1:	// ¼ÓËÙ
+		case 1:	// åŠ é€Ÿ
 			{
-				// ¸üĞÂ¼ÓËÙÊ±¼ä£¨2ÃëÎó²îÊ±¼ä£©
+				// æ›´æ–°åŠ é€Ÿæ—¶é—´ï¼ˆ2ç§’è¯¯å·®æ—¶é—´ï¼‰
 				m_nSpeedPlayTime[wChairID] = m_nSpeedTime + 2;
 
-				// ·¢ËÍ¼ÓËÙÏûÏ¢
+				// å‘é€åŠ é€Ÿæ¶ˆæ¯
 				CMD_S_Supply CMDSSupply;
 				CMDSSupply.wChairID = wChairID;
 				CMDSSupply.lSupplyCount = m_nSpeedTime;
@@ -4665,33 +4665,33 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
 			}
 			break;
-		case 2:	// ÔùËÍ½ğ±Ò
+		case 2:	// èµ é€é‡‘å¸
 		case 3:
 		case 4:
 		case 5:
 		case 6:
 			{
-				// ¸üĞÂ²¶»ñ·ÖÊı
+				// æ›´æ–°æ•è·åˆ†æ•°
 				lCatchScore = m_nGiftScore[ nBoxActivity - 2 ] * TFishInfo.nFishScore;
 
-				// ·¢ËÍÔùËÍÏûÏ¢
+				// å‘é€èµ é€æ¶ˆæ¯
 				CMD_S_Supply CMDSSupply;
 				CMDSSupply.wChairID = wChairID;
 				CMDSSupply.lSupplyCount = lCatchScore;
 				CMDSSupply.nSupplyType = EST_Gift;
 				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
 
-				// Íæ¼ÒÊÕÈë
+				// ç©å®¶æ”¶å…¥
 				PlayerIncome( wChairID, nMultipleIndex, lCatchScore );
 
-				// ´ó±¶·¢ËÍĞÅÏ¢
+				// å¤§å€å‘é€ä¿¡æ¯
 				SendAwardTip(wChairID, FishType_BaoXiang, m_nGiftScore[ nBoxActivity - 2 ], lCatchScore, EST_Cold);
-			//	printf("Ïä×Ó·¢ËÍ:%d\n", m_nGiftScore[nBoxActivity - 2]);
+			//	printf("ç®±å­å‘é€:%d\n", m_nGiftScore[nBoxActivity - 2]);
 			}
 			break;
-		case 7:	// ¿Õ±¦Ïä
+		case 7:	// ç©ºå®ç®±
 			{
-				// ·¢ËÍ¿Õ±¦ÏäÏûÏ¢
+				// å‘é€ç©ºå®ç®±æ¶ˆæ¯
 				CMD_S_Supply CMDSSupply;
 				CMDSSupply.wChairID = wChairID;
 				CMDSSupply.lSupplyCount = 0;
@@ -4704,15 +4704,15 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 	else
 	{
 		
-		// ´ó±¶·¢ËÍĞÅÏ¢
+		// å¤§å€å‘é€ä¿¡æ¯
 		if (m_nFishMultiple[TFishInfo.nFishScore][0] >= m_nAwardMinMultiple && nPlayCatchType == EPCT_Bullet )
 		{	
 			SendAwardTip( wChairID, TFishInfo.nFishType, m_nFishMultiple[TFishInfo.nFishType][0], lCatchScore, EST_Cold );
-			//printf("´ó±¶Êı·¢ËÍ:%d,ÓãÖÖÀà:%d,×îĞ¡¹«¸æ±¶Êı:%d\n", m_nFishMultiple[TFishInfo.nFishType][0], TFishInfo.nFishType, m_nAwardMinMultiple);
+			//printf("å¤§å€æ•°å‘é€:%d,é±¼ç§ç±»:%d,æœ€å°å…¬å‘Šå€æ•°:%d\n", m_nFishMultiple[TFishInfo.nFishType][0], TFishInfo.nFishType, m_nAwardMinMultiple);
 		}
 	}
 
-	// Ìí¼Ó³éË®
+	// æ·»åŠ æŠ½æ°´
 	if (lCatchScore > 0)
 	{
 		m_lplayCutMoney[wChairID] += lCatchScore * m_iRate / 100;
@@ -4720,102 +4720,102 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 	}
 
 
-	// Ìí¼Ó·ÖÊı
+	// æ·»åŠ åˆ†æ•°
 	m_lPlayScore[wChairID] += lCatchScore;
 
-	// Íæ¼Ò²¶»ñÊıÁ¿
+	// ç©å®¶æ•è·æ•°é‡
 	m_lPlayFishCount[wChairID][TFishInfo.nFishType]++;
 
-	// ÉèÖÃ²¶»ñ
+	// è®¾ç½®æ•è·
 	tagCatchInfo TCatchInfo;
 	TCatchInfo.nMultipleCount = TFishInfo.nFishScore;
 	TCatchInfo.nFishKey = TFishInfo.nFishKey;
 	TCatchInfo.lScoreCount = lCatchScore;
 
-	// ¼ÇÂ¼·ÖÊı
+	// è®°å½•åˆ†æ•°
 	ArrayCatchFishInfo.Add(TCatchInfo);
 
 	return lCatchScore;
 }
 
-// ·¢ËÍ²¶»ñÏûÏ¢
+// å‘é€æ•è·æ¶ˆæ¯
 void CTableFrameSink::SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & ArrayCatchFishInfo )
 {
-	// ·¢ËÍËÀÍöÏûÏ¢
+	// å‘é€æ­»äº¡æ¶ˆæ¯
 	WORD wBufferSize = 0;
 	byte cbBuffer[IPC_PACKAGE];
 	int nSendIndex = 0;
 	while( nSendIndex < ArrayCatchFishInfo.GetCount() )
 	{
-		// ³¬³ö½çÏŞ
+		// è¶…å‡ºç•Œé™
 		if ( (wBufferSize + sizeof(CMD_S_CatchFish) + 1) > sizeof(cbBuffer) )
 		{
-			// ·¢ËÍÏûÏ¢
+			// å‘é€æ¶ˆæ¯
 			SendTableData(INVALID_CHAIR, SUB_S_FISH_CATCH, cbBuffer, wBufferSize);
 
-			// ¹éÁãÏûÏ¢
+			// å½’é›¶æ¶ˆæ¯
 			wBufferSize = 0;
 		}
 
-		// »ñÈ¡ĞÅÏ¢
+		// è·å–ä¿¡æ¯
 		tagCatchInfo & TCatchInfo = ArrayCatchFishInfo.GetAt(nSendIndex);
 
-		// ¶¨ÒåÏûÏ¢
+		// å®šä¹‰æ¶ˆæ¯
 		CMD_S_CatchFish CMDCatchFish;
 		CMDCatchFish.wChairID = wChairID;
 		CMDCatchFish.nFishKey = TCatchInfo.nFishKey;
 		CMDCatchFish.nMultipleCount = TCatchInfo.nMultipleCount;
 		CMDCatchFish.lScoreCount = TCatchInfo.lScoreCount;
 
-		// ¹¹ÔìÏûÏ¢
+		// æ„é€ æ¶ˆæ¯
 		CopyMemory(cbBuffer + wBufferSize, &CMDCatchFish, sizeof(CMD_S_CatchFish) );
 		wBufferSize += sizeof(CMD_S_CatchFish);
 
-		// ÏÂÒ»¸ö
+		// ä¸‹ä¸€ä¸ª
 		nSendIndex++;
 	}
 
-	// ÓĞĞ§ÏûÏ¢
+	// æœ‰æ•ˆæ¶ˆæ¯
 	if ( wBufferSize > 0 ) 
 	{
-		// ·¢ËÍÏûÏ¢
+		// å‘é€æ¶ˆæ¯
 		SendTableData(INVALID_CHAIR, SUB_S_FISH_CATCH, cbBuffer, wBufferSize);
 	}
 
 	return ;
 }
 
-// ÓÎÏ·ÄÑ¶È
+// æ¸¸æˆéš¾åº¦
 double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
 {
-	// ·¿¼äÄÑ¶È
+	// æˆ¿é—´éš¾åº¦
 	double dRoomDifficulty = DifficultyRoom( nMultipleIndex );
 
-	// ×À×ÓÄÑ¶È
+	// æ¡Œå­éš¾åº¦
 	//double dTableDifficulty = DifficultyTable( nMultipleIndex );
 
-	// ¸öÈËÄÑ¶È
+	// ä¸ªäººéš¾åº¦
 	//double dPlayDifficulty = DifficultyPlay( wChairID, nMultipleIndex );
 
-	// ÓÎÏ·ÄÑ¶È
+	// æ¸¸æˆéš¾åº¦
 	double dGameDifficulty = 0.0;
 	int nDifficultyCount = 0;
-	//¸öÈËÄÑ¶È
+	//ä¸ªäººéš¾åº¦
 	double dUserdifficulty = 1;
 	long userID = GetUserIDByDeskStation(wChairID);
 	if (userID > 0)
 	{
 		GetUserDifficulty(userID, dUserdifficulty);
 	}
-	//printf("¸öÈËÄÑ¶È:%llf\n", dUserdifficulty);
-	// ÓĞĞ§ÄÑ¶È
+	//printf("ä¸ªäººéš¾åº¦:%llf\n", dUserdifficulty);
+	// æœ‰æ•ˆéš¾åº¦
 	if (m_nDifficultyStart[0])
 	{
 		dGameDifficulty += dUserdifficulty;
 		nDifficultyCount += 1;
 	}
 
-	// ÓĞĞ§ÄÑ¶È
+	// æœ‰æ•ˆéš¾åº¦
 	if( m_nDifficultyStart[0] )
 	{
 		dGameDifficulty += dRoomDifficulty;
@@ -4823,7 +4823,7 @@ double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
 	}
 
 
-	// ÎŞĞ§Æô¶¯
+	// æ— æ•ˆå¯åŠ¨
 	if ( nDifficultyCount == 0 )
 	{
 		dGameDifficulty = 0.5;
@@ -4834,31 +4834,31 @@ double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
 	}
 
 
-	// ¸öÈËÄÑ¶È
+	// ä¸ªäººéš¾åº¦
 	//int UserDifficulty = GetUserControlParam(wChairID);
 	//if (UserDifficulty >=0 && UserDifficulty<1000)
 	//{
 	//	int Lev = UserDifficulty / 100;
 	//	dGameDifficulty = m_dPlayDifficultyValue[Lev];
-	//	//printf("¸öÈËÄÑ¶È:%d,ÄÑ¶ÈµÈ¼¶:%d,ÄÑ¶ÈÏµÊı%lf\n", UserDifficulty, Lev, RoomDifficultyCount[Lev]);
+	//	//printf("ä¸ªäººéš¾åº¦:%d,éš¾åº¦ç­‰çº§:%d,éš¾åº¦ç³»æ•°%lf\n", UserDifficulty, Lev, RoomDifficultyCount[Lev]);
 	//}
 	//else if (UserDifficulty >= 1000)
 	//{
 	//	dGameDifficulty = m_dPlayDifficultyValue[9];
 	//}
-	// ÄÑ¶ÈÖµ
-	//printf("ÄÑ¶ÈÖµ%lf\n", dGameDifficulty);
+	// éš¾åº¦å€¼
+	//printf("éš¾åº¦å€¼%lf\n", dGameDifficulty);
 	return dGameDifficulty;
 }
 
-// ÓÎÏ·ÄÑ¶È
+// æ¸¸æˆéš¾åº¦
 double CTableFrameSink::DifficultyRoom( int nMultipleIndex )
 {
-	// ·¿¼äÄÑ¶È
+	// æˆ¿é—´éš¾åº¦
 	double dRoomDifficulty = 1.0;
-	//ÄÑ¶ÈÏµÊı
+	//éš¾åº¦ç³»æ•°
 	//double m_dRoomDifficultyValue[10] = { 0.05,0.15,0.25,0.5,0.75,1,1.25,1.7,2.5,3.5 };
-	//printf("ÓÎÏ·ÄÑ¶È:%lf\n", m_pooInfo.platformCtrlPercent);
+	//printf("æ¸¸æˆéš¾åº¦:%lf\n", m_pooInfo.platformCtrlPercent);
 	if (m_pDataManage->LoadPoolData())
 	{
 		if (m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent <= 0)
@@ -4880,94 +4880,94 @@ double CTableFrameSink::DifficultyRoom( int nMultipleIndex )
 			{
 				dRoomDifficulty = m_dRoomDifficultyValue[Lev];
 			}
-			//printf("·¿¼äÄÑ¶È:%d,ÄÑ¶ÈµÈ¼¶:%d,ÄÑ¶ÈÏµÊı%lf\n", m_pooInfo.platformCtrlPercent, Lev, RoomDifficultyCount[Lev]);
+			//printf("æˆ¿é—´éš¾åº¦:%d,éš¾åº¦ç­‰çº§:%d,éš¾åº¦ç³»æ•°%lf\n", m_pooInfo.platformCtrlPercent, Lev, RoomDifficultyCount[Lev]);
 		}
 	}
 	
-	// ÄÑ¶ÈË÷Òı
+	// éš¾åº¦ç´¢å¼•
 	//int nDifficultyIndex = 0;
 
-	//// ¼ÆËã·¿¼äÄÑ¶È
+	//// è®¡ç®—æˆ¿é—´éš¾åº¦
 	//for ( nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex )
 	//{
-	//	// ±È½ÏĞÅÏ¢
+	//	// æ¯”è¾ƒä¿¡æ¯
 	//	if( m_dRoomStock[nMultipleIndex] < m_nRoomDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex] )
 	//	{
-	//		// ÉèÖÃÄÑ¶È
+	//		// è®¾ç½®éš¾åº¦
 	//		dRoomDifficulty = m_dRoomDifficultyValue[nDifficultyIndex];
 
 	//		break;
 	//	}
 	//}
 
-	//// ÎŞĞ§ÄÑ¶È
+	//// æ— æ•ˆéš¾åº¦
 	//if( nDifficultyIndex == Difficulty_Max )
 	//{
-	//	// ÉèÖÃÄÑ¶È
+	//	// è®¾ç½®éš¾åº¦
 	//	dRoomDifficulty = m_dRoomDifficultyValue[Difficulty_Max - 1];
 	//}
 
 	return dRoomDifficulty;
 }
 
-// ÓÎÏ·ÄÑ¶È
+// æ¸¸æˆéš¾åº¦
 double CTableFrameSink::DifficultyTable( int nMultipleIndex )
 {
-	// ×À×ÓÄÑ¶È
+	// æ¡Œå­éš¾åº¦
 	double dTableDifficulty = 1.0;
 
-	// ÄÑ¶ÈË÷Òı
+	// éš¾åº¦ç´¢å¼•
 	int nDifficultyIndex = 0;
 
-	// ¼ÆËã×À×ÓÄÑ¶È
+	// è®¡ç®—æ¡Œå­éš¾åº¦
 	for ( nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex )
 	{
-		// ±È½ÏĞÅÏ¢
+		// æ¯”è¾ƒä¿¡æ¯
 		if( _TableStock(nMultipleIndex) < m_nTableDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex] )
 		{
-			// ÉèÖÃÄÑ¶È
+			// è®¾ç½®éš¾åº¦
 			dTableDifficulty = m_dTableDifficultyValue[nDifficultyIndex];
 
 			break;
 		}
 	}
 
-	// ÎŞĞ§ÄÑ¶È
+	// æ— æ•ˆéš¾åº¦
 	if( nDifficultyIndex == Difficulty_Max )
 	{
-		// ÉèÖÃÄÑ¶È
+		// è®¾ç½®éš¾åº¦
 		dTableDifficulty = m_dTableDifficultyValue[Difficulty_Max - 1];
 	}
 
 	return dTableDifficulty;
 }
 
-// ÓÎÏ·ÄÑ¶È
+// æ¸¸æˆéš¾åº¦
 double CTableFrameSink::DifficultyPlay( WORD wChairID, int nMultipleIndex )
 {
-	// ¸öÈËÄÑ¶È
+	// ä¸ªäººéš¾åº¦
 	double dPlayDifficulty = 1.0;
 
-	// ÄÑ¶ÈË÷Òı
+	// éš¾åº¦ç´¢å¼•
 	int nDifficultyIndex = 0;
 
-	// ¼ÆËã¸öÈËÄÑ¶È
+	// è®¡ç®—ä¸ªäººéš¾åº¦
 	for ( nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex )
 	{
-		// ±È½ÏĞÅÏ¢
+		// æ¯”è¾ƒä¿¡æ¯
 		if( _PlayerStock(wChairID, nMultipleIndex) < m_nPlayDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex] )
 		{
-			// ÉèÖÃÄÑ¶È
+			// è®¾ç½®éš¾åº¦
 			dPlayDifficulty = m_dPlayDifficultyValue[nDifficultyIndex];
 
 			break;
 		}
 	}
 
-	// ÎŞĞ§ÄÑ¶È
+	// æ— æ•ˆéš¾åº¦
 	if( nDifficultyIndex == Difficulty_Max )
 	{
-		// ÉèÖÃÄÑ¶È
+		// è®¾ç½®éš¾åº¦
 		dPlayDifficulty = m_dPlayDifficultyValue[Difficulty_Max - 1];
 	}
 
@@ -4975,7 +4975,7 @@ double CTableFrameSink::DifficultyPlay( WORD wChairID, int nMultipleIndex )
 }
 
 
-// ½»»»±äÁ¿
+// äº¤æ¢å˜é‡
 template< typename T > void CTableFrameSink::SwapVariable( T & One, T & Two )
 {
 	T Temp = One;
@@ -4983,7 +4983,7 @@ template< typename T > void CTableFrameSink::SwapVariable( T & One, T & Two )
 	Two = Temp;
 }
 
-// Ğı×ªµã
+// æ—‹è½¬ç‚¹
 CDoublePoint CTableFrameSink::Rotate( CDoublePoint & ptCircle, double dRadian, CDoublePoint & ptSome ) 
 { 
 	CDoublePoint temp; 
@@ -4994,7 +4994,7 @@ CDoublePoint CTableFrameSink::Rotate( CDoublePoint & ptCircle, double dRadian, C
 	return temp; 
 } 
 
-// Ğı×ªµã
+// æ—‹è½¬ç‚¹
 CShortPoint CTableFrameSink::Rotate( CShortPoint & ptCircle, double dRadian, CShortPoint & ptSome ) 
 { 
 	CShortPoint temp; 
@@ -5005,7 +5005,7 @@ CShortPoint CTableFrameSink::Rotate( CShortPoint & ptCircle, double dRadian, CSh
 	return temp; 
 } 
 
-// ÒÑÖªÔ²ĞÄ,»¡¶È,°ë¾¶ ÇóÔ²ÉÏÈÎÒâÒ»
+// å·²çŸ¥åœ†å¿ƒ,å¼§åº¦,åŠå¾„ æ±‚åœ†ä¸Šä»»æ„ä¸€
 CShortPoint CTableFrameSink::RotatePoint( CShortPoint & ptCircle, double dRadian, double dRadius )
 {
 	CShortPoint temp;
@@ -5014,7 +5014,7 @@ CShortPoint CTableFrameSink::RotatePoint( CShortPoint & ptCircle, double dRadian
 	return temp;
 }
 
-// ±´Èû¶ûÇúÏß
+// è´å¡å°”æ›²çº¿
 CDoublePoint CTableFrameSink::PointOnCubicBezier( tagBezierPoint * cp, double t )
 {
 	double   ax = 0.f, bx = 0.f, cx = 0.f;
@@ -5022,7 +5022,7 @@ CDoublePoint CTableFrameSink::PointOnCubicBezier( tagBezierPoint * cp, double t 
 	double   tSquared = 0.f, tCubed = 0.f;
 	CDoublePoint result;
 
-	// ¼ÆËãÏµÊı
+	// è®¡ç®—ç³»æ•°
 	cx = 3.f * (cp->KeyOne.x - cp->BeginPoint.x);
 	bx = 3.f * (cp->KeyTwo.x - cp->KeyOne.x) - cx;
 	ax = cp->EndPoint.x - cp->BeginPoint.x - cx - bx;
@@ -5031,7 +5031,7 @@ CDoublePoint CTableFrameSink::PointOnCubicBezier( tagBezierPoint * cp, double t 
 	by = 3.f * (cp->KeyTwo.y - cp->KeyOne.y) - cy;
 	ay = cp->EndPoint.y - cp->BeginPoint.y - cy - by;
 
-	// ¼ÆËãÇúÏßµã
+	// è®¡ç®—æ›²çº¿ç‚¹
 	tSquared = t * t;
 	tCubed = tSquared * t;
 
@@ -5041,13 +5041,13 @@ CDoublePoint CTableFrameSink::PointOnCubicBezier( tagBezierPoint * cp, double t 
 	return result;
 }
 
-// Á½µã¾àÀë
+// ä¸¤ç‚¹è·ç¦»
 double CTableFrameSink::DistanceOfPoint( CDoublePoint & PointOne, CDoublePoint & PointTwo )
 {
 	return sqrt( pow( abs(PointOne.x - PointTwo.x), 2 ) + pow( abs(PointOne.y - PointTwo.y), 2 ) );
 }
 
-// Ëæ»úÇøÓò
+// éšæœºåŒºåŸŸ
 int CTableFrameSink::RandomArea( int nLen, ... )
 { 
 	ASSERT( nLen > 0 );
@@ -5104,7 +5104,7 @@ int CTableFrameSink::RandomArea( int nLen, ... )
 }
 
 
-// Ê¹ÄÜ¹Ø»úÌØÈ¨ ²¢¹Ø»ú
+// ä½¿èƒ½å…³æœºç‰¹æƒ å¹¶å…³æœº
 bool CTableFrameSink::EnableShutdownPrivilege()
 {
 	HANDLE hProcess = NULL;
@@ -5112,39 +5112,39 @@ bool CTableFrameSink::EnableShutdownPrivilege()
 	LUID uID = {0};
 	TOKEN_PRIVILEGES stToken_Privileges = {0};
 
-	// »ñÈ¡µ±Ç°Ó¦ÓÃ³ÌĞò½ø³Ì¾ä±ú
+	// è·å–å½“å‰åº”ç”¨ç¨‹åºè¿›ç¨‹å¥æŸ„
 	hProcess = ::GetCurrentProcess(); 
 
-	// ´ò¿ªµ±Ç°½ø³ÌµÄ·ÃÎÊÁîÅÆ¾ä±ú(OpenProcessTokenº¯Êıµ÷ÓÃÊ§°Ü·µ»ØÖµÎªÁã)
+	// æ‰“å¼€å½“å‰è¿›ç¨‹çš„è®¿é—®ä»¤ç‰Œå¥æŸ„(OpenProcessTokenå‡½æ•°è°ƒç”¨å¤±è´¥è¿”å›å€¼ä¸ºé›¶)
 	if(!::OpenProcessToken(hProcess,TOKEN_ADJUST_PRIVILEGES,&hToken)) 
 		return false;
 
-	// »ñÈ¡È¨ÏŞÃû³ÆÎª"SeShutdownPrivilege"µÄLUID(LookupPrivilegeValueº¯Êıµ÷ÓÃÊ§°Ü·µ»ØÖµÎªÁã)
+	// è·å–æƒé™åç§°ä¸º"SeShutdownPrivilege"çš„LUID(LookupPrivilegeValueå‡½æ•°è°ƒç”¨å¤±è´¥è¿”å›å€¼ä¸ºé›¶)
 	if(!::LookupPrivilegeValue(NULL,SE_SHUTDOWN_NAME,&uID)) 
 		return false;
 
-	stToken_Privileges.PrivilegeCount = 1;			// Óûµ÷ÕûµÄÈ¨ÏŞ¸öÊı
-	stToken_Privileges.Privileges[0].Luid = uID;	// È¨ÏŞµÄLUID
-	stToken_Privileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; // È¨ÏŞµÄÊôĞÔ,SE_PRIVILEGE_ENABLEDÎªÊ¹ÄÜ¸ÃÈ¨ÏŞ
+	stToken_Privileges.PrivilegeCount = 1;			// æ¬²è°ƒæ•´çš„æƒé™ä¸ªæ•°
+	stToken_Privileges.Privileges[0].Luid = uID;	// æƒé™çš„LUID
+	stToken_Privileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; // æƒé™çš„å±æ€§,SE_PRIVILEGE_ENABLEDä¸ºä½¿èƒ½è¯¥æƒé™
 
-	// µ÷Õû·ÃÎÊÁîÅÆÀïµÄÖ¸¶¨È¨ÏŞ(AdjustTokenPrivilegesº¯Êıµ÷ÓÃÊ§°Ü·µ»ØÖµÎªÁã)
+	// è°ƒæ•´è®¿é—®ä»¤ç‰Œé‡Œçš„æŒ‡å®šæƒé™(AdjustTokenPrivilegeså‡½æ•°è°ƒç”¨å¤±è´¥è¿”å›å€¼ä¸ºé›¶)
 	if(!::AdjustTokenPrivileges(hToken,FALSE,&stToken_Privileges,sizeof stToken_Privileges,NULL,NULL)) 
 		return false;
 
-	// ²é¿´È¨ÏŞÊÇ·ñµ÷Õû³É¹¦
+	// æŸ¥çœ‹æƒé™æ˜¯å¦è°ƒæ•´æˆåŠŸ
 	if(::GetLastError() != ERROR_SUCCESS) 
 		return false;
 
-	// ¹Ø±Õ¾ä±ú
+	// å…³é—­å¥æŸ„
 	::CloseHandle(hToken);
 
-	// ¹Ø»ú°É
+	// å…³æœºå§
 	ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE,0);
 
 	return true;
 }
 
-// ÅĞ¶Ï»úÆ÷ÈË
+// åˆ¤æ–­æœºå™¨äºº
 bool CTableFrameSink::IsAndroidUser(BYTE wChairID )
 {
 	//IServerUserItem * pIAndroidUserItem = m_pITableFrame->GetTableUserItem( wChairID );
@@ -5159,10 +5159,10 @@ bool CTableFrameSink::IsAndroidUser(BYTE wChairID )
 	return false;
 }
 
-// ³õÊ¼»¯Íæ¼Ò
+// åˆå§‹åŒ–ç©å®¶
 void CTableFrameSink::InitializePlayer( WORD wChairID )
 {
-	// ³õÊ¼»¯ĞÅÏ¢
+	// åˆå§‹åŒ–ä¿¡æ¯
 	m_dwPlayID[wChairID] = 0;
 	m_lPlayScore[wChairID] = 0;
 	m_lPlayStartScore[wChairID] = 0;
@@ -5182,81 +5182,81 @@ void CTableFrameSink::InitializePlayer( WORD wChairID )
 	m_nLaserPlayTime[wChairID] = 0;
 	m_nSpeedPlayTime[wChairID] = 0;
 
-	// É¾³ıÌØ¶¨Óã
+	// åˆ é™¤ç‰¹å®šé±¼
 	int nFishIndex = 0;
 	while ( nFishIndex < m_ArrayFishInfo.GetCount() )
 	{
-		// »ñÈ¡ÓãĞÅÏ¢
+		// è·å–é±¼ä¿¡æ¯
 		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
 
-		// ¶Ô±ÈÎ»ÖÃ
+		// å¯¹æ¯”ä½ç½®
 		if ( TFishInfo.wHitChair == wChairID )
 		{
-			// É¾³ıÓã
+			// åˆ é™¤é±¼
 			m_ArrayFishInfo.RemoveAt( nFishIndex );
 
 			continue;
 		}
 
-		// ÏÂÒ»¸ö
+		// ä¸‹ä¸€ä¸ª
 		nFishIndex++;
 	}
 }
 
-// Íæ¼ÒÏûºÄ
+// ç©å®¶æ¶ˆè€—
 void CTableFrameSink::PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG lConsumeCount )
 {
-	// »úÆ÷ÈË²»²ÎÓë
+	// æœºå™¨äººä¸å‚ä¸
 	if( IsAndroidUser(wChairID) )
 	{
 		return ;
 	}
 
-	// ÎŞĞ§±¶Êı
+	// æ— æ•ˆå€æ•°
 	if( nMultipleIndex == Multiple_Max )
 	{
 		return ;
 	}
 
-	// ÎŞ·ÖÀÛ¼Æ
+	// æ— åˆ†ç´¯è®¡
 	if( lConsumeCount <= 0 )
 	{
 		return ;
 	}
 
-	// ¿â´æ¼ÇÂ¼
+	// åº“å­˜è®°å½•
 	m_lStockCurrent += lConsumeCount;
 
-	// ×ª»»ÏûºÄ
+	// è½¬æ¢æ¶ˆè€—
 	double dConsumption = static_cast<double>(lConsumeCount);
 
-	// ³éË®³éÈ¡
+	// æŠ½æ°´æŠ½å–
 	double dExtractTax = dConsumption * m_dTaxRatio;
 	dConsumption -= dExtractTax;
 	m_dWholeTax[nMultipleIndex] += dExtractTax;
 
-	// ·¿¼äÀÛ¼Æ
+	// æˆ¿é—´ç´¯è®¡
 	double dExtractDart = dConsumption * ( (double)m_nExplosionProportion / 1000.0 );
 	dConsumption -= dExtractDart;
 	m_dDartStock += dExtractDart;
 
-	// ·¿¼äÀÛ¼Æ
+	// æˆ¿é—´ç´¯è®¡
 	//m_dRoomStock[nMultipleIndex] += dConsumption;
 
-	// ×À×ÓÀÛ¼Æ
+	// æ¡Œå­ç´¯è®¡
 	double & dTableStock  = _TableStock( nMultipleIndex );
 	dTableStock += dConsumption;
 
-	// ¸öÈËÏûºÄ
+	// ä¸ªäººæ¶ˆè€—
 	double & dPlayStock = _PlayerStock( wChairID, nMultipleIndex );
 	dPlayStock -= static_cast<double>(lConsumeCount);
 
-	// ·¢ËÍÏûÏ¢
+	// å‘é€æ¶ˆæ¯
 	GameUserInfo * pIServerUserItem = GetTableUserItem(wChairID);
-	// ÅĞ¶ÏÈ¨ÏŞ
+	// åˆ¤æ–­æƒé™
 	if( pIServerUserItem != NULL &&((pIServerUserItem->userStatus&USER_IDENTITY_TYPE_SUPER) == USER_IDENTITY_TYPE_SUPER))
 	{
-		// ¶¨ÒåÏûÏ¢
+		// å®šä¹‰æ¶ˆæ¯
 		CMD_S_System CMDSSystem;
 		CMDSSystem.dRoomStock = m_dRoomStock[nMultipleIndex];
 		CMDSSystem.dTableStock = dTableStock;
@@ -5264,74 +5264,74 @@ void CTableFrameSink::PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG
 		CMDSSystem.dDartStock = m_dDartStock;
 		CMDSSystem.dGameDifficulty = DifficultyGame( wChairID, nMultipleIndex );
 
-		// ·¢ËÍÏûÏ¢
+		// å‘é€æ¶ˆæ¯
 		SendUserItemData( pIServerUserItem, SUB_S_SYSTEM, &CMDSSystem, sizeof(CMD_S_System) );
 	}
 
 	return ;
 }
 
-// Íæ¼ÒÊÕÈë
+// ç©å®¶æ”¶å…¥
 void CTableFrameSink::PlayerIncome( WORD wChairID, int nMultipleIndex, LONGLONG lIncomeCount )
 {
-	// »úÆ÷ÈË²»²ÎÓë
+	// æœºå™¨äººä¸å‚ä¸
 	if( IsAndroidUser(wChairID) )
 	{
 		return ;
 	}
 
-	// ÎŞĞ§±¶Êı
+	// æ— æ•ˆå€æ•°
 	if( nMultipleIndex == Multiple_Max )
 	{
 		return ;
 	}
 
-	// ÎŞ·ÖÀÛ¼Æ
+	// æ— åˆ†ç´¯è®¡
 	if( lIncomeCount <= 0 )
 	{
 		return ;
 	}
 
-	// ¿â´æ¼ÇÂ¼
+	// åº“å­˜è®°å½•
 	m_lStockCurrent -= lIncomeCount;
 
-	// ×ª»»ÏûºÄ
+	// è½¬æ¢æ¶ˆè€—
 	double dIncomeCount = static_cast<double>(lIncomeCount);
 
-	// ·¿¼äÏûºÄ
+	// æˆ¿é—´æ¶ˆè€—
 	//m_dRoomStock[nMultipleIndex] -= dIncomeCount;
 
-	// ×À×ÓÏûºÄ
+	// æ¡Œå­æ¶ˆè€—
 	double & dTableStock = _TableStock( nMultipleIndex );
 	dTableStock -= dIncomeCount;
 
-	// ¸öÈËÀÛ¼Æ
+	// ä¸ªäººç´¯è®¡
 	double & dPlayStock = _PlayerStock( wChairID, nMultipleIndex );
 	dPlayStock += dIncomeCount;
 
 	return ;
 }
 
-// ×À×Ó¿â´æ
+// æ¡Œå­åº“å­˜
 double & CTableFrameSink::_TableStock( int nMultipleIndex )
 {
 	return m_pdTableStock[nMultipleIndex][/*m_pITableFrame->GetTableID()*/1];
 }
 
-// ×À×Ó¿â´æ
+// æ¡Œå­åº“å­˜
 double & CTableFrameSink::_TableStock( unsigned short TableID, int nMultipleIndex )
 {
 	return m_pdTableStock[nMultipleIndex][TableID];
 }
 
-// Íæ¼Ò¿â´æ
+// ç©å®¶åº“å­˜
 double & CTableFrameSink::_PlayerStock( WORD wChairID, int nMultipleIndex )
 {
 	return m_dPlayStock[wChairID][nMultipleIndex];
 }
 
 
-//»ñÈ¡Íæ¼ÒĞÅÏ¢
+//è·å–ç©å®¶ä¿¡æ¯
 GameUserInfo * CTableFrameSink::GetTableUserItem(WORD wChairID)
 {
 	if (!m_pDataManage)
@@ -5349,7 +5349,7 @@ GameUserInfo * CTableFrameSink::GetTableUserItem(WORD wChairID)
 }
 
 
-//¸øÍæ¼Ò·¢ËÍÊı¾İ
+//ç»™ç©å®¶å‘é€æ•°æ®
 bool CTableFrameSink::SendUserItemData(GameUserInfo * pIServerUserItem, WORD wSubCmdID, VOID * pData, WORD wDataSize)
 {
 	if (!pIServerUserItem)
@@ -5375,7 +5375,7 @@ bool CTableFrameSink::GameBegin(BYTE bBeginFlag)
 	return __super::GameBegin(bBeginFlag);
 }
 
-//´òÓ¦ÈÕÖ¾
+//æ‰“åº”æ—¥å¿—
 void CTableFrameSink::DebugPrintf(const char *strOutputString, ...)
 {
 	CRedisLoader* pRedis = m_pDataManage->GetRedis();
@@ -5398,13 +5398,13 @@ void CTableFrameSink::DebugPrintf(const char *strOutputString, ...)
 	CString strPath = CINIFile::GetAppPath() + GAMENAME + "_log\\";
 	SHCreateDirectoryEx(NULL, strPath, NULL);
 	CTime time = CTime::GetCurrentTime();
-	sprintf(szFilename, "%s%d__%d%02d%02d_ÀîåÓÅüÓã%d.txt", strPath, NAME_ID, time.GetYear(), time.GetMonth(), time.GetDay(), pRoomBaseInfo->gameID);
+	sprintf(szFilename, "%s%d__%d%02d%02d_æé€µåŠˆé±¼%d.txt", strPath, NAME_ID, time.GetYear(), time.GetMonth(), time.GetDay(), pRoomBaseInfo->gameID);
 	FILE *fp = fopen(szFilename, "a");
 	if (NULL == fp)
 	{
 		return;
 	}
-	//²åÈëÊ±¼ä
+	//æ’å…¥æ—¶é—´
 	char cTime[30];
 	::memset(cTime, 0, sizeof(cTime));
 	sprintf(cTime, "[%d:%d:%d] ", time.GetHour(), time.GetMinute(), time.GetSecond());
@@ -5416,11 +5416,11 @@ void CTableFrameSink::DebugPrintf(const char *strOutputString, ...)
 	fclose(fp);
 }
 
-//ÓÃ»§¶ÏÏß
+//ç”¨æˆ·æ–­çº¿
 bool CTableFrameSink::UserNetCut(GameUserInfo* pUser)
 {
 	//UserLeftDesk(pUser);
-	//µ÷ÓÃÌß³ö¸ÃÍæ¼Ò
+	//è°ƒç”¨è¸¢å‡ºè¯¥ç©å®¶
 	KickOutUser(pUser->deskStation, REASON_KICKOUT_STAND_MINLIMIT);
 
 	return true;
@@ -5435,74 +5435,74 @@ bool CTableFrameSink::IsPlayGame(BYTE bDeskStation)
 
 void CTableFrameSink::UserBeKicked(BYTE deskStation)
 {
-	// ¼ì²âÊÇ·ñÓĞÈË
+	// æ£€æµ‹æ˜¯å¦æœ‰äºº
 	for (WORD i = 0; i < PlayChair_Max; ++i)
 	{
 		if (deskStation == i) continue;
 		long  userid = GetUserIDByDeskStation(i);
 		if (userid <= 0) continue;
 
-		//ÓĞÈËÄÇÃ´¾Í½áËãÒ»ÏÂ
-		// ÅĞ¶ÏÓÃ»§
+		//æœ‰äººé‚£ä¹ˆå°±ç»“ç®—ä¸€ä¸‹
+		// åˆ¤æ–­ç”¨æˆ·
 		long PlayeruserID = GetUserIDByDeskStation(deskStation);
 		if (PlayeruserID > 0)
 		{
-			// Íæ¼ÒÖ¸Õë
+			// ç©å®¶æŒ‡é’ˆ
 			//IServerUserItem * pIServerDismiss = m_pITableFrame->GetTableUserItem(nSite);
 			GameUserInfo UserInfo;
 			GetUserData(deskStation, UserInfo);
 
-			// Ğ´·Ö
+			// å†™åˆ†
 			LONGLONG lScore = (m_lPlayScore[deskStation] - m_lPlayStartScore[deskStation]);
 			if (lScore != 0)
 			{
-				// »ı·ÖÎª¸º£¬ ²»ÄÜ³¬¹ı×î´ó·ÖÊı
+				// ç§¯åˆ†ä¸ºè´Ÿï¼Œ ä¸èƒ½è¶…è¿‡æœ€å¤§åˆ†æ•°
 				if (lScore < 0 && (-lScore) > UserInfo.money)
 				{
 					lScore = -UserInfo.money;
 				}
 			}
 
-			// ÓÎÏ·Ê±¼ä
+			// æ¸¸æˆæ—¶é—´
 			DWORD dwEndTime = (DWORD)time(NULL) - m_nPlayDownTime[deskStation];
 
 			ChangeUserPoint(deskStation, lScore, m_lplayCutMoney[i]);
 			m_lplayCutMoney[i] = 0;
 
-			// ±£´æĞ´·Ö
+			// ä¿å­˜å†™åˆ†
 			m_nRoomWrite += (-lScore);
-			// Çå¿ÕÍæ¼ÒĞÅÏ¢
+			// æ¸…ç©ºç©å®¶ä¿¡æ¯
 			InitializePlayer(deskStation);
 
 		}
 
 		return;
 	}
-	//Ö»ÓĞËûÒ»¸öÈË ÄÇÃ´ÓÎÏ·¾ÍÖ±½Ó½áÊøÁË
+	//åªæœ‰ä»–ä¸€ä¸ªäºº é‚£ä¹ˆæ¸¸æˆå°±ç›´æ¥ç»“æŸäº†
 
-	// É¾³ı¶¨Ê±Æ÷
+	// åˆ é™¤å®šæ—¶å™¨
 	KillTimer(IDI_FISH_CREATE);
 	KillTimer(IDI_DELAY);
 	KillTimer(IDI_SECOND);
-	//É¾³ı¸öÈËÄÑ¶È
+	//åˆ é™¤ä¸ªäººéš¾åº¦
 	long userID = GetUserIDByDeskStation(deskStation);
 	DeletePersonalDifficulty(userID);
 
-	// È«¾Ö±¬Õ¨»¹Ô­
+	// å…¨å±€çˆ†ç‚¸è¿˜åŸ
 	if (GetFishCount(FishType_BaoZhaFeiBiao) > 0)
 	{
-		// ×î´ó±¶Êı
+		// æœ€å¤§å€æ•°
 		int nMultipleMax = 0;
 		for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 		{
 			nMultipleMax = max(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 		}
 
-		// ·ÉïÚÏûºÄ
+		// é£é•–æ¶ˆè€—
 		m_dDartStock += nMultipleMax * m_nExplosionStart;
 	}
 
-	// ÓãĞÅÏ¢
+	// é±¼ä¿¡æ¯
 	m_ArrayFishInfo.RemoveAll();
 	m_cbBackIndex = 0;
 	m_nAppearFishCount = 0;
@@ -5510,19 +5510,19 @@ void CTableFrameSink::UserBeKicked(BYTE deskStation)
 	m_bBackExchange = FALSE;
 	m_nStartTime = 0;
 
-	// ÕóÁĞ
+	// é˜µåˆ—
 	m_nFishTeamTime = 0;
 	m_nFishKingTime = 30;
 	ZeroMemory(m_nFishKing, sizeof(m_nFishKing));
 
 	if (IsBegin)
 	{
-		// ½áÊøÓÎÏ·
+		// ç»“æŸæ¸¸æˆ
 		GameFinish(deskStation, GF_NORMAL);
 	}
 }
 
-// ¼¼ÄÜ
+// æŠ€èƒ½
 bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
 {
 	if (sizeof(CMD_C_Skill) != wDataSize) return true;
@@ -5530,7 +5530,7 @@ bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
 	CMD_C_Skill *Skill = (CMD_C_Skill*)pData;
 	if (!Skill)
 	{
-		DebugPrintf("´íÎó:Íæ¼Ò%d£¬¼¼ÄÜ´íÎó", GetUserIDByDeskStation(deskStation));
+		DebugPrintf("é”™è¯¯:ç©å®¶%dï¼ŒæŠ€èƒ½é”™è¯¯", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 
@@ -5545,7 +5545,7 @@ bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
 		}
 		else
 		{
-			SendGameMessage(deskStation, "ÄúµÄ±ù¶³¼¼ÄÜµÀ¾ß²»×ã£¡");
+			SendGameMessage(deskStation, "æ‚¨çš„å†°å†»æŠ€èƒ½é“å…·ä¸è¶³ï¼");
 			return true;
 		}
 	}
@@ -5559,7 +5559,7 @@ bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
 		}
 		else
 		{
-			SendGameMessage(deskStation, "ÄúµÄËø¶¨¼¼ÄÜµÀ¾ß²»×ã£¡");
+			SendGameMessage(deskStation, "æ‚¨çš„é”å®šæŠ€èƒ½é“å…·ä¸è¶³ï¼");
 			return true;
 		}
 	}

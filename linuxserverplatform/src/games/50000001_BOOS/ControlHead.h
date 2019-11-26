@@ -30,147 +30,147 @@ if( Hinstance )											\
 	Hinstance = NULL;									\
 }								
 
-// ¸öÈËÄÑ¶È
+// ä¸ªäººéš¾åº¦
 typedef CMap< unsigned long, unsigned long, double, double > CMapPersonalDifficulty;
 
-// ½Ó¿ÚĞÅÏ¢
+// æ¥å£ä¿¡æ¯
 
-// ¿ØÖÆ»Øµ÷
+// æ§åˆ¶å›è°ƒ
 interface IClientControlCallback
 {
-	// ¿ØÖÆĞÅÏ¢
+	// æ§åˆ¶ä¿¡æ¯
 	virtual bool OnControlInfo( uint nMessageID, void * pData, uint nSize ) = NULL;
 };
 
-// ¿Í»§¶Ë½Ó¿Ú
+// å®¢æˆ·ç«¯æ¥å£
 interface IClientControl
 {
-	// ÊÍ·Å½Ó¿Ú
+	// é‡Šæ”¾æ¥å£
 	virtual void Release() = NULL;
-	// ´´½¨º¯Êı
+	// åˆ›å»ºå‡½æ•°
 	virtual bool Create( CWnd * pParentWnd, IClientControlCallback * pIClientControlCallback ) = NULL;
-	// ÏÔÊ¾´°¿Ú
+	// æ˜¾ç¤ºçª—å£
 	virtual bool ShowWindow( bool bShow ) = NULL;
-	// ÏûÏ¢º¯Êı
+	// æ¶ˆæ¯å‡½æ•°
 	virtual bool OnControlMessage( uint nMessageID, void * pData, uint nSize ) = NULL;
 };
 
-// ¿ØÖÆ»Øµ÷
+// æ§åˆ¶å›è°ƒ
 interface IServerControlCallback
 {
-	// ·µ»ØÅäÖÃ
+	// è¿”å›é…ç½®
 	virtual void GetCustomRule( tagCustomRule & nConfigInfo ) = NULL;
-	// ÉèÖÃÅäÖÃ
+	// è®¾ç½®é…ç½®
 	virtual void SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile ) = NULL;
-	// ·µ»Ø¸öÈËÄÑ¶È
+	// è¿”å›ä¸ªäººéš¾åº¦
 	virtual void GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty ) = NULL;
-	// ÉèÖÃ¸öÈËÄÑ¶È
+	// è®¾ç½®ä¸ªäººéš¾åº¦
 	virtual void SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty ) = NULL;
-	// É¾³ı¸öÈËÄÑ¶È
+	// åˆ é™¤ä¸ªäººéš¾åº¦
 	virtual void DeletePersonalDifficulty( unsigned long lPlayID ) = NULL;
-	// Çå¿Õ¸öÈËÄÑ¶È
+	// æ¸…ç©ºä¸ªäººéš¾åº¦
 	virtual void ClearPersonalDifficulty() = NULL;
-	// »ñÈ¡¿â´æ
+	// è·å–åº“å­˜
 	virtual void GetStock( LONGLONG & lStockInitial, LONGLONG & lStockCurrent ) = NULL;
-	// ÉèÖÃ×À×Ó¿â´æ
+	// è®¾ç½®æ¡Œå­åº“å­˜
 	virtual bool SetTableStock( unsigned short TableID, int nTableStock ) = NULL;
-	// ¿ØÖÆĞÅÏ¢
+	// æ§åˆ¶ä¿¡æ¯
 	virtual bool OnControlInfo( void * pIServerUserItem, uint nMessageID, void * pData, uint nSize ) = NULL;
 };
 
 
-// ·şÎñÆ÷½Ó¿Ú
+// æœåŠ¡å™¨æ¥å£
 interface IServerControl
 {
-	// ÊÍ·Å½Ó¿Ú
+	// é‡Šæ”¾æ¥å£
 	virtual void Release() = NULL;
-	// ´´½¨º¯Êı
+	// åˆ›å»ºå‡½æ•°
 	virtual bool Create( IServerControlCallback * pIServerControlCallback ) = NULL;
-	// ÏûÏ¢º¯Êı
+	// æ¶ˆæ¯å‡½æ•°
 	virtual bool OnControlMessage( void * pIServerUserItem, uint nMessageID, void * pData, uint nSize ) = NULL;
 };
 
 
-// ¿Í»§¶ËÏûÏ¢
-#define SUBC_C_GAME_QUERY				1			// ÓÎÏ·²éÑ¯
-#define SUBC_C_GAME_SET					2			// ÓÎÏ·ÉèÖÃ
+// å®¢æˆ·ç«¯æ¶ˆæ¯
+#define SUBC_C_GAME_QUERY				1			// æ¸¸æˆæŸ¥è¯¢
+#define SUBC_C_GAME_SET					2			// æ¸¸æˆè®¾ç½®
 
-#define SUBC_C_SET_TABLE				3			// ×À×ÓÉèÖÃ
-#define SUBC_C_SET_PERSONAL				4			// ¸öÈËÄÑ¶È
-#define SUBC_C_DELETE_PERSONAL			5			// ¸öÈËÉ¾³ı
-#define SUBC_C_QUERY_PERSONAL			6			// ²éÑ¯ÄÑ¶È
-#define SUBC_C_CLEAR_PERSONAL			7			// Çå¿ÕÄÑ¶È
-#define SUBC_C_UPDATA_STOCK				8			// ¸üĞÂ¿â´æ
+#define SUBC_C_SET_TABLE				3			// æ¡Œå­è®¾ç½®
+#define SUBC_C_SET_PERSONAL				4			// ä¸ªäººéš¾åº¦
+#define SUBC_C_DELETE_PERSONAL			5			// ä¸ªäººåˆ é™¤
+#define SUBC_C_QUERY_PERSONAL			6			// æŸ¥è¯¢éš¾åº¦
+#define SUBC_C_CLEAR_PERSONAL			7			// æ¸…ç©ºéš¾åº¦
+#define SUBC_C_UPDATA_STOCK				8			// æ›´æ–°åº“å­˜
 
-// ÉèÖÃĞÅÏ¢
+// è®¾ç½®ä¿¡æ¯
 struct CMDC_C_GameSet
 {
-	// ÅäÖÃĞÅÏ¢
-	tagCustomRule			nConfigInfo;			// ÅäÖÃĞÅÏ¢
+	// é…ç½®ä¿¡æ¯
+	tagCustomRule			nConfigInfo;			// é…ç½®ä¿¡æ¯
 
-	// ÊÇ·ñ±£´æ
-	bool					bSaveFile;				// ±£´æÎÄ¼ş
+	// æ˜¯å¦ä¿å­˜
+	bool					bSaveFile;				// ä¿å­˜æ–‡ä»¶
 };
 
-// ×À×ÓÉèÖÃ
+// æ¡Œå­è®¾ç½®
 struct CMDC_C_SetTable
 {
-	unsigned short			TableID;				// ×À×ÓID
-	int						nTableStock;			// ×À×Ó¿â´æ
+	unsigned short			TableID;				// æ¡Œå­ID
+	int						nTableStock;			// æ¡Œå­åº“å­˜
 };
 
-// ¸öÈËÉèÖÃ
+// ä¸ªäººè®¾ç½®
 struct CMDC_C_SetPersonal
 {
-	unsigned long			lPlayID;				// ¸öÈËID
-	double					dPersonalDifficulty;	// ¸öÈËÄÑ¶È
+	unsigned long			lPlayID;				// ä¸ªäººID
+	double					dPersonalDifficulty;	// ä¸ªäººéš¾åº¦
 };
 
-// ¸öÈËÉ¾³ı
+// ä¸ªäººåˆ é™¤
 struct CMDC_C_DeletePersonal
 {
-	unsigned long			lPlayID;				// ¸öÈËID
+	unsigned long			lPlayID;				// ä¸ªäººID
 };
 
-// ·şÎñÆ÷ÏûÏ¢
-#define SUBC_S_GAME_QUERY				1			// ÓÎÏ·²éÑ¯
-#define SUBC_S_TEXT						2			// ÎÄ×ÖÌáÊ¾
-#define SUBC_S_QUERY_PERSONAL			3			// ²éÑ¯ÄÑ¶È
-#define SUBC_S_UPDATA_STOCK				4			// ¸üĞÂ¿â´æ
+// æœåŠ¡å™¨æ¶ˆæ¯
+#define SUBC_S_GAME_QUERY				1			// æ¸¸æˆæŸ¥è¯¢
+#define SUBC_S_TEXT						2			// æ–‡å­—æç¤º
+#define SUBC_S_QUERY_PERSONAL			3			// æŸ¥è¯¢éš¾åº¦
+#define SUBC_S_UPDATA_STOCK				4			// æ›´æ–°åº“å­˜
 
-// ÓÎÏ·²éÑ¯
+// æ¸¸æˆæŸ¥è¯¢
 struct CMDC_S_GameQuery
 {
-	// ÅäÖÃĞÅÏ¢
-	tagCustomRule			nConfigInfo;			// ÅäÖÃĞÅÏ¢
+	// é…ç½®ä¿¡æ¯
+	tagCustomRule			nConfigInfo;			// é…ç½®ä¿¡æ¯
 
-	// ²éÑ¯ĞÅÏ¢
+	// æŸ¥è¯¢ä¿¡æ¯
 	enum EnumQuery
 	{
 		EnumQuery_Query,
 		EnumQuery_Set,
 		EnumQuery_SetSave,
 	};
-	EnumQuery				nEnumQuery;				// ²éÑ¯½á¹¹
+	EnumQuery				nEnumQuery;				// æŸ¥è¯¢ç»“æ„
 };
 
-// ÎÄ×ÖÌáÊ¾
+// æ–‡å­—æç¤º
 struct CMDC_S_Text
 {
-	// ÅäÖÃĞÅÏ¢
-	TCHAR					szTextInfo[64];			// ÌáÊ¾ĞÅÏ¢
+	// é…ç½®ä¿¡æ¯
+	TCHAR					szTextInfo[64];			// æç¤ºä¿¡æ¯
 };
 
-// ²éÑ¯ÄÑ¶È
+// æŸ¥è¯¢éš¾åº¦
 struct CMDC_S_QueryPersonal
 {
-	unsigned long			lPlayID;				// ¸öÈËID
-	double					dPersonalDifficulty;	// ¸öÈËÄÑ¶È
+	unsigned long			lPlayID;				// ä¸ªäººID
+	double					dPersonalDifficulty;	// ä¸ªäººéš¾åº¦
 };
 
-// ¸üĞÂ¿â´æ
+// æ›´æ–°åº“å­˜
 struct CMDC_S_UpdataStock
 {
-	LONGLONG				lStockInitial;			// ³õÊ¼¿â´æ
-	LONGLONG				lStockCurrent;			// µ±Ç°¿â´æ
+	LONGLONG				lStockInitial;			// åˆå§‹åº“å­˜
+	LONGLONG				lStockCurrent;			// å½“å‰åº“å­˜
 };

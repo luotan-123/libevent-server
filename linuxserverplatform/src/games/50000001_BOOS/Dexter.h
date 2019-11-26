@@ -1,5 +1,5 @@
 
-// ÖØ¶¨Òå
+// é‡å®šä¹‰
 typedef unsigned char		uchar;
 typedef unsigned short		ushort;
 typedef unsigned int		uint;
@@ -32,11 +32,11 @@ typedef POINT				point;
 #define ullong_max			0xffffffffffffffff
 #define ullong_min			0
 
-// ±ê×¼¶¨Òå
+// æ ‡å‡†å®šä¹‰
 #define _in
 #define _out
 
-// °²È«É¾³ý
+// å®‰å…¨åˆ é™¤
 #ifndef SafeRelease
 	#define SafeRelease(pObject) { if (pObject!=NULL) { pObject->Release(); pObject=NULL; } }
 #endif
@@ -57,14 +57,14 @@ typedef POINT				point;
 #define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
 #endif
 
-// ´íÎó¶¨Òå
+// é”™è¯¯å®šä¹‰
 #ifdef _DEBUG
 #define _Assert(A)				assert(A)
 #else
 #define _Assert(A)
 #endif
 
-// É¾³ýÊý×é
+// åˆ é™¤æ•°ç»„
 #define DeleteArray( Array )						\
 {													\
 	while ( Array.GetCount() )						\

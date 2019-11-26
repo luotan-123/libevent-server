@@ -7,55 +7,55 @@
 
 //////////////////////////////////////////////////////////////////////////////////
  
-//ÓÎÏ·¹ÜÀí
+//æ¸¸æˆç®¡ç†
 //#ifdef VER_IGameServiceCustomTime
 //	class CGameServiceManager : public IGameServiceManager, public IGameServiceCustomTime
 //#else
 //	class CGameServiceManager : public IGameServiceManager
 //#endif 
 //{
-//	//±äÁ¿¶¨Òå
+//	//å˜é‡å®šä¹‰
 //protected:
-//	//tagGameServiceAttrib				m_GameServiceAttrib;			//·şÎñÊôĞÔ
-//	//CGameServiceManagerHelper			m_AndroidServiceHelper;			//»úÆ÷ÈË·şÎñ
+//	//tagGameServiceAttrib				m_GameServiceAttrib;			//æœåŠ¡å±æ€§
+//	//CGameServiceManagerHelper			m_AndroidServiceHelper;			//æœºå™¨äººæœåŠ¡
 //
-//	//º¯Êı¶¨Òå
+//	//å‡½æ•°å®šä¹‰
 //public:
-//	//¹¹Ôìº¯Êı
+//	//æ„é€ å‡½æ•°
 //	CGameServiceManager();
-//	//Îö¹¹º¯Êı
+//	//ææ„å‡½æ•°
 //	virtual ~CGameServiceManager();
 //
-//	//»ù´¡½Ó¿Ú
+//	//åŸºç¡€æ¥å£
 //public:
-//	//ÊÍ·Å¶ÔÏó
+//	//é‡Šæ”¾å¯¹è±¡
 //	virtual VOID Release() { return; }
-//	//½Ó¿Ú²éÑ¯
+//	//æ¥å£æŸ¥è¯¢
 //	virtual VOID * QueryInterface(const IID & Guid, DWORD dwQueryVer);
 //
-//	//´´½¨½Ó¿Ú
+//	//åˆ›å»ºæ¥å£
 //public:
-//	//´´½¨×À×Ó
+//	//åˆ›å»ºæ¡Œå­
 //	virtual VOID * CreateTableFrameSink(REFGUID Guid, DWORD dwQueryVer);
-//	//´´½¨»úÆ÷
+//	//åˆ›å»ºæœºå™¨
 //	virtual VOID * CreateAndroidUserItemSink(REFGUID Guid, DWORD dwQueryVer);
-//	//´´½¨Êı¾İ
+//	//åˆ›å»ºæ•°æ®
 //	virtual VOID * CreateGameDataBaseEngineSink(REFGUID Guid, DWORD dwQueryVer);
 //
-//	//²ÎÊı½Ó¿Ú
+//	//å‚æ•°æ¥å£
 //public:
-//	//×é¼şÊôĞÔ
+//	//ç»„ä»¶å±æ€§
 ////	virtual bool GetServiceAttrib(tagGameServiceAttrib & GameServiceAttrib);
-//	//µ÷Õû²ÎÊı
+//	//è°ƒæ•´å‚æ•°
 ////	virtual bool RectifyParameter(tagGameServiceOption & GameServiceOption);
 //
-//	//²ÎÊı½Ó¿Ú
+//	//å‚æ•°æ¥å£
 //public:
-//	//»úÆ÷Âö³å
+//	//æœºå™¨è„‰å†²
 //	virtual DWORD GetAndroidTimerPulse();
-//	//Ê±¼ä·¶Î§
+//	//æ—¶é—´èŒƒå›´
 //	virtual DWORD GetTableSinkTimeRange();
-//	//Ê±¼äµ¥Ôª
+//	//æ—¶é—´å•å…ƒ
 //	virtual DWORD GetTimerEngineTimeCell();
 //
 //};

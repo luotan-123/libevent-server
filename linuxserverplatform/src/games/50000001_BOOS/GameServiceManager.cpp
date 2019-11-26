@@ -7,20 +7,20 @@
 //
 //
 //
-////¹¹Ôìº¯Êı
+////æ„é€ å‡½æ•°
 //CGameServiceManager::CGameServiceManager()
 //{
-//	//ÄÚºËÊôĞÔ
+//	//å†…æ ¸å±æ€§
 //	m_GameServiceAttrib.wKindID=KIND_ID;
 //	m_GameServiceAttrib.wChairCount=PlayChair_Max;
 //	m_GameServiceAttrib.wSupporType=(GAME_GENRE_GOLD|GAME_GENRE_MATCH);
 //
-//	//¹¦ÄÜ±êÖ¾
+//	//åŠŸèƒ½æ ‡å¿—
 //	m_GameServiceAttrib.cbDynamicJoin=TRUE;
 //	m_GameServiceAttrib.cbAndroidUser=TRUE;
 //	m_GameServiceAttrib.cbOffLineTrustee=FALSE;
 //
-//	//·şÎñÊôĞÔ
+//	//æœåŠ¡å±æ€§
 //	m_GameServiceAttrib.dwServerVersion=VERSION_SERVER;
 //	m_GameServiceAttrib.dwClientVersion=VERSION_CLIENT;
 //	lstrcpyn(m_GameServiceAttrib.szGameName,GAME_NAME,CountArray(m_GameServiceAttrib.szGameName));
@@ -31,13 +31,13 @@
 //	return;
 //}
 //
-////Îö¹¹º¯Êı
+////ææ„å‡½æ•°
 //CGameServiceManager::~CGameServiceManager()
 //{
 //
 //}
 //
-////½Ó¿Ú²éÑ¯
+////æ¥å£æŸ¥è¯¢
 //VOID * CGameServiceManager::QueryInterface(const IID & Guid, DWORD dwQueryVer)
 //{
 //	QUERYINTERFACE(IGameServiceManager,Guid,dwQueryVer);
@@ -51,39 +51,39 @@
 //	return NULL;
 //}
 //
-////´´½¨×À×Ó
+////åˆ›å»ºæ¡Œå­
 //VOID * CGameServiceManager::CreateTableFrameSink(REFGUID Guid, DWORD dwQueryVer)
 //{
 //
-//	//±äÁ¿¶¨Òå
+//	//å˜é‡å®šä¹‰
 //	CTableFrameSink * pTableFrameSink=NULL;
 //
 //	try
 //	{
-//		//½¨Á¢¶ÔÏó
+//		//å»ºç«‹å¯¹è±¡
 //		pTableFrameSink=new CTableFrameSink();
-//		if (pTableFrameSink==NULL) throw TEXT("´´½¨Ê§°Ü");
+//		if (pTableFrameSink==NULL) throw TEXT("åˆ›å»ºå¤±è´¥");
 //
-//		//²éÑ¯½Ó¿Ú
+//		//æŸ¥è¯¢æ¥å£
 //		VOID * pObject=pTableFrameSink->QueryInterface(Guid,dwQueryVer);
-//		if (pObject==NULL) throw TEXT("½Ó¿Ú²éÑ¯Ê§°Ü");
+//		if (pObject==NULL) throw TEXT("æ¥å£æŸ¥è¯¢å¤±è´¥");
 //
 //		return pObject;
 //	}
 //	catch (...) {}
 //
-//	//É¾³ı¶ÔÏó
+//	//åˆ é™¤å¯¹è±¡
 //	SafeDelete(pTableFrameSink);
 //
 //	return NULL;
 //}
 //
-////´´½¨»úÆ÷
+////åˆ›å»ºæœºå™¨
 //VOID * CGameServiceManager::CreateAndroidUserItemSink(REFGUID Guid, DWORD dwQueryVer)
 //{
 //	try
 //	{
-//		//´´½¨×é¼ş
+//		//åˆ›å»ºç»„ä»¶
 //		if( m_AndroidServiceHelper.GetInterface() == NULL )
 //		{
 //			m_AndroidServiceHelper.SetModuleCreateInfo( _T("FishLKAndroidService.dll"), "CreateGameServiceManager" );
@@ -91,9 +91,9 @@
 //			if( !m_AndroidServiceHelper.CreateInstance() ) throw 0;
 //		}
 //
-//		//´´½¨»úÆ÷ÈË
+//		//åˆ›å»ºæœºå™¨äºº
 //		VOID *pAndroidObject = m_AndroidServiceHelper->CreateAndroidUserItemSink(Guid,dwQueryVer);
-//		if( pAndroidObject == NULL ) throw TEXT("´´½¨»úÆ÷ÈËÊ§°Ü");
+//		if( pAndroidObject == NULL ) throw TEXT("åˆ›å»ºæœºå™¨äººå¤±è´¥");
 //
 //		return pAndroidObject;
 //	}
@@ -102,34 +102,34 @@
 //	return NULL;
 //}
 //
-////´´½¨Êı¾İ
+////åˆ›å»ºæ•°æ®
 //VOID * CGameServiceManager::CreateGameDataBaseEngineSink(REFGUID Guid, DWORD dwQueryVer)
 //{
 //	return NULL;
 //}
 //
-////×é¼şÊôĞÔ
+////ç»„ä»¶å±æ€§
 ////bool CGameServiceManager::GetServiceAttrib(tagGameServiceAttrib & GameServiceAttrib)
 //{
-//	//ÉèÖÃ±äÁ¿
+//	//è®¾ç½®å˜é‡
 //	GameServiceAttrib=m_GameServiceAttrib;
 //
 //	return true;
 //}
 //
-////µ÷Õû²ÎÊı
+////è°ƒæ•´å‚æ•°
 ////bool CGameServiceManager::RectifyParameter(tagGameServiceOption & GameServiceOption)
 //{
-//	// ĞŞ¸Ä²ÎÊı
+//	// ä¿®æ”¹å‚æ•°
 //	GameServiceOption.lCellScore = __max(1L, GameServiceOption.lCellScore);
 //
-//	// ×îµÍ»ı·Ö
+//	// æœ€ä½ç§¯åˆ†
 //	if (GameServiceOption.wServerType&GAME_GENRE_GOLD)
 //	{
-//		// ×îÉÙ»ı·Ö
+//		// æœ€å°‘ç§¯åˆ†
 //		GameServiceOption.lMinTableScore = __max(GameServiceOption.lMinTableScore, GameServiceOption.lCellScore);
 //
-//		// »ı·ÖÉÏÏŞ
+//		// ç§¯åˆ†ä¸Šé™
 //		if (GameServiceOption.lRestrictScore != 0L)
 //		{
 //			GameServiceOption.lRestrictScore = __max(GameServiceOption.lRestrictScore,GameServiceOption.lMinTableScore);
@@ -139,19 +139,19 @@
 //	return true;
 //}
 //
-////»úÆ÷Âö³å
+////æœºå™¨è„‰å†²
 //DWORD CGameServiceManager::GetAndroidTimerPulse()
 //{
 //	return 30;
 //}
 //
-////Ê±¼ä·¶Î§
+////æ—¶é—´èŒƒå›´
 //DWORD CGameServiceManager::GetTableSinkTimeRange()
 //{
 //	return 20;
 //}
 //
-////Ê±¼äµ¥Ôª
+////æ—¶é—´å•å…ƒ
 //DWORD CGameServiceManager::GetTimerEngineTimeCell()
 //{
 //	return 10;
@@ -159,10 +159,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////
 //
-////½¨Á¢¶ÔÏóº¯Êı
+////å»ºç«‹å¯¹è±¡å‡½æ•°
 //extern "C" __declspec(dllexport) VOID * CreateGameServiceManager(const GUID & Guid, DWORD dwInterfaceVer)
 //{
-//	//ÉèÖÃ¶ÔÏó
+//	//è®¾ç½®å¯¹è±¡
 //	static CGameServiceManager GameServiceManager;
 //	return GameServiceManager.QueryInterface(Guid,dwInterfaceVer);
 //}

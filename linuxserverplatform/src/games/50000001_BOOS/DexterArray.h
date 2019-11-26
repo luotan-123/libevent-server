@@ -5,101 +5,101 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 
-//Êı×éÄ£°åÀà
+//æ•°ç»„æ¨¡æ¿ç±»
 template <class TYPE, class ARG_TYPE=const TYPE &> class CDexterArray
 {
-	//±äÁ¿¶¨Òå
+	//å˜é‡å®šä¹‰
 protected:
-	TYPE *							m_pData;							//Êı×éÖ¸Õë
-	INT_PTR							m_nMaxCount;						//»º³åÊıÄ¿
-	INT_PTR							m_nGrowCount;						//Ôö³¤ÊıÄ¿
-	INT_PTR							m_nElementCount;					//ÔªËØÊıÄ¿
+	TYPE *							m_pData;							//æ•°ç»„æŒ‡é’ˆ
+	INT_PTR							m_nMaxCount;						//ç¼“å†²æ•°ç›®
+	INT_PTR							m_nGrowCount;						//å¢é•¿æ•°ç›®
+	INT_PTR							m_nElementCount;					//å…ƒç´ æ•°ç›®
 
-	//º¯Êı¶¨Òå
+	//å‡½æ•°å®šä¹‰
 public:
-	//¹¹Ôìº¯Êı
+	//æ„é€ å‡½æ•°
 	CDexterArray();
-	//Îö¹¹º¯Êı
+	//ææ„å‡½æ•°
 	virtual ~CDexterArray();
 
-	//ĞÅÏ¢º¯Êı
+	//ä¿¡æ¯å‡½æ•°
 public:
-	//ÊÇ·ñ¿Õ×é
+	//æ˜¯å¦ç©ºç»„
 	bool IsEmpty() const;
-	//»ñÈ¡ÊıÄ¿
+	//è·å–æ•°ç›®
 	INT_PTR GetCount() const;
 
-	//¹¦ÄÜº¯Êı
+	//åŠŸèƒ½å‡½æ•°
 public:
-	//»ñÈ¡»º³å
+	//è·å–ç¼“å†²
 	TYPE * GetData();
-	//»ñÈ¡»º³å
+	//è·å–ç¼“å†²
 	const TYPE * GetData() const;
-	//Ôö¼ÓÔªËØ
+	//å¢åŠ å…ƒç´ 
 	INT_PTR Add(ARG_TYPE newElement);
-	//¿½±´Êı×é
+	//æ‹·è´æ•°ç»„
 	VOID Copy(const CDexterArray & Src);
-	//×·¼ÓÊı×é
+	//è¿½åŠ æ•°ç»„
 	INT_PTR Append(const CDexterArray & Src);
-	//»ñÈ¡ÔªËØ
+	//è·å–å…ƒç´ 
 	TYPE & GetAt(INT_PTR nIndex);
-	//»ñÈ¡ÔªËØ
+	//è·å–å…ƒç´ 
 	const TYPE & GetAt(INT_PTR nIndex) const;
-	//»ñÈ¡ÔªËØ
+	//è·å–å…ƒç´ 
 	TYPE & ElementAt(INT_PTR nIndex);
-	//»ñÈ¡ÔªËØ
+	//è·å–å…ƒç´ 
 	const TYPE & ElementAt(INT_PTR nIndex) const;
 
-	//²Ù×÷º¯Êı
+	//æ“ä½œå‡½æ•°
 public:
-	//ÉèÖÃ´óĞ¡
+	//è®¾ç½®å¤§å°
 	VOID SetSize(INT_PTR nNewSize);
-	//ÉèÖÃÔªËØ
+	//è®¾ç½®å…ƒç´ 
 	VOID SetAt(INT_PTR nIndex, ARG_TYPE newElement);
-	//ÉèÖÃÔªËØ
+	//è®¾ç½®å…ƒç´ 
 	VOID SetAtGrow(INT_PTR nIndex, ARG_TYPE newElement);
-	//²åÈëÊı¾İ
+	//æ’å…¥æ•°æ®
 	VOID InsertAt(INT_PTR nIndex, const CDexterArray & Src);
-	//²åÈëÊı¾İ
+	//æ’å…¥æ•°æ®
 	VOID InsertAt(INT_PTR nIndex, ARG_TYPE newElement, INT_PTR nCount=1);
-	//É¾³ıÊı¾İ
+	//åˆ é™¤æ•°æ®
 	VOID RemoveAt(INT_PTR nIndex, INT_PTR nCount=1);
-	//É¾³ıÔªËØ
+	//åˆ é™¤å…ƒç´ 
 	VOID RemoveAll();
 
-	//²Ù×÷ÖØÔØ
+	//æ“ä½œé‡è½½
 public:
-	//²Ù×÷ÖØÔØ
+	//æ“ä½œé‡è½½
 	TYPE & operator[](INT_PTR nIndex);
-	//²Ù×÷ÖØÔØ
+	//æ“ä½œé‡è½½
 	const TYPE & operator[](INT_PTR nIndex) const;
 
-	//ÄÚ´æº¯Êı
+	//å†…å­˜å‡½æ•°
 public:
-	//ÊÍ·ÅÄÚ´æ
+	//é‡Šæ”¾å†…å­˜
 	VOID FreeMemory();
-	//ÉêÇëÄÚ´æ
+	//ç”³è¯·å†…å­˜
 	VOID AllocMemory(INT_PTR nNewCount);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-// CDexterArray<TYPE, ARG_TYPE> ÄÚÁªº¯Êı
+// CDexterArray<TYPE, ARG_TYPE> å†…è”å‡½æ•°
 
-//ÊÇ·ñ¿Õ×é
+//æ˜¯å¦ç©ºç»„
 template<class TYPE, class ARG_TYPE> 
 AFX_INLINE bool CDexterArray<TYPE, ARG_TYPE>::IsEmpty() const
 {
 	return (m_nElementCount==0);
 }
 
-//»ñÈ¡ÊıÄ¿
+//è·å–æ•°ç›®
 template<class TYPE, class ARG_TYPE>
 AFX_INLINE INT_PTR CDexterArray<TYPE, ARG_TYPE>::GetCount() const
 {
 	return m_nElementCount;
 }
 
-//Ôö¼ÓÔªËØ
+//å¢åŠ å…ƒç´ 
 template<class TYPE, class ARG_TYPE>
 AFX_INLINE INT_PTR CDexterArray<TYPE,ARG_TYPE>::Add(ARG_TYPE newElement)
 {
@@ -108,14 +108,14 @@ AFX_INLINE INT_PTR CDexterArray<TYPE,ARG_TYPE>::Add(ARG_TYPE newElement)
 	return nIndex;
 }
 
-//²Ù×÷ÖØÔØ
+//æ“ä½œé‡è½½
 template<class TYPE, class ARG_TYPE>
 AFX_INLINE TYPE & CDexterArray<TYPE, ARG_TYPE>::operator[](INT_PTR nIndex)
 { 
 	return ElementAt(nIndex);
 }
 
-//²Ù×÷ÖØÔØ
+//æ“ä½œé‡è½½
 template<class TYPE, class ARG_TYPE>
 AFX_INLINE const TYPE & CDexterArray<TYPE, ARG_TYPE>::operator[](INT_PTR nIndex) const
 { 
@@ -123,9 +123,9 @@ AFX_INLINE const TYPE & CDexterArray<TYPE, ARG_TYPE>::operator[](INT_PTR nIndex)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// CDexterArray<TYPE, ARG_TYPE> ÍâÁªº¯Êı
+// CDexterArray<TYPE, ARG_TYPE> å¤–è”å‡½æ•°
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 template<class TYPE, class ARG_TYPE> 
 CDexterArray<TYPE, ARG_TYPE>::CDexterArray()
 {
@@ -137,7 +137,7 @@ CDexterArray<TYPE, ARG_TYPE>::CDexterArray()
 	return;
 }
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 template<class TYPE, class ARG_TYPE> 
 CDexterArray<TYPE,ARG_TYPE>::~CDexterArray()
 {
@@ -151,29 +151,29 @@ CDexterArray<TYPE,ARG_TYPE>::~CDexterArray()
 	return;
 }
 
-//»ñÈ¡»º³å
+//è·å–ç¼“å†²
 template<class TYPE, class ARG_TYPE> 
 TYPE * CDexterArray<TYPE,ARG_TYPE>::GetData()
 {
 	return m_pData;
 }
 
-//»ñÈ¡»º³å
+//è·å–ç¼“å†²
 template<class TYPE, class ARG_TYPE> 
 const TYPE * CDexterArray<TYPE,ARG_TYPE>::GetData() const
 {
 	return m_pData;
 }
 
-//¿½±´Êı×é
+//æ‹·è´æ•°ç»„
 template<class TYPE, class ARG_TYPE> 
 VOID CDexterArray<TYPE,ARG_TYPE>::Copy(const CDexterArray & Src)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(this!=&Src);
 	if (this==&Src) return;
 
-	//¿½±´Êı×é
+	//æ‹·è´æ•°ç»„
 	AllocMemory(Src.m_nElementCount);
 	if (m_nElementCount>0)
 	{
@@ -186,15 +186,15 @@ VOID CDexterArray<TYPE,ARG_TYPE>::Copy(const CDexterArray & Src)
 	return;
 }
 
-//×·¼ÓÊı×é
+//è¿½åŠ æ•°ç»„
 template<class TYPE, class ARG_TYPE> 
 INT_PTR CDexterArray<TYPE,ARG_TYPE>::Append(const CDexterArray & Src)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(this!=&Src);
 	if (this==&Src) AfxThrowInvalidArgException();
 
-	//¿½±´Êı×é
+	//æ‹·è´æ•°ç»„
 	if (Src.m_nElementCount>0)
 	{
 		INT_PTR nOldCount=m_nElementCount;
@@ -206,7 +206,7 @@ INT_PTR CDexterArray<TYPE,ARG_TYPE>::Append(const CDexterArray & Src)
 	return m_nElementCount;
 }
 
-//»ñÈ¡ÔªËØ
+//è·å–å…ƒç´ 
 template<class TYPE, class ARG_TYPE> 
 TYPE & CDexterArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex)
 {
@@ -216,7 +216,7 @@ TYPE & CDexterArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex)
 	return m_pData[nIndex];
 }
 
-//»ñÈ¡ÔªËØ
+//è·å–å…ƒç´ 
 template<class TYPE, class ARG_TYPE> 
 const TYPE & CDexterArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex) const
 {
@@ -226,7 +226,7 @@ const TYPE & CDexterArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex) const
 	return m_pData[nIndex];
 }
 
-//»ñÈ¡ÔªËØ
+//è·å–å…ƒç´ 
 template<class TYPE, class ARG_TYPE> 
 TYPE & CDexterArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex)
 {
@@ -236,7 +236,7 @@ TYPE & CDexterArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex)
 	return m_pData[nIndex];
 }
 
-//»ñÈ¡ÔªËØ
+//è·å–å…ƒç´ 
 template<class TYPE, class ARG_TYPE> 
 const TYPE & CDexterArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex) const
 {
@@ -246,15 +246,15 @@ const TYPE & CDexterArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex) const
 	return m_pData[nIndex];
 }
 
-//ÉèÖÃ´óĞ¡
+//è®¾ç½®å¤§å°
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::SetSize(INT_PTR nNewSize)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(nNewSize>=0);
 	if (nNewSize<0)	AfxThrowInvalidArgException();
 
-	//ÉèÖÃ´óĞ¡
+	//è®¾ç½®å¤§å°
 	AllocMemory(nNewSize);
 	if (nNewSize>m_nElementCount)
 	{
@@ -270,7 +270,7 @@ VOID CDexterArray<TYPE,ARG_TYPE>::SetSize(INT_PTR nNewSize)
 	return;
 }
 
-//ÉèÖÃÔªËØ
+//è®¾ç½®å…ƒç´ 
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::SetAt(INT_PTR nIndex, ARG_TYPE newElement)
 {
@@ -281,32 +281,32 @@ VOID CDexterArray<TYPE,ARG_TYPE>::SetAt(INT_PTR nIndex, ARG_TYPE newElement)
 	return;
 }
 
-//ÉèÖÃÔªËØ
+//è®¾ç½®å…ƒç´ 
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::SetAtGrow(INT_PTR nIndex, ARG_TYPE newElement)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(nIndex>=0);
 	if (nIndex<0) AfxThrowInvalidArgException();
 
-	//ÉèÖÃÔªËØ
+	//è®¾ç½®å…ƒç´ 
 	if (nIndex>=m_nElementCount) SetSize(m_nElementCount+1);
 	m_pData[nIndex]=newElement;
 
 	return;
 }
 
-//²åÈëÊı¾İ
+//æ’å…¥æ•°æ®
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, const CDexterArray & Src)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(nStartIndex>=0);
 	if (nStartIndex<0) AfxThrowInvalidArgException();
 
 	if (Src.m_nElementCount>0)
 	{
-		//ÉêÇëÊı×é
+		//ç”³è¯·æ•°ç»„
 		if (nIndex<m_nElementCount)
 		{
 			INT_PTR nOldCount=m_nElementCount;
@@ -318,7 +318,7 @@ VOID CDexterArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, const CDexterArray & 
 		}
 		else SetSize(nIndex+nCount);
 
-		//¿½±´Êı×é
+		//æ‹·è´æ•°ç»„
 		ASSERT((nIndex+Src.m_nElementCount)<=m_nElementCount);
 		while (nCount--) m_pData[nIndex++]=newElement;
 	}
@@ -326,16 +326,16 @@ VOID CDexterArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, const CDexterArray & 
 	return;
 }
 
-//²åÈëÊı¾İ
+//æ’å…¥æ•°æ®
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, ARG_TYPE newElement, INT_PTR nCount)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(nIndex>=0);
 	ASSERT(nCount>0);
 	if ((nIndex<0)||(nCount<=0)) AfxThrowInvalidArgException();
 
-	//ÉêÇëÊı×é
+	//ç”³è¯·æ•°ç»„
 	if (nIndex<m_nElementCount)
 	{
 		INT_PTR nOldCount=m_nElementCount;
@@ -347,24 +347,24 @@ VOID CDexterArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, ARG_TYPE newElement, 
 	}
 	else SetSize(nIndex+nCount);
 
-	//¿½±´Êı×é
+	//æ‹·è´æ•°ç»„
 	ASSERT((nIndex+nCount)<=m_nElementCount);
 	while (nCount--) m_pData[nIndex++]=newElement;
 
 	return;
 }
 
-//É¾³ıÊı¾İ
+//åˆ é™¤æ•°æ®
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::RemoveAt(INT_PTR nIndex, INT_PTR nCount)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(nIndex>=0);
 	ASSERT(nCount>=0);
 	ASSERT(nIndex+nCount<=m_nElementCount);
 	if ((nIndex<0)||(nCount<0)||((nIndex+nCount>m_nElementCount))) AfxThrowInvalidArgException();
 
-	//É¾³ıÊı¾İ
+	//åˆ é™¤æ•°æ®
 	INT_PTR nMoveCount=m_nElementCount-(nIndex+nCount);
 	for (INT_PTR i=0;i<nCount;i++) (m_pData+nIndex+i)->~TYPE();
 	if (nMoveCount>0) memmove(m_pData+nIndex,m_pData+nIndex+nCount,nMoveCount*sizeof(TYPE));
@@ -373,7 +373,7 @@ VOID CDexterArray<TYPE,ARG_TYPE>::RemoveAt(INT_PTR nIndex, INT_PTR nCount)
 	return;
 }
 
-//É¾³ıÔªËØ
+//åˆ é™¤å…ƒç´ 
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::RemoveAll()
 {
@@ -387,7 +387,7 @@ VOID CDexterArray<TYPE,ARG_TYPE>::RemoveAll()
 	return;
 }
 
-//ÊÍ·ÅÄÚ´æ
+//é‡Šæ”¾å†…å­˜
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::FreeMemory()
 {
@@ -407,16 +407,16 @@ VOID CDexterArray<TYPE,ARG_TYPE>::FreeMemory()
 	return;
 }
 
-//ÉêÇëÄÚ´æ
+//ç”³è¯·å†…å­˜
 template<class TYPE, class ARG_TYPE>
 VOID CDexterArray<TYPE,ARG_TYPE>::AllocMemory(INT_PTR nNewCount)
 {
-	//Ğ§Ñé²ÎÊı
+	//æ•ˆéªŒå‚æ•°
 	ASSERT(nNewCount>=0);
 
 	if (nNewCount>m_nMaxCount)
 	{
-		//¼ÆËãÊıÄ¿
+		//è®¡ç®—æ•°ç›®
 		INT_PTR nGrowCount=m_nGrowCount;
 		if (nGrowCount==0)
 		{
@@ -425,13 +425,13 @@ VOID CDexterArray<TYPE,ARG_TYPE>::AllocMemory(INT_PTR nNewCount)
 		}
 		nNewCount+=nGrowCount;
 
-		//ÉêÇëÄÚ´æ
+		//ç”³è¯·å†…å­˜
 		TYPE * pNewData=(TYPE *) new BYTE[nNewCount*sizeof(TYPE)];
 		memcpy(pNewData,m_pData,m_nElementCount*sizeof(TYPE));
 		memset(pNewData+m_nElementCount,0,(nNewCount-m_nElementCount)*sizeof(TYPE));
 		delete [] (BYTE *)m_pData;
 
-		//ÉèÖÃ±äÁ¿
+		//è®¾ç½®å˜é‡
 		m_pData=pNewData;
 		m_nMaxCount=nNewCount;
 	}

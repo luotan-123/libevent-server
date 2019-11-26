@@ -12,20 +12,20 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////// 
 
-// ²¶ÓãÂ·¾¶
+// æ•é±¼è·¯å¾„
 struct tagFishPath
 {
 	CWHArray< tagBezierPoint * >		ArrayBezierPoint;
 };
 
-// ¿ªÅÚĞÅÏ¢
+// å¼€ç‚®ä¿¡æ¯
 struct tagFireInfo
 {
-	int							nMultipleIndex;		// ±¶ÊıË÷Òı
-	double						dBulletInvest;		// ×Óµ¯ÊÕÈë
+	int							nMultipleIndex;		// å€æ•°ç´¢å¼•
+	double						dBulletInvest;		// å­å¼¹æ”¶å…¥
 };
 
-// ²¶»ñĞÅÏ¢
+// æ•è·ä¿¡æ¯
 struct tagCatchInfo
 {
 	UINT						nFishKey;
@@ -52,269 +52,269 @@ struct tagCatchInfo
 	}
 };
 
-// Í£ÁôĞÅÏ¢
+// åœç•™ä¿¡æ¯
 struct tagStayInfo
 {
-	UINT						nStayStart;			// Í£Áô¿ªÊ¼
-	UINT						nStayTime;			// Í£ÁôÊ±¼ä
+	UINT						nStayStart;			// åœç•™å¼€å§‹
+	UINT						nStayTime;			// åœç•™æ—¶é—´
 };
 typedef CWHArray< tagStayInfo >	CArrayStay;
 
-// ÓãÓã½á¹¹
+// é±¼é±¼ç»“æ„
 struct tagFishInfo
 {
-	// »ù±¾ĞÅÏ¢
-	UINT				nFishKey;				// ÓãË÷Òı
-	BYTE				nFishType;				// ÓãÖÖÀà
-	int					nFishScore;				// Óã·ÖÊı
-	UINT				wHitChair;				// »÷É±Î»ÖÃ
+	// åŸºæœ¬ä¿¡æ¯
+	UINT				nFishKey;				// é±¼ç´¢å¼•
+	BYTE				nFishType;				// é±¼ç§ç±»
+	int					nFishScore;				// é±¼åˆ†æ•°
+	UINT				wHitChair;				// å‡»æ€ä½ç½®
 
-	// Ê±¼äĞÅÏ¢
-	UINT				unCreateTime;			// ´´½¨Ê±¼ä
-	UINT				unOverTime;				// ½áÊøÊ±¼ä
+	// æ—¶é—´ä¿¡æ¯
+	UINT				unCreateTime;			// åˆ›å»ºæ—¶é—´
+	UINT				unOverTime;				// ç»“æŸæ—¶é—´
 
-	// »÷É±ĞÅÏ¢
-	int					nScoreChance;			// ·ÖÊı¼¸ÂÊ
-	double				dCurChance;				// µ±Ç°¼¸ÂÊ
+	// å‡»æ€ä¿¡æ¯
+	int					nScoreChance;			// åˆ†æ•°å‡ ç‡
+	double				dCurChance;				// å½“å‰å‡ ç‡
 
-	// Óã×´Ì¬
-	EnumFishState		nFishState;				// Óã×´Ì¬
+	// é±¼çŠ¶æ€
+	EnumFishState		nFishState;				// é±¼çŠ¶æ€
 
-	// ÖØ¸´´´½¨
-	bool				bRepeatCreate;			// ÖØ¸´´´½¨
+	// é‡å¤åˆ›å»º
+	bool				bRepeatCreate;			// é‡å¤åˆ›å»º
 
-	// Â·¾¶Æ«ÒÆ
-	float				fRotateAngle;			// ½Ç¶È
-	CShortPoint 		PointOffSet;			// Æ«ÒÆ
+	// è·¯å¾„åç§»
+	float				fRotateAngle;			// è§’åº¦
+	CShortPoint 		PointOffSet;			// åç§»
 
-	// Â·¾¶ĞÅÏ¢
-	int					nBezierCount;			// Â·¾¶ÊıÁ¿
-	tagBezierPoint		TBezierPoint[BEZIER_POINT_MAX];		// Â·¾¶ĞÅÏ¢
+	// è·¯å¾„ä¿¡æ¯
+	int					nBezierCount;			// è·¯å¾„æ•°é‡
+	tagBezierPoint		TBezierPoint[BEZIER_POINT_MAX];		// è·¯å¾„ä¿¡æ¯
 
-	// ³õÊ¼»¯½Ç¶È
-	float				fInitialAngle;			// ½Ç¶È
+	// åˆå§‹åŒ–è§’åº¦
+	float				fInitialAngle;			// è§’åº¦
 
-	// Í£ÁôÊı¾İ
-	CArrayStay			ArrayStayInfo;			// Í£Áô¿ªÊ¼
+	// åœç•™æ•°æ®
+	CArrayStay			ArrayStayInfo;			// åœç•™å¼€å§‹
 
 	tagFishInfo()
 	{
-		// »ù±¾ĞÅÏ¢
+		// åŸºæœ¬ä¿¡æ¯
 		nFishKey = 0;
 		nFishType = 0;			
 		nFishScore = 0;	
 		wHitChair = 0;	
 
-		// Ê±¼äĞÅÏ¢
+		// æ—¶é—´ä¿¡æ¯
 		unCreateTime = 0;
 		unOverTime = 0;
 
-		// »÷É±ĞÅÏ¢
+		// å‡»æ€ä¿¡æ¯
 		nScoreChance = 0;
 		dCurChance = 0.0;
 
-		// ÓãÀàĞÍ
+		// é±¼ç±»å‹
 		nFishState = FishState_Normal;
 
-		// ÖØ¸´´´½¨
+		// é‡å¤åˆ›å»º
 		bRepeatCreate = false;
 
-		// Â·¾¶Æ«ÒÆ
+		// è·¯å¾„åç§»
 		fRotateAngle = 0.f;
 		PointOffSet.SetPoint(0, 0);
 
-		// Â·¾¶ĞÅÏ¢
+		// è·¯å¾„ä¿¡æ¯
 		nBezierCount = 0;
 		ZeroMemory(TBezierPoint, sizeof(TBezierPoint));
 	}
 
-	// ¸³Öµº¯Êı
+	// èµ‹å€¼å‡½æ•°
 	void operator= ( const tagFishInfo & TRight )
 	{
-		// »ù±¾ĞÅÏ¢
+		// åŸºæœ¬ä¿¡æ¯
 		nFishKey = TRight.nFishKey;
 		nFishType = TRight.nFishType;
 		nFishScore = TRight.nFishScore;	
 		wHitChair = TRight.wHitChair;
 
-		// Ê±¼äĞÅÏ¢
+		// æ—¶é—´ä¿¡æ¯
 		unCreateTime = TRight.unCreateTime;
 		unOverTime = TRight.unOverTime;
 
-		// »÷É±ĞÅÏ¢
+		// å‡»æ€ä¿¡æ¯
 		nScoreChance = TRight.nScoreChance;
 		dCurChance = TRight.dCurChance;
 
-		// ÓãÀàĞÍ
+		// é±¼ç±»å‹
 		nFishState = TRight.nFishState;
 
-		// ÖØ¸´´´½¨
+		// é‡å¤åˆ›å»º
 		bRepeatCreate = TRight.bRepeatCreate;
 
-		// Â·¾¶Æ«ÒÆ
+		// è·¯å¾„åç§»
 		fRotateAngle = TRight.fRotateAngle;
 		PointOffSet = TRight.PointOffSet;
 
-		// Â·¾¶ĞÅÏ¢
+		// è·¯å¾„ä¿¡æ¯
 		nBezierCount = TRight.nBezierCount;
 		CopyMemory(&TBezierPoint, TRight.TBezierPoint, sizeof(TBezierPoint));
 
-		// Í£ÁôÊı¾İ
+		// åœç•™æ•°æ®
 		ArrayStayInfo.Append( TRight.ArrayStayInfo );
 	}
 };
 
-// ÓãÒÆ¶¯ÀàĞÍ
+// é±¼ç§»åŠ¨ç±»å‹
 enum EnumFishMoveType
 {
-	FishMoveType_Next,					// ÏÂÒ»¸ö
-	FishMoveType_Delete,				// Òì³£Óã
-	FishMoveType_Normal,				// Õı³£Óã
+	FishMoveType_Next,					// ä¸‹ä¸€ä¸ª
+	FishMoveType_Delete,				// å¼‚å¸¸é±¼
+	FishMoveType_Normal,				// æ­£å¸¸é±¼
 };
 
-// ²¶»ñÀàĞÍ
+// æ•è·ç±»å‹
 enum EnumPlayCatchType
 {
-	EPCT_Bullet,				// ×Óµ¯
-	EPCT_Laser,					// ¼¤¹â
-	EPCT_Killer,				// É±ÊÖÓã
-	EPCT_Explosion,				// ¾Ö²¿±¬Õ¨
-	EPCT_FullScreen,			// È«ÆÁ±¬Õ¨
+	EPCT_Bullet,				// å­å¼¹
+	EPCT_Laser,					// æ¿€å…‰
+	EPCT_Killer,				// æ€æ‰‹é±¼
+	EPCT_Explosion,				// å±€éƒ¨çˆ†ç‚¸
+	EPCT_FullScreen,			// å…¨å±çˆ†ç‚¸
 };
 
-// É±ÊÖÀàĞÍ
+// æ€æ‰‹ç±»å‹
 enum EnumKillerType
 {
-	KillerType_No,			// ÎŞÉ±ÊÖ
-	KillerType_One,			// Ò»¸ö
-	KillerType_All,			// È«²¿
+	KillerType_No,			// æ— æ€æ‰‹
+	KillerType_One,			// ä¸€ä¸ª
+	KillerType_All,			// å…¨éƒ¨
 };
 
-// ÓÎÏ·×À×Ó
+// æ¸¸æˆæ¡Œå­
 class CTableFrameSink : public CGameDesk
 {
-	// º¯Êı¶¨Òå
+	// å‡½æ•°å®šä¹‰
 public:
-	// ¹¹Ôìº¯Êı
+	// æ„é€ å‡½æ•°
 	CTableFrameSink();
-	// Îö¹¹º¯Êı
+	// ææ„å‡½æ•°
 	virtual ~CTableFrameSink();
 
-	// °æÈ¨¿ØÖÆ
+	// ç‰ˆæƒæ§åˆ¶
 protected:
 	bool							m_bLegalOne;
 	bool							m_bLagalTwo;
 	//ICompilationSink *				m_pICompilationSink;			
 
-	// ÓÎÏ·±äÁ¿
+	// æ¸¸æˆå˜é‡
 protected:
-	bool							m_bCompetitionRoom;						// ±ÈÈü·¿¼ä
-	bool							m_bTimedCompetitionRoom;				// ¶¨Ê±Èü·¿¼ä
-	bool							m_bFirstTime;							// µÚÒ»´Î
-	bool							m_bFishSwimming;						// ÓãÓÎ¶¯
-	UINT							m_nAppearFishCount;						// ³öÏÖÓãÊı
-	 int						    m_nFishMultiple[FishType_Max][2];		// ÓãµÄ±¶Êı
+	bool							m_bCompetitionRoom;						// æ¯”èµ›æˆ¿é—´
+	bool							m_bTimedCompetitionRoom;				// å®šæ—¶èµ›æˆ¿é—´
+	bool							m_bFirstTime;							// ç¬¬ä¸€æ¬¡
+	bool							m_bFishSwimming;						// é±¼æ¸¸åŠ¨
+	UINT							m_nAppearFishCount;						// å‡ºç°é±¼æ•°
+	 int						    m_nFishMultiple[FishType_Max][2];		// é±¼çš„å€æ•°
 
-	// ´´½¨ĞÅÏ¢
+	// åˆ›å»ºä¿¡æ¯
 protected:
-	static int						m_nCreateCount;							// ´´½¨ÊıÁ¿
+	static int						m_nCreateCount;							// åˆ›å»ºæ•°é‡
 
-	// ³¡¾°ĞÅÏ¢
+	// åœºæ™¯ä¿¡æ¯
 protected:
-	byte							m_cbBackIndex;							// ±³¾°Ë÷Òı
-	bool							m_bBackExchange;						// ±³¾°½»»»
-	static int						m_nSceneTime;							// ³¡¾°Î¬³ÖÊ±¼ä
-	uint							m_nSceneBegin;							// ³¡¾°¿ªÊ¼Ê±¼ä
+	byte							m_cbBackIndex;							// èƒŒæ™¯ç´¢å¼•
+	bool							m_bBackExchange;						// èƒŒæ™¯äº¤æ¢
+	static int						m_nSceneTime;							// åœºæ™¯ç»´æŒæ—¶é—´
+	uint							m_nSceneBegin;							// åœºæ™¯å¼€å§‹æ—¶é—´
 
-	// ·¿¼ä±¶Êı
+	// æˆ¿é—´å€æ•°
 protected:
 	 int						m_nMultipleValue[Multiple_Max];
 
-	// ×Óµ¯
+	// å­å¼¹
 protected:
-	static int						m_nBulletVelocity;						// ×Óµ¯ËÙ¶È
-	static int						m_nBulletCoolingTime;					// ×Óµ¯ÀäÈ´
+	static int						m_nBulletVelocity;						// å­å¼¹é€Ÿåº¦
+	static int						m_nBulletCoolingTime;					// å­å¼¹å†·å´
 
-	// Íæ¼ÒĞÅÏ¢
+	// ç©å®¶ä¿¡æ¯
 protected:
-	DWORD 							m_dwPlayID[PlayChair_Max];								// Íæ¼ÒID
-	LONGLONG						m_lPlayScore[PlayChair_Max];							// Íæ¼Ò»ı·Ö
-	LONGLONG						m_lPlayStartScore[PlayChair_Max];						// Íæ¼Ò»ı·Ö
-	LONGLONG						m_lplayCutMoney[PlayChair_Max];							// ³éË®½ğ¶î
-	LONGLONG						m_lFireCount[PlayChair_Max];							// ¿ªÅÚÊıÁ¿
-	LONGLONG						m_lBulletConsume[PlayChair_Max];						// ×Óµ¯ÏûºÄ
-	DWORD							m_nPlayDownTime[PlayChair_Max];							// Íæ¼Ò×øÏÂÊ±¼ä
-	DWORD							m_nRobotPlayTime[PlayChair_Max];						// »úÆ÷ÈËÓÎÏ·Ê±¼ä
-	DWORD							m_nPlayDelay[PlayChair_Max];							// Íæ¼ÒÑÓ³Ù
-	long							m_lPlayFishCount[PlayChair_Max][FishType_Max];			// Íæ¼Ò²¶»ñÓãÊı
-	int								m_nMultipleIndex[PlayChair_Max];						// Íæ¼Ò±¶Êı
-	map< int, tagFireInfo >			m_ArrayBulletKey[PlayChair_Max];						// ×Óµ¯¹Ø¼üÖµ
+	DWORD 							m_dwPlayID[PlayChair_Max];								// ç©å®¶ID
+	LONGLONG						m_lPlayScore[PlayChair_Max];							// ç©å®¶ç§¯åˆ†
+	LONGLONG						m_lPlayStartScore[PlayChair_Max];						// ç©å®¶ç§¯åˆ†
+	LONGLONG						m_lplayCutMoney[PlayChair_Max];							// æŠ½æ°´é‡‘é¢
+	LONGLONG						m_lFireCount[PlayChair_Max];							// å¼€ç‚®æ•°é‡
+	LONGLONG						m_lBulletConsume[PlayChair_Max];						// å­å¼¹æ¶ˆè€—
+	DWORD							m_nPlayDownTime[PlayChair_Max];							// ç©å®¶åä¸‹æ—¶é—´
+	DWORD							m_nRobotPlayTime[PlayChair_Max];						// æœºå™¨äººæ¸¸æˆæ—¶é—´
+	DWORD							m_nPlayDelay[PlayChair_Max];							// ç©å®¶å»¶è¿Ÿ
+	long							m_lPlayFishCount[PlayChair_Max][FishType_Max];			// ç©å®¶æ•è·é±¼æ•°
+	int								m_nMultipleIndex[PlayChair_Max];						// ç©å®¶å€æ•°
+	map< int, tagFireInfo >			m_ArrayBulletKey[PlayChair_Max];						// å­å¼¹å…³é”®å€¼
 
-	// Íæ¼ÒĞÅÏ¢
+	// ç©å®¶ä¿¡æ¯
 protected:
-	CPoint							m_PointPlay[PlayChair_Max];							// Íæ¼ÒÎ»ÖÃ
+	CPoint							m_PointPlay[PlayChair_Max];							// ç©å®¶ä½ç½®
 
-	// Íæ¼Ò²¹¸ø
+	// ç©å®¶è¡¥ç»™
 protected:
-	static int						m_nSupplyCondition[2];					// »î¶¯Ìõ¼ş
-	int								m_nSupplyValue[PlayChair_Max];			// »î¶¯Öµ
-	int								m_nEnergyValue[PlayChair_Max];			// ÄÜÁ¿Öµ
-	bool							m_bPlaySupply[PlayChair_Max];				// ¼¤»î²¹¸øÏä
-	int								m_nLaserPlayTime[PlayChair_Max];			// ¼¤¹âÊ±¼ä
-	int								m_nSpeedPlayTime[PlayChair_Max];			// ¼ÓËÙÊ±¼ä
+	static int						m_nSupplyCondition[2];					// æ´»åŠ¨æ¡ä»¶
+	int								m_nSupplyValue[PlayChair_Max];			// æ´»åŠ¨å€¼
+	int								m_nEnergyValue[PlayChair_Max];			// èƒ½é‡å€¼
+	bool							m_bPlaySupply[PlayChair_Max];				// æ¿€æ´»è¡¥ç»™ç®±
+	int								m_nLaserPlayTime[PlayChair_Max];			// æ¿€å…‰æ—¶é—´
+	int								m_nSpeedPlayTime[PlayChair_Max];			// åŠ é€Ÿæ—¶é—´
 
-	// ÓãĞÅÏ¢
+	// é±¼ä¿¡æ¯
 protected:
-	CWHArray< tagFishInfo >			m_ArrayFishInfo;						// ÓãÓãĞÅÏ¢
-	DWORD							m_nStartTime;							// Í¬²½Ê±¼ä
-	DWORD							m_FishKingTime;							//ÓãÍõË¢ĞÂÆğÊ¼Ê±¼ä
-	DWORD                           m_FishKingIntervalTime;					//ÓãÍõµÄË¢ĞÂ¼ä¸ô
-	bool							m_bFushBoss;							//ÓãÍõË¢ĞÂ¹«¸æ½×¶Î
-	bool							m_bFushSence;							//Ë¢ĞÂBOSSÊ±¼äÓãÕó²»ÄÜË¢ĞÂ
-	bool							m_bIsFushBoss;						    //BOSSË¢ĞÂÖĞ
-	bool							m_bIsFushBegin;							//Ë¢ĞÂµ½BOSSÏûÊ§ÆÚ¼ä
+	CWHArray< tagFishInfo >			m_ArrayFishInfo;						// é±¼é±¼ä¿¡æ¯
+	DWORD							m_nStartTime;							// åŒæ­¥æ—¶é—´
+	DWORD							m_FishKingTime;							//é±¼ç‹åˆ·æ–°èµ·å§‹æ—¶é—´
+	DWORD                           m_FishKingIntervalTime;					//é±¼ç‹çš„åˆ·æ–°é—´éš”
+	bool							m_bFushBoss;							//é±¼ç‹åˆ·æ–°å…¬å‘Šé˜¶æ®µ
+	bool							m_bFushSence;							//åˆ·æ–°BOSSæ—¶é—´é±¼é˜µä¸èƒ½åˆ·æ–°
+	bool							m_bIsFushBoss;						    //BOSSåˆ·æ–°ä¸­
+	bool							m_bIsFushBegin;							//åˆ·æ–°åˆ°BOSSæ¶ˆå¤±æœŸé—´
 
-	// ÕóÁĞ
+	// é˜µåˆ—
 protected:
-	UINT							m_nFishTeamTime;							// Óã¶ÓÁĞÊı
-	int								m_nFishKingTime;							// ÓæÍõÊ±¼ä
-	int								m_nFishKing[FishType_Small_Max];				// ÓãÍõĞÅÏ¢
+	UINT							m_nFishTeamTime;							// é±¼é˜Ÿåˆ—æ•°
+	int								m_nFishKingTime;							// æ¸”ç‹æ—¶é—´
+	int								m_nFishKing[FishType_Small_Max];				// é±¼ç‹ä¿¡æ¯
 
-	// ÏûÏ¢¿ØÖÆ
+	// æ¶ˆæ¯æ§åˆ¶
 protected:
 	int								m_nAwardMinMultiple;
 	BOOL							m_bAwardChatBox;
 
-	// ²¹¸øÏä¿ØÖÆ
+	// è¡¥ç»™ç®±æ§åˆ¶
 protected:
-	static int						m_nLaserTime;							// ¼¤¹âÊ±¼ä
-	static int						m_nLaserChance;							// ¼¤¹â¼¸ÂÊ
-	static int						m_nSpeedTime;							// ¼ÓËÙÊ±¼ä
-	static int						m_nSpeedChance;							// ¼ÓËÙ¼¸ÂÊ
-	static int						m_nGiftScore[5];						// ÔùËÍ½ğ±Ò
-	static int						m_nGiftChance[5];						// ÔùËÍ¼¸ÂÊ
-	static int						m_nNullChance;							// ¿ÕÏä¼¸ÂÊ
+	static int						m_nLaserTime;							// æ¿€å…‰æ—¶é—´
+	static int						m_nLaserChance;							// æ¿€å…‰å‡ ç‡
+	static int						m_nSpeedTime;							// åŠ é€Ÿæ—¶é—´
+	static int						m_nSpeedChance;							// åŠ é€Ÿå‡ ç‡
+	static int						m_nGiftScore[5];						// èµ é€é‡‘å¸
+	static int						m_nGiftChance[5];						// èµ é€å‡ ç‡
+	static int						m_nNullChance;							// ç©ºç®±å‡ ç‡
 
-	// ±¬Õ¨¿ØÖÆ
+	// çˆ†ç‚¸æ§åˆ¶
 protected:
-	static int						m_nExplosionProportion;					// ±¬Õ¨±ÈÀı
-	static int						m_nExplosionStart;						// ±¬Õ¨Æô¶¯
-	static LONGLONG					m_lExplosionCondition;					// ±¬Õ¨Ìõ¼ş
-	static EnumExplosionConditionType m_nExplosionConditionType;			// Ìõ¼şÀàĞÍ
-	static CMap<uint, uint, LONGLONG, LONGLONG> m_MapPlayExplosionCondition;// ±¬Õ¨Ìõ¼ş
+	static int						m_nExplosionProportion;					// çˆ†ç‚¸æ¯”ä¾‹
+	static int						m_nExplosionStart;						// çˆ†ç‚¸å¯åŠ¨
+	static LONGLONG					m_lExplosionCondition;					// çˆ†ç‚¸æ¡ä»¶
+	static EnumExplosionConditionType m_nExplosionConditionType;			// æ¡ä»¶ç±»å‹
+	static CMap<uint, uint, LONGLONG, LONGLONG> m_MapPlayExplosionCondition;// çˆ†ç‚¸æ¡ä»¶
 
-	// ¿â´æ
+	// åº“å­˜
 protected:
-	static double					m_dTaxRatio;							// Ë°ÊÕ±ÈÀı
-	static LONGLONG					m_nRoomWrite;							// ·¿¼äÊµ¼ÊĞ´·Ö
-	static double					m_dDartStock;						// ·ÉïÚ¿â´æ
-	static double					m_dWholeTax[Multiple_Max];			// È«²¿Ë°ÊÕ
-	static double					m_dRoomStock[Multiple_Max];			// ·¿¼ä¿â´æ
-	static double *					m_pdTableStock[Multiple_Max];		// ·¿¼ä¿â´æ
-	double							m_dPlayStock[PlayChair_Max][Multiple_Max];// Íæ¼Ò¿â´æ
+	static double					m_dTaxRatio;							// ç¨æ”¶æ¯”ä¾‹
+	static LONGLONG					m_nRoomWrite;							// æˆ¿é—´å®é™…å†™åˆ†
+	static double					m_dDartStock;						// é£é•–åº“å­˜
+	static double					m_dWholeTax[Multiple_Max];			// å…¨éƒ¨ç¨æ”¶
+	static double					m_dRoomStock[Multiple_Max];			// æˆ¿é—´åº“å­˜
+	static double *					m_pdTableStock[Multiple_Max];		// æˆ¿é—´åº“å­˜
+	double							m_dPlayStock[PlayChair_Max][Multiple_Max];// ç©å®¶åº“å­˜
 	
-	// ÄÑ¶È
-	static int						m_nDifficultyStart[Difficulty_Type];		// ÄÑ¶ÈÀàĞÍ
+	// éš¾åº¦
+	static int						m_nDifficultyStart[Difficulty_Type];		// éš¾åº¦ç±»å‹
 	static int						m_nRoomDifficultyCount[Difficulty_Max];
 	static int						m_nTableDifficultyCount[Difficulty_Max];
 	static int						m_nPlayDifficultyCount[Difficulty_Max];
@@ -322,266 +322,266 @@ protected:
 	static double					m_dTableDifficultyValue[Difficulty_Max];
 	static double					m_dPlayDifficultyValue[Difficulty_Max];
 
-	// ¸öÈËÄÑ¶È¿ØÖÆ
+	// ä¸ªäººéš¾åº¦æ§åˆ¶
     CMapPersonalDifficulty	m_MapPersonalDifficulty;
 
-	// ×Ü¿â´æ
-	static LONGLONG					m_lStockInitial;					// ³õÊ¼¿â´æ
-	static LONGLONG					m_lStockCurrent;					// µ±Ç°¿â´æ
+	// æ€»åº“å­˜
+	static LONGLONG					m_lStockInitial;					// åˆå§‹åº“å­˜
+	static LONGLONG					m_lStockCurrent;					// å½“å‰åº“å­˜
 
-	// ÓãÂ·¾¶
+	// é±¼è·¯å¾„
 protected:
 	static CWHArray< tagFishPath * >	m_ArrayFishPathPositive;			
 
-	//ÆäËûÅäÖÃ
-	int   m_iAddFinshCount;	   //Ôö¼ÓÈËÊıÔö¼ÓµÄÓãÊı
-	int   m_iFinshLeve;        //ÓãÈº´óĞ¡µÈ¼¶
-	int   m_iFinshGroup;       //ÓãÕóÀàĞÍ
-	bool  m_bOpenShoalFish;    //´óÓãÈºÊÇ·ñ¿ªÆô
-	int   m_iFishShoalLev;     //´óÓãÈºÊıÁ¿µÈ¼¶
-	int   m_iCreatJiLv;        //´´½¨ÓãµÄÊ±ºòĞ¡Óã´´½¨±ÈÀı
-	int   m_iTickTime;		  //Íæ¼Ò¶à¾Ã²»²Ù×÷»á±»Ìß³ö
-	bool  m_IsOpenTick;	      //ÊÇ·ñ¿ªÆô²»²Ù×÷Ìß³öÍæ¼Ò
-	int	  m_ipropNum;		  //´óÓÚ¶àÉÙË÷ÒıµÄÓã¿ÉÒÔ±¬³öÌØÊâµÀ¾ß
-	int	  m_iBingDong;		  //±ù¶³¼¼ÄÜ¸ÅÂÊ
-	int	  m_iLocking;		  //1Ôª»°·Ñ¿¨¸ÅÂÊ
-	int	  m_iRate;			  //³éË®ÂÊ
-	int   m_iRobotTickTime;   // »úÆ÷ÈË¶à¾Ã²»²Ù×÷»á±»Ìß
+	//å…¶ä»–é…ç½®
+	int   m_iAddFinshCount;	   //å¢åŠ äººæ•°å¢åŠ çš„é±¼æ•°
+	int   m_iFinshLeve;        //é±¼ç¾¤å¤§å°ç­‰çº§
+	int   m_iFinshGroup;       //é±¼é˜µç±»å‹
+	bool  m_bOpenShoalFish;    //å¤§é±¼ç¾¤æ˜¯å¦å¼€å¯
+	int   m_iFishShoalLev;     //å¤§é±¼ç¾¤æ•°é‡ç­‰çº§
+	int   m_iCreatJiLv;        //åˆ›å»ºé±¼çš„æ—¶å€™å°é±¼åˆ›å»ºæ¯”ä¾‹
+	int   m_iTickTime;		  //ç©å®¶å¤šä¹…ä¸æ“ä½œä¼šè¢«è¸¢å‡º
+	bool  m_IsOpenTick;	      //æ˜¯å¦å¼€å¯ä¸æ“ä½œè¸¢å‡ºç©å®¶
+	int	  m_ipropNum;		  //å¤§äºå¤šå°‘ç´¢å¼•çš„é±¼å¯ä»¥çˆ†å‡ºç‰¹æ®Šé“å…·
+	int	  m_iBingDong;		  //å†°å†»æŠ€èƒ½æ¦‚ç‡
+	int	  m_iLocking;		  //1å…ƒè¯è´¹å¡æ¦‚ç‡
+	int	  m_iRate;			  //æŠ½æ°´ç‡
+	int   m_iRobotTickTime;   // æœºå™¨äººå¤šä¹…ä¸æ“ä½œä¼šè¢«è¸¢
 
-	uint   m_iOptionTime[PLAY_COUNT];//Íæ¼Ò²Ù×÷¼ä¸ôÊ±¼ä
-	// ×é¼ş±äÁ¿
+	uint   m_iOptionTime[PLAY_COUNT];//ç©å®¶æ“ä½œé—´éš”æ—¶é—´
+	// ç»„ä»¶å˜é‡
 protected:
-	CGameLogic						m_GameLogic;							// ÓÎÏ·Âß¼­
-	static tagCustomRule			m_CustomRule;							// ÅäÖÃ¹æÔò
+	CGameLogic						m_GameLogic;							// æ¸¸æˆé€»è¾‘
+	static tagCustomRule			m_CustomRule;							// é…ç½®è§„åˆ™
 
-	// ×é¼ş½Ó¿Ú
+	// ç»„ä»¶æ¥å£
 protected:
-	//ITableFrame	*					m_pITableFrame;							// ¿ò¼Ü½Ó¿Ú
-	//tagGameServiceOption *			m_pGameServiceOption;					// ·şÎñÅäÖÃ
+	//ITableFrame	*					m_pITableFrame;							// æ¡†æ¶æ¥å£
+	//tagGameServiceOption *			m_pGameServiceOption;					// æœåŠ¡é…ç½®
 
-	// ¿ØÖÆ×é¼ş
+	// æ§åˆ¶ç»„ä»¶
 public:
 	HINSTANCE						m_hControlInst;
 	//IServerControl *				m_pIServerControl;
 
 
 
-	// »ù´¡½Ó¿Ú
+	// åŸºç¡€æ¥å£
 public:
-	// ÊÍ·Å¶ÔÏó
+	// é‡Šæ”¾å¯¹è±¡
 	virtual VOID Release();
-	// ½Ó¿Ú²éÑ¯
+	// æ¥å£æŸ¥è¯¢
 	//virtual VOID * QueryInterface(REFGUID Guid, DWORD dwQueryVer);
 
-	// ¹ÜÀí½Ó¿Ú
+	// ç®¡ç†æ¥å£
 public:
-	// ÅäÖÃ×À×Ó
+	// é…ç½®æ¡Œå­
 	//virtual bool Initialization(IUnknownEx * pIUnknownEx);
-	// ¸´Î»×À×Ó
+	// å¤ä½æ¡Œå­
 	virtual VOID RepositionSink();
 
-	// ²éÑ¯½Ó¿Ú
+	// æŸ¥è¯¢æ¥å£
 public:
-	// ²éÑ¯ÊÇ·ñ¿Û·şÎñ·Ñ
+	// æŸ¥è¯¢æ˜¯å¦æ‰£æœåŠ¡è´¹
 	virtual bool QueryBuckleServiceCharge(WORD wChairID) { return false; }
 
 
 
-	// ÓÎÏ·ÊÂ¼ş
+	// æ¸¸æˆäº‹ä»¶
 public:
 
 
-	/// ³õÊ¼ÓÎÏ·
+	/// åˆå§‹æ¸¸æˆ
 	virtual bool InitDeskGameStation();
-	//ÓÎÏ·¿ªÊ¼
+	//æ¸¸æˆå¼€å§‹
 	//virtual bool OnStart();
-	//ÓÎÏ·¿ªÊ¼
+	//æ¸¸æˆå¼€å§‹
 	virtual bool GameBegin(BYTE bBeginFlag);
-	//ÓÎÏ·½áÊø
+	//æ¸¸æˆç»“æŸ
 	virtual bool GameFinish(BYTE bDeskStation, BYTE bCloseFlag);
-	//·¢ËÍ³¡¾°
+	//å‘é€åœºæ™¯
 	virtual bool OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser);
-	//	// ÖØÖÃÓÎÏ·×´Ì¬
+	//	// é‡ç½®æ¸¸æˆçŠ¶æ€
 	virtual bool ReSetGameState(BYTE bLastStation);
-	//¿ò¼ÜÏûÏ¢´¦Àíº¯Êı
+	//æ¡†æ¶æ¶ˆæ¯å¤„ç†å‡½æ•°
 	virtual bool HandleFrameMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser = false);
-	// Íæ¼Ò×øÏÂ
+	// ç©å®¶åä¸‹
 	virtual bool UserSitDeskActionNotify(BYTE deskStation);
 
-	// ÊÂ¼ş½Ó¿Ú
+	// äº‹ä»¶æ¥å£
 public:
-	//¶¨Ê±Æ÷ÊÂ¼ş
+	//å®šæ—¶å™¨äº‹ä»¶
 	virtual bool OnTimer(UINT uTimerID);
-	//ÓÎÏ·ÏûÏ¢´¦Àí
+	//æ¸¸æˆæ¶ˆæ¯å¤„ç†
 	virtual bool HandleNotifyMessage(BYTE deskStation, unsigned int assistID, void* pData, int size, bool bWatchUser = false);
 
-	//ÓÃ»§¶ÏÏß
+	//ç”¨æˆ·æ–­çº¿
 	virtual bool  UserNetCut(GameUserInfo* pUser);
-	//ÓÃ»§ÆğÀ´
+	//ç”¨æˆ·èµ·æ¥
 	virtual bool  UserLeftDesk(GameUserInfo* pUser);
-	//ÓÎÏ·×´Ì¬
+	//æ¸¸æˆçŠ¶æ€
 	virtual bool IsPlayGame(BYTE bDeskStation);
-	//ÓÃ»§±»Ìß
+	//ç”¨æˆ·è¢«è¸¢
 	//virtual void  UserBeKicked(BYTE deskStation);
 public:
-	//¼ÓÔØÅäÖÃ
+	//åŠ è½½é…ç½®
 	virtual void LoadDynamicConfig();
 
-	// ¿ØÖÆº¯Êı
+	// æ§åˆ¶å‡½æ•°
 public:
-	// ·µ»ØÅäÖÃ
+	// è¿”å›é…ç½®
 	virtual void GetCustomRule( tagCustomRule & nConfigInfo );
-	// ÉèÖÃÅäÖÃ
+	// è®¾ç½®é…ç½®
 	virtual void SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile );
-	// ·µ»Ø¸öÈËÄÑ¶È
+	// è¿”å›ä¸ªäººéš¾åº¦
 	virtual void GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty );
-	// ÉèÖÃ¸öÈËÄÑ¶È
+	// è®¾ç½®ä¸ªäººéš¾åº¦
 	virtual void SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty );
-	// É¾³ı¸öÈËÄÑ¶È
+	// åˆ é™¤ä¸ªäººéš¾åº¦
 	virtual void DeletePersonalDifficulty( unsigned long lPlayID );
-	// Çå¿Õ¸öÈËÄÑ¶È
+	// æ¸…ç©ºä¸ªäººéš¾åº¦
 	virtual void ClearPersonalDifficulty();
-	//»ñÈ¡¸öÈËÄÑ¶È
+	//è·å–ä¸ªäººéš¾åº¦
 	void GetUserDifficulty(unsigned long lPlayID, double& dPersonalDifficulty);
-	// »ñÈ¡¿â´æ
+	// è·å–åº“å­˜
 	
-	// ÉèÖÃ×À×Ó¿â´æ
+	// è®¾ç½®æ¡Œå­åº“å­˜
 	virtual bool SetTableStock( unsigned short TableID, int nTableStock );
-	//±»ÌßÍæ¼Ò´¦Àí
+	//è¢«è¸¢ç©å®¶å¤„ç†
 	virtual void UserBeKicked(BYTE deskStation);
-	// °ÙÈËÀàÓÎÏ·,ÅĞ¶ÏÕâ¸öÍæ¼ÒÃû×ÖÊÇ·ñ¿É±ä£¨°üÀ¨»úÆ÷ÈË£¬ÒÔ¼°ÉÏ×¯ÁĞ±íÍæ¼Ò£©
+	// ç™¾äººç±»æ¸¸æˆ,åˆ¤æ–­è¿™ä¸ªç©å®¶åå­—æ˜¯å¦å¯å˜ï¼ˆåŒ…æ‹¬æœºå™¨äººï¼Œä»¥åŠä¸Šåº„åˆ—è¡¨ç©å®¶ï¼‰
 	virtual bool HundredGameIsInfoChange(BYTE deskStation);
 
-	// ÓÎÏ·ÊÂ¼ş
+	// æ¸¸æˆäº‹ä»¶
 protected:
-	// ²¶ÓãÊÂ¼ş
+	// æ•é±¼äº‹ä»¶
 	bool OnSubCatchFish(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ¿ª»ğ
+	// å¼€ç«
 	bool OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ×¼±¸¼¤¹â
+	// å‡†å¤‡æ¿€å…‰
 	bool OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ¼¤¹â
+	// æ¿€å…‰
 	bool OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ÑÓ³Ù
+	// å»¶è¿Ÿ
 	bool OnSubDelay(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ÓïÒô
+	// è¯­éŸ³
 	bool OnSubSpeech(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ±¶ÊıÑ¡Ôñ
+	// å€æ•°é€‰æ‹©
 	bool OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD wDataSize);
-	// ¿ØÖÆĞÅÏ¢
+	// æ§åˆ¶ä¿¡æ¯
 	bool OnSubControl(BYTE deskStation, VOID * pData, WORD wDataSize );
-	//¼¼ÄÜÊÍ·Å
+	//æŠ€èƒ½é‡Šæ”¾
 	bool OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize);
 
 	void GetStock(LONGLONG & lStockInitial, LONGLONG & lStockCurrent);
-	//ÇĞ»»ÅÚÌ¨
+	//åˆ‡æ¢ç‚®å°
 	bool OnChangeCannon(BYTE deskStation, VOID * pData, WORD wDataSize);
 
-	// ¹¦ÄÜº¯Êı
+	// åŠŸèƒ½å‡½æ•°
 public:
-	//¸øÍæ¼Ò·¢ËÍÊı¾İ
+	//ç»™ç©å®¶å‘é€æ•°æ®
 	bool SendTableData(WORD wChairID, WORD wSubCmdID, VOID * pData, WORD wDataSize, unsigned int handleCode = 0);
-	//¸øÍæ¼Ò·¢ËÍÊı¾İ
+	//ç»™ç©å®¶å‘é€æ•°æ®
 	bool SendUserItemData(GameUserInfo * pIServerUserItem, WORD wSubCmdID, VOID * pData, WORD wDataSize);
 
-	// ·¢ËÍ½±ÀøÌáÊ¾
+	// å‘é€å¥–åŠ±æç¤º
 	bool SendAwardTip( WORD wChairID, byte nFishType, int nFishMultiple, LONGLONG lFishScore, EnumScoreType nScoreType );
-	// ³õÊ¼»¯Óã³Ø
+	// åˆå§‹åŒ–é±¼æ± 
 	void InitializationFishpond( uint nBeginTime = 0 );
-	// ´´½¨Óã
+	// åˆ›å»ºé±¼
 	uint CreateFish( byte cbCount, byte cbFishType = FishType_Max, uint nPathIndex = uint_max, uint unCreateTime = 0, uint unIntervalTime = 1000, float fRotateAngle = 0.f, bool bCanSpecial = true, bool bCanAquatic = true, EnumKillerType nKillerType = KillerType_No, WORD wHitChair = INVALID_CHAIR, CShortPoint & PointOffSet = CShortPoint(0,0), float fInitialAngle = 0.f, bool bRepeatCreate = true );
-	// ´´½¨Óã
+	// åˆ›å»ºé±¼
 	uint CreateFishEx( byte cbCount, byte cbFishType = FishType_Max, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX] = NULL, int nBezierCount = 0, uint unCreateTime = 0, uint unIntervalTime = 1000, float fRotateAngle = 0.f, bool bCanSpecial = true, bool bCanAquatic = true, EnumKillerType nKillerType = KillerType_No, WORD wHitChair = INVALID_CHAIR, CShortPoint & PointOffSet = CShortPoint(0,0), float fInitialAngle = 0.f, bool bRepeatCreate = true );
-	// ´´½¨Óã
+	// åˆ›å»ºé±¼
 	uint ResetFish( tagFishInfo & TFishInfo );
-	// Ëæ»úÂ·¾¶
+	// éšæœºè·¯å¾„
 	void RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX], int & nBezierCount );
-	// ·¢ËÍÓãĞÅÏ¢
+	// å‘é€é±¼ä¿¡æ¯
 	void SendFish( tagFishInfo & TFishInfo );
-	// ²¶Óã
+	// æ•é±¼
 	LONGLONG PlayCatchFish( WORD wChairID, int nBulletSplit, uint nFishCatchKey, int nMultipleIndex, EnumPlayCatchType EPlayCatchType );
-	// ±È½ÏÓã
+	// æ¯”è¾ƒé±¼
 	bool ISFishCatchKey( uint nFishKey, CWHArray< uint > & ArrayFishCatchKey );
-	// ²¶ÖĞÓã
+	// æ•ä¸­é±¼
 	LONGLONG CatchInFish( WORD wChairID, int nMultipleIndex, EnumPlayCatchType nPlayCatchType, tagFishInfo & TFishInfo, CWHArray< tagCatchInfo > & ArrayCatchFishInfo );
-	// ·¢ËÍ²¶»ñÏûÏ¢
+	// å‘é€æ•è·æ¶ˆæ¯
 	void SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & ArrayCatchFishInfo );
-	// ÓÎÏ·ÄÑ¶È
+	// æ¸¸æˆéš¾åº¦
 	double DifficultyGame( WORD wChairID, int nMultipleIndex );
-	// ÓÎÏ·ÄÑ¶È
+	// æ¸¸æˆéš¾åº¦
 	double DifficultyRoom( int nMultipleIndex );
-	// ÓÎÏ·ÄÑ¶È
+	// æ¸¸æˆéš¾åº¦
 	double DifficultyTable( int nMultipleIndex );
-	// ÓÎÏ·ÄÑ¶È
+	// æ¸¸æˆéš¾åº¦
 	double DifficultyPlay( WORD wChairID, int nMultipleIndex );
-	// ÄÚ²¿º¯Êı
+	// å†…éƒ¨å‡½æ•°
 private:
-	// ÌØÊâÓãÕó
+	// ç‰¹æ®Šé±¼é˜µ
 	uint SpecialFishMatrix( byte cbFishType, CDoublePoint PointFish );
-	// ÓãÈº½¨Á¢
+	// é±¼ç¾¤å»ºç«‹
 	uint GroupOfFish( uint nBeginTime = 0 );
-	// Ô²È¦Óã
+	// åœ†åœˆé±¼
 	uint CircleOfFish( byte cbFishType,	int nFishCount, int nPathIndex, uint unCreateTime, uint nRadius, uint unIntervalTime );
-	// »ñÈ¡Â·¾¶Ê±¼ä
+	// è·å–è·¯å¾„æ—¶é—´
 	uint PathTime( tagFishPath* pFishPath );
-	// ¼ÆËãµ±Ç°ÓãÎ»ÖÃ
+	// è®¡ç®—å½“å‰é±¼ä½ç½®
 	EnumFishMoveType FishMove( CDoublePoint & ptPosition, tagFishInfo & TFish, uint nCustomLossTime = uint_max );
-	// Óã¿ìËÙÏûÏ¢
+	// é±¼å¿«é€Ÿæ¶ˆæ¯
 	void FishFastMove();
-	// »ñÈ¡ÓãÊıÁ¿
+	// è·å–é±¼æ•°é‡
 	uint GetFishCount( uint nType );
-	// »ñÈ¡ÌØÊâÓãÊıÁ¿
+	// è·å–ç‰¹æ®Šé±¼æ•°é‡
 	uint GetFishSpecialCount();
-	// Óã±ù¶³
+	// é±¼å†°å†»
 	void FishFreeze( uint unLossTime );
-	// ½»»»±äÁ¿
+	// äº¤æ¢å˜é‡
 	template< typename T > void SwapVariable( T & One, T & Two );
-	// ÅĞ¶Ï»úÆ÷ÈË
+	// åˆ¤æ–­æœºå™¨äºº
 	bool IsAndroidUser( BYTE wChairID );
-	// ³õÊ¼»¯Íæ¼Ò
+	// åˆå§‹åŒ–ç©å®¶
 	void InitializePlayer( WORD wChairID );
 
 public:
-	// Ğı×ªµã
+	// æ—‹è½¬ç‚¹
 	CDoublePoint Rotate( CDoublePoint & ptCircle, double dRadian, CDoublePoint & ptSome );
-	// Ğı×ªµã
+	// æ—‹è½¬ç‚¹
 	CShortPoint Rotate( CShortPoint & ptCircle, double dRadian, CShortPoint & ptSome );
-	// ÒÑÖªÔ²ĞÄ,»¡¶È,°ë¾¶ ÇóÔ²ÉÏÈÎÒâÒ»
+	// å·²çŸ¥åœ†å¿ƒ,å¼§åº¦,åŠå¾„ æ±‚åœ†ä¸Šä»»æ„ä¸€
 	CShortPoint RotatePoint( CShortPoint & ptCircle, double dRadian, double dRadius );
-	// ±´Èû¶ûÇúÏß
+	// è´å¡å°”æ›²çº¿
 	CDoublePoint PointOnCubicBezier( tagBezierPoint* cp, double t );
-	// Á½µã¾àÀë
+	// ä¸¤ç‚¹è·ç¦»
 	double DistanceOfPoint( CDoublePoint & PointOne, CDoublePoint & PointTwo );
-	// Ëæ»úÇøÓò
+	// éšæœºåŒºåŸŸ
 	int RandomArea(int nLen, ...);
 
 public:
-	// Ê¹ÄÜ¹Ø»úÌØÈ¨ ²¢¹Ø»ú
+	// ä½¿èƒ½å…³æœºç‰¹æƒ å¹¶å…³æœº
 	bool EnableShutdownPrivilege();
 
-	// ¿â´æº¯Êı
+	// åº“å­˜å‡½æ•°
 public:
-	// Íæ¼ÒÏûºÄ
+	// ç©å®¶æ¶ˆè€—
 	void PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG lConsumeCount ); 
-	// Íæ¼ÒÊÕÈë
+	// ç©å®¶æ”¶å…¥
 	void PlayerIncome( WORD wChairID, int nMultipleIndex, LONGLONG lIncomeCount );
-	// ×À×Ó¿â´æ
+	// æ¡Œå­åº“å­˜
 	double & _TableStock( int nMultipleIndex );	
-	// ×À×Ó¿â´æ
+	// æ¡Œå­åº“å­˜
 	double & _TableStock( unsigned short TableID, int nMultipleIndex );	
-	// Íæ¼Ò¿â´æ
+	// ç©å®¶åº“å­˜
 	double & _PlayerStock( WORD wChairID, int nMultipleIndex );
 
-	//ĞÂÔö
-	//»ñÈ¡Íæ¼ÒĞÅÏ¢
+	//æ–°å¢
+	//è·å–ç©å®¶ä¿¡æ¯
 	GameUserInfo * GetTableUserItem(WORD wChairID);
-	//´òÓ¡ÈÕÖ¾ÎÄ¼ş-·şÎñÆ÷
+	//æ‰“å°æ—¥å¿—æ–‡ä»¶-æœåŠ¡å™¨
 	void DebugPrintf(const char *p, ...);
-	//³õÊ¼»¯ÓÎÏ·ÅäÖÃ
+	//åˆå§‹åŒ–æ¸¸æˆé…ç½®
 	void IniConfig();
 
-	//ĞÂÔö±äÁ¿
-	bool IsBegin;              //ÓÎÏ·ÊÇ·ñ¿ªÊ¼ÁË
+	//æ–°å¢å˜é‡
+	bool IsBegin;              //æ¸¸æˆæ˜¯å¦å¼€å§‹äº†
 };
 
 ////////////////////////////////////////////////////////////////////////////////// 

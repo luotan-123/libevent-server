@@ -105,7 +105,7 @@ inline CFloatTransform		b2MulT(const CFloatTransform& A, const CFloatTransform& 
 bool ShapeOverlap( const CPolygonShape* pShapeA, const CPolygonShape* pShapeB, const CFloatTransform& xfA, const CFloatTransform& xfB );
 
 // ----------------------------------------------------------------------------------
-// 怪物区域定义
+// 鎬墿鍖哄煙瀹氫箟
 #define	MONSTER_VEC						6
 
 const CFloatVector2 MonsterVec[FishType_Max][MONSTER_VEC] = 

@@ -2,194 +2,194 @@
 #define CMD_GAME_HEAD_FILE
 
 #include "..\Dexter\Dexter.h"
-// 1×Ö½Ú¶ÔÆä
+// 1å­—èŠ‚å¯¹å…¶
 #pragma pack(1)
 
 ////////////////////////////////////////////////////////////////////////// 
-// ·þÎñ¶¨Òå
+// æœåŠ¡å®šä¹‰
 
-#define GAMENAME						TEXT("BOSSÀ´ÁË")
-#define GAME_DLL_AUTHOR                 TEXT("ÉîÛÚ»ðÃÃÍøÂç¿Æ¼¼")            //
-#define GAME_DLL_NOTE                   TEXT("µçÍæ -- ÓÎÏ·×é¼þ")
+#define GAMENAME						TEXT("BOSSæ¥äº†")
+#define GAME_DLL_AUTHOR                 TEXT("æ·±åœ³ç«å¦¹ç½‘ç»œç§‘æŠ€")            //
+#define GAME_DLL_NOTE                   TEXT("ç”µçŽ© -- æ¸¸æˆç»„ä»¶")
 
 #define NAME_ID                         50000001
 #define PLAY_COUNT                      4
 
-// °æ±¾¶¨Òå
-#define GAME_MAX_VER					1								        // ÏÖÔÚ×î¸ß°æ±¾
-#define GAME_LESS_VER					1								        // ÏÖÔÚ×îµÍ°æ±¾
-#define GAME_CHANGE_VER					0								        // ÐÞ¸Ä°æ±¾
+// ç‰ˆæœ¬å®šä¹‰
+#define GAME_MAX_VER					1								        // çŽ°åœ¨æœ€é«˜ç‰ˆæœ¬
+#define GAME_LESS_VER					1								        // çŽ°åœ¨æœ€ä½Žç‰ˆæœ¬
+#define GAME_CHANGE_VER					0								        // ä¿®æ”¹ç‰ˆæœ¬
 
-// Ö§³ÖÀàÐÍ
+// æ”¯æŒç±»åž‹
 #define SUPPER_TYPE						SUP_NORMAL_GAME|SUP_MATCH_GAME|SUP_MONEY_GAME
 
-// ÓÎÏ·³£Á¿¶¨Òå
-#define INVALID_CHAIR				0xFFFF								//ÎÞÐ§ÒÎ×Ó
+// æ¸¸æˆå¸¸é‡å®šä¹‰
+#define INVALID_CHAIR				0xFFFF								//æ— æ•ˆæ¤…å­
 
 ////////////////////////////////////////////////////////////////////////// 
 
 //
-#define  GAME_STATUS_FREE     0     //¿ÕÏÐ×´Ì¬
-#define  GAME_STATUS_PLAY     1    //ÓÎÏ·×´Ì¬
+#define  GAME_STATUS_FREE     0     //ç©ºé—²çŠ¶æ€
+#define  GAME_STATUS_PLAY     1    //æ¸¸æˆçŠ¶æ€
 
-// ÓÎÏ·ÏûÏ¢
-#define WM_D3D_RENDER				(WM_USER + 300)					// äÖÈ¾ÏûÏ¢
-#define WM_D3D_LOAD					(WM_USER + 301)					// ÔØÈëÏûÏ¢
-#define WM_SHOW_CHAT				(WM_USER + 302)					// ÁÄÌìÏûÏ¢
-#define WM_BEGIN_HELP				(WM_USER + 303)					// ¿ªÊ¼°ïÖúÏûÏ¢
-#define IDM_CATCH_FISH				(WM_USER + 1000)				// ²¶ÓãÐÅÏ¢
-#define IDM_FIRE					(WM_USER + 1001)				// ¿ª»ðÐÅÏ¢
-#define IDM_UPDATE_CONTROLS			(WM_USER + 1004)				// ¸üÐÂ¿Ø¼þÐÅÏ¢
-#define IDM_SET						(WM_USER + 1005)				// ÉèÖÃÏûÏ¢
-#define IDM_FIRE_SWIM_OVER			(WM_USER + 1007)				// ÓÎ¶¯Íê½á
-#define IDM_TEMP_SET				(WM_USER + 1008)				// ÁÙÊ±ÉèÖÃÏûÏ¢
-#define IDM_COLOR					(WM_USER + 1009)				// ÑÕÉ«ÏûÏ¢
-#define IDM_BEGIN_LASER				(WM_USER + 1013)				// ×¼±¸¼¤¹â
-#define IDM_LASER					(WM_USER + 1014)				// ¼¤¹â
-#define IDM_GOLD_SELETE				(WM_USER + 1018)				// ½ð¹êÑ¡Ôñ
-#define IDM_SPEECH					(WM_USER + 1020)				// ÓïÒôÏûÏ¢
-#define IDM_MULTIPLE				(WM_USER + 1021)				// ±¶ÊýÏûÏ¢
-#define IDM_OPEN_CONTROL			(WM_USER + 1023)				// ´ò¿ª¿ØÖÆ
+// æ¸¸æˆæ¶ˆæ¯
+#define WM_D3D_RENDER				(WM_USER + 300)					// æ¸²æŸ“æ¶ˆæ¯
+#define WM_D3D_LOAD					(WM_USER + 301)					// è½½å…¥æ¶ˆæ¯
+#define WM_SHOW_CHAT				(WM_USER + 302)					// èŠå¤©æ¶ˆæ¯
+#define WM_BEGIN_HELP				(WM_USER + 303)					// å¼€å§‹å¸®åŠ©æ¶ˆæ¯
+#define IDM_CATCH_FISH				(WM_USER + 1000)				// æ•é±¼ä¿¡æ¯
+#define IDM_FIRE					(WM_USER + 1001)				// å¼€ç«ä¿¡æ¯
+#define IDM_UPDATE_CONTROLS			(WM_USER + 1004)				// æ›´æ–°æŽ§ä»¶ä¿¡æ¯
+#define IDM_SET						(WM_USER + 1005)				// è®¾ç½®æ¶ˆæ¯
+#define IDM_FIRE_SWIM_OVER			(WM_USER + 1007)				// æ¸¸åŠ¨å®Œç»“
+#define IDM_TEMP_SET				(WM_USER + 1008)				// ä¸´æ—¶è®¾ç½®æ¶ˆæ¯
+#define IDM_COLOR					(WM_USER + 1009)				// é¢œè‰²æ¶ˆæ¯
+#define IDM_BEGIN_LASER				(WM_USER + 1013)				// å‡†å¤‡æ¿€å…‰
+#define IDM_LASER					(WM_USER + 1014)				// æ¿€å…‰
+#define IDM_GOLD_SELETE				(WM_USER + 1018)				// é‡‘é¾Ÿé€‰æ‹©
+#define IDM_SPEECH					(WM_USER + 1020)				// è¯­éŸ³æ¶ˆæ¯
+#define IDM_MULTIPLE				(WM_USER + 1021)				// å€æ•°æ¶ˆæ¯
+#define IDM_OPEN_CONTROL			(WM_USER + 1023)				// æ‰“å¼€æŽ§åˆ¶
 
-#define S_TOP_LEFT					0								// ·þÎñÆ÷Î»ÖÃ
-#define S_TOP_CENTER				1								// ·þÎñÆ÷Î»ÖÃ
-#define S_TOP_RIGHT					2								// ·þÎñÆ÷Î»ÖÃ
-#define S_BOTTOM_LEFT				3								// ·þÎñÆ÷Î»ÖÃ
-#define S_BOTTOM_CENTER				4								// ·þÎñÆ÷Î»ÖÃ
-#define S_BOTTOM_RIGHT				5								// ·þÎñÆ÷Î»ÖÃ
+#define S_TOP_LEFT					0								// æœåŠ¡å™¨ä½ç½®
+#define S_TOP_CENTER				1								// æœåŠ¡å™¨ä½ç½®
+#define S_TOP_RIGHT					2								// æœåŠ¡å™¨ä½ç½®
+#define S_BOTTOM_LEFT				3								// æœåŠ¡å™¨ä½ç½®
+#define S_BOTTOM_CENTER				4								// æœåŠ¡å™¨ä½ç½®
+#define S_BOTTOM_RIGHT				5								// æœåŠ¡å™¨ä½ç½®
 
-#define C_TOP_LEFT					0								// ÊÓÍ¼Î»ÖÃ
-#define C_TOP_CENTER				1								// ÊÓÍ¼Î»ÖÃ
-#define C_TOP_RIGHT					2								// ÊÓÍ¼Î»ÖÃ
-#define C_BOTTOM_LEFT				3								// ÊÓÍ¼Î»ÖÃ
-#define C_BOTTOM_CENTER				4								// ÊÓÍ¼Î»ÖÃ
-#define C_BOTTOM_RIGHT				5								// ÊÓÍ¼Î»ÖÃ
+#define C_TOP_LEFT					0								// è§†å›¾ä½ç½®
+#define C_TOP_CENTER				1								// è§†å›¾ä½ç½®
+#define C_TOP_RIGHT					2								// è§†å›¾ä½ç½®
+#define C_BOTTOM_LEFT				3								// è§†å›¾ä½ç½®
+#define C_BOTTOM_CENTER				4								// è§†å›¾ä½ç½®
+#define C_BOTTOM_RIGHT				5								// è§†å›¾ä½ç½®
 
-// Ïà¶Ô´°¿Ú
-#define DEFAULE_WIDTH				(1280)							// ¿Í»§¶ËÏà¶Ô¿í
-#define DEFAULE_HEIGHT				(800)							// ¿Í»§¶ËÏà¶Ô¸ß	
-#define OBLIGATE_LENGTH				(300)							// Ô¤Áô¿í¶È
+// ç›¸å¯¹çª—å£
+#define DEFAULE_WIDTH				(1280)							// å®¢æˆ·ç«¯ç›¸å¯¹å®½
+#define DEFAULE_HEIGHT				(800)							// å®¢æˆ·ç«¯ç›¸å¯¹é«˜	
+#define OBLIGATE_LENGTH				(300)							// é¢„ç•™å®½åº¦
 
-#define CAPTION_TOP_SIZE			25								// ±êÌâ´óÐ¡
-#define CAPTION_BOTTOM_SIZE			40								// ±êÌâ´óÐ¡
+#define CAPTION_TOP_SIZE			25								// æ ‡é¢˜å¤§å°
+#define CAPTION_BOTTOM_SIZE			40								// æ ‡é¢˜å¤§å°
 
-// ÒôÁ¿
+// éŸ³é‡
 #define  MAX_VOLUME					(3000)
 
 ////////////////////////////////////////////////////////////////////////// 
-// Ê±¼ä±ä»»
+// æ—¶é—´å˜æ¢
 #define  SECOND_TO_MILLISECOND(A)	(A*1000)
 #define  MINUTE_TO_MILLISECOND(A)	(A*1000*60)
 
-// Çø¼äËæ»úÊý
+// åŒºé—´éšæœºæ•°
 #define	RAND_INDEX					2
 #define RAND_INITIAL( nValue, nMin, nMax )		{ nValue[0] = nMin; nValue[1] = nMax; }
 #define RAND_MIN_MAX( nValue, nMin, nMax )		{ if( (nMin) >= (nMax) ) { nValue = nMin;} else { nValue = (rand()%((nMax) - (nMin))) + (nMin); } }
 #define RAND_EQUAL_MIN_MAX( nMin, nMax )		( ( (rand() + GetTickCount()) % (nMax - nMin) ) + nMin )
 #define RAND_TRUE_FALSE( True, False )			( ( (rand() + GetTickCount()) % ((True) + (False)) ) < (uint)(True) )
 
-// ×î´óÂ·¾¶
+// æœ€å¤§è·¯å¾„
 #define BEZIER_POINT_MAX			8
 
-//¶¨ÒåµÀ¾ßµÄkey
-#define BAG_HONG_BAO		"redBag"			// ºì°ü
-#define BAG_PHONE_CARD1		"phoneBillCard1"	// 1Ôª»°·Ñ¿¨
-#define BAG_PHONE_CARD5		"phoneBillCard5"	// 5Ôª»°·Ñ¿¨
-#define BAG_BING_DONG		"skillFrozen"		// ±ù¶³¼¼ÄÜ
-#define BAG_LOCK			"skillLocking"		// Ëø¶¨¼¼ÄÜ
+//å®šä¹‰é“å…·çš„key
+#define BAG_HONG_BAO		"redBag"			// çº¢åŒ…
+#define BAG_PHONE_CARD1		"phoneBillCard1"	// 1å…ƒè¯è´¹å¡
+#define BAG_PHONE_CARD5		"phoneBillCard5"	// 5å…ƒè¯è´¹å¡
+#define BAG_BING_DONG		"skillFrozen"		// å†°å†»æŠ€èƒ½
+#define BAG_LOCK			"skillLocking"		// é”å®šæŠ€èƒ½
 
-// ÓÎÏ·Íæ¼Ò
+// æ¸¸æˆçŽ©å®¶
 enum
 {
 	PlayChair_Max				= 4,
 	PlayChair_Invalid			= 0xffff,
 	PlayName_Len				= 32,
-	QianPao_Bullet				= 1,							// Ç§ÅÚÏûºÄ
-	Multiple_Max				= 10,							// ×î´ó±¶Êý
+	QianPao_Bullet				= 1,							// åƒç‚®æ¶ˆè€—
+	Multiple_Max				= 10,							// æœ€å¤§å€æ•°
 };
 
-// ÓãÀàÐÍÐ¡Óã0-30
+// é±¼ç±»åž‹å°é±¼0-30
 enum EnumFishTypeA
 {
-	FishType_BXiaoHuangYu		= 0,							// Ð¡»ÆÓã
-	FishType_BXiaoQingYu	    = 1,							// Ð¡ÇàÓã
-	FishType_BCaiBanYu			= 2,							// ²Ê°ßÓã							
-	FishType_BHaiMa			    = 3,							// º£Âí
-	FishType_BBXiaoChouYu	    = 4,							// Ð¡³óÓã
-	FishType_BHongWeiYu		    = 5,							// ºìÎ²Óã
-	FishType_BHaiLuo			= 6,							// º£ÂÝ
-	FishType_BHaiLuoXie			= 7,							// º£ÂÝÐ·
-	FishType_BShanHuYu		    = 8,							// Éºº÷Óã
-	FishType_BHongJinYu			= 9,							// ºì½ðÓã
-	FishType_BLanWeiYu			= 10,							// À¶Î²Óã
-	FishType_BDengLongYu		= 11,							// µÆÁýÓã
+	FishType_BXiaoHuangYu		= 0,							// å°é»„é±¼
+	FishType_BXiaoQingYu	    = 1,							// å°é’é±¼
+	FishType_BCaiBanYu			= 2,							// å½©æ–‘é±¼							
+	FishType_BHaiMa			    = 3,							// æµ·é©¬
+	FishType_BBXiaoChouYu	    = 4,							// å°ä¸‘é±¼
+	FishType_BHongWeiYu		    = 5,							// çº¢å°¾é±¼
+	FishType_BHaiLuo			= 6,							// æµ·èžº
+	FishType_BHaiLuoXie			= 7,							// æµ·èžºèŸ¹
+	FishType_BShanHuYu		    = 8,							// çŠç‘šé±¼
+	FishType_BHongJinYu			= 9,							// çº¢é‡‘é±¼
+	FishType_BLanWeiYu			= 10,							// è“å°¾é±¼
+	FishType_BDengLongYu		= 11,							// ç¯ç¬¼é±¼
 
-	FishType_BQiPaoYu			= 12,							// ÆøÅÝÓã
-	FishType_BLvQiPaoYu		    = 13,							// ÂÌÉ«ÆøÅÝÓã
-	FishType_BKuiJiaYu			= 14,							// ¿ø¼×Óã
-	FishType_BNianYu			= 15,							// öóÓã
-	FishType_BWuGui				= 16,							// ÎÚ¹ê
-	FishType_BMoGuiYu			= 17,							// Ä§¹íÓã
+	FishType_BQiPaoYu			= 12,							// æ°”æ³¡é±¼
+	FishType_BLvQiPaoYu		    = 13,							// ç»¿è‰²æ°”æ³¡é±¼
+	FishType_BKuiJiaYu			= 14,							// ç›”ç”²é±¼
+	FishType_BNianYu			= 15,							// é²¶é±¼
+	FishType_BWuGui				= 16,							// ä¹Œé¾Ÿ
+	FishType_BMoGuiYu			= 17,							// é­”é¬¼é±¼
 
-	FishType_BJianYu			= 18,							// ½£Óã
-	FishType_BHaiTun		    = 19,							// º£ëà
-	FishType_BDianYu			= 20,							// µçÓã
-	FishType_BJingYu			= 21,							// ¾¨Óã
-	FishType_BShaYu				= 22,							// öèÓã
+	FishType_BJianYu			= 18,							// å‰‘é±¼
+	FishType_BHaiTun		    = 19,							// æµ·è±š
+	FishType_BDianYu			= 20,							// ç”µé±¼
+	FishType_BJingYu			= 21,							// é²¸é±¼
+	FishType_BShaYu				= 22,							// é²¨é±¼
 
-	FishType_BChuiTouSha		= 23,							// ´¸Í·öè
-	FishType_BJinJuChiSha		= 24,							// »Æ½ð¼×¾Þ³ßöè
-	FishType_BJinKuiJiaYu		= 25,							// »Æ½ð¿ø¼×Óã
-	FishType_BJinChuiTouSha	    = 26,							// »Æ½ð´¸Í·öè
-	FishType_BJinShaYu		    = 27,							// »Æ½ð¾¨Óã
-	FishType_BJinHuSha			= 28,							// »Æ½ð»¢¾¨
+	FishType_BChuiTouSha		= 23,							// é”¤å¤´é²¨
+	FishType_BJinJuChiSha		= 24,							// é»„é‡‘ç”²å·¨å°ºé²¨
+	FishType_BJinKuiJiaYu		= 25,							// é»„é‡‘ç›”ç”²é±¼
+	FishType_BJinChuiTouSha	    = 26,							// é»„é‡‘é”¤å¤´é²¨
+	FishType_BJinShaYu		    = 27,							// é»„é‡‘é²¸é±¼
+	FishType_BJinHuSha			= 28,							// é»„é‡‘è™Žé²¸
 
 	FishType_BOSS			    = 29,							//BOSS
 
-	FishType_Hong_Bao		    = 30,							//	ºì°ü keyÖµ:redBag
-	FishType_Hua_Fei1			= 31,							//  »°·Ñ1Ôª keyÖµ:phoneBillCard1
-	FishType_Hua_Fei2			= 32,							//  »°·Ñ5Ôª keyÖµ:phoneBillCard5
+	FishType_Hong_Bao		    = 30,							//	çº¢åŒ… keyå€¼:redBag
+	FishType_Hua_Fei1			= 31,							//  è¯è´¹1å…ƒ keyå€¼:phoneBillCard1
+	FishType_Hua_Fei2			= 32,							//  è¯è´¹5å…ƒ keyå€¼:phoneBillCard5
 
 
-	FishType_ShuiHuZhuan		= 35,							// Ë®ä°´«
-	FishType_ZhongYiTang		= 36,							// ÖÒÒåÌÃ
-	FishType_BaoZhaFeiBiao		= 37,							// ±¬Õ¨·ÉïÚ
-	FishType_BaoXiang			= 38,							// ±¦Ïä
-	FishType_General_Max		= 33,							// ÆÕÍ¨Óã×î´ó
-	FishType_Normal_Max			= 33,							// Õý³£Óã×î´ó
-	FishType_Max				= 33,							// ×î´óÊýÁ¿
-	FishType_Small_Max			= 11,							// Ð¡Óã×î´óË÷Òý
-	FishType_Moderate_Max		= 17,							// ÖÐÓãË÷
-	FishType_Moderate_Big_Max	= 22,							// ÖÐ´óÓãË÷
-	FishType_Big_Max			= 29,							// ´óÓãË÷Òý
-	FishType_Invalid			= -1,							// ÎÞÐ§Óã
+	FishType_ShuiHuZhuan		= 35,							// æ°´æµ’ä¼ 
+	FishType_ZhongYiTang		= 36,							// å¿ ä¹‰å ‚
+	FishType_BaoZhaFeiBiao		= 37,							// çˆ†ç‚¸é£žé•–
+	FishType_BaoXiang			= 38,							// å®ç®±
+	FishType_General_Max		= 33,							// æ™®é€šé±¼æœ€å¤§
+	FishType_Normal_Max			= 33,							// æ­£å¸¸é±¼æœ€å¤§
+	FishType_Max				= 33,							// æœ€å¤§æ•°é‡
+	FishType_Small_Max			= 11,							// å°é±¼æœ€å¤§ç´¢å¼•
+	FishType_Moderate_Max		= 17,							// ä¸­é±¼ç´¢
+	FishType_Moderate_Big_Max	= 22,							// ä¸­å¤§é±¼ç´¢
+	FishType_Big_Max			= 29,							// å¤§é±¼ç´¢å¼•
+	FishType_Invalid			= -1,							// æ— æ•ˆé±¼
 };
-//ÖÐÓã
+//ä¸­é±¼
 enum EnumFishTypeS
 {
-	FishTypeS_One			    = 30,							//ÖÐÓã
+	FishTypeS_One			    = 30,							//ä¸­é±¼
 
 };
-//´óÓã
+//å¤§é±¼
 enum EnumFishTypeSS
 {
-	FishTypeSS_One			   = 50,							//´óÓã
+	FishTypeSS_One			   = 50,							//å¤§é±¼
 };
-//ÓãÍõ
+//é±¼çŽ‹
 enum EnumFishTypeSSS
 {
-	FishTypeSSS_One			  = 90,							   //ÓãÍõ
+	FishTypeSSS_One			  = 90,							   //é±¼çŽ‹
 };
-// Óã×´Ì¬
+// é±¼çŠ¶æ€
 enum EnumFishState
 {
-	FishState_Normal,		// ÆÕÍ¨Óã
-	FishState_King,			// ÓãÍõ
-	FishState_Killer,		// É±ÊÖÓã
-	FishState_Aquatic,		// Ë®²ÝÓã
+	FishState_Normal,		// æ™®é€šé±¼
+	FishState_King,			// é±¼çŽ‹
+	FishState_Killer,		// æ€æ‰‹é±¼
+	FishState_Aquatic,		// æ°´è‰é±¼
 };
 
-// °ïÖú
+// å¸®åŠ©
 enum EnumHelpType
 {
 	HelpType_Operation,		
@@ -200,26 +200,26 @@ enum EnumHelpType
 
 ////////////////////////////////////////////////////////////////////////// 
 
-// ×Óµ¯¶¨Òå
+// å­å¼¹å®šä¹‰
 enum
 {
-	BulletTwo	= 0,			// Ë«ÅÚ×Óµ¯
-	BulletThree = 1,			// ÈýÅÚ×Óµ¯
-	BulletFour	= 2,			// ËÄÅÚ×Óµ¯
-	BulletStyle = 3,			// ×Óµ¯Ë÷Òý
+	BulletTwo	= 0,			// åŒç‚®å­å¼¹
+	BulletThree = 1,			// ä¸‰ç‚®å­å¼¹
+	BulletFour	= 2,			// å››ç‚®å­å¼¹
+	BulletStyle = 3,			// å­å¼¹ç´¢å¼•
 };
 
-// »ñÈ¡·ÖÊýÀàÐÍ
+// èŽ·å–åˆ†æ•°ç±»åž‹
 enum EnumScoreType
 {
-	EST_Cold,					// ½ð±Ò
-	EST_Laser,					// ¼¤¹â
-	EST_Speed,					// ¼ÓËÙ
-	EST_Gift,					// ÔùËÍ
-	EST_Null,					// ¿Õ
+	EST_Cold,					// é‡‘å¸
+	EST_Laser,					// æ¿€å…‰
+	EST_Speed,					// åŠ é€Ÿ
+	EST_Gift,					// èµ é€
+	EST_Null,					// ç©º
 };
 
-// ¼ÇÂ¼ÐÅÏ¢
+// è®°å½•ä¿¡æ¯
 enum EnumRecord
 {
 	Record_UserID		= 1,		
@@ -231,7 +231,7 @@ enum EnumRecord
 };
 
 
-// ¶¥µãÀà
+// é¡¶ç‚¹ç±»
 struct CDoublePoint
 {
 	double				x;
@@ -270,7 +270,7 @@ struct tagBezierPoint
 	uint					Time;
 };
 
-// ÔØÈëÐèÒªÐÅÏ¢
+// è½½å…¥éœ€è¦ä¿¡æ¯
 struct tagLoad
 {
 	void *							pGLDevice;
@@ -280,220 +280,220 @@ struct tagLoad
 	int								nIndex;
 };
 
-// RGB ÑÕÉ«
+// RGB é¢œè‰²
 struct COLORRGBM
 {
-	byte							R;									// ÑÕÉ«É«Ïà
-	byte							G;									// ÑÕÉ«±¥ºÍ
-	byte							B;									// ÑÕÉ«ÁÁ¶È
+	byte							R;									// é¢œè‰²è‰²ç›¸
+	byte							G;									// é¢œè‰²é¥±å’Œ
+	byte							B;									// é¢œè‰²äº®åº¦
 };
 
-// HSB ÑÕÉ«
+// HSB é¢œè‰²
 struct COLORHSBM
 {
-	WORD							H;									// ÑÕÉ«É«Ïà
-	double							S;									// ÑÕÉ«±¥ºÍ
-	double							B;									// ÑÕÉ«ÁÁ¶È
+	WORD							H;									// é¢œè‰²è‰²ç›¸
+	double							S;									// é¢œè‰²é¥±å’Œ
+	double							B;									// é¢œè‰²äº®åº¦
 };
 
-// ÓÎÏ·³¡¾°
+// æ¸¸æˆåœºæ™¯
 struct GameScene
 {
-	byte				cbBackIndex;							// ±³¾°Ë÷Òý
-	LONGLONG			lPlayScore;								// Íæ¼Ò»ý·Ö
-	LONGLONG			lPlayCurScore[PlayChair_Max];				// Íæ¼Ò»ý·Ö
-	LONGLONG			lPlayStartScore[PlayChair_Max];			// Íæ¼Ò»ý·Ö
+	byte				cbBackIndex;							// èƒŒæ™¯ç´¢å¼•
+	LONGLONG			lPlayScore;								// çŽ©å®¶ç§¯åˆ†
+	LONGLONG			lPlayCurScore[PlayChair_Max];				// çŽ©å®¶ç§¯åˆ†
+	LONGLONG			lPlayStartScore[PlayChair_Max];			// çŽ©å®¶ç§¯åˆ†
 
-	int					nBulletVelocity;						// ×Óµ¯ËÙ¶È
-	int					nBulletCoolingTime;						// ×Óµ¯ÀäÈ´
-	int					nFishMultiple[FishType_Max][2];		// Óã±¶Êý
+	int					nBulletVelocity;						// å­å¼¹é€Ÿåº¦
+	int					nBulletCoolingTime;						// å­å¼¹å†·å´
+	int					nFishMultiple[FishType_Max][2];		// é±¼å€æ•°
 
-	LONGLONG			lBulletConsume[PlayChair_Max];			// ×Óµ¯ÏûºÄ
-	long				lPlayFishCount[PlayChair_Max][FishType_Max];	// Íæ¼Ò²¶»ñÓãÊý
-	int					nMultipleValue[Multiple_Max];		// ·¿¼ä±¶Êý
-	int					nMultipleIndex[PlayChair_Max];			// µ±Ç°±¶Êý
-	bool				bUnlimitedRebound;						// ÎÞÏÞ·´µ¯
-//	tchar				szBrowseUrl[256];						// ³äÖµµØÖ·
+	LONGLONG			lBulletConsume[PlayChair_Max];			// å­å¼¹æ¶ˆè€—
+	long				lPlayFishCount[PlayChair_Max][FishType_Max];	// çŽ©å®¶æ•èŽ·é±¼æ•°
+	int					nMultipleValue[Multiple_Max];		// æˆ¿é—´å€æ•°
+	int					nMultipleIndex[PlayChair_Max];			// å½“å‰å€æ•°
+	bool				bUnlimitedRebound;						// æ— é™åå¼¹
+//	tchar				szBrowseUrl[256];						// å……å€¼åœ°å€
 };
 
 ////////////////////////////////////////////////////////////////////////// 
-// ·þÎñÆ÷ÃüÁî½á¹¹
+// æœåŠ¡å™¨å‘½ä»¤ç»“æž„
 enum
 {
-	SUB_S_SYNCHRONOUS = 101,				// Í¬²½ÐÅÏ¢
-	SUB_S_FISH_CREATE,						// Óã´´½¨
-	SUB_S_FISH_CATCH,						// ²¶»ñÓã
-	SUB_S_FIRE,								// ¿ª»ð
-	SUB_S_EXCHANGE_SCENE,					// ×ª»»³¡¾°
-	SUB_S_OVER,								// ½áËã
-	SUB_S_DELAY_BEGIN,						// ÑÓ³Ù
-	SUB_S_DELAY,							// ÑÓ³Ù
-	SUB_S_BEGIN_LASER,						// ×¼±¸¼¤¹â
-	SUB_S_LASER,							// ¼¤¹â
-	SUB_S_BANK_TAKE,						// ÒøÐÐÈ¡¿î
-	SUB_S_SPEECH,							// ÓïÒôÏûÏ¢
-	SUB_S_SYSTEM,							// ÏµÍ³ÏûÏ¢
-	SUB_S_MULTIPLE,							// ±¶ÊýÏûÏ¢
-	SUB_S_SUPPLY_TIP,						// ²¹¸øÌáÊ¾
-	SUB_S_SUPPLY,							// ²¹¸øÏûÏ¢
-	SUB_S_AWARD_TIP,						// ·ÖÊýÌáÊ¾
-	SUB_S_CONTROL,							// ¿ØÖÆÏûÏ¢
-	SUB_S_UPDATE_GAME,						// ¸üÐÂÓÎÏ·
-	SUB_S_STAY_FISH,						// Í£ÁôÓã
-	SUB_S_GAME_SENCE,                       //·¢ËÍ³¡¾°
-	SUB_S_GAME_BOSS,						//BOSSË¢ÐÂ
+	SUB_S_SYNCHRONOUS = 101,				// åŒæ­¥ä¿¡æ¯
+	SUB_S_FISH_CREATE,						// é±¼åˆ›å»º
+	SUB_S_FISH_CATCH,						// æ•èŽ·é±¼
+	SUB_S_FIRE,								// å¼€ç«
+	SUB_S_EXCHANGE_SCENE,					// è½¬æ¢åœºæ™¯
+	SUB_S_OVER,								// ç»“ç®—
+	SUB_S_DELAY_BEGIN,						// å»¶è¿Ÿ
+	SUB_S_DELAY,							// å»¶è¿Ÿ
+	SUB_S_BEGIN_LASER,						// å‡†å¤‡æ¿€å…‰
+	SUB_S_LASER,							// æ¿€å…‰
+	SUB_S_BANK_TAKE,						// é“¶è¡Œå–æ¬¾
+	SUB_S_SPEECH,							// è¯­éŸ³æ¶ˆæ¯
+	SUB_S_SYSTEM,							// ç³»ç»Ÿæ¶ˆæ¯
+	SUB_S_MULTIPLE,							// å€æ•°æ¶ˆæ¯
+	SUB_S_SUPPLY_TIP,						// è¡¥ç»™æç¤º
+	SUB_S_SUPPLY,							// è¡¥ç»™æ¶ˆæ¯
+	SUB_S_AWARD_TIP,						// åˆ†æ•°æç¤º
+	SUB_S_CONTROL,							// æŽ§åˆ¶æ¶ˆæ¯
+	SUB_S_UPDATE_GAME,						// æ›´æ–°æ¸¸æˆ
+	SUB_S_STAY_FISH,						// åœç•™é±¼
+	SUB_S_GAME_SENCE,                       //å‘é€åœºæ™¯
+	SUB_S_GAME_BOSS,						//BOSSåˆ·æ–°
 };
 
-#define  SUB_S_CREATE_FISHS           666    //´´½¨ÓãÓã
+#define  SUB_S_CREATE_FISHS           666    //åˆ›å»ºé±¼é±¼
 
-// ÏµÍ³ÏûÏ¢
+// ç³»ç»Ÿæ¶ˆæ¯
 struct CMD_S_System
 {
-	double					dRoomStock;			// ·¿¼ä¿â´æ
-	double					dTableStock;		// ·¿¼ä¿â´æ
-	double					dPlayStock;			// Íæ¼Ò¿â´æ
-	double					dDartStock;			// ¿ÕÏÐ¿â´æ
-	double					dGameDifficulty;	// ·¿¼äÄÑ¶È
+	double					dRoomStock;			// æˆ¿é—´åº“å­˜
+	double					dTableStock;		// æˆ¿é—´åº“å­˜
+	double					dPlayStock;			// çŽ©å®¶åº“å­˜
+	double					dDartStock;			// ç©ºé—²åº“å­˜
+	double					dGameDifficulty;	// æˆ¿é—´éš¾åº¦
 };
 
-// Óã´´½¨
+// é±¼åˆ›å»º
 struct CMD_S_FishCreate
 {
-	// »ù±¾ÐÅÏ¢
-	uint				nFishKey;				// Óã¹Ø¼üÖµ
-	uint				unCreateTime;			// ´´½¨Ê±¼ä
-	WORD				wHitChair;				// »÷É±Î»ÖÃ
-	byte				nFishType;				// ÓãÖÖÀà
-	EnumFishState		nFishState;				// Óã×´Ì¬
+	// åŸºæœ¬ä¿¡æ¯
+	uint				nFishKey;				// é±¼å…³é”®å€¼
+	uint				unCreateTime;			// åˆ›å»ºæ—¶é—´
+	WORD				wHitChair;				// å‡»æ€ä½ç½®
+	byte				nFishType;				// é±¼ç§ç±»
+	EnumFishState		nFishState;				// é±¼çŠ¶æ€
 
-	// Â·¾¶Æ«ÒÆ
-	float				fRotateAngle;			// ½Ç¶È
-	CShortPoint 		PointOffSet;			// Æ«ÒÆ
+	// è·¯å¾„åç§»
+	float				fRotateAngle;			// è§’åº¦
+	CShortPoint 		PointOffSet;			// åç§»
 
-	// ³õÊ¼½Ç¶È
-	float				fInitialAngle;			// ½Ç¶È
+	// åˆå§‹è§’åº¦
+	float				fInitialAngle;			// è§’åº¦
 
-	// Ëæ»úÂ·¾¶
-	int					nBezierCount;			// Â·¾¶ÊýÁ¿
-	tagBezierPoint		TBezierPoint[BEZIER_POINT_MAX];		// Â·¾¶ÐÅÏ¢
+	// éšæœºè·¯å¾„
+	int					nBezierCount;			// è·¯å¾„æ•°é‡
+	tagBezierPoint		TBezierPoint[BEZIER_POINT_MAX];		// è·¯å¾„ä¿¡æ¯
 };
 
-// Í¬²½ÏûÏ¢
+// åŒæ­¥æ¶ˆæ¯
 struct CMD_S_Synchronous
 {						 
-	uint				nOffSetTime;			// Æ«ÒÆÊ±¼ä	
+	uint				nOffSetTime;			// åç§»æ—¶é—´	
 };
 
-// ²¶»ñÓã
+// æ•èŽ·é±¼
 struct CMD_S_CatchFish
 {
-	uint				nFishKey;				// ÓãË÷Òý
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	int					nMultipleCount;			// ±¶ÊýÊýÁ¿
-	LONGLONG			lScoreCount;			// »ñµÃÊýÁ¿
+	uint				nFishKey;				// é±¼ç´¢å¼•
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	int					nMultipleCount;			// å€æ•°æ•°é‡
+	LONGLONG			lScoreCount;			// èŽ·å¾—æ•°é‡
 };
 
-// ¿ª»ð
+// å¼€ç«
 struct CMD_S_Fire
 {
-	uint				nBulletKey;				// ×Óµ¯¹Ø¼üÖµ
-	int					nBulletScore;			// ×Óµ¯·ÖÊý
-	int					nMultipleIndex;			// ±¶ÊýË÷Òý
-	int					nTrackFishIndex;		// ×·×ÙÓãË÷Òý
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	CShortPoint			ptPos;					// Î»ÖÃ
-	LONGLONG			llPlayScore;			// Íæ¼ÒÊµÊ±»ý·Ö
+	uint				nBulletKey;				// å­å¼¹å…³é”®å€¼
+	int					nBulletScore;			// å­å¼¹åˆ†æ•°
+	int					nMultipleIndex;			// å€æ•°ç´¢å¼•
+	int					nTrackFishIndex;		// è¿½è¸ªé±¼ç´¢å¼•
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	CShortPoint			ptPos;					// ä½ç½®
+	LONGLONG			llPlayScore;			// çŽ©å®¶å®žæ—¶ç§¯åˆ†
 };
 
 
-// ×¼±¸¼¤¹â
+// å‡†å¤‡æ¿€å…‰
 struct CMD_S_BeginLaser
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	CShortPoint			ptPos;					// Î»ÖÃ
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	CShortPoint			ptPos;					// ä½ç½®
 };
 
-// ¼¤¹â
+// æ¿€å…‰
 struct CMD_S_Laser
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	CShortPoint			ptPos;					// Î»ÖÃ
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	CShortPoint			ptPos;					// ä½ç½®
 };
 
-// ¼¤¹â½±Àø
+// æ¿€å…‰å¥–åŠ±
 struct CMD_S_LaserReward
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	LONGLONG			lScore;					// ·ÖÊý½±Àø
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	LONGLONG			lScore;					// åˆ†æ•°å¥–åŠ±
 };
 
-// ×ª»»³¡¾°
+// è½¬æ¢åœºæ™¯
 struct CMD_S_ExchangeScene
 {
-	byte				cbBackIndex;			// ±³¾°Ë÷Òý
+	byte				cbBackIndex;			// èƒŒæ™¯ç´¢å¼•
 };
 
-// ½áËã
+// ç»“ç®—
 struct CMD_S_Over
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
 };
 
-// ÑÓ³Ù
+// å»¶è¿Ÿ
 struct CMD_S_Delay
 {
-	int					nDelay;					// ÑÓ³Ù
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
+	int					nDelay;					// å»¶è¿Ÿ
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
 };
 
-// ÒøÐÐ²é¿´
+// é“¶è¡ŒæŸ¥çœ‹
 struct CMD_S_BankTake
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	LONGLONG			lPlayScore;				// ÓÃ»§»ý·Ö
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	LONGLONG			lPlayScore;				// ç”¨æˆ·ç§¯åˆ†
 };
 
-// ÓïÒôÏûÏ¢
+// è¯­éŸ³æ¶ˆæ¯
 struct CMD_S_Speech
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	int					nSpeechIndex;			// ÓïÒôË÷Òý
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	int					nSpeechIndex;			// è¯­éŸ³ç´¢å¼•
 };
 
-// ±¶ÊýÑ¡Ôñ
+// å€æ•°é€‰æ‹©
 struct CMD_S_Multiple
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	int					nMultipleIndex;			// ±¶ÊýË÷Òý
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	int					nMultipleIndex;			// å€æ•°ç´¢å¼•
 };
 
-// ²¹¸øÌáÊ¾
+// è¡¥ç»™æç¤º
 struct CMD_S_SupplyTip
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
 };
 
-// ²¹¸øÐÅÏ¢
+// è¡¥ç»™ä¿¡æ¯
 struct CMD_S_Supply
 {
-	WORD				wChairID;				// Íæ¼ÒÎ»ÖÃ
-	LONGLONG			lSupplyCount;			// ²¹¸øÊýÁ¿
-	EnumScoreType		nSupplyType;			// ²¹¸øÀàÐÍ
+	WORD				wChairID;				// çŽ©å®¶ä½ç½®
+	LONGLONG			lSupplyCount;			// è¡¥ç»™æ•°é‡
+	EnumScoreType		nSupplyType;			// è¡¥ç»™ç±»åž‹
 };
 
-// ÌáÊ¾ÏûÏ¢
+// æç¤ºæ¶ˆæ¯
 struct CMD_S_AwardTip
 {
-	WORD				wTableID;				// ×À×ÓID
-	WORD				wChairID;				// Î»ÖÃID
-	tchar				szPlayName[32];			// ÓÃ»§Ãû
-	byte				nFishType;				// ÓãÖÖÀà
-	int					nFishMultiple;			// Óã±¶Êý
-	LONGLONG			lFishScore;				// ¾ßÌå·ÖÊý
-	EnumScoreType		nScoreType;				// ·ÖÊýÀàÐÍ
+	WORD				wTableID;				// æ¡Œå­ID
+	WORD				wChairID;				// ä½ç½®ID
+	tchar				szPlayName[32];			// ç”¨æˆ·å
+	byte				nFishType;				// é±¼ç§ç±»
+	int					nFishMultiple;			// é±¼å€æ•°
+	LONGLONG			lFishScore;				// å…·ä½“åˆ†æ•°
+	EnumScoreType		nScoreType;				// åˆ†æ•°ç±»åž‹
 };
 
-// ½á¹¹ÐÅÏ¢
+// ç»“æž„ä¿¡æ¯
 struct CMD_S_Control
 {
 	uint				nMessageID;
@@ -501,85 +501,85 @@ struct CMD_S_Control
 	byte				cbMessageInfo[1024];
 };
 
-// ¸üÐÂÓÎÏ·
+// æ›´æ–°æ¸¸æˆ
 struct CMD_S_UpdateGame
 {
-	int					nMultipleValue[Multiple_Max];						// ·¿¼ä±¶Êý
-	int					nCatchFishMultiple[FishType_Max][RAND_INDEX];		// ²¶Óã±¶Êý
-	int					nBulletVelocity;									// ×Óµ¯ËÙ¶È
-	int					nBulletCoolingTime;									// ×Óµ¯ÀäÈ´
+	int					nMultipleValue[Multiple_Max];						// æˆ¿é—´å€æ•°
+	int					nCatchFishMultiple[FishType_Max][RAND_INDEX];		// æ•é±¼å€æ•°
+	int					nBulletVelocity;									// å­å¼¹é€Ÿåº¦
+	int					nBulletCoolingTime;									// å­å¼¹å†·å´
 };
 
-// Í£ÁôÓã
+// åœç•™é±¼
 struct CMD_S_StayFish
 {
-	uint				nFishKey;							// ÓãË÷Òý
-	uint				nStayStart;							// Í£Áô¿ªÊ¼
-	uint				nStayTime;							// Í£ÁôÊ±¼ä
+	uint				nFishKey;							// é±¼ç´¢å¼•
+	uint				nStayStart;							// åœç•™å¼€å§‹
+	uint				nStayTime;							// åœç•™æ—¶é—´
 };
 
 ////////////////////////////////////////////////////////////////////////// 
-// ¿Í»§¶ËÃüÁî½á¹¹
+// å®¢æˆ·ç«¯å‘½ä»¤ç»“æž„
 enum
 {
-	SUB_C_CATCH_FISH = 101,							// ²¶ÓãÐÅÏ¢
-	SUB_C_FIRE,										// ¿ª»ð
-	SUB_C_DELAY,									// ÑÓ³Ù
-	SUB_C_BEGIN_LASER,								// ×¼±¸¼¤¹â
-	SUB_C_LASER,									// ¼¤¹â
-	SUB_C_SPEECH,									// ÓïÒôÏûÏ¢
-	SUB_C_MULTIPLE,									// ±¶ÊýÏûÏ¢
-	SUB_C_CONTROL,									// ¿ØÖÆÏûÏ¢
-	SUB_C_SKILL,									// ÊÍ·Å¼¼ÄÜ
-	SUB_C_CHANGE_CONNON,							// ÇÐ»»ÅÚÌ¨
+	SUB_C_CATCH_FISH = 101,							// æ•é±¼ä¿¡æ¯
+	SUB_C_FIRE,										// å¼€ç«
+	SUB_C_DELAY,									// å»¶è¿Ÿ
+	SUB_C_BEGIN_LASER,								// å‡†å¤‡æ¿€å…‰
+	SUB_C_LASER,									// æ¿€å…‰
+	SUB_C_SPEECH,									// è¯­éŸ³æ¶ˆæ¯
+	SUB_C_MULTIPLE,									// å€æ•°æ¶ˆæ¯
+	SUB_C_CONTROL,									// æŽ§åˆ¶æ¶ˆæ¯
+	SUB_C_SKILL,									// é‡Šæ”¾æŠ€èƒ½
+	SUB_C_CHANGE_CONNON,							// åˆ‡æ¢ç‚®å°
 };
 
-// ²¶ÖÐ×î´óÊýÁ¿
+// æ•ä¸­æœ€å¤§æ•°é‡
 #define FishCatch_Max			5
 
-// ²¶»ñÓã
+// æ•èŽ·é±¼
 struct CMD_C_CatchFish
 {
-	uint				nBulletKey;					// ×Óµ¯¹Ø¼üÖµ
-	uint				nFishKey[FishCatch_Max];	// ²¶ÖÐÓã
+	uint				nBulletKey;					// å­å¼¹å…³é”®å€¼
+	uint				nFishKey[FishCatch_Max];	// æ•ä¸­é±¼
 };
 
-// ¿ª»ð
+// å¼€ç«
 struct CMD_C_Fire
 {
-	int					nMultipleIndex;				// ±¶ÊýË÷Òý
-	int					nTrackFishIndex;			// ×·×ÙÓãË÷Òý
-	uint				nBulletKey;					// ×Óµ¯¹Ø¼üÖµ
-	CShortPoint			ptPos;						// Î»ÖÃ
+	int					nMultipleIndex;				// å€æ•°ç´¢å¼•
+	int					nTrackFishIndex;			// è¿½è¸ªé±¼ç´¢å¼•
+	uint				nBulletKey;					// å­å¼¹å…³é”®å€¼
+	CShortPoint			ptPos;						// ä½ç½®
 };
 
-// ×¼±¸¼¤¹â
+// å‡†å¤‡æ¿€å…‰
 struct CMD_C_BeginLaser
 {
-	CShortPoint			ptPos;						// Î»ÖÃ
+	CShortPoint			ptPos;						// ä½ç½®
 };
 
-// ¼¤¹â
+// æ¿€å…‰
 struct CMD_C_Laser
 {
-	CShortPoint			ptBeginPos;					// ¿ªÊ¼Î»ÖÃ
-	CShortPoint			ptEndPos;					// ½áÊøÎ»ÖÃ
-	uint				unLossTime;					// ÒÑ¹ýÊ±¼ä
+	CShortPoint			ptBeginPos;					// å¼€å§‹ä½ç½®
+	CShortPoint			ptEndPos;					// ç»“æŸä½ç½®
+	uint				unLossTime;					// å·²è¿‡æ—¶é—´
 };
 
-// ÓïÒôÏûÏ¢
+// è¯­éŸ³æ¶ˆæ¯
 struct CMD_C_Speech
 {
-	int					nSpeechIndex;				// ÓïÒôË÷Òý
+	int					nSpeechIndex;				// è¯­éŸ³ç´¢å¼•
 };
 
-// ±¶ÊýÏûÏ¢
+// å€æ•°æ¶ˆæ¯
 struct CMD_C_Multiple
 {
-	int					nMultipleIndex;			// ÓïÒôË÷Òý
+	int					nMultipleIndex;			// è¯­éŸ³ç´¢å¼•
 };
 
-// ½á¹¹ÐÅÏ¢
+// ç»“æž„ä¿¡æ¯
 struct CMD_C_Control
 {
 	uint				nMessageID;
@@ -587,17 +587,17 @@ struct CMD_C_Control
 	byte				cbMessageInfo[1024];
 };
 
-//¼¼ÄÜ
+//æŠ€èƒ½
 struct CMD_C_Skill
 {
-	byte	SkillType; //¼¼ÄÜÀàÐÍ 2,±ù¶³,3,Ëø¶¨
+	byte	SkillType; //æŠ€èƒ½ç±»åž‹ 2,å†°å†»,3,é”å®š
 };
 
-//ÅÚÌ¨ÇÐ»»
+//ç‚®å°åˆ‡æ¢
 struct CMD_C_CANNON
 {
-	BYTE desksTation;   //×ùÎ»ºÅ
-	BYTE cannonIndex;	//ÅÚÌ¨Ë÷Òý
+	BYTE desksTation;   //åº§ä½å·
+	BYTE cannonIndex;	//ç‚®å°ç´¢å¼•
 	CMD_C_CANNON()
 	{
 		desksTation = 255;
@@ -606,7 +606,7 @@ struct CMD_C_CANNON
 };
 ////////////////////////////////////////////////////////////////////////// 
 
-// ÄÑ¶ÈË÷Òý
+// éš¾åº¦ç´¢å¼•
 #define Difficulty_Type		3	
 #define Difficulty_Max		10	
 
@@ -616,53 +616,53 @@ enum EnumExplosionConditionType
 	ExplosionConditionType_Gold,
 };
 
-// ×Ô¶¨ÒåÅäÖÃ
+// è‡ªå®šä¹‰é…ç½®
 struct tagCustomRule
 {
-	// ±¶ÊýÅäÖÃ
-	int						nMultipleValue[Multiple_Max];		// ·¿¼ä±¶Êý
+	// å€æ•°é…ç½®
+	int						nMultipleValue[Multiple_Max];		// æˆ¿é—´å€æ•°
 
-	// ¿ØÖÆÅäÖÃ
-	int						nTaxRatio;								// ³éË®±ÈÀý
-	int						nInitialStock;							// ³õÊ¼¿â´æ
-	int						nRoomDifficultyCount[Difficulty_Max];	// ·¿¼äÄÑ¶È
-	int						nTableDifficultyCount[Difficulty_Max];	// ×À×ÓÄÑ¶È
-	int						nPlayDifficultyCount[Difficulty_Max];	// ÒÎ×ÓÄÑ¶È
-	double					dRoomDifficultyValue[Difficulty_Max];	// ·¿¼äÄÑ¶È
-	double					dTableDifficultyValue[Difficulty_Max];	// ×À×ÓÄÑ¶È
-	double					dPlayDifficultyValue[Difficulty_Max];	// ÒÎ×ÓÄÑ¶È
+	// æŽ§åˆ¶é…ç½®
+	int						nTaxRatio;								// æŠ½æ°´æ¯”ä¾‹
+	int						nInitialStock;							// åˆå§‹åº“å­˜
+	int						nRoomDifficultyCount[Difficulty_Max];	// æˆ¿é—´éš¾åº¦
+	int						nTableDifficultyCount[Difficulty_Max];	// æ¡Œå­éš¾åº¦
+	int						nPlayDifficultyCount[Difficulty_Max];	// æ¤…å­éš¾åº¦
+	double					dRoomDifficultyValue[Difficulty_Max];	// æˆ¿é—´éš¾åº¦
+	double					dTableDifficultyValue[Difficulty_Max];	// æ¡Œå­éš¾åº¦
+	double					dPlayDifficultyValue[Difficulty_Max];	// æ¤…å­éš¾åº¦
 
-	// ³¡¾°ÅäÖÃ
-	int						nCreateCount;							// ´´½¨ÊýÁ¿
-	int						nSceneTime;								// ³¡¾°Î¬³ÖÊ±¼ä
+	// åœºæ™¯é…ç½®
+	int						nCreateCount;							// åˆ›å»ºæ•°é‡
+	int						nSceneTime;								// åœºæ™¯ç»´æŒæ—¶é—´
 
-	// ×Óµ¯ÅäÖÃ
-	int						nBulletVelocity;						// ×Óµ¯ËÙ¶È
-	int						nBulletCoolingTime;						// ×Óµ¯ÀäÈ´
+	// å­å¼¹é…ç½®
+	int						nBulletVelocity;						// å­å¼¹é€Ÿåº¦
+	int						nBulletCoolingTime;						// å­å¼¹å†·å´
 
-	// »î¶¯ÅäÖÃ
-	int						nSupplyCondition[2];					// ²¹¸øÌõ¼þ
-	int						nLaserTime;								// ¼¤¹âÊ±¼ä
-	int						nLaserChance;							// ¼¤¹â¼¸ÂÊ
-	int						nSpeedTime;								// ¼ÓËÙÊ±¼ä
-	int						nSpeedChance;							// ¼ÓËÙ¼¸ÂÊ
-	int						nGiftScore[5];							// ÔùËÍ½ð±Ò
-	int						nGiftChance[5];							// ÔùËÍ¼¸ÂÊ
-	int						nNullChance;							// ¿ÕÏä¼¸ÂÊ
+	// æ´»åŠ¨é…ç½®
+	int						nSupplyCondition[2];					// è¡¥ç»™æ¡ä»¶
+	int						nLaserTime;								// æ¿€å…‰æ—¶é—´
+	int						nLaserChance;							// æ¿€å…‰å‡ çŽ‡
+	int						nSpeedTime;								// åŠ é€Ÿæ—¶é—´
+	int						nSpeedChance;							// åŠ é€Ÿå‡ çŽ‡
+	int						nGiftScore[5];							// èµ é€é‡‘å¸
+	int						nGiftChance[5];							// èµ é€å‡ çŽ‡
+	int						nNullChance;							// ç©ºç®±å‡ çŽ‡
 
-	// ÓãÅäÖÃ
-	int						nCatchFishMultiple[FishType_Max][RAND_INDEX];		// ²¶Óã±¶Êý
+	// é±¼é…ç½®
+	int						nCatchFishMultiple[FishType_Max][RAND_INDEX];		// æ•é±¼å€æ•°
 
-	// 2.0 ÍØÕ¹
-	int						nDifficultyStart[Difficulty_Type];		// ÄÑ¶ÈÀàÐÍ
+	// 2.0 æ‹“å±•
+	int						nDifficultyStart[Difficulty_Type];		// éš¾åº¦ç±»åž‹
 
-	// 3.0 ÍØÕ¹
-	int						nExplosionProportion;					// ±¬Õ¨±ÈÀý
-	int						nExplosionStart;						// ±¬Õ¨Æô¶¯
-	LONGLONG				lExplosionCondition;					// ±¬Õ¨Ìõ¼þ
-	EnumExplosionConditionType nExplosionConditionType;				// Ìõ¼þÀàÐÍ
+	// 3.0 æ‹“å±•
+	int						nExplosionProportion;					// çˆ†ç‚¸æ¯”ä¾‹
+	int						nExplosionStart;						// çˆ†ç‚¸å¯åŠ¨
+	LONGLONG				lExplosionCondition;					// çˆ†ç‚¸æ¡ä»¶
+	EnumExplosionConditionType nExplosionConditionType;				// æ¡ä»¶ç±»åž‹
 
-	// 4.0 ÍØÕ¹
+	// 4.0 æ‹“å±•
 	int						nAwardMinMultiple;
 	BOOL					nAwardChatBox;
 
@@ -671,18 +671,18 @@ struct tagCustomRule
 		DefaultCustomRule();
 	}
 
-	// Ä¬ÈÏÅäÖÃ
+	// é»˜è®¤é…ç½®
 	void DefaultCustomRule()
 	{
-		// ·¿¼ä±¶Êý
+		// æˆ¿é—´å€æ•°
 		int nTempMultipleValue[Multiple_Max] = { 1, 10, 100, 500, 1000, 5000 };
 		CopyMemory( nMultipleValue, nTempMultipleValue, sizeof(nMultipleValue) );
 
-		// ¿ØÖÆÅäÖÃ
+		// æŽ§åˆ¶é…ç½®
 		nInitialStock = 0;
 		nTaxRatio = 3;
 
-		// ÄÑ¶È¿ØÖÆ
+		// éš¾åº¦æŽ§åˆ¶
 		nRoomDifficultyCount[0] = 50;
 		nRoomDifficultyCount[1] = 100;
 		nRoomDifficultyCount[2] = 200;
@@ -749,15 +749,15 @@ struct tagCustomRule
 		dPlayDifficultyValue[8] = 0.15;
 		dPlayDifficultyValue[9] = 0.10;
 
-		// ³¡¾°ÅäÖÃ
+		// åœºæ™¯é…ç½®
 		nCreateCount = 12;
 		nSceneTime = 60 * 8;
 
-		// ×Óµ¯ÅäÖÃ
+		// å­å¼¹é…ç½®
 		nBulletVelocity = 15000;					
 		nBulletCoolingTime = 150;
 
-		// »î¶¯ÅäÖÃ
+		// æ´»åŠ¨é…ç½®
 		RAND_INITIAL(nSupplyCondition, 500, 700);
 		nLaserTime = 30;
 		nLaserChance = 10;
@@ -775,22 +775,22 @@ struct tagCustomRule
 		nGiftChance[4] = 5;
 		nNullChance = 5;
 
-		// ÓãÅäÖÃ
+		// é±¼é…ç½®
 		int	nTempFishMultiple[FishType_Max][RAND_INDEX] = { { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 }, { 10, 10 }, { 12, 12 }, { 15, 15 }, { 18, 18 }, { 20, 20 }, { 25, 25 }, { 30, 30 }, { 40, 40 }, { 150, 150 }, { 200, 200 }, { 300, 300 }, { 400, 400 }, { 400, 1000 }, { 20, 20 }, { 20, 20 }, { 20, 20 }, { 0, 0 } };
 		CopyMemory(nCatchFishMultiple, nTempFishMultiple, sizeof(nCatchFishMultiple));
 
-		// ÄÑ¶È¿ªÆô
+		// éš¾åº¦å¼€å¯
 		nDifficultyStart[0] = TRUE;
 		nDifficultyStart[1] = TRUE;
 		nDifficultyStart[2] = FALSE;
 
-		// ±¬Õ¨ÐÅÏ¢
+		// çˆ†ç‚¸ä¿¡æ¯
 		nExplosionProportion = 50;
 		nExplosionStart = 5000;
 		lExplosionCondition = 3000;
 		nExplosionConditionType = ExplosionConditionType_Gun;
 
-		// ÖÐ½±ÅäÖÃ
+		// ä¸­å¥–é…ç½®
 		nAwardMinMultiple = 50;
 		nAwardChatBox = TRUE;
 	}
@@ -799,7 +799,7 @@ struct tagCustomRule
 
 
 
-// »¹Ô­¶ÔÆäÊý
+// è¿˜åŽŸå¯¹å…¶æ•°
 #pragma pack()
 
 ////////////////////////////////////////////////////////////////////////// 
