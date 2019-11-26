@@ -33,5 +33,9 @@ vim 命令模式下输入  :set fileformat=unix
 frame 8   (8是堆的层次)
 p pThis->m_bRun
 
+八、改变文件权限     -R   表示递归目录下所有文件
+修改文件所属组群：chgrp  用户名    文件名  -R 
+修改文件拥有者：chown 用户名   文件名  -R
+
 
 
