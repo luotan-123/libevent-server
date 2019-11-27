@@ -4,3 +4,6 @@ git checkout -b tianhe
  git push origin tianhe:tianhe
 3、本地分支关联远程分支
 git branch --set-upstream-to=origin/tianhe tianhe
+
+linux 安装git
+sudo yum install git
