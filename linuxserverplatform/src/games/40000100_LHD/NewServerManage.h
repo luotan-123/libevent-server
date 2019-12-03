@@ -1,11 +1,8 @@
 #pragma once
 
-#include "GameDesk.h"
-#include "GameDefine.h"
+#include "UpgradeMessage.h"
 #include "UpGradeLogic.h"
-#include <vector>
 #include <queue>
-#include <list>
 #include <array>
 
 using namespace DTProto;

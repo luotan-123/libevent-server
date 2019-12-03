@@ -1,8 +1,6 @@
-#include"stdafx.h"
+#include "GameDefine.h"
 #include "UpGradeLogic.h"
 
-#include <vector>
-#include <algorithm>
 
 CPokerGameLogic::CPokerGameLogic()
 {

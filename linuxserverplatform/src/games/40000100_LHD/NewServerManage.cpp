@@ -1,6 +1,5 @@
-#include "Stdafx.h"
 #include "NewServerManage.h"
-#include "UpgradeMessage.h"
+
 
 CNewServerManage::CNewServerManage() : CGameDesk(ALL_ARGEE)
 {
@@ -176,7 +175,7 @@ bool CNewServerManage::HandleNotifyMessage(BYTE deskStation, unsigned int assist
 		break;
 	}
 
-	return __super::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
+	return CGameDesk::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 }
 
 bool CNewServerManage::OnTimer(unsigned int timerID)
@@ -333,12 +332,12 @@ bool CNewServerManage::UserLeftDesk(GameUserInfo* pUser)
 	// 删除座位号
 	DelDeskUser(pUser->deskStation);
 
-	return __super::UserLeftDesk(pUser);
+	return CGameDesk::UserLeftDesk(pUser);
 }
 
 bool CNewServerManage::UserNetCut(GameUserInfo* pUser)
 {
-	return __super::UserNetCut(pUser);
+	return CGameDesk::UserNetCut(pUser);
 }
 
 bool CNewServerManage::OnHandleUserRequestShangZhuang(BYTE deskStation, void* pData, int size)
@@ -937,7 +936,7 @@ bool CNewServerManage::OnHandleRequestSit(BYTE deskStation, void* pData, int siz
 		if (llUserResNums < m_gameConfig.sitLimitMoney)
 		{
 			char msg[128] = "";
-			sprintf_s(msg, sizeof(msg), "您的金币不够%lld，无法坐下", m_gameConfig.sitLimitMoney);
+			sprintf(msg, "您的金币不够%lld，无法坐下", m_gameConfig.sitLimitMoney);
 			SendGameMessage(deskStation, msg);
 			return false;
 		}
@@ -1974,10 +1973,11 @@ bool CNewServerManage::IsPlayGame(BYTE deskStation)
 void CNewServerManage::LoadDynamicConfig()
 {
 	//////////////////////////////////公共配置////////////////////////////////////////
-	CString nameID;
-	nameID.Format("%d", NAME_ID);
+	string nameID = std::to_string(NAME_ID);
 	CINIFile f(CINIFile::GetAppPath() + nameID + "_s.ini");
-	CString key = TEXT("game");
+
+	string key = "game";
+
 	m_gameConfig.waitBeginTime = f.GetKeyVal(key, "waitBeginTime", 5);
 	m_gameConfig.noteKeepTime = f.GetKeyVal(key, "noteKeepTime", 15);
 	m_gameConfig.sendCardKeepTime = f.GetKeyVal(key, "sendCardKeepTime", 2);
@@ -2068,8 +2068,8 @@ void CNewServerManage::LoadDynamicConfig()
 	}
 
 	////////////////////////////////特殊房间配置//////////////////////////////////////////
-	TCHAR szKey[20];
-	wsprintf(szKey, "%s_%d", nameID, m_pDataManage->m_InitData.uRoomID);
+	char szKey[20];
+	sprintf(szKey, "%s_%d", nameID.c_str(), m_pDataManage->m_InitData.uRoomID);
 	key = szKey;
 	m_gameConfig.waitBeginTime = f.GetKeyVal(key, "waitBeginTime", m_gameConfig.waitBeginTime);
 

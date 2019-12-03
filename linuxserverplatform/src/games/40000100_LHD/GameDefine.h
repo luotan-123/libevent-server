@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include "GameDesk.h"
 
 #define SYSTEMMONEY 88888888
 

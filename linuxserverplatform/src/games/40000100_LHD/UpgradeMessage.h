@@ -1,6 +1,5 @@
 #pragma once
 
-#include "stdafx.h"
 #include "GameDefine.h"
 
 namespace DTProto
@@ -8,9 +7,9 @@ namespace DTProto
 #pragma pack(1)
 
 	// 游戏名称信息
-#define GAMENAME						TEXT("龙虎斗")                          // 游戏名称
-#define GAME_DLL_AUTHOR                 TEXT("深圳火妹网科技有限公司")          //
-#define GAME_DLL_NOTE                   TEXT("百人类 -- 游戏组件")
+#define GAMENAME						"龙虎斗"									// 游戏名称
+#define GAME_DLL_AUTHOR                 "深圳网科技有限公司"						 //
+#define GAME_DLL_NOTE                   "百人类 -- 游戏组件"
 
 #define NAME_ID							40000100								 // 名字 ID
 
@@ -70,7 +69,7 @@ namespace DTProto
 
 	struct UserInfo
 	{
-		long userID;
+		int userID;
 		long long money;	
 		char name[64];
 		char headURL[256];//保持用户头像信息
@@ -234,7 +233,7 @@ namespace DTProto
 	{
 		struct SettleUserInfo
 		{
-			long userID;
+			int userID;
 			char name[64];
 			char headURL[256];
 			long long winMoney;
