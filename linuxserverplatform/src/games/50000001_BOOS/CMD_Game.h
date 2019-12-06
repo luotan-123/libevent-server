@@ -1,16 +1,16 @@
 #ifndef CMD_GAME_HEAD_FILE
 #define CMD_GAME_HEAD_FILE
 
-#include "..\Dexter\Dexter.h"
+#include "Dexter.h"
 // 1字节对其
 #pragma pack(1)
 
 ////////////////////////////////////////////////////////////////////////// 
 // 服务定义
 
-#define GAMENAME						TEXT("BOSS来了")
-#define GAME_DLL_AUTHOR                 TEXT("深圳火妹网络科技")            //
-#define GAME_DLL_NOTE                   TEXT("电玩 -- 游戏组件")
+#define GAMENAME						"BOSS来了"
+#define GAME_DLL_AUTHOR                 "深圳火妹网络科技"           //
+#define GAME_DLL_NOTE                   "电玩 -- 游戏组件"
 
 #define NAME_ID                         50000001
 #define PLAY_COUNT                      4

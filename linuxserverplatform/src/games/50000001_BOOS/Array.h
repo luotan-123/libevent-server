@@ -11,9 +11,9 @@ template <class TYPE, class ARG_TYPE=const TYPE &> class CWHArray
 	//变量定义
 protected:
 	TYPE *							m_pData;							//数组指针
-	INT_PTR							m_nMaxCount;						//缓冲数目
-	INT_PTR							m_nGrowCount;						//增长数目
-	INT_PTR							m_nElementCount;					//元素数目
+	UINT							m_nMaxCount;						//缓冲数目
+	UINT							m_nGrowCount;						//增长数目
+	UINT							m_nElementCount;					//元素数目
 
 	//函数定义
 public:
@@ -27,7 +27,7 @@ public:
 	//是否空组
 	bool IsEmpty() const;
 	//获取数目
-	INT_PTR GetCount() const;
+	UINT GetCount() const;
 
 	//功能函数
 public:
@@ -36,50 +36,50 @@ public:
 	//获取缓冲
 	const TYPE * GetData() const;
 	//增加元素
-	INT_PTR Add(ARG_TYPE newElement);
+	UINT Add(ARG_TYPE newElement);
 	//拷贝数组
-	VOID Copy(const CWHArray & Src);
+	void Copy(const CWHArray & Src);
 	//追加数组
-	INT_PTR Append(const CWHArray & Src);
+	UINT Append(const CWHArray & Src);
 	//获取元素
-	TYPE & GetAt(INT_PTR nIndex);
+	TYPE & GetAt(UINT nIndex);
 	//获取元素
-	const TYPE & GetAt(INT_PTR nIndex) const;
+	const TYPE & GetAt(UINT nIndex) const;
 	//获取元素
-	TYPE & ElementAt(INT_PTR nIndex);
+	TYPE & ElementAt(UINT nIndex);
 	//获取元素
-	const TYPE & ElementAt(INT_PTR nIndex) const;
+	const TYPE & ElementAt(UINT nIndex) const;
 
 	//操作函数
 public:
 	//设置大小
-	VOID SetSize(INT_PTR nNewSize);
+	void SetSize(UINT nNewSize);
 	//设置元素
-	VOID SetAt(INT_PTR nIndex, ARG_TYPE newElement);
+	void SetAt(UINT nIndex, ARG_TYPE newElement);
 	//设置元素
-	VOID SetAtGrow(INT_PTR nIndex, ARG_TYPE newElement);
+	void SetAtGrow(UINT nIndex, ARG_TYPE newElement);
 	//插入数据
-	VOID InsertAt(INT_PTR nIndex, const CWHArray & Src);
+	void InsertAt(UINT nIndex, const CWHArray & Src);
 	//插入数据
-	VOID InsertAt(INT_PTR nIndex, ARG_TYPE newElement, INT_PTR nCount=1);
+	void InsertAt(UINT nIndex, ARG_TYPE newElement, UINT nCount=1);
 	//删除数据
-	VOID RemoveAt(INT_PTR nIndex, INT_PTR nCount=1);
+	void RemoveAt(UINT nIndex, UINT nCount=1);
 	//删除元素
-	VOID RemoveAll();
+	void RemoveAll();
 
 	//操作重载
 public:
 	//操作重载
-	TYPE & operator[](INT_PTR nIndex);
+	TYPE & operator[](UINT nIndex);
 	//操作重载
-	const TYPE & operator[](INT_PTR nIndex) const;
+	const TYPE & operator[](UINT nIndex) const;
 
 	//内存函数
 public:
 	//释放内存
-	VOID FreeMemory();
+	void FreeMemory();
 	//申请内存
-	VOID AllocMemory(INT_PTR nNewCount);
+	void AllocMemory(UINT nNewCount);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -87,37 +87,37 @@ public:
 
 //是否空组
 template<class TYPE, class ARG_TYPE> 
-AFX_INLINE bool CWHArray<TYPE, ARG_TYPE>::IsEmpty() const
+bool CWHArray<TYPE, ARG_TYPE>::IsEmpty() const
 {
 	return (m_nElementCount==0);
 }
 
 //获取数目
 template<class TYPE, class ARG_TYPE>
-AFX_INLINE INT_PTR CWHArray<TYPE, ARG_TYPE>::GetCount() const
+UINT CWHArray<TYPE, ARG_TYPE>::GetCount() const
 {
 	return m_nElementCount;
 }
 
 //增加元素
 template<class TYPE, class ARG_TYPE>
-AFX_INLINE INT_PTR CWHArray<TYPE,ARG_TYPE>::Add(ARG_TYPE newElement)
+UINT CWHArray<TYPE,ARG_TYPE>::Add(ARG_TYPE newElement)
 {
-	INT_PTR nIndex=m_nElementCount;
+	UINT nIndex=m_nElementCount;
 	SetAtGrow(nIndex,newElement);
 	return nIndex;
 }
 
 //操作重载
 template<class TYPE, class ARG_TYPE>
-AFX_INLINE TYPE & CWHArray<TYPE, ARG_TYPE>::operator[](INT_PTR nIndex)
+TYPE & CWHArray<TYPE, ARG_TYPE>::operator[](UINT nIndex)
 { 
 	return ElementAt(nIndex);
 }
 
 //操作重载
 template<class TYPE, class ARG_TYPE>
-AFX_INLINE const TYPE & CWHArray<TYPE, ARG_TYPE>::operator[](INT_PTR nIndex) const
+const TYPE & CWHArray<TYPE, ARG_TYPE>::operator[](UINT nIndex) const
 { 
 	return GetAt(nIndex);
 }
@@ -143,7 +143,7 @@ CWHArray<TYPE,ARG_TYPE>::~CWHArray()
 {
 	if (m_pData!=NULL)
 	{
-		for (INT_PTR i=0;i<m_nElementCount;i++)	(m_pData+i)->~TYPE();
+		for (UINT i=0;i<m_nElementCount;i++)	(m_pData+i)->~TYPE();
 		delete [] (BYTE *)m_pData;
 		m_pData=NULL;
 	}
@@ -167,7 +167,7 @@ const TYPE * CWHArray<TYPE,ARG_TYPE>::GetData() const
 
 //拷贝数组
 template<class TYPE, class ARG_TYPE> 
-VOID CWHArray<TYPE,ARG_TYPE>::Copy(const CWHArray & Src)
+void CWHArray<TYPE,ARG_TYPE>::Copy(const CWHArray & Src)
 {
 	//效验参数
 	ASSERT(this!=&Src);
@@ -177,10 +177,10 @@ VOID CWHArray<TYPE,ARG_TYPE>::Copy(const CWHArray & Src)
 	AllocMemory(Src.m_nElementCount);
 	if (m_nElementCount>0)
 	{
-		for (INT_PTR i=0;i<m_nElementCount;i++) (m_pData+i)->~TYPE();
+		for (UINT i=0;i<m_nElementCount;i++) (m_pData+i)->~TYPE();
 		memset(m_pData,0,m_nElementCount*sizeof(TYPE));
 	}
-	for (INT_PTR i=0;i<Src.m_nElementCount;i++)	m_pData[i]=Src.m_pData[i];
+	for (UINT i=0;i<Src.m_nElementCount;i++)	m_pData[i]=Src.m_pData[i];
 	m_nElementCount=Src.m_nElementCount;
 
 	return;
@@ -188,7 +188,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::Copy(const CWHArray & Src)
 
 //追加数组
 template<class TYPE, class ARG_TYPE> 
-INT_PTR CWHArray<TYPE,ARG_TYPE>::Append(const CWHArray & Src)
+UINT CWHArray<TYPE,ARG_TYPE>::Append(const CWHArray & Src)
 {
 	//效验参数
 	ASSERT(this!=&Src);
@@ -197,9 +197,9 @@ INT_PTR CWHArray<TYPE,ARG_TYPE>::Append(const CWHArray & Src)
 	//拷贝数组
 	if (Src.m_nElementCount>0)
 	{
-		INT_PTR nOldCount=m_nElementCount;
+		UINT nOldCount=m_nElementCount;
 		AllocMemory(m_nElementCount+Src.m_nElementCount);
-		for (INT_PTR i=0;i<Src.m_nElementCount;i++)	m_pData[m_nElementCount+i]=Src.m_pData[i];
+		for (UINT i=0;i<Src.m_nElementCount;i++)	m_pData[m_nElementCount+i]=Src.m_pData[i];
 		m_nElementCount+=Src.m_nElementCount;
 	}
 
@@ -208,7 +208,7 @@ INT_PTR CWHArray<TYPE,ARG_TYPE>::Append(const CWHArray & Src)
 
 //获取元素
 template<class TYPE, class ARG_TYPE> 
-TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex)
+TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(UINT nIndex)
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
 	if ((nIndex<0)||(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
@@ -218,7 +218,7 @@ TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex)
 
 //获取元素
 template<class TYPE, class ARG_TYPE> 
-const TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex) const
+const TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(UINT nIndex) const
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
 	if ((nIndex<0)||(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
@@ -228,7 +228,7 @@ const TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(INT_PTR nIndex) const
 
 //获取元素
 template<class TYPE, class ARG_TYPE> 
-TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex)
+TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex)
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
 	if ((nIndex<0)&&(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
@@ -238,7 +238,7 @@ TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex)
 
 //获取元素
 template<class TYPE, class ARG_TYPE> 
-const TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex) const
+const TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex) const
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
 	if ((nIndex<0)&&(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
@@ -248,7 +248,7 @@ const TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(INT_PTR nIndex) const
 
 //设置大小
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::SetSize(INT_PTR nNewSize)
+void CWHArray<TYPE,ARG_TYPE>::SetSize(UINT nNewSize)
 {
 	//效验参数
 	ASSERT(nNewSize>=0);
@@ -258,11 +258,11 @@ VOID CWHArray<TYPE,ARG_TYPE>::SetSize(INT_PTR nNewSize)
 	AllocMemory(nNewSize);
 	if (nNewSize>m_nElementCount)
 	{
-		for (INT_PTR i=m_nElementCount;i<nNewSize;i++) new ((VOID *)(m_pData+i)) TYPE;
+		for (UINT i=m_nElementCount;i<nNewSize;i++) new ((void *)(m_pData+i)) TYPE;
 	}
 	else if (nNewSize<m_nElementCount)
 	{
-		for (INT_PTR i=nNewSize;i<m_nElementCount;i++) (m_pData+i)->~TYPE();
+		for (UINT i=nNewSize;i<m_nElementCount;i++) (m_pData+i)->~TYPE();
 		memset(m_pData+nNewSize,0,(m_nElementCount-nNewSize)*sizeof(TYPE));
 	}
 	m_nElementCount=nNewSize;
@@ -272,7 +272,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::SetSize(INT_PTR nNewSize)
 
 //设置元素
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::SetAt(INT_PTR nIndex, ARG_TYPE newElement)
+void CWHArray<TYPE,ARG_TYPE>::SetAt(UINT nIndex, ARG_TYPE newElement)
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
 	if ((nIndex>=0)&&(nIndex<m_nElementCount)) m_pData[nIndex]=newElement;
@@ -283,7 +283,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::SetAt(INT_PTR nIndex, ARG_TYPE newElement)
 
 //设置元素
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::SetAtGrow(INT_PTR nIndex, ARG_TYPE newElement)
+void CWHArray<TYPE,ARG_TYPE>::SetAtGrow(UINT nIndex, ARG_TYPE newElement)
 {
 	//效验参数
 	ASSERT(nIndex>=0);
@@ -298,7 +298,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::SetAtGrow(INT_PTR nIndex, ARG_TYPE newElement)
 
 //插入数据
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, const CWHArray & Src)
+void CWHArray<TYPE,ARG_TYPE>::InsertAt(UINT nIndex, const CWHArray & Src)
 {
 	//效验参数
 	ASSERT(nStartIndex>=0);
@@ -309,12 +309,12 @@ VOID CWHArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, const CWHArray & Src)
 		//申请数组
 		if (nIndex<m_nElementCount)
 		{
-			INT_PTR nOldCount=m_nElementCount;
+			UINT nOldCount=m_nElementCount;
 			SetSize(m_nElementCount+Src.m_nElementCount);
-			for (INT_PTR i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
+			for (UINT i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
 			memmove(m_pData+nIndex+nCount,m_pData+nIndex,(nOldCount-nIndex)*sizeof(TYPE));
 			memset(m_pData+nIndex,0,Src.m_nElementCount*sizeof(TYPE));
-			for (INT_PTR i=0;i<Src.m_nElementCount;i++) new (m_pData+nIndex+i) TYPE();
+			for (UINT i=0;i<Src.m_nElementCount;i++) new (m_pData+nIndex+i) TYPE();
 		}
 		else SetSize(nIndex+nCount);
 
@@ -328,7 +328,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, const CWHArray & Src)
 
 //插入数据
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, ARG_TYPE newElement, INT_PTR nCount)
+void CWHArray<TYPE,ARG_TYPE>::InsertAt(UINT nIndex, ARG_TYPE newElement, UINT nCount)
 {
 	//效验参数
 	ASSERT(nIndex>=0);
@@ -338,12 +338,12 @@ VOID CWHArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, ARG_TYPE newElement, INT_
 	//申请数组
 	if (nIndex<m_nElementCount)
 	{
-		INT_PTR nOldCount=m_nElementCount;
+		UINT nOldCount=m_nElementCount;
 		SetSize(m_nElementCount+nCount);
-		for (INT_PTR i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
+		for (UINT i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
 		memmove(m_pData+nIndex+nCount,m_pData+nIndex,(nOldCount-nIndex)*sizeof(TYPE));
 		memset(m_pData+nIndex,0,nCount*sizeof(TYPE));
-		for (INT_PTR i=0;i<nCount;i++) new (m_pData+nIndex+i) TYPE();
+		for (UINT i=0;i<nCount;i++) new (m_pData+nIndex+i) TYPE();
 	}
 	else SetSize(nIndex+nCount);
 
@@ -356,7 +356,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::InsertAt(INT_PTR nIndex, ARG_TYPE newElement, INT_
 
 //删除数据
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::RemoveAt(INT_PTR nIndex, INT_PTR nCount)
+void CWHArray<TYPE,ARG_TYPE>::RemoveAt(UINT nIndex, UINT nCount)
 {
 	//效验参数
 	ASSERT(nIndex>=0);
@@ -365,8 +365,8 @@ VOID CWHArray<TYPE,ARG_TYPE>::RemoveAt(INT_PTR nIndex, INT_PTR nCount)
 	if ((nIndex<0)||(nCount<0)||((nIndex+nCount>m_nElementCount))) AfxThrowInvalidArgException();
 
 	//删除数据
-	INT_PTR nMoveCount=m_nElementCount-(nIndex+nCount);
-	for (INT_PTR i=0;i<nCount;i++) (m_pData+nIndex+i)->~TYPE();
+	UINT nMoveCount=m_nElementCount-(nIndex+nCount);
+	for (UINT i=0;i<nCount;i++) (m_pData+nIndex+i)->~TYPE();
 	if (nMoveCount>0) memmove(m_pData+nIndex,m_pData+nIndex+nCount,nMoveCount*sizeof(TYPE));
 	m_nElementCount-=nCount;
 
@@ -375,11 +375,11 @@ VOID CWHArray<TYPE,ARG_TYPE>::RemoveAt(INT_PTR nIndex, INT_PTR nCount)
 
 //删除元素
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::RemoveAll()
+void CWHArray<TYPE,ARG_TYPE>::RemoveAll()
 {
 	if (m_nElementCount>0)
 	{
-		for (INT_PTR i=0;i<m_nElementCount;i++) (m_pData+i)->~TYPE();
+		for (UINT i=0;i<m_nElementCount;i++) (m_pData+i)->~TYPE();
 		memset(m_pData,0,m_nElementCount*sizeof(TYPE));
 		m_nElementCount=0;
 	}
@@ -389,7 +389,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::RemoveAll()
 
 //释放内存
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::FreeMemory()
+void CWHArray<TYPE,ARG_TYPE>::FreeMemory()
 {
 	if (m_nElementCount!=m_nMaxCount)
 	{
@@ -409,7 +409,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::FreeMemory()
 
 //申请内存
 template<class TYPE, class ARG_TYPE>
-VOID CWHArray<TYPE,ARG_TYPE>::AllocMemory(INT_PTR nNewCount)
+void CWHArray<TYPE,ARG_TYPE>::AllocMemory(UINT nNewCount)
 {
 	//效验参数
 	ASSERT(nNewCount>=0);
@@ -417,7 +417,7 @@ VOID CWHArray<TYPE,ARG_TYPE>::AllocMemory(INT_PTR nNewCount)
 	if (nNewCount>m_nMaxCount)
 	{
 		//计算数目
-		INT_PTR nGrowCount=m_nGrowCount;
+		UINT nGrowCount=m_nGrowCount;
 		if (nGrowCount==0)
 		{
 			nGrowCount=m_nElementCount/8;

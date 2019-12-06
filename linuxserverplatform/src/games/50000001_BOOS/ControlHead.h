@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CMD_Game.h"
-#include <afxtempl.h>
 
 #define CreateInterface( Hinstance, InterfacePoint, InterfaceName, CallDllName, CallFunctionName )		\
 InterfacePoint = NULL;																					\

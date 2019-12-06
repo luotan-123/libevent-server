@@ -6,12 +6,15 @@
 5、python简单入门，给linux框架做抗压力测试
 使用python开发压力测试工具
 6、实现c++和lua之间的相互调用
+大工程
 7、linux项目makefile的编写
 不写makefile，使用eclipse ide 做c++开发
 8、对gserver和gate-logon-server做QBS统计
 完成了处理数据的qbs
 9、可以利用消息中间件kafka来解耦实现lua开发游戏
+方法：也可也使用rocketMQ
 10、支持websocket协议
+方法：参考CTCPSocketManage写websocket类。完成一次http握手。先解析websocket头部，然后再解析自己头部。
 
 
 
