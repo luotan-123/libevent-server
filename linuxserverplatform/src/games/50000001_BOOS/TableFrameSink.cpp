@@ -2179,8 +2179,6 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	// 无效倍数
 	if ( pFire->nMultipleIndex != m_nMultipleIndex[deskStation] )
 	{
-		ASSERT(FALSE);
-
 		return true;
 	}
 
