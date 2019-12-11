@@ -1,13 +1,8 @@
-#ifndef TABLE_FRAME_SINK_HEAD_FILE
-#define TABLE_FRAME_SINK_HEAD_FILE
-
 #pragma once
 
-#include "Stdafx.h"
-#include "AfxTempl.h"
+#include "CMD_Game.h"
 #include "GameLogic.h"
 #include "PolygonShape.h"
-#include <map>
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////// 
@@ -301,7 +296,7 @@ protected:
 	static int						m_nExplosionStart;						// 爆炸启动
 	static LONGLONG					m_lExplosionCondition;					// 爆炸条件
 	static EnumExplosionConditionType m_nExplosionConditionType;			// 条件类型
-	static CMap<uint, uint, LONGLONG, LONGLONG> m_MapPlayExplosionCondition;// 爆炸条件
+	static map<uint, LONGLONG>		m_MapPlayExplosionCondition;			// 爆炸条件
 
 	// 库存
 protected:
@@ -361,7 +356,7 @@ protected:
 
 	// 控制组件
 public:
-	HINSTANCE						m_hControlInst;
+	//HINSTANCE						m_hControlInst;
 	//IServerControl *				m_pIServerControl;
 
 
@@ -489,9 +484,9 @@ public:
 	// 初始化鱼池
 	void InitializationFishpond( uint nBeginTime = 0 );
 	// 创建鱼
-	uint CreateFish( byte cbCount, byte cbFishType = FishType_Max, uint nPathIndex = uint_max, uint unCreateTime = 0, uint unIntervalTime = 1000, float fRotateAngle = 0.f, bool bCanSpecial = true, bool bCanAquatic = true, EnumKillerType nKillerType = KillerType_No, WORD wHitChair = INVALID_CHAIR, CShortPoint & PointOffSet = CShortPoint(0,0), float fInitialAngle = 0.f, bool bRepeatCreate = true );
+	uint CreateFish(byte cbCount, byte cbFishType = FishType_Max, uint nPathIndex = uint_max, uint unCreateTime = 0, uint unIntervalTime = 1000, float fRotateAngle = 0.f, bool bCanSpecial = true, bool bCanAquatic = true, EnumKillerType nKillerType = KillerType_No, WORD wHitChair = INVALID_CHAIR, CShortPoint PointOffSet = CShortPoint(0, 0), float fInitialAngle = 0.f, bool bRepeatCreate = true);
 	// 创建鱼
-	uint CreateFishEx( byte cbCount, byte cbFishType = FishType_Max, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX] = NULL, int nBezierCount = 0, uint unCreateTime = 0, uint unIntervalTime = 1000, float fRotateAngle = 0.f, bool bCanSpecial = true, bool bCanAquatic = true, EnumKillerType nKillerType = KillerType_No, WORD wHitChair = INVALID_CHAIR, CShortPoint & PointOffSet = CShortPoint(0,0), float fInitialAngle = 0.f, bool bRepeatCreate = true );
+	uint CreateFishEx(byte cbCount, byte cbFishType = FishType_Max, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX] = NULL, int nBezierCount = 0, uint unCreateTime = 0, uint unIntervalTime = 1000, float fRotateAngle = 0.f, bool bCanSpecial = true, bool bCanAquatic = true, EnumKillerType nKillerType = KillerType_No, WORD wHitChair = INVALID_CHAIR, CShortPoint PointOffSet = CShortPoint(0, 0), float fInitialAngle = 0.f, bool bRepeatCreate = true);
 	// 创建鱼
 	uint ResetFish( tagFishInfo & TFishInfo );
 	// 随机路径
@@ -543,9 +538,9 @@ private:
 
 public:
 	// 旋转点
-	CDoublePoint Rotate( CDoublePoint & ptCircle, double dRadian, CDoublePoint & ptSome );
+	CDoublePoint Rotate(const CDoublePoint & ptCircle, double dRadian, const CDoublePoint & ptSome );
 	// 旋转点
-	CShortPoint Rotate( CShortPoint & ptCircle, double dRadian, CShortPoint & ptSome );
+	CShortPoint Rotate(const CShortPoint & ptCircle, double dRadian, const CShortPoint & ptSome );
 	// 已知圆心,弧度,半径 求圆上任意一
 	CShortPoint RotatePoint( CShortPoint & ptCircle, double dRadian, double dRadius );
 	// 贝塞尔曲线
@@ -554,10 +549,6 @@ public:
 	double DistanceOfPoint( CDoublePoint & PointOne, CDoublePoint & PointTwo );
 	// 随机区域
 	int RandomArea(int nLen, ...);
-
-public:
-	// 使能关机特权 并关机
-	bool EnableShutdownPrivilege();
 
 	// 库存函数
 public:
@@ -575,8 +566,6 @@ public:
 	//新增
 	//获取玩家信息
 	GameUserInfo * GetTableUserItem(WORD wChairID);
-	//打印日志文件-服务器
-	void DebugPrintf(const char *p, ...);
 	//初始化游戏配置
 	void IniConfig();
 
@@ -585,5 +574,3 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////// 
-
-#endif

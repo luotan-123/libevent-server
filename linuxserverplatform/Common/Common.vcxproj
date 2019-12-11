@@ -159,6 +159,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -182,6 +183,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -205,6 +207,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -228,6 +231,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -251,6 +255,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -274,6 +279,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -297,6 +303,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -320,6 +327,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>

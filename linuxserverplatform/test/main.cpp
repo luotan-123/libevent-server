@@ -162,10 +162,12 @@ void* Thread(void*p)
 
 int main()
 {
+	unsigned long saadsad = GetTickCount();
+
 	CSignedLock lock_;
 	printf("lock_ = %lld\n", sizeof(lock_));
 	pthread_t ssss = 0;
-	pthread_create(&ssss, NULL, Thread, NULL);
+	//pthread_create(&ssss, NULL, Thread, NULL);
 
 	struct timeval tv;
 	gettimeofday(&tv, NULL);

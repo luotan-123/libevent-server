@@ -1,5 +1,6 @@
 #pragma once
-#include <limits>
+#include "ControlHead.h"
+#include <float.h>
 
 #define	_MaxFloat				FLT_MAX
 #define	_Epsilon				FLT_EPSILON

@@ -132,6 +132,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -143,6 +144,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -154,6 +156,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -165,6 +168,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -176,6 +180,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -187,6 +192,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -198,6 +204,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -209,6 +216,7 @@
       <SharedLibrarySearchPath />
       <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,4 @@
-#include "StdAfx.h"
-#include "polygonshape.h"
+#include "PolygonShape.h"
 
 const CFloatVector2		b2Vec2_zero(0.0f, 0.0f);
 
@@ -165,7 +164,7 @@ struct b2DistanceProxy
 {
 	b2DistanceProxy() : m_vertices(NULL), m_count(0) {}
 
-	inline void b2DistanceProxy::Set(const CPolygonShape* shape )
+	inline void Set(const CPolygonShape* shape )
 	{
 		const CPolygonShape* polygon = (CPolygonShape*)shape;
 		m_vertices = polygon->m_vertices;
@@ -173,7 +172,7 @@ struct b2DistanceProxy
 	}
 
 
-	inline int b2DistanceProxy::GetSupport(const CFloatVector2& d) const
+	inline int GetSupport(const CFloatVector2& d) const
 	{
 		int bestIndex = 0;
 		float bestValue = b2Dot(m_vertices[0], d);
@@ -280,12 +279,12 @@ struct b2Simplex
 	void WriteCache(b2SimplexCache* cache) const
 	{
 		cache->metric = GetMetric();
-		cache->count = unsigned short(m_count);
+		cache->count = (unsigned short)m_count;
 		const b2SimplexVertex* vertices = &m_v1;
 		for (int i = 0; i < m_count; ++i)
 		{
-			cache->indexA[i] = unsigned char(vertices[i].indexA);
-			cache->indexB[i] = unsigned char(vertices[i].indexB);
+			cache->indexA[i] = (unsigned char)vertices[i].indexA;
+			cache->indexB[i] = (unsigned char)vertices[i].indexB;
 		}
 	}
 

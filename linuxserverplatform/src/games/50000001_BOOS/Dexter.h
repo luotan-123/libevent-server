@@ -1,3 +1,6 @@
+#pragma once
+
+#include "Array.h"
 
 // 重定义
 typedef unsigned char		uchar;
@@ -8,16 +11,19 @@ typedef unsigned long long  uint64;
 typedef unsigned long long  ulonglong;
 typedef long long			longlong;
 typedef long long			int64;
-typedef FILE				file;
-typedef WORD				word;
-typedef DWORD				dword;
-typedef HWND				hwnd;
-typedef HANDLE				handle;
-typedef HINSTANCE			hinstance;
-typedef HRSRC				hrsrc;
-typedef COLORREF			colorref;
-typedef GUID				guid;
-typedef POINT				point;
+typedef unsigned short		word;
+typedef unsigned int		dword;
+typedef unsigned int		hwnd;
+typedef unsigned int		handle;
+typedef unsigned int		hinstance;
+typedef unsigned char		byte;
+typedef unsigned short      WORD;
+typedef longlong			LONGLONG;
+typedef char				tchar;
+typedef char				TCHAR;
+typedef unsigned int        DWORD;
+typedef void				VOID;
+typedef float				FLOAT;
 #define Vector				vector
 #define Map					map
 #define Static				static
@@ -29,10 +35,14 @@ typedef POINT				point;
 #define llong_min			0x8000000000000000
 #define ullong_max			0xffffffffffffffff
 #define ullong_min			0
+#define CopyMemory			memcpy
+#define ZeroMemory			bzero
+#define file				FILE
 
 // 标准定义
 #define _in
 #define _out
+#define MAX_PATH			256
 
 // 安全删除
 #ifndef SafeRelease
@@ -55,12 +65,6 @@ typedef POINT				point;
 #define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
 #endif
 
-// 错误定义
-#ifdef _DEBUG
-#define _Assert(A)				assert(A)
-#else
-#define _Assert(A)
-#endif
 
 // 删除数组
 #define DeleteArray( Array )						\
@@ -71,3 +75,14 @@ typedef POINT				point;
 		Array.RemoveAt(0);							\
 	};												\
 }													
+
+typedef struct tagPOINT
+{
+	int  x;
+	int  y;
+} POINT;
+
+struct CPoint : public tagPOINT
+{
+
+};

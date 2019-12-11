@@ -1,8 +1,5 @@
-#include "StdAfx.h"
 #include "TableFrameSink.h"
-#include <mmsystem.h>
-#include "Util.h"
-#pragma comment(lib,"winmm.lib")
+
 
 ////////////////////////////////////////////////////////////////////////////////// 
 ////////////////////////////////////////////////////////////////////////////////// 
@@ -33,7 +30,7 @@
 #define AngleToRadian( Angle )     ( (float)(Angle) / 360.f ) * ( GL_PI * 2 )
 
 // 记录转换
-#define NumberToString( String, nSize, Number )	 tchar String[nSize] = { _T("") }; _sntprintf( String, nSize, TEXT("%I64d"), (LONGLONG)Number );	
+#define NumberToString( String, nSize, Number )	 tchar String[nSize] = { "" }; _sntprintf( String, nSize, TEXT("%I64d"), (LONGLONG)Number );	
 
 ////////////////////////////////////////////////////////////////////////////////// 
 
@@ -89,23 +86,15 @@ int CTableFrameSink::m_nExplosionStart;
 LONGLONG CTableFrameSink::m_lExplosionCondition;
 // 条件类型
 EnumExplosionConditionType CTableFrameSink::m_nExplosionConditionType;
-CMap<uint, uint, LONGLONG, LONGLONG> CTableFrameSink::m_MapPlayExplosionCondition;
+map<uint, LONGLONG> CTableFrameSink::m_MapPlayExplosionCondition;
 LONGLONG CTableFrameSink::m_lStockInitial;
 LONGLONG CTableFrameSink::m_lStockCurrent;
   
 
 
-
-
-// 日志记录
-char g_szStockFileName[MAX_PATH] = { "" };
-
 //初始化游戏
 bool CTableFrameSink::InitDeskGameStation()
 {
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
-
 	IsBegin = false;
 	IniConfig();
 	return true;
@@ -114,7 +103,6 @@ bool CTableFrameSink::InitDeskGameStation()
 // 构造函数
 CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 {
-
 	// 游戏变量
 	m_bFirstTime = true;
 	m_bFishSwimming = false;
@@ -198,11 +186,11 @@ CTableFrameSink::~CTableFrameSink()
 // 释放对象
 VOID CTableFrameSink::Release()
 {
-	for( INT_PTR i = 0; i < m_ArrayFishPathPositive.GetCount(); ++i )
+	for(UINT i = 0; i < m_ArrayFishPathPositive.GetCount(); ++i )
 	{
 		if( m_ArrayFishPathPositive[i] )
 		{
-			for( INT_PTR j = 0; j < m_ArrayFishPathPositive[i]->ArrayBezierPoint.GetCount(); ++j )
+			for(UINT j = 0; j < m_ArrayFishPathPositive[i]->ArrayBezierPoint.GetCount(); ++j )
 			{
 
 				if( m_ArrayFishPathPositive[i]->ArrayBezierPoint[j] )
@@ -408,8 +396,8 @@ void CTableFrameSink::IniConfig()
 	m_nExplosionStart = 5000;
 	m_lExplosionCondition = 3000;
 	m_nExplosionConditionType = ExplosionConditionType_Gun;
-	m_nExplosionProportion = max(m_nExplosionProportion, 0);
-	m_nExplosionProportion = min(m_nExplosionProportion, 1000);
+	m_nExplosionProportion = Max_(m_nExplosionProportion, 0);
+	m_nExplosionProportion = Min_(m_nExplosionProportion, 1000);
 
 	// 中奖配置
 	m_nAwardMinMultiple = 50;
@@ -433,7 +421,7 @@ void CTableFrameSink::IniConfig()
 	int nMultipleMax = 0;
 	for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 	{
-		nMultipleMax = max(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
+		nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 	}
 
 	// 创建飞镖
@@ -442,10 +430,9 @@ void CTableFrameSink::IniConfig()
 #endif
 
 	// 获取当前路径
-	TCHAR szDirectoryPath[MAX_PATH + 1] = { _T("") };
-	GetModuleFileName(NULL, szDirectoryPath, MAX_PATH);
-	PathRemoveFileSpec(szDirectoryPath);
-
+	TCHAR szDirectoryPath[MAX_PATH + 1] = { "" };
+	strcpy(szDirectoryPath, CINIFile::GetAppPath().c_str());
+	
 	CRedisLoader* pRedis = m_pDataManage->GetRedis();
 	RoomBaseInfo roomBasekInfo;
 	RoomBaseInfo* pRoomBaseInfo = NULL;
@@ -459,41 +446,37 @@ void CTableFrameSink::IniConfig()
 	}
 	if (!pRoomBaseInfo)
 	{
+		CON_ERROR_LOG("roomID 错误");
 		return;
 	}
+
 	// 读取鱼路径
 	if (m_ArrayFishPathPositive.GetCount() == 0)
 	{
 		// 打开配置
-		tchar szFishMermaidPath[MAX_PATH] = _T("");
-		_sntprintf(szFishMermaidPath, MAX_PATH, TEXT("%s\\FishLKConfig\\FishLKPath.pat"), szDirectoryPath);
+		tchar szFishMermaidPath[MAX_PATH] = "";
+		sprintf(szFishMermaidPath, "%sFishLKPath.pat", szDirectoryPath);
 
 		// 载入路径
-		CStdioFile myFile;
-		BOOL bOpen = myFile.Open(szFishMermaidPath, CFile::modeNoTruncate | CFile::modeReadWrite);
-		if (bOpen == FALSE)
-		{
-			AfxMessageBox(TEXT("文件 FishLKConfig\\FishLKPath.pat 读取失败！"));
-			return;
-		}
+		fstream f(szFishMermaidPath);
 
 		// 读取信息
-		CString strReadPrior;
+		string strReadPrior;
 		int nStrCount = 10;
 		int nPathCount = 0;
 		BOOL bHand = FALSE;
 		BOOL bBeging = TRUE;
 		int jD = 0;
-		while (myFile.ReadString(strReadPrior))
+		while (std::getline(f, strReadPrior))
 		{
 			// 判断是否明文
-			if (bBeging && strReadPrior.GetLength() == 9)
+			if (bBeging && strReadPrior.length() == 9)
 			{
 				// 头信息比较
 				TCHAR cHand[9] = { 1, 9, 8, 9, 7, 3, 2, 2, 'S' };
-				for (; jD < strReadPrior.GetLength() && jD < 9; ++jD)
+				for (; jD < strReadPrior.length() && jD < 9; ++jD)
 				{
-					if (strReadPrior.GetAt(jD) != cHand[jD])
+					if (strReadPrior.at(jD) != cHand[jD])
 					{
 						break;
 					}
@@ -509,16 +492,16 @@ void CTableFrameSink::IniConfig()
 			bBeging = FALSE;
 
 			// 最后信息
-			CString strRead;
+			string strRead;
 
 			// 被加密
 			if (bHand)
 			{
-				int nPriorCount = strReadPrior.GetLength();
+				int nPriorCount = strReadPrior.length();
 				TCHAR* pData = new TCHAR[nPriorCount + 1];
 				for (int jD = 0; jD < nPriorCount; ++jD)
 				{
-					pData[jD] = strReadPrior.GetAt(jD);
+					pData[jD] = strReadPrior.at(jD);
 					if (pData[jD] != '\n')
 						pData[jD] -= nStrCount % 99;
 
@@ -536,8 +519,8 @@ void CTableFrameSink::IniConfig()
 
 
 			// 转换多字节
-			CHAR szReadByte[1024];
-			strcpy(szReadByte, (LPCTSTR)strRead);
+			char szReadByte[1024];
+			strcpy(szReadByte, strRead.c_str());
 
 			if (szReadByte[0] == 'B')
 			{
@@ -569,23 +552,20 @@ void CTableFrameSink::IniConfig()
 				pFishPath->Time = nTime;
 				m_ArrayFishPathPositive[nPathCount]->ArrayBezierPoint.Add(pFishPath);
 			}
-			else if (strRead == TEXT("End"))
+			else if (strRead =="End")
 			{
 				// 数量增加
 				nPathCount++;
 			}
 			else
 			{
+				CON_ERROR_LOG("FishLKPath.pat 文件格式不正确");
 				ASSERT(FALSE);
 			}
 		}
 
-		myFile.Flush();
-		myFile.Close();
+		f.close();
 	}
-
-
-
 
 	// 玩家位置
 	m_PointPlay[S_TOP_LEFT].x = 230;
@@ -606,10 +586,11 @@ void CTableFrameSink::IniConfig()
 // 配置桌子
 void CTableFrameSink::LoadDynamicConfig()
 {
-	CString nameID;
-	nameID.Format("%d", NAME_ID);
+	string nameID = std::to_string(NAME_ID);
 	CINIFile f(CINIFile::GetAppPath() + nameID + "_s.ini");
-	CString key = TEXT("game");
+
+	string key = "game";
+
 	//获取倍率
 	int Multiple = GetPlatformMultiple();
 
@@ -1099,7 +1080,7 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 			int nMultipleMax = 0;
 			for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 			{
-				nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+				nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 			}
 
 			// 飞镖消耗
@@ -1132,7 +1113,7 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		ZeroMemory(m_nFishKing, sizeof(m_nFishKing));
 
 		IsBegin = false;
-		return __super::GameFinish(bDeskStation, bCloseFlag);
+		return CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 	}
 	// 清空玩家
 	for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
@@ -1142,7 +1123,7 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 	}
 
 	IsBegin = false;
-	return __super::GameFinish(bDeskStation, bCloseFlag);
+	return CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 }
 
  //发送场景
@@ -1178,7 +1159,7 @@ bool CTableFrameSink::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool b
 			SendGameStation(bDeskStation, uSocketID, bWatchUser, &Scene, sizeof(Scene));
 			//printf("子弹速度:%d,冷却:%d", Scene.nBulletVelocity, Scene.nBulletCoolingTime);
 			// 发送鱼信息
-			DWORD dwTime = timeGetTime();
+			DWORD dwTime = GetSysMilliseconds();
 			DWORD Time = dwTime - m_nStartTime;
 		//	printf("%d,%d,%d\n", Time, dwTime, m_nStartTime);
 			// 时间同步
@@ -1235,7 +1216,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 					int nMultipleMax = 0;
 					for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 					{
-						nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+						nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 					}
 
 					// 飞镖消耗
@@ -1293,7 +1274,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 							int nMultipleMax = 0;
 							for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 							{
-								nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+								nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 							}
 
 							// 飞镖消耗
@@ -1313,7 +1294,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 			}
 
 			// 当前时间
-			const uint nCurrentTime = timeGetTime();
+			const uint nCurrentTime = GetSysMilliseconds();
 
 			// 换地图
 			if( !m_bBackExchange && nCurrentTime - m_nSceneBegin > (uint)m_nSceneTime * 1000 && !m_bFushSence)
@@ -1346,7 +1327,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 					int nMultipleMax = 0;
 					for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 					{
-						nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+						nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 					}
 
 					// 创建飞镖
@@ -1420,7 +1401,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 				if (GameUser == NULL ) continue;
 				//if ( !pIServerUserItem->IsClientReady() ) continue;
 
-				m_nPlayDelay[i] = timeGetTime();
+				m_nPlayDelay[i] = GetSysMilliseconds();
 				SendUserItemData(GameUser, SUB_S_DELAY_BEGIN, NULL, NULL);
 			}
 		}
@@ -1470,7 +1451,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 			// 游戏时间
 			DWORD dwCurrentime = (DWORD)time(NULL);
 
-			uint NowTime = timeGetTime();
+			uint NowTime = GetSysMilliseconds();
 			//判断玩家多长时间不操作
 			//if (m_IsOpenTick)
 			//{
@@ -1607,7 +1588,7 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 //框架消息处理函数
 bool CTableFrameSink::HandleFrameMessage(BYTE bDeskStation, unsigned int assistID, void* pData, int size, bool bWatchUser)
 {
-	return __super::HandleFrameMessage(bDeskStation, assistID, pData, size, bWatchUser);
+	return CGameDesk::HandleFrameMessage(bDeskStation, assistID, pData, size, bWatchUser);
 }
 
 
@@ -1618,7 +1599,7 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 	try
 	{
 		//记录玩家操作时间
-		m_iOptionTime[deskStation] = timeGetTime();
+		m_iOptionTime[deskStation] = GetSysMilliseconds();
 
 		// 消息处理
 		bool bSuccess = false;
@@ -1658,14 +1639,14 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 
 		// 判断执行状况
 		if( !bSuccess )
-			DebugPrintf( " %d执行消息 [ %d ] 失败！", GetUserIDByDeskStation(deskStation),assistID);
+			ERROR_LOG( " %d执行消息 [ %d ] 失败！", GetUserIDByDeskStation(deskStation),assistID);
 
-		return __super::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
+		return CGameDesk::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 	}
 	catch ( CException * pException )
 	{
 		// 获取错误信息
-		tchar szErrorMessage[1024] = { _T("") };
+		tchar szErrorMessage[1024] = { "" };
 		pException->GetErrorMessage(szErrorMessage, 1024);
 		pException->Delete();
 
@@ -1674,10 +1655,10 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 	}
 	catch ( ... )
 	{
-		DebugPrintf("严重错误 执行消息 [ %d ] 失败！", assistID);
+		ERROR_LOG("严重错误 执行消息 [ %d ] 失败！", assistID);
 		return true;
 	}
-	return __super::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
+	return CGameDesk::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 }
 
  
@@ -1727,11 +1708,11 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 		SetTimer(IDI_SECOND, 1000);
 	
 		// 保存时间
-		m_nStartTime = timeGetTime();
+		m_nStartTime = GetSysMilliseconds();
 		m_nSceneBegin = m_nStartTime;
 	}
 	//记录玩家坐下时间
-	m_iOptionTime[deskStation] = timeGetTime();
+	m_iOptionTime[deskStation] = GetSysMilliseconds();
 
 	//获取玩家信息
 	GameUserInfo UserData;
@@ -1824,7 +1805,7 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 			InitializePlayer(pUser->deskStation);
 
 		}
-		return __super::UserLeftDesk(pUser);
+		return CGameDesk::UserLeftDesk(pUser);
 	}
 
 	// 删除定时器
@@ -1841,7 +1822,7 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 		int nMultipleMax = 0;
 		for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 		{
-			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 		}
 
 		// 飞镖消耗
@@ -1867,7 +1848,7 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 		GameFinish(pUser->deskStation, GF_NORMAL);
 	}
 
-	return __super::UserLeftDesk(pUser);
+	return CGameDesk::UserLeftDesk(pUser);
 }
 
 // 返回配置
@@ -1901,15 +1882,14 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	if ( bSaveFile )
 	{
 		// 获取当前路径
-		TCHAR szDirectoryPath[MAX_PATH + 1] = { _T("") }; 
-		GetModuleFileName(NULL, szDirectoryPath, MAX_PATH); 
-		PathRemoveFileSpec(szDirectoryPath);
+		TCHAR szDirectoryPath[MAX_PATH + 1] = { "" }; 
+		strcpy(szDirectoryPath, CINIFile::GetAppPath().c_str());
 
 		// 打开配置
-		tchar szConfigPath[MAX_PATH] = _T("");
-		_sntprintf(szConfigPath, MAX_PATH, TEXT("%s\\FishLKConfig\\%s.fdx"), szDirectoryPath, pRoomBaseInfo->name);
+		tchar szConfigPath[MAX_PATH] = "";
+		sprintf(szConfigPath, "%s%s.fdx", szDirectoryPath, pRoomBaseInfo->name);
 		file * pFile = NULL;
-		pFile = fopen( CT2A(szConfigPath), "wb+" );
+		pFile = fopen(szConfigPath, "wb+" );
 		if ( pFile != NULL )
 		{
 			// 保存配置
@@ -1942,7 +1922,7 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	m_lStockCurrent = lStockSetAmount;
 
 	// 控制配置
-	m_dTaxRatio = min( (double)nConfigInfo.nTaxRatio / 1000.0, 0.90 );
+	m_dTaxRatio = Min_( (double)nConfigInfo.nTaxRatio / 1000.0, 0.90 );
 
 	// 场景配置
 	m_nCreateCount = nConfigInfo.nCreateCount;
@@ -1960,7 +1940,7 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	m_nSpeedChance = nConfigInfo.nSpeedChance;
 	CopyMemory(m_nGiftScore, nConfigInfo.nGiftScore, sizeof(m_nGiftScore)); 
 	CopyMemory(m_nGiftChance, nConfigInfo.nGiftChance, sizeof(m_nGiftChance)); 
-	m_nNullChance = max(nConfigInfo.nNullChance, 2);
+	m_nNullChance = Max_(nConfigInfo.nNullChance, 2);
 
 	// 鱼配置
 	CopyMemory(m_nFishMultiple, nConfigInfo.nCatchFishMultiple, sizeof(m_nFishMultiple)); 
@@ -1970,8 +1950,8 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	m_nExplosionStart = nConfigInfo.nExplosionStart;
 	m_lExplosionCondition = nConfigInfo.lExplosionCondition;
 	m_nExplosionConditionType = nConfigInfo.nExplosionConditionType;
-	m_nExplosionProportion = max( m_nExplosionProportion, 0 );
-	m_nExplosionProportion = min( m_nExplosionProportion, 1000 );
+	m_nExplosionProportion = Max_( m_nExplosionProportion, 0 );
+	m_nExplosionProportion = Min_( m_nExplosionProportion, 1000 );
 
 	// 更新信息
 	CMD_S_UpdateGame CMDSUpdateGame;
@@ -1987,36 +1967,44 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 // 返回个人难度
 void CTableFrameSink::GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty )
 {
-	POSITION Pos = m_MapPersonalDifficulty.GetStartPosition();
+	/*POSITION Pos = m_MapPersonalDifficulty.GetStartPosition();
 	while ( Pos )
 	{
 		unsigned long lPlayID = 0;
 		double dPersonalDifficulty = 0.0;
 		m_MapPersonalDifficulty.GetNextAssoc( Pos, lPlayID, dPersonalDifficulty );
 		MapPersonalDifficulty.SetAt( lPlayID, dPersonalDifficulty );
-	}
+	}*/
 }
 //获取玩家的难度
 void CTableFrameSink::GetUserDifficulty(unsigned long lPlayID, double& dPersonalDifficulty)
 {
-	m_MapPersonalDifficulty.Lookup(lPlayID, dPersonalDifficulty);
+	//m_MapPersonalDifficulty.Lookup(lPlayID, dPersonalDifficulty);
+	auto iter = m_MapPersonalDifficulty.find(lPlayID);
+	if (iter != m_MapPersonalDifficulty.end())
+	{
+		dPersonalDifficulty = iter->second;
+	}
 }
 // 设置个人难度
 void CTableFrameSink::SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty )
 {
-	m_MapPersonalDifficulty.SetAt( lPlayID, dPersonalDifficulty );
+	//m_MapPersonalDifficulty.SetAt( lPlayID, dPersonalDifficulty );
+	m_MapPersonalDifficulty[lPlayID] = dPersonalDifficulty;
 }
 
 // 删除个人难度
 void CTableFrameSink::DeletePersonalDifficulty( unsigned long lPlayID )
 {
-	m_MapPersonalDifficulty.RemoveKey( lPlayID );
+	//m_MapPersonalDifficulty.RemoveKey( lPlayID );
+	m_MapPersonalDifficulty.erase(lPlayID);
 }
 
 // 清空个人难度
 void CTableFrameSink::ClearPersonalDifficulty()
 {
-	m_MapPersonalDifficulty.RemoveAll();
+	//m_MapPersonalDifficulty.RemoveAll();
+	m_MapPersonalDifficulty.clear();
 }
 
 // 获取库存
@@ -2064,7 +2052,7 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 	CMD_C_CatchFish * pCatchFish = (CMD_C_CatchFish *)pBuffer;
 	if (!pCatchFish)
 	{
-		DebugPrintf("错误：玩家:%d,OnSubCatchFish（捕鱼事件）空数据包",GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误：玩家:%d,OnSubCatchFish（捕鱼事件）空数据包",GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 	// 定义变量
@@ -2174,14 +2162,14 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	if (wDataSize!=sizeof(CMD_C_Fire)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("玩家ID不存在");
+		ERROR_LOG("玩家ID不存在");
 		return true;
 	}
 	// 消息处理
 	CMD_C_Fire * pFire = (CMD_C_Fire *)pBuffer;
 	if (!pFire)
 	{
-		DebugPrintf("错误：玩家%d,OnSubFire发送空数据包", GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误：玩家%d,OnSubFire发送空数据包", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 
@@ -2205,7 +2193,7 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	// 扣除金币
 	if ( m_lPlayScore[deskStation] < lBulletInvest )
 	{
-	//	FishMermaidLogo( _T("普通子弹金币扣除失败 %d, [P %I64d] [L %I64d]"), ( pIServerUserItem->IsAndroidUser() ? 1 : 0 ), m_lPlayScore[wChairID], lBulletInvest );
+	//	FishMermaidLogo( "普通子弹金币扣除失败 %d, [P %I64d] [L %I64d]", ( pIServerUserItem->IsAndroidUser() ? 1 : 0 ), m_lPlayScore[wChairID], lBulletInvest );
 
 		ASSERT( FALSE );
 
@@ -2214,7 +2202,14 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 
 	// 修改开炮
 	LONGLONG lPlayExplosionCondition = 0;
-	m_MapPlayExplosionCondition.Lookup(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
+
+	auto iter = m_MapPlayExplosionCondition.find(GetUserIDByDeskStation(deskStation));
+	if (iter != m_MapPlayExplosionCondition.end())
+	{
+		lPlayExplosionCondition = iter->second;
+	}
+
+	//m_MapPlayExplosionCondition.Lookup(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
 	
 	// 未满足条件
 	if ( lPlayExplosionCondition < m_lExplosionCondition )
@@ -2222,12 +2217,14 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 		if( m_nExplosionConditionType == ExplosionConditionType_Gun )
 		{
 			lPlayExplosionCondition += 1;
-			m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
+			m_MapPlayExplosionCondition[GetUserIDByDeskStation(deskStation)] = lPlayExplosionCondition;
+			//m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
 		}
 		else
 		{
 			lPlayExplosionCondition += lBulletInvest;
-			m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
+			m_MapPlayExplosionCondition[GetUserIDByDeskStation(deskStation)] = lPlayExplosionCondition;
+			//m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
 		}
 	}
 
@@ -2303,13 +2300,13 @@ bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WO
 
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("错误：玩家不存在");
+		ERROR_LOG("错误：玩家不存在");
 		return false;
 	}
 	// 激光数值判断
 	//if ( m_nLaserPlayTime[pIServerUserItem->GetChairID()] <= 0 )
 	//{
-	//	FishMermaidLogo( _T("激光使用超时 - 1。") );
+	//	FishMermaidLogo( "激光使用超时 - 1。" );
 
 	//	ASSERT(FALSE);
 
@@ -2320,7 +2317,7 @@ bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WO
 	CMD_C_BeginLaser * pBeginLaser = (CMD_C_BeginLaser *)pBuffer;
 	if (!pBeginLaser)
 	{
-		DebugPrintf("错误:玩家%d，OnSubBeginLaser存在空指针", GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误:玩家%d，OnSubBeginLaser存在空指针", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 	// 发送消息
@@ -2344,7 +2341,7 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	// 激光数值判断
 	//if ( m_nLaserPlayTime[pIServerUserItem->GetChairID()] <= 0 )
 	//{
-	//	FishMermaidLogo( _T("激光使用超时 - 2。") );
+	//	FishMermaidLogo( "激光使用超时 - 2。" );
 
 	//	ASSERT(FALSE);
 
@@ -2352,7 +2349,7 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	//}
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("错误：找不到玩家%d", deskStation);
+		ERROR_LOG("错误：找不到玩家%d", deskStation);
 		return false;
 	}
 	// 消息处理
@@ -2360,7 +2357,7 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 
 	if (!pLaser)
 	{
-		DebugPrintf("错误：玩家 :%d,OnSubLaser空指针", GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误：玩家 :%d,OnSubLaser空指针", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 	// 定义变量
@@ -2388,8 +2385,8 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	FRBullet.Set(fRadian);
 	FVBullet.Set(pLaser->ptBeginPos.x, pLaser->ptBeginPos.y);
 	CFloatVector2 FVLaser[4];
-	FVLaser[0].Set( -50, -(max(DEFAULE_WIDTH, DEFAULE_HEIGHT)) );
-	FVLaser[1].Set(  50, -(max(DEFAULE_WIDTH, DEFAULE_HEIGHT)) );
+	FVLaser[0].Set( -50, -(Max_(DEFAULE_WIDTH, DEFAULE_HEIGHT)) );
+	FVLaser[1].Set(  50, -(Max_(DEFAULE_WIDTH, DEFAULE_HEIGHT)) );
 	FVLaser[2].Set(  50, 0 );
 	FVLaser[3].Set( -50, 0 );
 	SPBullet.Set( FVLaser, 4 );
@@ -2449,7 +2446,7 @@ bool CTableFrameSink::OnSubDelay(BYTE deskStation, const void * pBuffer, WORD wD
 	CMD_S_Delay Delay;
 
 	// 计算延迟
-	DWORD dwTime = timeGetTime();
+	DWORD dwTime = GetSysMilliseconds();
 	if ( dwTime < m_nPlayDelay[deskStation] )
 		Delay.nDelay = ULONG_MAX - m_nPlayDelay[deskStation] + dwTime;
 	else
@@ -2502,14 +2499,14 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	if (wDataSize!=sizeof(CMD_C_Multiple)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("错误:玩家%d不存在!", deskStation);
+		ERROR_LOG("错误:玩家%d不存在!", deskStation);
 		return false;
 	}
 	// 消息处理
 	CMD_C_Multiple * pMultiple = (CMD_C_Multiple *)pBuffer;
 	if (!pMultiple)
 	{
-		DebugPrintf("错误:玩家%d,倍数选择OnSubMultiple空指针", GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误:玩家%d,倍数选择OnSubMultiple空指针", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 	// 定义变量
@@ -2518,7 +2515,7 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	// 判断信息
 	if ( pMultiple->nMultipleIndex >= Multiple_Max || pMultiple->nMultipleIndex < 0 )
 	{
-		DebugPrintf("玩家%d设置倍数失败, 超过有效值。", deskStation);
+		ERROR_LOG("玩家%d设置倍数失败, 超过有效值。", deskStation);
 
 		ASSERT(FALSE);
 
@@ -2528,7 +2525,7 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	// 激光和宝箱过滤
 	if ( m_nLaserPlayTime[deskStation] > 0 || m_bPlaySupply[deskStation] )
 	{
-		DebugPrintf("活动期间，玩家%d,ID:%d设置倍数无效,激光：%d,补给箱:%d。", deskStation, GetUserIDByDeskStation(deskStation), m_nLaserPlayTime[deskStation], m_bPlaySupply[deskStation]);
+		ERROR_LOG("活动期间，玩家%d,ID:%d设置倍数无效,激光：%d,补给箱:%d。", deskStation, GetUserIDByDeskStation(deskStation), m_nLaserPlayTime[deskStation], m_bPlaySupply[deskStation]);
 
 		ASSERT(FALSE);
 
@@ -2558,12 +2555,12 @@ bool CTableFrameSink::OnSubControl(BYTE deskStation, VOID * pData, WORD wDataSiz
 	CMD_C_Control * pControl = (CMD_C_Control*)pData;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
-		DebugPrintf("错误:玩家%d不存在!", deskStation);
+		ERROR_LOG("错误:玩家%d不存在!", deskStation);
 		return false;
 	}
 	if (!pControl)
 	{
-		DebugPrintf("错误:玩家%d,控制信息OnSubControl空指针", GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误:玩家%d,控制信息OnSubControl空指针", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 	// 判断权限
@@ -2584,7 +2581,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 								   bool bCanAquatic /* = true */, 
 								   EnumKillerType nKillerType /*= KillerType_No*/, 
 								   WORD wHitChair /*= INVALID_CHAIR*/, 
-								   CShortPoint & PointOffSet /*= CShortPoint(0,0)*/, 
+								   CShortPoint PointOffSet /*= CShortPoint(0,0)*/, 
 								   float fInitialAngle /*= 0.f*/, 
 								   bool bRepeatCreate /*= true */ )
 {
@@ -2661,11 +2658,11 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 		//鱼王刷新时间
 		if (m_FishKingTime == 0)
 		{
-			m_FishKingTime = timeGetTime();
+			m_FishKingTime = GetSysMilliseconds();
 			m_bFushBoss = false;
 			m_bFushSence = false;
 		}
-		else if (!m_bIsFushBoss && m_FishKingTime > 0 && (timeGetTime() - m_FishKingTime) >m_FishKingIntervalTime && GetFishCount(FishType_BOSS) <= 0)
+		else if (!m_bIsFushBoss && m_FishKingTime > 0 && (GetSysMilliseconds() - m_FishKingTime) >m_FishKingIntervalTime && GetFishCount(FishType_BOSS) <= 0)
 		{
 			m_bFushSence = true;
 			m_bIsFushBoss = true;
@@ -2679,7 +2676,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			m_bFushSence = true;
 			m_bIsFushBegin = true;
 			cbFishType = FishType_BOSS;
-			m_FishKingTime = timeGetTime();
+			m_FishKingTime = GetSysMilliseconds();
 		}
 
 		if (GetFishCount(FishType_BOSS) <= 0 && m_bIsFushBegin && cbFishType!= FishType_BOSS)
@@ -2717,7 +2714,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 
 	// 循环创建
 	int nIndex = 0;
-	const uint unCurrentTime = timeGetTime();
+	const uint unCurrentTime = GetSysMilliseconds();
 	ASSERT( unCurrentTime >= m_nStartTime );
 	while ( nIndex < cbCount )
 	{
@@ -2739,7 +2736,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 
 		// 基本信息
 		tagFishInfo FishInfo;
-		FishInfo.nFishKey = max( 1, m_nAppearFishCount + 1);
+		FishInfo.nFishKey = Max_( 1, m_nAppearFishCount + 1);
 		FishInfo.nFishType = cbFishType;
 		FishInfo.unCreateTime = (unCurrentTime - m_nStartTime) + unCreateTime + nIndex * unIntervalTime;
 		FishInfo.unOverTime = unSwimmiTime;
@@ -2799,7 +2796,7 @@ uint CTableFrameSink::CreateFish( byte cbCount,
 								  bool bCanAquatic		/* = true */, 
 								  EnumKillerType nKillerType /* = KillerType_No */,
 								  WORD wHitChair		/* = INVALID_CHAIR */,
-								  CShortPoint & PointOffSet /*= CShortPoint(0,0)*/, 
+								  CShortPoint PointOffSet /*= CShortPoint(0,0)*/, 
 								  float fInitialAngle /*= 0.f*/, 
 								  bool bRepeatCreate /*= true*/)
 {
@@ -2827,7 +2824,7 @@ uint CTableFrameSink::CreateFish( byte cbCount,
 			tagBezierPoint * pBezierPoint = pArrayBezierPoint->GetAt(nIndex);
 			if (!pBezierPoint)
 			{
-				DebugPrintf("错误:获取鱼路径错误");
+				ERROR_LOG("错误:获取鱼路径错误");
 				return false;
 			}
 			// 赋值信息
@@ -2843,12 +2840,12 @@ uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
 {
 	// 当前时间
 	int nIndex = 0;
-	const uint nCurrentTime = timeGetTime();
+	const uint nCurrentTime = GetSysMilliseconds();
 	ASSERT( nCurrentTime >= m_nStartTime );
 
 	// 基本信息
 	tagFishInfo TFishCreateInfo;
-	TFishCreateInfo.nFishKey = max( 1, m_nAppearFishCount + 1);
+	TFishCreateInfo.nFishKey = Max_( 1, m_nAppearFishCount + 1);
 	TFishCreateInfo.nFishType = TFishInfo.nFishType;
 	TFishCreateInfo.unCreateTime = nCurrentTime - m_nStartTime;
 	TFishCreateInfo.unOverTime = TFishInfo.unOverTime;
@@ -3089,7 +3086,7 @@ uint CTableFrameSink::SpecialFishMatrix( byte cbFishType, CDoublePoint PointFish
 	tagBezierPoint * pBezierPoint = m_ArrayFishPathPositive.GetAt(nPathIndex)->ArrayBezierPoint.GetAt(0);
 	if (!pBezierPoint)
 	{
-		DebugPrintf("错误:特殊鱼阵获取错误");
+		ERROR_LOG("错误:特殊鱼阵获取错误");
 		return false;
 	}
 	PointOffSet.x = (short)(PointFish.x - pBezierPoint->BeginPoint.x);
@@ -3124,7 +3121,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 	{
 		Grop = m_iFinshGroup;
 	}
-	//DebugPrintf("创建鱼阵类型：%d,鱼阵等级:%d", Grop, m_iFinshLeve);
+	//ERROR_LOG("创建鱼阵类型：%d,鱼阵等级:%d", Grop, m_iFinshLeve);
 	// 判断种类
 	switch(Grop)
 	{
@@ -3553,7 +3550,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			}
 			for( int nIndex = 0; nIndex < nCountMax; ++nIndex )
 			{
-				float fAngle = GL_PI * 2.f / (float)nCountMax * (float)nIndex;
+				double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
 				CreateFish( 1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 140) ), fAngle + GL_PI, false );
 				CreateFish( 1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 140) ), fAngle + GL_PI, false );
 			}
@@ -3570,7 +3567,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			}
 			for( int nIndex = 0; nIndex < nCountMax; ++nIndex )
 			{
-				float fAngle = GL_PI * 2.f / (float)nCountMax * (float)nIndex;
+				double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
 				CreateFish( 1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 225) ), fAngle + GL_PI, false );
 				CreateFish( 1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 225) ), fAngle + GL_PI, false );
 			}
@@ -3587,7 +3584,7 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 			}
 			for( int nIndex = 0; nIndex < nCountMax; ++nIndex )
 			{
-				float fAngle = GL_PI * 2.f / (float)nCountMax * (float)nIndex;
+				double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
 				CreateFish( 1, FishType_BXiaoHuangYu, 15, 1000, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 295) ), fAngle + GL_PI, false );
 				CreateFish( 1, FishType_BXiaoHuangYu, 15, 1000, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 295) ), fAngle + GL_PI, false );
 			}
@@ -3630,7 +3627,7 @@ uint CTableFrameSink::PathTime( tagFishPath * pFishPath )
 EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & TFish, uint nCustomLossTime /*= uint_max*/ )
 {
 	// 判断当前时间
-	uint nCurrentTime = timeGetTime();
+	uint nCurrentTime = GetSysMilliseconds();
 
 	// 流逝时间
 	uint nLossTime = nCurrentTime - m_nStartTime;
@@ -3694,7 +3691,7 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 		tagBezierPoint * pBezierPoint = &TFish.TBezierPoint[nBezierIndex];
 		if (!pBezierPoint)
 		{
-			DebugPrintf("错误:FishMove获取鱼信息错误");
+			ERROR_LOG("错误:FishMove获取鱼信息错误");
 		}
 		// 路径耗时
 		unAllTime += pBezierPoint->Time;
@@ -3742,7 +3739,7 @@ void CTableFrameSink::FishFastMove()
 		int nMultipleMax = 0;
 		for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
 		{
-			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
 		}
 
 		// 飞镖消耗
@@ -3765,7 +3762,7 @@ void CTableFrameSink::FishFastMove()
 	}
 
 	// 更新时间
-	m_nStartTime = timeGetTime();
+	m_nStartTime = GetSysMilliseconds();
 }
 
 // 获取鱼数量
@@ -3940,13 +3937,13 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 	if( m_bAwardChatBox && nFishMultiple >= m_nAwardMinMultiple && lFishScore >= 0 )
 	{
 		// 鱼信息
-		tchar szFishName[FishType_Max][11] = {
-			_T("小黄鱼"), _T("小青鱼"), _T("彩斑鱼"), _T("海马"), _T("小丑鱼"),
-			_T("红尾鱼"), _T("海螺"), _T("海螺蟹"), _T("珊瑚鱼"), _T("红金鱼"),
-			_T("蓝尾鱼"), _T("灯笼鱼"), _T("气泡鱼"), _T("绿色气泡鱼"), _T("盔甲鱼"),
-			_T("鲶鱼"), _T("乌龟"), _T("魔鬼鱼"), _T("剑鱼"), _T("海豚"),
-			_T("电鱼"), _T("鲸鱼"), _T("鲨鱼"), _T("黄金锤头鲨"), _T("黄金巨尺鲨"),
-			_T("黄金盔甲鱼"), _T("黄金锤头鲨"), _T("黄金鲸鱼"), _T("黄金虎鲸"), _T("史前巨鳄") };
+		tchar szFishName[FishType_Max][22] = {
+			"小黄鱼", "小青鱼", "彩斑鱼", "海马", "小丑鱼",
+			"红尾鱼", "海螺", "海螺蟹", "珊瑚鱼", "红金鱼",
+			"蓝尾鱼", "灯笼鱼", "气泡鱼", "绿色气泡鱼", "盔甲鱼",
+			"鲶鱼", "乌龟", "魔鬼鱼", "剑鱼", "海豚",
+			"电鱼", "鲸鱼", "鲨鱼", "黄金锤头鲨", "黄金巨尺鲨",
+			"黄金盔甲鱼", "黄金锤头鲨", "黄金鲸鱼", "黄金虎鲸", "史前巨鳄" };
 
 
 		GameUserInfo data;
@@ -3957,24 +3954,21 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 		}
 
 
-		// 桌子信息
-		CString StrTable;
-
 		// 生成信息
-		CString StrAwardTip;
+		char StrAwardTip[1024];
 		//if (GetRoomLevel() <= 1)
 		//{
-		//	StrAwardTip.Format(_T("恭喜玩家#FF0000 | 【%s】#00FAFA | 在【BOOS来了初级场】捕获了#FF12FA | 【%s】#FFFAFA | 获得#FFFA12 | 金币#I1 | %d #C1！"),
+		//	StrAwardTip.Format("恭喜玩家#FF0000 | 【%s】#00FAFA | 在【BOOS来了初级场】捕获了#FF12FA | 【%s】#FFFAFA | 获得#FFFA12 | 金币#I1 | %d #C1！",
 		//		data.name, szFishName[nFishType], /*nFishMultiple,*/ lFishScore);
 		//}
 		//else if (GetRoomLevel() == 2)
 		//{
-		//	StrAwardTip.Format(_T("恭喜玩家#FF0000 | 【%s】#00FAFA | 在【BOOS来了中级场】捕获了#FF12FA | 【%s】#FFFAFA | 获得#FFFA12 | 金币#I1 | %d #C1！"),
+		//	StrAwardTip.Format("恭喜玩家#FF0000 | 【%s】#00FAFA | 在【BOOS来了中级场】捕获了#FF12FA | 【%s】#FFFAFA | 获得#FFFA12 | 金币#I1 | %d #C1！",
 		//		data.name, szFishName[nFishType], /*nFishMultiple,*/ lFishScore);
 		//}
 		//else if (GetRoomLevel() == 3)
 		//{
-		//	StrAwardTip.Format(_T("恭喜玩家#FF0000 | 【%s】#00FAFA | 在【BOOS来了高级场】捕获了#FF12FA | 【%s】#FFFAFA | 获得#FFFA12 | 金币#I1 | %d #C1！"),
+		//	StrAwardTip.Format("恭喜玩家#FF0000 | 【%s】#00FAFA | 在【BOOS来了高级场】捕获了#FF12FA | 【%s】#FFFAFA | 获得#FFFA12 | 金币#I1 | %d #C1！",
 		//		data.name, szFishName[nFishType], /*nFishMultiple,*/ lFishScore);
 		//}
 		//else
@@ -3985,7 +3979,7 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 		{
 			Multiple = 1;
 		}
-			StrAwardTip.Format(_T("恭喜玩家#FF0000|【%s】#00FAFA|在【打BOOS】捕获了#FF12FA|【%s】#FFFAFA|获得#FFFA12|金币#I1|%2f #C1"),
+			sprintf(StrAwardTip,"恭喜玩家#FF0000|【%s】#00FAFA|在【打BOOS】捕获了#FF12FA|【%s】#FFFAFA|获得#FFFA12|金币#I1|%2f #C1",
 				data.name, szFishName[nFishType], /*nFishMultiple,*/ (double)(lFishScore)/ Multiple);
 		//}
 
@@ -3993,25 +3987,25 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 		// 金币捕获
 		//if( nScoreType == EST_Cold )
 		//{
-		//	StrAwardTip.Format( _T("%s玩家 %s 捕中了%s，获得 %d倍 %I64d分数！"), pRoomBaseInfo->name, data.name, szFishName[nFishType], nFishMultiple, lFishScore);
+		//	StrAwardTip.Format( "%s玩家 %s 捕中了%s，获得 %d倍 %I64d分数！", pRoomBaseInfo->name, data.name, szFishName[nFishType], nFishMultiple, lFishScore);
 		//}
 		//else if ( nScoreType == EST_Laser )
 		//{
-		//	StrAwardTip.Format( _T("%s玩家 %s 使用激光，获得 %d倍 %I64d分数！"), StrTable, CMDSAwardTip.szPlayName, nFishMultiple, lFishScore);
+		//	StrAwardTip.Format( "%s玩家 %s 使用激光，获得 %d倍 %I64d分数！", StrTable, CMDSAwardTip.szPlayName, nFishMultiple, lFishScore);
 		//}
 
 		//// 末尾提示
 		//if ( nFishMultiple >= 500 )
 		//{
-		//	StrAwardTip += _T("超神了！！！");
+		//	StrAwardTip += "超神了！！！";
 		//}
 		//else if ( nFishType == FishType_BaoXiang )
 		//{
-		//	StrAwardTip += _T("运气爆表！！！");
+		//	StrAwardTip += "运气爆表！！！";
 		//}
 		//else
 		//{
-		//	StrAwardTip += _T("实力超群！！！");
+		//	StrAwardTip += "实力超群！！！";
 		//}
 		m_pDataManage->SendRewardActivityNotify(StrAwardTip);
 		//printf("%s\n", StrAwardTip);
@@ -4038,11 +4032,11 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 	int nCreateCount = 0;
 	if (nPlayCount > 1)
 	{
-		nCreateCount = min(nPlayCount-1, 4) * m_iAddFinshCount + m_nCreateCount;
+		nCreateCount = Min_(nPlayCount-1, 4) * m_iAddFinshCount + m_nCreateCount;
 	}
 	else
 	{
-		nCreateCount = min(nPlayCount, 4) * m_iAddFinshCount + m_nCreateCount;
+		nCreateCount = Min_(nPlayCount, 4) * m_iAddFinshCount + m_nCreateCount;
 	}
 	
 	
@@ -4228,7 +4222,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	double dDeathScore = static_cast<double>(m_nMultipleValue[nMultipleIndex] * nDeathScore);
 
 	// 几率信息
-	nBulletSplit = max( 1, nBulletSplit );
+	nBulletSplit = Max_( 1, nBulletSplit );
 	double dAppendChance = dBulletScore / (double)nBulletSplit / dDeathScore;
 	double dBulletScale = (double)QianPao_Bullet / (double)nBulletSplit / (double)nDeathCount;
 
@@ -4261,13 +4255,13 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	// 防止负数, 增加难度
 	//if ( m_dRoomStock[nMultipleIndex] < dDeathScore )
 	//{
-	//	dModifyChance = min( 0.15, dModifyChance );
+	//	dModifyChance = Min_( 0.15, dModifyChance );
 	//}
 
 	//// 负数太厉害
 	//if ( m_dRoomStock[nMultipleIndex] < -100 * m_nMultipleValue[nMultipleIndex] )
 	//{
-	//	dModifyChance = min( 0.05, dModifyChance );
+	//	dModifyChance = Min_( 0.05, dModifyChance );
 	//}
 
 	// 机器人默认难度
@@ -4280,7 +4274,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		int nMultipleMax = 0;
 		for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 		{
-			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nIndex] );
+			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nIndex] );
 		}
 
 		// 机器人赢得太多
@@ -4293,7 +4287,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	// 比赛房间统一难度
 	if( m_bCompetitionRoom )
 	{
-		dModifyChance = max(1.2, dModifyChance);
+		dModifyChance = Max_(1.2, dModifyChance);
 	}
 
 	// 遍历鱼
@@ -4310,7 +4304,15 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 
 		// 全局爆炸判断
 		LONGLONG lPlayExplosionCondition = 0;
-		m_MapPlayExplosionCondition.Lookup( GetUserIDByDeskStation(wChairID), lPlayExplosionCondition );
+
+		auto iter = m_MapPlayExplosionCondition.find(GetUserIDByDeskStation(wChairID));
+		if (iter != m_MapPlayExplosionCondition.end())
+		{
+			lPlayExplosionCondition = iter->second;
+		}
+
+		//m_MapPlayExplosionCondition.Lookup( GetUserIDByDeskStation(wChairID), lPlayExplosionCondition );
+
 		if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao && lPlayExplosionCondition < m_lExplosionCondition )
 		{
 			continue;
@@ -4336,12 +4338,12 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		double dWillBeIn = 1.2 / dModifyChance;
 
 		// 优化几率
-		nCaptureChance = max( nCaptureChance, 1 );
+		nCaptureChance = Max_( nCaptureChance, 1 );
 
 		// 非特殊处理, 系统防止负数
 		//if ( !bSpecialDie && m_dRoomStock[nMultipleIndex] < dDeathScore && !m_bCompetitionRoom )
 		//{
-		//	dWillBeIn = max( 2.0, dWillBeIn );
+		//	dWillBeIn = Max_( 2.0, dWillBeIn );
 		//	nCaptureChance = 1;
 		//}
 
@@ -4355,7 +4357,8 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 			if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao )
 			{
 				// 清空数据
-				m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(wChairID), 0 );
+				//m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(wChairID), 0 );
+				m_MapPlayExplosionCondition[GetUserIDByDeskStation(wChairID)] = 0;
 			}
 
 			// 捕获中鱼
@@ -4480,7 +4483,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		int nMultipleMax = 0;
 		for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
 		{
-			nMultipleMax = max( nMultipleMax, m_nMultipleValue[nIndex] );
+			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nIndex] );
 		}
 
 		// 还原分数
@@ -4530,7 +4533,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	// 停留消息
 	if ( bStayFish )
 	{
-		//FishFreeze( timeGetTime() - m_nStartTime );
+		//FishFreeze( GetSysMilliseconds() - m_nStartTime );
 	}
 
 	// 返回信息
@@ -4984,24 +4987,26 @@ template< typename T > void CTableFrameSink::SwapVariable( T & One, T & Two )
 }
 
 // 旋转点
-CDoublePoint CTableFrameSink::Rotate( CDoublePoint & ptCircle, double dRadian, CDoublePoint & ptSome ) 
+CDoublePoint CTableFrameSink::Rotate(const CDoublePoint & ptCircle, double dRadian, const CDoublePoint & ptSome )
 { 
 	CDoublePoint temp; 
-	ptSome.x -= ptCircle.x; 
-	ptSome.y -= ptCircle.y; 
-	temp.x = ptSome.x*cos(dRadian) - ptSome.y*sin(dRadian) + ptCircle.x; 
-	temp.y = ptSome.y*cos(dRadian) + ptSome.x*sin(dRadian) + ptCircle.y; 
+	CDoublePoint tempPtSome(ptSome);
+	tempPtSome.x -= ptCircle.x; 
+	tempPtSome.y -= ptCircle.y;
+	temp.x = tempPtSome.x*cos(dRadian) - tempPtSome.y*sin(dRadian) + ptCircle.x;
+	temp.y = tempPtSome.y*cos(dRadian) + tempPtSome.x*sin(dRadian) + ptCircle.y;
 	return temp; 
 } 
 
 // 旋转点
-CShortPoint CTableFrameSink::Rotate( CShortPoint & ptCircle, double dRadian, CShortPoint & ptSome ) 
+CShortPoint CTableFrameSink::Rotate(const CShortPoint & ptCircle, double dRadian, const CShortPoint & ptSome )
 { 
 	CShortPoint temp; 
-	ptSome.x -= ptCircle.x; 
-	ptSome.y -= ptCircle.y; 
-	temp.x = (short)(ptSome.x*cos(dRadian) - ptSome.y*sin(dRadian) + ptCircle.x); 
-	temp.y = (short)(ptSome.y*cos(dRadian) + ptSome.x*sin(dRadian) + ptCircle.y); 
+	CShortPoint tempPtSome(ptSome);
+	tempPtSome.x -= ptCircle.x;
+	tempPtSome.y -= ptCircle.y;
+	temp.x = (short)(tempPtSome.x*cos(dRadian) - tempPtSome.y*sin(dRadian) + ptCircle.x);
+	temp.y = (short)(tempPtSome.y*cos(dRadian) + tempPtSome.x*sin(dRadian) + ptCircle.y);
 	return temp; 
 } 
 
@@ -5103,46 +5108,6 @@ int CTableFrameSink::RandomArea( int nLen, ... )
 	return nIndex;
 }
 
-
-// 使能关机特权 并关机
-bool CTableFrameSink::EnableShutdownPrivilege()
-{
-	HANDLE hProcess = NULL;
-	HANDLE hToken = NULL;
-	LUID uID = {0};
-	TOKEN_PRIVILEGES stToken_Privileges = {0};
-
-	// 获取当前应用程序进程句柄
-	hProcess = ::GetCurrentProcess(); 
-
-	// 打开当前进程的访问令牌句柄(OpenProcessToken函数调用失败返回值为零)
-	if(!::OpenProcessToken(hProcess,TOKEN_ADJUST_PRIVILEGES,&hToken)) 
-		return false;
-
-	// 获取权限名称为"SeShutdownPrivilege"的LUID(LookupPrivilegeValue函数调用失败返回值为零)
-	if(!::LookupPrivilegeValue(NULL,SE_SHUTDOWN_NAME,&uID)) 
-		return false;
-
-	stToken_Privileges.PrivilegeCount = 1;			// 欲调整的权限个数
-	stToken_Privileges.Privileges[0].Luid = uID;	// 权限的LUID
-	stToken_Privileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; // 权限的属性,SE_PRIVILEGE_ENABLED为使能该权限
-
-	// 调整访问令牌里的指定权限(AdjustTokenPrivileges函数调用失败返回值为零)
-	if(!::AdjustTokenPrivileges(hToken,FALSE,&stToken_Privileges,sizeof stToken_Privileges,NULL,NULL)) 
-		return false;
-
-	// 查看权限是否调整成功
-	if(::GetLastError() != ERROR_SUCCESS) 
-		return false;
-
-	// 关闭句柄
-	::CloseHandle(hToken);
-
-	// 关机吧
-	ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE,0);
-
-	return true;
-}
 
 // 判断机器人
 bool CTableFrameSink::IsAndroidUser(BYTE wChairID )
@@ -5372,48 +5337,7 @@ bool CTableFrameSink::GameBegin(BYTE bBeginFlag)
 	SetTimer(TIME_WRITE_SCORE, 30000);
 	IniConfig();
 	LoadDynamicConfig();
-	return __super::GameBegin(bBeginFlag);
-}
-
-//打应日志
-void CTableFrameSink::DebugPrintf(const char *strOutputString, ...)
-{
-	CRedisLoader* pRedis = m_pDataManage->GetRedis();
-	RoomBaseInfo roomBasekInfo;
-	RoomBaseInfo* pRoomBaseInfo = NULL;
-	if (pRedis->GetRoomBaseInfo(m_pDataManage->GetRoomID(), roomBasekInfo))
-	{
-		pRoomBaseInfo = &roomBasekInfo;
-	}
-	else
-	{
-		pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(m_pDataManage->GetRoomID());
-	}
-	if (!pRoomBaseInfo)
-	{
-		return;
-	}
-
-	char szFilename[256];
-	CString strPath = CINIFile::GetAppPath() + GAMENAME + "_log\\";
-	SHCreateDirectoryEx(NULL, strPath, NULL);
-	CTime time = CTime::GetCurrentTime();
-	sprintf(szFilename, "%s%d__%d%02d%02d_李逵劈鱼%d.txt", strPath, NAME_ID, time.GetYear(), time.GetMonth(), time.GetDay(), pRoomBaseInfo->gameID);
-	FILE *fp = fopen(szFilename, "a");
-	if (NULL == fp)
-	{
-		return;
-	}
-	//插入时间
-	char cTime[30];
-	::memset(cTime, 0, sizeof(cTime));
-	sprintf(cTime, "[%d:%d:%d] ", time.GetHour(), time.GetMinute(), time.GetSecond());
-	fprintf(fp, cTime);
-	va_list arg;
-	va_start(arg, strOutputString);
-	vfprintf(fp, strOutputString, arg);
-	fprintf(fp, "\n");
-	fclose(fp);
+	return CGameDesk::GameBegin(bBeginFlag);
 }
 
 //用户断线
@@ -5495,7 +5419,7 @@ void CTableFrameSink::UserBeKicked(BYTE deskStation)
 		int nMultipleMax = 0;
 		for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 		{
-			nMultipleMax = max(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
+			nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 		}
 
 		// 飞镖消耗
@@ -5530,7 +5454,7 @@ bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
 	CMD_C_Skill *Skill = (CMD_C_Skill*)pData;
 	if (!Skill)
 	{
-		DebugPrintf("错误:玩家%d，技能错误", GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误:玩家%d，技能错误", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 

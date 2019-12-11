@@ -30,63 +30,44 @@ if( Hinstance )											\
 }								
 
 // 个人难度
-typedef CMap< unsigned long, unsigned long, double, double > CMapPersonalDifficulty;
+typedef map< unsigned long, double > CMapPersonalDifficulty;
 
 // 接口信息
 
-// 控制回调
-interface IClientControlCallback
-{
-	// 控制信息
-	virtual bool OnControlInfo( uint nMessageID, void * pData, uint nSize ) = NULL;
-};
-
-// 客户端接口
-interface IClientControl
-{
-	// 释放接口
-	virtual void Release() = NULL;
-	// 创建函数
-	virtual bool Create( CWnd * pParentWnd, IClientControlCallback * pIClientControlCallback ) = NULL;
-	// 显示窗口
-	virtual bool ShowWindow( bool bShow ) = NULL;
-	// 消息函数
-	virtual bool OnControlMessage( uint nMessageID, void * pData, uint nSize ) = NULL;
-};
 
 // 控制回调
-interface IServerControlCallback
+class IServerControlCallback
 {
 	// 返回配置
-	virtual void GetCustomRule( tagCustomRule & nConfigInfo ) = NULL;
+	virtual void GetCustomRule( tagCustomRule & nConfigInfo ) = 0;
 	// 设置配置
-	virtual void SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile ) = NULL;
+	virtual void SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile ) = 0;
 	// 返回个人难度
-	virtual void GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty ) = NULL;
+	virtual void GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty ) = 0;
 	// 设置个人难度
-	virtual void SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty ) = NULL;
+	virtual void SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty ) = 0;
 	// 删除个人难度
-	virtual void DeletePersonalDifficulty( unsigned long lPlayID ) = NULL;
+	virtual void DeletePersonalDifficulty( unsigned long lPlayID ) = 0;
 	// 清空个人难度
-	virtual void ClearPersonalDifficulty() = NULL;
+	virtual void ClearPersonalDifficulty() = 0;
 	// 获取库存
-	virtual void GetStock( LONGLONG & lStockInitial, LONGLONG & lStockCurrent ) = NULL;
+	virtual void GetStock( LONGLONG & lStockInitial, LONGLONG & lStockCurrent ) = 0;
 	// 设置桌子库存
-	virtual bool SetTableStock( unsigned short TableID, int nTableStock ) = NULL;
+	virtual bool SetTableStock( unsigned short TableID, int nTableStock ) = 0;
 	// 控制信息
-	virtual bool OnControlInfo( void * pIServerUserItem, uint nMessageID, void * pData, uint nSize ) = NULL;
+	virtual bool OnControlInfo( void * pIServerUserItem, uint nMessageID, void * pData, uint nSize ) = 0;
 };
 
 
 // 服务器接口
-interface IServerControl
+class IServerControl
 {
 	// 释放接口
-	virtual void Release() = NULL;
+	virtual void Release() = 0;
 	// 创建函数
-	virtual bool Create( IServerControlCallback * pIServerControlCallback ) = NULL;
+	virtual bool Create( IServerControlCallback * pIServerControlCallback ) = 0;
 	// 消息函数
-	virtual bool OnControlMessage( void * pIServerUserItem, uint nMessageID, void * pData, uint nSize ) = NULL;
+	virtual bool OnControlMessage( void * pIServerUserItem, uint nMessageID, void * pData, uint nSize ) = 0;
 };
 
 
@@ -157,7 +138,7 @@ struct CMDC_S_GameQuery
 struct CMDC_S_Text
 {
 	// 配置信息
-	TCHAR					szTextInfo[64];			// 提示信息
+	char					szTextInfo[64];			// 提示信息
 };
 
 // 查询难度

@@ -39,16 +39,13 @@
     <ClInclude Include="..\..\src\games\50000001_BOOS\CMD_Game.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\ControlHead.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\Dexter.h" />
-    <ClInclude Include="..\..\src\games\50000001_BOOS\DexterArray.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\GameLogic.h" />
-    <ClInclude Include="..\..\src\games\50000001_BOOS\GameServiceManager.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\PolygonShape.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\TableFrameSink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\games\50000001_BOOS\GameLogic.cpp" />
     <ClCompile Include="..\..\src\games\50000001_BOOS\GameServer.cpp" />
-    <ClCompile Include="..\..\src\games\50000001_BOOS\GameServiceManager.cpp" />
     <ClCompile Include="..\..\src\games\50000001_BOOS\PolygonShape.cpp" />
     <ClCompile Include="..\..\src\games\50000001_BOOS\TableFrameSink.cpp" />
   </ItemGroup>
@@ -148,6 +145,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -158,6 +156,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -168,6 +167,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -178,6 +178,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -188,6 +189,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -198,6 +200,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -208,6 +211,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -218,6 +222,7 @@
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

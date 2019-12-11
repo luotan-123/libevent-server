@@ -239,11 +239,11 @@ struct CDoublePoint
 
 	CDoublePoint() {  x = 0.0; y = 0.0; }
 	CDoublePoint( POINT& Par ) {  x = Par.x; y = Par.y; }
-	CDoublePoint( CDoublePoint& Par ) {  x = Par.x; y = Par.y; }
+	CDoublePoint( const CDoublePoint& Par ) {  x = Par.x; y = Par.y; }
 	CDoublePoint( double ParX, double ParY ) { x = ParX; y = ParY; }
 	CDoublePoint& operator= (const CDoublePoint& point) { this->x = point.x; this->y = point.y; return *this; }
-	void operator+= (CDoublePoint& point) { x += point.x; y += point.y; }
-	bool operator!= (CDoublePoint& point) { return (x != point.x || y != point.y); }
+	void operator+= (const CDoublePoint& point) { x += point.x; y += point.y; }
+	bool operator!= (const CDoublePoint& point) { return (x != point.x || y != point.y); }
 	inline void SetPoint( double ParX, double ParY ) { x = ParX; y = ParY; }
 };
 
@@ -254,9 +254,9 @@ struct CShortPoint
 
 	CShortPoint() {  x = 0; y = 0; }
 	CShortPoint( POINT& Par ) {  x = (short)Par.x; y = (short)Par.y; }
-	CShortPoint( CShortPoint& Par ) {  x = Par.x; y = Par.y; }
+	CShortPoint( const CShortPoint& Par ) {  x = Par.x; y = Par.y; }
 	CShortPoint( short ParX, short ParY ) { x = ParX; y = ParY; }
-	void operator+= (CShortPoint& point) { x += point.x; y += point.y; }
+	void operator+= ( const CShortPoint& point) { x += point.x; y += point.y; }
 	inline void SetPoint( short ParX, short ParY ) { x = ParX; y = ParY; }
 
 };
@@ -309,7 +309,7 @@ struct GameScene
 	int					nFishMultiple[FishType_Max][2];		// 鱼倍数
 
 	LONGLONG			lBulletConsume[PlayChair_Max];			// 子弹消耗
-	long				lPlayFishCount[PlayChair_Max][FishType_Max];	// 玩家捕获鱼数
+	int					lPlayFishCount[PlayChair_Max][FishType_Max];	// 玩家捕获鱼数
 	int					nMultipleValue[Multiple_Max];		// 房间倍数
 	int					nMultipleIndex[PlayChair_Max];			// 当前倍数
 	bool				bUnlimitedRebound;						// 无限反弹

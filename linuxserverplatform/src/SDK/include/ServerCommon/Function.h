@@ -43,6 +43,9 @@ extern void GetLocalTime(SYSTEMTIME* sysTime);
 //获取时间戳（单位：毫秒）
 extern long long GetSysMilliseconds();
 
+//获取自系统开机以来的毫秒数
+extern unsigned long GetTickCount();
+
 //获取线程pid,线程内部id  pthread库函数
 extern pthread_t GetCurrentThreadId();
 

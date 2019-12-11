@@ -167,6 +167,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -187,6 +188,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -207,6 +209,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -227,6 +230,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -247,6 +251,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -267,6 +272,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -287,6 +293,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>
@@ -307,6 +314,7 @@
       <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
     <RemotePostBuildEvent>
       <Command>

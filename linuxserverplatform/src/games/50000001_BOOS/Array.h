@@ -1,7 +1,9 @@
-#ifndef ARRAY_HEAD_FILE
-#define ARRAY_HEAD_FILE
-
 #pragma once
+
+#include "GameDesk.h"
+#include <assert.h>
+
+#define ASSERT	assert
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -58,10 +60,10 @@ public:
 	void SetAt(UINT nIndex, ARG_TYPE newElement);
 	//设置元素
 	void SetAtGrow(UINT nIndex, ARG_TYPE newElement);
-	//插入数据
-	void InsertAt(UINT nIndex, const CWHArray & Src);
-	//插入数据
-	void InsertAt(UINT nIndex, ARG_TYPE newElement, UINT nCount=1);
+	////插入数据
+	//void InsertAt(UINT nIndex, const CWHArray & Src);
+	////插入数据
+	//void InsertAt(UINT nIndex, ARG_TYPE newElement, UINT nCount=1);
 	//删除数据
 	void RemoveAt(UINT nIndex, UINT nCount=1);
 	//删除元素
@@ -192,7 +194,7 @@ UINT CWHArray<TYPE,ARG_TYPE>::Append(const CWHArray & Src)
 {
 	//效验参数
 	ASSERT(this!=&Src);
-	if (this==&Src) AfxThrowInvalidArgException();
+	if (this==&Src) throw 0;
 
 	//拷贝数组
 	if (Src.m_nElementCount>0)
@@ -211,7 +213,7 @@ template<class TYPE, class ARG_TYPE>
 TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(UINT nIndex)
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
-	if ((nIndex<0)||(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
+	if ((nIndex<0)||(nIndex>=m_nElementCount)) throw 0;
 	
 	return m_pData[nIndex];
 }
@@ -221,7 +223,7 @@ template<class TYPE, class ARG_TYPE>
 const TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(UINT nIndex) const
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
-	if ((nIndex<0)||(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
+	if ((nIndex<0)||(nIndex>=m_nElementCount)) throw 0;
 	
 	return m_pData[nIndex];
 }
@@ -231,7 +233,7 @@ template<class TYPE, class ARG_TYPE>
 TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex)
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
-	if ((nIndex<0)&&(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
+	if ((nIndex<0)&&(nIndex>=m_nElementCount)) throw 0;
 	
 	return m_pData[nIndex];
 }
@@ -241,7 +243,7 @@ template<class TYPE, class ARG_TYPE>
 const TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex) const
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
-	if ((nIndex<0)&&(nIndex>=m_nElementCount)) AfxThrowInvalidArgException();
+	if ((nIndex<0)&&(nIndex>=m_nElementCount)) throw 0;
 
 	return m_pData[nIndex];
 }
@@ -252,7 +254,7 @@ void CWHArray<TYPE,ARG_TYPE>::SetSize(UINT nNewSize)
 {
 	//效验参数
 	ASSERT(nNewSize>=0);
-	if (nNewSize<0)	AfxThrowInvalidArgException();
+	if (nNewSize<0)	throw 0;
 	
 	//设置大小
 	AllocMemory(nNewSize);
@@ -276,7 +278,7 @@ void CWHArray<TYPE,ARG_TYPE>::SetAt(UINT nIndex, ARG_TYPE newElement)
 {
 	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
 	if ((nIndex>=0)&&(nIndex<m_nElementCount)) m_pData[nIndex]=newElement;
-	else AfxThrowInvalidArgException();
+	else throw 0;
 
 	return;
 }
@@ -287,7 +289,7 @@ void CWHArray<TYPE,ARG_TYPE>::SetAtGrow(UINT nIndex, ARG_TYPE newElement)
 {
 	//效验参数
 	ASSERT(nIndex>=0);
-	if (nIndex<0) AfxThrowInvalidArgException();
+	if (nIndex<0) throw 0;
 
 	//设置元素
 	if (nIndex>=m_nElementCount) SetSize(m_nElementCount+1);
@@ -296,63 +298,63 @@ void CWHArray<TYPE,ARG_TYPE>::SetAtGrow(UINT nIndex, ARG_TYPE newElement)
 	return;
 }
 
-//插入数据
-template<class TYPE, class ARG_TYPE>
-void CWHArray<TYPE,ARG_TYPE>::InsertAt(UINT nIndex, const CWHArray & Src)
-{
-	//效验参数
-	ASSERT(nStartIndex>=0);
-	if (nStartIndex<0) AfxThrowInvalidArgException();
-
-	if (Src.m_nElementCount>0)
-	{
-		//申请数组
-		if (nIndex<m_nElementCount)
-		{
-			UINT nOldCount=m_nElementCount;
-			SetSize(m_nElementCount+Src.m_nElementCount);
-			for (UINT i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
-			memmove(m_pData+nIndex+nCount,m_pData+nIndex,(nOldCount-nIndex)*sizeof(TYPE));
-			memset(m_pData+nIndex,0,Src.m_nElementCount*sizeof(TYPE));
-			for (UINT i=0;i<Src.m_nElementCount;i++) new (m_pData+nIndex+i) TYPE();
-		}
-		else SetSize(nIndex+nCount);
-
-		//拷贝数组
-		ASSERT((nIndex+Src.m_nElementCount)<=m_nElementCount);
-		while (nCount--) m_pData[nIndex++]=newElement;
-	}
-
-	return;
-}
-
-//插入数据
-template<class TYPE, class ARG_TYPE>
-void CWHArray<TYPE,ARG_TYPE>::InsertAt(UINT nIndex, ARG_TYPE newElement, UINT nCount)
-{
-	//效验参数
-	ASSERT(nIndex>=0);
-	ASSERT(nCount>0);
-	if ((nIndex<0)||(nCount<=0)) AfxThrowInvalidArgException();
-
-	//申请数组
-	if (nIndex<m_nElementCount)
-	{
-		UINT nOldCount=m_nElementCount;
-		SetSize(m_nElementCount+nCount);
-		for (UINT i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
-		memmove(m_pData+nIndex+nCount,m_pData+nIndex,(nOldCount-nIndex)*sizeof(TYPE));
-		memset(m_pData+nIndex,0,nCount*sizeof(TYPE));
-		for (UINT i=0;i<nCount;i++) new (m_pData+nIndex+i) TYPE();
-	}
-	else SetSize(nIndex+nCount);
-
-	//拷贝数组
-	ASSERT((nIndex+nCount)<=m_nElementCount);
-	while (nCount--) m_pData[nIndex++]=newElement;
-
-	return;
-}
+////插入数据
+//template<class TYPE, class ARG_TYPE>
+//void CWHArray<TYPE,ARG_TYPE>::InsertAt(UINT nIndex, const CWHArray & Src)
+//{
+//	//效验参数
+//	ASSERT(nIndex >=0);
+//	if (nIndex <0) throw 0;
+//
+//	if (Src.m_nElementCount>0)
+//	{
+//		//申请数组
+//		if (nIndex<m_nElementCount)
+//		{
+//			UINT nOldCount=m_nElementCount;
+//			SetSize(m_nElementCount+Src.m_nElementCount);
+//			for (UINT i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
+//			memmove(m_pData+nIndex+nCount,m_pData+nIndex,(nOldCount-nIndex)*sizeof(TYPE));
+//			memset(m_pData+nIndex,0,Src.m_nElementCount*sizeof(TYPE));
+//			for (UINT i=0;i<Src.m_nElementCount;i++) new (m_pData+nIndex+i) TYPE();
+//		}
+//		else SetSize(nIndex+nCount);
+//
+//		//拷贝数组
+//		ASSERT((nIndex+Src.m_nElementCount)<=m_nElementCount);
+//		while (nCount--) m_pData[nIndex++]=newElement;
+//	}
+//
+//	return;
+//}
+//
+////插入数据
+//template<class TYPE, class ARG_TYPE>
+//void CWHArray<TYPE,ARG_TYPE>::InsertAt(UINT nIndex, ARG_TYPE newElement, UINT nCount)
+//{
+//	//效验参数
+//	ASSERT(nIndex>=0);
+//	ASSERT(nCount>0);
+//	if ((nIndex<0)||(nCount<=0)) throw 0;
+//
+//	//申请数组
+//	if (nIndex<m_nElementCount)
+//	{
+//		UINT nOldCount=m_nElementCount;
+//		SetSize(m_nElementCount+nCount);
+//		for (UINT i=0;i<nCount;i++) (m_pData+nOldCount+i)->~TYPE();
+//		memmove(m_pData+nIndex+nCount,m_pData+nIndex,(nOldCount-nIndex)*sizeof(TYPE));
+//		memset(m_pData+nIndex,0,nCount*sizeof(TYPE));
+//		for (UINT i=0;i<nCount;i++) new (m_pData+nIndex+i) TYPE();
+//	}
+//	else SetSize(nIndex+nCount);
+//
+//	//拷贝数组
+//	ASSERT((nIndex+nCount)<=m_nElementCount);
+//	while (nCount--) m_pData[nIndex++]=newElement;
+//
+//	return;
+//}
 
 //删除数据
 template<class TYPE, class ARG_TYPE>
@@ -362,7 +364,7 @@ void CWHArray<TYPE,ARG_TYPE>::RemoveAt(UINT nIndex, UINT nCount)
 	ASSERT(nIndex>=0);
 	ASSERT(nCount>=0);
 	ASSERT(nIndex+nCount<=m_nElementCount);
-	if ((nIndex<0)||(nCount<0)||((nIndex+nCount>m_nElementCount))) AfxThrowInvalidArgException();
+	if ((nIndex<0)||(nCount<0)||((nIndex+nCount>m_nElementCount))) throw 0;
 
 	//删除数据
 	UINT nMoveCount=m_nElementCount-(nIndex+nCount);
@@ -440,5 +442,3 @@ void CWHArray<TYPE,ARG_TYPE>::AllocMemory(UINT nNewCount)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-
-#endif

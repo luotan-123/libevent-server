@@ -128,9 +128,26 @@ INI_RES CINIFile::OpenFile(const char* pathName, const char* mode)
 				string szSubKey, szSubValue;
 				szSubKey = szLine.substr(0, nIndexPos);
 				szSubValue = szLine.substr(nIndexPos + 1, szLine.length() - nIndexPos - 1);
-				//mLastMap[szSubKey] = szSubValue ;
+
+				//去除首尾特殊字符，比如空格、；
+				if (!szSubKey.empty())
+				{
+					szSubKey.erase(0, szSubKey.find_first_not_of(" "));
+					szSubKey.erase(szSubKey.find_last_not_of(" ") + 1);
+				}
+				if (!szSubValue.empty())
+				{
+					szSubValue.erase(0, szSubValue.find_first_not_of(" "));
+					int ret = szSubValue.find_first_of(";");
+					if (ret != -1)
+					{
+						szSubValue.erase(ret);
+					}
+					szSubValue.erase(szSubValue.find_last_not_of(" ") + 1);
+				}
+
 				MAINKEYMAP::iterator it = m_Map.find(szLastMainKey);
-				if (it != m_Map.end())
+				if (!szSubKey.empty() && !szSubValue.empty() && it != m_Map.end())
 				{
 					it->second[szSubKey] = szSubValue;
 				}
