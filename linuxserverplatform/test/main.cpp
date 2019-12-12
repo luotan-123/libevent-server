@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "HttpServer.h"
 
 using namespace test;
 
@@ -162,6 +163,11 @@ void* Thread(void*p)
 
 int main()
 {
+	// http服务器
+	CHttpServer http;
+	http.Start();
+
+
 	unsigned long saadsad = GetTickCount();
 
 	CSignedLock lock_;

@@ -400,8 +400,7 @@ display_listen_sock(struct evhttp_bound_socket* handle)
 	return 0;
 }
 
-int
-Testmain(int argc, char** argv)
+int HttpMain(int argc, char** argv)
 {
 	struct event_config* cfg = NULL;
 	struct event_base* base = NULL;
@@ -539,6 +538,21 @@ err:
 	return ret;
 }
 
+void* HttpThread(void* param)
+{
+	char* httpParam[8] = {};
+	int argc = 0;
+
+	char arg1[128] = "123456";
+	httpParam[argc++] = arg1;
+
+	char arg2[128] = "123456";
+	httpParam[argc++] = arg2;
+
+	HttpMain(argc, httpParam);
+
+	pthread_exit(NULL);
+}
 
 CHttpServer::CHttpServer()
 {
@@ -564,7 +578,14 @@ bool CHttpServer::Start()
 
 	m_bRun = true;
 
-	
+	// 创建线程
+	pthread_t threadID = 0;
+	int err = pthread_create(&threadID, NULL, HttpThread, (void*)this);
+	if (err != 0)
+	{
+		SYS_ERROR_LOG("ThreadSendMsg failed");
+		return false;
+	}
 
 	INFO_LOG("HttpServer start end.");
 
