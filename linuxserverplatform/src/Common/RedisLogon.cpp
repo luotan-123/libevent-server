@@ -370,29 +370,25 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 
 	const int MAX_SAVE_DATA_COUNT = 72;
 	int iSaveCount = 0;
-
-	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SMEMBERS %s", CACHE_UPDATE_SET);
-	if (pReply == NULL)
+	
+	while(true)
 	{
-		return;
-	}
-
-	for (size_t i = 0; i < pReply->elements; i++)
-	{
-		if (!updateAll && iSaveCount >= MAX_SAVE_DATA_COUNT) //每次最多处理数据量
+		redisReply* pReply = (redisReply*)redisCommand(m_pContext, "SPOP %s", CACHE_UPDATE_SET);
+		if (pReply == NULL)
 		{
 			break;
 		}
 
-		const char* key = pReply->element[i]->str;
-		if (!key)
+		if (pReply->type == REDIS_REPLY_NIL)
 		{
-			continue;
+			freeReplyObject(pReply);
+			break;
 		}
 
-		//分布式处理
-		if (!IsDistributedSystemCalculate(CUtil::BKDRHash(key)))
+		const char* key = pReply->str;
+		if (!key)
 		{
+			freeReplyObject(pReply);
 			continue;
 		}
 
@@ -403,14 +399,15 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 		if (!ParseKey(key, tableName, id))
 		{
 			ERROR_LOG("解析key失败::key=%s", key);
-			SremMember(CACHE_UPDATE_SET, key);
+			freeReplyObject(pReply);
 			continue;
 		}
 
 		int extendMode = GetExtendMode(key);
 		if (extendMode <= 0)
 		{
-			SremMember(CACHE_UPDATE_SET, key);
+			ERROR_LOG("保存数据失败，extendMode=%d , key=%s", extendMode, key);
+			freeReplyObject(pReply);
 			continue;
 		}
 
@@ -419,18 +416,20 @@ void CRedisLogon::RountineSaveRedisDataToDB(bool updateAll)
 			ERROR_LOG("定时保存数据失败:key=%s", key);
 		}
 
-		// 将处理的玩家从集合中删除TODO
-		SremMember(CACHE_UPDATE_SET, key);
-
 		iSaveCount++;
+
+		freeReplyObject(pReply);
+
+		if (!updateAll && iSaveCount >= MAX_SAVE_DATA_COUNT) //每次最多处理数据量
+		{
+			break;
+		}
 	}
 
-	if (pReply->elements >= 1000)
+	if (updateAll)
 	{
-		INFO_LOG("总数据:%d，共保存数据:%d", pReply->elements, iSaveCount);
+		INFO_LOG("共保存数据:%d", iSaveCount);
 	}
-
-	freeReplyObject(pReply);
 }
 
 bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int id, int mode)
@@ -454,8 +453,11 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 		return false;
 	}
 
+	// 元素最小长度
+	static const int MIN_ELEMENTS_LENGHT = 4;
+
 	int elements = pReply->elements;
-	if (elements % 2 != 0 || elements <= 0)
+	if (elements % 2 != 0 || elements <= MIN_ELEMENTS_LENGHT)
 	{
 		ERROR_LOG("invalid elements: elements=%d", elements);
 		freeReplyObject(pReply);
@@ -502,34 +504,36 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 		{
 			continue;
 		}
-		else if (!strcmp(field, "motto")) // UTF-8字符串跳过
-		{
-			continue;
-		}
+		//else if (!strcmp(field, "motto")) // UTF-8字符串跳过
+		//{
+		//	continue;
+		//}
 
 		FieldRealInfo fieldInfo;
 
 		fieldInfo.field = field;
 		fieldInfo.type = valueType;
 
-		if (!strcmp(field, "name")) //转义插入，有个性签名的补上个性签名
-		{
-			memcpy(name, value, Min_(strlen(value), sizeof(name)));
+		//if (!strcmp(field, "name")) //转义插入，有个性签名的补上个性签名
+		//{
+		//	memcpy(name, value, Min_(strlen(value), sizeof(name)));
 
-			CUtil::TransString(name, sizeof(name), strlen(name));
-			fieldInfo.value = name;
-		}
-		else if (!strcmp(field, "account")) //转义插入
-		{
-			memcpy(account, value, Min_(strlen(value), sizeof(account)));
+		//	CUtil::TransString(name, sizeof(name), strlen(name));
+		//	fieldInfo.value = name;
+		//}
+		//else if (!strcmp(field, "account")) //转义插入
+		//{
+		//	memcpy(account, value, Min_(strlen(value), sizeof(account)));
 
-			CUtil::TransString(account, sizeof(account), strlen(account));
-			fieldInfo.value = account;
-		}
-		else
-		{
-			fieldInfo.value = value;
-		}
+		//	CUtil::TransString(account, sizeof(account), strlen(account));
+		//	fieldInfo.value = account;
+		//}
+		//else
+		//{
+		//	fieldInfo.value = value;
+		//}
+
+		fieldInfo.value = value;
 
 		m_vecFields.push_back(fieldInfo);
 	}
