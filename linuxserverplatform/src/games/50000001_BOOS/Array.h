@@ -50,7 +50,7 @@ public:
 	//获取元素
 	TYPE & ElementAt(UINT nIndex);
 	//获取元素
-	const TYPE & ElementAt(UINT nIndex) const;
+	//const TYPE & ElementAt(UINT nIndex) const;
 
 	//操作函数
 public:
@@ -232,21 +232,21 @@ const TYPE & CWHArray<TYPE,ARG_TYPE>::GetAt(UINT nIndex) const
 template<class TYPE, class ARG_TYPE> 
 TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex)
 {
-	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
-	if ((nIndex<0)&&(nIndex>=m_nElementCount)) throw 0;
+	//ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
+	if ((nIndex<0)||(nIndex>=m_nElementCount)) throw 0;
 	
 	return m_pData[nIndex];
 }
 
-//获取元素
-template<class TYPE, class ARG_TYPE> 
-const TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex) const
-{
-	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
-	if ((nIndex<0)&&(nIndex>=m_nElementCount)) throw 0;
-
-	return m_pData[nIndex];
-}
+////获取元素
+//template<class TYPE, class ARG_TYPE> 
+//const TYPE & CWHArray<TYPE,ARG_TYPE>::ElementAt(UINT nIndex) const
+//{
+//	ASSERT((nIndex>=0)&&(nIndex<m_nElementCount));
+//	if ((nIndex<0)&&(nIndex>=m_nElementCount)) throw 0;
+//
+//	return m_pData[nIndex];
+//}
 
 //设置大小
 template<class TYPE, class ARG_TYPE>

@@ -620,7 +620,7 @@ bool CRedisLogon::SaveRedisDataToDB(const char* key, const char* tableName, int 
 
 	memcpy(msg.sql, sql, sizeof(sql));
 
-	m_pDBManage->PushLine(&msg.dataLineHead, sizeof(AsyncEventMsgSqlStatement), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, 0);
+	m_pDBManage->PushLine(&msg.dataLineHead, sizeof(msg) - sizeof(msg.sql) + strlen(msg.sql), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, 0);
 
 	freeReplyObject(pReply);
 

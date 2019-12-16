@@ -1487,14 +1487,14 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 					//超时不操作踢出
 					if (NowTime - m_iOptionTime[nSite] > m_iRobotTickTime * 1000)
 					{
-						printf("机器人不操作踢出\n");
+						//printf("机器人不操作踢出\n");
 						//调用踢出该玩家
 						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
 					}
 
 					if (dwCurrentime - m_nPlayDownTime[nSite] > m_nRobotPlayTime[nSite])
 					{
-						printf("机器人游戏超时被踢出:%d\n", m_nRobotPlayTime[nSite]);
+						//printf("机器人游戏超时被踢出:%d\n", m_nRobotPlayTime[nSite]);
 						//调用踢出该玩家
 						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
 					}
@@ -2063,7 +2063,7 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 
 	if( itr == m_ArrayBulletKey[deskStation].end() )
 	{
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 
 		return true;
 	}
@@ -2151,7 +2151,7 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	static int paoCount;
 	if (IsAndroidUser(deskStation))
 	{
-		printf("机器人开炮:%d\n", paoCount);
+		//printf("机器人开炮:%d\n", paoCount);
 		paoCount++;
 	}
 	if (paoCount > 999)
@@ -2515,7 +2515,7 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	{
 		ERROR_LOG("玩家%d设置倍数失败, 超过有效值。", deskStation);
 
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 
 		return false;
 	}
@@ -2525,7 +2525,7 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	{
 		ERROR_LOG("活动期间，玩家%d,ID:%d设置倍数无效,激光：%d,补给箱:%d。", deskStation, GetUserIDByDeskStation(deskStation), m_nLaserPlayTime[deskStation], m_bPlaySupply[deskStation]);
 
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 
 		return true;
 	}
@@ -5070,7 +5070,7 @@ int CTableFrameSink::RandomArea( int nLen, ... )
 		}
 		else
 		{
-			ASSERT(FALSE);
+			//ASSERT(FALSE);
 			break;
 		}
 	}
@@ -5113,13 +5113,13 @@ bool CTableFrameSink::IsAndroidUser(BYTE wChairID )
 	//IServerUserItem * pIAndroidUserItem = m_pITableFrame->GetTableUserItem( wChairID );
 	//return pIAndroidUserItem && pIAndroidUserItem->IsAndroidUser();
 
-	GameUserInfo user;
+	/*GameUserInfo user;
 	if (GetUserData(wChairID, user))
 	{
 		return user.isVirtual;
-	}
+	}*/
 
-	return false;
+	return IsVirtual(wChairID);
 }
 
 // 初始化玩家

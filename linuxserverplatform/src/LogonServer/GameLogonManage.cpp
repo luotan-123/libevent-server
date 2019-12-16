@@ -144,7 +144,7 @@ bool CGameLogonManage::OnStart()
 	char sql[128] = "select userID,name,headURL,money from userInfo order by money desc limit 5";
 	memcpy(msg.sql, sql, sizeof(sql));
 	msg.bIsSelect = true;
-	m_SQLDataManage.PushLine(&msg.dataLineHead, sizeof(AsyncEventMsgSqlStatement), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, ASYNC_MESSAGE_DATABASE_TEST);
+	m_SQLDataManage.PushLine(&msg.dataLineHead, sizeof(msg) - sizeof(msg.sql) + strlen(msg.sql), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, ASYNC_MESSAGE_DATABASE_TEST);
 
 	INFO_LOG("GameLogonManage OnStart end.");
 

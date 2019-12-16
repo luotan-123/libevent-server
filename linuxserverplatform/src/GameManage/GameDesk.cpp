@@ -1299,11 +1299,20 @@ bool CGameDesk::ChangeUserPoint(BYTE deskStation, long long point, long long rat
 	{
 		rateMoney = 0;
 	}
-	pRedis->SetUserMoneyEx(userID, point, true, RESOURCE_CHANGE_REASON_GAME_FINISHED, m_pDataManage->GetRoomID(), rateMoney, pUser->isVirtual, m_friendsGroupMsg.friendsGroupID, GetRoomType());
+
 	pUser->money += point;
 	if (pUser->money < 0)
 	{
 		pUser->money = 0;
+	}
+
+	if (pUser->isVirtual)
+	{
+		pRedis->SetUserMoney(userID, pUser->money);
+	}
+	else
+	{
+		pRedis->SetUserMoneyEx(userID, point, true, RESOURCE_CHANGE_REASON_GAME_FINISHED, m_pDataManage->GetRoomID(), rateMoney, pUser->isVirtual, m_friendsGroupMsg.friendsGroupID, GetRoomType());
 	}
 
 	if (notify)

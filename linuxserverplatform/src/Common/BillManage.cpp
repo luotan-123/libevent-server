@@ -47,7 +47,7 @@ void CBillManage::WriteBill(CDataBaseManage* m_pDBManage, const char* pFormat, .
 	AsyncEventMsgSqlStatement msg;
 	memcpy(msg.sql, sql, sizeof(sql));
 
-	if (!m_pDBManage->PushLine(&msg.dataLineHead, sizeof(AsyncEventMsgSqlStatement), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_LOG, 0))
+	if (!m_pDBManage->PushLine(&msg.dataLineHead, sizeof(msg) - sizeof(msg.sql) + strlen(msg.sql), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_LOG, 0))
 	{
 		ERROR_LOG("投递队列失败：%s", sql);
 	}

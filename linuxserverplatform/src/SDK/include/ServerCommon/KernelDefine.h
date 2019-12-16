@@ -25,7 +25,7 @@ const int MAX_DB_USER_SIZE = 48;		// 最大db_user缓冲区大小
 const int MAX_DB_PASSWD_SIZE = 48;		// 最大db_passwd缓冲区大小
 const int MAX_DB_NAME_SIZE = 48;		// 最大db_name缓冲区大小
 
-const int MAX_LOG_BUF_SIZE = 2048;		// log缓冲区大小
+const int MAX_LOG_BUF_SIZE = 1024;		// log缓冲区大小
 const int MAX_FILE_NAME_SIZE = 256;		// 最大文件名长度
 const int MAX_FUNC_NAME_SIZE = 128;		// 最大函数名长度
 const int MAX_LOG_FILE_SIZE = 1024 * 1024 * 32;  //日子文件的最大的长度，超过长度会生成新的文件
@@ -55,8 +55,8 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 /////////////////////////////////////////////////////////
 // 性能测试
 const int MAX_COST_BUF_SIZE = 256;						// 缓冲区长度
-#define ALL_STATISTICS_FUNC_COST_TIME			2000000	// 调用接口的总耗时，超过这个时间就输出日志(us)
-#define MIN_STATISTICS_FUNC_COST_TIME			100000	// 调用接口的总耗时，超过这个时间就输出日志(us)，针对只调用一次的函数
+#define ALL_STATISTICS_FUNC_COST_TIME			10000000// 调用接口的总耗时，超过这个时间就输出日志(us)
+#define MIN_STATISTICS_FUNC_COST_TIME			200000	// 调用接口的总耗时，超过这个时间就输出日志(us)，针对只调用一次的函数
 
 /////////////////////////////////////////////////////////
 // 线程处理时间间隔 单位毫秒

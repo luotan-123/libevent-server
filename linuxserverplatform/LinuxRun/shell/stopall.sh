@@ -1,7 +1,7 @@
 #!/bin/bash
-bash ./stopcenterServer.sh
+bash ./stopcserver.sh
 sleep 1
-bash ./stoplogonServer.sh
+bash ./stoplserver.sh
 sleep 1
 bash ./stopgserver.sh
 

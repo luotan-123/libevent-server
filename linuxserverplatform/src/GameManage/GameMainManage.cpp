@@ -304,17 +304,20 @@ CGameDesk* CGameMainManage::GetDeskObject(int deskIdx)
 //////////////////////////////////////////////////////////////////////
 bool CGameMainManage::OnTimerMessage(UINT uTimerID)
 {
-	AUTOCOST("timerID=%d", uTimerID);
-
 	//游戏定时器
 	if (uTimerID >= TIME_START_ID)
 	{
 		int deskIdx = (int)((uTimerID - TIME_START_ID) / TIME_SPACE);
 		if (deskIdx < (int)m_InitData.uDeskCount)
 		{
-			return (*(m_pDesk + deskIdx))->OnTimer((uTimerID - TIME_START_ID) % TIME_SPACE);
+			UINT gameTimerID = (uTimerID - TIME_START_ID) % TIME_SPACE;
+			AUTOCOST("game timerID=%d", gameTimerID);
+
+			return (*(m_pDesk + deskIdx))->OnTimer(gameTimerID);
 		}
 	}
+
+	AUTOCOST("timerID=%d", uTimerID);
 
 	//内部定时器
 	switch (uTimerID)
