@@ -64,7 +64,7 @@ int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourc
 
 	unsigned int index = pMessage->dataLineHead.uIndex;
 
-	if (index >= GetNewArraySize(m_pDataBaseManage->m_pMysqlHelper))
+	if (index >= DB_TYPE_PHP)
 	{
 		ERROR_LOG("invalid hDatabase");
 		return -3;

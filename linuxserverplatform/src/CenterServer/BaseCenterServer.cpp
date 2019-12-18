@@ -108,6 +108,7 @@ bool CBaseCenterServer::Init(ManageInfoStruct* pInitData)
 	// 初始化定时器
 	int iServerTimerNums = Min_(MAX_TIMER_THRED_NUMS, ConfigManage()->GetCommonConfig().TimerThreadNumber);
 	iServerTimerNums = iServerTimerNums <= 0 ? 1 : iServerTimerNums;
+	m_KernelData.uTimerCount = iServerTimerNums;
 	m_pServerTimer = new CServerTimer[iServerTimerNums];
 	if (!m_pServerTimer)
 	{
@@ -187,7 +188,7 @@ bool CBaseCenterServer::Start()
 	}
 
 	// 启动定时器
-	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
+	for (int i = 0; i < m_KernelData.uTimerCount; i++)
 	{
 		if (!m_pServerTimer[i].Start(&m_DataLine))
 		{
@@ -250,7 +251,7 @@ bool CBaseCenterServer::Stop()
 	}
 
 	//关闭定时器
-	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
+	for (int i = 0; i < m_KernelData.uTimerCount; i++)
 	{
 		m_pServerTimer[i].Stop();
 	}
@@ -303,7 +304,7 @@ bool CBaseCenterServer::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* =
 		return false;
 	}
 
-	int iTimerCount = GetNewArraySize(m_pServerTimer);
+	int iTimerCount = m_KernelData.uTimerCount;
 	if (iTimerCount <= 0 || iTimerCount > MAX_TIMER_THRED_NUMS)
 	{
 		ERROR_LOG("timer error");
@@ -324,7 +325,7 @@ bool CBaseCenterServer::KillTimer(UINT uTimerID)
 		return false;
 	}
 
-	int iTimerCount = GetNewArraySize(m_pServerTimer);
+	int iTimerCount = m_KernelData.uTimerCount;
 	if (iTimerCount <= 0 || iTimerCount > MAX_TIMER_THRED_NUMS)
 	{
 		ERROR_LOG("timer error");

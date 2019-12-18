@@ -5341,7 +5341,7 @@ bool CTableFrameSink::GameBegin(BYTE bBeginFlag)
 //用户断线
 bool CTableFrameSink::UserNetCut(GameUserInfo* pUser)
 {
-	//UserLeftDesk(pUser);
+	//CGameDesk::UserNetCut(pUser);
 	//调用踢出该玩家
 	KickOutUser(pUser->deskStation, REASON_KICKOUT_STAND_MINLIMIT);
 

@@ -134,6 +134,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 	// 初始化定时器
 	int iServerTimerNums = Min_(MAX_TIMER_THRED_NUMS, ConfigManage()->GetCommonConfig().TimerThreadNumber);
 	iServerTimerNums = iServerTimerNums <= 0 ? 1 : iServerTimerNums;
+	m_KernelData.uTimerCount = iServerTimerNums;
 	m_pServerTimer = new CServerTimer[iServerTimerNums];
 	if (!m_pServerTimer)
 	{
@@ -239,7 +240,7 @@ bool CBaseLogonServer::Start()
 	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, m_InitData.uRoomID);
 
 	// 启动定时器
-	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
+	for (int i = 0; i < m_KernelData.uTimerCount; i++)
 	{
 		if (!m_pServerTimer[i].Start(&m_DataLine))
 		{
@@ -318,7 +319,7 @@ bool CBaseLogonServer::Stop()
 	m_SQLDataManage.Stop();
 
 	//关闭定时器
-	for (int i = 0; i < GetNewArraySize(m_pServerTimer); i++)
+	for (int i = 0; i < m_KernelData.uTimerCount; i++)
 	{
 		m_pServerTimer[i].Stop();
 	}
@@ -383,7 +384,7 @@ bool CBaseLogonServer::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = 
 		return false;
 	}
 
-	int iTimerCount = GetNewArraySize(m_pServerTimer);
+	int iTimerCount = m_KernelData.uTimerCount;
 	if (iTimerCount <= 0 || iTimerCount > MAX_TIMER_THRED_NUMS)
 	{
 		ERROR_LOG("timer error");
@@ -404,7 +405,7 @@ bool CBaseLogonServer::KillTimer(UINT uTimerID)
 		return false;
 	}
 
-	int iTimerCount = GetNewArraySize(m_pServerTimer);
+	int iTimerCount = m_KernelData.uTimerCount;
 	if (iTimerCount <= 0 || iTimerCount > MAX_TIMER_THRED_NUMS)
 	{
 		ERROR_LOG("timer error");

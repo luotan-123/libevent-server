@@ -1,7 +1,7 @@
 长期优化
 1、原系统long类型改成int  ，unsigned long 改成 unsigned int
 2、检查printf和sprintf函数，int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
-3、内存优化：自己分配内存、内存越界检查、内存泄露检查、暂时可以不用考虑内存碎片优化
+3、内存优化：自己分配内存、内存越界检查、内存泄露检查、解决内存碎片。目前比较好的内存分配器：ptmalloc、tcmalloc、jemalloc
 4、cpu优化：一少、一多策略。少指的是执行cpu时间少（算法时间复杂度，代码优化），多指的是多利用cpu执行，并发或者并行执行（并发执行）
 5、优化代码，增加更多c++11新特性
 
@@ -24,5 +24,17 @@ malloc/free 函数崩溃原因
 主线程栈上消耗Memory超过12,568,257 bytes时，进程Crash
 从线程栈上消耗Memory超过10,479,656 bytes时，进程Crash
 原因2：
-一般是分配的内存被释放了，又去写入野指针了。
-或者分配的内存写入越界了。
+malloc/free多线程情况调用非常频繁
+解决办法：
+用jemlloc或者tcmalloc内存分配器
+
+---------------------------
+内存优化，分析，泄露检测
+可以利用jemalloc的profile，
+注意编译的时候./configure --enable-prof
+并需要通过环境变量控制  export MALLOC_CONF="prof:true,prof_prefix:jeprof.out" 或者
+vim ~/.bash_profile  添加下面两行
+MALLOC_CONF="prof:true,prof_prefix:jeprof.out"
+export MALLOC_CONF 
+执行source ~/.bash_profile 生效
+

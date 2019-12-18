@@ -80,6 +80,7 @@ struct KernelInfoStruct
 	BYTE						bNativeDataBase;					//使用本地数据库
 	BYTE						bLogonDataBase;						//使用登陆数据库
 	BYTE						bStartTCPSocket;					//是否启动网络
+	UINT						uTimerCount;						//定时器数量
 
 	KernelInfoStruct()
 	{

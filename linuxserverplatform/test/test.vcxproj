@@ -107,6 +107,7 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="jemalloc_cpp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test.pb.cc" />
   </ItemGroup>
@@ -116,12 +117,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -134,7 +137,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -142,12 +145,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -160,7 +165,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -168,12 +173,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -186,7 +193,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -194,12 +201,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -212,7 +221,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>

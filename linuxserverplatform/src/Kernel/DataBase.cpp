@@ -166,7 +166,7 @@ bool CDataBaseManage::SQLConnectReset()
 
 	m_pMysqlHelper = new CMysqlHelper[DB_TYPE_PHP];
 
-	for (int i = 0; i < GetNewArraySize(m_pMysqlHelper); i++)
+	for (int i = 0; i < DB_TYPE_PHP; i++)
 	{
 		const DBConfig& dbConfig = ConfigManage()->GetDBConfig(i);
 
@@ -197,7 +197,7 @@ bool CDataBaseManage::CheckSQLConnect()
 	sprintf(buf, "select * from %s LIMIT 1", TBL_BASE_GAME);
 	bool bConect = false;
 
-	for (int i = 0; i < GetNewArraySize(m_pMysqlHelper); i++)
+	for (int i = 0; i < DB_TYPE_PHP; i++)
 	{
 		try
 		{

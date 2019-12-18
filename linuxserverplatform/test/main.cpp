@@ -1,3 +1,4 @@
+#include <jemalloc/jemalloc.h>
 #include "CommonHead.h"
 #include "Lock.h"
 #include "basemessage.h"
@@ -132,48 +133,82 @@ void fun()
 	printf("%d=======\n", i);
 }
 
+
 void* Thread(void*p)
 {
+	void* p1 = malloc(10000);
 
-	std::list<int> liii;
+	printf("%p\n", p1);
 
-	int sssss = liii.front();
-	liii.pop_front();
+	free(p1);
 
-	CSignedLockObject LockObject(&m_csLock, false);
 
-	int count = 0;
-	while (true)
-	{
-		LockObject.Lock();
+	p1 = malloc(10000);
 
-		m_csLock.Wait();
+	printf("%p\n", p1);
 
-		count++;
-		if (count > 30000)
-		{
-			break;
-		}
+	free(p1);
 
-		LockObject.UnLock();
-	}
+	p1 = malloc(8000);
 
-	printf("%d=========\n", count);
+	printf("%p\n", p1);
+
+	return p1;
+}
+
+void do_something(size_t i)
+{
+	// Leak some memory.
+	malloc(i * 100);
 }
 
 int main()
 {
-	// http服务器
-	CHttpServer http;
-	http.Start();
+	//mallctl("prof.dump", NULL, NULL, NULL, 0);
+	int i;
+	for (i = 0; i < 1000; i++)
+	{
+		do_something(i);
+	}
 
+	//malloc_stats_print(NULL, NULL, NULL);
 
-	unsigned long saadsad = GetTickCount();
+	uint64_t epoch = 1;
+	size_t sz = sizeof(epoch);
+	mallctl("epoch", &epoch, &sz, &epoch, sz);
+
+	size_t allocated, active, mapped;
+	sz = sizeof(size_t);
+	mallctl("stats.allocated", &allocated, &sz, NULL, 0);
+	mallctl("stats.active", &active, &sz, NULL, 0);
+	mallctl("stats.mapped", &mapped, &sz, NULL, 0);
+
+	printf("allocated/active/mapped: %zu/%zu/%zu\n", allocated, active, mapped);
+
+	//mallctl("prof.dump", NULL, NULL, NULL, 0);
 
 	CSignedLock lock_;
 	printf("lock_ = %lld\n", sizeof(lock_));
 	pthread_t ssss = 0;
-	//pthread_create(&ssss, NULL, Thread, NULL);
+	pthread_create(&ssss, NULL, Thread, NULL);
+
+	void* pMalloc = NULL;
+	pthread_join(ssss, &pMalloc);
+
+	int* pint = (int*)pMalloc;
+	*pint = 4;
+	printf("%d\n", *pint);
+	free(pMalloc);
+	printf("%d\n",*pint);
+
+	//malloc_stats_print(NULL, NULL, NULL);
+
+
+
+	mallctl("prof.dump", NULL, NULL, NULL, 0);
+
+
+
 
 	struct timeval tv;
 	gettimeofday(&tv, NULL);

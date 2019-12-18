@@ -30,7 +30,7 @@ typedef struct _SYSTEMTIME {
 //安全删除指针
 #define SAFE_DELETE(ptr) { if(ptr){	try{ delete ptr; }catch(...){ ERROR_LOG("CATCH: *** SAFE_DELETE(%s) crash! *** %s %d\n",#ptr,__FILE__, __LINE__); } ptr = 0; } }
 
-//获取动态数组指针大小
+//获取动态数组指针大小，使用jemalloc，只有非标准类型才能使用
 extern int GetNewArraySize(void* pArray);
 
 //判断大小函数
