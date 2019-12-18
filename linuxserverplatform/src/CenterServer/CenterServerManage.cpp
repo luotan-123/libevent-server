@@ -473,6 +473,11 @@ void CCenterServerManage::OnServerCrossDay()
 
 	// 每天发送一次集群信息
 	SendDistributedSystemInfo();
+
+	// 生成内存分析
+#ifdef JEMALLOC_PROFILE_MEMORY
+	mallctl("prof.dump", NULL, NULL, NULL, 0);
+#endif // JEMALLOC_PROFILE_MEMORY
 }
 
 void CCenterServerManage::OnServerCrossWeek()

@@ -57,6 +57,9 @@
     <ClCompile Include="..\src\protobuf\AsyncEventMsg.pb.cc">
       <Filter>协议模块</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp">
+      <Filter>公共定义</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h">

@@ -234,6 +234,8 @@ private:
 	void CheckTimeOutDesk();
 	// 通用定时器
 	void OnCommonTimer();
+	// 跨天
+	void OnServerCrossDay();
 	// 检查redis连接性
 	void CheckRedisConnection();
 	// 检查超时没有准备的玩家
@@ -307,6 +309,7 @@ protected:
 	UINT				m_uDeskCount;						// 游戏桌数目
 	CGameDesk			* * m_pDesk;						// 游戏桌指针
 	CGameDesk			* m_pDeskArray;						// 游戏桌指针
+	time_t				m_lastNormalTimerTime;
 };
 
 //游戏数据管理类模板

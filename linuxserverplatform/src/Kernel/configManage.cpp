@@ -5,6 +5,7 @@
 #include "curl.h"
 #include "log.h"
 #include "MysqlHelper.h"
+#include <event2/event.h>
 
 CConfigManage::CConfigManage()
 {
@@ -42,6 +43,9 @@ bool CConfigManage::Init()
 
 	// 初始化curl
 	curl_global_init(CURL_GLOBAL_ALL);
+	
+	// 设置内存管理接口
+	event_set_mem_functions(&malloc, &realloc, &free);
 
 	bool ret = false;
 
@@ -682,7 +686,7 @@ bool CConfigManage::LoadDirtyWordsConfig()
 		return true;
 	}
 
-	const int dirtyBufSize = 10 * 1024 * 1024;
+	const int dirtyBufSize = 2 * 1024 * 1024;
 	char* pBuf = new char[dirtyBufSize];
 	if (!pBuf)
 	{

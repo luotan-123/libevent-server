@@ -155,5 +155,8 @@
     <ClCompile Include="..\src\Kernel\HttpServer.cpp">
       <Filter>HttpServer</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp">
+      <Filter>工具和接口</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

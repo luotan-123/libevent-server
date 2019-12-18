@@ -120,6 +120,7 @@
     <ClCompile Include="..\src\GameManage\GameDesk.cpp" />
     <ClCompile Include="..\src\GameManage\GameMainManage.cpp" />
     <ClCompile Include="..\src\GameManage\gameUserManage.cpp" />
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\BaseMainManage.h" />
@@ -134,7 +135,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -145,7 +146,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -156,7 +157,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -167,7 +168,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -178,7 +179,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -189,7 +190,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -200,7 +201,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -211,7 +212,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>

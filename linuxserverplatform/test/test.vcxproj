@@ -107,7 +107,7 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="jemalloc_cpp.cpp" />
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test.pb.cc" />
   </ItemGroup>

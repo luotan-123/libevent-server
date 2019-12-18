@@ -1,6 +1,7 @@
 #pragma once
 
 // 公共头文件
+#include <jemalloc/jemalloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,3 +39,6 @@ typedef long long __int64;
 // 基础常量定义
 #define TRUE true
 #define FALSE false
+
+// 条件编译
+#define JEMALLOC_PROFILE_MEMORY

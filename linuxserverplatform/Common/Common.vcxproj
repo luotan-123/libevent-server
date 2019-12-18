@@ -125,6 +125,7 @@
     <ClCompile Include="..\src\Common\RedisLogon.cpp" />
     <ClCompile Include="..\src\Common\RedisPHP.cpp" />
     <ClCompile Include="..\src\Common\Util.cpp" />
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
     <ClCompile Include="..\src\protobuf\AsyncEventMsg.pb.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +156,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -179,7 +180,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -203,7 +204,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -227,7 +228,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -251,7 +252,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -275,7 +276,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -299,7 +300,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -323,7 +324,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>

@@ -2338,6 +2338,11 @@ void CGameLogonManage::OnServerCrossDay()
 		int userID = iter->first;
 		OnUserCrossDay(userID, currTime);
 	}
+
+	// 生成内存分析
+#ifdef JEMALLOC_PROFILE_MEMORY
+	mallctl("prof.dump", NULL, NULL, NULL, 0);
+#endif // JEMALLOC_PROFILE_MEMORY
 }
 
 // 凌晨12点

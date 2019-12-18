@@ -161,9 +161,17 @@ void do_something(size_t i)
 	// Leak some memory.
 	malloc(i * 100);
 }
-
+class A
+{
+public:
+	A()
+	{
+		printf("A\n");
+	}
+};
 int main()
 {
+	A* pa = new A[6];
 	//mallctl("prof.dump", NULL, NULL, NULL, 0);
 	int i;
 	for (i = 0; i < 1000; i++)

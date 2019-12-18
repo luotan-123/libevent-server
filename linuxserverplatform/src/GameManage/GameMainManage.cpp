@@ -9,6 +9,7 @@ CGameMainManage::CGameMainManage()
 	m_pDeskArray = NULL;
 	m_uNameID = 0;
 	m_pGameUserManage = NULL;
+	m_lastNormalTimerTime = 0;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -90,6 +91,8 @@ bool CGameMainManage::OnStart()
 	{
 		m_pRedisPHP->SetDBManage(&m_SQLDataManage);
 	}
+
+	m_lastNormalTimerTime = time(NULL);
 
 	// 启动一些定时器
 	SetTimer(LOADER_TIMER_SAVE_ROOM_PEOPLE_COUNT, CHECK_SAVE_ROOM_PEOPLE_COUNT * 1000);
@@ -2351,6 +2354,27 @@ void CGameMainManage::OnCommonTimer()
 	{
 		CheckDeskStartMatch();
 	}
+
+	//////////////////////////////中心服凌晨6点////////////////////////////////////////////
+	// 检查是否跨天
+	time_t currTime = time(NULL);
+	int currHour = CUtil::GetHourTimeStamp(currTime);
+	int lastHour = CUtil::GetHourTimeStamp(m_lastNormalTimerTime);
+	if (currHour == 5 && currHour > lastHour)
+	{
+		OnServerCrossDay();
+	}
+
+	m_lastNormalTimerTime = currTime;
+}
+
+// 跨天
+void CGameMainManage::OnServerCrossDay()
+{
+	// 生成内存分析
+#ifdef JEMALLOC_PROFILE_MEMORY
+	mallctl("prof.dump", NULL, NULL, NULL, 0);
+#endif // JEMALLOC_PROFILE_MEMORY
 }
 
 void CGameMainManage::CheckRedisConnection()

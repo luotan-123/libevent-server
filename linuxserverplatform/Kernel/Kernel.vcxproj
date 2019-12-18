@@ -115,6 +115,7 @@
     <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)$(TargetExt)</RemoteTargetPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
     <ClCompile Include="..\src\Kernel\configManage.cpp" />
     <ClCompile Include="..\src\Kernel\DataBase.cpp" />
     <ClCompile Include="..\src\Kernel\DataLine.cpp" />
@@ -164,7 +165,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -185,7 +186,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -206,7 +207,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -227,7 +228,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -248,7 +249,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -269,7 +270,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -290,7 +291,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -311,7 +312,7 @@
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;curl;mysqlclient;event;event_pthreads;jemalloc;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
