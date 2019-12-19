@@ -2373,7 +2373,10 @@ void CGameMainManage::OnServerCrossDay()
 {
 	// 生成内存分析
 #ifdef JEMALLOC_PROFILE_MEMORY
-	mallctl("prof.dump", NULL, NULL, NULL, 0);
+	if (g_jemallocProfileRoom == GetRoomID())
+	{
+		mallctl("prof.dump", NULL, NULL, NULL, 0);
+	}
 #endif // JEMALLOC_PROFILE_MEMORY
 }
 

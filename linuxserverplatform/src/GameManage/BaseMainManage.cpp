@@ -6,6 +6,7 @@
 #include "Util.h"
 #include "BaseMainManage.h"
 
+int CBaseMainManage::g_jemallocProfileRoom = 0;
 
 //处理线程启动结构
 struct HandleThreadStartStruct
@@ -246,6 +247,8 @@ bool CBaseMainManage::Start()
 
 	// 关联游戏业务逻辑线程与对应日志文件
 	GameLogManage()->AddLogFile(m_hHandleThread, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
+
+	g_jemallocProfileRoom = m_InitData.uRoomID;
 
 	ret = OnStart();
 	if (!ret)

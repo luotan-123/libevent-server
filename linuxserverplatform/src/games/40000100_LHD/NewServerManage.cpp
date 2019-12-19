@@ -1820,17 +1820,6 @@ void CNewServerManage::CalcAreaRate()
 	}
 }
 
-int CNewServerManage::GetRandNum()
-{
-	if (g_iRandNum >= 1000)
-	{
-		g_iRandNum = 0;
-	}
-	srand((unsigned)time(NULL) + g_iRandNum); rand();
-	g_iRandNum++;
-	return rand();
-}
-
 void CNewServerManage::SetResult(int result)
 {
 	m_allCount++;

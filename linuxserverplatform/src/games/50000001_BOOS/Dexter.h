@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Array.h"
+#include "GameDesk.h"
+#include <assert.h>
+
 
 // 重定义
 typedef unsigned char		uchar;
@@ -38,6 +40,7 @@ typedef float				FLOAT;
 #define CopyMemory			memcpy
 #define ZeroMemory			bzero
 #define file				FILE
+#define ASSERT				assert
 
 // 标准定义
 #define _in
@@ -63,18 +66,7 @@ typedef float				FLOAT;
 
 #ifndef CountArray
 #define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
-#endif
-
-
-// 删除数组
-#define DeleteArray( Array )						\
-{													\
-	while ( Array.GetCount() )						\
-	{												\
-		SafeDelete(Array[0]);						\
-		Array.RemoveAt(0);							\
-	};												\
-}													
+#endif												
 
 typedef struct tagPOINT
 {

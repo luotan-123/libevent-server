@@ -63,9 +63,8 @@ private:
 	void KillAllTimer();
 	bool ConfirmDealer();
 	time_t GetNextStageLeftSecs();
-	//获得随机数
-	int GetRandNum();
 	void SetResult(int result);
+
 private:
 	// 等待开始阶段
 	void TransToWaitNextStage();

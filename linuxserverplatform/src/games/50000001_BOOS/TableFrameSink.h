@@ -10,7 +10,7 @@ using namespace std;
 // 捕鱼路径
 struct tagFishPath
 {
-	CWHArray< tagBezierPoint * >		ArrayBezierPoint;
+	vector< tagBezierPoint * >		ArrayBezierPoint;
 };
 
 // 开炮信息
@@ -33,7 +33,7 @@ struct tagCatchInfo
 		nMultipleCount = 0;
 		lScoreCount = 0;
 	}
-	tagCatchInfo ( tagCatchInfo & TRight )
+	tagCatchInfo (const tagCatchInfo & TRight )
 	{
 		nFishKey = TRight.nFishKey;
 		nMultipleCount = TRight.nMultipleCount;
@@ -53,7 +53,7 @@ struct tagStayInfo
 	UINT						nStayStart;			// 停留开始
 	UINT						nStayTime;			// 停留时间
 };
-typedef CWHArray< tagStayInfo >	CArrayStay;
+typedef vector< tagStayInfo >	CArrayStay;
 
 // 鱼鱼结构
 struct tagFishInfo
@@ -155,7 +155,7 @@ struct tagFishInfo
 		CopyMemory(&TBezierPoint, TRight.TBezierPoint, sizeof(TBezierPoint));
 
 		// 停留数据
-		ArrayStayInfo.Append( TRight.ArrayStayInfo );
+		ArrayStayInfo.insert(ArrayStayInfo.end(), TRight.ArrayStayInfo.begin(), TRight.ArrayStayInfo.end());
 	}
 };
 
@@ -260,7 +260,7 @@ protected:
 
 	// 鱼信息
 protected:
-	CWHArray< tagFishInfo >			m_ArrayFishInfo;						// 鱼鱼信息
+	vector< tagFishInfo >			m_ArrayFishInfo;						// 鱼鱼信息
 	DWORD							m_nStartTime;							// 同步时间
 	DWORD							m_FishKingTime;							//鱼王刷新起始时间
 	DWORD                           m_FishKingIntervalTime;					//鱼王的刷新间隔
@@ -326,7 +326,7 @@ protected:
 
 	// 鱼路径
 protected:
-	static CWHArray< tagFishPath * >	m_ArrayFishPathPositive;			
+	static vector< tagFishPath * >	m_ArrayFishPathPositive;
 
 	//其他配置
 	int   m_iAddFinshCount;	   //增加人数增加的鱼数
@@ -496,11 +496,11 @@ public:
 	// 捕鱼
 	LONGLONG PlayCatchFish( WORD wChairID, int nBulletSplit, uint nFishCatchKey, int nMultipleIndex, EnumPlayCatchType EPlayCatchType );
 	// 比较鱼
-	bool ISFishCatchKey( uint nFishKey, CWHArray< uint > & ArrayFishCatchKey );
+	bool ISFishCatchKey( uint nFishKey, vector< uint > & ArrayFishCatchKey );
 	// 捕中鱼
-	LONGLONG CatchInFish( WORD wChairID, int nMultipleIndex, EnumPlayCatchType nPlayCatchType, tagFishInfo & TFishInfo, CWHArray< tagCatchInfo > & ArrayCatchFishInfo );
+	LONGLONG CatchInFish( WORD wChairID, int nMultipleIndex, EnumPlayCatchType nPlayCatchType, tagFishInfo & TFishInfo, vector< tagCatchInfo > & ArrayCatchFishInfo );
 	// 发送捕获消息
-	void SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & ArrayCatchFishInfo );
+	void SendCatchFish( WORD wChairID, vector< tagCatchInfo > & ArrayCatchFishInfo );
 	// 游戏难度
 	double DifficultyGame( WORD wChairID, int nMultipleIndex );
 	// 游戏难度

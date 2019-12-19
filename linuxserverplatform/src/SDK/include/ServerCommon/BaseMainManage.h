@@ -17,7 +17,8 @@ protected:
 	HANDLE									m_hHandleThread;			//处理线程
 	HANDLE									m_connectCServerHandle;		//与中心服交互线程句柄
 	CDataLine								m_DataLine;					//数据队列
-	
+	static int								g_jemallocProfileRoom;		//生成jemalloc profile的房间
+
 public:
 	ManageInfoStruct						m_InitData;					//初始化数据
 	KernelInfoStruct						m_KernelData;				//内核数据

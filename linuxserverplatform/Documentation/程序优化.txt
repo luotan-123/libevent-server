@@ -19,7 +19,7 @@ bt	       查看该线程函数堆栈
 frame  1	       切换到函数栈，list查看代码
 
 ---------------------------
-malloc/free 函数崩溃原因
+多线程环境下malloc/free 函数崩溃原因
 原因1：
 主线程栈上消耗Memory超过12,568,257 bytes时，进程Crash
 从线程栈上消耗Memory超过10,479,656 bytes时，进程Crash

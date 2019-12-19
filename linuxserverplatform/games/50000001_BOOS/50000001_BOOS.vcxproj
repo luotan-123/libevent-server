@@ -35,7 +35,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\games\50000001_BOOS\Array.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\CMD_Game.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\ControlHead.h" />
     <ClInclude Include="..\..\src\games\50000001_BOOS\Dexter.h" />
@@ -143,7 +142,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -154,7 +153,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -165,7 +164,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -176,7 +175,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -187,7 +186,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -198,7 +197,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -209,7 +208,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -220,7 +219,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;json;protobuf;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>

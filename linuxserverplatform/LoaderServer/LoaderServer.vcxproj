@@ -35,6 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
     <ClCompile Include="..\src\LoaderServer\LoaderServerModule.cpp" />
     <ClCompile Include="..\src\LoaderServer\main.cpp" />
   </ItemGroup>
@@ -135,7 +136,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -151,7 +152,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -167,7 +168,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -183,7 +184,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -199,7 +200,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -215,7 +216,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -231,7 +232,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -247,7 +248,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>Kernel;Common;GameManage;dl;event</LibraryDependencies>
+      <LibraryDependencies>Kernel;Common;GameManage;dl;event;jemalloc;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <SharedLibrarySearchPath />
       <OutputFile>$(RemoteTargetPath)</OutputFile>

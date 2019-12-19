@@ -21,8 +21,6 @@ static const BYTE g_cardArray[54] =
 	0x4E, 0x4F 
 };
 
-static	int g_iRandNum = 0; 
-
 class CPokerGameLogic
 {
 public:

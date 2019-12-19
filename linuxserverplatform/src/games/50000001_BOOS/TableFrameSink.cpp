@@ -34,14 +34,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////// 
 
-CWHArray< tagFishPath * >	CTableFrameSink::m_ArrayFishPathPositive;			// 鱼路径保存(正)
+vector< tagFishPath* >	CTableFrameSink::m_ArrayFishPathPositive;			// 鱼路径保存(正)
 
 // 库存控制
 LONGLONG					CTableFrameSink::m_nRoomWrite = 0;
 double						CTableFrameSink::m_dDartStock = 0.0;
 double						CTableFrameSink::m_dWholeTax[Multiple_Max] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };	// 全部税收
 double						CTableFrameSink::m_dRoomStock[Multiple_Max] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };	// 房间库存
-double *					CTableFrameSink::m_pdTableStock[Multiple_Max] = { NULL, NULL, NULL, NULL, NULL, NULL };
+double* CTableFrameSink::m_pdTableStock[Multiple_Max] = { NULL, NULL, NULL, NULL, NULL, NULL };
 //CMapPersonalDifficulty		CTableFrameSink::m_MapPersonalDifficulty;
 
 double CTableFrameSink::m_dTaxRatio;
@@ -89,7 +89,7 @@ EnumExplosionConditionType CTableFrameSink::m_nExplosionConditionType;
 map<uint, LONGLONG> CTableFrameSink::m_MapPlayExplosionCondition;
 LONGLONG CTableFrameSink::m_lStockInitial;
 LONGLONG CTableFrameSink::m_lStockCurrent;
-  
+
 
 
 //初始化游戏
@@ -107,8 +107,8 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	m_bFirstTime = true;
 	m_bFishSwimming = false;
 	m_nAppearFishCount = 0;
-	ZeroMemory( m_nFishMultiple, sizeof(m_nFishMultiple) );
-	
+	ZeroMemory(m_nFishMultiple, sizeof(m_nFishMultiple));
+
 	// 创建信息
 	m_nCreateCount = 0;
 
@@ -126,27 +126,27 @@ CTableFrameSink::CTableFrameSink() : CGameDesk(ALL_ARGEE)
 	// 子弹
 	m_nBulletVelocity = 10000;
 	m_nBulletCoolingTime = 100;
-	
+
 	// 玩家信息
-	ZeroMemory(m_dwPlayID,sizeof(m_dwPlayID));
-	ZeroMemory(m_lPlayScore,sizeof(m_lPlayScore));
-	ZeroMemory(m_lPlayStartScore,sizeof(m_lPlayStartScore));
-	ZeroMemory(m_lplayCutMoney,sizeof(m_lplayCutMoney));
+	ZeroMemory(m_dwPlayID, sizeof(m_dwPlayID));
+	ZeroMemory(m_lPlayScore, sizeof(m_lPlayScore));
+	ZeroMemory(m_lPlayStartScore, sizeof(m_lPlayStartScore));
+	ZeroMemory(m_lplayCutMoney, sizeof(m_lplayCutMoney));
 	ZeroMemory(m_lFireCount, sizeof(m_lFireCount));
-	ZeroMemory(m_lBulletConsume,sizeof(m_lBulletConsume));
-	ZeroMemory(m_nPlayDownTime,sizeof(m_nPlayDownTime));
+	ZeroMemory(m_lBulletConsume, sizeof(m_lBulletConsume));
+	ZeroMemory(m_nPlayDownTime, sizeof(m_nPlayDownTime));
 	ZeroMemory(m_nRobotPlayTime, sizeof(m_nRobotPlayTime));
-	ZeroMemory(m_nPlayDelay,sizeof(m_nPlayDelay));
-	ZeroMemory(m_lPlayFishCount,sizeof(m_lPlayFishCount));
-	ZeroMemory(m_nMultipleIndex,sizeof(m_nMultipleIndex));
+	ZeroMemory(m_nPlayDelay, sizeof(m_nPlayDelay));
+	ZeroMemory(m_lPlayFishCount, sizeof(m_lPlayFishCount));
+	ZeroMemory(m_nMultipleIndex, sizeof(m_nMultipleIndex));
 
 	// 玩家补给
-	ZeroMemory(m_nSupplyCondition,sizeof(m_nSupplyCondition));
-	ZeroMemory(m_nSupplyValue,sizeof(m_nSupplyValue));
-	ZeroMemory(m_nEnergyValue,sizeof(m_nEnergyValue));
-	ZeroMemory(m_bPlaySupply,sizeof(m_bPlaySupply));
-	ZeroMemory(m_nLaserPlayTime,sizeof(m_nLaserPlayTime));
-	ZeroMemory(m_nSpeedPlayTime,sizeof(m_nSpeedPlayTime));
+	ZeroMemory(m_nSupplyCondition, sizeof(m_nSupplyCondition));
+	ZeroMemory(m_nSupplyValue, sizeof(m_nSupplyValue));
+	ZeroMemory(m_nEnergyValue, sizeof(m_nEnergyValue));
+	ZeroMemory(m_bPlaySupply, sizeof(m_bPlaySupply));
+	ZeroMemory(m_nLaserPlayTime, sizeof(m_nLaserPlayTime));
+	ZeroMemory(m_nSpeedPlayTime, sizeof(m_nSpeedPlayTime));
 
 	// 鱼信息
 	m_nStartTime = 0;
@@ -178,34 +178,34 @@ CTableFrameSink::~CTableFrameSink()
 {
 	// 释放接口
 //	ReleaseInterface( m_hControlInst, m_pIServerControl );
-	for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
-		SafeDeleteArray( m_pdTableStock[nIndex] );
-	
+	for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
+		SafeDeleteArray(m_pdTableStock[nIndex]);
+
 }
 
 // 释放对象
 VOID CTableFrameSink::Release()
 {
-	for(UINT i = 0; i < m_ArrayFishPathPositive.GetCount(); ++i )
+	for (UINT i = 0; i < m_ArrayFishPathPositive.size(); ++i)
 	{
-		if( m_ArrayFishPathPositive[i] )
+		if (m_ArrayFishPathPositive[i])
 		{
-			for(UINT j = 0; j < m_ArrayFishPathPositive[i]->ArrayBezierPoint.GetCount(); ++j )
+			for (UINT j = 0; j < m_ArrayFishPathPositive[i]->ArrayBezierPoint.size(); ++j)
 			{
 
-				if( m_ArrayFishPathPositive[i]->ArrayBezierPoint[j] )
+				if (m_ArrayFishPathPositive[i]->ArrayBezierPoint[j])
 				{
 					delete m_ArrayFishPathPositive[i]->ArrayBezierPoint[j];
 					m_ArrayFishPathPositive[i]->ArrayBezierPoint[j] = NULL;
 				}
 			}
-			m_ArrayFishPathPositive[i]->ArrayBezierPoint.RemoveAll();
+			m_ArrayFishPathPositive[i]->ArrayBezierPoint.clear();
 			delete m_ArrayFishPathPositive[i];
 			m_ArrayFishPathPositive[i] = NULL;
 		}
 	}
 
-	m_ArrayFishPathPositive.RemoveAll();
+	m_ArrayFishPathPositive.clear();
 
 	delete this;
 }
@@ -227,9 +227,9 @@ void CTableFrameSink::IniConfig()
 	//房间库存 暂时没用
 	for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 	{
-		m_dRoomStock[nIndex] =(10 *(double)m_nMultipleValue[nIndex]);
-		m_lStockInitial += (10* (LONGLONG)m_nMultipleValue[nIndex]);
-		m_lStockCurrent += (10* (LONGLONG)m_nMultipleValue[nIndex]);
+		m_dRoomStock[nIndex] = (10 * (double)m_nMultipleValue[nIndex]);
+		m_lStockInitial += (10 * (LONGLONG)m_nMultipleValue[nIndex]);
+		m_lStockCurrent += (10 * (LONGLONG)m_nMultipleValue[nIndex]);
 	}
 
 	//难度类型
@@ -313,7 +313,7 @@ void CTableFrameSink::IniConfig()
 	m_dTaxRatio = 0.3;
 
 	//场景配置
-	m_nCreateCount = 12; 
+	m_nCreateCount = 12;
 	m_nSceneTime = 60 * 8;
 
 	// 子弹信息
@@ -339,7 +339,7 @@ void CTableFrameSink::IniConfig()
 	m_nGiftChance[4] = 5;
 	m_nNullChance = 5;
 
-     //鱼配置
+	//鱼配置
 	m_nFishMultiple[0][0] = 2;
 	m_nFishMultiple[0][1] = 2;
 	m_nFishMultiple[1][0] = 3;
@@ -413,7 +413,7 @@ void CTableFrameSink::IniConfig()
 		}
 	}
 
-	
+
 
 #ifdef _DEBUG
 
@@ -432,7 +432,7 @@ void CTableFrameSink::IniConfig()
 	// 获取当前路径
 	TCHAR szDirectoryPath[MAX_PATH + 1] = { "" };
 	strcpy(szDirectoryPath, CINIFile::GetAppPath().c_str());
-	
+
 	CRedisLoader* pRedis = m_pDataManage->GetRedis();
 	RoomBaseInfo roomBasekInfo;
 	RoomBaseInfo* pRoomBaseInfo = NULL;
@@ -451,7 +451,7 @@ void CTableFrameSink::IniConfig()
 	}
 
 	// 读取鱼路径
-	if (m_ArrayFishPathPositive.GetCount() == 0)
+	if (m_ArrayFishPathPositive.size() == 0)
 	{
 		// 打开配置
 		tchar szFishMermaidPath[MAX_PATH] = "";
@@ -530,9 +530,9 @@ void CTableFrameSink::IniConfig()
 
 				// 保存成节点
 				tagFishPath* pNode = new tagFishPath;
-				m_ArrayFishPathPositive.Add(pNode);
+				m_ArrayFishPathPositive.push_back(pNode);
 			}
-			else if (szReadByte[0] == 'S' && nPathCount < (int)m_ArrayFishPathPositive.GetCount())
+			else if (szReadByte[0] == 'S' && nPathCount < (int)m_ArrayFishPathPositive.size())
 			{
 				CPoint BeginPoint;
 				CPoint EndPoint;
@@ -550,9 +550,9 @@ void CTableFrameSink::IniConfig()
 				pFishPath->KeyOne = KeyOne;
 				pFishPath->KeyTwo = KeyTwo;
 				pFishPath->Time = nTime;
-				m_ArrayFishPathPositive[nPathCount]->ArrayBezierPoint.Add(pFishPath);
+				m_ArrayFishPathPositive[nPathCount]->ArrayBezierPoint.push_back(pFishPath);
 			}
-			else if (strRead =="End")
+			else if (strRead == "End")
 			{
 				// 数量增加
 				nPathCount++;
@@ -614,7 +614,7 @@ void CTableFrameSink::LoadDynamicConfig()
 	m_ipropNum = f.GetKeyVal(key, "propNum", 23);
 	m_iBingDong = f.GetKeyVal(key, "BingDong", 20);
 	m_iLocking = f.GetKeyVal(key, "Locking", 20);
-	m_iRate	= f.GetKeyVal(key, "Rate", 5);
+	m_iRate = f.GetKeyVal(key, "Rate", 5);
 	m_iRobotTickTime = f.GetKeyVal(key, "RobotTickTime", 60);
 
 	if (m_iFinshLeve > 3 || m_iFinshLeve < 0)
@@ -622,7 +622,7 @@ void CTableFrameSink::LoadDynamicConfig()
 		m_iFinshLeve = 3;
 	}
 	//大鱼群是否开启
-	m_bOpenShoalFish= f.GetKeyVal(key, "OpenFishShoal", 1);
+	m_bOpenShoalFish = f.GetKeyVal(key, "OpenFishShoal", 1);
 	//大鱼群数量
 	m_iFishShoalLev = f.GetKeyVal(key, "FishShoalLev", 10);
 	//小于次倍数不公告
@@ -674,7 +674,7 @@ void CTableFrameSink::LoadDynamicConfig()
 	m_dPlayDifficultyValue[2] = f.GetKeyVal(key, "dPlayDifficultyValue_1_2", 20);
 	m_dPlayDifficultyValue[1] = f.GetKeyVal(key, "dPlayDifficultyValue_1_1", 15);
 	m_dPlayDifficultyValue[0] = f.GetKeyVal(key, "dPlayDifficultyValue_1_0", 10);
-	for (int i = 0;i<10;i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (m_dRoomDifficultyValue[i] > 1000 && m_dRoomDifficultyValue[i] <= 0)
 		{
@@ -1016,7 +1016,7 @@ void CTableFrameSink::LoadDynamicConfig()
 		m_nFishMultiple[32][0] = f.GetKeyVal(key, "m_nFishMultiple_3_32_0", 400);
 		m_nFishMultiple[32][1] = f.GetKeyVal(key, "m_nFishMultiple_3_32_1", 600);
 	}
-	
+
 	return;
 }
 
@@ -1037,22 +1037,22 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		SetGameStation(GAME_STATUS_FREE);
 
 		// 清空玩家
-		for ( int nSite = 0; nSite < PlayChair_Max; ++nSite )
+		for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
 		{
 			// 判断用户
 			long userID = GetUserIDByDeskStation(nSite);
-			if( userID > 0 )
+			if (userID > 0)
 			{
 				// 玩家指针
 				GameUserInfo UserInfo;
-				GetUserData(nSite,UserInfo);
+				GetUserData(nSite, UserInfo);
 
 				// 写分
-				LONGLONG lScore = ( m_lPlayScore[nSite] - m_lPlayStartScore[nSite] );
-				if ( lScore != 0 )
+				LONGLONG lScore = (m_lPlayScore[nSite] - m_lPlayStartScore[nSite]);
+				if (lScore != 0)
 				{
 					// 积分为负， 不能超过最大分数
-					if ( lScore < 0 && (-lScore) > UserInfo.money)
+					if (lScore < 0 && (-lScore) > UserInfo.money)
 					{
 						lScore = -UserInfo.money;
 					}
@@ -1074,13 +1074,13 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		}
 
 		// 全局爆炸还原
-		if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
+		if (GetFishCount(FishType_BaoZhaFeiBiao) > 0)
 		{
 			// 最大倍数
 			int nMultipleMax = 0;
-			for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
+			for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 			{
-				nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+				nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 			}
 
 			// 飞镖消耗
@@ -1100,7 +1100,7 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 		ClearPersonalDifficulty();
 
 		// 鱼信息
-		m_ArrayFishInfo.RemoveAll();
+		m_ArrayFishInfo.clear();
 		m_cbBackIndex = 0;
 		m_nAppearFishCount = 0;
 		m_bFishSwimming = FALSE;
@@ -1126,57 +1126,53 @@ bool CTableFrameSink::GameFinish(BYTE bDeskStation, BYTE bCloseFlag)
 	return CGameDesk::GameFinish(bDeskStation, bCloseFlag);
 }
 
- //发送场景
+//发送场景
 bool CTableFrameSink::OnGetGameStation(BYTE bDeskStation, UINT uSocketID, bool bWatchUser)
 {
-
 	BYTE cbGameStatus = GetGameStation();
 
-	switch(cbGameStatus)
+	switch (cbGameStatus)
 	{
-	case GAME_STATUS_FREE:		
+	case GAME_STATUS_FREE:
 	case GAME_STATUS_PLAY:
-		{
-
-
-
-			// 基本信息
-			GameScene Scene;
-			ZeroMemory(&Scene, sizeof(Scene));
-			Scene.lPlayScore = m_lPlayScore[bDeskStation];
-			Scene.cbBackIndex = m_cbBackIndex;
-			CopyMemory( Scene.lPlayCurScore, m_lPlayScore, sizeof(Scene.lPlayCurScore) );
-			CopyMemory( Scene.lPlayStartScore, m_lPlayStartScore, sizeof(Scene.lPlayStartScore) );
-			Scene.nBulletVelocity = m_nBulletVelocity;
-			Scene.nBulletCoolingTime = m_nBulletCoolingTime;
-			CopyMemory( Scene.nFishMultiple, m_nFishMultiple, sizeof(Scene.nFishMultiple) );
-			CopyMemory( Scene.lBulletConsume, m_lBulletConsume, sizeof(Scene.lBulletConsume) );
-			CopyMemory( Scene.lPlayFishCount, m_lPlayFishCount, sizeof(Scene.lPlayFishCount) );
-			CopyMemory( Scene.nMultipleValue, m_nMultipleValue, sizeof(Scene.nMultipleValue) );
-			CopyMemory( Scene.nMultipleIndex, m_nMultipleIndex, sizeof(Scene.nMultipleIndex) );
-			Scene.bUnlimitedRebound = false;
-			//_sntprintf(Scene.szBrowseUrl, CountArray(Scene.szBrowseUrl), TEXT("%s/Pay/PayIndex.aspx"),szPlatformLink);
-			SendGameStation(bDeskStation, uSocketID, bWatchUser, &Scene, sizeof(Scene));
-			//printf("子弹速度:%d,冷却:%d", Scene.nBulletVelocity, Scene.nBulletCoolingTime);
-			// 发送鱼信息
-			DWORD dwTime = GetSysMilliseconds();
-			DWORD Time = dwTime - m_nStartTime;
+	{
+		// 基本信息
+		GameScene Scene;
+		ZeroMemory(&Scene, sizeof(Scene));
+		Scene.lPlayScore = m_lPlayScore[bDeskStation];
+		Scene.cbBackIndex = m_cbBackIndex;
+		CopyMemory(Scene.lPlayCurScore, m_lPlayScore, sizeof(Scene.lPlayCurScore));
+		CopyMemory(Scene.lPlayStartScore, m_lPlayStartScore, sizeof(Scene.lPlayStartScore));
+		Scene.nBulletVelocity = m_nBulletVelocity;
+		Scene.nBulletCoolingTime = m_nBulletCoolingTime;
+		CopyMemory(Scene.nFishMultiple, m_nFishMultiple, sizeof(Scene.nFishMultiple));
+		CopyMemory(Scene.lBulletConsume, m_lBulletConsume, sizeof(Scene.lBulletConsume));
+		CopyMemory(Scene.lPlayFishCount, m_lPlayFishCount, sizeof(Scene.lPlayFishCount));
+		CopyMemory(Scene.nMultipleValue, m_nMultipleValue, sizeof(Scene.nMultipleValue));
+		CopyMemory(Scene.nMultipleIndex, m_nMultipleIndex, sizeof(Scene.nMultipleIndex));
+		Scene.bUnlimitedRebound = false;
+		//_sntprintf(Scene.szBrowseUrl, CountArray(Scene.szBrowseUrl), TEXT("%s/Pay/PayIndex.aspx"),szPlatformLink);
+		SendGameStation(bDeskStation, uSocketID, bWatchUser, &Scene, sizeof(Scene));
+		//printf("子弹速度:%d,冷却:%d", Scene.nBulletVelocity, Scene.nBulletCoolingTime);
+		// 发送鱼信息
+		DWORD dwTime = GetSysMilliseconds();
+		DWORD Time = dwTime - m_nStartTime;
 		//	printf("%d,%d,%d\n", Time, dwTime, m_nStartTime);
 			// 时间同步
-			CMD_S_Synchronous CMDSSynchronous;
-			CMDSSynchronous.nOffSetTime = dwTime - m_nStartTime;
-			//printf("%d,%d,%d\n", CMDSSynchronous.nOffSetTime, dwTime, m_nStartTime);
-		     SendTableData(bDeskStation, SUB_S_SYNCHRONOUS, &CMDSSynchronous, sizeof(CMDSSynchronous));
+		CMD_S_Synchronous CMDSSynchronous;
+		CMDSSynchronous.nOffSetTime = dwTime - m_nStartTime;
+		//printf("%d,%d,%d\n", CMDSSynchronous.nOffSetTime, dwTime, m_nStartTime);
+		SendTableData(bDeskStation, SUB_S_SYNCHRONOUS, &CMDSSynchronous, sizeof(CMDSSynchronous));
 
-			//// 发送鱼
-			//for( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
-			//{
-			//	 发送信息
-			//	SendFish( m_ArrayFishInfo.GetAt( nIndex) );
-			//}
-			//
-			return true;
-		}
+		//// 发送鱼
+		//for( int nIndex = 0; nIndex < m_ArrayFishInfo.size(); ++nIndex )
+		//{
+		//	 发送信息
+		//	SendFish( m_ArrayFishInfo.at( nIndex) );
+		//}
+		//
+		return true;
+	}
 	}
 
 	return true;
@@ -1189,397 +1185,397 @@ bool CTableFrameSink::OnTimer(UINT uTimerID)
 	{
 		// 创建鱼定时
 	case IDI_FISH_CREATE:
-		{
-			// 关闭定时器
+	{
+		// 关闭定时器
 		KillTimer(IDI_FISH_CREATE);
-			
-			// 检测是否有人
-			bool bHavePeople = false;
-			for ( WORD i = 0; i < PlayChair_Max; ++i )
+
+		// 检测是否有人
+		bool bHavePeople = false;
+		for (WORD i = 0; i < PlayChair_Max; ++i)
+		{
+			long  GameUser = GetUserIDByDeskStation(i);
+			if (GameUser <= 0) continue;
+			//if(IsAndroidUser(i)) continue;
+
+			bHavePeople = true;
+
+			break;
+		}
+
+		// 无人返回
+		if (!bHavePeople)
+		{
+			// 全局爆炸还原
+			if (GetFishCount(FishType_BaoZhaFeiBiao) > 0)
 			{
-				long  GameUser = GetUserIDByDeskStation(i);
-				if (GameUser <= 0) continue;
-				//if(IsAndroidUser(i)) continue;
-				
-				bHavePeople = true;
-				
-				break;
-			}
-			
-			// 无人返回
-			if ( !bHavePeople )
-			{
-				// 全局爆炸还原
-				if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
+				// 最大倍数
+				int nMultipleMax = 0;
+				for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 				{
-					// 最大倍数
-					int nMultipleMax = 0;
-					for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
+					nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
+				}
+
+				// 飞镖消耗
+				m_dDartStock += nMultipleMax * m_nExplosionStart;
+			}
+
+			// 鱼信息
+			m_ArrayFishInfo.clear();
+
+			// 设置信息
+			m_cbBackIndex = 0;
+			m_nAppearFishCount = 0;
+			m_bFishSwimming = FALSE;
+			m_bBackExchange = FALSE;
+
+			GameFinish(0, GF_NORMAL);
+
+			return true;
+		}
+
+		// 计算当前鱼
+		int nFishIndex = 0;
+		while (nFishIndex < m_ArrayFishInfo.size())
+		{
+			// 获取鱼信息
+			tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nFishIndex);
+
+			// 计算鱼位置
+			CDoublePoint PointFish;
+			if (FishMove(PointFish, TFishInfo) == FishMoveType_Delete)
+			{
+				// 重新创建
+				if (TFishInfo.bRepeatCreate && !m_bBackExchange)
+				{
+					// 重新生成鱼
+					ResetFish(TFishInfo);
+
+					// 下一条
+					++nFishIndex;
+				}
+				else
+				{
+
+					// 盒子爆炸
+					if (TFishInfo.nFishType == FishType_BaoXiang && TFishInfo.wHitChair != INVALID_CHAIR)
 					{
-						nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+						// 活动重载
+						m_bPlaySupply[TFishInfo.wHitChair] = false;
 					}
 
+					// 全局爆炸还原
+					if (TFishInfo.nFishType == FishType_BaoZhaFeiBiao)
+					{
+						// 最大倍数
+						int nMultipleMax = 0;
+						for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
+						{
+							nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
+						}
+
+						// 飞镖消耗
+						m_dDartStock += nMultipleMax * m_nExplosionStart;
+					}
+
+					// 删除鱼
+					m_ArrayFishInfo.erase(m_ArrayFishInfo.begin() + nFishIndex);
+
+					// 继续
+					continue;
+				}
+			}
+
+			// 下一条
+			++nFishIndex;
+		}
+
+		// 当前时间
+		const uint nCurrentTime = GetSysMilliseconds();
+
+		// 换地图
+		if (!m_bBackExchange && nCurrentTime - m_nSceneBegin > (uint)m_nSceneTime * 1000 && !m_bFushSence)
+		{
+			m_bBackExchange = TRUE;
+			m_nSceneBegin = nCurrentTime;
+		}
+
+		// 等待换地图 不添加鱼
+		if (!m_bBackExchange)
+		{
+			// 添加鱼
+			if (m_nAppearFishCount == 0 && !m_bBackExchange && !m_bFirstTime)
+			{
+				// 创建阵列
+				DWORD GroupTime = GroupOfFish();
+				m_nFishTeamTime = GetTickCount() + GroupTime;
+				//BOSS时间去除鱼阵时间
+				m_FishKingTime += GroupTime;
+			}
+			else if (!m_bBackExchange && (GetTickCount() > m_nFishTeamTime || m_ArrayFishInfo.size() == 0))
+			{
+				// 过滤第一次
+				m_bFirstTime = false;
+
+				// 创建鱼群
+				InitializationFishpond();
+
+				// 最大倍数
+				int nMultipleMax = 0;
+				for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
+				{
+					nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
+				}
+
+				// 创建飞镖
+				if (m_dDartStock >= nMultipleMax * m_nExplosionStart && GetFishCount(FishType_BaoZhaFeiBiao) == 0)
+				{
 					// 飞镖消耗
-					m_dDartStock += nMultipleMax * m_nExplosionStart;
-				}
-
-				// 鱼信息
-				m_ArrayFishInfo.RemoveAll();
-
-				// 设置信息
-				m_cbBackIndex = 0;
-				m_nAppearFishCount = 0;
-				m_bFishSwimming = FALSE;
-				m_bBackExchange = FALSE;
-
-				GameFinish(0, GF_NORMAL);
-
-				return true;
-			}
-
-			// 计算当前鱼
-			int nFishIndex = 0;
-			while ( nFishIndex < m_ArrayFishInfo.GetCount() )
-			{
-				// 获取鱼信息
-				tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
-
-				// 计算鱼位置
-				CDoublePoint PointFish;
-				if( FishMove(PointFish, TFishInfo) == FishMoveType_Delete )
-				{
-					// 重新创建
-					if( TFishInfo.bRepeatCreate && !m_bBackExchange )
-					{
-						// 重新生成鱼
-						ResetFish( TFishInfo );
-
-						// 下一条
-						++nFishIndex;
-					}
-					else
-					{
-
-						// 盒子爆炸
-						if( TFishInfo.nFishType == FishType_BaoXiang && TFishInfo.wHitChair != INVALID_CHAIR )
-						{
-							// 活动重载
-							m_bPlaySupply[TFishInfo.wHitChair] = false;
-						}
-
-						// 全局爆炸还原
-						if ( TFishInfo.nFishType == FishType_BaoZhaFeiBiao )
-						{
-							// 最大倍数
-							int nMultipleMax = 0;
-							for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
-							{
-								nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
-							}
-
-							// 飞镖消耗
-							m_dDartStock += nMultipleMax * m_nExplosionStart;
-						}
-
-						// 删除鱼
-						m_ArrayFishInfo.RemoveAt( nFishIndex );
-
-						// 继续
-						continue;
-					}
-				}
-
-				// 下一条
-				++nFishIndex;
-			}
-
-			// 当前时间
-			const uint nCurrentTime = GetSysMilliseconds();
-
-			// 换地图
-			if( !m_bBackExchange && nCurrentTime - m_nSceneBegin > (uint)m_nSceneTime * 1000 && !m_bFushSence)
-			{
-				m_bBackExchange = TRUE;
-				m_nSceneBegin = nCurrentTime;
-			}
-
-			// 等待换地图 不添加鱼
-			if ( !m_bBackExchange )
-			{
-				// 添加鱼
-				if ( m_nAppearFishCount == 0 && !m_bBackExchange && !m_bFirstTime )
-				{
-					// 创建阵列
-					DWORD GroupTime = GroupOfFish();
-					m_nFishTeamTime = GetTickCount() + GroupTime;
-					//BOSS时间去除鱼阵时间
-					m_FishKingTime += GroupTime;
-				}
-				else if ( !m_bBackExchange && ( GetTickCount() > m_nFishTeamTime || m_ArrayFishInfo.GetCount() == 0 ) )
-				{
-					// 过滤第一次
-					m_bFirstTime = false;
-
-					// 创建鱼群
-					InitializationFishpond();
-
-					// 最大倍数
-					int nMultipleMax = 0;
-					for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
-					{
-						nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
-					}
+					m_dDartStock -= nMultipleMax * m_nExplosionStart;
 
 					// 创建飞镖
-					if( m_dDartStock >= nMultipleMax * m_nExplosionStart && GetFishCount(FishType_BaoZhaFeiBiao) == 0 )
-					{
-						// 飞镖消耗
-						m_dDartStock -= nMultipleMax * m_nExplosionStart;
-
-						// 创建飞镖
-						CreateFish( 1, FishType_BaoZhaFeiBiao );
-					}
+					CreateFish(1, FishType_BaoZhaFeiBiao);
 				}
 			}
-	
-			// 换场景发送消息
-			BOOL bChangeScene = FALSE;
-			if ( m_bBackExchange && m_ArrayFishInfo.GetCount() < 5 )
-			{
-				m_cbBackIndex = (m_cbBackIndex + 1)%3;
-				m_bBackExchange = FALSE;
-				bChangeScene = TRUE;
-				m_nAppearFishCount = 0;
-
-				// 鱼快速消息
-				FishFastMove();
-
-				// 换图消息
-				CMD_S_ExchangeScene ExchangeScene;
-				ExchangeScene.cbBackIndex = m_cbBackIndex;
-
-				// 发送消息
-				SendTableData(INVALID_CHAIR, SUB_S_EXCHANGE_SCENE, &ExchangeScene, sizeof(ExchangeScene) );
-			}
-
-			// 启动定时器
-			if ( bChangeScene )
-			{
-				SetTimer(IDI_FISH_CREATE, 5000);
-			}
-			else
-			{
-				SetTimer(IDI_FISH_CREATE, 200);
-			}
 		}
-		return true;
-		// 延迟定时
-	case IDI_DELAY:
+
+		// 换场景发送消息
+		BOOL bChangeScene = FALSE;
+		if (m_bBackExchange && m_ArrayFishInfo.size() < 5)
 		{
-			// 关闭定时器
-			KillTimer(IDI_DELAY);
+			m_cbBackIndex = (m_cbBackIndex + 1) % 3;
+			m_bBackExchange = FALSE;
+			bChangeScene = TRUE;
+			m_nAppearFishCount = 0;
 
-			// 检测是否有人
-			bool bHavePeople = false;
-			GameUserInfo *GameUser = NULL;
-			for ( WORD i = 0; i < PlayChair_Max; ++i )
-			{
-				GameUser = GetTableUserItem(i);
-				if (GameUser == NULL) continue;
+			// 鱼快速消息
+			FishFastMove();
 
-				// 开启定时器
-				bHavePeople = true;
-				SetTimer(IDI_DELAY, TIME_DELAY);
-				break;
-			}
+			// 换图消息
+			CMD_S_ExchangeScene ExchangeScene;
+			ExchangeScene.cbBackIndex = m_cbBackIndex;
 
 			// 发送消息
-			for (WORD i = 0; i < PlayChair_Max && bHavePeople; ++i )
-			{
-				//IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem( i );
-				GameUser = GetTableUserItem(i);
-				if (GameUser == NULL ) continue;
-				//if ( !pIServerUserItem->IsClientReady() ) continue;
+			SendTableData(INVALID_CHAIR, SUB_S_EXCHANGE_SCENE, &ExchangeScene, sizeof(ExchangeScene));
+		}
 
-				m_nPlayDelay[i] = GetSysMilliseconds();
-				SendUserItemData(GameUser, SUB_S_DELAY_BEGIN, NULL, NULL);
+		// 启动定时器
+		if (bChangeScene)
+		{
+			SetTimer(IDI_FISH_CREATE, 5000);
+		}
+		else
+		{
+			SetTimer(IDI_FISH_CREATE, 200);
+		}
+	}
+	return true;
+	// 延迟定时
+	case IDI_DELAY:
+	{
+		// 关闭定时器
+		KillTimer(IDI_DELAY);
+
+		// 检测是否有人
+		bool bHavePeople = false;
+		GameUserInfo* GameUser = NULL;
+		for (WORD i = 0; i < PlayChair_Max; ++i)
+		{
+			GameUser = GetTableUserItem(i);
+			if (GameUser == NULL) continue;
+
+			// 开启定时器
+			bHavePeople = true;
+			SetTimer(IDI_DELAY, TIME_DELAY);
+			break;
+		}
+
+		// 发送消息
+		for (WORD i = 0; i < PlayChair_Max && bHavePeople; ++i)
+		{
+			//IServerUserItem *pIServerUserItem = m_pITableFrame->GetTableUserItem( i );
+			GameUser = GetTableUserItem(i);
+			if (GameUser == NULL) continue;
+			//if ( !pIServerUserItem->IsClientReady() ) continue;
+
+			m_nPlayDelay[i] = GetSysMilliseconds();
+			SendUserItemData(GameUser, SUB_S_DELAY_BEGIN, NULL, NULL);
+		}
+	}
+	return true;
+
+	// 秒钟定时
+	case IDI_SECOND:
+	{
+		// 关闭定时器
+		KillTimer(IDI_SECOND);
+
+		// 检测是否有人
+		bool bHavePeople = false;
+		WORD wSite = INVALID_CHAIR;
+		GameUserInfo* GameUser = NULL;
+		for (WORD i = 0; i < PlayChair_Max; ++i)
+		{
+			GameUser = GetTableUserItem(i);
+			if (GameUser == NULL) continue;
+
+			// 开启定时器
+			bHavePeople = true;
+			SetTimer(IDI_SECOND, 1000);
+			wSite = i;
+			break;
+		}
+
+		// 无人无倍数
+		if (!bHavePeople)
+			return true;
+
+		// 减少鱼阵时间
+		if (m_nFishKingTime > 0)
+		{
+			m_nFishKingTime--;
+		}
+
+		// 减少鱼阵时间
+		for (int nIndex = 0; nIndex < CountArray(m_nFishKing); ++nIndex)
+		{
+			if (m_nFishKing[nIndex] > 0)
+			{
+				m_nFishKing[nIndex]--;
+			}
+		}
+
+		// 游戏时间
+		DWORD dwCurrentime = (DWORD)time(NULL);
+
+		uint NowTime = GetSysMilliseconds();
+		//判断玩家多长时间不操作
+		//if (m_IsOpenTick)
+		//{
+		//	for (int i = 0; i < PLAY_COUNT; i++)
+		//	{
+		//		if (GetUserIDByDeskStation(i) <= 0) continue;
+
+		//		if (NowTime - m_iOptionTime[i] > m_iTickTime * 1000)
+		//		{
+		//			//调用踢出该玩家
+		//			KickOutUser(i);
+		//		}
+		//	}
+		//}
+
+		for (int i = 0; i < PLAY_COUNT; i++)
+		{
+			if (GetUserIDByDeskStation(i) <= 0) continue;
+			if (IsAndroidUser(i))
+			{
+
+
+			}
+		}
+		// 机器人游戏时间
+		for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
+		{
+			// 玩家接口
+			//IServerUserItem * pServerRobot = m_pITableFrame->GetTableUserItem(nSite);
+
+			if (IsAndroidUser(nSite))
+			{
+				//超时不操作踢出
+				if (NowTime - m_iOptionTime[nSite] > m_iRobotTickTime * 1000)
+				{
+					//printf("机器人不操作踢出\n");
+					//调用踢出该玩家
+					KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
+				}
+
+				if (dwCurrentime - m_nPlayDownTime[nSite] > m_nRobotPlayTime[nSite])
+				{
+					//printf("机器人游戏超时被踢出:%d\n", m_nRobotPlayTime[nSite]);
+					//调用踢出该玩家
+					KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
+				}
+				else if (m_lPlayScore[nSite] < m_nMultipleValue[m_nMultipleIndex[nSite]])
+				{
+					printf("机器人钱不足被踢出，房间等级：%d**:%lld", GetRoomLevel(), m_lPlayScore[nSite]);
+					printf(",%d,%d\n", m_nMultipleIndex[nSite], m_nMultipleValue[m_nMultipleIndex[nSite]]);
+					//调用踢出该玩家
+					KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
+				}
 			}
 		}
 		return true;
-
-		// 秒钟定时
-	case IDI_SECOND:
+	}
+	case TIME_WRITE_SCORE: //定时写分
+	{
+		//关闭定时器
+		KillTimer(TIME_WRITE_SCORE);
+		// 检测是否有人
+		for (WORD i = 0; i < PlayChair_Max; ++i)
 		{
-			// 关闭定时器
-			KillTimer(IDI_SECOND);
+			long  userid = GetUserIDByDeskStation(i);
+			if (userid <= 0) continue;
 
-			// 检测是否有人
-			bool bHavePeople = false;
-			WORD wSite = INVALID_CHAIR;
-			GameUserInfo *GameUser = NULL;
-			for ( WORD i = 0; i < PlayChair_Max; ++i )
+			//有人那么就结算一下
+			GameUserInfo UserInfo;
+			GetUserData(i, UserInfo);
+
+			// 写分
+			LONGLONG lScore = (m_lPlayScore[i] - m_lPlayStartScore[i]);
+			if (lScore != 0)
 			{
-				GameUser = GetTableUserItem(i);
-				if (GameUser == NULL) continue;
-
-				// 开启定时器
-				bHavePeople = true;
-				SetTimer(IDI_SECOND, 1000);
-				wSite = i;
-				break;
-			}
-			
-			// 无人无倍数
-			if( !bHavePeople )
-				return true;
-
-			// 减少鱼阵时间
-			if ( m_nFishKingTime > 0 )
-			{
-				m_nFishKingTime--;
-			}
-
-			// 减少鱼阵时间
-			for( int nIndex = 0; nIndex < CountArray(m_nFishKing); ++nIndex )
-			{
-				if ( m_nFishKing[nIndex] > 0 )
+				// 积分为负， 不能超过最大分数
+				if (lScore < 0 && (-lScore) > UserInfo.money)
 				{
-					m_nFishKing[nIndex]--;
+					lScore = -UserInfo.money;
 				}
 			}
 
 			// 游戏时间
-			DWORD dwCurrentime = (DWORD)time(NULL);
+			DWORD dwEndTime = (DWORD)time(NULL) - m_nPlayDownTime[i];
+			ChangeUserPoint(i, lScore, m_lplayCutMoney[i]);
+			m_lplayCutMoney[i] = 0;
 
-			uint NowTime = GetSysMilliseconds();
-			//判断玩家多长时间不操作
-			//if (m_IsOpenTick)
-			//{
-			//	for (int i = 0; i < PLAY_COUNT; i++)
-			//	{
-			//		if (GetUserIDByDeskStation(i) <= 0) continue;
+			//初始化分
+			GetUserData(i, UserInfo);
+			m_lPlayScore[i] = UserInfo.money;
+			m_lPlayStartScore[i] = UserInfo.money;
 
-			//		if (NowTime - m_iOptionTime[i] > m_iTickTime * 1000)
-			//		{
-			//			//调用踢出该玩家
-			//			KickOutUser(i);
-			//		}
-			//	}
-			//}
-
-			for (int i = 0; i < PLAY_COUNT; i++)
+			//更新玩家的个人难度
+			//设置玩家个人难度
+			long Userid = GetUserIDByDeskStation(i);
+			if (Userid > 0)
 			{
-				if (GetUserIDByDeskStation(i) <= 0) continue;
-				if (IsAndroidUser(i))
+
+				// 个人难度
+				int UserDifficulty = GetUserControlParam(i);
+				//printf("玩家：%d,个人难度：%d\n", Userid, UserDifficulty);
+				double dGameDifficulty = 0;
+				if (UserDifficulty >= 0 && UserDifficulty < 1000)
 				{
-
-
+					int Lev = UserDifficulty / 100;
+					dGameDifficulty = m_dPlayDifficultyValue[Lev];
 				}
-			}
-			// 机器人游戏时间
-			for( int nSite = 0; nSite < PlayChair_Max; ++nSite )
-			{
-				// 玩家接口
-				//IServerUserItem * pServerRobot = m_pITableFrame->GetTableUserItem(nSite);
-
-				if (IsAndroidUser(nSite))
+				else if (UserDifficulty >= 1000)
 				{
-					//超时不操作踢出
-					if (NowTime - m_iOptionTime[nSite] > m_iRobotTickTime * 1000)
-					{
-						//printf("机器人不操作踢出\n");
-						//调用踢出该玩家
-						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
-					}
-
-					if (dwCurrentime - m_nPlayDownTime[nSite] > m_nRobotPlayTime[nSite])
-					{
-						//printf("机器人游戏超时被踢出:%d\n", m_nRobotPlayTime[nSite]);
-						//调用踢出该玩家
-						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
-					}
-					else if(m_lPlayScore[nSite] < m_nMultipleValue[m_nMultipleIndex[nSite]])
-					{
-						printf("机器人钱不足被踢出，房间等级：%d**:%lld", GetRoomLevel(), m_lPlayScore[nSite]);
-						printf(",%d,%d\n", m_nMultipleIndex[nSite], m_nMultipleValue[m_nMultipleIndex[nSite]]);
-						//调用踢出该玩家
-						KickOutUser(nSite, REASON_KICKOUT_STAND_MINLIMIT);
-					}
+					dGameDifficulty = m_dPlayDifficultyValue[9];
 				}
-			}
-			return true;
-		}
-	case TIME_WRITE_SCORE: //定时写分
-		{
-			//关闭定时器
-			KillTimer(TIME_WRITE_SCORE);
-			// 检测是否有人
-			for (WORD i = 0; i < PlayChair_Max; ++i)
-			{
-				long  userid = GetUserIDByDeskStation(i);
-				if (userid <= 0) continue;
-
-				//有人那么就结算一下
-				GameUserInfo UserInfo;
-				GetUserData(i, UserInfo);
-
-				// 写分
-				LONGLONG lScore = (m_lPlayScore[i] - m_lPlayStartScore[i]);
-				if (lScore != 0)
-				{
-					// 积分为负， 不能超过最大分数
-					if (lScore < 0 && (-lScore) > UserInfo.money)
-					{
-						lScore = -UserInfo.money;
-					}
-				}
-
-				// 游戏时间
-				DWORD dwEndTime = (DWORD)time(NULL) - m_nPlayDownTime[i];
-				ChangeUserPoint(i, lScore, m_lplayCutMoney[i]);
-				m_lplayCutMoney[i] = 0;
-
-				//初始化分
-				GetUserData(i, UserInfo);
-				m_lPlayScore[i] = UserInfo.money;
-				m_lPlayStartScore[i] = UserInfo.money;
-
-				//更新玩家的个人难度
-				//设置玩家个人难度
-				long Userid = GetUserIDByDeskStation(i);
-				if (Userid > 0)
-				{
-					
-					// 个人难度
-					int UserDifficulty = GetUserControlParam(i);
-					//printf("玩家：%d,个人难度：%d\n", Userid, UserDifficulty);
-					double dGameDifficulty = 0;
-					if (UserDifficulty >= 0 && UserDifficulty < 1000)
-					{
-						int Lev = UserDifficulty / 100;
-						dGameDifficulty = m_dPlayDifficultyValue[Lev];
-					}
-					else if (UserDifficulty >= 1000)
-					{
-						dGameDifficulty = m_dPlayDifficultyValue[9];
-					}
 				//	printf("设置个人难度：%llf", dGameDifficulty);
-					SetPersonalDifficulty(Userid, dGameDifficulty);
-				}
-
-				// 保存写分
-				m_nRoomWrite += (-lScore);		
+				SetPersonalDifficulty(Userid, dGameDifficulty);
 			}
-			SetTimer(TIME_WRITE_SCORE, 30000);
-			return true;
+
+			// 保存写分
+			m_nRoomWrite += (-lScore);
 		}
+		SetTimer(TIME_WRITE_SCORE, 30000);
+		return true;
+	}
 	case TIME_FUSH_BOSS:
 	{
 		KillTimer(TIME_FUSH_BOSS);
 		m_bFushBoss = true;
 		return true;
 	}
-		return true;
+	return true;
 	}
 	return false;
 }
@@ -1603,7 +1599,7 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 
 		// 消息处理
 		bool bSuccess = false;
-		switch(assistID)
+		switch (assistID)
 		{
 		case SUB_C_CATCH_FISH:
 			bSuccess = OnSubCatchFish(deskStation, pData, size);
@@ -1638,12 +1634,12 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 		}
 
 		// 判断执行状况
-		if( !bSuccess )
-			ERROR_LOG( " %d执行消息 [ %d ] 失败！", GetUserIDByDeskStation(deskStation),assistID);
+		if (!bSuccess)
+			ERROR_LOG(" %d执行消息 [ %d ] 失败！", GetUserIDByDeskStation(deskStation), assistID);
 
 		return CGameDesk::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 	}
-	catch ( CException * pException )
+	catch (CException * pException)
 	{
 		// 获取错误信息
 		tchar szErrorMessage[1024] = { "" };
@@ -1653,7 +1649,7 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 
 		return true;
 	}
-	catch ( ... )
+	catch (...)
 	{
 		ERROR_LOG("严重错误 执行消息 [ %d ] 失败！", assistID);
 		return true;
@@ -1661,15 +1657,15 @@ bool CTableFrameSink::HandleNotifyMessage(BYTE deskStation, unsigned int assistI
 	return CGameDesk::HandleNotifyMessage(deskStation, assistID, pData, size, bWatchUser);
 }
 
- 
- //用户坐下
+
+//用户坐下
 bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 {
 
 	// 记录库存
 	//FishMermaidStock();
 	bool bHavePeople = false;
-	for (int i = 0;i<PlayChair_Max;i++)
+	for (int i = 0; i < PlayChair_Max; i++)
 	{
 		long  GameUser = GetUserIDByDeskStation(i);
 		if (GameUser <= 0) continue;
@@ -1687,7 +1683,7 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 
 	SetGameStation(GAME_STATUS_PLAY);
 	// 启动捕鱼
-	if( !m_bFishSwimming)
+	if (!m_bFishSwimming)
 	{
 		// 设置种子
 		srand(GetTickCount());
@@ -1706,7 +1702,7 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 
 		// 秒定时
 		SetTimer(IDI_SECOND, 1000);
-	
+
 		// 保存时间
 		m_nStartTime = GetSysMilliseconds();
 		m_nSceneBegin = m_nStartTime;
@@ -1718,7 +1714,7 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 	GameUserInfo UserData;
 	GetUserData(deskStation, UserData);
 	// 属性设置
-	if( m_dwPlayID[deskStation] == 0 )
+	if (m_dwPlayID[deskStation] == 0)
 	{
 		// 初始化玩家
 		InitializePlayer(deskStation);
@@ -1728,7 +1724,7 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 		m_lPlayScore[deskStation] = (LONGLONG)UserData.money;
 		m_lPlayStartScore[deskStation] = m_lPlayScore[deskStation];
 		m_nPlayDownTime[deskStation] = (DWORD)time(NULL);
-		m_nRobotPlayTime[deskStation] = ( (rand()%15) + 15 ) * 60;
+		m_nRobotPlayTime[deskStation] = ((rand() % 15) + 15) * 60;
 
 		//设置玩家个人难度
 		long Userid = GetUserIDByDeskStation(deskStation);
@@ -1764,11 +1760,11 @@ bool CTableFrameSink::UserSitDeskActionNotify(BYTE deskStation)
 // 用户起立
 bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 {
-		
+
 	// 检测是否有人
-	for ( WORD i = 0; i < PlayChair_Max; ++i )
+	for (WORD i = 0; i < PlayChair_Max; ++i)
 	{
-	   if (pUser->deskStation == i) continue;
+		if (pUser->deskStation == i) continue;
 		long  userid = GetUserIDByDeskStation(i);
 		if (userid <= 0) continue;
 
@@ -1816,13 +1812,13 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 	DeletePersonalDifficulty(pUser->userID);
 
 	// 全局爆炸还原
-	if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
+	if (GetFishCount(FishType_BaoZhaFeiBiao) > 0)
 	{
 		// 最大倍数
 		int nMultipleMax = 0;
-		for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
+		for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 		{
-			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+			nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 		}
 
 		// 飞镖消耗
@@ -1830,7 +1826,7 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 	}
 
 	// 鱼信息
-	m_ArrayFishInfo.RemoveAll();
+	m_ArrayFishInfo.clear();
 	m_cbBackIndex = 0;
 	m_nAppearFishCount = 0;
 	m_bFishSwimming = FALSE;
@@ -1852,17 +1848,17 @@ bool CTableFrameSink::UserLeftDesk(GameUserInfo* pUser)
 }
 
 // 返回配置
-void CTableFrameSink::GetCustomRule( tagCustomRule & nConfigInfo )
+void CTableFrameSink::GetCustomRule(tagCustomRule& nConfigInfo)
 {
 	// 更新数值
-	CopyMemory( &nConfigInfo, &m_CustomRule, sizeof(tagCustomRule) );
+	CopyMemory(&nConfigInfo, &m_CustomRule, sizeof(tagCustomRule));
 }
 
 // 设置配置
-void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile )
+void CTableFrameSink::SetCustomRule(tagCustomRule& nConfigInfo, bool bSaveFile)
 {
 	// 更新数值
-	CopyMemory( &m_CustomRule, &nConfigInfo, sizeof(tagCustomRule) );
+	CopyMemory(&m_CustomRule, &nConfigInfo, sizeof(tagCustomRule));
 	CRedisLoader* pRedis = m_pDataManage->GetRedis();
 	RoomBaseInfo roomBasekInfo;
 	RoomBaseInfo* pRoomBaseInfo = NULL;
@@ -1879,50 +1875,50 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 		return;
 	}
 	// 保存信息
-	if ( bSaveFile )
+	if (bSaveFile)
 	{
 		// 获取当前路径
-		TCHAR szDirectoryPath[MAX_PATH + 1] = { "" }; 
+		TCHAR szDirectoryPath[MAX_PATH + 1] = { "" };
 		strcpy(szDirectoryPath, CINIFile::GetAppPath().c_str());
 
 		// 打开配置
 		tchar szConfigPath[MAX_PATH] = "";
 		sprintf(szConfigPath, "%s%s.fdx", szDirectoryPath, pRoomBaseInfo->name);
-		file * pFile = NULL;
-		pFile = fopen(szConfigPath, "wb+" );
-		if ( pFile != NULL )
+		file* pFile = NULL;
+		pFile = fopen(szConfigPath, "wb+");
+		if (pFile != NULL)
 		{
 			// 保存配置
-			fwrite( &m_CustomRule, sizeof(m_CustomRule), 1, pFile );
-			fflush( pFile );
-			fclose( pFile );
+			fwrite(&m_CustomRule, sizeof(m_CustomRule), 1, pFile);
+			fflush(pFile);
+			fclose(pFile);
 		}
 	}
 
 	// 倍数配置
-	CopyMemory( m_nMultipleValue, nConfigInfo.nMultipleValue, sizeof(m_nMultipleValue) ); 
+	CopyMemory(m_nMultipleValue, nConfigInfo.nMultipleValue, sizeof(m_nMultipleValue));
 
 	// 库存计算
 	LONGLONG lStockSetAmount = 0;
-	for( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
+	for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 	{
 		m_dRoomStock[nIndex] = (double)((double)nConfigInfo.nInitialStock * (double)m_nMultipleValue[nIndex]);
 		lStockSetAmount += (LONGLONG)(((LONGLONG)nConfigInfo.nInitialStock) * ((LONGLONG)m_nMultipleValue[nIndex]));
 	}
 	CopyMemory(m_nDifficultyStart, nConfigInfo.nDifficultyStart, sizeof(m_nDifficultyStart));
-	CopyMemory(m_nRoomDifficultyCount, nConfigInfo.nRoomDifficultyCount, sizeof(m_nRoomDifficultyCount)); 
-	CopyMemory(m_nTableDifficultyCount, nConfigInfo.nTableDifficultyCount, sizeof(m_nTableDifficultyCount)); 
-	CopyMemory(m_nPlayDifficultyCount, nConfigInfo.nPlayDifficultyCount, sizeof(m_nPlayDifficultyCount)); 
-	CopyMemory(m_dRoomDifficultyValue, nConfigInfo.dRoomDifficultyValue, sizeof(m_dRoomDifficultyValue)); 
-	CopyMemory(m_dTableDifficultyValue, nConfigInfo.dTableDifficultyValue, sizeof(m_dTableDifficultyValue)); 
-	CopyMemory(m_dPlayDifficultyValue, nConfigInfo.dPlayDifficultyValue, sizeof(m_dPlayDifficultyValue)); 
+	CopyMemory(m_nRoomDifficultyCount, nConfigInfo.nRoomDifficultyCount, sizeof(m_nRoomDifficultyCount));
+	CopyMemory(m_nTableDifficultyCount, nConfigInfo.nTableDifficultyCount, sizeof(m_nTableDifficultyCount));
+	CopyMemory(m_nPlayDifficultyCount, nConfigInfo.nPlayDifficultyCount, sizeof(m_nPlayDifficultyCount));
+	CopyMemory(m_dRoomDifficultyValue, nConfigInfo.dRoomDifficultyValue, sizeof(m_dRoomDifficultyValue));
+	CopyMemory(m_dTableDifficultyValue, nConfigInfo.dTableDifficultyValue, sizeof(m_dTableDifficultyValue));
+	CopyMemory(m_dPlayDifficultyValue, nConfigInfo.dPlayDifficultyValue, sizeof(m_dPlayDifficultyValue));
 
 	// 库存更新
 	m_lStockInitial = m_lStockInitial + (lStockSetAmount - m_lStockCurrent);
 	m_lStockCurrent = lStockSetAmount;
 
 	// 控制配置
-	m_dTaxRatio = Min_( (double)nConfigInfo.nTaxRatio / 1000.0, 0.90 );
+	m_dTaxRatio = Min_((double)nConfigInfo.nTaxRatio / 1000.0, 0.90);
 
 	// 场景配置
 	m_nCreateCount = nConfigInfo.nCreateCount;
@@ -1933,39 +1929,39 @@ void CTableFrameSink::SetCustomRule( tagCustomRule & nConfigInfo, bool bSaveFile
 	m_nBulletVelocity = nConfigInfo.nBulletVelocity;
 
 	// 活动配置
-	CopyMemory(m_nSupplyCondition, nConfigInfo.nSupplyCondition, sizeof(m_nSupplyCondition)); 
+	CopyMemory(m_nSupplyCondition, nConfigInfo.nSupplyCondition, sizeof(m_nSupplyCondition));
 	m_nLaserTime = nConfigInfo.nLaserTime;
 	m_nLaserChance = nConfigInfo.nLaserChance;
 	m_nSpeedTime = nConfigInfo.nSpeedTime;
 	m_nSpeedChance = nConfigInfo.nSpeedChance;
-	CopyMemory(m_nGiftScore, nConfigInfo.nGiftScore, sizeof(m_nGiftScore)); 
-	CopyMemory(m_nGiftChance, nConfigInfo.nGiftChance, sizeof(m_nGiftChance)); 
+	CopyMemory(m_nGiftScore, nConfigInfo.nGiftScore, sizeof(m_nGiftScore));
+	CopyMemory(m_nGiftChance, nConfigInfo.nGiftChance, sizeof(m_nGiftChance));
 	m_nNullChance = Max_(nConfigInfo.nNullChance, 2);
 
 	// 鱼配置
-	CopyMemory(m_nFishMultiple, nConfigInfo.nCatchFishMultiple, sizeof(m_nFishMultiple)); 
+	CopyMemory(m_nFishMultiple, nConfigInfo.nCatchFishMultiple, sizeof(m_nFishMultiple));
 
 	// 爆炸配置
 	m_nExplosionProportion = nConfigInfo.nExplosionProportion;
 	m_nExplosionStart = nConfigInfo.nExplosionStart;
 	m_lExplosionCondition = nConfigInfo.lExplosionCondition;
 	m_nExplosionConditionType = nConfigInfo.nExplosionConditionType;
-	m_nExplosionProportion = Max_( m_nExplosionProportion, 0 );
-	m_nExplosionProportion = Min_( m_nExplosionProportion, 1000 );
+	m_nExplosionProportion = Max_(m_nExplosionProportion, 0);
+	m_nExplosionProportion = Min_(m_nExplosionProportion, 1000);
 
 	// 更新信息
 	CMD_S_UpdateGame CMDSUpdateGame;
-	CopyMemory( CMDSUpdateGame.nMultipleValue, m_nMultipleValue, sizeof(CMDSUpdateGame.nMultipleValue) );
-	CopyMemory( CMDSUpdateGame.nCatchFishMultiple, m_nFishMultiple, sizeof(CMDSUpdateGame.nCatchFishMultiple) );
+	CopyMemory(CMDSUpdateGame.nMultipleValue, m_nMultipleValue, sizeof(CMDSUpdateGame.nMultipleValue));
+	CopyMemory(CMDSUpdateGame.nCatchFishMultiple, m_nFishMultiple, sizeof(CMDSUpdateGame.nCatchFishMultiple));
 	CMDSUpdateGame.nBulletVelocity = m_nBulletVelocity;
 	CMDSUpdateGame.nBulletCoolingTime = m_nBulletCoolingTime;
 
 	// 全房间发送
-	SendTableData(INVALID_CHAIR, SUB_S_UPDATE_GAME, &CMDSUpdateGame, sizeof(CMD_S_UpdateGame) );
+	SendTableData(INVALID_CHAIR, SUB_S_UPDATE_GAME, &CMDSUpdateGame, sizeof(CMD_S_UpdateGame));
 }
 
 // 返回个人难度
-void CTableFrameSink::GetPersonalDifficulty( CMapPersonalDifficulty & MapPersonalDifficulty )
+void CTableFrameSink::GetPersonalDifficulty(CMapPersonalDifficulty& MapPersonalDifficulty)
 {
 	/*POSITION Pos = m_MapPersonalDifficulty.GetStartPosition();
 	while ( Pos )
@@ -1987,14 +1983,14 @@ void CTableFrameSink::GetUserDifficulty(unsigned long lPlayID, double& dPersonal
 	}
 }
 // 设置个人难度
-void CTableFrameSink::SetPersonalDifficulty( unsigned long lPlayID, double dPersonalDifficulty )
+void CTableFrameSink::SetPersonalDifficulty(unsigned long lPlayID, double dPersonalDifficulty)
 {
 	//m_MapPersonalDifficulty.SetAt( lPlayID, dPersonalDifficulty );
 	m_MapPersonalDifficulty[lPlayID] = dPersonalDifficulty;
 }
 
 // 删除个人难度
-void CTableFrameSink::DeletePersonalDifficulty( unsigned long lPlayID )
+void CTableFrameSink::DeletePersonalDifficulty(unsigned long lPlayID)
 {
 	//m_MapPersonalDifficulty.RemoveKey( lPlayID );
 	m_MapPersonalDifficulty.erase(lPlayID);
@@ -2003,19 +1999,19 @@ void CTableFrameSink::DeletePersonalDifficulty( unsigned long lPlayID )
 // 清空个人难度
 void CTableFrameSink::ClearPersonalDifficulty()
 {
-	//m_MapPersonalDifficulty.RemoveAll();
+	//m_MapPersonalDifficulty.clear();
 	m_MapPersonalDifficulty.clear();
 }
 
 // 获取库存
-void CTableFrameSink::GetStock( LONGLONG & lStockInitial, LONGLONG & lStockCurrent )
+void CTableFrameSink::GetStock(LONGLONG& lStockInitial, LONGLONG& lStockCurrent)
 {
 	lStockInitial = m_lStockInitial;
 	lStockCurrent = m_lStockCurrent;
 }
 
 // 设置桌子库存
-bool CTableFrameSink::SetTableStock( unsigned short TableID, int nTableStock )
+bool CTableFrameSink::SetTableStock(unsigned short TableID, int nTableStock)
 {
 	// 判断有效
 	//if( TableID >= m_pGameServiceOption->wTableCount )
@@ -2024,10 +2020,10 @@ bool CTableFrameSink::SetTableStock( unsigned short TableID, int nTableStock )
 	//}
 
 	// 设置库存
-	for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
+	for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 	{
 		// 桌子库存
-		double & dTableStock = _TableStock(TableID, nIndex);
+		double& dTableStock = _TableStock(TableID, nIndex);
 
 		// 设置库存
 		dTableStock = nTableStock * m_nMultipleValue[nIndex];
@@ -2039,20 +2035,20 @@ bool CTableFrameSink::SetTableStock( unsigned short TableID, int nTableStock )
 
 
 // 捕鱼事件
-bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WORD wDataSize )
+bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	// 效验数据
-	ASSERT(wDataSize==sizeof(CMD_C_CatchFish));
-	if (wDataSize!=sizeof(CMD_C_CatchFish)) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_CatchFish));
+	if (wDataSize != sizeof(CMD_C_CatchFish)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
 		return true;
 	}
 	// 消息处理
-	CMD_C_CatchFish * pCatchFish = (CMD_C_CatchFish *)pBuffer;
+	CMD_C_CatchFish* pCatchFish = (CMD_C_CatchFish*)pBuffer;
 	if (!pCatchFish)
 	{
-		ERROR_LOG("错误：玩家:%d,OnSubCatchFish（捕鱼事件）空数据包",GetUserIDByDeskStation(deskStation));
+		ERROR_LOG("错误：玩家:%d,OnSubCatchFish（捕鱼事件）空数据包", GetUserIDByDeskStation(deskStation));
 		return false;
 	}
 	// 定义变量
@@ -2061,7 +2057,7 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 	// 查找子弹
 	map<int, tagFireInfo>::iterator itr = m_ArrayBulletKey[deskStation].find(pCatchFish->nBulletKey);
 
-	if( itr == m_ArrayBulletKey[deskStation].end() )
+	if (itr == m_ArrayBulletKey[deskStation].end())
 	{
 		//ASSERT(FALSE);
 
@@ -2069,39 +2065,39 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 	}
 
 	// 获取子弹信息
-	tagFireInfo & TFireInfo = itr->second;
+	tagFireInfo& TFireInfo = itr->second;
 
 	// 子弹拆分
 	int nBulletSplit = 0;
-	for ( int nIndex = 0; nIndex < FishCatch_Max; ++nIndex )
+	for (int nIndex = 0; nIndex < FishCatch_Max; ++nIndex)
 	{
 		// 有效捕获
-		if ( pCatchFish->nFishKey[nIndex] != 0 )
+		if (pCatchFish->nFishKey[nIndex] != 0)
 		{
-			
+
 			nBulletSplit++;
 		}
 	}
 
 	// 计算捕获
-	for ( int nIndex = 0; nIndex < FishCatch_Max; ++nIndex )
+	for (int nIndex = 0; nIndex < FishCatch_Max; ++nIndex)
 	{
 		// 有效捕获
-		if ( pCatchFish->nFishKey[nIndex] != 0 )
+		if (pCatchFish->nFishKey[nIndex] != 0)
 		{
 			// 鱼信息
 			bool				bRealKill = false;
-			byte				nFishType = FishType_Max;				
+			byte				nFishType = FishType_Max;
 			EnumFishState		nFishState = FishState_Normal;
 
 			// 获取鱼信息
-			for( int nDeathIndex = 0; nDeathIndex < m_ArrayFishInfo.GetCount(); nDeathIndex++ )
+			for (int nDeathIndex = 0; nDeathIndex < m_ArrayFishInfo.size(); nDeathIndex++)
 			{
 				// 获取鱼信息
-				tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
+				tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nDeathIndex);
 
 				// 捕获鱼
-				if ( TFishInfo.nFishKey == pCatchFish->nFishKey[nIndex] )
+				if (TFishInfo.nFishKey == pCatchFish->nFishKey[nIndex])
 				{
 					//printf("捕中鱼的key:%d\n", pCatchFish->nFishKey[nIndex]);
 					// 保存信息
@@ -2109,7 +2105,7 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 					nFishState = TFishInfo.nFishState;
 
 					// 有效击杀
-					if( TFishInfo.wHitChair == deskStation || TFishInfo.wHitChair == INVALID_CHAIR )
+					if (TFishInfo.wHitChair == deskStation || TFishInfo.wHitChair == INVALID_CHAIR)
 					{
 						bRealKill = true;
 					}
@@ -2119,15 +2115,15 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 			}
 
 			// 有效击杀
-			if ( bRealKill )
+			if (bRealKill)
 			{
 				// 计算捕获数量
 				LONGLONG lCatchScore = PlayCatchFish(deskStation, nBulletSplit, pCatchFish->nFishKey[nIndex], TFireInfo.nMultipleIndex, EPCT_Bullet);
 
 				// 判断鱼信息
-				if(nFishState >= FishType_BChuiTouSha /*nFishState == FishState_Killer || nFishType == FishType_BaoZhaFeiBiao || nFishType == FishType_ZhongYiTang */)
+				if (nFishState >= FishType_BChuiTouSha /*nFishState == FishState_Killer || nFishType == FishType_BaoZhaFeiBiao || nFishType == FishType_ZhongYiTang */)
 				{
-					
+
 					// 大倍发送信息
 					int nCatchMultiple = (int)(lCatchScore / m_nMultipleValue[TFireInfo.nMultipleIndex]);
 					SendAwardTip(deskStation, nFishType, nCatchMultiple, lCatchScore, EST_Cold);
@@ -2145,7 +2141,7 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void * pBuffer, WOR
 
 
 // 开火
-bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDataSize)
+bool CTableFrameSink::OnSubFire(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	// 效验数据
 	static int paoCount;
@@ -2158,15 +2154,15 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	{
 		paoCount = 0;
 	}
-	ASSERT(wDataSize==sizeof(CMD_C_Fire));
-	if (wDataSize!=sizeof(CMD_C_Fire)) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_Fire));
+	if (wDataSize != sizeof(CMD_C_Fire)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
 		ERROR_LOG("玩家ID不存在");
 		return true;
 	}
 	// 消息处理
-	CMD_C_Fire * pFire = (CMD_C_Fire *)pBuffer;
+	CMD_C_Fire* pFire = (CMD_C_Fire*)pBuffer;
 	if (!pFire)
 	{
 		ERROR_LOG("错误：玩家%d,OnSubFire发送空数据包", GetUserIDByDeskStation(deskStation));
@@ -2177,7 +2173,7 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	//WORD wChairID = pIServerUserItem->GetChairID();
 
 	// 无效倍数
-	if ( pFire->nMultipleIndex != m_nMultipleIndex[deskStation] )
+	if (pFire->nMultipleIndex != m_nMultipleIndex[deskStation])
 	{
 		return true;
 	}
@@ -2189,11 +2185,11 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	lBulletInvest = m_nMultipleValue[m_nMultipleIndex[deskStation]] * QianPao_Bullet;
 	//printf("房间等级:%d,打炮倍数:%d,%d,%lld\n",GetRoomLevel() ,m_nMultipleIndex[deskStation], m_nMultipleValue[m_nMultipleIndex[deskStation]], lBulletInvest);
 	// 扣除金币
-	if ( m_lPlayScore[deskStation] < lBulletInvest )
+	if (m_lPlayScore[deskStation] < lBulletInvest)
 	{
-	//	FishMermaidLogo( "普通子弹金币扣除失败 %d, [P %I64d] [L %I64d]", ( pIServerUserItem->IsAndroidUser() ? 1 : 0 ), m_lPlayScore[wChairID], lBulletInvest );
+		//	FishMermaidLogo( "普通子弹金币扣除失败 %d, [P %I64d] [L %I64d]", ( pIServerUserItem->IsAndroidUser() ? 1 : 0 ), m_lPlayScore[wChairID], lBulletInvest );
 
-		ASSERT( FALSE );
+		ASSERT(FALSE);
 
 		return true;
 	}
@@ -2208,11 +2204,11 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	}
 
 	//m_MapPlayExplosionCondition.Lookup(GetUserIDByDeskStation(deskStation), lPlayExplosionCondition );
-	
+
 	// 未满足条件
-	if ( lPlayExplosionCondition < m_lExplosionCondition )
+	if (lPlayExplosionCondition < m_lExplosionCondition)
 	{
-		if( m_nExplosionConditionType == ExplosionConditionType_Gun )
+		if (m_nExplosionConditionType == ExplosionConditionType_Gun)
 		{
 			lPlayExplosionCondition += 1;
 			m_MapPlayExplosionCondition[GetUserIDByDeskStation(deskStation)] = lPlayExplosionCondition;
@@ -2235,17 +2231,17 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	m_lBulletConsume[deskStation] += (long)lBulletInvest;
 
 	// 添加能量
-	if ( !m_bPlaySupply[deskStation] )
+	if (!m_bPlaySupply[deskStation])
 		m_nEnergyValue[deskStation] += 1;
-	
+
 	// 瓜分收入
-	PlayerConsume(deskStation, m_nMultipleIndex[deskStation], lBulletInvest );
+	PlayerConsume(deskStation, m_nMultipleIndex[deskStation], lBulletInvest);
 
 	// 添加子弹
 	tagFireInfo FireInfo;
 	FireInfo.nMultipleIndex = m_nMultipleIndex[deskStation];
 	FireInfo.dBulletInvest = (double)lBulletInvest;
-	m_ArrayBulletKey[deskStation].insert( map<int, tagFireInfo>::value_type(pFire->nBulletKey, FireInfo) );
+	m_ArrayBulletKey[deskStation].insert(map<int, tagFireInfo>::value_type(pFire->nBulletKey, FireInfo));
 	//printf("子弹关键值:%d,倍数索引:%d,子弹收入:%d", pFire->nBulletKey, FireInfo.nMultipleIndex, FireInfo.dBulletInvest);
 	// 设置信息
 	CMD_S_Fire CMDSFire;
@@ -2263,13 +2259,13 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 	}
 
 	// 补给箱判断(暂时未开放)
-	if ( false && !m_bPlaySupply[deskStation] && m_nSupplyValue[deskStation] != 0 && m_nEnergyValue[deskStation] >= m_nSupplyValue[deskStation] && !m_bBackExchange )
+	if (false && !m_bPlaySupply[deskStation] && m_nSupplyValue[deskStation] != 0 && m_nEnergyValue[deskStation] >= m_nSupplyValue[deskStation] && !m_bBackExchange)
 	{
 		// 生成路径
 		uint nPathIndex = deskStation;
 
 		// 创建补给箱
-		CreateFish( 1, FishType_BaoXiang, nPathIndex, 0, 0, 0.f, false, false, KillerType_No, deskStation, CShortPoint(0, 0), 0.f, false );
+		CreateFish(1, FishType_BaoXiang, nPathIndex, 0, 0, 0.f, false, false, KillerType_No, deskStation, CShortPoint(0, 0), 0.f, false);
 
 		// 清空能量
 		m_nEnergyValue[deskStation] = 0;
@@ -2283,18 +2279,18 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void * pBuffer, WORD wDa
 		// 发送提示消息
 		CMD_S_SupplyTip CMDSSupplyTip;
 		CMDSSupplyTip.wChairID = deskStation;
-		SendTableData(INVALID_CHAIR, SUB_S_SUPPLY_TIP, &CMDSSupplyTip, sizeof(CMDSSupplyTip) );
+		SendTableData(INVALID_CHAIR, SUB_S_SUPPLY_TIP, &CMDSSupplyTip, sizeof(CMDSSupplyTip));
 	}
 
 	return true;
 }
 
 // 准备激光
-bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WORD wDataSize)
+bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	// 效验数据
-	ASSERT(wDataSize==sizeof(CMD_C_BeginLaser));
-	if (wDataSize!=sizeof(CMD_C_BeginLaser) ) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_BeginLaser));
+	if (wDataSize != sizeof(CMD_C_BeginLaser)) return false;
 
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
@@ -2312,7 +2308,7 @@ bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WO
 	//}
 
 	// 消息处理
-	CMD_C_BeginLaser * pBeginLaser = (CMD_C_BeginLaser *)pBuffer;
+	CMD_C_BeginLaser* pBeginLaser = (CMD_C_BeginLaser*)pBuffer;
 	if (!pBeginLaser)
 	{
 		ERROR_LOG("错误:玩家%d，OnSubBeginLaser存在空指针", GetUserIDByDeskStation(deskStation));
@@ -2324,17 +2320,17 @@ bool CTableFrameSink::OnSubBeginLaser(BYTE deskStation, const void * pBuffer, WO
 	BeginLaser.ptPos = pBeginLaser->ptPos;
 
 	// 发送消息
-	SendTableData(INVALID_CHAIR, SUB_S_BEGIN_LASER, &BeginLaser, sizeof(BeginLaser) );
+	SendTableData(INVALID_CHAIR, SUB_S_BEGIN_LASER, &BeginLaser, sizeof(BeginLaser));
 
 	return true;
 }
 
 // 激光
-bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wDataSize)
+bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	// 效验数据
-	ASSERT(wDataSize==sizeof(CMD_C_Laser));
-	if (wDataSize!=sizeof(CMD_C_Laser)) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_Laser));
+	if (wDataSize != sizeof(CMD_C_Laser)) return false;
 
 	// 激光数值判断
 	//if ( m_nLaserPlayTime[pIServerUserItem->GetChairID()] <= 0 )
@@ -2351,7 +2347,7 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 		return false;
 	}
 	// 消息处理
-	CMD_C_Laser * pLaser = (CMD_C_Laser *)pBuffer;
+	CMD_C_Laser* pLaser = (CMD_C_Laser*)pBuffer;
 
 	if (!pLaser)
 	{
@@ -2370,10 +2366,10 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	m_nLaserPlayTime[deskStation] = 0;
 
 	// 发送消息
-	SendTableData(INVALID_CHAIR, SUB_S_LASER, &Laser, sizeof(Laser) );
+	SendTableData(INVALID_CHAIR, SUB_S_LASER, &Laser, sizeof(Laser));
 
 	// 角计算
-	FLOAT fRadian = atan2((FLOAT)( pLaser->ptEndPos.y - pLaser->ptBeginPos.y ) , (FLOAT)( pLaser->ptBeginPos.x - pLaser->ptEndPos.x ));
+	FLOAT fRadian = atan2((FLOAT)(pLaser->ptEndPos.y - pLaser->ptBeginPos.y), (FLOAT)(pLaser->ptBeginPos.x - pLaser->ptEndPos.x));
 	fRadian = -fRadian - GL_PI / 2;
 
 	// 生成激光范围
@@ -2383,33 +2379,33 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	FRBullet.Set(fRadian);
 	FVBullet.Set(pLaser->ptBeginPos.x, pLaser->ptBeginPos.y);
 	CFloatVector2 FVLaser[4];
-	FVLaser[0].Set( -50, -(Max_(DEFAULE_WIDTH, DEFAULE_HEIGHT)) );
-	FVLaser[1].Set(  50, -(Max_(DEFAULE_WIDTH, DEFAULE_HEIGHT)) );
-	FVLaser[2].Set(  50, 0 );
-	FVLaser[3].Set( -50, 0 );
-	SPBullet.Set( FVLaser, 4 );
+	FVLaser[0].Set(-50, -(Max_(DEFAULE_WIDTH, DEFAULE_HEIGHT)));
+	FVLaser[1].Set(50, -(Max_(DEFAULE_WIDTH, DEFAULE_HEIGHT)));
+	FVLaser[2].Set(50, 0);
+	FVLaser[3].Set(-50, 0);
+	SPBullet.Set(FVLaser, 4);
 
 	// 计算捕获
-	CWHArray< uint > ArrayFishCatchKey;
-	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
+	vector< uint > ArrayFishCatchKey;
+	for (int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.size(); ++nFishIndex)
 	{
 		// 获取信息
-		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt( nFishIndex );
+		tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nFishIndex);
 
 		// 计算鱼位置
 		CDoublePoint PointFish;
-		if( FishMove( PointFish, TFishInfo, pLaser->unLossTime ) == FishMoveType_Normal )
+		if (FishMove(PointFish, TFishInfo, pLaser->unLossTime) == FishMoveType_Normal)
 		{
 			// 无效位置
-			if ( PointFish.x < 0 || PointFish.x > DEFAULE_WIDTH || PointFish.y < 0 || PointFish.y > DEFAULE_HEIGHT )
+			if (PointFish.x < 0 || PointFish.x > DEFAULE_WIDTH || PointFish.y < 0 || PointFish.y > DEFAULE_HEIGHT)
 			{
 				continue;
 			}
 
 			// 比较位置
-			if( SPBullet.PointInShape( CFloatTransform( FVBullet, FRBullet ), CFloatVector2(PointFish.x, PointFish.y) ) )
+			if (SPBullet.PointInShape(CFloatTransform(FVBullet, FRBullet), CFloatVector2(PointFish.x, PointFish.y)))
 			{
-				ArrayFishCatchKey.Add( TFishInfo.nFishKey );
+				ArrayFishCatchKey.emplace_back(TFishInfo.nFishKey);
 			}
 		}
 	}
@@ -2418,10 +2414,10 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 	LONGLONG lCatchScore = 0;
 
 	// 计算捕获
-	for ( int nFishCatchKeyIndex = 0; nFishCatchKeyIndex < ArrayFishCatchKey.GetCount(); nFishCatchKeyIndex++ )
+	for (int nFishCatchKeyIndex = 0; nFishCatchKeyIndex < ArrayFishCatchKey.size(); nFishCatchKeyIndex++)
 	{
 		// 计算捕获
-		lCatchScore += PlayCatchFish(deskStation, (int)ArrayFishCatchKey.GetCount(), ArrayFishCatchKey[nFishCatchKeyIndex], m_nMultipleIndex[deskStation], EPCT_Laser);
+		lCatchScore += PlayCatchFish(deskStation, (int)ArrayFishCatchKey.size(), ArrayFishCatchKey[nFishCatchKeyIndex], m_nMultipleIndex[deskStation], EPCT_Laser);
 	}
 
 	// 大倍发送信息
@@ -2432,7 +2428,7 @@ bool CTableFrameSink::OnSubLaser(BYTE deskStation, const void * pBuffer, WORD wD
 }
 
 // 延迟
-bool CTableFrameSink::OnSubDelay(BYTE deskStation, const void * pBuffer, WORD wDataSize)
+bool CTableFrameSink::OnSubDelay(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	ASSERT(wDataSize == 0);
 	if (wDataSize != 0) return false;
@@ -2445,7 +2441,7 @@ bool CTableFrameSink::OnSubDelay(BYTE deskStation, const void * pBuffer, WORD wD
 
 	// 计算延迟
 	DWORD dwTime = GetSysMilliseconds();
-	if ( dwTime < m_nPlayDelay[deskStation] )
+	if (dwTime < m_nPlayDelay[deskStation])
 		Delay.nDelay = ULONG_MAX - m_nPlayDelay[deskStation] + dwTime;
 	else
 		Delay.nDelay = dwTime - m_nPlayDelay[deskStation];
@@ -2454,24 +2450,24 @@ bool CTableFrameSink::OnSubDelay(BYTE deskStation, const void * pBuffer, WORD wD
 	Delay.wChairID = deskStation;
 
 	// 机器人随机延时
-	if( IsAndroidUser(deskStation) )
+	if (IsAndroidUser(deskStation))
 	{
-		Delay.nDelay = rand()%50 + 50;
+		Delay.nDelay = rand() % 50 + 50;
 	}
 
 	// 发送消息
-	SendTableData(INVALID_CHAIR, SUB_S_DELAY, &Delay, sizeof(CMD_S_Delay) );
+	SendTableData(INVALID_CHAIR, SUB_S_DELAY, &Delay, sizeof(CMD_S_Delay));
 
 	return true;
 }
 
 
 // 语音
-bool CTableFrameSink::OnSubSpeech(BYTE deskStation, const void * pBuffer, WORD wDataSize)
+bool CTableFrameSink::OnSubSpeech(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	// 效验数据
-	ASSERT(wDataSize==sizeof(CMD_C_Speech));
-	if (wDataSize!=sizeof(CMD_C_Speech)) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_Speech));
+	if (wDataSize != sizeof(CMD_C_Speech)) return false;
 
 	//// 消息处理
 	//CMD_C_Speech * pSpeech = (CMD_C_Speech *)pBuffer;
@@ -2490,18 +2486,18 @@ bool CTableFrameSink::OnSubSpeech(BYTE deskStation, const void * pBuffer, WORD w
 }
 
 // 倍数选择
-bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD wDataSize)
+bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void* pBuffer, WORD wDataSize)
 {
 	// 效验数据
-	ASSERT(wDataSize==sizeof(CMD_C_Multiple));
-	if (wDataSize!=sizeof(CMD_C_Multiple)) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_Multiple));
+	if (wDataSize != sizeof(CMD_C_Multiple)) return false;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
 		ERROR_LOG("错误:玩家%d不存在!", deskStation);
 		return false;
 	}
 	// 消息处理
-	CMD_C_Multiple * pMultiple = (CMD_C_Multiple *)pBuffer;
+	CMD_C_Multiple* pMultiple = (CMD_C_Multiple*)pBuffer;
 	if (!pMultiple)
 	{
 		ERROR_LOG("错误:玩家%d,倍数选择OnSubMultiple空指针", GetUserIDByDeskStation(deskStation));
@@ -2511,7 +2507,7 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	WORD wChairID = deskStation;
 
 	// 判断信息
-	if ( pMultiple->nMultipleIndex >= Multiple_Max || pMultiple->nMultipleIndex < 0 )
+	if (pMultiple->nMultipleIndex >= Multiple_Max || pMultiple->nMultipleIndex < 0)
 	{
 		ERROR_LOG("玩家%d设置倍数失败, 超过有效值。", deskStation);
 
@@ -2521,7 +2517,7 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 	}
 
 	// 激光和宝箱过滤
-	if ( m_nLaserPlayTime[deskStation] > 0 || m_bPlaySupply[deskStation] )
+	if (m_nLaserPlayTime[deskStation] > 0 || m_bPlaySupply[deskStation])
 	{
 		ERROR_LOG("活动期间，玩家%d,ID:%d设置倍数无效,激光：%d,补给箱:%d。", deskStation, GetUserIDByDeskStation(deskStation), m_nLaserPlayTime[deskStation], m_bPlaySupply[deskStation]);
 
@@ -2543,14 +2539,14 @@ bool CTableFrameSink::OnSubMultiple(BYTE deskStation, const void * pBuffer, WORD
 }
 
 // 控制信息
-bool CTableFrameSink::OnSubControl(BYTE deskStation, VOID * pData, WORD wDataSize )
+bool CTableFrameSink::OnSubControl(BYTE deskStation, VOID* pData, WORD wDataSize)
 {
 	// 效验数据
-	ASSERT(wDataSize==sizeof(CMD_C_Control));
-	if (wDataSize!=sizeof(CMD_C_Control)) return false;
+	ASSERT(wDataSize == sizeof(CMD_C_Control));
+	if (wDataSize != sizeof(CMD_C_Control)) return false;
 
 	// 定义变量
-	CMD_C_Control * pControl = (CMD_C_Control*)pData;
+	CMD_C_Control* pControl = (CMD_C_Control*)pData;
 	if (GetUserIDByDeskStation(deskStation) <= 0)
 	{
 		ERROR_LOG("错误:玩家%d不存在!", deskStation);
@@ -2568,23 +2564,23 @@ bool CTableFrameSink::OnSubControl(BYTE deskStation, VOID * pData, WORD wDataSiz
 }
 
 // 创建鱼
-uint CTableFrameSink::CreateFishEx( byte cbCount, 
-								   byte cbFishType /*= FishType_Max*/, 
-								   tagBezierPoint TBezierPoint[BEZIER_POINT_MAX] /*= NULL*/, 
-								   int nBezierCount /*= 0*/, 
-								   uint unCreateTime /*= 0*/, 
-								   uint unIntervalTime /*= 1000*/, 
-								   float fRotateAngle /*= 0.f*/, 
-								   bool bCanSpecial /*= true*/, 
-								   bool bCanAquatic /* = true */, 
-								   EnumKillerType nKillerType /*= KillerType_No*/, 
-								   WORD wHitChair /*= INVALID_CHAIR*/, 
-								   CShortPoint PointOffSet /*= CShortPoint(0,0)*/, 
-								   float fInitialAngle /*= 0.f*/, 
-								   bool bRepeatCreate /*= true */ )
+uint CTableFrameSink::CreateFishEx(byte cbCount,
+	byte cbFishType /*= FishType_Max*/,
+	tagBezierPoint TBezierPoint[BEZIER_POINT_MAX] /*= NULL*/,
+	int nBezierCount /*= 0*/,
+	uint unCreateTime /*= 0*/,
+	uint unIntervalTime /*= 1000*/,
+	float fRotateAngle /*= 0.f*/,
+	bool bCanSpecial /*= true*/,
+	bool bCanAquatic /* = true */,
+	EnumKillerType nKillerType /*= KillerType_No*/,
+	WORD wHitChair /*= INVALID_CHAIR*/,
+	CShortPoint PointOffSet /*= CShortPoint(0,0)*/,
+	float fInitialAngle /*= 0.f*/,
+	bool bRepeatCreate /*= true */)
 {
 	// 无效路径
-	if ( TBezierPoint == NULL || nBezierCount == 0 )
+	if (TBezierPoint == NULL || nBezierCount == 0)
 	{
 		//_Assert( false );
 
@@ -2593,14 +2589,14 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 
 	// 玩家数量
 	int nPlayCount = 0;
-	for( int nSite = 0; nSite < PlayChair_Max; ++nSite )
+	for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
 	{
-		if( GetUserIDByDeskStation(nSite) > 0 )
+		if (GetUserIDByDeskStation(nSite) > 0)
 			nPlayCount++;
 	}
 
 	// 创建种类
-	if ( cbFishType == FishType_Max )
+	if (cbFishType == FishType_Max)
 	{
 		// 大鱼几率
 		int ChuiTouSha = 4;
@@ -2614,7 +2610,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 		int HuaFei1 = 40;
 		int HuaFei2 = 40;
 
-		if( GetFishCount(FishType_BChuiTouSha) >= 1 ) ChuiTouSha = 0;
+		if (GetFishCount(FishType_BChuiTouSha) >= 1) ChuiTouSha = 0;
 		if (GetFishCount(FishType_BJinJuChiSha) >= 1) JinJuChiSha = 0;
 		if (GetFishCount(FishType_BJinKuiJiaYu) >= 1) JinKuiJiaYu = 0;
 		if (GetFishCount(FishType_BJinChuiTouSha) >= 1) JinChuiTouSha = 0;
@@ -2642,7 +2638,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			int JinShaYu = 0;
 			int JinHuSha = 0;
 		}
-		if (GetFishCount(FishType_Hong_Bao)  >= 1)
+		if (GetFishCount(FishType_Hong_Bao) >= 1)
 		{
 			HongBao = 0;
 		}
@@ -2652,7 +2648,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			HuaFei2 = 0;
 		}
 		// 随机鱼
-		cbFishType = RandomArea(FishType_Normal_Max, 2, 5, 5, 20, 20, 20, 20, 20, 10, 10, 10, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, ChuiTouSha, JinJuChiSha, JinKuiJiaYu, JinChuiTouSha, JinShaYu, JinHuSha, 0,HongBao, HuaFei1,HuaFei2);
+		cbFishType = RandomArea(FishType_Normal_Max, 2, 5, 5, 20, 20, 20, 20, 20, 10, 10, 10, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, ChuiTouSha, JinJuChiSha, JinKuiJiaYu, JinChuiTouSha, JinShaYu, JinHuSha, 0, HongBao, HuaFei1, HuaFei2);
 		//鱼王刷新时间
 		if (m_FishKingTime == 0)
 		{
@@ -2660,7 +2656,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			m_bFushBoss = false;
 			m_bFushSence = false;
 		}
-		else if (!m_bIsFushBoss && m_FishKingTime > 0 && (GetSysMilliseconds() - m_FishKingTime) >m_FishKingIntervalTime && GetFishCount(FishType_BOSS) <= 0)
+		else if (!m_bIsFushBoss && m_FishKingTime > 0 && (GetSysMilliseconds() - m_FishKingTime) > m_FishKingIntervalTime&& GetFishCount(FishType_BOSS) <= 0)
 		{
 			m_bFushSence = true;
 			m_bIsFushBoss = true;
@@ -2677,7 +2673,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 			m_FishKingTime = GetSysMilliseconds();
 		}
 
-		if (GetFishCount(FishType_BOSS) <= 0 && m_bIsFushBegin && cbFishType!= FishType_BOSS)
+		if (GetFishCount(FishType_BOSS) <= 0 && m_bIsFushBegin && cbFishType != FishType_BOSS)
 		{
 			m_bFushSence = false;
 			m_bIsFushBoss = false;
@@ -2687,24 +2683,24 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 
 	// 鱼分数
 	int nFishScore = 0;
-	RAND_MIN_MAX(nFishScore, m_nFishMultiple[cbFishType][0], m_nFishMultiple[cbFishType][1] );
+	RAND_MIN_MAX(nFishScore, m_nFishMultiple[cbFishType][0], m_nFishMultiple[cbFishType][1]);
 
 	//  宝箱保存当前倍数
-	if ( cbFishType == FishType_BaoXiang && wHitChair != INVALID_CHAIR )
+	if (cbFishType == FishType_BaoXiang && wHitChair != INVALID_CHAIR)
 	{
 		nFishScore = m_nMultipleValue[m_nMultipleIndex[wHitChair]];
 	}
 
 	// 游动时间
 	uint unSwimmiTime = 0;
-	for( int nBezierIndex = 0; nBezierIndex < nBezierCount; ++nBezierIndex )
+	for (int nBezierIndex = 0; nBezierIndex < nBezierCount; ++nBezierIndex)
 		unSwimmiTime += TBezierPoint[nBezierIndex].Time;
 
 	// 杀手鱼限制
 	int nKillerIndex = int_max;
-	if( nKillerType == KillerType_One && cbFishType < FishType_Small_Max )
+	if (nKillerType == KillerType_One && cbFishType < FishType_Small_Max)
 	{
-		nKillerIndex = rand()%cbCount;
+		nKillerIndex = rand() % cbCount;
 	}
 
 	// 死亡几率
@@ -2713,12 +2709,12 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 	// 循环创建
 	int nIndex = 0;
 	const uint unCurrentTime = GetSysMilliseconds();
-	ASSERT( unCurrentTime >= m_nStartTime );
-	while ( nIndex < cbCount )
+	ASSERT(unCurrentTime >= m_nStartTime);
+	while (nIndex < cbCount)
 	{
 		// 特殊鱼
-		bool bSpecial = false;				
-		if( GetFishSpecialCount() < 2 && bCanSpecial && m_nFishKingTime == 0 && m_nFishKing[cbFishType] == 0 && cbFishType < FishType_Small_Max && nFishScore > 0 && nFishScore <= 10 && RandomArea(2, 3, 19) == 0 )
+		bool bSpecial = false;
+		if (GetFishSpecialCount() < 2 && bCanSpecial && m_nFishKingTime == 0 && m_nFishKing[cbFishType] == 0 && cbFishType < FishType_Small_Max && nFishScore > 0 && nFishScore <= 10 && RandomArea(2, 3, 19) == 0)
 		{
 			m_nFishKing[cbFishType] = 30;
 			m_nFishKingTime = 45 - (nPlayCount * 5);
@@ -2726,38 +2722,38 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 		}
 
 		// 停留鱼鱼
-		bool bAquatic = false;	
-		if( bCanAquatic && nFishScore < 20 && RandomArea(2, 1, 30) == 0 && cbFishType != FishType_BaoXiang )
+		bool bAquatic = false;
+		if (bCanAquatic && nFishScore < 20 && RandomArea(2, 1, 30) == 0 && cbFishType != FishType_BaoXiang)
 		{
 			bAquatic = true;
 		}
 
 		// 基本信息
 		tagFishInfo FishInfo;
-		FishInfo.nFishKey = Max_( 1, m_nAppearFishCount + 1);
+		FishInfo.nFishKey = Max_(1, m_nAppearFishCount + 1);
 		FishInfo.nFishType = cbFishType;
 		FishInfo.unCreateTime = (unCurrentTime - m_nStartTime) + unCreateTime + nIndex * unIntervalTime;
 		FishInfo.unOverTime = unSwimmiTime;
 		FishInfo.nScoreChance = nFishScore;
-		FishInfo.dCurChance	= dCurChance;
+		FishInfo.dCurChance = dCurChance;
 		FishInfo.fRotateAngle = fRotateAngle;
 		FishInfo.PointOffSet = PointOffSet;
 		FishInfo.wHitChair = wHitChair;
 		FishInfo.nFishScore = nFishScore;
-		FishInfo.nBezierCount = nBezierCount; 
+		FishInfo.nBezierCount = nBezierCount;
 		FishInfo.bRepeatCreate = bRepeatCreate;
 		FishInfo.fInitialAngle = fInitialAngle;
-		CopyMemory( FishInfo.TBezierPoint, TBezierPoint, sizeof(FishInfo.TBezierPoint) );
+		CopyMemory(FishInfo.TBezierPoint, TBezierPoint, sizeof(FishInfo.TBezierPoint));
 
-		if ( nIndex == nKillerIndex || nKillerType == KillerType_All )
+		if (nIndex == nKillerIndex || nKillerType == KillerType_All)
 		{
 			FishInfo.nFishState = FishState_Killer;
 		}
-		else if ( bSpecial )
+		else if (bSpecial)
 		{
 			FishInfo.nFishState = FishState_King;
 		}
-		else if ( bAquatic )
+		else if (bAquatic)
 		{
 			FishInfo.nFishState = FishState_Aquatic;
 		}
@@ -2770,7 +2766,7 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 		m_nAppearFishCount++;
 
 		// 添加数据
-		m_ArrayFishInfo.Add(FishInfo);
+		m_ArrayFishInfo.emplace_back(FishInfo);
 
 		// 发送鱼信息
 		SendFish(FishInfo);
@@ -2784,71 +2780,71 @@ uint CTableFrameSink::CreateFishEx( byte cbCount,
 
 
 // 创建鱼
-uint CTableFrameSink::CreateFish( byte cbCount, 
-								  byte cbFishType		/* = FishType_Max */, 
-								  uint nPathIndex		/* = uint_max */,
-								  uint unCreateTime		/* = 0 */,
-								  uint unIntervalTime	/* = 1000 */,
-								  float fRotateAngle	/* = 0.f */, 
-								  bool bCanSpecial		/* = true */, 
-								  bool bCanAquatic		/* = true */, 
-								  EnumKillerType nKillerType /* = KillerType_No */,
-								  WORD wHitChair		/* = INVALID_CHAIR */,
-								  CShortPoint PointOffSet /*= CShortPoint(0,0)*/, 
-								  float fInitialAngle /*= 0.f*/, 
-								  bool bRepeatCreate /*= true*/)
+uint CTableFrameSink::CreateFish(byte cbCount,
+	byte cbFishType		/* = FishType_Max */,
+	uint nPathIndex		/* = uint_max */,
+	uint unCreateTime		/* = 0 */,
+	uint unIntervalTime	/* = 1000 */,
+	float fRotateAngle	/* = 0.f */,
+	bool bCanSpecial		/* = true */,
+	bool bCanAquatic		/* = true */,
+	EnumKillerType nKillerType /* = KillerType_No */,
+	WORD wHitChair		/* = INVALID_CHAIR */,
+	CShortPoint PointOffSet /*= CShortPoint(0,0)*/,
+	float fInitialAngle /*= 0.f*/,
+	bool bRepeatCreate /*= true*/)
 {
 
 	// 随机路径
 	int nBezierCount = 0;
 	tagBezierPoint TBezierPoint[BEZIER_POINT_MAX];
-	if ( (int64)nPathIndex >= m_ArrayFishPathPositive.GetCount() )
+	if ((int64)nPathIndex >= m_ArrayFishPathPositive.size())
 	{
 		// 无指定
-		RandomPath( cbFishType, TBezierPoint, nBezierCount );
+		RandomPath(cbFishType, TBezierPoint, nBezierCount);
 	}
 	else
 	{
 		// 获取固定路径
-		ASSERT(nPathIndex < (uint)m_ArrayFishPathPositive.GetCount() );
-		CWHArray< tagBezierPoint * > * pArrayBezierPoint = &(m_ArrayFishPathPositive[nPathIndex]->ArrayBezierPoint);
+		ASSERT(nPathIndex < (uint)m_ArrayFishPathPositive.size());
+		vector< tagBezierPoint* >* pArrayBezierPoint = &(m_ArrayFishPathPositive[nPathIndex]->ArrayBezierPoint);
 
 		// 赋值路径
-		ASSERT( pArrayBezierPoint->GetCount() > 0 && pArrayBezierPoint->GetCount() <= BEZIER_POINT_MAX );
-		nBezierCount = (int)pArrayBezierPoint->GetCount();
-		for ( int nIndex = 0; nIndex < nBezierCount; ++nIndex )
+		ASSERT(pArrayBezierPoint->size() > 0 && pArrayBezierPoint->size() <= BEZIER_POINT_MAX);
+		nBezierCount = (int)pArrayBezierPoint->size();
+		for (int nIndex = 0; nIndex < nBezierCount; ++nIndex)
 		{
 			// 获取路径
-			tagBezierPoint * pBezierPoint = pArrayBezierPoint->GetAt(nIndex);
+			tagBezierPoint* pBezierPoint = pArrayBezierPoint->at(nIndex);
 			if (!pBezierPoint)
 			{
 				ERROR_LOG("错误:获取鱼路径错误");
 				return false;
 			}
 			// 赋值信息
-			CopyMemory( &TBezierPoint[nIndex], pBezierPoint, sizeof(tagBezierPoint) );
+			CopyMemory(&TBezierPoint[nIndex], pBezierPoint, sizeof(tagBezierPoint));
 		}
 	}
 
-	return CreateFishEx( cbCount, cbFishType, TBezierPoint, nBezierCount, unCreateTime, unIntervalTime, fRotateAngle, bCanSpecial, bCanAquatic, nKillerType, wHitChair, PointOffSet, fInitialAngle, bRepeatCreate );
+	return CreateFishEx(cbCount, cbFishType, TBezierPoint, nBezierCount, unCreateTime, unIntervalTime, fRotateAngle, bCanSpecial, bCanAquatic, nKillerType, wHitChair, PointOffSet, fInitialAngle, bRepeatCreate);
 }
 
 // 创建鱼
-uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
+uint CTableFrameSink::ResetFish(tagFishInfo& TFishInfo)
 {
 	// 当前时间
 	int nIndex = 0;
 	const uint nCurrentTime = GetSysMilliseconds();
-	ASSERT( nCurrentTime >= m_nStartTime );
+	ASSERT(nCurrentTime >= m_nStartTime);
 
 	// 基本信息
 	tagFishInfo TFishCreateInfo;
-	TFishCreateInfo.nFishKey = Max_( 1, m_nAppearFishCount + 1);
+	TFishCreateInfo.nFishKey = Max_(1, m_nAppearFishCount + 1);
 	TFishCreateInfo.nFishType = TFishInfo.nFishType;
 	TFishCreateInfo.unCreateTime = nCurrentTime - m_nStartTime;
 	TFishCreateInfo.unOverTime = TFishInfo.unOverTime;
 	TFishCreateInfo.nScoreChance = TFishInfo.nFishScore;
-	TFishCreateInfo.dCurChance	= TFishInfo.dCurChance;
+	TFishCreateInfo.dCurChance = TFishInfo.dCurChance;
 	TFishCreateInfo.fRotateAngle = TFishInfo.fRotateAngle;
 	TFishCreateInfo.PointOffSet = TFishInfo.PointOffSet;
 	TFishCreateInfo.nFishState = TFishInfo.nFishState;
@@ -2859,7 +2855,7 @@ uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
 	//TFishCreateInfo.PSFish.Set( MonsterVec[TFishInfo.nFishType], MONSTER_VEC );
 
 	// 修改路径
-	for ( int nIndex = TFishInfo.nBezierCount - 1, nAntiIndex = 0; nIndex >= 0; --nIndex, ++nAntiIndex )
+	for (int nIndex = TFishInfo.nBezierCount - 1, nAntiIndex = 0; nIndex >= 0; --nIndex, ++nAntiIndex)
 	{
 		// 修改路径信息
 		TFishCreateInfo.TBezierPoint[nAntiIndex].BeginPoint = TFishInfo.TBezierPoint[nIndex].EndPoint;
@@ -2883,7 +2879,7 @@ uint CTableFrameSink::ResetFish( tagFishInfo & TFishInfo )
 
 
 // 随机路径
-void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX], int & nBezierCount )
+void CTableFrameSink::RandomPath(byte cbFishType, tagBezierPoint TBezierPoint[BEZIER_POINT_MAX], int& nBezierCount)
 {
 	// BOSS
 	if (m_bIsFushBoss && cbFishType >= FishType_Moderate_Max)
@@ -2902,46 +2898,46 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 		// 路径数量
 		nBezierCount = 1;
 	}
-	else if( cbFishType >= FishType_Moderate_Max )
+	else if (cbFishType >= FishType_Moderate_Max)
 	{
 		// 创建路径
 		TBezierPoint[0].BeginPoint.x = -200;
-		TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX( 100, 700 );
+		TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX(100, 700);
 		TBezierPoint[0].EndPoint.x = 1480;
-		TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX( 100, 700 );
-		TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
-		TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX( 0, 800 );
-		TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
-		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 0, 800 );
+		TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX(100, 700);
+		TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX(0, 1280);
+		TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX(0, 800);
+		TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX(0, 1280);
+		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX(0, 800);
 		TBezierPoint[0].Time = 30000;
 
 		// 路径数量
 		nBezierCount = 1;
 	}
 	// 中鱼
-	else if( cbFishType >= FishType_Small_Max )
+	else if (cbFishType >= FishType_Small_Max)
 	{
 		// 创建路径
-		if ( RAND_TRUE_FALSE(50, 50) )
+		if (RAND_TRUE_FALSE(50, 50))
 		{
 			TBezierPoint[0].BeginPoint.x = -200;
-			TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX( 100, 700 );
+			TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX(100, 700);
 			TBezierPoint[0].EndPoint.x = 1480;
-			TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX( 100, 700 );
+			TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX(100, 700);
 		}
 		else
 		{
-			TBezierPoint[0].BeginPoint.x = RAND_EQUAL_MIN_MAX( 100, 1180 );
+			TBezierPoint[0].BeginPoint.x = RAND_EQUAL_MIN_MAX(100, 1180);
 			TBezierPoint[0].BeginPoint.y = -200;
-			TBezierPoint[0].EndPoint.x = RAND_EQUAL_MIN_MAX( 100, 1180 );
+			TBezierPoint[0].EndPoint.x = RAND_EQUAL_MIN_MAX(100, 1180);
 			TBezierPoint[0].EndPoint.y = 1000;
 		}
 
-		TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX( 200, 1080 );
-		TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX( 200, 600 );
-		TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX( 200, 1080 );
-		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 200, 600 );
-		TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX( 15000, 23000 );
+		TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX(200, 1080);
+		TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX(200, 600);
+		TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX(200, 1080);
+		TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX(200, 600);
+		TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX(15000, 23000);
 
 		// 路径数量
 		nBezierCount = 1;
@@ -2951,29 +2947,29 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 	{
 
 		// 第一种模式
-		if ( RAND_TRUE_FALSE(20, 80) )
+		if (RAND_TRUE_FALSE(20, 80))
 		{
 			// 创建路径
-			if ( RAND_TRUE_FALSE(50, 50) )
+			if (RAND_TRUE_FALSE(50, 50))
 			{
 				TBezierPoint[0].BeginPoint.x = -200;
-				TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX( 0, 800 );
+				TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX(0, 800);
 				TBezierPoint[0].EndPoint.x = 1480;
-				TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX( 0, 800 );
+				TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX(0, 800);
 			}
 			else
 			{
-				TBezierPoint[0].BeginPoint.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
+				TBezierPoint[0].BeginPoint.x = RAND_EQUAL_MIN_MAX(0, 1280);
 				TBezierPoint[0].BeginPoint.y = -200;
-				TBezierPoint[0].EndPoint.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
+				TBezierPoint[0].EndPoint.x = RAND_EQUAL_MIN_MAX(0, 1280);
 				TBezierPoint[0].EndPoint.y = 1000;
 			}
 
-			TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX( 200, 1080 );
-			TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX( 200, 600 );
-			TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX( 200, 1080 );
-			TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 200, 600 );
-			TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX( 10000, 15000 );
+			TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX(200, 1080);
+			TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX(200, 600);
+			TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX(200, 1080);
+			TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX(200, 600);
+			TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX(10000, 15000);
 
 			// 路径数量
 			nBezierCount = 1;
@@ -2982,37 +2978,37 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 		else
 		{
 			// 创建路径
-			if ( RAND_TRUE_FALSE(50, 50) )
+			if (RAND_TRUE_FALSE(50, 50))
 			{
 				TBezierPoint[0].BeginPoint.x = -200;
-				TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX( 0, 800 );
+				TBezierPoint[0].BeginPoint.y = RAND_EQUAL_MIN_MAX(0, 800);
 				TBezierPoint[1].EndPoint.x = 1480;
-				TBezierPoint[1].EndPoint.y = RAND_EQUAL_MIN_MAX( 0, 800 );
+				TBezierPoint[1].EndPoint.y = RAND_EQUAL_MIN_MAX(0, 800);
 			}
 			else
 			{
-				TBezierPoint[0].BeginPoint.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
+				TBezierPoint[0].BeginPoint.x = RAND_EQUAL_MIN_MAX(0, 1280);
 				TBezierPoint[0].BeginPoint.y = -200;
-				TBezierPoint[1].EndPoint.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
+				TBezierPoint[1].EndPoint.x = RAND_EQUAL_MIN_MAX(0, 1280);
 				TBezierPoint[1].EndPoint.y = 1000;
 			}
 
-			TBezierPoint[0].EndPoint.x = RAND_EQUAL_MIN_MAX( 200, 1208 );
-			TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX( 100, 800 );
+			TBezierPoint[0].EndPoint.x = RAND_EQUAL_MIN_MAX(200, 1208);
+			TBezierPoint[0].EndPoint.y = RAND_EQUAL_MIN_MAX(100, 800);
 			TBezierPoint[1].BeginPoint.x = TBezierPoint[0].EndPoint.x;
 			TBezierPoint[1].BeginPoint.y = TBezierPoint[0].EndPoint.y;
 
-			TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX( 200, 1080 );
-			TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX( 200, 600 );
-			TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX( 200, 1080 );
-			TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX( 200, 600 );
-			TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX( 7000, 9000 );
+			TBezierPoint[0].KeyOne.x = RAND_EQUAL_MIN_MAX(200, 1080);
+			TBezierPoint[0].KeyOne.y = RAND_EQUAL_MIN_MAX(200, 600);
+			TBezierPoint[0].KeyTwo.x = RAND_EQUAL_MIN_MAX(200, 1080);
+			TBezierPoint[0].KeyTwo.y = RAND_EQUAL_MIN_MAX(200, 600);
+			TBezierPoint[0].Time = RAND_EQUAL_MIN_MAX(7000, 9000);
 
-			TBezierPoint[1].KeyOne.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
-			TBezierPoint[1].KeyOne.y = RAND_EQUAL_MIN_MAX( 0, 800 );
-			TBezierPoint[1].KeyTwo.x = RAND_EQUAL_MIN_MAX( 0, 1280 );
-			TBezierPoint[1].KeyTwo.y = RAND_EQUAL_MIN_MAX( 0, 800 );
-			TBezierPoint[1].Time = RAND_EQUAL_MIN_MAX( 7000, 15000 );
+			TBezierPoint[1].KeyOne.x = RAND_EQUAL_MIN_MAX(0, 1280);
+			TBezierPoint[1].KeyOne.y = RAND_EQUAL_MIN_MAX(0, 800);
+			TBezierPoint[1].KeyTwo.x = RAND_EQUAL_MIN_MAX(0, 1280);
+			TBezierPoint[1].KeyTwo.y = RAND_EQUAL_MIN_MAX(0, 800);
+			TBezierPoint[1].Time = RAND_EQUAL_MIN_MAX(7000, 15000);
 
 			// 路径数量
 			nBezierCount = 2;
@@ -3020,11 +3016,11 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 	}
 
 	// 随机反转路径
-	if( RAND_TRUE_FALSE(50, 50) )
+	if (RAND_TRUE_FALSE(50, 50))
 	{
 		// 遍历路径
 		tagBezierPoint TBezierPointAnti[BEZIER_POINT_MAX];
-		for ( int nIndex = nBezierCount - 1, nAntiIndex = 0; nIndex >= 0; --nIndex, ++nAntiIndex )
+		for (int nIndex = nBezierCount - 1, nAntiIndex = 0; nIndex >= 0; --nIndex, ++nAntiIndex)
 		{
 			// 修改路径信息
 			TBezierPointAnti[nAntiIndex].BeginPoint = TBezierPoint[nIndex].EndPoint;
@@ -3038,7 +3034,7 @@ void CTableFrameSink::RandomPath( byte cbFishType, tagBezierPoint TBezierPoint[B
 }
 
 // 发送鱼信息
-void CTableFrameSink::SendFish( tagFishInfo & TFishInfo )
+void CTableFrameSink::SendFish(tagFishInfo& TFishInfo)
 {
 	// 构造消息
 	CMD_S_FishCreate FishCreate;
@@ -3051,16 +3047,16 @@ void CTableFrameSink::SendFish( tagFishInfo & TFishInfo )
 	FishCreate.PointOffSet = TFishInfo.PointOffSet;
 	FishCreate.nBezierCount = TFishInfo.nBezierCount;
 	FishCreate.fInitialAngle = TFishInfo.fInitialAngle;
-	CopyMemory( &FishCreate.TBezierPoint, &TFishInfo.TBezierPoint, sizeof(FishCreate.TBezierPoint) );
+	CopyMemory(&FishCreate.TBezierPoint, &TFishInfo.TBezierPoint, sizeof(FishCreate.TBezierPoint));
 	//printf("创建鱼时间:%d", FishCreate.unCreateTime);
 	// 发送消息
-	SendTableData(INVALID_CHAIR, SUB_S_CREATE_FISHS, &FishCreate, sizeof(CMD_S_FishCreate) );
+	SendTableData(INVALID_CHAIR, SUB_S_CREATE_FISHS, &FishCreate, sizeof(CMD_S_FishCreate));
 
 	// 发送停留消息
-	for( int nIndex = 0; nIndex < TFishInfo.ArrayStayInfo.GetCount(); ++nIndex )
+	for (int nIndex = 0; nIndex < TFishInfo.ArrayStayInfo.size(); ++nIndex)
 	{
 		// 获取停留信息
-		tagStayInfo & TStayInfo = TFishInfo.ArrayStayInfo.GetAt( nIndex );
+		tagStayInfo& TStayInfo = TFishInfo.ArrayStayInfo.at(nIndex);
 
 		// 定义消息
 		CMD_S_StayFish CMDSStayFish;
@@ -3074,14 +3070,14 @@ void CTableFrameSink::SendFish( tagFishInfo & TFishInfo )
 }
 
 // 特殊鱼阵
-uint CTableFrameSink::SpecialFishMatrix( byte cbFishType, CDoublePoint PointFish )
+uint CTableFrameSink::SpecialFishMatrix(byte cbFishType, CDoublePoint PointFish)
 {
 	// 鱼位置
 	int nPathIndex = RAND_TRUE_FALSE(50, 50) ? 6 : 7;
 
 	// 偏移位置
 	CShortPoint PointOffSet;
-	tagBezierPoint * pBezierPoint = m_ArrayFishPathPositive.GetAt(nPathIndex)->ArrayBezierPoint.GetAt(0);
+	tagBezierPoint* pBezierPoint = m_ArrayFishPathPositive.at(nPathIndex)->ArrayBezierPoint.at(0);
 	if (!pBezierPoint)
 	{
 		ERROR_LOG("错误:特殊鱼阵获取错误");
@@ -3095,499 +3091,499 @@ uint CTableFrameSink::SpecialFishMatrix( byte cbFishType, CDoublePoint PointFish
 
 	// 36个
 	int nCountMax = 36;
-	if (m_iFishShoalLev > 0 && m_iFishShoalLev <50)
+	if (m_iFishShoalLev > 0 && m_iFishShoalLev < 50)
 	{
 		nCountMax = m_iFishShoalLev;
 	}
-	for( int nCount = 0; nCount < nCountMax; ++nCount )
+	for (int nCount = 0; nCount < nCountMax; ++nCount)
 	{
 		// 创建杀手
-		bool bKiller = !bCreateKiller && (RandomArea( 2, 2, nCountMax - nCount - 1 ) == 0);
-		if ( bKiller ) bCreateKiller = true;
+		bool bKiller = !bCreateKiller && (RandomArea(2, 2, nCountMax - nCount - 1) == 0);
+		if (bKiller) bCreateKiller = true;
 
 		// 创建3圈鱼
-		CreateFish( 3, cbFishType, nPathIndex, 0, 1000, GL_PI * 2.f / nCountMax * nCount, false, false, bKiller ? KillerType_One : KillerType_No, INVALID_CHAIR, PointOffSet, 0.f, false );
+		CreateFish(3, cbFishType, nPathIndex, 0, 1000, GL_PI * 2.f / nCountMax * nCount, false, false, bKiller ? KillerType_One : KillerType_No, INVALID_CHAIR, PointOffSet, 0.f, false);
 	}
 
 	return 0;
 }
 // 鱼群建立
-uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
+uint CTableFrameSink::GroupOfFish(uint nBeginTime /* = 0 */)
 {
 	BYTE Grop = rand() % 5;
-	if (m_iFinshGroup >=0 && m_iFinshGroup<5)
+	if (m_iFinshGroup >= 0 && m_iFinshGroup < 5)
 	{
 		Grop = m_iFinshGroup;
 	}
 	//ERROR_LOG("创建鱼阵类型：%d,鱼阵等级:%d", Grop, m_iFinshLeve);
 	// 判断种类
-	switch(Grop)
+	switch (Grop)
 	{
 	case 0:
+	{
+		// 创建大
+		int nFishTime[10] = { 0, 3000, 6000, 9000, 12000, 15500, 18000, 22000, 27500, 32000 };
+		for (int nFishIndex = FishType_BDengLongYu; nFishIndex <= FishType_BMoGuiYu; ++nFishIndex)
 		{
-			// 创建大
-			int nFishTime[10] = {0, 3000, 6000, 9000, 12000, 15500, 18000, 22000, 27500, 32000 };
-			for ( int nFishIndex = FishType_BDengLongYu; nFishIndex <= FishType_BMoGuiYu; ++nFishIndex )
-			{
-				CreateFish( 1, nFishIndex, 8, nFishTime[nFishIndex - FishType_BDengLongYu], 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(0, 50), 0.f, false );
-				CreateFish( 1, nFishIndex, 9, nFishTime[nFishIndex - FishType_BDengLongYu], 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(0, -50), 0.f, false );
-			}
-			int nFishCount = 32;
-			// 创建鱼
-			if (m_iFinshLeve == 3)
-			{
-				nFishCount = 32;
-			}
-			else if (m_iFinshLeve == 2)
-			{
-				nFishCount = 20;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				nFishCount = 12;
-			}
-
-			for( int nIndex = 1; nIndex < nFishCount; ++nIndex )
-			{
-				CreateFish( 1, FishType_BHaiLuo, 16, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, -40), 0.f, false );
-				CreateFish( 1, FishType_BHaiLuo, 17, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, 40), 0.f, false );
-			}
-
-			nFishCount = 16;
-			if (m_iFinshLeve == 3)
-			{
-				nFishCount = 16;
-			}
-			else if (m_iFinshLeve == 2)
-			{
-				nFishCount = 12;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				nFishCount = 7;
-			}
-			for( int nIndex = 1; nIndex < nFishCount; ++nIndex )
-			{
-				CreateFish( 1, FishType_BHongWeiYu, 16, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, 70), 0.f, false );
-				CreateFish( 1, FishType_BHongWeiYu, 17, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, -70), 0.f, false );
-			}
+			CreateFish(1, nFishIndex, 8, nFishTime[nFishIndex - FishType_BDengLongYu], 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(0, 50), 0.f, false);
+			CreateFish(1, nFishIndex, 9, nFishTime[nFishIndex - FishType_BDengLongYu], 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(0, -50), 0.f, false);
 		}
-		return 52000;
-	case 1:
+		int nFishCount = 32;
+		// 创建鱼
+		if (m_iFinshLeve == 3)
 		{
+			nFishCount = 32;
+		}
+		else if (m_iFinshLeve == 2)
+		{
+			nFishCount = 20;
+		}
+		else if (m_iFinshLeve == 1)
+		{
+			nFishCount = 12;
+		}
 
-			// 创建大
-			CreateFish( 1, FishType_BMoGuiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(640, 400), 0.f, false );
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(440, 400), 0.f, false );
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(840, 400), GL_PI, false );
+		for (int nIndex = 1; nIndex < nFishCount; ++nIndex)
+		{
+			CreateFish(1, FishType_BHaiLuo, 16, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, -40), 0.f, false);
+			CreateFish(1, FishType_BHaiLuo, 17, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, 40), 0.f, false);
+		}
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(415, 199), 0.f, false );
+		nFishCount = 16;
+		if (m_iFinshLeve == 3)
+		{
+			nFishCount = 16;
+		}
+		else if (m_iFinshLeve == 2)
+		{
+			nFishCount = 12;
+		}
+		else if (m_iFinshLeve == 1)
+		{
+			nFishCount = 7;
+		}
+		for (int nIndex = 1; nIndex < nFishCount; ++nIndex)
+		{
+			CreateFish(1, FishType_BHongWeiYu, 16, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, 70), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 17, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH * nIndex / nFishCount, -70), 0.f, false);
+		}
+	}
+	return 52000;
+	case 1:
+	{
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(537, 199), 0.f, false );
+		// 创建大
+		CreateFish(1, FishType_BMoGuiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(640, 400), 0.f, false);
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(440, 400), 0.f, false);
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(840, 400), GL_PI, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(661, 199), 0.f, false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(415, 199), 0.f, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(784, 199), 0.f, false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(537, 199), 0.f, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(866, 199), 0.f, false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(661, 199), 0.f, false);
 
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(784, 199), 0.f, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(415, 600), GL_PI, false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(537, 600), GL_PI, false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(661, 600), GL_PI, false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(784, 600), GL_PI, false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(866, 600), GL_PI, false );
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 206), AngleToRadian(-15), false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(242, 298), AngleToRadian(-60), false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(222, 451), AngleToRadian(-105), false );
-
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(317, 573), AngleToRadian(-150), false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(866, 199), 0.f, false);
 
 
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(415, 600), GL_PI, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(918, 206), AngleToRadian(15), false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(537, 600), GL_PI, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1039, 298), AngleToRadian(60), false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(661, 600), GL_PI, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1059, 451), AngleToRadian(105), false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(784, 600), GL_PI, false);
 
-			CreateFish( 1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(966, 573), AngleToRadian(150), false );
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(866, 600), GL_PI, false);
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 206), AngleToRadian(-15), false);
+
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(242, 298), AngleToRadian(-60), false);
+
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(222, 451), AngleToRadian(-105), false);
+
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(317, 573), AngleToRadian(-150), false);
 
 
-			//下边一排的鱼
-			//CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(413, 125), 0.f, false );
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(518, 125), 0.f, false );	
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(918, 206), AngleToRadian(15), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(641, 125), 0.f, false );	
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1039, 298), AngleToRadian(60), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(770, 125), 0.f, false );	
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1059, 451), AngleToRadian(105), false);
 
-			//CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(869, 125), 0.f, false );	
+		CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(966, 573), AngleToRadian(150), false);
 
-			//上边一排
-		//	CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(413, 672), GL_PI, false );
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(490, 672), GL_PI, false );	
-	
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(641, 672), GL_PI, false );	
-	
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(800, 672), GL_PI, false );	
-	
+		//下边一排的鱼
+		//CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(413, 125), 0.f, false );
+
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(518, 125), 0.f, false);
+
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(641, 125), 0.f, false);
+
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(770, 125), 0.f, false);
+
+		//CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(869, 125), 0.f, false );	
+
+		//上边一排
+	//	CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(413, 672), GL_PI, false );
+
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(490, 672), GL_PI, false);
+
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(641, 672), GL_PI, false);
+
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(800, 672), GL_PI, false);
+
 		//	CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(869, 672), GL_PI, false );	
 			//弧形
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(365, 129), AngleToRadian(-10), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(365, 129), AngleToRadian(-10), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(237, 190), AngleToRadian(-40), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(237, 190), AngleToRadian(-40), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(156, 305), AngleToRadian(-70), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(156, 305), AngleToRadian(-70), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(144, 446), AngleToRadian(-100), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(144, 446), AngleToRadian(-100), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(203, 575), AngleToRadian(-130), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(203, 575), AngleToRadian(-130), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(319, 656), AngleToRadian(-160), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(319, 656), AngleToRadian(-160), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 129), AngleToRadian(10), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 129), AngleToRadian(10), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1044, 190), AngleToRadian(40), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1044, 190), AngleToRadian(40), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1125, 305), AngleToRadian(70), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1125, 305), AngleToRadian(70), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1137, 446), AngleToRadian(100), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1137, 446), AngleToRadian(100), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1078, 575), AngleToRadian(130), false );
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1078, 575), AngleToRadian(130), false);
 
-			CreateFish( 1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(962, 656), AngleToRadian(160), false );
-
-		
+		CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(962, 656), AngleToRadian(160), false);
 
 
 
-			if (m_iFinshLeve == 3)
-			{
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(456, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(497, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(579, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(620, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(702, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(743, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(825, 199), 0.f, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(456, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(497, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(579, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(620, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(702, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(743, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(825, 600), GL_PI, false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(317, 226), AngleToRadian(-30), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(274, 257), AngleToRadian(-45), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(222, 346), AngleToRadian(-75), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(215, 399), AngleToRadian(-90), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(242, 500), AngleToRadian(-120), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(274, 540), AngleToRadian(-135), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 593), AngleToRadian(-165), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(966, 226), AngleToRadian(30), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1008, 257), AngleToRadian(45), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1059, 346), AngleToRadian(75), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1067, 399), AngleToRadian(90), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1039, 500), AngleToRadian(120), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1008, 540), AngleToRadian(135), false);
-				CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(918, 593), AngleToRadian(165), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(451, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(489, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(565, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(603, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(679, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(717, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(793, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(831, 125), 0.f, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(451, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(489, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(565, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(603, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(679, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(717, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(793, 672), GL_PI, false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(831, 672), GL_PI, false);
-
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(319, 142), AngleToRadian(-20), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(276, 162), AngleToRadian(-30), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(204, 223), AngleToRadian(-50), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(176, 262), AngleToRadian(-60), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(144, 352), AngleToRadian(-80), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(139, 399), AngleToRadian(-90), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(156, 492), AngleToRadian(-110), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(176, 535), AngleToRadian(-120), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(237, 608), AngleToRadian(-140), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(276, 636), AngleToRadian(-150), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(365, 668), AngleToRadian(-170), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(962, 142), AngleToRadian(20), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1005, 162), AngleToRadian(30), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1078, 223), AngleToRadian(50), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1105, 262), AngleToRadian(60), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1137, 352), AngleToRadian(80), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1141, 399), AngleToRadian(90), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1125, 492), AngleToRadian(110), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1105, 535), AngleToRadian(120), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1044, 608), AngleToRadian(140), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1005, 636), AngleToRadian(150), false);
-				CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 668), AngleToRadian(170), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(487, 36), 0.f, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(548, 36), 0.f, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(670, 36), 0.f, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(731, 36), 0.f, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(853, 36), 0.f, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(487, 760), GL_PI, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(548, 760), GL_PI, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(670, 760), GL_PI, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(731, 760), GL_PI, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(853, 760), GL_PI, false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(303, 58), AngleToRadian(-20), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(245, 85), AngleToRadian(-30), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(149, 166), AngleToRadian(-50), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(113, 217), AngleToRadian(-60), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(70, 335), AngleToRadian(-80), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(64, 399), AngleToRadian(-90), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(86, 523), AngleToRadian(-110), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(113, 580), AngleToRadian(-120), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(194, 676), AngleToRadian(-140), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(245, 712), AngleToRadian(-150), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 755), AngleToRadian(-170), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(977, 58), AngleToRadian(20), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1034, 85), AngleToRadian(30), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1131, 166), AngleToRadian(50), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1167, 217), AngleToRadian(60), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1210, 335), AngleToRadian(80), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1216, 399), AngleToRadian(90), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1194, 523), AngleToRadian(110), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1167, 580), AngleToRadian(120), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1086, 676), AngleToRadian(140), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1034, 712), AngleToRadian(150), false);
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 755), AngleToRadian(170), false);
 
 
+		if (m_iFinshLeve == 3)
+		{
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(456, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(497, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(579, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(620, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(702, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(743, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(825, 199), 0.f, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(456, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(497, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(579, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(620, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(702, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(743, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(825, 600), GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(317, 226), AngleToRadian(-30), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(274, 257), AngleToRadian(-45), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(222, 346), AngleToRadian(-75), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(215, 399), AngleToRadian(-90), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(242, 500), AngleToRadian(-120), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(274, 540), AngleToRadian(-135), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 593), AngleToRadian(-165), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(966, 226), AngleToRadian(30), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1008, 257), AngleToRadian(45), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1059, 346), AngleToRadian(75), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1067, 399), AngleToRadian(90), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1039, 500), AngleToRadian(120), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1008, 540), AngleToRadian(135), false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(918, 593), AngleToRadian(165), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(451, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(489, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(565, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(603, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(679, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(717, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(793, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(831, 125), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(451, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(489, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(565, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(603, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(679, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(717, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(793, 672), GL_PI, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(831, 672), GL_PI, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 36), 0.f, false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(319, 142), AngleToRadian(-20), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(276, 162), AngleToRadian(-30), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(204, 223), AngleToRadian(-50), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(176, 262), AngleToRadian(-60), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(144, 352), AngleToRadian(-80), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(139, 399), AngleToRadian(-90), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(156, 492), AngleToRadian(-110), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(176, 535), AngleToRadian(-120), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(237, 608), AngleToRadian(-140), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(276, 636), AngleToRadian(-150), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(365, 668), AngleToRadian(-170), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(962, 142), AngleToRadian(20), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1005, 162), AngleToRadian(30), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1078, 223), AngleToRadian(50), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1105, 262), AngleToRadian(60), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1137, 352), AngleToRadian(80), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1141, 399), AngleToRadian(90), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1125, 492), AngleToRadian(110), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1105, 535), AngleToRadian(120), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1044, 608), AngleToRadian(140), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1005, 636), AngleToRadian(150), false);
+			CreateFish(1, FishType_BBXiaoChouYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 668), AngleToRadian(170), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(487, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(548, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(670, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(731, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(853, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(487, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(548, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(670, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(731, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(853, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(303, 58), AngleToRadian(-20), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(245, 85), AngleToRadian(-30), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(149, 166), AngleToRadian(-50), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(113, 217), AngleToRadian(-60), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(70, 335), AngleToRadian(-80), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(64, 399), AngleToRadian(-90), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(86, 523), AngleToRadian(-110), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(113, 580), AngleToRadian(-120), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(194, 676), AngleToRadian(-140), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(245, 712), AngleToRadian(-150), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 755), AngleToRadian(-170), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(977, 58), AngleToRadian(20), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1034, 85), AngleToRadian(30), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1131, 166), AngleToRadian(50), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1167, 217), AngleToRadian(60), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1210, 335), AngleToRadian(80), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1216, 399), AngleToRadian(90), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1194, 523), AngleToRadian(110), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1167, 580), AngleToRadian(120), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1086, 676), AngleToRadian(140), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1034, 712), AngleToRadian(150), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 755), AngleToRadian(170), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 36), 0.f, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 36), 0.f, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 36), 0.f, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 36), 0.f, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 760), GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 36), 0.f, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 42), AngleToRadian(-10), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 760), GL_PI, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(194, 121), AngleToRadian(-40), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 760), GL_PI, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(86, 275), AngleToRadian(-70), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 760), GL_PI, false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(70, 462), AngleToRadian(-100), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 42), AngleToRadian(-10), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(149, 631), AngleToRadian(-130), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(194, 121), AngleToRadian(-40), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(303, 739), AngleToRadian(-160), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(86, 275), AngleToRadian(-70), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 42), AngleToRadian(10), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(70, 462), AngleToRadian(-100), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1086, 121), AngleToRadian(40), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(149, 631), AngleToRadian(-130), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1194, 275), AngleToRadian(70), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(303, 739), AngleToRadian(-160), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1210, 462), AngleToRadian(100), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 42), AngleToRadian(10), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1131, 631), AngleToRadian(130), false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1086, 121), AngleToRadian(40), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(977, 739), AngleToRadian(160), false);
-			}
-			else if (m_iFinshLeve == 2)
-			{
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1194, 275), AngleToRadian(70), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1210, 462), AngleToRadian(100), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 36), 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1131, 631), AngleToRadian(130), false);
 
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 760), GL_PI, false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 760), GL_PI, false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 760), GL_PI, false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 42), AngleToRadian(-10), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(194, 121), AngleToRadian(-40), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(86, 275), AngleToRadian(-70), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(70, 462), AngleToRadian(-100), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(149, 631), AngleToRadian(-130), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(303, 739), AngleToRadian(-160), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 42), AngleToRadian(10), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1086, 121), AngleToRadian(40), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1194, 275), AngleToRadian(70), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1210, 462), AngleToRadian(100), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1131, 631), AngleToRadian(130), false);
-
-				CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(977, 739), AngleToRadian(160), false);
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				
-			}
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(977, 739), AngleToRadian(160), false);
 		}
-		return 45000;
+		else if (m_iFinshLeve == 2)
+		{
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 36), 0.f, false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 36), 0.f, false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 36), 0.f, false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(426, 760), GL_PI, false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(609, 760), GL_PI, false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(792, 760), GL_PI, false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(364, 42), AngleToRadian(-10), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(194, 121), AngleToRadian(-40), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(86, 275), AngleToRadian(-70), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(70, 462), AngleToRadian(-100), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(149, 631), AngleToRadian(-130), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(303, 739), AngleToRadian(-160), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(916, 42), AngleToRadian(10), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1086, 121), AngleToRadian(40), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1194, 275), AngleToRadian(70), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1210, 462), AngleToRadian(100), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(1131, 631), AngleToRadian(130), false);
+
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(977, 739), AngleToRadian(160), false);
+		}
+		else if (m_iFinshLeve == 1)
+		{
+
+		}
+	}
+	return 45000;
 	case 2:
+	{
+		// 创建小鱼
+		byte cbFishSmallIndex[3] = { FishType_BXiaoHuangYu, FishType_BHaiMa, FishType_BCaiBanYu };
+		uint unFishCount[3] = { 72, 48, 32 };
+		uint unFishSmallCreateTime[3] = { 0, 1000, 2000 };
+		uint fFishSmallRadius[3] = { 300, 240, 170 };
+		uint fFishSmallIntervalTime[3] = { 9000, 7000, 5000 };
+
+		if (m_iFinshLeve == 2)
 		{
-			// 创建小鱼
-			byte cbFishSmallIndex[3] = { FishType_BXiaoHuangYu, FishType_BHaiMa, FishType_BCaiBanYu };
-			uint unFishCount[3] = { 72, 48, 32 };
-			uint unFishSmallCreateTime[3] = { 0, 1000, 2000 };
-			uint fFishSmallRadius[3] = { 300, 240, 170 };
-			uint fFishSmallIntervalTime[3] = { 9000, 7000, 5000 };
-
-			if (m_iFinshLeve == 2)
-			{
-				unFishCount[0] = 35;
-				unFishCount[1] = 24;
-				unFishCount[2] = 16;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				unFishCount[0] = 20;
-				unFishCount[1] = 18;
-				unFishCount[2] = 12;
-			}
-			// 简单鱼阵
-			for( int nIndex = 0; nIndex < 3; ++nIndex )
-			{
-				CircleOfFish( cbFishSmallIndex[nIndex], unFishCount[nIndex], 8, unFishSmallCreateTime[nIndex], fFishSmallRadius[nIndex], fFishSmallIntervalTime[nIndex] );
-				CircleOfFish( cbFishSmallIndex[nIndex], unFishCount[nIndex], 9, unFishSmallCreateTime[nIndex], fFishSmallRadius[nIndex], fFishSmallIntervalTime[nIndex] );
-			}
-
-			// 创建中鱼
-			byte cbFishBigIndex = ( rand() % 6 ) + FishType_BNianYu;
-			CreateFish( 1, cbFishBigIndex, 8, 4500, 0, 0.f, false, false );
-			CreateFish( 1, cbFishBigIndex, 9, 4500, 0, 0.f, false, false );
+			unFishCount[0] = 35;
+			unFishCount[1] = 24;
+			unFishCount[2] = 16;
 		}
-		return 17000 + 6000;
+		else if (m_iFinshLeve == 1)
+		{
+			unFishCount[0] = 20;
+			unFishCount[1] = 18;
+			unFishCount[2] = 12;
+		}
+		// 简单鱼阵
+		for (int nIndex = 0; nIndex < 3; ++nIndex)
+		{
+			CircleOfFish(cbFishSmallIndex[nIndex], unFishCount[nIndex], 8, unFishSmallCreateTime[nIndex], fFishSmallRadius[nIndex], fFishSmallIntervalTime[nIndex]);
+			CircleOfFish(cbFishSmallIndex[nIndex], unFishCount[nIndex], 9, unFishSmallCreateTime[nIndex], fFishSmallRadius[nIndex], fFishSmallIntervalTime[nIndex]);
+		}
+
+		// 创建中鱼
+		byte cbFishBigIndex = (rand() % 6) + FishType_BNianYu;
+		CreateFish(1, cbFishBigIndex, 8, 4500, 0, 0.f, false, false);
+		CreateFish(1, cbFishBigIndex, 9, 4500, 0, 0.f, false, false);
+	}
+	return 17000 + 6000;
 	case 3:
+	{
+		// 创建BOSS
+		CreateFish(1, (rand() % 4) + FishType_BMoGuiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH / 2, DEFAULE_HEIGHT / 2), 0.f, false);
+
+		// 鱼位置
+		int nPathIndex6 = 6;
+		int nPathIndex7 = 7;
+
+		// 偏移位置
+		CShortPoint PointOffSet6;
+		CShortPoint PointOffSet7;
+		tagBezierPoint* pBezierPoint6 = m_ArrayFishPathPositive.at(nPathIndex6)->ArrayBezierPoint.at(0);
+		tagBezierPoint* pBezierPoint7 = m_ArrayFishPathPositive.at(nPathIndex7)->ArrayBezierPoint.at(0);
+		PointOffSet6.x = (short)(DEFAULE_WIDTH / 2 - pBezierPoint6->BeginPoint.x);
+		PointOffSet6.y = (short)(DEFAULE_HEIGHT / 2 - pBezierPoint6->BeginPoint.y);
+		PointOffSet7.x = (short)(DEFAULE_WIDTH / 2 - pBezierPoint7->BeginPoint.x);
+		PointOffSet7.y = (short)(DEFAULE_HEIGHT / 2 - pBezierPoint7->BeginPoint.y);
+
+		// 36个
+		int nCountMax = 36;
+		if (m_iFinshLeve == 2)
 		{
-			// 创建BOSS
-			CreateFish( 1, ( rand() % 4 ) + FishType_BMoGuiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(DEFAULE_WIDTH / 2, DEFAULE_HEIGHT / 2), 0.f, false );
-
-			// 鱼位置
-			int nPathIndex6 = 6;
-			int nPathIndex7 = 7;
-
-			// 偏移位置
-			CShortPoint PointOffSet6;
-			CShortPoint PointOffSet7;
-			tagBezierPoint * pBezierPoint6 = m_ArrayFishPathPositive.GetAt(nPathIndex6)->ArrayBezierPoint.GetAt(0);
-			tagBezierPoint * pBezierPoint7 = m_ArrayFishPathPositive.GetAt(nPathIndex7)->ArrayBezierPoint.GetAt(0);
-			PointOffSet6.x = (short)(DEFAULE_WIDTH / 2 - pBezierPoint6->BeginPoint.x);
-			PointOffSet6.y = (short)(DEFAULE_HEIGHT / 2 - pBezierPoint6->BeginPoint.y);
-			PointOffSet7.x = (short)(DEFAULE_WIDTH / 2 - pBezierPoint7->BeginPoint.x);
-			PointOffSet7.y = (short)(DEFAULE_HEIGHT / 2 - pBezierPoint7->BeginPoint.y);
-
-			// 36个
-			int nCountMax = 36;
-			if (m_iFinshLeve == 2)
-			{
-				nCountMax = 20;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				nCountMax = 12;
-			}
-			for( int nCount = 0; nCount < nCountMax; ++nCount )
-			{
-				// 创建5圈鱼
-				CreateFish( 1, FishType_BBXiaoChouYu, nPathIndex7, 0, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false );
-				CreateFish( 1, FishType_BHaiLuo, nPathIndex6, 3000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet6, 0.f, false );
-				CreateFish( 1, FishType_BHongWeiYu, nPathIndex7, 6000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false );
-				CreateFish( 1, FishType_BHaiLuo, nPathIndex6, 9000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet6, 0.f, false );
-				CreateFish( 1, FishType_BHongWeiYu, nPathIndex7, 12000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false );
-			}
-
+			nCountMax = 20;
 		}
-		return 45000;
+		else if (m_iFinshLeve == 1)
+		{
+			nCountMax = 12;
+		}
+		for (int nCount = 0; nCount < nCountMax; ++nCount)
+		{
+			// 创建5圈鱼
+			CreateFish(1, FishType_BBXiaoChouYu, nPathIndex7, 0, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false);
+			CreateFish(1, FishType_BHaiLuo, nPathIndex6, 3000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet6, 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, nPathIndex7, 6000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false);
+			CreateFish(1, FishType_BHaiLuo, nPathIndex6, 9000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet6, 0.f, false);
+			CreateFish(1, FishType_BHongWeiYu, nPathIndex7, 12000, 0, GL_PI * 2.f / nCountMax * nCount, false, false, KillerType_No, INVALID_CHAIR, PointOffSet7, 0.f, false);
+		}
+
+	}
+	return 45000;
 	case 4:
+	{
+		// 创建BOSS
+		byte cbFishBigIndex = (rand() % 4) + FishType_BMoGuiYu;
+		CreateFish(1, cbFishBigIndex, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(318, 400), 0.f, false);
+		CreateFish(1, cbFishBigIndex, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(957, 400), 0.f, false);
+
+		// 创建鱼
+		int nCountMax = 18;
+		if (m_iFinshLeve == 2)
 		{
-			// 创建BOSS
-			byte cbFishBigIndex = ( rand() % 4 ) + FishType_BMoGuiYu;
-			CreateFish( 1, cbFishBigIndex, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(318, 400), 0.f, false );
-			CreateFish( 1, cbFishBigIndex, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, CShortPoint(957, 400), 0.f, false );
-
-			// 创建鱼
-			int nCountMax = 18;
-			if (m_iFinshLeve == 2)
-			{
-				nCountMax = 14;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				nCountMax = 10;
-			}
-			for( int nIndex = 0; nIndex < nCountMax; ++nIndex )
-			{
-				double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
-				CreateFish( 1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 140) ), fAngle + GL_PI, false );
-				CreateFish( 1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 140) ), fAngle + GL_PI, false );
-			}
-
-			// 创建鱼
-			nCountMax = 36;
-			if (m_iFinshLeve == 2)
-			{
-				nCountMax = 22;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				nCountMax = 11;
-			}
-			for( int nIndex = 0; nIndex < nCountMax; ++nIndex )
-			{
-				double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
-				CreateFish( 1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 225) ), fAngle + GL_PI, false );
-				CreateFish( 1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 225) ), fAngle + GL_PI, false );
-			}
-
-			// 创建鱼
-			nCountMax = 72;
-			if (m_iFinshLeve == 2)
-			{
-				nCountMax = 32;
-			}
-			else if (m_iFinshLeve == 1)
-			{
-				nCountMax = 20;
-			}
-			for( int nIndex = 0; nIndex < nCountMax; ++nIndex )
-			{
-				double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
-				CreateFish( 1, FishType_BXiaoHuangYu, 15, 1000, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 295) ), fAngle + GL_PI, false );
-				CreateFish( 1, FishType_BXiaoHuangYu, 15, 1000, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate( CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 295) ), fAngle + GL_PI, false );
-			}
+			nCountMax = 14;
 		}
-		return 45000;
+		else if (m_iFinshLeve == 1)
+		{
+			nCountMax = 10;
+		}
+		for (int nIndex = 0; nIndex < nCountMax; ++nIndex)
+		{
+			double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate(CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 140)), fAngle + GL_PI, false);
+			CreateFish(1, FishType_BHongWeiYu, 15, 0, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate(CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 140)), fAngle + GL_PI, false);
+		}
+
+		// 创建鱼
+		nCountMax = 36;
+		if (m_iFinshLeve == 2)
+		{
+			nCountMax = 22;
+		}
+		else if (m_iFinshLeve == 1)
+		{
+			nCountMax = 11;
+		}
+		for (int nIndex = 0; nIndex < nCountMax; ++nIndex)
+		{
+			double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
+			CreateFish(1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate(CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 225)), fAngle + GL_PI, false);
+			CreateFish(1, FishType_BCaiBanYu, 15, 500, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate(CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 225)), fAngle + GL_PI, false);
+		}
+
+		// 创建鱼
+		nCountMax = 72;
+		if (m_iFinshLeve == 2)
+		{
+			nCountMax = 32;
+		}
+		else if (m_iFinshLeve == 1)
+		{
+			nCountMax = 20;
+		}
+		for (int nIndex = 0; nIndex < nCountMax; ++nIndex)
+		{
+			double fAngle = GL_PI * 2.0 / nCountMax * nIndex;
+			CreateFish(1, FishType_BXiaoHuangYu, 15, 1000, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate(CShortPoint(318, 400), fAngle, CShortPoint(318, 400 + 295)), fAngle + GL_PI, false);
+			CreateFish(1, FishType_BXiaoHuangYu, 15, 1000, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, Rotate(CShortPoint(957, 400), fAngle, CShortPoint(957, 400 + 295)), fAngle + GL_PI, false);
+		}
+	}
+	return 45000;
 	}
 
 	return 0;
@@ -3595,15 +3591,15 @@ uint CTableFrameSink::GroupOfFish( uint nBeginTime /* = 0 */ )
 
 
 // 圆圈鱼
-uint CTableFrameSink::CircleOfFish( byte cbFishType, int nFishCount, int nPathIndex, uint unCreateTime, uint nRadius, uint unIntervalTime )
+uint CTableFrameSink::CircleOfFish(byte cbFishType, int nFishCount, int nPathIndex, uint unCreateTime, uint nRadius, uint unIntervalTime)
 {
 	// 创建鱼
-	for( int nIndex = 0; nIndex < nFishCount; ++nIndex )
+	for (int nIndex = 0; nIndex < nFishCount; ++nIndex)
 	{
 		float fRadius = (float)nRadius;
-		CShortPoint PointOffset(0, (short)(fRadius * sin( GL_PI * 2.f / (float)nFishCount * (float)nIndex )));
-		uint unCreateOffsetTime = (uint)(( fRadius - (fRadius * cos( GL_PI * 2.f / (float)nFishCount * (float)nIndex )) ) / (fRadius * 2.f) * unIntervalTime);
-		CreateFish( 1, cbFishType, nPathIndex, unCreateTime + unCreateOffsetTime, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, PointOffset );
+		CShortPoint PointOffset(0, (short)(fRadius * sin(GL_PI * 2.f / (float)nFishCount * (float)nIndex)));
+		uint unCreateOffsetTime = (uint)((fRadius - (fRadius * cos(GL_PI * 2.f / (float)nFishCount * (float)nIndex))) / (fRadius * 2.f) * unIntervalTime);
+		CreateFish(1, cbFishType, nPathIndex, unCreateTime + unCreateOffsetTime, 0, 0.f, false, false, KillerType_No, INVALID_CHAIR, PointOffset);
 	}
 
 	return nFishCount;
@@ -3611,10 +3607,10 @@ uint CTableFrameSink::CircleOfFish( byte cbFishType, int nFishCount, int nPathIn
 
 
 // 获取路径时间
-uint CTableFrameSink::PathTime( tagFishPath * pFishPath )
+uint CTableFrameSink::PathTime(tagFishPath* pFishPath)
 {
 	uint unTime = 0;
-	for( int i = 0; i < pFishPath->ArrayBezierPoint.GetCount(); ++i )
+	for (int i = 0; i < pFishPath->ArrayBezierPoint.size(); ++i)
 	{
 		unTime += pFishPath->ArrayBezierPoint[i]->Time;
 	}
@@ -3622,7 +3618,7 @@ uint CTableFrameSink::PathTime( tagFishPath * pFishPath )
 }
 
 // 计算当前鱼位置
-EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & TFish, uint nCustomLossTime /*= uint_max*/ )
+EnumFishMoveType CTableFrameSink::FishMove(CDoublePoint& ptPos, tagFishInfo& TFish, uint nCustomLossTime /*= uint_max*/)
 {
 	// 判断当前时间
 	uint nCurrentTime = GetSysMilliseconds();
@@ -3631,13 +3627,13 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 	uint nLossTime = nCurrentTime - m_nStartTime;
 
 	// 更新时间
-	if ( nCustomLossTime != uint_max )
+	if (nCustomLossTime != uint_max)
 	{
 		nLossTime = nCustomLossTime;
 	}
 
 	// 未到创建时间
-	if ( nLossTime < TFish.unCreateTime )
+	if (nLossTime < TFish.unCreateTime)
 	{
 		return FishMoveType_Next;
 	}
@@ -3646,27 +3642,27 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 	uint nBeforeStayTime = 0;
 
 	// 停留时间
-	for( int nStayIndex = 0; nStayIndex < TFish.ArrayStayInfo.GetCount(); ++nStayIndex )
+	for (int nStayIndex = 0; nStayIndex < TFish.ArrayStayInfo.size(); ++nStayIndex)
 	{
 		// 获取信息
-		tagStayInfo & nStayInfo = TFish.ArrayStayInfo.GetAt(nStayIndex);
+		tagStayInfo& nStayInfo = TFish.ArrayStayInfo.at(nStayIndex);
 
 		// 获取时间
-		uint nStayStart = nStayInfo.nStayStart;				
+		uint nStayStart = nStayInfo.nStayStart;
 		uint nStayTime = nStayInfo.nStayTime;
 
 		// 比较信息
-		if( nLossTime <= nStayStart )
+		if (nLossTime <= nStayStart)
 		{
 			break;
 		}
-		else if( nLossTime > nStayStart && nLossTime < nStayStart + nStayTime )
+		else if (nLossTime > nStayStart&& nLossTime < nStayStart + nStayTime)
 		{
 			nLossTime = nStayStart;
 
 			break;
 		}
-		else if ( nLossTime >= nStayStart + nStayTime )
+		else if (nLossTime >= nStayStart + nStayTime)
 		{
 			nBeforeStayTime += nStayTime;
 		}
@@ -3683,10 +3679,10 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 	bool bSuccess = false;
 
 	// 获取游动索引
-	for ( int nBezierIndex = 0; nBezierIndex < TFish.nBezierCount ; ++nBezierIndex )
+	for (int nBezierIndex = 0; nBezierIndex < TFish.nBezierCount; ++nBezierIndex)
 	{
 		// 获取信息
-		tagBezierPoint * pBezierPoint = &TFish.TBezierPoint[nBezierIndex];
+		tagBezierPoint* pBezierPoint = &TFish.TBezierPoint[nBezierIndex];
 		if (!pBezierPoint)
 		{
 			ERROR_LOG("错误:FishMove获取鱼信息错误");
@@ -3695,7 +3691,7 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 		unAllTime += pBezierPoint->Time;
 
 		// 查找当前路径
-		if ( unSwimTime <= unAllTime )
+		if (unSwimTime <= unAllTime)
 		{
 			nMoveIndex = nBezierIndex;
 			bSuccess = true;
@@ -3707,18 +3703,18 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 	}
 
 	// 路径结束
-	if ( !bSuccess )
+	if (!bSuccess)
 	{
 		return FishMoveType_Delete;
 	}
 
 	// 计算贝塞尔
-	double dProportion = (double)(unSwimCurTime)/(double)(TFish.TBezierPoint[nMoveIndex].Time);
+	double dProportion = (double)(unSwimCurTime) / (double)(TFish.TBezierPoint[nMoveIndex].Time);
 	CDoublePoint ptPosition(0.0, 0.0);
-	ptPosition = PointOnCubicBezier( &TFish.TBezierPoint[nMoveIndex], dProportion );
+	ptPosition = PointOnCubicBezier(&TFish.TBezierPoint[nMoveIndex], dProportion);
 
 	// 计算旋转
-	ptPos = Rotate(TFish.TBezierPoint[0].BeginPoint, TFish.fRotateAngle, ptPosition );
+	ptPos = Rotate(TFish.TBezierPoint[0].BeginPoint, TFish.fRotateAngle, ptPosition);
 
 	// 偏移
 	ptPos.x += TFish.PointOffSet.x;
@@ -3731,13 +3727,13 @@ EnumFishMoveType CTableFrameSink::FishMove( CDoublePoint & ptPos, tagFishInfo & 
 void CTableFrameSink::FishFastMove()
 {
 	// 全局爆炸还原
-	if ( GetFishCount(FishType_BaoZhaFeiBiao) > 0 )
+	if (GetFishCount(FishType_BaoZhaFeiBiao) > 0)
 	{
 		// 最大倍数
 		int nMultipleMax = 0;
-		for ( int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex )
+		for (int nMultipleIndex = 0; nMultipleIndex < Multiple_Max; ++nMultipleIndex)
 		{
-			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nMultipleIndex] );
+			nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nMultipleIndex]);
 		}
 
 		// 飞镖消耗
@@ -3746,13 +3742,13 @@ void CTableFrameSink::FishFastMove()
 
 	// 清除鱼
 	m_nFishTeamTime = 0;
-	m_ArrayFishInfo.RemoveAll();
+	m_ArrayFishInfo.clear();
 
 	// 清空宝箱信息
-	for ( int nSite = 0; nSite < PlayChair_Max; ++nSite )
+	for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
 	{
 		// 宝箱启动中
-		if( m_bPlaySupply[nSite] )
+		if (m_bPlaySupply[nSite])
 		{
 			m_nEnergyValue[nSite] = 0;
 			m_bPlaySupply[nSite] = false;
@@ -3764,17 +3760,17 @@ void CTableFrameSink::FishFastMove()
 }
 
 // 获取鱼数量
-uint CTableFrameSink::GetFishCount( uint nType )
+uint CTableFrameSink::GetFishCount(uint nType)
 {
 	// 判断类型
-	if( nType >= FishType_Max )
+	if (nType >= FishType_Max)
 		return 0;
 
 	// 鱼数量
 	uint nFishCount = 0;
-	for ( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
+	for (int nIndex = 0; nIndex < m_ArrayFishInfo.size(); ++nIndex)
 	{
-		if( m_ArrayFishInfo.GetAt(nIndex).nFishType == nType )
+		if (m_ArrayFishInfo.at(nIndex).nFishType == nType)
 		{
 			nFishCount++;
 		}
@@ -3788,9 +3784,9 @@ uint CTableFrameSink::GetFishSpecialCount()
 {
 	// 鱼数量
 	uint nFishCount = 0;
-	for ( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
+	for (int nIndex = 0; nIndex < m_ArrayFishInfo.size(); ++nIndex)
 	{
-		if( m_ArrayFishInfo.GetAt(nIndex).nFishState == FishState_King )
+		if (m_ArrayFishInfo.at(nIndex).nFishState == FishState_King)
 		{
 			nFishCount++;
 		}
@@ -3800,36 +3796,36 @@ uint CTableFrameSink::GetFishSpecialCount()
 }
 
 // 鱼冰冻
-void CTableFrameSink::FishFreeze( uint unLossTime )
+void CTableFrameSink::FishFreeze(uint unLossTime)
 {
 	// 设置停留
 	uint nStayStart = unLossTime;
 	uint nStayTime = 5000;
 
 	// 鱼信息
-	for( int nIndex = 0; nIndex < m_ArrayFishInfo.GetCount(); ++nIndex )
+	for (int nIndex = 0; nIndex < m_ArrayFishInfo.size(); ++nIndex)
 	{
 		// 获取鱼信息
-		tagFishInfo & TFish = m_ArrayFishInfo.GetAt(nIndex);
+		tagFishInfo& TFish = m_ArrayFishInfo.at(nIndex);
 
 		// 未到时间
-		if ( nStayStart < TFish.unCreateTime )
+		if (nStayStart < TFish.unCreateTime)
 		{
 			continue;
 		}
 
 		// 获取鱼数据
-		CArrayStay & ArrayStayInfo = TFish.ArrayStayInfo;
+		CArrayStay& ArrayStayInfo = TFish.ArrayStayInfo;
 
 		// 对比最后一个
 		bool bUpLast = false;
-		if ( ArrayStayInfo.GetCount() > 0 )
+		if (ArrayStayInfo.size() > 0)
 		{
 			// 获取最后一个
-			tagStayInfo & nStaylast = ArrayStayInfo.GetAt( ArrayStayInfo.GetCount() - 1 );
+			tagStayInfo& nStaylast = ArrayStayInfo.at(ArrayStayInfo.size() - 1);
 
 			// 相同时间
-			if ( nStaylast.nStayStart + nStaylast.nStayTime >= nStayStart )
+			if (nStaylast.nStayStart + nStaylast.nStayTime >= nStayStart)
 			{
 				// 更新时间
 				nStaylast.nStayTime = nStayStart - nStaylast.nStayStart + 5000;
@@ -3840,9 +3836,9 @@ void CTableFrameSink::FishFreeze( uint unLossTime )
 				nStayTime = nStaylast.nStayTime;
 			}
 		}
-	
+
 		// 添加信息
-		if( !bUpLast )
+		if (!bUpLast)
 		{
 			// 设置信息
 			tagStayInfo nStayInfo;
@@ -3850,7 +3846,7 @@ void CTableFrameSink::FishFreeze( uint unLossTime )
 			nStayInfo.nStayTime = nStayTime;
 
 			// 添加信息
-			ArrayStayInfo.Add(nStayInfo);
+			ArrayStayInfo.emplace_back(nStayInfo);
 		}
 
 		// 定义消息
@@ -3865,7 +3861,7 @@ void CTableFrameSink::FishFreeze( uint unLossTime )
 }
 
 // 发送消息
-bool CTableFrameSink::SendTableData(WORD wChairID, WORD wSubCmdID, VOID * pData, WORD wDataSize, unsigned int handleCode/* = 0*/)
+bool CTableFrameSink::SendTableData(WORD wChairID, WORD wSubCmdID, VOID* pData, WORD wDataSize, unsigned int handleCode/* = 0*/)
 {
 	// 判断桌子
 	if (wChairID == INVALID_CHAIR)
@@ -3884,10 +3880,10 @@ bool CTableFrameSink::SendTableData(WORD wChairID, WORD wSubCmdID, VOID * pData,
 }
 
 // 发送奖励提示
-bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMultiple, LONGLONG lFishScore, EnumScoreType nScoreType )
+bool CTableFrameSink::SendAwardTip(WORD wChairID, byte nFishType, int nFishMultiple, LONGLONG lFishScore, EnumScoreType nScoreType)
 {
 	// 有效倍数才发送
-	if ( nFishMultiple <= 0 || lFishScore <= 0 )
+	if (nFishMultiple <= 0 || lFishScore <= 0)
 		return false;
 
 	// 获取玩家
@@ -3910,7 +3906,7 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 		return false;
 	}
 	// 比赛房间不发送
-	if ( m_bCompetitionRoom )
+	if (m_bCompetitionRoom)
 		return true;
 
 	// 倍数太小
@@ -3932,7 +3928,7 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 	//SendTableData(INVALID_CHAIR, SUB_S_AWARD_TIP, &CMDSAwardTip, sizeof(CMD_S_AwardTip) );
 
 	// 发送桌子消息
-	if( m_bAwardChatBox && nFishMultiple >= m_nAwardMinMultiple && lFishScore >= 0 )
+	if (m_bAwardChatBox && nFishMultiple >= m_nAwardMinMultiple && lFishScore >= 0)
 	{
 		// 鱼信息
 		tchar szFishName[FishType_Max][22] = {
@@ -3945,7 +3941,7 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 
 
 		GameUserInfo data;
-		
+
 		if (!GetUserData(wChairID, data))
 		{
 			return false;
@@ -3977,11 +3973,11 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 		{
 			Multiple = 1;
 		}
-			sprintf(StrAwardTip,"恭喜玩家#FF0000|【%s】#00FAFA|在【打BOOS】捕获了#FF12FA|【%s】#FFFAFA|获得#FFFA12|金币#I1|%2f #C1",
-				data.name, szFishName[nFishType], /*nFishMultiple,*/ (double)(lFishScore)/ Multiple);
+		sprintf(StrAwardTip, "恭喜玩家#FF0000|【%s】#00FAFA|在【打BOOS】捕获了#FF12FA|【%s】#FFFAFA|获得#FFFA12|金币#I1|%2f #C1",
+			data.name, szFishName[nFishType], /*nFishMultiple,*/ (double)(lFishScore) / Multiple);
 		//}
 
-		
+
 		// 金币捕获
 		//if( nScoreType == EST_Cold )
 		//{
@@ -4015,14 +4011,14 @@ bool CTableFrameSink::SendAwardTip( WORD wChairID, byte nFishType, int nFishMult
 }
 
 // 初始化鱼池
-void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
+void CTableFrameSink::InitializationFishpond(uint nBeginTime /*= 0*/)
 {
 
 	// 玩家数量
 	int nPlayCount = 0;
-	for( int nSite = 0; nSite < PlayChair_Max; ++nSite )
+	for (int nSite = 0; nSite < PlayChair_Max; ++nSite)
 	{
-		if( GetUserIDByDeskStation(nSite) != NULL )
+		if (GetUserIDByDeskStation(nSite) != NULL)
 			nPlayCount++;
 	}
 
@@ -4030,23 +4026,23 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 	int nCreateCount = 0;
 	if (nPlayCount > 1)
 	{
-		nCreateCount = Min_(nPlayCount-1, 4) * m_iAddFinshCount + m_nCreateCount;
+		nCreateCount = Min_(nPlayCount - 1, 4) * m_iAddFinshCount + m_nCreateCount;
 	}
 	else
 	{
 		nCreateCount = Min_(nPlayCount, 4) * m_iAddFinshCount + m_nCreateCount;
 	}
-	
-	
+
+
 	// 获取有效数量
 	int nValidCount = 0;
-	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
+	for (int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.size(); ++nFishIndex)
 	{
-		nValidCount += (m_ArrayFishInfo.GetAt(nFishIndex).bRepeatCreate) ? 1 : 0;
+		nValidCount += (m_ArrayFishInfo.at(nFishIndex).bRepeatCreate) ? 1 : 0;
 	}
 
 	// 判断数量
-	if( nValidCount > nCreateCount )
+	if (nValidCount > nCreateCount)
 	{
 		return;
 	}
@@ -4055,16 +4051,16 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 	uint unCreateTime = nBeginTime;
 
 	// 小鱼群
-	if( (m_nAppearFishCount % 16) == 0 )
+	if ((m_nAppearFishCount % 16) == 0)
 	{
 		// 小鱼数量
 		int nNumber = (rand() % 3) + 3;
-		byte cbFishType = RandomArea(6, 21, 19, 18, 16,13,12);
+		byte cbFishType = RandomArea(6, 21, 19, 18, 16, 13, 12);
 
 		// 正常鱼群
-		if ( rand() % 2 == 0 )
+		if (rand() % 2 == 0)
 		{
-			CreateFish( nNumber, cbFishType, uint_max, unCreateTime, 1000, 0.f, true, true, KillerType_No, INVALID_CHAIR, CShortPoint(0, 0), 0.f, false );
+			CreateFish(nNumber, cbFishType, uint_max, unCreateTime, 1000, 0.f, true, true, KillerType_No, INVALID_CHAIR, CShortPoint(0, 0), 0.f, false);
 		}
 		// 爆炸鱼群
 		else
@@ -4072,19 +4068,19 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 			// 随机路径
 			int nBezierCount = 0;
 			tagBezierPoint TBezierPoint[BEZIER_POINT_MAX];
-			RandomPath( cbFishType, TBezierPoint, nBezierCount );
-			CreateFishEx( 1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(-50, 0), 0.f, false );
-			CreateFishEx( 1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(50, 0), 0.f, false );
-			CreateFishEx( 1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(0, 50), 0.f, false );
-			CreateFishEx( 1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(0, -50), 0.f, false );
+			RandomPath(cbFishType, TBezierPoint, nBezierCount);
+			CreateFishEx(1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(-50, 0), 0.f, false);
+			CreateFishEx(1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(50, 0), 0.f, false);
+			CreateFishEx(1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(0, 50), 0.f, false);
+			CreateFishEx(1, cbFishType, TBezierPoint, nBezierCount, unCreateTime, 0, 0.f, true, false, KillerType_All, INVALID_CHAIR, CShortPoint(0, -50), 0.f, false);
 		}
 	}
 	// 单条鱼
 	else
 	{
-		if (rand()%100 < m_iCreatJiLv)
+		if (rand() % 100 < m_iCreatJiLv)
 		{
-			CreateFish(1, RandomArea(7, 30, 30,25,20,10,10,10), uint_max, unCreateTime, 0, 0.f, true, true, (RandomArea(2, 1, 99) == 0) ? KillerType_One : KillerType_No);
+			CreateFish(1, RandomArea(7, 30, 30, 25, 20, 10, 10, 10), uint_max, unCreateTime, 0, 0.f, true, true, (RandomArea(2, 1, 99) == 0) ? KillerType_One : KillerType_No);
 		}
 		else
 		{
@@ -4095,12 +4091,12 @@ void CTableFrameSink::InitializationFishpond( uint nBeginTime /*= 0*/ )
 }
 
 // 捕获到鱼
-LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint nFishCatchKey, int nMultipleIndex, EnumPlayCatchType nPlayCatchType )
+LONGLONG CTableFrameSink::PlayCatchFish(WORD wChairID, int nBulletSplit, uint nFishCatchKey, int nMultipleIndex, EnumPlayCatchType nPlayCatchType)
 {
 	// 暂无倍数
-	if( nMultipleIndex == Multiple_Max )
+	if (nMultipleIndex == Multiple_Max)
 	{
-		_Assert( false && "捕获鱼倍数异常。" );
+		_Assert(false && "捕获鱼倍数异常。");
 
 		return 0;
 	}
@@ -4113,23 +4109,23 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	int nDeathCount = 0;
 
 	// 更新分数几率
-	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
+	for (int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.size(); ++nFishIndex)
 	{
 		// 获取信息
-		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
+		tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nFishIndex);
 
 		// 更新分数几率
 		TFishInfo.nScoreChance = TFishInfo.nFishScore;
 	}
 
 	// 遍历鱼
-	for( int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.GetCount(); ++nFishIndex )
+	for (int nFishIndex = 0; nFishIndex < m_ArrayFishInfo.size(); ++nFishIndex)
 	{
 		// 获取信息
-		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
+		tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nFishIndex);
 
 		// 非捕获鱼
-		if ( TFishInfo.nFishKey != nFishCatchKey )
+		if (TFishInfo.nFishKey != nFishCatchKey)
 		{
 			continue;
 		}
@@ -4139,7 +4135,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		nDeathCount += 1;
 
 		// 特殊鱼过滤
-		if ( TFishInfo.nFishState != FishState_Killer /*&& TFishInfo.nFishType != FishType_ZhongYiTang*/ )
+		if (TFishInfo.nFishState != FishState_Killer /*&& TFishInfo.nFishType != FishType_ZhongYiTang*/)
 		{
 			// 返回
 			break;
@@ -4147,27 +4143,27 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 
 		// 有效位置
 		CDoublePoint PointFish;
-		if ( FishMove( PointFish, TFishInfo ) != FishMoveType_Normal )
+		if (FishMove(PointFish, TFishInfo) != FishMoveType_Normal)
 		{
 			// 返回
 			break;
 		}
 
 		// 计算周边鱼
-		for( int nFishPeripheryIndex = 0; nFishPeripheryIndex < m_ArrayFishInfo.GetCount(); ++nFishPeripheryIndex )
+		for (int nFishPeripheryIndex = 0; nFishPeripheryIndex < m_ArrayFishInfo.size(); ++nFishPeripheryIndex)
 		{
 			// 获取信息
-			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nFishPeripheryIndex);
+			tagFishInfo& TPeripheryInfo = m_ArrayFishInfo.at(nFishPeripheryIndex);
 
 			// 重复比较
-			if ( TPeripheryInfo.nFishKey == nFishCatchKey )
+			if (TPeripheryInfo.nFishKey == nFishCatchKey)
 			{
 				continue;
 			}
 
 			// 有效位置
 			CDoublePoint PointPeriphery;
-			if ( FishMove( PointPeriphery, TPeripheryInfo ) != FishMoveType_Normal )
+			if (FishMove(PointPeriphery, TPeripheryInfo) != FishMoveType_Normal)
 			{
 				continue;
 			}
@@ -4176,7 +4172,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 			bool bRelatedFish = false;
 
 			// 杀手鱼
-			if ( TFishInfo.nFishState == FishState_Killer )
+			if (TFishInfo.nFishState == FishState_Killer)
 			{
 				// 同类鱼
 				bRelatedFish = TFishInfo.nFishType == TPeripheryInfo.nFishType;
@@ -4188,7 +4184,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 			//}
 
 			// 有效连带
-			if( bRelatedFish )
+			if (bRelatedFish)
 			{
 				// 修改几率
 				TFishInfo.nScoreChance += TPeripheryInfo.nFishScore;
@@ -4204,23 +4200,23 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	}
 
 	// 无效捕获
-	if( nDeathScore == 0 || nDeathCount == 0 )
+	if (nDeathScore == 0 || nDeathCount == 0)
 	{
 		return 0;
 	}
 
 	// 玩家指针
 	//IServerUserItem * pIServerUserItem = m_pITableFrame->GetTableUserItem( wChairID );
-	
+
 	// 难度值
-	double dModifyChance = DifficultyGame( wChairID, nMultipleIndex );
+	double dModifyChance = DifficultyGame(wChairID, nMultipleIndex);
 	//printf("捕到鱼:索引%d,总难度%llf\n", nMultipleIndex, dModifyChance);
 	// 分数信息
 	double dBulletScore = static_cast<double>(m_nMultipleValue[nMultipleIndex] * QianPao_Bullet);
 	double dDeathScore = static_cast<double>(m_nMultipleValue[nMultipleIndex] * nDeathScore);
 
 	// 几率信息
-	nBulletSplit = Max_( 1, nBulletSplit );
+	nBulletSplit = Max_(1, nBulletSplit);
 	double dAppendChance = dBulletScore / (double)nBulletSplit / dDeathScore;
 	double dBulletScale = (double)QianPao_Bullet / (double)nBulletSplit / (double)nDeathCount;
 
@@ -4247,8 +4243,8 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	CDoublePoint PointExplosion;
 
 	// 捕获鱼数据
-	Static CWHArray< tagCatchInfo > ArrayCatchFishInfo;	
-	ArrayCatchFishInfo.RemoveAll();
+	Static vector< tagCatchInfo > ArrayCatchFishInfo;
+	ArrayCatchFishInfo.clear();
 
 	// 防止负数, 增加难度
 	//if ( m_dRoomStock[nMultipleIndex] < dDeathScore )
@@ -4263,39 +4259,39 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	//}
 
 	// 机器人默认难度
-	if ( IsAndroidUser(wChairID) )
+	if (IsAndroidUser(wChairID))
 	{
 		// 默认难度
 		dModifyChance = 1.0;
 
 		// 最大倍数
 		int nMultipleMax = 0;
-		for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
+		for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 		{
-			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nIndex] );
+			nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nIndex]);
 		}
 
 		// 机器人赢得太多
-		if ( m_lPlayScore[wChairID] - m_lPlayStartScore[wChairID] > 2000 * nMultipleMax )
+		if (m_lPlayScore[wChairID] - m_lPlayStartScore[wChairID] > 2000 * nMultipleMax)
 		{
 			dModifyChance = 0.5;
 		}
 	}
 
 	// 比赛房间统一难度
-	if( m_bCompetitionRoom )
+	if (m_bCompetitionRoom)
 	{
 		dModifyChance = Max_(1.2, dModifyChance);
 	}
 
 	// 遍历鱼
-	for( int nDeathIndex = 0; nDeathIndex < m_ArrayFishInfo.GetCount(); nDeathIndex++ )
+	for (int nDeathIndex = 0; nDeathIndex < m_ArrayFishInfo.size(); nDeathIndex++)
 	{
 		// 获取鱼信息
-		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
+		tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nDeathIndex);
 
 		// 非捕获鱼
-		if ( TFishInfo.nFishKey != nFishCatchKey )
+		if (TFishInfo.nFishKey != nFishCatchKey)
 		{
 			continue;
 		}
@@ -4311,7 +4307,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 
 		//m_MapPlayExplosionCondition.Lookup( GetUserIDByDeskStation(wChairID), lPlayExplosionCondition );
 
-		if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao && lPlayExplosionCondition < m_lExplosionCondition )
+		if (TFishInfo.nFishType == FishType_BaoZhaFeiBiao && lPlayExplosionCondition < m_lExplosionCondition)
 		{
 			continue;
 		}
@@ -4320,13 +4316,13 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		bool bSpecialDie = false;
 
 		// 如果是宝箱, 宝箱几率直接20%
-		if ( TFishInfo.nFishType == FishType_BaoXiang && RAND_TRUE_FALSE(20, 80) )
+		if (TFishInfo.nFishType == FishType_BaoXiang && RAND_TRUE_FALSE(20, 80))
 		{
 			bSpecialDie = true;
 		}
 
 		// 如果是激光必中
-		if ( nPlayCatchType == EPCT_Laser )
+		if (nPlayCatchType == EPCT_Laser)
 		{
 			bSpecialDie = true;
 		}
@@ -4336,7 +4332,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		double dWillBeIn = 1.2 / dModifyChance;
 
 		// 优化几率
-		nCaptureChance = Max_( nCaptureChance, 1 );
+		nCaptureChance = Max_(nCaptureChance, 1);
 
 		// 非特殊处理, 系统防止负数
 		//if ( !bSpecialDie && m_dRoomStock[nMultipleIndex] < dDeathScore && !m_bCompetitionRoom )
@@ -4349,10 +4345,10 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 		TFishInfo.dCurChance += dAppendChance;
 
 		// 捕获到鱼
-		if ( bSpecialDie || TFishInfo.dCurChance > dWillBeIn || ( RAND_TRUE_FALSE( nCaptureChance, TFishInfo.nScoreChance * 100 ) ) )
+		if (bSpecialDie || TFishInfo.dCurChance > dWillBeIn || (RAND_TRUE_FALSE(nCaptureChance, TFishInfo.nScoreChance * 100)))
 		{
 			// 捕获爆炸鱼
-			if( TFishInfo.nFishType == FishType_BaoZhaFeiBiao )
+			if (TFishInfo.nFishType == FishType_BaoZhaFeiBiao)
 			{
 				// 清空数据
 				//m_MapPlayExplosionCondition.SetAt(GetUserIDByDeskStation(wChairID), 0 );
@@ -4360,22 +4356,22 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 			}
 
 			// 捕获中鱼
-			lTotalCatchScore += CatchInFish( wChairID, nMultipleIndex, nPlayCatchType, TFishInfo, ArrayCatchFishInfo );
+			lTotalCatchScore += CatchInFish(wChairID, nMultipleIndex, nPlayCatchType, TFishInfo, ArrayCatchFishInfo);
 
 			// 记录杀手鱼
-			if ( TFishInfo.nFishState == FishState_Killer && !bFishKiller )
+			if (TFishInfo.nFishState == FishState_Killer && !bFishKiller)
 			{
 				// 记录信息
 				CDoublePoint PointKeller;
-				bFishKiller = (FishMove( PointKeller, TFishInfo ) == FishMoveType_Normal);
+				bFishKiller = (FishMove(PointKeller, TFishInfo) == FishMoveType_Normal);
 				nFishTypeKiller = TFishInfo.nFishType;
 			}
 
 			// 记录鱼王
-			if ( TFishInfo.nFishState == FishState_King && !bFishSpecial )
+			if (TFishInfo.nFishState == FishState_King && !bFishSpecial)
 			{
 				// 记录信息
-				bFishSpecial = (FishMove( PointSpecial, TFishInfo ) == FishMoveType_Normal);
+				bFishSpecial = (FishMove(PointSpecial, TFishInfo) == FishMoveType_Normal);
 				cbFishTypeSpecial = TFishInfo.nFishType;
 			}
 
@@ -4403,7 +4399,7 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 			//}
 
 			// 删除鱼
-			m_ArrayFishInfo.RemoveAt(nDeathIndex);
+			m_ArrayFishInfo.erase(m_ArrayFishInfo.begin() + nDeathIndex);
 		}
 
 		// 退出
@@ -4411,24 +4407,24 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	}
 
 	// 杀手鱼计算
-	if ( bFishKiller )
+	if (bFishKiller)
 	{
 		// 遍历鱼
-		int nDeathIndex = 0; 
-		while( nDeathIndex < m_ArrayFishInfo.GetCount() )
+		int nDeathIndex = 0;
+		while (nDeathIndex < m_ArrayFishInfo.size())
 		{
 			// 获取信息
-			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
+			tagFishInfo& TPeripheryInfo = m_ArrayFishInfo.at(nDeathIndex);
 
 			// 周边鱼距离
 			CDoublePoint PointPeriphery;
-			if( FishMove( PointPeriphery, TPeripheryInfo ) == FishMoveType_Normal && nFishTypeKiller == TPeripheryInfo.nFishType )
+			if (FishMove(PointPeriphery, TPeripheryInfo) == FishMoveType_Normal && nFishTypeKiller == TPeripheryInfo.nFishType)
 			{
 				// 捕获中鱼
-				lTotalCatchScore += CatchInFish( wChairID, nMultipleIndex, EPCT_Killer, TPeripheryInfo, ArrayCatchFishInfo );
+				lTotalCatchScore += CatchInFish(wChairID, nMultipleIndex, EPCT_Killer, TPeripheryInfo, ArrayCatchFishInfo);
 
 				// 删除鱼
-				m_ArrayFishInfo.RemoveAt(nDeathIndex);
+				m_ArrayFishInfo.erase(m_ArrayFishInfo.begin() + nDeathIndex);
 
 				// 继续
 				continue;
@@ -4440,34 +4436,34 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	}
 
 	// 特殊鱼计算
-	if ( bFishSpecial && m_bOpenShoalFish)
+	if (bFishSpecial && m_bOpenShoalFish)
 	{
 		// 创建鱼阵
-		SpecialFishMatrix( cbFishTypeSpecial, PointSpecial );
+		SpecialFishMatrix(cbFishTypeSpecial, PointSpecial);
 	}
 
 	// 全屏爆炸
-	if ( bFishFullScreen )
+	if (bFishFullScreen)
 	{
 		// 遍历鱼
 		LONGLONG lFishFullScreenScore = 0;
-		int nDeathIndex = 0; 
-		while( nDeathIndex < m_ArrayFishInfo.GetCount() )
+		int nDeathIndex = 0;
+		while (nDeathIndex < m_ArrayFishInfo.size())
 		{
 			// 获取信息
-			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
+			tagFishInfo& TPeripheryInfo = m_ArrayFishInfo.at(nDeathIndex);
 
 			// 周边鱼距离
 			CDoublePoint PointPeriphery;
-			if( FishMove( PointPeriphery, TPeripheryInfo ) == FishMoveType_Normal && PointPeriphery.x > 0 && PointPeriphery.x < DEFAULE_WIDTH && PointPeriphery.y > 0 && PointPeriphery.y < DEFAULE_HEIGHT )
+			if (FishMove(PointPeriphery, TPeripheryInfo) == FishMoveType_Normal && PointPeriphery.x > 0 && PointPeriphery.x < DEFAULE_WIDTH && PointPeriphery.y > 0 && PointPeriphery.y < DEFAULE_HEIGHT)
 			{
 				// 捕获中鱼
-				LONGLONG lCatchScore = CatchInFish( wChairID, nMultipleIndex, EPCT_FullScreen, TPeripheryInfo, ArrayCatchFishInfo );
+				LONGLONG lCatchScore = CatchInFish(wChairID, nMultipleIndex, EPCT_FullScreen, TPeripheryInfo, ArrayCatchFishInfo);
 				lTotalCatchScore += lCatchScore;
 				lFishFullScreenScore += lCatchScore;
 
 				// 删除鱼
-				m_ArrayFishInfo.RemoveAt(nDeathIndex);
+				m_ArrayFishInfo.erase(m_ArrayFishInfo.begin() + nDeathIndex);
 
 				// 继续
 				continue;
@@ -4479,13 +4475,13 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 
 		// 最大倍数
 		int nMultipleMax = 0;
-		for ( int nIndex = 0; nIndex < Multiple_Max; ++nIndex )
+		for (int nIndex = 0; nIndex < Multiple_Max; ++nIndex)
 		{
-			nMultipleMax = Max_( nMultipleMax, m_nMultipleValue[nIndex] );
+			nMultipleMax = Max_(nMultipleMax, m_nMultipleValue[nIndex]);
 		}
 
 		// 还原分数
-		if( !IsAndroidUser(wChairID) )
+		if (!IsAndroidUser(wChairID))
 		{
 			m_dDartStock += nMultipleMax * m_nExplosionStart - lFishFullScreenScore;
 			//m_dRoomStock[nMultipleIndex] += lFishFullScreenScore;
@@ -4497,24 +4493,24 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	}
 
 	// 局部爆炸
-	if( bFishExplosion )
+	if (bFishExplosion)
 	{
 		// 遍历鱼
-		int nDeathIndex = 0; 
-		while( nDeathIndex < m_ArrayFishInfo.GetCount() )
+		int nDeathIndex = 0;
+		while (nDeathIndex < m_ArrayFishInfo.size())
 		{
 			// 获取信息
-			tagFishInfo & TPeripheryInfo = m_ArrayFishInfo.GetAt(nDeathIndex);
+			tagFishInfo& TPeripheryInfo = m_ArrayFishInfo.at(nDeathIndex);
 
 			// 周边鱼距离
 			CDoublePoint PointPeriphery;
-			if( FishMove( PointPeriphery, TPeripheryInfo ) == FishMoveType_Normal && DistanceOfPoint(PointExplosion, PointPeriphery) < 300.0 && TPeripheryInfo.nFishType != FishType_BaoZhaFeiBiao )
+			if (FishMove(PointPeriphery, TPeripheryInfo) == FishMoveType_Normal && DistanceOfPoint(PointExplosion, PointPeriphery) < 300.0 && TPeripheryInfo.nFishType != FishType_BaoZhaFeiBiao)
 			{
 				// 捕获中鱼
-				lTotalCatchScore += CatchInFish( wChairID, nMultipleIndex, EPCT_Explosion, TPeripheryInfo, ArrayCatchFishInfo );
+				lTotalCatchScore += CatchInFish(wChairID, nMultipleIndex, EPCT_Explosion, TPeripheryInfo, ArrayCatchFishInfo);
 
 				// 删除鱼
-				m_ArrayFishInfo.RemoveAt(nDeathIndex);
+				m_ArrayFishInfo.erase(m_ArrayFishInfo.begin() + nDeathIndex);
 
 				// 继续
 				continue;
@@ -4526,10 +4522,10 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 	}
 
 	// 发送捕获消息
-	SendCatchFish( wChairID, ArrayCatchFishInfo );
+	SendCatchFish(wChairID, ArrayCatchFishInfo);
 
 	// 停留消息
-	if ( bStayFish )
+	if (bStayFish)
 	{
 		//FishFreeze( GetSysMilliseconds() - m_nStartTime );
 	}
@@ -4539,13 +4535,13 @@ LONGLONG CTableFrameSink::PlayCatchFish( WORD wChairID, int nBulletSplit, uint n
 }
 
 // 比较鱼
-bool CTableFrameSink::ISFishCatchKey( uint nFishKey, CWHArray< uint > & ArrayFishCatchKey )
+bool CTableFrameSink::ISFishCatchKey(uint nFishKey, vector< uint >& ArrayFishCatchKey)
 {
 	// 遍历捕获
-	for ( int nCatchIndex = 0; nCatchIndex < ArrayFishCatchKey.GetCount(); ++nCatchIndex )
+	for (int nCatchIndex = 0; nCatchIndex < ArrayFishCatchKey.size(); ++nCatchIndex)
 	{
 		// 判断有效捕获
-		if ( ArrayFishCatchKey[nCatchIndex] != 0 && ArrayFishCatchKey[nCatchIndex] == nFishKey )
+		if (ArrayFishCatchKey[nCatchIndex] != 0 && ArrayFishCatchKey[nCatchIndex] == nFishKey)
 		{
 			return true;
 		}
@@ -4555,19 +4551,19 @@ bool CTableFrameSink::ISFishCatchKey( uint nFishKey, CWHArray< uint > & ArrayFis
 }
 
 // 捕中鱼
-LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPlayCatchType nPlayCatchType, tagFishInfo & TFishInfo, CWHArray< tagCatchInfo > & ArrayCatchFishInfo )
+LONGLONG CTableFrameSink::CatchInFish(WORD wChairID, int nMultipleIndex, EnumPlayCatchType nPlayCatchType, tagFishInfo& TFishInfo, vector< tagCatchInfo >& ArrayCatchFishInfo)
 {
 	// 鱼分数
 	int nFishScore = TFishInfo.nFishScore;
 
 	// 添加水草
-	if( TFishInfo.nFishState == FishState_Aquatic )
+	if (TFishInfo.nFishState == FishState_Aquatic)
 	{
 		nFishScore += 8;
 	}
 
 	// 盒子爆炸
-	if( TFishInfo.nFishType == FishType_BaoXiang )
+	if (TFishInfo.nFishType == FishType_BaoXiang)
 	{
 		nFishScore = 0;
 	}
@@ -4576,7 +4572,7 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 	if (TFishInfo.nFishType == FishType_Hong_Bao)
 	{
 		nFishScore = 0;
-		ChangeUserBage(wChairID,BAG_HONG_BAO);
+		ChangeUserBage(wChairID, BAG_HONG_BAO);
 	}
 
 	if (TFishInfo.nFishType == FishType_Hua_Fei1)
@@ -4607,23 +4603,23 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 			{
 				ChangeUserBage(wChairID, BAG_LOCK);
 			}
-		}	
+		}
 	}
 	// 捕获信息
 	LONGLONG lCatchScore = (LONGLONG)((LONGLONG)nFishScore * (LONGLONG)m_nMultipleValue[nMultipleIndex]);
 
 	// 玩家收入
-	PlayerIncome( wChairID, nMultipleIndex, lCatchScore );
+	PlayerIncome(wChairID, nMultipleIndex, lCatchScore);
 
 	// 盒子爆炸
-	if( TFishInfo.nFishType == FishType_BaoXiang )
+	if (TFishInfo.nFishType == FishType_BaoXiang)
 	{
 		// 活动重载
 		m_bPlaySupply[wChairID] = false;
 
 		// 如果是机器人，就不要出现激光
 		int nLaserChance = m_nLaserChance;
-		if ( IsAndroidUser(wChairID) )
+		if (IsAndroidUser(wChairID))
 		{
 			nLaserChance = 0;
 		}
@@ -4641,74 +4637,74 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 		switch (nBoxActivity)
 		{
 		case 0:	// 激光
-			{
-				// 更新激光时间（5秒误差时间）
-				m_nLaserPlayTime[wChairID] = m_nLaserTime + 5;
+		{
+			// 更新激光时间（5秒误差时间）
+			m_nLaserPlayTime[wChairID] = m_nLaserTime + 5;
 
-				// 发送激光消息
-				CMD_S_Supply CMDSSupply;
-				CMDSSupply.wChairID = wChairID;
-				CMDSSupply.lSupplyCount = m_nLaserTime;
-				CMDSSupply.nSupplyType = EST_Laser;
-				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
-			}
-			break;
+			// 发送激光消息
+			CMD_S_Supply CMDSSupply;
+			CMDSSupply.wChairID = wChairID;
+			CMDSSupply.lSupplyCount = m_nLaserTime;
+			CMDSSupply.nSupplyType = EST_Laser;
+			SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply));
+		}
+		break;
 		case 1:	// 加速
-			{
-				// 更新加速时间（2秒误差时间）
-				m_nSpeedPlayTime[wChairID] = m_nSpeedTime + 2;
+		{
+			// 更新加速时间（2秒误差时间）
+			m_nSpeedPlayTime[wChairID] = m_nSpeedTime + 2;
 
-				// 发送加速消息
-				CMD_S_Supply CMDSSupply;
-				CMDSSupply.wChairID = wChairID;
-				CMDSSupply.lSupplyCount = m_nSpeedTime;
-				CMDSSupply.nSupplyType = EST_Speed;
-				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
-			}
-			break;
+			// 发送加速消息
+			CMD_S_Supply CMDSSupply;
+			CMDSSupply.wChairID = wChairID;
+			CMDSSupply.lSupplyCount = m_nSpeedTime;
+			CMDSSupply.nSupplyType = EST_Speed;
+			SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply));
+		}
+		break;
 		case 2:	// 赠送金币
 		case 3:
 		case 4:
 		case 5:
 		case 6:
-			{
-				// 更新捕获分数
-				lCatchScore = m_nGiftScore[ nBoxActivity - 2 ] * TFishInfo.nFishScore;
+		{
+			// 更新捕获分数
+			lCatchScore = m_nGiftScore[nBoxActivity - 2] * TFishInfo.nFishScore;
 
-				// 发送赠送消息
-				CMD_S_Supply CMDSSupply;
-				CMDSSupply.wChairID = wChairID;
-				CMDSSupply.lSupplyCount = lCatchScore;
-				CMDSSupply.nSupplyType = EST_Gift;
-				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
+			// 发送赠送消息
+			CMD_S_Supply CMDSSupply;
+			CMDSSupply.wChairID = wChairID;
+			CMDSSupply.lSupplyCount = lCatchScore;
+			CMDSSupply.nSupplyType = EST_Gift;
+			SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply));
 
-				// 玩家收入
-				PlayerIncome( wChairID, nMultipleIndex, lCatchScore );
+			// 玩家收入
+			PlayerIncome(wChairID, nMultipleIndex, lCatchScore);
 
-				// 大倍发送信息
-				SendAwardTip(wChairID, FishType_BaoXiang, m_nGiftScore[ nBoxActivity - 2 ], lCatchScore, EST_Cold);
+			// 大倍发送信息
+			SendAwardTip(wChairID, FishType_BaoXiang, m_nGiftScore[nBoxActivity - 2], lCatchScore, EST_Cold);
 			//	printf("箱子发送:%d\n", m_nGiftScore[nBoxActivity - 2]);
-			}
-			break;
+		}
+		break;
 		case 7:	// 空宝箱
-			{
-				// 发送空宝箱消息
-				CMD_S_Supply CMDSSupply;
-				CMDSSupply.wChairID = wChairID;
-				CMDSSupply.lSupplyCount = 0;
-				CMDSSupply.nSupplyType = EST_Null;
-				SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply) );
-			}
-			break;
+		{
+			// 发送空宝箱消息
+			CMD_S_Supply CMDSSupply;
+			CMDSSupply.wChairID = wChairID;
+			CMDSSupply.lSupplyCount = 0;
+			CMDSSupply.nSupplyType = EST_Null;
+			SendTableData(INVALID_CHAIR, SUB_S_SUPPLY, &CMDSSupply, sizeof(CMDSSupply));
+		}
+		break;
 		}
 	}
 	else
 	{
-		
+
 		// 大倍发送信息
-		if (m_nFishMultiple[TFishInfo.nFishScore][0] >= m_nAwardMinMultiple && nPlayCatchType == EPCT_Bullet )
-		{	
-			SendAwardTip( wChairID, TFishInfo.nFishType, m_nFishMultiple[TFishInfo.nFishType][0], lCatchScore, EST_Cold );
+		if (m_nFishMultiple[TFishInfo.nFishScore][0] >= m_nAwardMinMultiple && nPlayCatchType == EPCT_Bullet)
+		{
+			SendAwardTip(wChairID, TFishInfo.nFishType, m_nFishMultiple[TFishInfo.nFishType][0], lCatchScore, EST_Cold);
 			//printf("大倍数发送:%d,鱼种类:%d,最小公告倍数:%d\n", m_nFishMultiple[TFishInfo.nFishType][0], TFishInfo.nFishType, m_nAwardMinMultiple);
 		}
 	}
@@ -4734,22 +4730,22 @@ LONGLONG CTableFrameSink::CatchInFish( WORD wChairID, int nMultipleIndex, EnumPl
 	TCatchInfo.lScoreCount = lCatchScore;
 
 	// 记录分数
-	ArrayCatchFishInfo.Add(TCatchInfo);
+	ArrayCatchFishInfo.emplace_back(TCatchInfo);
 
 	return lCatchScore;
 }
 
 // 发送捕获消息
-void CTableFrameSink::SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & ArrayCatchFishInfo )
+void CTableFrameSink::SendCatchFish(WORD wChairID, vector< tagCatchInfo >& ArrayCatchFishInfo)
 {
 	// 发送死亡消息
 	WORD wBufferSize = 0;
 	byte cbBuffer[IPC_PACKAGE];
 	int nSendIndex = 0;
-	while( nSendIndex < ArrayCatchFishInfo.GetCount() )
+	while (nSendIndex < ArrayCatchFishInfo.size())
 	{
 		// 超出界限
-		if ( (wBufferSize + sizeof(CMD_S_CatchFish) + 1) > sizeof(cbBuffer) )
+		if ((wBufferSize + sizeof(CMD_S_CatchFish) + 1) > sizeof(cbBuffer))
 		{
 			// 发送消息
 			SendTableData(INVALID_CHAIR, SUB_S_FISH_CATCH, cbBuffer, wBufferSize);
@@ -4759,7 +4755,7 @@ void CTableFrameSink::SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & A
 		}
 
 		// 获取信息
-		tagCatchInfo & TCatchInfo = ArrayCatchFishInfo.GetAt(nSendIndex);
+		tagCatchInfo& TCatchInfo = ArrayCatchFishInfo.at(nSendIndex);
 
 		// 定义消息
 		CMD_S_CatchFish CMDCatchFish;
@@ -4769,7 +4765,7 @@ void CTableFrameSink::SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & A
 		CMDCatchFish.lScoreCount = TCatchInfo.lScoreCount;
 
 		// 构造消息
-		CopyMemory(cbBuffer + wBufferSize, &CMDCatchFish, sizeof(CMD_S_CatchFish) );
+		CopyMemory(cbBuffer + wBufferSize, &CMDCatchFish, sizeof(CMD_S_CatchFish));
 		wBufferSize += sizeof(CMD_S_CatchFish);
 
 		// 下一个
@@ -4777,20 +4773,20 @@ void CTableFrameSink::SendCatchFish( WORD wChairID, CWHArray< tagCatchInfo > & A
 	}
 
 	// 有效消息
-	if ( wBufferSize > 0 ) 
+	if (wBufferSize > 0)
 	{
 		// 发送消息
 		SendTableData(INVALID_CHAIR, SUB_S_FISH_CATCH, cbBuffer, wBufferSize);
 	}
 
-	return ;
+	return;
 }
 
 // 游戏难度
-double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
+double CTableFrameSink::DifficultyGame(WORD wChairID, int nMultipleIndex)
 {
 	// 房间难度
-	double dRoomDifficulty = DifficultyRoom( nMultipleIndex );
+	double dRoomDifficulty = DifficultyRoom(nMultipleIndex);
 
 	// 桌子难度
 	//double dTableDifficulty = DifficultyTable( nMultipleIndex );
@@ -4817,7 +4813,7 @@ double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
 	}
 
 	// 有效难度
-	if( m_nDifficultyStart[0] )
+	if (m_nDifficultyStart[0])
 	{
 		dGameDifficulty += dRoomDifficulty;
 		nDifficultyCount += 1;
@@ -4825,7 +4821,7 @@ double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
 
 
 	// 无效启动
-	if ( nDifficultyCount == 0 )
+	if (nDifficultyCount == 0)
 	{
 		dGameDifficulty = 0.5;
 	}
@@ -4853,7 +4849,7 @@ double CTableFrameSink::DifficultyGame( WORD wChairID, int nMultipleIndex )
 }
 
 // 游戏难度
-double CTableFrameSink::DifficultyRoom( int nMultipleIndex )
+double CTableFrameSink::DifficultyRoom(int nMultipleIndex)
 {
 	// 房间难度
 	double dRoomDifficulty = 1.0;
@@ -4864,12 +4860,12 @@ double CTableFrameSink::DifficultyRoom( int nMultipleIndex )
 	{
 		if (m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent <= 0)
 		{
-			dRoomDifficulty  == 1;
+			dRoomDifficulty == 1;
 		}
 		else
 		{
 			int Lev = 5;
-			if (m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent >= 1000 )
+			if (m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent >= 1000)
 			{
 				m_pDataManage->m_rewardsPoolInfo.platformCtrlPercent = 999;
 			}
@@ -4884,7 +4880,7 @@ double CTableFrameSink::DifficultyRoom( int nMultipleIndex )
 			//printf("房间难度:%d,难度等级:%d,难度系数%lf\n", m_pooInfo.platformCtrlPercent, Lev, RoomDifficultyCount[Lev]);
 		}
 	}
-	
+
 	// 难度索引
 	//int nDifficultyIndex = 0;
 
@@ -4912,7 +4908,7 @@ double CTableFrameSink::DifficultyRoom( int nMultipleIndex )
 }
 
 // 游戏难度
-double CTableFrameSink::DifficultyTable( int nMultipleIndex )
+double CTableFrameSink::DifficultyTable(int nMultipleIndex)
 {
 	// 桌子难度
 	double dTableDifficulty = 1.0;
@@ -4921,10 +4917,10 @@ double CTableFrameSink::DifficultyTable( int nMultipleIndex )
 	int nDifficultyIndex = 0;
 
 	// 计算桌子难度
-	for ( nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex )
+	for (nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex)
 	{
 		// 比较信息
-		if( _TableStock(nMultipleIndex) < m_nTableDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex] )
+		if (_TableStock(nMultipleIndex) < m_nTableDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex])
 		{
 			// 设置难度
 			dTableDifficulty = m_dTableDifficultyValue[nDifficultyIndex];
@@ -4934,7 +4930,7 @@ double CTableFrameSink::DifficultyTable( int nMultipleIndex )
 	}
 
 	// 无效难度
-	if( nDifficultyIndex == Difficulty_Max )
+	if (nDifficultyIndex == Difficulty_Max)
 	{
 		// 设置难度
 		dTableDifficulty = m_dTableDifficultyValue[Difficulty_Max - 1];
@@ -4944,7 +4940,7 @@ double CTableFrameSink::DifficultyTable( int nMultipleIndex )
 }
 
 // 游戏难度
-double CTableFrameSink::DifficultyPlay( WORD wChairID, int nMultipleIndex )
+double CTableFrameSink::DifficultyPlay(WORD wChairID, int nMultipleIndex)
 {
 	// 个人难度
 	double dPlayDifficulty = 1.0;
@@ -4953,10 +4949,10 @@ double CTableFrameSink::DifficultyPlay( WORD wChairID, int nMultipleIndex )
 	int nDifficultyIndex = 0;
 
 	// 计算个人难度
-	for ( nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex )
+	for (nDifficultyIndex = 0; nDifficultyIndex < Difficulty_Max; ++nDifficultyIndex)
 	{
 		// 比较信息
-		if( _PlayerStock(wChairID, nMultipleIndex) < m_nPlayDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex] )
+		if (_PlayerStock(wChairID, nMultipleIndex) < m_nPlayDifficultyCount[nDifficultyIndex] * m_nMultipleValue[nMultipleIndex])
 		{
 			// 设置难度
 			dPlayDifficulty = m_dPlayDifficultyValue[nDifficultyIndex];
@@ -4966,7 +4962,7 @@ double CTableFrameSink::DifficultyPlay( WORD wChairID, int nMultipleIndex )
 	}
 
 	// 无效难度
-	if( nDifficultyIndex == Difficulty_Max )
+	if (nDifficultyIndex == Difficulty_Max)
 	{
 		// 设置难度
 		dPlayDifficulty = m_dPlayDifficultyValue[Difficulty_Max - 1];
@@ -4977,7 +4973,7 @@ double CTableFrameSink::DifficultyPlay( WORD wChairID, int nMultipleIndex )
 
 
 // 交换变量
-template< typename T > void CTableFrameSink::SwapVariable( T & One, T & Two )
+template< typename T > void CTableFrameSink::SwapVariable(T& One, T& Two)
 {
 	T Temp = One;
 	One = Two;
@@ -4985,40 +4981,40 @@ template< typename T > void CTableFrameSink::SwapVariable( T & One, T & Two )
 }
 
 // 旋转点
-CDoublePoint CTableFrameSink::Rotate(const CDoublePoint & ptCircle, double dRadian, const CDoublePoint & ptSome )
-{ 
-	CDoublePoint temp; 
+CDoublePoint CTableFrameSink::Rotate(const CDoublePoint& ptCircle, double dRadian, const CDoublePoint& ptSome)
+{
+	CDoublePoint temp;
 	CDoublePoint tempPtSome(ptSome);
-	tempPtSome.x -= ptCircle.x; 
+	tempPtSome.x -= ptCircle.x;
 	tempPtSome.y -= ptCircle.y;
-	temp.x = tempPtSome.x*cos(dRadian) - tempPtSome.y*sin(dRadian) + ptCircle.x;
-	temp.y = tempPtSome.y*cos(dRadian) + tempPtSome.x*sin(dRadian) + ptCircle.y;
-	return temp; 
-} 
+	temp.x = tempPtSome.x * cos(dRadian) - tempPtSome.y * sin(dRadian) + ptCircle.x;
+	temp.y = tempPtSome.y * cos(dRadian) + tempPtSome.x * sin(dRadian) + ptCircle.y;
+	return temp;
+}
 
 // 旋转点
-CShortPoint CTableFrameSink::Rotate(const CShortPoint & ptCircle, double dRadian, const CShortPoint & ptSome )
-{ 
-	CShortPoint temp; 
+CShortPoint CTableFrameSink::Rotate(const CShortPoint& ptCircle, double dRadian, const CShortPoint& ptSome)
+{
+	CShortPoint temp;
 	CShortPoint tempPtSome(ptSome);
 	tempPtSome.x -= ptCircle.x;
 	tempPtSome.y -= ptCircle.y;
-	temp.x = (short)(tempPtSome.x*cos(dRadian) - tempPtSome.y*sin(dRadian) + ptCircle.x);
-	temp.y = (short)(tempPtSome.y*cos(dRadian) + tempPtSome.x*sin(dRadian) + ptCircle.y);
-	return temp; 
-} 
+	temp.x = (short)(tempPtSome.x * cos(dRadian) - tempPtSome.y * sin(dRadian) + ptCircle.x);
+	temp.y = (short)(tempPtSome.y * cos(dRadian) + tempPtSome.x * sin(dRadian) + ptCircle.y);
+	return temp;
+}
 
 // 已知圆心,弧度,半径 求圆上任意一
-CShortPoint CTableFrameSink::RotatePoint( CShortPoint & ptCircle, double dRadian, double dRadius )
+CShortPoint CTableFrameSink::RotatePoint(CShortPoint& ptCircle, double dRadian, double dRadius)
 {
 	CShortPoint temp;
-	temp.x = (short)(dRadius*cos(dRadian) + ptCircle.x);
-	temp.y = (short)(dRadius*sin(dRadian) + ptCircle.y);
+	temp.x = (short)(dRadius * cos(dRadian) + ptCircle.x);
+	temp.y = (short)(dRadius * sin(dRadian) + ptCircle.y);
 	return temp;
 }
 
 // 贝塞尔曲线
-CDoublePoint CTableFrameSink::PointOnCubicBezier( tagBezierPoint * cp, double t )
+CDoublePoint CTableFrameSink::PointOnCubicBezier(tagBezierPoint* cp, double t)
 {
 	double   ax = 0.f, bx = 0.f, cx = 0.f;
 	double   ay = 0.f, by = 0.f, cy = 0.f;
@@ -5045,28 +5041,28 @@ CDoublePoint CTableFrameSink::PointOnCubicBezier( tagBezierPoint * cp, double t 
 }
 
 // 两点距离
-double CTableFrameSink::DistanceOfPoint( CDoublePoint & PointOne, CDoublePoint & PointTwo )
+double CTableFrameSink::DistanceOfPoint(CDoublePoint& PointOne, CDoublePoint& PointTwo)
 {
-	return sqrt( pow( abs(PointOne.x - PointTwo.x), 2 ) + pow( abs(PointOne.y - PointTwo.y), 2 ) );
+	return sqrt(pow(abs(PointOne.x - PointTwo.x), 2) + pow(abs(PointOne.y - PointTwo.y), 2));
 }
 
 // 随机区域
-int CTableFrameSink::RandomArea( int nLen, ... )
-{ 
-	ASSERT( nLen > 0 );
-	if ( nLen <= 0 )
+int CTableFrameSink::RandomArea(int nLen, ...)
+{
+	ASSERT(nLen > 0);
+	if (nLen <= 0)
 		return 0;
 
 	va_list argptr;
 	va_start(argptr, nLen);
-	Static CWHArray<int> Array;
-	Array.RemoveAll();
-	for ( byte i = 0; i < nLen; ++i )
+	Static vector<int> Array;
+	Array.clear();
+	for (byte i = 0; i < nLen; ++i)
 	{
-		int nTemp = va_arg( argptr, int );
-		if( nTemp >= 0 && nTemp < 100000 )
+		int nTemp = va_arg(argptr, int);
+		if (nTemp >= 0 && nTemp < 100000)
 		{
-			Array.Add(nTemp);
+			Array.emplace_back(nTemp);
 		}
 		else
 		{
@@ -5079,14 +5075,14 @@ int CTableFrameSink::RandomArea( int nLen, ... )
 
 	int nIndex = 0;
 	int nACTotal = 0;
-	for (int i = 0; i < Array.GetCount(); i++)
+	for (int i = 0; i < Array.size(); i++)
 		nACTotal += Array[i];
 
-	ASSERT( nACTotal > 0  );
-	if ( nACTotal > 0 )
+	ASSERT(nACTotal > 0);
+	if (nACTotal > 0)
 	{
-		int nRandNum = ( rand() + GetTickCount() + m_nAppearFishCount ) % nACTotal;
-		for (int i = 0; i < Array.GetCount(); i++)
+		int nRandNum = (rand() + GetTickCount() + m_nAppearFishCount) % nACTotal;
+		for (int i = 0; i < Array.size(); i++)
 		{
 			nRandNum -= Array[i];
 			if (nRandNum < 0)
@@ -5098,17 +5094,21 @@ int CTableFrameSink::RandomArea( int nLen, ... )
 	}
 	else
 	{
-		nIndex = rand()%nLen;
+		nIndex = rand() % nLen;
 	}
 
 
-	ASSERT( nIndex < nLen );
+	//ASSERT(nIndex < nLen);
+	if (nIndex >= nLen)
+	{
+		return nLen;
+	}
 	return nIndex;
 }
 
 
 // 判断机器人
-bool CTableFrameSink::IsAndroidUser(BYTE wChairID )
+bool CTableFrameSink::IsAndroidUser(BYTE wChairID)
 {
 	//IServerUserItem * pIAndroidUserItem = m_pITableFrame->GetTableUserItem( wChairID );
 	//return pIAndroidUserItem && pIAndroidUserItem->IsAndroidUser();
@@ -5123,7 +5123,7 @@ bool CTableFrameSink::IsAndroidUser(BYTE wChairID )
 }
 
 // 初始化玩家
-void CTableFrameSink::InitializePlayer( WORD wChairID )
+void CTableFrameSink::InitializePlayer(WORD wChairID)
 {
 	// 初始化信息
 	m_dwPlayID[wChairID] = 0;
@@ -5147,16 +5147,16 @@ void CTableFrameSink::InitializePlayer( WORD wChairID )
 
 	// 删除特定鱼
 	int nFishIndex = 0;
-	while ( nFishIndex < m_ArrayFishInfo.GetCount() )
+	while (nFishIndex < m_ArrayFishInfo.size())
 	{
 		// 获取鱼信息
-		tagFishInfo & TFishInfo = m_ArrayFishInfo.GetAt(nFishIndex);
+		tagFishInfo& TFishInfo = m_ArrayFishInfo.at(nFishIndex);
 
 		// 对比位置
-		if ( TFishInfo.wHitChair == wChairID )
+		if (TFishInfo.wHitChair == wChairID)
 		{
 			// 删除鱼
-			m_ArrayFishInfo.RemoveAt( nFishIndex );
+			m_ArrayFishInfo.erase(m_ArrayFishInfo.begin() + nFishIndex);
 
 			continue;
 		}
@@ -5167,24 +5167,24 @@ void CTableFrameSink::InitializePlayer( WORD wChairID )
 }
 
 // 玩家消耗
-void CTableFrameSink::PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG lConsumeCount )
+void CTableFrameSink::PlayerConsume(WORD wChairID, int nMultipleIndex, LONGLONG lConsumeCount)
 {
 	// 机器人不参与
-	if( IsAndroidUser(wChairID) )
+	if (IsAndroidUser(wChairID))
 	{
-		return ;
+		return;
 	}
 
 	// 无效倍数
-	if( nMultipleIndex == Multiple_Max )
+	if (nMultipleIndex == Multiple_Max)
 	{
-		return ;
+		return;
 	}
 
 	// 无分累计
-	if( lConsumeCount <= 0 )
+	if (lConsumeCount <= 0)
 	{
-		return ;
+		return;
 	}
 
 	// 库存记录
@@ -5199,7 +5199,7 @@ void CTableFrameSink::PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG
 	m_dWholeTax[nMultipleIndex] += dExtractTax;
 
 	// 房间累计
-	double dExtractDart = dConsumption * ( (double)m_nExplosionProportion / 1000.0 );
+	double dExtractDart = dConsumption * ((double)m_nExplosionProportion / 1000.0);
 	dConsumption -= dExtractDart;
 	m_dDartStock += dExtractDart;
 
@@ -5207,17 +5207,17 @@ void CTableFrameSink::PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG
 	//m_dRoomStock[nMultipleIndex] += dConsumption;
 
 	// 桌子累计
-	double & dTableStock  = _TableStock( nMultipleIndex );
+	double& dTableStock = _TableStock(nMultipleIndex);
 	dTableStock += dConsumption;
 
 	// 个人消耗
-	double & dPlayStock = _PlayerStock( wChairID, nMultipleIndex );
+	double& dPlayStock = _PlayerStock(wChairID, nMultipleIndex);
 	dPlayStock -= static_cast<double>(lConsumeCount);
 
 	// 发送消息
-	GameUserInfo * pIServerUserItem = GetTableUserItem(wChairID);
+	GameUserInfo* pIServerUserItem = GetTableUserItem(wChairID);
 	// 判断权限
-	if( pIServerUserItem != NULL &&((pIServerUserItem->userStatus&USER_IDENTITY_TYPE_SUPER) == USER_IDENTITY_TYPE_SUPER))
+	if (pIServerUserItem != NULL && ((pIServerUserItem->userStatus & USER_IDENTITY_TYPE_SUPER) == USER_IDENTITY_TYPE_SUPER))
 	{
 		// 定义消息
 		CMD_S_System CMDSSystem;
@@ -5225,34 +5225,34 @@ void CTableFrameSink::PlayerConsume( WORD wChairID, int nMultipleIndex, LONGLONG
 		CMDSSystem.dTableStock = dTableStock;
 		CMDSSystem.dPlayStock = dPlayStock;
 		CMDSSystem.dDartStock = m_dDartStock;
-		CMDSSystem.dGameDifficulty = DifficultyGame( wChairID, nMultipleIndex );
+		CMDSSystem.dGameDifficulty = DifficultyGame(wChairID, nMultipleIndex);
 
 		// 发送消息
-		SendUserItemData( pIServerUserItem, SUB_S_SYSTEM, &CMDSSystem, sizeof(CMD_S_System) );
+		SendUserItemData(pIServerUserItem, SUB_S_SYSTEM, &CMDSSystem, sizeof(CMD_S_System));
 	}
 
-	return ;
+	return;
 }
 
 // 玩家收入
-void CTableFrameSink::PlayerIncome( WORD wChairID, int nMultipleIndex, LONGLONG lIncomeCount )
+void CTableFrameSink::PlayerIncome(WORD wChairID, int nMultipleIndex, LONGLONG lIncomeCount)
 {
 	// 机器人不参与
-	if( IsAndroidUser(wChairID) )
+	if (IsAndroidUser(wChairID))
 	{
-		return ;
+		return;
 	}
 
 	// 无效倍数
-	if( nMultipleIndex == Multiple_Max )
+	if (nMultipleIndex == Multiple_Max)
 	{
-		return ;
+		return;
 	}
 
 	// 无分累计
-	if( lIncomeCount <= 0 )
+	if (lIncomeCount <= 0)
 	{
-		return ;
+		return;
 	}
 
 	// 库存记录
@@ -5265,37 +5265,37 @@ void CTableFrameSink::PlayerIncome( WORD wChairID, int nMultipleIndex, LONGLONG 
 	//m_dRoomStock[nMultipleIndex] -= dIncomeCount;
 
 	// 桌子消耗
-	double & dTableStock = _TableStock( nMultipleIndex );
+	double& dTableStock = _TableStock(nMultipleIndex);
 	dTableStock -= dIncomeCount;
 
 	// 个人累计
-	double & dPlayStock = _PlayerStock( wChairID, nMultipleIndex );
+	double& dPlayStock = _PlayerStock(wChairID, nMultipleIndex);
 	dPlayStock += dIncomeCount;
 
-	return ;
+	return;
 }
 
 // 桌子库存
-double & CTableFrameSink::_TableStock( int nMultipleIndex )
+double& CTableFrameSink::_TableStock(int nMultipleIndex)
 {
 	return m_pdTableStock[nMultipleIndex][/*m_pITableFrame->GetTableID()*/1];
 }
 
 // 桌子库存
-double & CTableFrameSink::_TableStock( unsigned short TableID, int nMultipleIndex )
+double& CTableFrameSink::_TableStock(unsigned short TableID, int nMultipleIndex)
 {
 	return m_pdTableStock[nMultipleIndex][TableID];
 }
 
 // 玩家库存
-double & CTableFrameSink::_PlayerStock( WORD wChairID, int nMultipleIndex )
+double& CTableFrameSink::_PlayerStock(WORD wChairID, int nMultipleIndex)
 {
 	return m_dPlayStock[wChairID][nMultipleIndex];
 }
 
 
 //获取玩家信息
-GameUserInfo * CTableFrameSink::GetTableUserItem(WORD wChairID)
+GameUserInfo* CTableFrameSink::GetTableUserItem(WORD wChairID)
 {
 	if (!m_pDataManage)
 	{
@@ -5313,7 +5313,7 @@ GameUserInfo * CTableFrameSink::GetTableUserItem(WORD wChairID)
 
 
 //给玩家发送数据
-bool CTableFrameSink::SendUserItemData(GameUserInfo * pIServerUserItem, WORD wSubCmdID, VOID * pData, WORD wDataSize)
+bool CTableFrameSink::SendUserItemData(GameUserInfo* pIServerUserItem, WORD wSubCmdID, VOID* pData, WORD wDataSize)
 {
 	if (!pIServerUserItem)
 	{
@@ -5425,7 +5425,7 @@ void CTableFrameSink::UserBeKicked(BYTE deskStation)
 	}
 
 	// 鱼信息
-	m_ArrayFishInfo.RemoveAll();
+	m_ArrayFishInfo.clear();
 	m_cbBackIndex = 0;
 	m_nAppearFishCount = 0;
 	m_bFishSwimming = FALSE;
@@ -5445,11 +5445,11 @@ void CTableFrameSink::UserBeKicked(BYTE deskStation)
 }
 
 // 技能
-bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
+bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID* pData, WORD wDataSize)
 {
 	if (sizeof(CMD_C_Skill) != wDataSize) return true;
 
-	CMD_C_Skill *Skill = (CMD_C_Skill*)pData;
+	CMD_C_Skill* Skill = (CMD_C_Skill*)pData;
 	if (!Skill)
 	{
 		ERROR_LOG("错误:玩家%d，技能错误", GetUserIDByDeskStation(deskStation));
@@ -5487,7 +5487,7 @@ bool CTableFrameSink::OnSubSkill(BYTE deskStation, VOID * pData, WORD wDataSize)
 	}
 
 	SendTableData(INVALID_CHAIR, SUB_C_SKILL, pData, wDataSize);
-	
+
 	return true;
 }
 
@@ -5497,11 +5497,11 @@ bool CTableFrameSink::HundredGameIsInfoChange(BYTE deskStation)
 	return false;
 }
 
-bool CTableFrameSink::OnChangeCannon(BYTE deskStation, VOID * pData, WORD wDataSize)
+bool CTableFrameSink::OnChangeCannon(BYTE deskStation, VOID* pData, WORD wDataSize)
 {
 	if (sizeof(CMD_C_CANNON) != wDataSize) return false;
 
-	CMD_C_CANNON *cannon = (CMD_C_CANNON*)pData;
+	CMD_C_CANNON* cannon = (CMD_C_CANNON*)pData;
 
 	long userID = GetUserIDByDeskStation(deskStation);
 	if (userID <= 0) return false;

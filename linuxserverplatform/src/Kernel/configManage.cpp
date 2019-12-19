@@ -450,7 +450,7 @@ void CConfigManage::SetServiceType(int type)
 
 bool CConfigManage::ConnectToDatabase()
 {
-	CON_INFO_LOG("连接数据库中。。。[ip=%s,port=%d,dbname=%s,user=%s,passwd=%s]"
+	CON_INFO_LOG("连接主数据库中。。。[ip=%s,port=%d,dbname=%s,user=%s,passwd=%s]"
 		, m_dbConfig[DB_TYPE_COMMON].ip, m_dbConfig[DB_TYPE_COMMON].port,
 		m_dbConfig[DB_TYPE_COMMON].dbName, m_dbConfig[DB_TYPE_COMMON].user, m_dbConfig[DB_TYPE_COMMON].passwd);
 
@@ -462,11 +462,11 @@ bool CConfigManage::ConnectToDatabase()
 	}
 	catch (MysqlHelper_Exception& excep)
 	{
-		ERROR_LOG("连接数据库失败:%s", excep.errorInfo.c_str());
+		ERROR_LOG("连接主数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
-	CON_INFO_LOG("连接数据库成功");
+	CON_INFO_LOG("连接主数据库成功");
 
 	return true;
 }

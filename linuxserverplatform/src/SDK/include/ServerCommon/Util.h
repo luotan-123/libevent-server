@@ -1,5 +1,29 @@
 #pragma once
 
+// 以下是检测内存泄露的方法
+//void TestJeMalloc()
+//{
+//	class TestJeMallocClsss
+//	{
+//	public:
+//		TestJeMallocClsss()
+//		{
+//
+//		}
+//		~TestJeMallocClsss()
+//		{
+//
+//		}
+//		int a;
+//	};
+//
+//	//void * p = malloc(20 * 1024);
+//	TestJeMallocClsss* pTestJeMallocClsss = new TestJeMallocClsss[100 * 1024];
+//
+//}
+//TestJeMalloc();
+//mallctl("prof.dump", NULL, NULL, NULL, 0);
+
 enum TimeFormat
 {
 	TIME_YYYYMMDD = 0,		// 20170802
