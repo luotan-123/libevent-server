@@ -25,6 +25,7 @@ struct TCPSocketInfo
 	int acceptFd;			//自己的socket
 	bufferevent* bev;
 	CSignedLock* lock;
+	bool bHandleAccptMsg;	//是否处理了握手消息，websocket使用
 
 	TCPSocketInfo()
 	{
@@ -90,7 +91,7 @@ public:
 
 public:
 	// 初始化
-	bool Init(IServerSocketService* pService, int maxCount, int port, const char* ip = NULL);
+	virtual bool Init(IServerSocketService* pService, int maxCount, int port, const char* ip = NULL);
 	// 取消初始化
 	virtual bool UnInit();
 	// 开始服务
@@ -98,10 +99,9 @@ public:
 	// 停止服务
 	virtual bool Stop();
 
-
 public:
 	// 发送数据函数
-	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification = 0);
+	virtual bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification = 0);
 	// 中心服务器发送数据
 	bool CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent);
 	// 关闭连接(业务逻辑线程调用)
@@ -130,13 +130,19 @@ public:
 	void RemoveTCPSocketStatus(int index, bool isClientAutoClose = false);
 	// 派发数据包
 	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
+
+protected:
+	// 解析数据函数
+	virtual bool HandleData(bufferevent* bev, int index);
+
+public: // 设置tcp属性
 	// 设置tcp收发缓冲区
 	static void SetTcpRcvSndBUF(int fd, int rcvBufSize, int sndBufSize);
 	// 设置应用层单次读取数据包的大小 bufferevent_set_max_single_read
 	static void SetMaxSingleReadAndWrite(bufferevent* bev, int rcvBufSize, int sndBufSize);
 
 	// 线程函数
-private:
+protected:
 	// SOCKET 连接应答线程
 	static void* ThreadAccept(void* pThreadData);
 	// SOCKET 数据接收线程
@@ -145,7 +151,7 @@ private:
 	static void* ThreadSendMsg(void* pThreadData);
 
 	// 回调函数
-private:
+protected:
 	// 新的连接到来，ThreadAccept线程函数
 	static void ListenerCB(struct evconnlistener*, evutil_socket_t, struct sockaddr*, int socklen, void*);
 	// 新的数据到来，ThreadRSSocket线程函数
@@ -159,7 +165,7 @@ private:
 	// libEvent日志回调函数
 	static void EventLog(int severity, const char* msg);
 
-private:
+protected:
 	event_base* m_listenerBase;
 	std::vector<WorkThreadInfo> m_workBaseVec;
 	IServerSocketService* m_pService;

@@ -6,6 +6,7 @@
 #include "log.h"
 #include "MysqlHelper.h"
 #include <event2/event.h>
+#include <event2/thread.h>
 
 CConfigManage::CConfigManage()
 {
@@ -44,8 +45,15 @@ bool CConfigManage::Init()
 	// 初始化curl
 	curl_global_init(CURL_GLOBAL_ALL);
 	
-	// 设置内存管理接口
+	// 设置libevent内存管理接口
 	event_set_mem_functions(&malloc, &realloc, &free);
+
+	// 初始化libevent线程
+	if (evthread_use_pthreads() < 0)
+	{
+		CON_ERROR_LOG("evthread_use_pthreads fail");
+		return false;
+	}
 
 	bool ret = false;
 

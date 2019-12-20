@@ -105,6 +105,9 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\HttpServer.h">
       <Filter>HttpServer</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\WebSocket.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp">
       <Filter>工具和接口</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\WebSocket.cpp">
+      <Filter>网络模块</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

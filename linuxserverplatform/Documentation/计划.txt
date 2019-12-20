@@ -1,20 +1,21 @@
-1、支持http协议。
-(正在进行)
-2、redis用集群，分布式数据存取，高可靠
-3、部署服务器shell，开启关闭服务器进程的shell
-4、go语言学习开发
-5、python简单入门，给linux框架做抗压力测试
+1、支持websocket协议
+方法：参考CTCPSocketManage写websocket类。完成一次http握手。先解析websocket头部，然后再解析自己头部。
+2、支持http协议。
+方法：不必重复造轮子，直接网上查
+3、实现c++和lua之间的相互调用
+大工程，涉及内容很多
+4、redis用集群，分布式数据存取，高可靠
+5、go语言学习开发
+6、python简单入门，给linux框架做抗压力测试
 使用python开发压力测试工具
-6、实现c++和lua之间的相互调用
-大工程
 7、linux项目makefile的编写
 不写makefile，使用eclipse ide 做c++开发
-8、对gserver和gate-logon-server做QBS统计
+8、部署服务器shell，开启关闭服务器进程的shell
+9、对gserver和gate-logon-server做QBS统计
 完成了处理数据的qbs
-9、可以利用消息中间件kafka来解耦实现lua开发游戏
+10、可以利用消息中间件kafka来解耦实现lua开发游戏
 方法：也可也使用rocketMQ
-10、支持websocket协议
-方法：参考CTCPSocketManage写websocket类。完成一次http握手。先解析websocket头部，然后再解析自己头部。
+
 
 
 
