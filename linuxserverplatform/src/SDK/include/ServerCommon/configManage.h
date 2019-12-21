@@ -127,12 +127,17 @@ struct RoomBaseInfo
 struct LogonBaseInfo
 {
 	int		logonID;
-	char	ip[24];
-	char	intranetIP[24];
+	char	ip[MAX_NUM_IP_ADDR_SIZE];
+	char	intranetIP[MAX_NUM_IP_ADDR_SIZE];
 	int		port;
 	int		maxPeople;
 	int		curPeople;
 	BYTE	status;
+	int		socketCount;
+	int		webSocketPort;
+	int		maxWebSocketPeople;
+	int		curWebSocketPeople;
+	int		webSocketCount;
 
 	LogonBaseInfo()
 	{
@@ -186,6 +191,7 @@ struct CenterServerConfig
 struct LogonServerConfig
 {
 	int logonID;
+	BYTE webSocket;
 
 	LogonServerConfig()
 	{

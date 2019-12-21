@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50553
-Source Host           : localhost:3306
-Source Database       : haowan20190815
+Source Server         : 192.168.198.121
+Source Server Version : 50645
+Source Host           : 192.168.198.121:3306
+Source Database       : luotan
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50645
 File Encoding         : 65001
 
-Date: 2019-08-15 15:21:06
+Date: 2019-12-21 11:12:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -161,19 +161,24 @@ CREATE TABLE `logonbaseinfo` (
   `ip` varchar(24) CHARACTER SET utf8 DEFAULT '' COMMENT '网关服ip地址',
   `intranetIP` varchar(24) CHARACTER SET utf8 DEFAULT '' COMMENT '内网ip',
   `port` int(11) DEFAULT '3015' COMMENT '网关服端口',
-  `maxPeople` int(11) DEFAULT '3000' COMMENT '网关服最多容纳的最大人数',
+  `maxPeople` int(11) DEFAULT '3000' COMMENT '网关服TCP最多容纳的最大人数',
   `curPeople` int(11) DEFAULT '0' COMMENT '当前人数',
   `status` tinyint(2) DEFAULT '0' COMMENT '0：关闭状态，1：开启状态',
+  `socketCount` int(11) DEFAULT '0' COMMENT 'socket数量',
+  `webSocketPort` int(11) DEFAULT '3017' COMMENT 'websocket端口',
+  `maxWebSocketPeople` int(11) DEFAULT '1000' COMMENT '网关服websocket最多容纳的最大人数',
+  `curWebSocketPeople` int(11) DEFAULT '0' COMMENT '当前人数',
+  `webSocketCount` int(11) DEFAULT '0' COMMENT 'socket数量',
   PRIMARY KEY (`logonID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of logonbaseinfo
 -- ----------------------------
-INSERT INTO `logonbaseinfo` VALUES ('1', '14.215.33.38', '127.0.0.1', '3015', '1200', '0', '0');
-INSERT INTO `logonbaseinfo` VALUES ('2', '14.215.33.38', '127.0.0.1', '3016', '1200', '0', '0');
-INSERT INTO `logonbaseinfo` VALUES ('3', '14.215.33.38', '127.0.0.1', '3017', '1200', '0', '0');
-INSERT INTO `logonbaseinfo` VALUES ('4', '14.215.33.38', '127.0.0.1', '3018', '1200', '0', '0');
+INSERT INTO `logonbaseinfo` VALUES ('1', '14.215.33.38', '127.0.0.1', '3015', '1200', '0', '0', '0', '0', '3000', '0', '0');
+INSERT INTO `logonbaseinfo` VALUES ('2', '14.215.33.38', '127.0.0.1', '3016', '1200', '0', '0', '0', '0', '3000', '0', '0');
+INSERT INTO `logonbaseinfo` VALUES ('3', '14.215.33.38', '127.0.0.1', '3017', '1200', '0', '0', '0', '0', '3000', '0', '0');
+INSERT INTO `logonbaseinfo` VALUES ('4', '14.215.33.38', '127.0.0.1', '3018', '1200', '0', '0', '0', '0', '3000', '0', '0');
 
 -- ----------------------------
 -- Table structure for otherconfig

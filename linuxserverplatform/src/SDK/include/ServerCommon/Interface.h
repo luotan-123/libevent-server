@@ -18,9 +18,9 @@ class IServerSocketService
 	///接口函数
 public:
 	//网络关闭处理
-	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime) = 0;
+	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime, BYTE socketType) = 0;
 	//网络消息处理
-	virtual bool OnSocketReadEvent(void* pBufferevent, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex) = 0;
+	virtual bool OnSocketReadEvent(BYTE socketType, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex) = 0;
 	// 获取dataline
 	virtual CDataLine* GetDataLine() = 0;
 };

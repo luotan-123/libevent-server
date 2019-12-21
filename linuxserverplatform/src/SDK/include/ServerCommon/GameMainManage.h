@@ -72,9 +72,7 @@ private:
 private:
 	//服务扩展接口函数 （本处理线程调用）
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
-	//SOCKET 关闭
-	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex);
 	//异步线程处理结果
 	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize);
 	//定时器消息

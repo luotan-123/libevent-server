@@ -64,16 +64,16 @@ private:
 	//SOCKET 数据读取 （必须重载）
 	virtual bool OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent) = 0;
 	//SOCKET 关闭 （必须重载）
-	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime) = 0;
+	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime, BYTE socketType) = 0;
 	//定时器消息 （必须重载）
 	virtual bool OnTimerMessage(UINT uTimerID) = 0;
 
 	//服务接口函数 （其他服务线程调用）
 public:
 	//网络关闭处理 （不需要重载）
-	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime);
-	//网络消息处理 （不需要重载）为Z服务器准备
-	virtual bool OnSocketReadEvent(void* pBufferevent, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex);
+	virtual bool OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime, BYTE socketType);
+	//网络消息处理 （不需要重载）
+	virtual bool OnSocketReadEvent(BYTE socketType, NetMessageHead * pNetHead, void * pData, UINT uSize, UINT uIndex);
 
 	virtual CDataLine* GetDataLine() { return &m_DataLine; }
 

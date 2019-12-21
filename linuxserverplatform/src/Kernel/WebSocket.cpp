@@ -76,11 +76,11 @@ bool CWebSocketManage::SendData(int index, void* pData, int size, int mainID, in
 	return true;
 }
 
-bool CWebSocketManage::HandleData(bufferevent* bev, int index)
+bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 {
 	if (bev == NULL)
 	{
-		ERROR_LOG("HandleData error bev == NULL");
+		ERROR_LOG("RecvData error bev == NULL");
 		return false;
 	}
 

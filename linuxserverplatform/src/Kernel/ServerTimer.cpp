@@ -4,9 +4,6 @@
 #include "ServerTimer.h"
 
 
-// 定时器精度，单位毫秒。
-#define SERVER_TIME_ONCE	100
-
 // 定时器测试代码宏
 //#define TEST_TIMER_CODE
 
@@ -25,6 +22,7 @@ CServerTimer::CServerTimer()
 	m_bRun = false;
 	m_pDataLine = NULL;
 	m_pLock = new CSignedLock;
+	m_timeOnce = 100;
 }
 
 CServerTimer::~CServerTimer()
@@ -34,7 +32,7 @@ CServerTimer::~CServerTimer()
 	m_pLock = NULL;
 }
 
-bool CServerTimer::Start(CDataLine* pDataLine)
+bool CServerTimer::Start(CDataLine* pDataLine, int timeonce/* = 100*/)
 {
 	INFO_LOG("CServerTimer thread begin...");
 
@@ -44,8 +42,15 @@ bool CServerTimer::Start(CDataLine* pDataLine)
 		return false;
 	}
 
+	if (timeonce != 100 && timeonce != 1000)
+	{
+		CON_ERROR_LOG("timeonce=%d 不满足要求", timeonce);
+		return false;
+	}
+
 	m_pDataLine = pDataLine;
 	m_bRun = true;
+	m_timeOnce = timeonce;
 
 	// 开辟线程
 	pthread_t threadID = 0;
@@ -73,15 +78,15 @@ bool CServerTimer::Stop()
 
 bool CServerTimer::SetTimer(unsigned int uTimerID, unsigned int uElapse, BYTE timerType /*= SERVERTIMER_TYPE_PERISIST*/)
 {
-	if (uElapse < SERVER_TIME_ONCE)
+	if (uElapse < m_timeOnce)
 	{
-		uElapse = SERVER_TIME_ONCE;
+		uElapse = m_timeOnce;
 	}
 
 	ServerTimerInfo info;
 
-	info.elapse = uElapse / SERVER_TIME_ONCE * SERVER_TIME_ONCE;
-	info.starttime = GetSysMilliseconds() / SERVER_TIME_ONCE * SERVER_TIME_ONCE + uElapse;
+	info.elapse = uElapse / m_timeOnce * m_timeOnce;
+	info.starttime = GetSysMilliseconds() / m_timeOnce * m_timeOnce + uElapse;
 	info.timertype = timerType;
 
 	CSignedLockObject lock(m_pLock, true);
@@ -151,7 +156,7 @@ void CServerTimer::TimeoutCB(evutil_socket_t fd, short event, void* arg)
 	g_lasttime = newtime;
 #endif
 
-	long long currTime = GetSysMilliseconds() / SERVER_TIME_ONCE * SERVER_TIME_ONCE;
+	long long currTime = GetSysMilliseconds() / param->pCServerTimer->m_timeOnce * param->pCServerTimer->m_timeOnce;
 
 	// lock
 	CSignedLockObject lock(param->pCServerTimer->m_pLock, false);
@@ -202,7 +207,7 @@ void* CServerTimer::ThreadCheckTimer(void* pThreadData)
 
 	struct timeval tv;
 	tv.tv_sec = 0;
-	tv.tv_usec = SERVER_TIME_ONCE * 1000;
+	tv.tv_usec = pThis->m_timeOnce * 1000;
 	event_add(&timeout, &tv);
 
 #ifdef TEST_TIMER_CODE

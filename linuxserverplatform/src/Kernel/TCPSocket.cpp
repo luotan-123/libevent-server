@@ -41,6 +41,7 @@ CTCPSocketManage::CTCPSocketManage()
 	memset(m_bindIP, 0, sizeof(m_bindIP));
 	m_port = 0;
 	m_uCurSocketIndex = 0;
+	m_socketType = SOCKET_TYPE_TCP;
 }
 
 CTCPSocketManage::~CTCPSocketManage()
@@ -48,7 +49,7 @@ CTCPSocketManage::~CTCPSocketManage()
 
 }
 
-bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int port, const char* ip/* = NULL*/)
+bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int port, const char* ip/* = NULL*/,SocketType socketType)
 {
 	INFO_LOG("service TCPSocketManage init begin...");
 
@@ -65,6 +66,7 @@ bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int po
 		strcpy(m_bindIP, ip);
 	}
 	m_port = port;
+	m_socketType = socketType;
 
 	m_workBaseVec.clear();
 
@@ -535,7 +537,7 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 	// 回调业务层
 	if (m_pService)
 	{
-		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime);
+		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime, m_socketType);
 	}
 
 	CON_INFO_LOG("close [ip=%s port=%d index=%d fd=%d isClientAutoClose:%d acceptTime=%lld]",
@@ -572,6 +574,7 @@ bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageH
 	msg.pBufferevent = pBufferevent;
 	msg.uAccessIP = 0;
 	msg.netMessageHead = *pHead;
+	msg.socketType = m_socketType;
 
 	unsigned int addBytes = pDataLine->AddData(&msg.LineHead, sizeof(SocketReadLine), HD_SOCKET_READ, pData, size);
 
@@ -583,11 +586,11 @@ bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageH
 	return true;
 }
 
-bool CTCPSocketManage::HandleData(bufferevent* bev, int index)
+bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 {
 	if (bev == NULL)
 	{
-		ERROR_LOG("HandleData error bev == NULL");
+		ERROR_LOG("RecvData error bev == NULL");
 		return false;
 	}
 
@@ -956,7 +959,7 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 	int index = param->index;
 
 	// 处理数据，包头解析
-	pThis->HandleData(bev, index);
+	pThis->RecvData(bev, index);
 }
 
 void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)

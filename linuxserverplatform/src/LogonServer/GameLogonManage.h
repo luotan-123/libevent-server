@@ -20,10 +20,10 @@ enum LogonServerTimerID
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
 const int ROUTINE_CHECK_UNBINDID_SOCKET = 59;		// 定期检查未登录的连接(s)
-const int CHECK_SAVE_SOCKET_COUNT = 13;				// 定期保存网关socket数量(s)
-const int NORMAL_TIMER_SECS = 2;					// 通用定时器(s)
+const int CHECK_SAVE_SOCKET_COUNT = 17;				// 定期保存网关socket数量(s)
+const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
 
-// 登陆服socket
+// 登陆服tcpsocket
 struct LogonServerSocket
 {
 	BYTE type;			// 两种类型的socket 1：玩家的socket，2：游戏服的socket
@@ -48,25 +48,24 @@ struct LogonServerSocket
 class CGameLogonManage : public CBaseLogonServer
 {
 public:
-	UINT						m_nPort;				//登陆服务器端口
-	UINT						m_uMaxPeople;			//支持最大人数（包括gserver数量）
+	UINT						m_nPort;				//登陆服务器端口 tcp
+	UINT						m_uMaxPeople;			//支持最大人数（包括gserver数量） tcp
 
 private:
 	CLogonUserManage*			m_pUserManage;			// 玩家管理器
 	CLogonGServerManage*		m_pGServerManage;		// 游戏服管理器
-	std::unordered_map<int,LogonServerSocket>	m_socketInfoMap;// socket索引和identityID的映射表
+	std::unordered_map<int, LogonServerSocket> m_socketInfoMap;		// socket索引和identityID的映射表 TCP
+	std::unordered_map<int, LogonServerSocket> m_webSocketInfoMap;	// socket索引和userID的映射表 websocket
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
 	time_t						m_lastSendHeartBeatTime;// 上次发送心跳时间
-	std::vector<UINT>			m_socketIndexVec;		// socket索引
+	std::vector<UINT>			m_socketIndexVec;		// socket索引，遍历在线tcpsocket需要
 
 private:
-	std::set<UINT>				m_scoketMatch;			// 在比赛场相关页面的玩家
+	std::set<UINT>				m_socketMatch;			// 在比赛场相关页面的玩家
 
 public:
 	CGameLogonManage();
-	CGameLogonManage(CGameLogonManage&);
-	CGameLogonManage & operator = (CGameLogonManage &);
 	virtual ~CGameLogonManage();
 
 public:
@@ -80,9 +79,9 @@ private:
 	//获取信息函数
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
+	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
 	//SOCKET 关闭
-	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
+	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime, BYTE socketType);
 	//异步线程处理结果
 	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize);
 	//定时器消息
@@ -93,21 +92,21 @@ private:
 	void NotifyUserInfo(const UserData &userData);
 private:
 	// 玩家注册相关
-	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
+	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
 
 	// 玩家登陆相关
-	bool OnHandleUserLogonMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
+	bool OnHandleUserLogonMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
 
-	bool OnHanleUserLogon(void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
+	bool OnHanleUserLogon(void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
 
 	// 桌子相关
-	bool OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
+	bool OnHandleGameDeskMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
 
 	bool OnHandleUserBuyDesk(int userID, void* pData, int size);
 	bool OnHandleUserEnterDesk(int userID, void* pData, int size);
 
 	// 其他相关
-	bool OnHandleOtherMessage(int assistID, void* pData, int size, unsigned long accessIP, unsigned int socketIdx, void* pBufferevent);
+	bool OnHandleOtherMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
 
 	//刷新个人信息
 	bool OnHandleUserInfoFlush(int userID, void* pData, int size);
@@ -124,23 +123,28 @@ private:
 	// 认证
 	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx, void* pBufferevent);
 	// 前端 ----> 游戏服
-	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
+	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
 	// 游戏服 ----> 前端
-	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
+	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
 
 public:
 	// 通过socketIdx获取socket信息
-	LogonServerSocket GetIdentityIDBySocketIdx(int socketIdx);
+	LogonServerSocket GetIdentityIDBySocketIdx(int socketIdx, BYTE socketType);
 	// 删除socketIdx索引
-	void DelSocketIdx(int socketIdx);
+	void DelSocketIdx(int socketIdx, BYTE socketType);
 	// 给玩家发送数据
 	bool SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification = 0);
+	// 通过索引发送数据
+	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, BYTE socketType, unsigned int uIdentification = 0);
 	// 广播全部玩家（不包括gserver）
 	bool SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode);
 	// 通知资源变化, value为总值，不是变化值
 	void NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue);
+
+public:
 	// 向中心服务器发送消息
 	bool SendMessageToCenterServer(UINT msgID, void* pData, UINT size, int userID = 0, UINT mainID = 0, UINT assistID = 0, UINT handleCode = 0);
+
 public:
 	// 判断roomID的服务器是否存在
 	bool IsRoomIDServerExists(int roomID);

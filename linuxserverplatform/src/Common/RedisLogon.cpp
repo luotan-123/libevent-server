@@ -1177,6 +1177,25 @@ bool CRedisLogon::SetLogonServerCurrPeopleCount(int logonID, UINT peopleCount, U
 	return true;
 }
 
+bool CRedisLogon::SetGatewayServerCurrPeopleCount(int logonID, UINT curWebSocketPeople, UINT webSocketCount)
+{
+	if (logonID <= 0)
+	{
+		return false;
+	}
+
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, "HMSET %s|%d curWebSocketPeople %u webSocketCount %u",
+		TBL_BASE_LOGON, logonID, curWebSocketPeople, webSocketCount);
+	if (!pReply)
+	{
+		return false;
+	}
+
+	freeReplyObject(pReply);
+
+	return true;
+}
+
 int CRedisLogon::IsCanCreateFriendsGroupRoom(int userID, int friendsGroupID, BYTE userPower, int friendsGroupDeskNumber)
 {
 	BYTE managerPower = friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT ? FRIENDSGROUP_POWER_TYPE_VIPROOM : FRIENDSGROUP_POWER_TYPE_DESK;

@@ -16,7 +16,7 @@ public:
 
 protected:
 	// 解析数据函数
-	virtual bool HandleData(bufferevent* bev, int index);
+	virtual bool RecvData(bufferevent* bev, int index);
 
 public: //websocket相关函数
 

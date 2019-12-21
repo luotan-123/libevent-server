@@ -190,7 +190,8 @@ bool CBaseCenterServer::Start()
 	// 启动定时器
 	for (int i = 0; i < m_KernelData.uTimerCount; i++)
 	{
-		if (!m_pServerTimer[i].Start(&m_DataLine))
+		// 一秒执行一次
+		if (!m_pServerTimer[i].Start(&m_DataLine, 1000))
 		{
 			ERROR_LOG("CBaseMainManage::m_pServerTimer.Start 定时器启动失败");
 			return false;
@@ -268,17 +269,18 @@ bool CBaseCenterServer::Stop()
 }
 
 //网络关闭处理
-bool CBaseCenterServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime)
+bool CBaseCenterServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime, BYTE socketType)
 {
 	SocketCloseLine SocketClose;
 	SocketClose.uConnectTime = uConnectTime;
 	SocketClose.uIndex = uIndex;
 	SocketClose.uAccessIP = uAccessIP;
+	SocketClose.socketType = socketType;
 	return (m_DataLine.AddData(&SocketClose.LineHead, sizeof(SocketClose), HD_SOCKET_CLOSE) != 0);
 }
 
 //网络消息处理
-bool CBaseCenterServer::OnSocketReadEvent(void* pBufferevent, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
+bool CBaseCenterServer::OnSocketReadEvent(BYTE socketType, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
 {
 	if (!pNetHead)
 	{
@@ -289,7 +291,7 @@ bool CBaseCenterServer::OnSocketReadEvent(void* pBufferevent, NetMessageHead* pN
 
 	SocketRead.uHandleSize = uSize;
 	SocketRead.uIndex = uIndex;
-	SocketRead.pBufferevent = pBufferevent;
+	SocketRead.socketType = socketType;
 	SocketRead.uAccessIP = 0;		//TODO
 	SocketRead.netMessageHead = *pNetHead;
 	return m_DataLine.AddData(&SocketRead.LineHead, sizeof(SocketRead), HD_SOCKET_READ, pData, uSize) != 0;
@@ -401,7 +403,7 @@ void* CBaseCenterServer::LineDataHandleThread(void* pThreadData)
 			case HD_SOCKET_CLOSE:		// socket 关闭
 			{
 				SocketCloseLine* pSocketClose = (SocketCloseLine*)pDataLineHead;
-				pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime);
+				pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime, pSocketClose->socketType);
 				break;
 			}
 			case HD_TIMER_MESSAGE:		// 定时器消息

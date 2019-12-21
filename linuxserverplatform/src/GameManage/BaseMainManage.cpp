@@ -413,7 +413,7 @@ void* CBaseMainManage::LineDataHandleThread(void* pThreadData)
 				if (pMainManage->OnSocketRead(&pSocketRead->netMessageHead,
 					pSocketRead->uHandleSize ? pSocketRead + 1 : NULL,
 					pSocketRead->uHandleSize, pSocketRead->uAccessIP,
-					pSocketRead->uIndex, pSocketRead->pBufferevent) == false)
+					pSocketRead->uIndex) == false)
 				{
 					//ERROR_LOG("OnSocketRead failed mainID=%d assistID=%d", pSocketRead->NetMessageHead.uMainID, pSocketRead->NetMessageHead.uAssistantID);
 				}

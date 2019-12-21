@@ -116,4 +116,11 @@ enum DBType
 	DB_TYPE_MAX,						//总数据库最大索引
 };
 
+// socket类型
+enum SocketType
+{
+	SOCKET_TYPE_TCP = 0,				//tcp
+	SOCKET_TYPE_WEBSOCKET = 1,			//websocket
+};
+
 //////////////////////////////////////////////////////////////////////////

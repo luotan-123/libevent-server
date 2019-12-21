@@ -99,7 +99,7 @@ private:
 	//SOCKET 数据读取
 	virtual bool OnSocketRead(NetMessageHead * pNetHead, CenterServerMessageHead * pCenterHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent);
 	//SOCKET 关闭
-	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime);
+	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime, BYTE socketType);
 	//定时器消息
 	virtual bool OnTimerMessage(UINT uTimerID);
 

@@ -32,7 +32,7 @@ class CServerTimer
 public:
 	CServerTimer();
 	~CServerTimer();
-	bool Start(CDataLine* pDataLine);
+	bool Start(CDataLine* pDataLine, int timeonce = 100);
 	bool Stop();
 	bool SetTimer(unsigned int uTimerID, unsigned int uElapse, BYTE timerType = SERVERTIMER_TYPE_PERISIST); //uElapse是毫秒单位，大于100ms
 	bool KillTimer(unsigned int uTimerID);
@@ -43,9 +43,11 @@ private:
 	static void TimeoutCB(evutil_socket_t fd, short event, void* arg);
 	// 定时器线程函数
 	static void* ThreadCheckTimer(void* pThreadData);
+
 private:
 	volatile bool m_bRun;
 	std::unordered_map<unsigned int, ServerTimerInfo> m_timerMap;
 	CDataLine* m_pDataLine;	// 共享的dataline对象
 	CSignedLock* m_pLock; // 线程锁
+	int	m_timeOnce;
 };

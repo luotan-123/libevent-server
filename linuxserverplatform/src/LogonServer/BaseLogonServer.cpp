@@ -101,7 +101,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 		return false;
 	}
 
-	// 初始化网络
+	// 初始化TCP网络
 	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort);
 	if (!ret)
 	{
@@ -109,6 +109,26 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 		return false;
 	}
 
+	// 判断id是否配置
+	int logonID = ConfigManage()->GetLogonServerConfig().logonID;
+	LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(logonID);
+	if (pLogonBaseInfo == nullptr)
+	{
+		ERROR_LOG("logonID 不存在");
+		return false;
+	}
+
+	// 初始化websocket网络
+	if (ConfigManage()->m_logonServerConfig.webSocket)
+	{
+		ret = m_WebSocket.Init(this, pLogonBaseInfo->maxWebSocketPeople, pLogonBaseInfo->webSocketPort, NULL, SOCKET_TYPE_WEBSOCKET);
+		if (!ret)
+		{
+			ERROR_LOG("WebSocket Init failed");
+			return false;
+		}
+	}
+	
 	// DB相关
 	ret = pDataHandleService->SetParameter(this, &m_SQLDataManage, &m_InitData, &m_KernelData);
 	if (!ret)
@@ -167,6 +187,10 @@ bool CBaseLogonServer::UnInit()
 
 	m_bInit = false;
 	m_TCPSocket.UnInit();
+	if (ConfigManage()->m_logonServerConfig.webSocket)
+	{
+		m_WebSocket.UnInit();
+	}
 	m_SQLDataManage.UnInit();
 
 	//设置数据
@@ -214,7 +238,7 @@ bool CBaseLogonServer::Start()
 		return false;
 	}
 
-	// 启动网络模块
+	// 启动TCP网络模块
 	ret = m_TCPSocket.Start(SERVICE_TYPE_LOGON);
 	if (!ret)
 	{
@@ -222,12 +246,23 @@ bool CBaseLogonServer::Start()
 		return false;
 	}
 
+	// 启动websocket网络模块
+	if (ConfigManage()->m_logonServerConfig.webSocket)
+	{
+		ret = m_WebSocket.Start(SERVICE_TYPE_LOGON);
+		if (!ret)
+		{
+			ERROR_LOG("TCPSocket Start failed");
+			return false;
+		}
+	}
+
 	// 启动与中心服务器连接模块
 	const CenterServerConfig& centerServerConfig = ConfigManage()->GetCenterServerConfig();
 	ret = m_pTcpConnect->Start(&m_DataLine, centerServerConfig.ip, centerServerConfig.port, SERVICE_TYPE_LOGON, ConfigManage()->GetLogonServerConfig().logonID);		// TODO	
 	if (!ret)
 	{
-		throw new CException("CBaseLogonServer::m_TCPSocket.Start 连接模块启动失败", 0x433);
+		throw new CException("CBaseLogonServer::m_pTcpConnect.Start 连接模块启动失败", 0x433);
 	}
 	int err = pthread_create(&m_connectCServerHandle, NULL, TcpConnectThread, (void*)this);
 	if (err != 0)
@@ -242,7 +277,8 @@ bool CBaseLogonServer::Start()
 	// 启动定时器
 	for (int i = 0; i < m_KernelData.uTimerCount; i++)
 	{
-		if (!m_pServerTimer[i].Start(&m_DataLine))
+		// 一秒执行一次
+		if (!m_pServerTimer[i].Start(&m_DataLine, 1000))
 		{
 			ERROR_LOG("CBaseLogonServer::m_pServerTimer.Start 定时器启动失败");
 			return false;
@@ -294,6 +330,10 @@ bool CBaseLogonServer::Stop()
 
 	// 先关闭网络模块
 	m_TCPSocket.Stop();
+	if (ConfigManage()->m_logonServerConfig.webSocket)
+	{
+		m_WebSocket.Stop();
+	}
 
 	//关闭与中心服务器的连接
 	m_pTcpConnect->Stop();
@@ -333,17 +373,18 @@ bool CBaseLogonServer::Stop()
 }
 
 //网络关闭处理
-bool CBaseLogonServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime)
+bool CBaseLogonServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime, BYTE socketType)
 {
 	SocketCloseLine SocketClose;
 	SocketClose.uConnectTime = uConnectTime;
 	SocketClose.uIndex = uIndex;
 	SocketClose.uAccessIP = uAccessIP;
+	SocketClose.socketType = socketType;
 	return (m_DataLine.AddData(&SocketClose.LineHead, sizeof(SocketClose), HD_SOCKET_CLOSE) != 0);
 }
 
 //网络消息处理
-bool CBaseLogonServer::OnSocketReadEvent(void* pBufferevent, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
+bool CBaseLogonServer::OnSocketReadEvent(BYTE socketType, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
 {
 	if (!pNetHead)
 	{
@@ -354,7 +395,7 @@ bool CBaseLogonServer::OnSocketReadEvent(void* pBufferevent, NetMessageHead* pNe
 
 	SocketRead.uHandleSize = uSize;
 	SocketRead.uIndex = uIndex;
-	SocketRead.pBufferevent = pBufferevent;
+	SocketRead.socketType = socketType;
 	SocketRead.uAccessIP = 0;		//TODO
 	SocketRead.netMessageHead = *pNetHead;
 	return m_DataLine.AddData(&SocketRead.LineHead, sizeof(SocketRead), HD_SOCKET_READ, pData, uSize) != 0;
@@ -458,17 +499,24 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 					pBuffer = (void*)(pSocketRead + 1);			// 移动一个SocketReadLine
 				}
 
-				if (!pThis->OnSocketRead(&pSocketRead->netMessageHead, pBuffer, size, pSocketRead->uAccessIP, pSocketRead->uIndex, pSocketRead->pBufferevent))
+				if (!pThis->OnSocketRead(&pSocketRead->netMessageHead, pBuffer, size, pSocketRead->socketType, pSocketRead->uIndex, pSocketRead->pBufferevent))
 				{
 					ERROR_LOG("OnSocketRead failed mainID=%d assistID=%d", pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
-					pThis->m_TCPSocket.CloseSocket(pSocketRead->uIndex);
+					if (ConfigManage()->m_logonServerConfig.webSocket && pSocketRead->socketType)
+					{
+						pThis->m_WebSocket.CloseSocket(pSocketRead->uIndex);
+					}
+					else
+					{
+						pThis->m_TCPSocket.CloseSocket(pSocketRead->uIndex);
+					}
 				}
 				break;
 			}
 			case HD_SOCKET_CLOSE:		// socket 关闭
 			{
 				SocketCloseLine* pSocketClose = (SocketCloseLine*)pDataLineHead;
-				pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime);
+				pThis->OnSocketClose(pSocketClose->uAccessIP, pSocketClose->uIndex, pSocketClose->uConnectTime, pSocketClose->socketType);
 				break;
 			}
 			case HD_ASYN_THREAD_RESULT://异步线程处理结果

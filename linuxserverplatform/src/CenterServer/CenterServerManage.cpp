@@ -151,7 +151,7 @@ bool CCenterServerManage::PreInitParameter(ManageInfoStruct* pInitData, KernelIn
 
 //////////////////////////////////////////////////////////////////////
 // 走到这里的一般是底层通知业务层关闭(比如客户端断线，或者主动关闭socket之类)
-bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime)
+bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime, BYTE socketType)
 {
 	// 考虑到PHP，这里不生成日志
 	auto itrSocketToServerMap = m_socketToServerMap.find(socketIdx);

@@ -506,6 +506,11 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 		umap["port"] = std::to_string(itr->second.port);
 		umap["maxPeople"] = std::to_string(itr->second.maxPeople);
 		umap["curPeople"] = "0";
+		umap["socketCount"] = std::to_string(itr->second.socketCount);
+		umap["webSocketPort"] = std::to_string(itr->second.webSocketPort);
+		umap["maxWebSocketPeople"] = std::to_string(itr->second.maxWebSocketPeople);
+		umap["curWebSocketPeople"] = std::to_string(itr->second.curWebSocketPeople);
+		umap["webSocketCount"] = std::to_string(itr->second.webSocketCount);
 
 		hmset(TBL_BASE_LOGON, itr->first, umap);
 	}

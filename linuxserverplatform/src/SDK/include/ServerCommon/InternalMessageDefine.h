@@ -46,6 +46,8 @@ struct SocketCloseLine
 	UINT								uIndex;						//SOCKT 索引
 	ULONG								uAccessIP;					//SOCKET IP
 	UINT								uConnectTime;				//连接时间
+	BYTE								socketType;					//socket类型 enum SocketType
+
 	SocketCloseLine()
 	{
 		memset(this, 0, sizeof(SocketCloseLine));
@@ -60,7 +62,9 @@ struct SocketReadLine
 	UINT								uHandleSize;				//数据包处理大小
 	UINT								uIndex;						//SOCKET 索引
 	ULONG								uAccessIP;					//SOCKET IP
-	void*								pBufferevent;				//bufferevent	
+	void*								pBufferevent;				//bufferevent
+	BYTE								socketType;					//socket类型 enum SocketType
+
 	SocketReadLine()
 	{
 		memset(this, 0, sizeof(SocketReadLine));

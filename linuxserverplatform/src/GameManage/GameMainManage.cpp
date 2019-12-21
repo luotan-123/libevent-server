@@ -158,7 +158,7 @@ bool CGameMainManage::OnUpdate()
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex, void* pBufferevent)
+bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, ULONG uAccessIP, UINT uIndex)
 {
 	if (!pNetHead)
 	{
@@ -232,13 +232,6 @@ bool CGameMainManage::OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT
 
 	ERROR_LOG("unavalible mainID: %d", pNetHead->uMainID);
 
-	return true;
-}
-
-//////////////////////////////////////////////////////////////////////////
-bool CGameMainManage::OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime)
-{
-	// 废弃不用改用，OnUserSocketClose
 	return true;
 }
 

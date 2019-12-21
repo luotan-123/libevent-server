@@ -91,7 +91,7 @@ public:
 
 public:
 	// 初始化
-	virtual bool Init(IServerSocketService* pService, int maxCount, int port, const char* ip = NULL);
+	virtual bool Init(IServerSocketService* pService, int maxCount, int port, const char* ip = NULL, SocketType socketType = SOCKET_TYPE_TCP);
 	// 取消初始化
 	virtual bool UnInit();
 	// 开始服务
@@ -132,8 +132,8 @@ public:
 	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
 
 protected:
-	// 解析数据函数
-	virtual bool HandleData(bufferevent* bev, int index);
+	// 最底层处理收到的数据函数
+	virtual bool RecvData(bufferevent* bev, int index);
 
 public: // 设置tcp属性
 	// 设置tcp收发缓冲区
@@ -175,6 +175,7 @@ protected:
 	volatile UINT				m_uCurSocketSize;
 	char						m_bindIP[48];
 	unsigned short				m_port;
+	BYTE						m_socketType;
 
 	// 内核管理socket模块
 	CSignedLock					m_csSocketInfoLock;

@@ -4,6 +4,8 @@
 
 CLogonUserManage::CLogonUserManage()
 {
+	m_tcpSocketCount = 0;
+	m_webSocketCount = 0;
 }
 
 CLogonUserManage::~CLogonUserManage()
@@ -36,6 +38,15 @@ bool CLogonUserManage::AddUser(int userID, LogonUserInfo * pUser)
 
 	m_logonUserInfoMap.insert(std::make_pair(userID, pUser));
 
+	if (pUser->socketType == SOCKET_TYPE_WEBSOCKET)
+	{
+		m_webSocketCount++;
+	}
+	else
+	{
+		m_tcpSocketCount++;
+	}
+
 	return true;
 }
 
@@ -46,6 +57,15 @@ void CLogonUserManage::DelUser(int userID)
 	{
 		ERROR_LOG("find use failed userID:%d", userID);
 		return;
+	}
+
+	if (iter->second->socketType == SOCKET_TYPE_WEBSOCKET)
+	{
+		m_webSocketCount--;
+	}
+	else
+	{
+		m_tcpSocketCount--;
 	}
 
 	SAFE_DELETE(iter->second);
@@ -59,5 +79,7 @@ void CLogonUserManage::Release()
 		SAFE_DELETE(iter->second);
 	}
 
+	m_tcpSocketCount = 0;
+	m_webSocketCount = 0;
 	m_logonUserInfoMap.clear();
 }

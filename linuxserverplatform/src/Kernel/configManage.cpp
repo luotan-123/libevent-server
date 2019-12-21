@@ -1209,6 +1209,7 @@ bool CConfigManage::LoadLogonServerConfig()
 	string key = "LOGONSERVER";
 
 	m_logonServerConfig.logonID = file.GetKeyVal(key, "logonID", 1);
+	m_logonServerConfig.webSocket = file.GetKeyVal(key, "webSocket", 0);
 
 	return true;
 }
@@ -1266,12 +1267,20 @@ bool CConfigManage::LoadLogonBaseConfig()
 		sqlGetValue(dataSet[i], "intranetIP", logonBaseInfo.intranetIP, sizeof(logonBaseInfo.intranetIP));
 		sqlGetValue(dataSet[i], "port", logonBaseInfo.port);
 		sqlGetValue(dataSet[i], "maxPeople", logonBaseInfo.maxPeople);
+		sqlGetValue(dataSet[i], "webSocketPort", logonBaseInfo.webSocketPort);
+		sqlGetValue(dataSet[i], "maxWebSocketPeople", logonBaseInfo.maxWebSocketPeople);
 
 		ServerConfigInfo configInfo(logonBaseInfo.port, logonBaseInfo.ip);
 
 		if (m_logonPortSet.count(configInfo) > 0)
 		{
 			ERROR_LOG("登陆服端口或IP重复");
+			return false;
+		}
+
+		if (logonBaseInfo.webSocketPort == logonBaseInfo.port)
+		{
+			ERROR_LOG("tcpsocket(%d)和websocket不能相同(%d)", logonBaseInfo.port, logonBaseInfo.webSocketPort);
 			return false;
 		}
 

@@ -47,8 +47,10 @@ public:
 	// 闲聊登陆
 	int GetUserIDByXianLiao(const char* xianliao);
 
-	// 设置登录服人数
+	// 设置登录服人数 TCPscoket
 	bool SetLogonServerCurrPeopleCount(int logonID, UINT peopleCount, UINT socketCount);
+	// 设置网关服务器websocket信息
+	bool SetGatewayServerCurrPeopleCount(int logonID, UINT curWebSocketPeople, UINT webSocketCount);
 
 	///////////////////////////////////战绩模块///////////////////////////////////////
 	bool GetGradeSimpleInfo(long long id, PrivateDeskGradeSimpleInfo& simpleInfoVec);
