@@ -243,7 +243,7 @@ protected:
 	DWORD							m_nPlayDelay[PlayChair_Max];							// 玩家延迟
 	long							m_lPlayFishCount[PlayChair_Max][FishType_Max];			// 玩家捕获鱼数
 	int								m_nMultipleIndex[PlayChair_Max];						// 玩家倍数
-	map< int, tagFireInfo >			m_ArrayBulletKey[PlayChair_Max];						// 子弹关键值
+	unordered_map< int, tagFireInfo >			m_ArrayBulletKey[PlayChair_Max];						// 子弹关键值
 
 	// 玩家信息
 protected:
@@ -296,7 +296,7 @@ protected:
 	static int						m_nExplosionStart;						// 爆炸启动
 	static LONGLONG					m_lExplosionCondition;					// 爆炸条件
 	static EnumExplosionConditionType m_nExplosionConditionType;			// 条件类型
-	static map<uint, LONGLONG>		m_MapPlayExplosionCondition;			// 爆炸条件
+	static unordered_map<uint, LONGLONG>		m_MapPlayExplosionCondition;			// 爆炸条件
 
 	// 库存
 protected:

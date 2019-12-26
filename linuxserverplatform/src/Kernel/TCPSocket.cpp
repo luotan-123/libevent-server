@@ -12,18 +12,18 @@
 
 
 //通用变量的定义
-const int ERROR_SERVICE_FULL = 15;			// 服务器人数已满
-const unsigned int MSG_MAIN_TEST = 1;		// 测试消息
-const unsigned int MSG_MAIN_CONECT = 2;		// 连接测试
+const static int ERROR_SERVICE_FULL = 15;			// 服务器人数已满
+const static unsigned int MSG_MAIN_TEST = 1;		// 测试消息
+const static unsigned int MSG_MAIN_CONECT = 2;		// 连接测试
 
 //接收线程参数
 struct RecvThreadParam
 {
-	CTCPSocketManage* pCTCPSocketManage;
+	CTCPSocketManage* pThis;
 	int index;
 	RecvThreadParam()
 	{
-		pCTCPSocketManage = NULL;
+		pThis = NULL;
 		index = 0;
 	}
 };
@@ -69,9 +69,7 @@ bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int po
 	m_socketType = socketType;
 
 	m_workBaseVec.clear();
-
-	// 设置libevent日志回调函数
-	event_set_log_callback(EventLog);
+	m_heartBeatSocketSet.clear();
 
 	// 初始化分配内存
 	m_socketInfoVec.resize(m_uMaxSocketSize * 2);
@@ -101,7 +99,6 @@ bool CTCPSocketManage::Start(int serverType)
 	m_running = true;
 	m_iServiceType = serverType;
 	m_uCurSocketSize = 0;
-	m_heartBeatSocketSet.clear();
 	m_uCurSocketIndex = 0;
 
 	// 创建发送队列
@@ -399,7 +396,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 
 	// 生成回调函数参数，调用bufferevent_free要释放内存，否则内存泄露
 	RecvThreadParam* pRecvThreadParam = new RecvThreadParam;
-	pRecvThreadParam->pCTCPSocketManage = this;
+	pRecvThreadParam->pThis = this;
 	pRecvThreadParam->index = index;
 
 	// 添加事件，并设置好回调函数
@@ -551,12 +548,6 @@ bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageH
 		return false;
 	}
 
-	CDataLine* pDataLine = GetRecvDataLine();
-	if (!pDataLine)
-	{
-		return false;
-	}
-
 	if (pHead->uMainID == MSG_MAIN_TEST) //心跳包
 	{
 		return true;
@@ -565,6 +556,12 @@ bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageH
 	if (pHead->uMainID == MSG_MAIN_CONECT) //测试连接包
 	{
 		return SendData(index, NULL, 0, pHead->uMainID, pHead->uAssistantID, pHead->uHandleCode, 0, pBufferevent, pHead->uIdentification);
+	}
+
+	CDataLine* pDataLine = GetRecvDataLine();
+	if (!pDataLine)
+	{
+		return false;
 	}
 
 	SocketReadLine msg;
@@ -752,7 +749,7 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 	for (int i = 0; i < workBaseCount; i++)
 	{
 		param[i].index = i;
-		param[i].pCTCPSocketManage = pThis;
+		param[i].pThis = pThis;
 
 		WorkThreadInfo workInfo;
 		int fd[2];
@@ -830,7 +827,7 @@ void* CTCPSocketManage::ThreadRSSocket(void* pThreadData)
 	}
 
 	// 处于监听状态
-	event_base_dispatch(param->pCTCPSocketManage->m_workBaseVec[param->index].base);
+	event_base_dispatch(param->pThis->m_workBaseVec[param->index].base);
 
 	pthread_exit(NULL);
 }
@@ -955,7 +952,7 @@ void CTCPSocketManage::ListenerCB(evconnlistener* listener, evutil_socket_t fd, 
 void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 {
 	RecvThreadParam* param = (RecvThreadParam*)data;
-	CTCPSocketManage* pThis = param->pCTCPSocketManage;
+	CTCPSocketManage* pThis = param->pThis;
 	int index = param->index;
 
 	// 处理数据，包头解析
@@ -965,7 +962,7 @@ void CTCPSocketManage::ReadCB(bufferevent* bev, void* data)
 void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 {
 	RecvThreadParam* param = (RecvThreadParam*)data;
-	CTCPSocketManage* pThis = param->pCTCPSocketManage;
+	CTCPSocketManage* pThis = param->pThis;
 	int index = param->index;
 
 	if (events & BEV_EVENT_EOF)
@@ -996,7 +993,7 @@ void CTCPSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)
 void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 {
 	RecvThreadParam* param = (RecvThreadParam*)arg;
-	CTCPSocketManage* pThis = param->pCTCPSocketManage;
+	CTCPSocketManage* pThis = param->pThis;
 	int threadIndex = param->index;
 	if (threadIndex < 0 || threadIndex >= pThis->m_workBaseVec.size() || readfd != pThis->m_workBaseVec[threadIndex].read_fd)
 	{
@@ -1024,26 +1021,4 @@ void CTCPSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 	}
 
 	event_add(pThis->m_workBaseVec[threadIndex].event, NULL);
-}
-
-void CTCPSocketManage::EventLog(int severity, const char* msg)
-{
-	switch (severity)
-	{
-	case EVENT_LOG_DEBUG:
-		INFO_LOG("libevent[debug]:%s", msg);
-		break;
-	case EVENT_LOG_MSG:
-		INFO_LOG("libevent[msg]:%s", msg);
-		break;
-	case EVENT_LOG_WARN:
-		INFO_LOG("libevent[warn]:%s", msg);
-		break;
-	case EVENT_LOG_ERR:
-		ERROR_LOG("########## libevent内核错误:%s ##########", msg);
-		break;
-	default:
-		INFO_LOG("libevent:%s", msg);
-		break;
-	}
 }

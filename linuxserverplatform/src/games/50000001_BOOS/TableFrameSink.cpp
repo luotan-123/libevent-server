@@ -86,7 +86,7 @@ int CTableFrameSink::m_nExplosionStart;
 LONGLONG CTableFrameSink::m_lExplosionCondition;
 // 条件类型
 EnumExplosionConditionType CTableFrameSink::m_nExplosionConditionType;
-map<uint, LONGLONG> CTableFrameSink::m_MapPlayExplosionCondition;
+unordered_map<uint, LONGLONG> CTableFrameSink::m_MapPlayExplosionCondition;
 LONGLONG CTableFrameSink::m_lStockInitial;
 LONGLONG CTableFrameSink::m_lStockCurrent;
 
@@ -2055,7 +2055,7 @@ bool CTableFrameSink::OnSubCatchFish(BYTE deskStation, const void* pBuffer, WORD
 	//WORD wChairID = pIServerUserItem->GetChairID();
 
 	// 查找子弹
-	map<int, tagFireInfo>::iterator itr = m_ArrayBulletKey[deskStation].find(pCatchFish->nBulletKey);
+	unordered_map<int, tagFireInfo>::iterator itr = m_ArrayBulletKey[deskStation].find(pCatchFish->nBulletKey);
 
 	if (itr == m_ArrayBulletKey[deskStation].end())
 	{
@@ -2241,7 +2241,7 @@ bool CTableFrameSink::OnSubFire(BYTE deskStation, const void* pBuffer, WORD wDat
 	tagFireInfo FireInfo;
 	FireInfo.nMultipleIndex = m_nMultipleIndex[deskStation];
 	FireInfo.dBulletInvest = (double)lBulletInvest;
-	m_ArrayBulletKey[deskStation].insert(map<int, tagFireInfo>::value_type(pFire->nBulletKey, FireInfo));
+	m_ArrayBulletKey[deskStation].insert(unordered_map<int, tagFireInfo>::value_type(pFire->nBulletKey, FireInfo));
 	//printf("子弹关键值:%d,倍数索引:%d,子弹收入:%d", pFire->nBulletKey, FireInfo.nMultipleIndex, FireInfo.dBulletInvest);
 	// 设置信息
 	CMD_S_Fire CMDSFire;

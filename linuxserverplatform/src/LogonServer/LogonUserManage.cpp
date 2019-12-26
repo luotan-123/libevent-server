@@ -83,3 +83,22 @@ void CLogonUserManage::Release()
 	m_webSocketCount = 0;
 	m_logonUserInfoMap.clear();
 }
+
+void CLogonUserManage::UserChangeSocketType(int srcSocketType, int dstSocketType)
+{
+	if (srcSocketType == dstSocketType)
+	{
+		return;
+	}
+
+	if(dstSocketType == SOCKET_TYPE_WEBSOCKET)
+	{
+		m_webSocketCount++;
+		m_tcpSocketCount--;
+	}
+	else
+	{
+		m_webSocketCount--;
+		m_tcpSocketCount++;
+	}
+}

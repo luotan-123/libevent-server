@@ -108,6 +108,12 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\WebSocket.h">
       <Filter>网络模块</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\sha1.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\base64.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -163,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\WebSocket.cpp">
       <Filter>网络模块</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\sha1.cpp">
+      <Filter>工具和接口</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\base64.cpp">
+      <Filter>工具和接口</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

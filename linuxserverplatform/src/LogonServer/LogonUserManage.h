@@ -42,6 +42,7 @@ public:
 	UINT GetUserCount() { return m_logonUserInfoMap.size(); }
 	UINT GetTcpSocketUserCount() { return m_tcpSocketCount; }
 	UINT GetWebSocketUserCount() { return m_webSocketCount; }
+	void UserChangeSocketType(int srcSocketType, int dstSocketType);
 
 private:
 	std::unordered_map<int, LogonUserInfo*> m_logonUserInfoMap;			// 大厅玩家管理器中只保存在线的玩家

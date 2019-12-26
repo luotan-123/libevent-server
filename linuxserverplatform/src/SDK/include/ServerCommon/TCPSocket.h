@@ -87,7 +87,7 @@ class CTCPSocketManage
 {
 public:
 	CTCPSocketManage();
-	~CTCPSocketManage();
+	virtual ~CTCPSocketManage();
 
 public:
 	// 初始化
@@ -122,6 +122,8 @@ public:
 	const char* GetSocketIP(int index);
 	// 获取TcpSocketInfo
 	const TCPSocketInfo* GetTCPSocketInfo(int index);
+	
+protected:
 	// 分配socketIndex算法
 	int GetSocketIndex();
 	// 添加TCPSocketInfo
@@ -130,8 +132,6 @@ public:
 	void RemoveTCPSocketStatus(int index, bool isClientAutoClose = false);
 	// 派发数据包
 	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
-
-protected:
 	// 最底层处理收到的数据函数
 	virtual bool RecvData(bufferevent* bev, int index);
 
@@ -162,8 +162,6 @@ protected:
 	static void AcceptErrorCB(struct evconnlistener* listener, void*);
 	// 新的连接到来，ThreadRSSocket线程函数
 	static void ThreadLibeventProcess(int readfd, short which, void* arg);
-	// libEvent日志回调函数
-	static void EventLog(int severity, const char* msg);
 
 protected:
 	event_base* m_listenerBase;

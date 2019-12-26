@@ -30,6 +30,33 @@ struct NetMessageHead
 	}
 };
 
+struct WebSocketMsg
+{
+	uint8_t fin;
+	uint8_t opcode;
+	uint8_t mask;
+	uint8_t maskingKey[4];
+	uint32_t dataLength;	//数据包总长度
+	uint32_t payloadLength; //数据部分长度，不包含包头
+	char* payload;			//数据部分起始地址
+
+	WebSocketMsg()
+	{
+		Init();
+	}
+
+	void Init()
+	{
+		fin = 0;
+		opcode = 0;
+		mask = 0;
+		maskingKey[0] = 0;
+		dataLength = 0;
+		payloadLength = 0;
+		payload = nullptr;
+	}
+};
+
 //中心服包头
 struct CenterServerMessageHead
 {

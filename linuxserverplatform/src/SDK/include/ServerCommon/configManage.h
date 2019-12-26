@@ -520,6 +520,9 @@ public:
 	void SetServiceType(int type);
 	// 解析json数据
 	static std::string ParseJsonValue(const std::string& src, const char* key);
+	// libEvent日志回调函数
+	static void EventLog(int severity, const char* msg);
+
 private:
 	// 测试数据库连接
 	bool ConnectToDatabase();

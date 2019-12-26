@@ -60,7 +60,7 @@ int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("上传录像json耗时");
+	//AUTOCOST("上传录像json耗时");
 
 	if (!m_pInitInfo)
 	{
@@ -79,7 +79,7 @@ int CGameDataBaseHandle::OnUploadVideo(DataBaseLineHead* pSourceData)
 // 执行sql语句
 int CGameDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData)
 {
-	AUTOCOST("执行SQL语句耗时");
+	//AUTOCOST("执行SQL语句耗时");
 
 	AsyncEventMsgSqlStatement* pMessage = (AsyncEventMsgSqlStatement*)pSourceData;
 	if (!pMessage)
@@ -180,7 +180,7 @@ int CGameDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("HTTP请求");
+	//AUTOCOST("HTTP请求");
 
 	//发送邮件接口
 	MyCurl curl;

@@ -28,20 +28,23 @@ struct LogonServerSocket
 {
 	BYTE type;			// 两种类型的socket 1：玩家的socket，2：游戏服的socket
 	int identityID;		// 玩家id或者roomID
-	void* pBufferevent;
 
 	LogonServerSocket()
 	{
 		type = LOGON_SERVER_SOCKET_TYPE_NO;
 		identityID = 0;
-		pBufferevent = nullptr;
 	}
 
-	LogonServerSocket(BYTE type, int identityID, void* pBufferevent)
+	LogonServerSocket(BYTE type, int identityID)
 	{
 		this->type = type;
 		this->identityID = identityID;
-		this->pBufferevent = pBufferevent;
+	}
+
+	void Init()
+	{
+		type = LOGON_SERVER_SOCKET_TYPE_NO;
+		identityID = 0;
 	}
 };
 
@@ -50,12 +53,13 @@ class CGameLogonManage : public CBaseLogonServer
 public:
 	UINT						m_nPort;				//登陆服务器端口 tcp
 	UINT						m_uMaxPeople;			//支持最大人数（包括gserver数量） tcp
+	UINT						m_uMaxWebPeople;		//支持最大人数 websocket
 
 private:
 	CLogonUserManage*			m_pUserManage;			// 玩家管理器
 	CLogonGServerManage*		m_pGServerManage;		// 游戏服管理器
-	std::unordered_map<int, LogonServerSocket> m_socketInfoMap;		// socket索引和identityID的映射表 TCP
-	std::unordered_map<int, LogonServerSocket> m_webSocketInfoMap;	// socket索引和userID的映射表 websocket
+	std::vector<LogonServerSocket> m_socketInfoMap;		// socket索引和identityID的映射表 TCP
+	std::vector<LogonServerSocket> m_webSocketInfoMap;	// socket索引和userID的映射表 websocket
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
 	time_t						m_lastSendHeartBeatTime;// 上次发送心跳时间
@@ -136,8 +140,8 @@ public:
 	bool SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification = 0);
 	// 通过索引发送数据
 	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, BYTE socketType, unsigned int uIdentification = 0);
-	// 广播全部玩家（不包括gserver）
-	bool SendDataBatch(void * pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode);
+	// 广播全服数据，toGServer=true广播到游戏服务器
+	bool SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode, bool toGServer);
 	// 通知资源变化, value为总值，不是变化值
 	void NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue);
 

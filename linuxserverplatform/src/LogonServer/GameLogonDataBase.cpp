@@ -47,7 +47,7 @@ UINT CServiceDataBaseHandle::HandleDataBase(DataBaseLineHead* pSourceData)
 // 执行sql语句
 int CServiceDataBaseHandle::OnHandleExecuteSQLStatement(DataBaseLineHead* pSourceData)
 {
-	AUTOCOST("执行SQL语句耗时");
+	//AUTOCOST("执行SQL语句耗时");
 
 	AsyncEventMsgSqlStatement* pMessage = (AsyncEventMsgSqlStatement*)pSourceData;
 	if (!pMessage)
@@ -148,7 +148,7 @@ int CServiceDataBaseHandle::OnHandleHTTP(DataBaseLineHead* pSourceData)
 		return -2;
 	}
 
-	AUTOCOST("HTTP请求");
+	//AUTOCOST("HTTP请求");
 
 	//发送邮件接口
 	MyCurl curl;

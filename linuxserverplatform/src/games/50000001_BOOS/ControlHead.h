@@ -30,7 +30,7 @@ if( Hinstance )											\
 }								
 
 // 个人难度
-typedef map< unsigned long, double > CMapPersonalDifficulty;
+typedef unordered_map< unsigned long, double > CMapPersonalDifficulty;
 
 // 接口信息
 

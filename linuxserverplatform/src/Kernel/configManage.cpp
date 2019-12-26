@@ -48,6 +48,9 @@ bool CConfigManage::Init()
 	// 设置libevent内存管理接口
 	event_set_mem_functions(&malloc, &realloc, &free);
 
+	// 设置libevent日志回调函数
+	event_set_log_callback(EventLog);
+
 	// 初始化libevent线程
 	if (evthread_use_pthreads() < 0)
 	{
@@ -1010,6 +1013,28 @@ std::string CConfigManage::ParseJsonValue(const std::string& src, const char* ke
 
 	std::string value(subStr.c_str() + realBegin + 1, subStr.c_str() + realEnd);
 	return value;
+}
+
+void CConfigManage::EventLog(int severity, const char* msg)
+{
+	switch (severity)
+	{
+	case EVENT_LOG_DEBUG:
+		INFO_LOG("libevent[debug]:%s", msg);
+		break;
+	case EVENT_LOG_MSG:
+		INFO_LOG("libevent[msg]:%s", msg);
+		break;
+	case EVENT_LOG_WARN:
+		INFO_LOG("libevent[warn]:%s", msg);
+		break;
+	case EVENT_LOG_ERR:
+		ERROR_LOG("########## libevent内核错误:%s ##########", msg);
+		break;
+	default:
+		INFO_LOG("libevent:%s", msg);
+		break;
+	}
 }
 
 void CConfigManage::GetOtherConfigKeyValue(std::string& strKey, std::string& strValue)

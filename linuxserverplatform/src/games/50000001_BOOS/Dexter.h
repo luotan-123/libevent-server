@@ -27,7 +27,6 @@ typedef unsigned int        DWORD;
 typedef void				VOID;
 typedef float				FLOAT;
 #define Vector				vector
-#define Map					map
 #define Static				static
 #define int_max				2147483647       
 #define int_min				(-2147483647 - 1)   
