@@ -511,7 +511,7 @@ void CWebSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, tcpInfo.bev);
 	}
 
-	CON_INFO_LOG("client connect [ip=%s port=%d index=%d fd=%d bufferevent=%p]",
+	CON_INFO_LOG("WEBSOCKET connect [ip=%s port=%d index=%d fd=%d bufferevent=%p]",
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, tcpInfo.bev);
 }
 
@@ -586,7 +586,7 @@ void CWebSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime, m_socketType);
 	}
 
-	CON_INFO_LOG("close [ip=%s port=%d index=%d fd=%d isClientAutoClose:%d acceptTime=%lld]",
+	CON_INFO_LOG("WEBSOCKET close [ip=%s port=%d index=%d fd=%d isClientAutoClose:%d acceptTime=%lld]",
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, isClientAutoClose, tcpInfo.acceptMsgTime);
 }
 
@@ -904,7 +904,7 @@ void* CWebSocketManage::ThreadAccept(void* pThreadData)
 	pThis->m_listenerBase = event_base_new();
 	if (!pThis->m_listenerBase)
 	{
-		CON_ERROR_LOG("Could not initialize libevent!");
+		CON_ERROR_LOG("WEBSOCKET Could not initialize libevent!");
 		exit(1);
 	}
 
@@ -959,20 +959,20 @@ void* CWebSocketManage::ThreadAccept(void* pThreadData)
 		workInfo.base = event_base_new();
 		if (!workInfo.base)
 		{
-			CON_ERROR_LOG("Could not initialize libevent!");
+			CON_ERROR_LOG("WEBSOCKET Could not initialize libevent!");
 			exit(1);
 		}
 
 		workInfo.event = event_new(workInfo.base, workInfo.read_fd, EV_READ, ThreadLibeventProcess, (void*)&param[i]);
 		if (!workInfo.event)
 		{
-			CON_ERROR_LOG("Could not create event!");
+			CON_ERROR_LOG("WEBSOCKET Could not create event!");
 			exit(1);
 		}
 
 		if (event_add(workInfo.event, NULL) < 0)
 		{
-			CON_ERROR_LOG("event_add ERROR");
+			CON_ERROR_LOG("WEBSOCKET event_add ERROR");
 			exit(1);
 		}
 
@@ -1188,7 +1188,7 @@ void CWebSocketManage::ThreadLibeventProcess(int readfd, short which, void* arg)
 	int threadIndex = param->index;
 	if (threadIndex < 0 || threadIndex >= pThis->m_workBaseVec.size() || readfd != pThis->m_workBaseVec[threadIndex].read_fd)
 	{
-		CON_ERROR_LOG("######  threadIndex = %d", threadIndex);
+		ERROR_LOG("######  threadIndex = %d", threadIndex);
 		exit(1);
 	}
 

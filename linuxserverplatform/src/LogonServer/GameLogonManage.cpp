@@ -22,7 +22,6 @@ CGameLogonManage::CGameLogonManage() : CBaseLogonServer()
 	m_pUserManage = NULL;
 	m_pGServerManage = NULL;
 	m_lastNormalTimerTime = 0;
-	m_lastSendHeartBeatTime = 0;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -95,8 +94,10 @@ bool CGameLogonManage::OnStart()
 	//初始化socket
 	m_socketInfoMap.clear();
 	m_webSocketInfoMap.clear();
+	m_socketIndexVec.clear();
 	m_socketInfoMap.resize(2 * m_uMaxPeople);
 	m_webSocketInfoMap.resize(2 * m_uMaxWebPeople);
+	m_socketIndexVec.resize(Max_(m_uMaxPeople, m_uMaxWebPeople));
 
 	if (m_pRedis)
 	{
@@ -143,8 +144,6 @@ bool CGameLogonManage::OnStart()
 	}
 
 	m_lastNormalTimerTime = time(NULL);
-	m_lastSendHeartBeatTime = 0;
-	m_socketIndexVec.resize(m_uMaxPeople);
 
 	InitRounteCheckEvent();
 
@@ -203,9 +202,7 @@ bool CGameLogonManage::OnTimerMessage(UINT uTimerID)
 	}
 	case LOGON_TIMER_CHECK_HEARTBEAT:
 	{
-		CheckHeartBeat(m_lastSendHeartBeatTime, CHECK_HEAETBEAT_SECS);
-		m_lastSendHeartBeatTime = time(NULL);
-
+		CheckHeartBeat();
 		return true;
 	}
 	default:
@@ -2309,7 +2306,7 @@ void CGameLogonManage::CheckRedisConnection()
 	m_pRedisPHP->CheckConnection(redisPHPConfig);
 }
 
-void CGameLogonManage::CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeartBeatTime)
+void CGameLogonManage::CheckHeartBeat()
 {
 	// 广播心跳
 	SendDataBatch(NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, true);

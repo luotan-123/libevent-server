@@ -62,7 +62,6 @@ private:
 	std::vector<LogonServerSocket> m_webSocketInfoMap;	// socket索引和userID的映射表 websocket
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
-	time_t						m_lastSendHeartBeatTime;// 上次发送心跳时间
 	std::vector<UINT>			m_socketIndexVec;		// socket索引，遍历在线tcpsocket需要
 
 private:
@@ -170,7 +169,7 @@ private:
 	// 检查redis连接性
 	void CheckRedisConnection();
 	// 检查心跳
-	void CheckHeartBeat(time_t llLastSendHeartBeatTime, int iHeartBeatTime);
+	void CheckHeartBeat();
 	// 定时存储redis数据到DB updateAll=是否全部更新
 	void RountineSaveRedisDataToDB(bool updateAll);
 	// 定期检查没有绑定玩家ID的链接

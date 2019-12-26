@@ -72,11 +72,16 @@ int main()
 		return -1;
 	}
 
-	char szBuf[256] = "";
-	sprintf(szBuf, "LogonServer启动成功 [Port:%d] [LogonID:%d] [MaxPeople:%d]", 
-		g_LogonServerModule.m_LogonManage.m_nPort, ConfigManage()->m_logonServerConfig.logonID,
-		g_LogonServerModule.m_LogonManage.m_uMaxPeople);
-	std::cout << szBuf << std::endl;
+	int logonID = ConfigManage()->GetLogonServerConfig().logonID;
+	LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(logonID);
+	if (pLogonBaseInfo)
+	{
+		char szBuf[256] = "";
+		sprintf(szBuf, "LogonServer启动成功 [LogonID:%d] [tcpPort:%d] [tcpMaxPeople:%d] [wbPort:%d] [wbMaxPeople:%d]",
+			ConfigManage()->m_logonServerConfig.logonID, pLogonBaseInfo->port, pLogonBaseInfo->maxPeople,
+			pLogonBaseInfo->webSocketPort, pLogonBaseInfo->maxWebSocketPeople);
+		std::cout << szBuf << std::endl;
+	}
 
 	// 标题（显示版本信息和进程id）
 	printf("v%d.%d.%d %s  processID:%d\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME, getpid());
