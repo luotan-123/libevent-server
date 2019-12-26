@@ -1,6 +1,6 @@
-1、支持websocket协议
+1、支持websocket协议（已经完成）
 方法：参考CTCPSocketManage写websocket类。完成一次http握手。先解析websocket头部，然后再解析自己头部。
-2、支持http协议。
+2、支持http协议。（待开发）
 方法：不必重复造轮子，直接网上查
 3、实现c++和lua之间的相互调用
 大工程，涉及内容很多
