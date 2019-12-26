@@ -16,7 +16,6 @@ using namespace AsyncEventMsg;
 //////////////////////////////////////////////////////////////////////
 CGameLogonManage::CGameLogonManage() : CBaseLogonServer()
 {
-	m_nPort = 0;
 	m_uMaxPeople = 0;
 	m_uMaxWebPeople = 0;
 	m_pUserManage = NULL;
@@ -360,9 +359,8 @@ bool CGameLogonManage::PreInitParameter(ManageInfoStruct* pInitData, KernelInfoS
 
 	m_uMaxPeople = pLogonBaseInfo->maxPeople;
 	m_uMaxWebPeople = pLogonBaseInfo->maxWebSocketPeople;
-	m_nPort = pLogonBaseInfo->port;
 
-	pInitData->uListenPort = m_nPort;
+	pInitData->uListenPort = pLogonBaseInfo->port;
 	pInitData->uMaxPeople = m_uMaxPeople;
 
 	return true;

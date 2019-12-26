@@ -51,7 +51,6 @@ struct LogonServerSocket
 class CGameLogonManage : public CBaseLogonServer
 {
 public:
-	UINT						m_nPort;				//登陆服务器端口 tcp
 	UINT						m_uMaxPeople;			//支持最大人数（包括gserver数量） tcp
 	UINT						m_uMaxWebPeople;		//支持最大人数 websocket
 
