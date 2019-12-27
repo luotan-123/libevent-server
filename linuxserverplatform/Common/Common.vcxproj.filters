@@ -22,6 +22,9 @@
     <Filter Include="HttpClient">
       <UniqueIdentifier>{aab4321d-1407-4393-b531-fa6eb2e37a43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HttpServer">
+      <UniqueIdentifier>{6e588f4f-7431-437d-9f2d-8f2774912e83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Common\Util.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp">
       <Filter>公共定义</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Common\HttpServer.cpp">
+      <Filter>HttpServer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h">
       <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK\include\ServerCommon\HttpServer.h">
+      <Filter>HttpServer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

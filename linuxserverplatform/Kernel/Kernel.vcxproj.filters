@@ -34,9 +34,6 @@
     <Filter Include="线程锁和条件变量">
       <UniqueIdentifier>{82a5bb52-2846-4b6f-b921-9803fbb1eeb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HttpServer">
-      <UniqueIdentifier>{b3b3000b-e3af-47d4-8002-8df99c608c59}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h">
@@ -102,9 +99,6 @@
     <ClInclude Include="..\src\SDK\include\ServerCommon\TCPSocket.h">
       <Filter>网络模块</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\HttpServer.h">
-      <Filter>HttpServer</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\SDK\include\ServerCommon\WebSocket.h">
       <Filter>网络模块</Filter>
     </ClInclude>
@@ -160,9 +154,6 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\TCPSocket.cpp">
       <Filter>网络模块</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Kernel\HttpServer.cpp">
-      <Filter>HttpServer</Filter>
     </ClCompile>
     <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp">
       <Filter>工具和接口</Filter>
