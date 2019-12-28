@@ -19,7 +19,7 @@ enum LogonServerTimerID
 
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
-const int ROUTINE_CHECK_UNBINDID_SOCKET = 59;		// 定期检查未登录的连接(s)
+const int ROUTINE_CHECK_UNBINDID_SOCKET = 67;		// 定期检查未登录的连接(s)
 const int CHECK_SAVE_SOCKET_COUNT = 17;				// 定期保存网关socket数量(s)
 const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
 

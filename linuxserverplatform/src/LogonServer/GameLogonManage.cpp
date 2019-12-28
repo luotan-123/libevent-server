@@ -2344,6 +2344,10 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 		}
 	}
 
+	if (!ConfigManage()->GetLogonServerConfig().webSocket || m_WebSocket.GetCurSocketSize() <= 0)
+	{
+		return;
+	}
 
 	// websocket踢人
 	const std::vector<TCPSocketInfo>& vec = m_WebSocket.GetSocketVector();
