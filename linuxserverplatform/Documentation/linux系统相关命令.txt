@@ -37,5 +37,8 @@ p pThis->m_bRun
 修改文件所属组群：chgrp  用户名    文件名  -R 
 修改文件拥有者：chown 用户名   文件名  -R
 
+九、查看端口占用
+ss -lntpd | grep :3306
+
 
 
