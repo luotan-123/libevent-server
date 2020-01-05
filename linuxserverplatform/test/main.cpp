@@ -169,53 +169,20 @@ public:
 		printf("A\n");
 	}
 };
-int main()
+int main(int argc, char** argv)
 {
+	// 测试http服务器
+	CHttpServer httpserver;
+	httpserver.Start();
+
+
 	A* pa = new A[6];
-	//mallctl("prof.dump", NULL, NULL, NULL, 0);
 	int i;
 	for (i = 0; i < 1000; i++)
 	{
 		do_something(i);
 	}
-
-	//malloc_stats_print(NULL, NULL, NULL);
-
-	uint64_t epoch = 1;
-	size_t sz = sizeof(epoch);
-	mallctl("epoch", &epoch, &sz, &epoch, sz);
-
-	size_t allocated, active, mapped;
-	sz = sizeof(size_t);
-	mallctl("stats.allocated", &allocated, &sz, NULL, 0);
-	mallctl("stats.active", &active, &sz, NULL, 0);
-	mallctl("stats.mapped", &mapped, &sz, NULL, 0);
-
-	printf("allocated/active/mapped: %zu/%zu/%zu\n", allocated, active, mapped);
-
-	//mallctl("prof.dump", NULL, NULL, NULL, 0);
-
-	CSignedLock lock_;
-	printf("lock_ = %lld\n", sizeof(lock_));
-	pthread_t ssss = 0;
-	pthread_create(&ssss, NULL, Thread, NULL);
-
-	void* pMalloc = NULL;
-	pthread_join(ssss, &pMalloc);
-
-	int* pint = (int*)pMalloc;
-	*pint = 4;
-	printf("%d\n", *pint);
-	free(pMalloc);
-	printf("%d\n",*pint);
-
-	//malloc_stats_print(NULL, NULL, NULL);
-
-
-
 	mallctl("prof.dump", NULL, NULL, NULL, 0);
-
-
 
 
 	struct timeval tv;

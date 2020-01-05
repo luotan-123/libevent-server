@@ -93,6 +93,8 @@ dump_request_cb(struct evhttp_request* req, void* arg)
 	struct evkeyval* header;
 	struct evbuffer* buf;
 
+	struct evbuffer* evb = evbuffer_new();
+
 	switch (evhttp_request_get_command(req)) {
 	case EVHTTP_REQ_GET: cmdtype = "GET"; break;
 	case EVHTTP_REQ_POST: cmdtype = "POST"; break;
@@ -126,7 +128,14 @@ dump_request_cb(struct evhttp_request* req, void* arg)
 	}
 	puts(">>>");
 
-	evhttp_send_reply(req, 200, "OK", NULL);
+
+	evbuffer_add_printf(evb, "luotan http-server: Received a %s\r\n request for %s",
+		cmdtype, evhttp_request_get_uri(req));
+
+	evhttp_send_reply(req, 200, "OK", evb);
+
+	if (evb)
+		evbuffer_free(evb);
 }
 
 /* This callback gets invoked when we get any http request that doesn't match
@@ -408,7 +417,18 @@ int HttpMain(int argc, char** argv)
 	struct evhttp_bound_socket* handle = NULL;
 	struct evconnlistener* lev = NULL;
 	struct event* term = NULL;
-	struct options o = parse_opts(argc, argv);
+	struct options o; // = parse_opts(argc, argv);
+
+
+	// 配置参数
+	o.port = 8080;
+	o.docroot = "/root/linuxserverplatform/";
+	o.iocp = 0;
+	o.unixsock = 0;
+	o.unlink = 0;
+	o.verbose = 0;
+
+
 	int ret = 0;
 
 #ifdef _WIN32
@@ -543,11 +563,11 @@ void* HttpThread(void* param)
 	char* httpParam[8] = {};
 	int argc = 0;
 
-	char arg1[128] = "123456";
-	httpParam[argc++] = arg1;
+	//char arg1[128] = "/root/linuxserverplatform/bin/test";
+	//httpParam[argc++] = arg1;
 
-	char arg2[128] = "123456";
-	httpParam[argc++] = arg2;
+	//char arg2[128] = "-p 8080";
+	//httpParam[argc++] = arg2;
 
 	HttpMain(argc, httpParam);
 
@@ -556,8 +576,8 @@ void* HttpThread(void* param)
 
 CHttpServer::CHttpServer()
 {
-	
-
+	m_bRun = false;
+	m_pHandleService = NULL;
 }
 
 CHttpServer::~CHttpServer()
