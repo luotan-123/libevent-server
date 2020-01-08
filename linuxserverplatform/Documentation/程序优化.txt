@@ -38,3 +38,6 @@ MALLOC_CONF="prof:true,prof_prefix:jeprof.out"
 export MALLOC_CONF 
 执行source ~/.bash_profile 生效
 
+
+2、数据库数据超过几十亿条的处理办法（大数据库处理）
+
