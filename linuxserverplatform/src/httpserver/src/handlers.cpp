@@ -11,10 +11,12 @@
 #include <event2/keyvalq_struct.h>
 
 void general_request_handler(struct evhttp_request *req, void *arg) {
+    printf("recv msg\n");
     evhttp_send_error(req, 403, "Forbidden");
 }
 
 void ping_handler(struct evhttp_request *req, void *args) {
+    printf("recv ping\n");
     evhttp_add_header(evhttp_request_get_output_headers(req), "Content-Type", "application/json");
     struct evbuffer *evb = evbuffer_new();
     evbuffer_add_printf(evb, "%s", "{\"message\":\"PING -> PONG\"}");
@@ -23,6 +25,8 @@ void ping_handler(struct evhttp_request *req, void *args) {
 }
 
 void post_handler(struct evhttp_request *req, void *args) {
+
+    printf("recv post\n");
 
     const char *source_uri = evhttp_request_get_uri(req);
 

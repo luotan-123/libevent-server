@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
     LOG_INFO<<"server starting ...";
 
-    http::Server server{6666, 1024, 2};
+    http::Server server{6666, SOMAXCONN, 1};
     server.Run();
 
     return 0;
