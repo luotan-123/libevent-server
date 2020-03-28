@@ -7,3 +7,6 @@ git branch --set-upstream-to=origin/tianhe tianhe
 
 linux 安装git
 sudo yum install git
+
+保存账号和密码
+git config --global credential.helper store
