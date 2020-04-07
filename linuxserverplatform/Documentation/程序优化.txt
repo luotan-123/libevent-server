@@ -1,52 +1,52 @@
-�����Ż�
-1��ԭϵͳlong���͸ĳ�int  ��unsigned long �ĳ� unsigned int
-2�����printf��sprintf������int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
-3���ڴ��Ż����Լ������ڴ桢�ڴ�Խ���顢�ڴ�й¶��顢����ڴ���Ƭ��Ŀǰ�ȽϺõ��ڴ��������ptmalloc��tcmalloc��jemalloc
-4��cpu�Ż���һ�١�һ����ԡ���ָ����ִ��cpuʱ���٣��㷨ʱ�临�Ӷȣ������Ż�������ָ���Ƕ�����cpuִ�У��������߲���ִ�У�����ִ�У�
-5���Ż����룬���Ӹ���c++11������
+长期优化
+1、原系统long类型改成int  ，unsigned long 改成 unsigned int
+2、检查printf和sprintf函数，int->%d, long->%ld, long long->%lld, unsigned int->%u, unsigned long ->%lu, unsigned long long -> %llu
+3、内存优化：自己分配内存、内存越界检查、内存泄露检查、解决内存碎片。目前比较好的内存分配器：ptmalloc、tcmalloc、jemalloc
+4、cpu优化：一少、一多策略。少指的是执行cpu时间少（算法时间复杂度，代码优化），多指的是多利用cpu执行，并发或者并行执行（并发执行）
+5、优化代码，增加更多c++11新特性
 
 
-����pb�����ƣ�
-1.Protocol Buffer ���� varint ԭ��ѹ�������Ժ󣬶��������ݷǳ����գ�option Ҳ����ѹ�������һ���ٴ롣���� pb �����С�����ѡ������Ϊ�������ݴ��䣬�Ʊ���ͬ���ݣ����ĵ������������١����ǲ�û��ѹ�������ޣ�float��double �����Ͷ�û��ѹ����
-2.Protocol Buffer �� JSON �� XML ���� {��}��: ��Щ���ţ����Ҳ����һЩ���ټ��� varint ѹ����gzip ѹ���Ժ������С��
-Protocol Buffer �� Tag - Value (Tag - Length - Value)�ı��뷽ʽ��ʵ�֣������˷ָ�����ʹ�ã����ݴ洢���ӽ��ա�
-3��Protocol Buffer ����һ�����ļ�ֵ�����ṩ��һ�׹��ߣ�һ�����빤�ߣ��Զ������� get/set ���롣���˶����Խ����ĸ��Ӷȣ�ʹ�ñ�����빤��������������
-4.Protocol Buffer �������������ģ��뿪���������� .proto �ļ������޷��������������������㼴���ŵ㣬ʹ���ݾ���һ���ġ������ԡ���Ҳ��ȱ�㣬���ݿɶ��Լ������ Protocol Buffer �ǳ��ʺ��ڲ�����֮�� RPC ���úʹ������ݡ�
-5.Protocol Buffer ���������ݵ����ԣ��������ݽṹ�Ժ��ϰ汾���ɿ��Լ��ݣ���Ҳ�� Protocol Buffer ����֮���������������⡣��Ϊ�������Բ�ʶ��������ֶλ�������������
+关于pb的优势：
+1.Protocol Buffer 利用 varint 原理压缩数据以后，二进制数据非常紧凑，option 也算是压缩体积的一个举措。所以 pb 体积更小，如果选用它作为网络数据传输，势必相同数据，消耗的网络流量更少。但是并没有压缩到极限，float、double 浮点型都没有压缩。
+2.Protocol Buffer 比 JSON 和 XML 少了 {、}、: 这些符号，体积也减少一些。再加上 varint 压缩，gzip 压缩以后体积更小！
+Protocol Buffer 是 Tag - Value (Tag - Length - Value)的编码方式的实现，减少了分隔符的使用，数据存储更加紧凑。
+3。Protocol Buffer 另外一个核心价值在于提供了一套工具，一个编译工具，自动化生成 get/set 代码。简化了多语言交互的复杂度，使得编码解码工作有了生产力。
+4.Protocol Buffer 不是自我描述的，离开了数据描述 .proto 文件，就无法理解二进制数据流。这点即是优点，使数据具有一定的“加密性”，也是缺点，数据可读性极差。所以 Protocol Buffer 非常适合内部服务之间 RPC 调用和传递数据。
+5.Protocol Buffer 具有向后兼容的特性，更新数据结构以后，老版本依旧可以兼容，这也是 Protocol Buffer 诞生之初被寄予解决的问题。因为编译器对不识别的新增字段会跳过不处理。
 
 
-�����ٺã�ģ���ڲ�ʵ�ָ���Ҫ
+构架再好，模块内部实现更重要
 
 
-��������������
+部分问题解决方案
 ------------------------------------------------------------------------------------------------------------------------------------------------
-1�������������еĽ��̣������ѭ���취
+1、对于正在运行的进程，解决死循环办法
 gdb
-attach 42834   ���ӽ��̵���
-info thread      �鿴�߳���Ϣ���Ϳ��Կ�����ѭ���߳�ִ�еĺ���
-bt	       �鿴���̺߳�����ջ
-frame  1	       �л�������ջ��list�鿴����
+attach 42834   附加进程调试
+info thread      查看线程信息，就可以看到死循环线程执行的函数
+bt	       查看该线程函数堆栈
+frame  1	       切换到函数栈，list查看代码
 
 ---------------------------
-���̻߳�����malloc/free ��������ԭ��
-ԭ��1��
-���߳�ջ������Memory����12,568,257 bytesʱ������Crash
-���߳�ջ������Memory����10,479,656 bytesʱ������Crash
-ԭ��2��
-malloc/free���߳�������÷ǳ�Ƶ��
-����취��
-��jemlloc����tcmalloc�ڴ������
+多线程环境下malloc/free 函数崩溃原因
+原因1：
+主线程栈上消耗Memory超过12,568,257 bytes时，进程Crash
+从线程栈上消耗Memory超过10,479,656 bytes时，进程Crash
+原因2：
+malloc/free多线程情况调用非常频繁
+解决办法：
+用jemlloc或者tcmalloc内存分配器
 
 ---------------------------
-�ڴ��Ż���������й¶���
-��������jemalloc��profile��
-ע������ʱ��./configure --enable-prof
-����Ҫͨ��������������  export MALLOC_CONF="prof:true,prof_prefix:jeprof.out" ����
-vim ~/.bash_profile  ������������
+内存优化，分析，泄露检测
+可以利用jemalloc的profile，
+注意编译的时候./configure --enable-prof
+并需要通过环境变量控制  export MALLOC_CONF="prof:true,prof_prefix:jeprof.out" 或者
+vim ~/.bash_profile  添加下面两行
 MALLOC_CONF="prof:true,prof_prefix:jeprof.out"
 export MALLOC_CONF 
-ִ��source ~/.bash_profile ��Ч
+执行source ~/.bash_profile 生效
 
 
-2�����ݿ����ݳ�����ʮ�����Ĵ����취�������ݿ⴦����
+2、数据库数据超过几十亿条的处理办法（大数据库处理）
 

@@ -1,0 +1,2 @@
+1、redis如何定位数据被修改，如何定位哪个指令执行最频繁
+答案：info commandstats

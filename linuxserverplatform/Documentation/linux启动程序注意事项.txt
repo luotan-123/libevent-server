@@ -1,0 +1,21 @@
+1、设置动态库加载命令，启动server之前先执行命令
+export LD_LIBRARY_PATH=./
+或者也可以这样
+vim /etc/ld.so.conf 
+文件中加入一行  /home/luotan/linuxserverplatform/bin/
+执行 root权限运行 ldconfig
+
+2、启动程序必须用shell脚本启动，方便生产core文件
+启动coredumpshell.sh，重启系统生效。重启后，还需要以root执行以下命令。不执行core会生成在当前目录。
+echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern
+
+3、安装环境
+用到的轮子：
+1、curl （centos下已经编译好库，不需要安装）
+2、jemalloc （必须安装）
+3、libevent（centos下已经编译好库，不需要安装）
+4、libjson （centos下已经编译好库，不需要安装）
+5、protobuf（必须安装）
+6、redis（hiredis 已经编译成静态库，不需要安装。redis-server、redis-cli、redis-sentinel自己部署）
+7、libunwind（内存分析工具，选择安装）
+8、libmysqlclient（centos下已经编译好库，不需要安装）

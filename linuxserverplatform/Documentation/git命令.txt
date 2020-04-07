@@ -1,12 +1,12 @@
-1¡¢git´´½¨±¾µØ·ÖÖ§
+1ã€gitåˆ›å»ºæœ¬åœ°åˆ†æ”¯
 git checkout -b tianhe
-2¡¢´´½¨Ô¶³Ì·ÖÖ§
+2ã€åˆ›å»ºè¿œç¨‹åˆ†æ”¯
  git push origin tianhe:tianhe
-3¡¢±¾µØ·ÖÖ§¹ØÁªÔ¶³Ì·ÖÖ§
+3ã€æœ¬åœ°åˆ†æ”¯å…³è”è¿œç¨‹åˆ†æ”¯
 git branch --set-upstream-to=origin/tianhe tianhe
 
-linux °²×°git
+linux å®‰è£…git
 sudo yum install git
 
-±£´æÕËºÅºÍÃÜÂë
+ä¿å­˜è´¦å·å’Œå¯†ç 
 git config --global credential.helper store

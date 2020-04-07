@@ -1,23 +1,23 @@
-mysqlÏà¹Ø£º
-1¡¢ĞŞ¸ÄÃÜÂëÇ¿¶È
+mysqlç›¸å…³ï¼š
+1ã€ä¿®æ”¹å¯†ç å¼ºåº¦
 set global validate_password_policy=0;
 set global validate_password_length=1;
-2¡¢¹Ø±Õ×Ô¶¯¸üĞÂ
+2ã€å…³é—­è‡ªåŠ¨æ›´æ–°
 yum -y remove mysql57-community-release-el7-10.noarch
-3¡¢ÉèÖÃÈ¨ÏŞ
+3ã€è®¾ç½®æƒé™
 grant all privileges on *.* to 'root'@'192.168.19.%' identified by 'root' with grant option;
 flush privileges;
-4¡¢ÖØÆômysql
+4ã€é‡å¯mysql
 systemctl restart mysqld.service
 service mysql restart    -- ubuntu
 service mysqld restart  -- centos
-5¡¢ÉèÖÃ²»Çø·Ö´óĞ¡Ğ´
+5ã€è®¾ç½®ä¸åŒºåˆ†å¤§å°å†™
 vim /etc/my.cnf
-»òÕßsudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+æˆ–è€…sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 lower_case_table_names=1
 
-²Ù×÷ÏµÍ³Ïà¹Ø£º
-1¡¢¹Ø±Õ·À»ğÇ½
+æ“ä½œç³»ç»Ÿç›¸å…³ï¼š
+1ã€å…³é—­é˜²ç«å¢™
 service iptables stop
 service firewalld stop
-systemctl disable firewalld  ·ÀÖ¹¿ª»úÆô¶¯
+systemctl disable firewalld  é˜²æ­¢å¼€æœºå¯åŠ¨

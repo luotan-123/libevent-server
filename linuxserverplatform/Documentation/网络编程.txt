@@ -1,27 +1,27 @@
-1��libevent�Ƿ�������̣�����socketһ��Ҫ���óɷ�����
+1、libevent是非阻塞编程，监听socket一定要设置成非阻塞
 
-2�������ӵ�socket��Ҫ��ȡsocket���ͺͽ��ջ����С��������?
-�𰸣�������ֻ��Ҫ���ü���socket���ͳɹ�������������socket��
-���û�����ã�������������socketĬ���շ�����������һ��Ĭ��ֵ�����Ĭ�ϺͿͻ��˵��շ�����������һ��
-linux�ͻ���socketû��Ҫ�����շ��������������ӳɹ���������ϵͳ������һ���ܴ�ֵ
-���飺�������˶��������ӵ�socket���ж�һ���Ƿ��������ݰ���С����ȥ�����շ�������
+2、新连接的socket，要获取socket发送和接收缓存大小，并设置?
+答案：服务器只需要设置监听socket，就成功设置了新连接socket，
+如果没有设置，服务器新连接socket默认收发缓冲区会有一个默认值，这个默认和客户端的收发缓冲区保持一致
+linux客户端socket没必要设置收发缓冲区，当连接成功服务器，系统会设置一个很大值
+建议：服务器端对于新连接的socket，判断一下是否满足数据包大小，再去设置收发缓冲区
 cat /proc/sys/net/ipv4/tcp_rmem cat /proc/sys/net/ipv4/tcp_wmem
 
-3�����bufferevent�Ķ�������������û�ж�ȡ�꣬�ص������Ƿ�һֱִ�У�
-�𰸣�����һֱ����
+3、如果bufferevent的读缓冲区有数据没有读取完，回调函数是否一直执行？
+答案：不会一直触发
 
-4���������óɱ�Ե��������Ϊ���Ļ��е������ݰ����������ܼ�ʱ������
-�𰸣�bufferevent_enable���Ժܷ������ñ�Ե������Ŀǰû�з�������
+4、不能设置成边缘触发，因为担心会有单个数据包服务器不能及时处理？
+答案：bufferevent_enable可以很方便设置边缘触发，目前没有发现异样
 
-5��event_base_loopѭ����ʱ�������߳��Ƿ���������¼����̰߳�ȫ��
-�𰸣�����ͨ������һ�����ӵ�socket����ͨ�ţ�����ƽ̨�����¼�
+5、event_base_loop循环的时候，其它线程是否可以添加事件，线程安全？
+答案：可以通过创建一对连接的socket进行通信，来跨平台添加事件
 
-6��libevent�ܶ��̱߳�̣�
-�𰸣����Ժܺõĸ߲������
+6、libevent能多线程编程？
+答案：可以很好的高并发编程
 
-7��libeventȷ���Ƿ������epoll�������������ļ���������С
-�𰸣������ԣ�libeventĬ��ֵ��32000����epoll_init��������
+7、libevent确定是否可以像epoll，设置最大监听文件描述符大小
+答案：不可以，libevent默认值是32000，在epoll_init函数中有
 
-8��bufferevent������߳���
+8、bufferevent如何用线程锁
 evbuffer_lock(input); 
 evbuffer_unlock(input);

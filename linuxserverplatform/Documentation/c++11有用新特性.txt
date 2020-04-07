@@ -1,59 +1,59 @@
-1¡¢ÀàĞÍÓë±äÁ¿Ïà¹Ø
-1.1¡¢ auto
+1ã€ç±»å‹ä¸å˜é‡ç›¸å…³
+1.1ã€ auto
 for (auto i: V) {}
-1.2¡¢ ×Ö·û´®ºÍÊı×Ö×ª»»
-to_string    stoi¡¢stol¡¢stoul¡¢stoll¡¢stoull¡¢stof¡¢stod¡¢stold
-1.3¡¢ Éú³ÉËæ»úÊı
+1.2ã€ å­—ç¬¦ä¸²å’Œæ•°å­—è½¬æ¢
+to_string    stoiã€stolã€stoulã€stollã€stoullã€stofã€stodã€stold
+1.3ã€ ç”Ÿæˆéšæœºæ•°
 std::random_device rd; 
 int randint = rd();
-1.4¡¢ Ô­×Ó±äÁ¿
+1.4ã€ åŸå­å˜é‡
 std::atomic<int>
 
-2¡¢ÈİÆ÷
-2.1¡¢tupleÔª×é ºÍ »¨À¨ºÅ³õÊ¼»¯
+2ã€å®¹å™¨
+2.1ã€tupleå…ƒç»„ å’Œ èŠ±æ‹¬å·åˆå§‹åŒ–
 using  result = std::tuple<int, char, double>;
-result res  {1£¬'a'£¬1.0};
+result res  {1ï¼Œ'a'ï¼Œ1.0};
 return res;
-2.2¡¢hashÕıÊ½½øÈëstl
-unordered_map¡¢unordered_set¡¢unordered_multimap¡¢unordered_multiset
-2.3¡¢emplace ÉÙµ÷ÓÃÒ»´Î¿½±´¹¹Ôìº¯Êı
+2.2ã€hashæ­£å¼è¿›å…¥stl
+unordered_mapã€unordered_setã€unordered_multimapã€unordered_multiset
+2.3ã€emplace å°‘è°ƒç”¨ä¸€æ¬¡æ‹·è´æ„é€ å‡½æ•°
 std::map<int, int> myMap;
 myMap[1] = 5; myMap.emplace(6666, 9999999);
-2.4¡¢shrink_to_fit()
+2.4ã€shrink_to_fit()
 std::vector<int> v{ 1, 2, 3, 4, 5 };
 v.push_back(1);
 std::cout << "before shrink_to_fit: " << v.capacity() << std::endl;
 v.shrink_to_fit();
 std::cout << "after shrink_to_fit: " << v.capacity() << std::endl;
 
-3¡¢Àà
-std::move()ÅäºÏÓÒÖµÒıÓÃÊ¹ÓÃ£¬ÏÂÃæÕâ¸öÀı×Ó¿ÉÒÔÍêÈ«¼õÉÙÄÚ´æ¿½±´£¬ÄÚ´æÒÆ¶¯
+3ã€ç±»
+std::move()é…åˆå³å€¼å¼•ç”¨ä½¿ç”¨ï¼Œä¸‹é¢è¿™ä¸ªä¾‹å­å¯ä»¥å®Œå…¨å‡å°‘å†…å­˜æ‹·è´ï¼Œå†…å­˜ç§»åŠ¨
 std::unordered_map<int,std::vector<A> > ltmap;
 std::vector<A> aVec = { a,a,a };
 ltmap.insert(std::make_pair(0, aVec));
 ltmap.emplace(1, std::move(aVec));
-¼Ì³Ğ£º×ÓÀàµÄĞéº¯Êı¶àÌ¬ÊµÏÖÒª¼ÓoverrideÏÔÊ½µÄ±íÃ÷£¬·ñÔò»áÈÃÈËÎóÈÏÎªÊÇ×ÓÀà×Ô¼ºµÄĞéº¯Êı£»
-²»ÈÃ×ÓÀà¶àÌ¬ÊµÏÖµÄĞéº¯ÊıÒ²Òª¼ÇµÃ¼ÓÈëfinal£»
+ç»§æ‰¿ï¼šå­ç±»çš„è™šå‡½æ•°å¤šæ€å®ç°è¦åŠ overrideæ˜¾å¼çš„è¡¨æ˜ï¼Œå¦åˆ™ä¼šè®©äººè¯¯è®¤ä¸ºæ˜¯å­ç±»è‡ªå·±çš„è™šå‡½æ•°ï¼›
+ä¸è®©å­ç±»å¤šæ€å®ç°çš„è™šå‡½æ•°ä¹Ÿè¦è®°å¾—åŠ å…¥finalï¼›
 
-4¡¢º¯ÊıÊ½±à³Ì
-4.1¡¢º¯ÊıÖ¸Õë
+4ã€å‡½æ•°å¼ç¼–ç¨‹
+4.1ã€å‡½æ•°æŒ‡é’ˆ
 void readcb(std::function<int(int, int)> fun, void* param)
 
-5¡¢¶¯Ì¬Ö¸Õë
+5ã€åŠ¨æ€æŒ‡é’ˆ
 void fun()
 {
 	std::unique_ptr<TestClass> p(new TestClass);
 }
 
-6¡¢¶àÏß³ÌÓë»¥³âÍ¬²½(»¥³âËø£¬Ìõ¼ş±äÁ¿)
-std::mutex mtx; // È«¾Ö»¥³âËø.
-std::condition_variable cv; // È«¾ÖÌõ¼ş±äÁ¿.
-bool ready = false; // È«¾Ö±êÖ¾Î».
+6ã€å¤šçº¿ç¨‹ä¸äº’æ–¥åŒæ­¥(äº’æ–¥é”ï¼Œæ¡ä»¶å˜é‡)
+std::mutex mtx; // å…¨å±€äº’æ–¥é”.
+std::condition_variable cv; // å…¨å±€æ¡ä»¶å˜é‡.
+bool ready = false; // å…¨å±€æ ‡å¿—ä½.
 void do_print_id(int id)
 {
 	std::unique_lock <std::mutex> lck(mtx);
-	while (!ready) // Èç¹û±êÖ¾Î»²»Îª true, ÔòµÈ´ı...
-		cv.wait(lck); // µ±Ç°Ïß³Ì±»×èÈû, µ±È«¾Ö±êÖ¾Î»±äÎª true Ö®ºó,
+	while (!ready) // å¦‚æœæ ‡å¿—ä½ä¸ä¸º true, åˆ™ç­‰å¾…...
+		cv.wait(lck); // å½“å‰çº¿ç¨‹è¢«é˜»å¡, å½“å…¨å±€æ ‡å¿—ä½å˜ä¸º true ä¹‹å,
 }
 int main()
 {
