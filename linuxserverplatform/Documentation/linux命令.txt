@@ -1,4 +1,4 @@
-一、查找进程，关闭进程
+﻿一、查找进程，关闭进程
 1.  ps -ef |grep redis
 ps:将某个进程显示出来
 -A 　显示所有程序。 
@@ -13,7 +13,9 @@ kill就是给某个进程id发送了一个信号。默认发送的信号是SIGTE
 即exit。exit信号不会被系统阻塞，所以kill -9能顺利杀掉进程。当然你也可以使用kill发送其他信号给进程。
 
 二、链接命令
+相当于创建快捷方式，可以用来创建动态库命令
 ln -s /usr/local/bin/protoc /usr/bin
+ln -s /root/linuxserverplatform/bin/LogonServer /usr/bin
 
 
 三、生成core
@@ -40,5 +42,9 @@ p pThis->m_bRun
 九、查看端口占用
 ss -lntpd | grep :3306
 
+10、设计开机启动脚本
+vim /etc/rc.d/rc.local
+bash /root/linuxserverplatform/LinuxRun/RedisGame/start-server.sh
+chmod +x /etc/rc.d/rc.local
 
 
