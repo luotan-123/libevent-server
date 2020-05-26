@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
+    <ClCompile Include="..\src\WorkServer\BaseWorkServer.cpp" />
+    <ClCompile Include="..\src\WorkServer\GameWorkDataBase.cpp" />
+    <ClCompile Include="..\src\WorkServer\GameWorkManage.cpp" />
+    <ClCompile Include="..\src\WorkServer\GameWorkModule.cpp" />
+    <ClCompile Include="..\src\WorkServer\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\WorkServer\BaseWorkServer.h" />
+    <ClInclude Include="..\src\WorkServer\GameWorkDataBase.h" />
+    <ClInclude Include="..\src\WorkServer\GameWorkManage.h" />
+    <ClInclude Include="..\src\WorkServer\GameWorkModule.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CAA3F523-A743-4FDF-8354-09AAACE4BF1D}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>LogonServer</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <RemoteRootDir>/root/linuxserverplatform</RemoteRootDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <RemoteTargetPath>$(RemoteRootDir)/bin/$(TargetName)</RemoteTargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath />
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;</LibraryDependencies>
+      <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(RemoteTargetPath)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

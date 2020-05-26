@@ -15,6 +15,11 @@ service mysqld restart  -- centos
 vim /etc/my.cnf
 或者sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 lower_case_table_names=1
+6、安装mysql
+yum list mysql-server
+yum install mysql-server
+grep 'temporary password' /var/log/mysqld.log
+SET PASSWORD FOR 'root'@'localhost'="Root@123";
 
 操作系统相关：
 1、关闭防火墙
