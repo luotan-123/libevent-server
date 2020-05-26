@@ -95,7 +95,7 @@ void func7()
 }
 ////////////////////////////////
 
-////////////////////////////////
+//////////////shared_ptr解决删除数组问题//////////////////
 void func8()
 {
 	shared_ptr<Test> sptr1(new Test[5],
@@ -134,7 +134,7 @@ void func9()
 }
 ////////////////////////////////
 
-////////////////////////////////
+////////////shared_ptr问题1：裸指针管理问题////////////////////
 void delfunc(Test *p)
 {
 	shared_ptr<Test> sptr1(p);
@@ -148,7 +148,7 @@ void func10()
 ////////////////////////////////
 
 
-////////////////////////////////
+///////////////shared_ptr问题2：循环引用问题/////////////////
 class B;
 class A
 {
@@ -172,16 +172,157 @@ public:
 };
 void func11()
 {
-	shared_ptr<B> sptrB(new B);
+	shared_ptr<Test> pTest = nullptr;
+	//cout << pTest.use_count() << " " << pTest.get() << " " << pTest.unique()<<endl;
+
 	shared_ptr<A> sptrA(new A);
+	//printf("%ld\n", sptrA.use_count()); // 1
+	//printf("%ld\n", sptrA->m_sptrB.use_count()); // 0
+
+
+	shared_ptr<B> sptrB(new B);
+	//printf("%ld\n", sptrB.use_count()); // 1
+	//printf("%ld\n", sptrB->m_sptrA.use_count()); // 0
+
+
 	sptrB->m_sptrA = sptrA;
+	printf("%ld\n", sptrB.use_count()); // 1
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 2
+	printf("%ld\n", sptrA.use_count()); // 2
+	printf("%ld\n", sptrA->m_sptrB.use_count()); // 0
+
+	cout << sptrB->m_sptrA.get() << " " << sptrA.get() << endl;
+
+
 	sptrA->m_sptrB = sptrB;
+	printf("%ld\n", sptrB.use_count()); // 2
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 2
+	printf("%ld\n", sptrA.use_count());// 2
+	printf("%ld\n", sptrA->m_sptrB.use_count()); // 2
+}
+////////////////////////////////
+
+////////////weak_ptr////////////////////
+void func12()
+{
+	shared_ptr<Test> sptr(new Test);
+	weak_ptr<Test> wptr(sptr);
+	weak_ptr<Test> wptr1 = wptr;
+	cout << wptr.use_count() << endl;
+	
+	// 有效资源
+	if (wptr.expired())
+	{
+		cout << "测试weak_ptr" << endl;
+	}
+
+	auto pTest = wptr.lock();
+	cout << sptr.get() << " " << pTest << endl;
+
+	printf("%ld\n", sptr.use_count()); // 1
+	
+}
+////////////////////////////////
+
+
+////////////weak_ptr解决循环引用问题////////////////////
+class BB;
+class AA
+{
+public:
+	AA() { valAA = 123; };
+	~AA()
+	{
+		cout << " AA is destroyed" << endl;
+	}
+	int valAA;
+	weak_ptr<BB> m_sptrB;
+};
+class BB
+{
+public:
+	BB() { valBB = 321; };
+	~BB()
+	{
+		cout << " BB is destroyed" << endl;
+	}
+	int valBB;
+	weak_ptr<AA> m_sptrA;
+};
+void func13()
+{
+	shared_ptr<AA> sptrA(new AA);
+	printf("%ld\n", sptrA.use_count()); // 1
+	printf("%ld\n", sptrA->m_sptrB.use_count()); // 0
+	sptrA->valAA = 122555555;
+	if (!sptrA->m_sptrB.expired())
+	{
+		cout << sptrA->m_sptrB.lock()->valBB << endl;
+	}
+
+	shared_ptr<BB> sptrB(new BB);
+	printf("%ld\n", sptrB.use_count()); // 1
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 0
+	sptrB->valBB = 644646;
+	if (!sptrB->m_sptrA.expired())
+	{
+		cout << sptrB->m_sptrA.lock()->valAA << endl;
+	}
+
+
+	sptrB->m_sptrA = sptrA;
+	printf("%ld\n", sptrB.use_count()); // 1
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 2
+	printf("%ld\n", sptrA.use_count()); // 2
+	printf("%ld\n", sptrA->m_sptrB.use_count()); // 0
+	if (!sptrB->m_sptrA.expired())
+	{
+		cout << sptrB->m_sptrA.lock()->valAA << endl;
+	}
+
+	sptrA->m_sptrB = sptrB;
+	printf("%ld\n", sptrB.use_count()); // 2
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 2
+	printf("%ld\n", sptrA.use_count());// 2
+	printf("%ld\n", sptrA->m_sptrB.use_count()); // 2
+	if (!sptrA->m_sptrB.expired())
+	{
+		cout << sptrA->m_sptrB.lock()->valBB << endl;
+	}
+}
+////////////////////////////////
+
+////////////unique_ptr////////////////////
+void func14()
+{
+	unique_ptr<Test> uptr1(new Test);
+	unique_ptr<Test[]> uptr2(new Test[3]);
+}
+////////////////////////////////
+
+////////////unique_ptr////////////////////
+void unifunc(unique_ptr<Test> uptr1)
+{
+	cout << uptr1->m_a << endl;
+	cout << "sss" << endl;
+}
+void func15()
+{
+	unique_ptr<Test> uptr1(new Test);
+	uptr1->m_a = 12345;
+	unifunc(move(uptr1));
+	cout << uptr1.get() << endl;
+	cout << "sss" << endl;
 }
 ////////////////////////////////
 
 void IntelligentPointer()
 {
-	func11();
+	//func11();
+	//func12();
+	//func13();
+	//func14();
+	func15();
 
 	printf("-----------智能指针测试结束------------\n");
 }
