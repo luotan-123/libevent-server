@@ -40,10 +40,7 @@ ltmap.emplace(1, std::move(aVec));
 void readcb(std::function<int(int, int)> fun, void* param)
 
 5、动态指针
-void fun()
-{
-	std::unique_ptr<TestClass> p(new TestClass);
-}
+CppExperience 项目中有更多关于智能指针的示例
 关于智能指针有更详细的解释：https://blog.csdn.net/zy19940906/article/details/50470087
 
 6、多线程与互斥同步(互斥锁，条件变量)
