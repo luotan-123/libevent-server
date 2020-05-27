@@ -264,7 +264,7 @@ protected:
 	// 属性判断函数
 public:
 	// 桌子是否有效
-	inline bool IsEnable() { return m_enable; }
+	bool IsEnable() { return m_enable; }
 	// 玩家是否托管
 	bool IsAuto(BYTE deskStation);
 	// 判断玩家是否掉线

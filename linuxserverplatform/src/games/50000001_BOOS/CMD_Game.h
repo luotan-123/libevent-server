@@ -244,7 +244,7 @@ struct CDoublePoint
 	CDoublePoint& operator= (const CDoublePoint& point) { this->x = point.x; this->y = point.y; return *this; }
 	void operator+= (const CDoublePoint& point) { x += point.x; y += point.y; }
 	bool operator!= (const CDoublePoint& point) { return (x != point.x || y != point.y); }
-	inline void SetPoint( double ParX, double ParY ) { x = ParX; y = ParY; }
+	void SetPoint( double ParX, double ParY ) { x = ParX; y = ParY; }
 };
 
 struct CShortPoint
@@ -257,7 +257,7 @@ struct CShortPoint
 	CShortPoint( const CShortPoint& Par ) {  x = Par.x; y = Par.y; }
 	CShortPoint( short ParX, short ParY ) { x = ParX; y = ParY; }
 	void operator+= ( const CShortPoint& point) { x += point.x; y += point.y; }
-	inline void SetPoint( short ParX, short ParY ) { x = ParX; y = ParY; }
+	void SetPoint( short ParX, short ParY ) { x = ParX; y = ParY; }
 
 };
 

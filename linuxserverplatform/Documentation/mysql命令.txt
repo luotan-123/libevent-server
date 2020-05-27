@@ -1,4 +1,4 @@
-mysql相关：
+﻿mysql相关：
 1、修改密码强度
 set global validate_password_policy=0;
 set global validate_password_length=1;
@@ -6,6 +6,10 @@ set global validate_password_length=1;
 yum -y remove mysql57-community-release-el7-10.noarch
 3、设置权限
 grant all privileges on *.* to 'root'@'192.168.19.%' identified by 'root' with grant option;
+flush privileges;
+//mysql8
+create user 'root'@'%' identified with mysql_native_password by 'root';
+grant all privileges on *.* to 'root'@'%' with grant option;
 flush privileges;
 4、重启mysql
 systemctl restart mysqld.service
@@ -16,10 +20,7 @@ vim /etc/my.cnf
 或者sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 lower_case_table_names=1
 6、安装mysql
-yum list mysql-server
-yum install mysql-server
-grep 'temporary password' /var/log/mysqld.log
-SET PASSWORD FOR 'root'@'localhost'="Root@123";
+https://www.cnblogs.com/yanglang/p/10782941.html
 
 操作系统相关：
 1、关闭防火墙

@@ -133,7 +133,7 @@ public:
 public:
 	//[设置相关]
 	//获取扑克数字
-	inline int GetCardNum(BYTE iCard) { return (iCard&UG_VALUE_MASK)+1; }
+	int GetCardNum(BYTE iCard) { return (iCard&UG_VALUE_MASK)+1; }
 	//获取扑克花色(默认为真实花色)
 	BYTE GetCardHuaKind(BYTE iCard, BOOL bTrueHua=TRUE);
 	//获取扑克相对大小(默认为牌大小,非排序大小)
@@ -221,7 +221,7 @@ public:
     //获取牌型
 	BYTE GetCardShape(BYTE iCardList[], int iCardCount,bool bExlVal=false);
 	//是否单牌
-	inline BOOL IsOnlyOne(BYTE iCardList[], int iCardCount) { return iCardCount==1; };
+	BOOL IsOnlyOne(BYTE iCardList[], int iCardCount) { return iCardCount==1; };
 	//是否对牌
 	BOOL IsDouble(BYTE iCardList[], int iCardCount,bool bExtVal=false);
 	//3 带 1or2(带一对带二单张或带一单张

@@ -29,7 +29,7 @@ public:
 
 public:
 	//获取扑克数字
-	inline int GetCardNum(BYTE iCard) { return (iCard&UG_VALUE_MASK)+1; }
+	int GetCardNum(BYTE iCard) { return (iCard&UG_VALUE_MASK)+1; }
 	//获取扑克相对大小
 	int GetCardBulk(BYTE iCard, int bExtVol = false);
 	//获取扑克花色

@@ -164,7 +164,7 @@ struct b2DistanceProxy
 {
 	b2DistanceProxy() : m_vertices(NULL), m_count(0) {}
 
-	inline void Set(const CPolygonShape* shape )
+	void Set(const CPolygonShape* shape )
 	{
 		const CPolygonShape* polygon = (CPolygonShape*)shape;
 		m_vertices = polygon->m_vertices;
@@ -172,7 +172,7 @@ struct b2DistanceProxy
 	}
 
 
-	inline int GetSupport(const CFloatVector2& d) const
+	int GetSupport(const CFloatVector2& d) const
 	{
 		int bestIndex = 0;
 		float bestValue = b2Dot(m_vertices[0], d);

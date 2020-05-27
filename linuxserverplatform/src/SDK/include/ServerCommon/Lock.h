@@ -12,8 +12,8 @@ public:
 	~CSignedLockObject();
 
 public:
-	inline void Lock();
-	inline void UnLock();
+	void Lock();
+	void UnLock();
 };
 
 // pthread_mutex_init  pthread_mutexattr_t 的第二个参数详细解释 
@@ -41,8 +41,8 @@ public:
 	void TimedWait(const struct timespec* abstime) { pthread_cond_timedwait(&m_cond, &m_csLock, abstime); }
 
 private:
-	inline void Lock() { pthread_mutex_lock(&m_csLock); }
-	inline void UnLock() { pthread_mutex_unlock(&m_csLock); }
+	void Lock() { pthread_mutex_lock(&m_csLock); }
+	void UnLock() { pthread_mutex_unlock(&m_csLock); }
 };
 
 /////////////////////////////管道事件///////////////////////////////////////

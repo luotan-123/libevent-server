@@ -26,7 +26,7 @@ CSignedLockObject::~CSignedLockObject()
 	}
 }
 
-inline void CSignedLockObject::Lock()
+void CSignedLockObject::Lock()
 {
 	if (m_pLockObject)
 	{
@@ -35,7 +35,7 @@ inline void CSignedLockObject::Lock()
 	}
 }
 
-inline void CSignedLockObject::UnLock()
+void CSignedLockObject::UnLock()
 {
 	if (m_pLockObject)
 	{

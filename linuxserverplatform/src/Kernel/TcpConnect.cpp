@@ -48,7 +48,7 @@ int CTcpClient::GetSocketIdx()
 	return m_index;
 }
 
-inline bool CTcpClient::Enable()
+bool CTcpClient::Enable()
 {
 	if (m_socket != INVALID_SOCKET && m_isConnected == true)
 	{

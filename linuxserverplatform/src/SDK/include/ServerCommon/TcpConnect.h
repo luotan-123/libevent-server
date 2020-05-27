@@ -19,7 +19,7 @@ public:
 	int GetSocketIdx();
 
 	// 是否有效
-	inline bool Enable();
+	bool Enable();
 	bool OnRead();
 
 	bool Send(const void* pData, int size);
