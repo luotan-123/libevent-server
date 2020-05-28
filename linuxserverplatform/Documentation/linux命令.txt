@@ -47,4 +47,8 @@ vim /etc/rc.d/rc.local
 bash /root/linuxserverplatform/LinuxRun/RedisGame/start-server.sh
 chmod +x /etc/rc.d/rc.local
 
+11、删除windows \r
+vim 相关文件，执行下面指令
+set fileformat=unix
+
 
