@@ -1,11 +1,9 @@
 #pragma once
 
-#include "BaseLogonServer.h"
-#include "LogonUserManage.h"
-#include "LogonGServerManage.h"
+#include "BaseWorkServer.h"
 
 // 定时器ID
-enum LogonServerTimerID
+enum WorkServerTimerID
 {
 	LOGON_TIMER_BEGIN = 0,
 	LOGON_TIMER_CHECK_HEARTBEAT,				// 心跳定时器
@@ -23,42 +21,10 @@ const int ROUTINE_CHECK_UNBINDID_SOCKET = 67;		// 定期检查未登录的连接
 const int CHECK_SAVE_SOCKET_COUNT = 17;				// 定期保存网关socket数量(s)
 const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
 
-// 登陆服tcpsocket
-struct LogonServerSocket
+
+class CGameWorkManage : public CBaseWorkServer
 {
-	BYTE type;			// 两种类型的socket 1：玩家的socket，2：游戏服的socket
-	int identityID;		// 玩家id或者roomID
-
-	LogonServerSocket()
-	{
-		type = LOGON_SERVER_SOCKET_TYPE_NO;
-		identityID = 0;
-	}
-
-	LogonServerSocket(BYTE type, int identityID)
-	{
-		this->type = type;
-		this->identityID = identityID;
-	}
-
-	void Init()
-	{
-		type = LOGON_SERVER_SOCKET_TYPE_NO;
-		identityID = 0;
-	}
-};
-
-class CGameLogonManage : public CBaseLogonServer
-{
-public:
-	UINT						m_uMaxPeople;			//支持最大人数（包括gserver数量） tcp
-	UINT						m_uMaxWebPeople;		//支持最大人数 websocket
-
 private:
-	CLogonUserManage*			m_pUserManage;			// 玩家管理器
-	CLogonGServerManage*		m_pGServerManage;		// 游戏服管理器
-	std::vector<LogonServerSocket> m_socketInfoMap;		// socket索引和identityID的映射表 TCP
-	std::vector<LogonServerSocket> m_webSocketInfoMap;	// socket索引和userID的映射表 websocket
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
 	std::vector<UINT>			m_socketIndexVec;		// socket索引，遍历在线tcpsocket需要
@@ -67,8 +33,8 @@ private:
 	std::set<UINT>				m_socketMatch;			// 在比赛场相关页面的玩家
 
 public:
-	CGameLogonManage();
-	virtual ~CGameLogonManage();
+	CGameWorkManage();
+	virtual ~CGameWorkManage();
 
 public:
 	//数据管理模块启动
@@ -93,14 +59,6 @@ private:
 private:
 	void NotifyUserInfo(const UserData &userData);
 private:
-	// 玩家注册相关
-	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
-
-	// 玩家登陆相关
-	bool OnHandleUserLogonMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
-
-	bool OnHanleUserLogon(void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
-
 	// 桌子相关
 	bool OnHandleGameDeskMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
 
@@ -121,19 +79,8 @@ private:
 	// 请求退出比赛场页面
 	bool OnHandleExitMatchScene(UINT index);
 
-	//////////////////////////////游戏服相关////////////////////////////////////////////
-	// 认证
-	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx, void* pBufferevent);
-	// 前端 ----> 游戏服
-	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
-	// 游戏服 ----> 前端
-	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
-
 public:
-	// 通过socketIdx获取socket信息
-	LogonServerSocket GetIdentityIDBySocketIdx(int socketIdx, BYTE socketType);
-	// 删除socketIdx索引
-	void DelSocketIdx(int socketIdx, BYTE socketType);
+	
 	// 给玩家发送数据
 	bool SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification = 0);
 	// 通过索引发送数据

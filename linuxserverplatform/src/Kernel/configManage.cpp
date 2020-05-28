@@ -84,11 +84,19 @@ bool CConfigManage::Init()
 		return false;
 	}
 
-	// 加载大厅服务器配置
+	// 加载网关服务器配置
 	ret = LoadLogonServerConfig();
 	if (!ret)
 	{
 		ERROR_LOG("LoadLogonServerConfig failed");
+		return false;
+	}
+
+	// 加载逻辑服务器配置
+	ret = LoadWorkServerConfig();
+	if (!ret)
+	{
+		ERROR_LOG("LoadWorkServerConfig failed");
 		return false;
 	}
 
@@ -556,13 +564,13 @@ bool CConfigManage::LoadBuyGameDeskConfig()
 bool CConfigManage::LoadRoomBaseConfig()
 {
 	char sql[128] = "";
-	if (m_serviceType == SERVICE_TYPE_LOGON || m_serviceType == SERVICE_TYPE_CENTER)
+	if (m_serviceType == SERVICE_TYPE_LOADER)
 	{
-		sprintf(sql, "select * from %s", TBL_BASE_ROOM);
+		sprintf(sql, "select * from %s where serviceName = '%s'", TBL_BASE_ROOM, m_loaderServerConfig.serviceName);
 	}
 	else
 	{
-		sprintf(sql, "select * from %s where serviceName = '%s'", TBL_BASE_ROOM, m_loaderServerConfig.serviceName);
+		sprintf(sql, "select * from %s", TBL_BASE_ROOM);
 	}
 
 	CMysqlHelper::MysqlData dataSet;
@@ -1239,6 +1247,18 @@ bool CConfigManage::LoadLogonServerConfig()
 	return true;
 }
 
+bool CConfigManage::LoadWorkServerConfig()
+{
+	string path = CINIFile::GetAppPath();
+	CINIFile file(path + "config.ini");
+
+	string key = "WORKSERVER";
+
+	m_workServerConfig.workID = file.GetKeyVal(key, "workID", 1);
+
+	return true;
+}
+
 bool CConfigManage::LoadCenterServerConfig()
 {
 	string path = CINIFile::GetAppPath();
@@ -1259,6 +1279,11 @@ bool CConfigManage::LoadCenterServerConfig()
 const LogonServerConfig& CConfigManage::GetLogonServerConfig()
 {
 	return m_logonServerConfig;
+}
+
+const WorkServerConfig& CConfigManage::GetWorkServerConfig()
+{
+	return m_workServerConfig;
 }
 
 const CenterServerConfig& CConfigManage::GetCenterServerConfig()
@@ -1378,6 +1403,30 @@ bool CConfigManage::GetTableNameByDate(const char* name, char* dateName, size_t 
 	sprintf(dateName, "%s_%d%02d", name, sys.wYear, sys.wMonth);
 
 	return true;
+}
+
+// 根据服务器类型获取名字
+std::string CConfigManage::GetServerNameByType(int type)
+{
+	switch (type)
+	{
+	case SERVICE_TYPE_LOGON:
+		return "logonserver";
+	case SERVICE_TYPE_LOADER:
+		return "gameserver";
+	case SERVICE_TYPE_CENTER:
+		return "centerserver";
+	case SERVICE_TYPE_PHP:
+		return "PHP";
+	case SERVICE_TYPE_HTTP:
+		return "httpserver";
+	case SERVICE_TYPE_WORK:
+		return "workserver";
+	default:
+		break;
+	}
+
+	return "undefine";
 }
 
 bool CConfigManage::sqlGetValue(std::map<string, string>& data, const char* szFieldName, int& iValue)

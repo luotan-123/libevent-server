@@ -210,6 +210,8 @@ bool CBaseLogonServer::UnInit()
 	//调用接口
 	OnUnInit();
 
+	SAFE_DELETE(m_pTcpConnect);
+
 	return true;
 }
 
@@ -228,7 +230,7 @@ bool CBaseLogonServer::Start()
 	bool ret = false;
 
 	// 创建管道
-	CFIFOEvent fifo("/tmp/CBaseCenterServer-Start-fifo");
+	CFIFOEvent fifo("/tmp/CBaseLogonServer-Start-fifo");
 
 	// 启动DB模块
 	ret = m_SQLDataManage.Start();

@@ -281,7 +281,7 @@ bool CTcpConnect::Connect()
 		return true;
 	}
 
-	ERROR_LOG("连接中心服务器失败，稍后会重连。ip=%s,port=%d", m_ip, m_port);
+	ERROR_LOG("连接中心服务器(ip=%s,port=%d)失败，稍后会重连。", m_ip, m_port);
 
 	return false;
 }

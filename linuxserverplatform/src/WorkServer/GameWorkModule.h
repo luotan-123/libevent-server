@@ -1,18 +1,18 @@
 #pragma once
 
-#include "GameLogonManage.h"
-#include "GameLogonDataBase.h"
+#include "GameWorkManage.h"
+#include "GameWorkDataBase.h"
 
 //游戏登陆模块
-class CGameLogonModule : public IModuleManageService
+class CGameWorkModule : public IModuleManageService
 {
 public:
-	CGameLogonManage		m_LogonManage;				//登陆管理
+	CGameWorkManage		m_WorkManage;				//登陆管理
 	CServiceDataBaseHandle	m_DataBaseHandle;			//数据库数据处理模块
 
 public:
-	CGameLogonModule();
-	virtual ~CGameLogonModule();
+	CGameWorkModule();
+	virtual ~CGameWorkModule();
 
 public:
 	virtual bool InitService(ManageInfoStruct * pInitData);

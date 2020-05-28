@@ -1,8 +1,8 @@
 #include "CommonHead.h"
-#include "GameLogonManage.h"
-#include "GameLogonModule.h"
+#include "GameWorkManage.h"
+#include "GameWorkModule.h"
 
-#define APP_TITLE "Gate-Logon-Server"
+#define APP_TITLE "WorkServer"
 
 // 命令模式
 //#define COMMAND_MODE
@@ -11,7 +11,7 @@
 bool g_mainProcess = true;
 
 // 登陆服务器（网关服务器）模块
-CGameLogonModule	g_LogonServerModule;
+CGameWorkModule	g_WorkServerModule;
 
 // 处理命令
 void _HandleCommand(const std::string& command)
@@ -35,7 +35,7 @@ int main()
 	CUtil::MkdirIfNotExists(SAVE_COREFILE_PATH);
 
 	// 设置服务器类型
-	ConfigManage()->SetServiceType(SERVICE_TYPE_LOGON);
+	ConfigManage()->SetServiceType(SERVICE_TYPE_WORK);
 
 	// 关联大厅主线程的log文件
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
@@ -58,7 +58,7 @@ int main()
 	memset(&Init, 0, sizeof(Init));
 
 	// 初始化服务
-	if (!g_LogonServerModule.InitService(&Init))
+	if (!g_WorkServerModule.InitService(&Init))
 	{
 		CON_ERROR_LOG("InitService Error ! view log file !!! ");
 		return -1;
@@ -66,22 +66,23 @@ int main()
 
 	// 启动服务
 	UINT errCode = 0;
-	if (!g_LogonServerModule.StartService(errCode))
+	if (!g_WorkServerModule.StartService(errCode))
 	{
 		CON_ERROR_LOG("Start Service Failed ,Error Code:%X . view log file !!!\n", errCode);
 		return -1;
 	}
 
-	int logonID = ConfigManage()->GetLogonServerConfig().logonID;
-	LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(logonID);
-	if (pLogonBaseInfo)
+	/*int logonID = ConfigManage()->GetWorkServerConfig().logonID;
+	WorkBaseInfo* pWorkBaseInfo = ConfigManage()->GetWorkBaseInfo(logonID);
+	if (pWorkBaseInfo)
 	{
 		char szBuf[256] = "";
-		sprintf(szBuf, "LogonServer启动成功 [LogonID:%d] [tcpPort:%d] [tcpMaxPeople:%d] [wbPort:%d] [wbMaxPeople:%d]",
-			ConfigManage()->m_logonServerConfig.logonID, pLogonBaseInfo->port, pLogonBaseInfo->maxPeople,
-			pLogonBaseInfo->webSocketPort, pLogonBaseInfo->maxWebSocketPeople);
+		sprintf(szBuf, "WorkServer启动成功 [WorkID:%d] [tcpPort:%d] [tcpMaxPeople:%d] [wbPort:%d] [wbMaxPeople:%d]",
+			ConfigManage()->m_logonServerConfig.logonID, pWorkBaseInfo->port, pWorkBaseInfo->maxPeople,
+			pWorkBaseInfo->webSocketPort, pWorkBaseInfo->maxWebSocketPeople);
 		std::cout << szBuf << std::endl;
-	}
+	}*/
+	std::cout << "WorkServer 启动成功" << std::endl;
 
 	// 标题（显示版本信息和进程id）
 	printf("v%d.%d.%d %s  processID:%d\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME, getpid());
@@ -115,9 +116,9 @@ int main()
 
 #endif
 
-	g_LogonServerModule.StoptService();
+	g_WorkServerModule.StoptService();
 
-	CON_INFO_LOG("==========================Logonserver end================================");
+	CON_INFO_LOG("==========================Workserver end================================");
 
 	GameLogManage()->Release();
 	ConfigManage()->Release();

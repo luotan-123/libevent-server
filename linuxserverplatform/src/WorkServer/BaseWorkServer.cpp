@@ -1,5 +1,5 @@
 #include "CommonHead.h"
-#include "BaseLogonServer.h"
+#include "BaseWorkServer.h"
 
 
 //处理线程启动结构
@@ -7,11 +7,11 @@ struct HandleThreadStartStruct
 {
 	//变量定义
 	CFIFOEvent* pFIFO;						//启动事件
-	CBaseLogonServer* pMainManage;			//数据管理指针
+	CBaseWorkServer* pMainManage;			//数据管理指针
 };
 
 /*****************************************************************************************************************/
-CBaseLogonServer::CBaseLogonServer()
+CBaseWorkServer::CBaseWorkServer()
 {
 	m_bInit = false;
 	m_bRun = false;
@@ -25,20 +25,22 @@ CBaseLogonServer::CBaseLogonServer()
 	m_pRedisPHP = NULL;
 	m_pTcpConnect = NULL;
 	m_pServerTimer = NULL;
+	m_pGServerConnect = NULL;
 }
 
-CBaseLogonServer::~CBaseLogonServer()
+CBaseWorkServer::~CBaseWorkServer()
 {
 	SAFE_DELETE(m_pRedis);
 	SAFE_DELETE(m_pRedisPHP);
 	SAFE_DELETE(m_pTcpConnect);
 	SafeDeleteArray(m_pServerTimer);
+	SAFE_DELETE(m_pGServerConnect);
 }
 
 //初始化函数 
-bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* pDataHandleService)
+bool CBaseWorkServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* pDataHandleService)
 {
-	INFO_LOG("CBaseLogonServer Init begin...");
+	INFO_LOG("CBaseWorkServer Init begin...");
 
 	if (m_bInit == true)
 	{
@@ -101,33 +103,15 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 		return false;
 	}
 
-	// 初始化TCP网络
-	ret = m_TCPSocket.Init(this, m_InitData.uMaxPeople, m_InitData.uListenPort);
-	if (!ret)
-	{
-		ERROR_LOG("TCPSocket Init failed");
-		return false;
-	}
 
-	// 判断id是否配置
-	int logonID = ConfigManage()->GetLogonServerConfig().logonID;
-	LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(logonID);
-	if (pLogonBaseInfo == nullptr)
-	{
-		ERROR_LOG("logonID 不存在");
-		return false;
-	}
-
-	// 初始化websocket网络
-	if (ConfigManage()->m_logonServerConfig.webSocket)
-	{
-		ret = m_WebSocket.Init(this, pLogonBaseInfo->maxWebSocketPeople, pLogonBaseInfo->webSocketPort, NULL, SOCKET_TYPE_WEBSOCKET);
-		if (!ret)
-		{
-			ERROR_LOG("WebSocket Init failed");
-			return false;
-		}
-	}
+	//// 判断id是否配置
+	//int workID = ConfigManage()->GetWorkServerConfig().workID;
+	//LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(workID);
+	//if (pLogonBaseInfo == nullptr)
+	//{
+	//	ERROR_LOG("workID 不存在");
+	//	return false;
+	//}
 	
 	// DB相关
 	ret = pDataHandleService->SetParameter(this, &m_SQLDataManage, &m_InitData, &m_KernelData);
@@ -148,7 +132,14 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 	m_pTcpConnect = new CTcpConnect;
 	if (!m_pTcpConnect)
 	{
-		throw new CException("CBaseLogonServer::Init new CTcpConnect failed", 0x43A);
+		throw new CException("CBaseWorkServer::Init new CTcpConnect failed", 0x43A);
+	}
+
+	// 连接网关
+	m_pGServerConnect = new CGServerConnect;
+	if (!m_pGServerConnect)
+	{
+		throw new CException("CBaseMainManage::Init new CGServerConnect failed", 0x43A);
 	}
 
 	// 初始化定时器
@@ -171,13 +162,13 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 
 	m_bInit = true;
 
-	INFO_LOG("CBaseLogonServer Init end");
+	INFO_LOG("CBaseWorkServer Init end");
 
 	return true;
 }
 
 //取消初始化函数 
-bool CBaseLogonServer::UnInit()
+bool CBaseWorkServer::UnInit()
 {
 	//停止服务
 	if (m_bRun)
@@ -186,11 +177,6 @@ bool CBaseLogonServer::UnInit()
 	}
 
 	m_bInit = false;
-	m_TCPSocket.UnInit();
-	if (ConfigManage()->m_logonServerConfig.webSocket)
-	{
-		m_WebSocket.UnInit();
-	}
 	m_SQLDataManage.UnInit();
 
 	//设置数据
@@ -206,6 +192,8 @@ bool CBaseLogonServer::UnInit()
 
 	//删除定时器
 	SafeDeleteArray(m_pServerTimer);
+	SAFE_DELETE(m_pGServerConnect);
+	SAFE_DELETE(m_pTcpConnect);
 
 	//调用接口
 	OnUnInit();
@@ -214,13 +202,13 @@ bool CBaseLogonServer::UnInit()
 }
 
 //启动函数
-bool CBaseLogonServer::Start()
+bool CBaseWorkServer::Start()
 {
-	INFO_LOG("CBaseLogonServer Start begin...");
+	INFO_LOG("CBaseWorkServer Start begin...");
 
 	if (m_bInit == false || m_bRun == true)
 	{
-		ERROR_LOG("CBaseLogonServer already been inited or running");
+		ERROR_LOG("CBaseWorkServer already been inited or running");
 		return false;
 	}
 
@@ -228,7 +216,7 @@ bool CBaseLogonServer::Start()
 	bool ret = false;
 
 	// 创建管道
-	CFIFOEvent fifo("/tmp/CBaseCenterServer-Start-fifo");
+	CFIFOEvent fifo("/tmp/CBaseWorkServer-Start-fifo");
 
 	// 启动DB模块
 	ret = m_SQLDataManage.Start();
@@ -238,41 +226,29 @@ bool CBaseLogonServer::Start()
 		return false;
 	}
 
-	// 启动TCP网络模块
-	ret = m_TCPSocket.Start(SERVICE_TYPE_LOGON);
-	if (!ret)
-	{
-		ERROR_LOG("TCPSocket Start failed");
-		return false;
-	}
-
-	// 启动websocket网络模块
-	if (ConfigManage()->m_logonServerConfig.webSocket)
-	{
-		ret = m_WebSocket.Start(SERVICE_TYPE_LOGON);
-		if (!ret)
-		{
-			ERROR_LOG("TCPSocket Start failed");
-			return false;
-		}
-	}
-
 	// 启动与中心服务器连接模块
 	const CenterServerConfig& centerServerConfig = ConfigManage()->GetCenterServerConfig();
-	ret = m_pTcpConnect->Start(&m_DataLine, centerServerConfig.ip, centerServerConfig.port, SERVICE_TYPE_LOGON, ConfigManage()->GetLogonServerConfig().logonID);		// TODO	
+	ret = m_pTcpConnect->Start(&m_DataLine, centerServerConfig.ip, centerServerConfig.port, SERVICE_TYPE_WORK, ConfigManage()->GetWorkServerConfig().workID);		// TODO	
 	if (!ret)
 	{
-		throw new CException("CBaseLogonServer::m_pTcpConnect.Start 连接模块启动失败", 0x433);
+		throw new CException("CBaseWorkServer::m_pTcpConnect.Start 连接模块启动失败", 0x433);
 	}
 	int err = pthread_create(&m_connectCServerHandle, NULL, TcpConnectThread, (void*)this);
 	if (err != 0)
 	{
 		SYS_ERROR_LOG("TcpConnectThread failed");
-		throw new CException("CBaseLogonServer::m_pTcpConnect.Start 连接线程函数启动失败", 0x434);
+		throw new CException("CBaseWorkServer::m_pTcpConnect.Start 连接线程函数启动失败", 0x434);
 	}
 
 	// 关联日志文件
-	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, m_InitData.uRoomID);
+	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, ConfigManage()->GetWorkServerConfig().workID);
+
+	//////////////////////////////////建立与网关的连接////////////////////////////////////////
+	ret = m_pGServerConnect->Start(&m_DataLine, ConfigManage()->GetWorkServerConfig().workID, SERVICE_TYPE_WORK, true);
+	if (!ret)
+	{
+		throw new CException("CBaseWorkServer::m_pGServerConnect.Start 连接模块启动失败", 0x433);
+	}
 
 	// 启动定时器
 	for (int i = 0; i < m_KernelData.uTimerCount; i++)
@@ -280,7 +256,7 @@ bool CBaseLogonServer::Start()
 		// 一秒执行一次
 		if (!m_pServerTimer[i].Start(&m_DataLine, 1000))
 		{
-			ERROR_LOG("CBaseLogonServer::m_pServerTimer.Start 定时器启动失败");
+			ERROR_LOG("CBaseWorkServer::m_pServerTimer.Start 定时器启动失败");
 			return false;
 		}
 	}
@@ -310,15 +286,15 @@ bool CBaseLogonServer::Start()
 	// 等待子线程读取线程参数
 	fifo.WaitForEvent();
 
-	INFO_LOG("CBaseLogonServer Start end.");
+	INFO_LOG("CBaseWorkServer Start end.");
 
 	return true;
 }
 
 //停止服务
-bool CBaseLogonServer::Stop()
+bool CBaseWorkServer::Stop()
 {
-	INFO_LOG("CBaseLogonServer Stop begin...");
+	INFO_LOG("CBaseWorkServer Stop begin...");
 
 	if (m_bRun == false)
 	{
@@ -328,15 +304,13 @@ bool CBaseLogonServer::Stop()
 
 	m_bRun = false;
 
-	// 先关闭网络模块
-	m_TCPSocket.Stop();
-	if (ConfigManage()->m_logonServerConfig.webSocket)
-	{
-		m_WebSocket.Stop();
-	}
-
 	//关闭与中心服务器的连接
 	m_pTcpConnect->Stop();
+
+	if (m_pGServerConnect)
+	{
+		m_pGServerConnect->Stop();
+	}
 
 	//退出处理线程
 	if (m_hHandleThread)
@@ -367,13 +341,13 @@ bool CBaseLogonServer::Stop()
 	//清理队列数据
 	m_DataLine.CleanLineData();
 
-	INFO_LOG("CBaseLogonServer Stop end.");
+	INFO_LOG("CBaseWorkServer Stop end.");
 
 	return true;
 }
 
 //网络关闭处理
-bool CBaseLogonServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime, BYTE socketType)
+bool CBaseWorkServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uConnectTime, BYTE socketType)
 {
 	SocketCloseLine SocketClose;
 	SocketClose.uConnectTime = uConnectTime;
@@ -384,7 +358,7 @@ bool CBaseLogonServer::OnSocketCloseEvent(ULONG uAccessIP, UINT uIndex, UINT uCo
 }
 
 //网络消息处理
-bool CBaseLogonServer::OnSocketReadEvent(BYTE socketType, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
+bool CBaseWorkServer::OnSocketReadEvent(BYTE socketType, NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
 {
 	if (!pNetHead)
 	{
@@ -402,7 +376,7 @@ bool CBaseLogonServer::OnSocketReadEvent(BYTE socketType, NetMessageHead* pNetHe
 }
 
 //异步线程结果处理
-bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uIndex, UINT uMsgID)
+bool CBaseWorkServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleResult, const void* pData, UINT uResultSize, UINT uIndex, UINT uMsgID)
 {
 	AsynThreadResultLine resultData;
 
@@ -417,7 +391,7 @@ bool CBaseLogonServer::OnAsynThreadResultEvent(UINT uHandleKind, UINT uHandleRes
 }
 
 //设定定时器
-bool CBaseLogonServer::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = SERVERTIMER_TYPE_PERISIST*/)
+bool CBaseWorkServer::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = SERVERTIMER_TYPE_PERISIST*/)
 {
 	if (!m_pServerTimer)
 	{
@@ -438,7 +412,7 @@ bool CBaseLogonServer::SetTimer(UINT uTimerID, UINT uElapse, BYTE timerType/* = 
 }
 
 //清除定时器
-bool CBaseLogonServer::KillTimer(UINT uTimerID)
+bool CBaseWorkServer::KillTimer(UINT uTimerID)
 {
 	if (!m_pServerTimer)
 	{
@@ -459,10 +433,10 @@ bool CBaseLogonServer::KillTimer(UINT uTimerID)
 }
 
 //队列数据处理线程
-void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
+void* CBaseWorkServer::LineDataHandleThread(void* pThreadData)
 {
 	HandleThreadStartStruct* pData = (HandleThreadStartStruct*)pThreadData;
-	CBaseLogonServer* pThis = pData->pMainManage;
+	CBaseWorkServer* pThis = pData->pMainManage;
 	CDataLine* pDataLine = &pThis->m_DataLine;
 	CFIFOEvent* pCFIFOEvent = pData->pFIFO;
 
@@ -502,14 +476,6 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 				if (!pThis->OnSocketRead(&pSocketRead->netMessageHead, pBuffer, size, pSocketRead->socketType, pSocketRead->uIndex, pSocketRead->pBufferevent))
 				{
 					ERROR_LOG("OnSocketRead failed mainID=%d assistID=%d", pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
-					if (ConfigManage()->m_logonServerConfig.webSocket && pSocketRead->socketType)
-					{
-						pThis->m_WebSocket.CloseSocket(pSocketRead->uIndex);
-					}
-					else
-					{
-						pThis->m_TCPSocket.CloseSocket(pSocketRead->uIndex);
-					}
 				}
 				break;
 			}
@@ -579,7 +545,7 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 
 		catch (int iCode)
 		{
-			ERROR_LOG("[ LogonServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
+			ERROR_LOG("[ WorkServer 编号：%d ] [ 描述：如果有dump文件，请查看dump文件 ] [ 源代码位置：未知 ]", iCode);
 			continue;
 		}
 
@@ -595,9 +561,9 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 
 //////////////////////////////////////////////////////////////////////////
 // 中心服连接线程
-void* CBaseLogonServer::TcpConnectThread(void* pThreadData)
+void* CBaseWorkServer::TcpConnectThread(void* pThreadData)
 {
-	CBaseLogonServer* pThis = (CBaseLogonServer*)pThreadData;
+	CBaseWorkServer* pThis = (CBaseWorkServer*)pThreadData;
 	if (!pThis)
 	{
 		std::cout << "thread param is null" << "{func=" << __FUNCTION__ << " line=" << __LINE__ << "}\n";

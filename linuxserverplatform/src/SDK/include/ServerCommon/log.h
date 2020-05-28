@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameLogManage.h"
+#include "configManage.h"
 #include <string>
 #include <array>
 

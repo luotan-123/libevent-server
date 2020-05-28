@@ -5,6 +5,34 @@
 #include "Function.h"
 #include "Lock.h"
 
+struct LogFileElem
+{
+	pthread_t threadID;
+	int serverType;
+
+	LogFileElem()
+	{
+		threadID = 0;
+		serverType = 0;
+	}
+
+	bool operator<(const LogFileElem& elem)const
+	{
+		if (threadID < elem.threadID)
+		{
+			return true;
+		}
+		else if (serverType == elem.serverType)
+		{
+			if (serverType < elem.serverType)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
 struct ThreadLogFiles
 {
 	std::string errorLog;
@@ -42,23 +70,10 @@ public:
 
 	// 设置进程日志目录
 	void SetLogPath(const std::string &path);
-private:
-	// 添加中心服务器相关日志文件
-	void AddCenterLogFile(pthread_t threadID, int threadType);
-
-	// 添加大厅服务器相关日志文件
-	void AddLogonLogFile(pthread_t threadID, int threadType);
-
-	// 添加游戏服务器相关日志文件
-	void AddLoaderLogFile(pthread_t threadID, int threadType, int roomID);
 
 private:
-	// 游戏日志文件map
-	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_loaderLogFilesMap;
-	// 大厅日志文件map
-	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_logonLogFilesMap;
-	// 中心服日志文件map
-	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/> m_centerLogFilesMap;
+	// 日志文件map
+	std::map<LogFileElem, ThreadLogFiles /*logFileName*/> m_LogFilesMap;
 
 	// 文件描述符map
 	std::unordered_map<std::string, FILE*> m_filesFpMap;

@@ -194,6 +194,7 @@ enum LogonServerSocketType
 	LOGON_SERVER_SOCKET_TYPE_NO = 0,			//无类型
 	LOGON_SERVER_SOCKET_TYPE_USER = 1,			//玩家
 	LOGON_SERVER_SOCKET_TYPE_GAME_SERVER = 2,	//游戏服
+	LOGON_SERVER_SOCKET_TYPE_WORK_SERVER = 3,	//逻辑服
 };
 
 //////////////////////////////////////////////////////////////////////////

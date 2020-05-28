@@ -6,7 +6,7 @@
 #include "MyCurl.h"
 #include "tableDefine.h"
 #include "AsyncEventMsg.pb.h"
-#include "GameLogonDataBase.h"
+#include "GameWorkDataBase.h"
 
 using namespace AsyncEventMsg;
 

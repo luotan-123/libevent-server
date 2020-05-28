@@ -393,6 +393,10 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 
 		INFO_LOG("游戏服掉线：roomID=%d", socketInfo.identityID);
 	}
+	else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER)
+	{
+		INFO_LOG("逻辑服务器掉线：serverID=%d", socketInfo.identityID);
+	}
 	else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER)
 	{
 		////////////////////////////////玩家掉线//////////////////////////////////////////
@@ -2009,13 +2013,6 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 {
 	SAFECHECK_MESSAGE(pMessage, PlatformLogonServerVerify, pData, size);
 
-	RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(pMessage->roomID);
-	if (!pRoomBaseInfo)
-	{
-		ERROR_LOG("没有配置的roomID=%d", pMessage->roomID);
-		return false;
-	}
-
 	// 容错
 	pMessage->passwd[sizeof(pMessage->passwd) - 1] = '\0';
 
@@ -2026,29 +2023,45 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 		return false;
 	}
 
-	// 添加到内存
-	LogonGServerInfo* pGServer = m_pGServerManage->GetGServer(pMessage->roomID);
-	if (pGServer)
+	if (pMessage->serverType == SERVICE_TYPE_LOADER)
 	{
-		ERROR_LOG("gserver（%d）已经登录过了", pMessage->roomID);
+		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(pMessage->serverID);
+		if (!pRoomBaseInfo)
+		{
+			ERROR_LOG("没有配置的serverID=%d", pMessage->serverID);
+			return false;
+		}
 
-		// 返回true不断socket
-		return true;
+		// 添加到内存
+		LogonGServerInfo* pGServer = m_pGServerManage->GetGServer(pMessage->serverID);
+		if (pGServer)
+		{
+			ERROR_LOG("gserver（%d）已经登录过了", pMessage->serverID);
+
+			// 返回true不断socket
+			return true;
+		}
+		else
+		{
+			pGServer = new LogonGServerInfo;
+			pGServer->roomID = pMessage->serverID;
+			pGServer->socketIdx = socketIdx;
+			pGServer->pBufferevent = pBufferevent;
+
+			m_pGServerManage->AddGServer(pMessage->serverID, pGServer);
+		}
+
+		// socketIdx和gserver关联
+		m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->serverID);
 	}
-	else
+	else if (pMessage->serverType == SERVICE_TYPE_WORK)
 	{
-		pGServer = new LogonGServerInfo;
-		pGServer->roomID = pMessage->roomID;
-		pGServer->socketIdx = socketIdx;
-		pGServer->pBufferevent = pBufferevent;
-
-		m_pGServerManage->AddGServer(pMessage->roomID, pGServer);
+		// socketIdx和gserver关联
+		m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_WORK_SERVER, pMessage->serverID);
 	}
 
-	// socketIdx和gserver关联
-	m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_GAME_SERVER, pMessage->roomID);
-
-	INFO_LOG("【roomID=%d】游戏服连接本服", pMessage->roomID);
+	
+	INFO_LOG("【serverID=%d, serverType=%d】游戏服连接本服", pMessage->serverID, pMessage->serverType);
 
 	return true;
 }
@@ -2188,7 +2201,8 @@ bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT
 		{
 			const LogonServerSocket&& socketInfo = GetIdentityIDBySocketIdx(m_socketIndexVec[i], SOCKET_TYPE_TCP);
 			if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER 
-				|| toGServer && socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER)
+				|| toGServer && (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER
+					|| socketInfo.type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER))
 			{
 				m_TCPSocket.SendData(m_socketIndexVec[i], pData, uSize, uMainID, bAssistantID, 0, 0, NULL);
 			}
@@ -2199,7 +2213,8 @@ bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT
 		for (int i = 0; i < m_socketInfoMap.size(); i++)
 		{
 			if (m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_USER || 
-				toGServer && m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER)
+				toGServer && (m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER
+					|| m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER))
 			{
 				m_TCPSocket.SendData(i, pData, uSize, uMainID, bAssistantID, 0, 0, NULL);
 			}

@@ -187,7 +187,7 @@ struct CenterServerConfig
 	}
 };
 
-// 大厅服务器配置
+// 网关服务器配置
 struct LogonServerConfig
 {
 	int logonID;
@@ -196,6 +196,17 @@ struct LogonServerConfig
 	LogonServerConfig()
 	{
 		memset(this, 0, sizeof(LogonServerConfig));
+	}
+};
+
+// 逻辑服务器配置
+struct WorkServerConfig
+{
+	int workID;
+
+	WorkServerConfig()
+	{
+		memset(this, 0, sizeof(WorkServerConfig));
 	}
 };
 
@@ -506,6 +517,8 @@ public:
 	bool LoadCenterServerConfig();
 	// 加载本地网关服务器配置
 	bool LoadLogonServerConfig();
+	// 加载本地逻辑服务器配置
+	bool LoadWorkServerConfig();
 	// 加载游戏服务器配置
 	bool LoadLoaderServerConfig();
 	// 加载通用配置
@@ -549,6 +562,8 @@ public:
 	const CenterServerConfig& GetCenterServerConfig();
 	// 获取logonserver配置
 	const LogonServerConfig& GetLogonServerConfig();
+	// 获取logonserver配置
+	const WorkServerConfig& GetWorkServerConfig();
 	// 获取通用配置
 	const CommonConfig& GetCommonConfig();
 	// 获取ftp配置
@@ -581,6 +596,8 @@ public:
 	void GetBuyRoomInfo(int gameID, int roomType, std::vector<int>& roomIDVec);
 	// 获得分表的表名
 	bool GetTableNameByDate(const char* name, char* dateName, size_t size);
+	// 根据服务器类型获取名字
+	std::string GetServerNameByType(int type);
 
 public:
 	// 通过机器人的ID获取信息
@@ -603,8 +620,10 @@ public:
 	DBConfig m_dbConfig[DBType::DB_TYPE_MAX];
 	// 中心服务器配置
 	CenterServerConfig m_centerServerConfig;
-	// 大厅服务器配置
+	// 网关服务器配置
 	LogonServerConfig m_logonServerConfig;
+	// 逻辑服务器配置
+	WorkServerConfig m_workServerConfig;
 	// 游戏服务器配置
 	LoaderServerConfig m_loaderServerConfig;
 	// 通用配置

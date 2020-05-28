@@ -215,8 +215,8 @@ bool CBaseMainManage::Start()
 	// 关联日志文件
 	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, m_InitData.uRoomID);
 
-	//////////////////////////////////建立与登录服的连接////////////////////////////////////////
-	ret = m_pGServerConnect->Start(&m_DataLine, m_InitData.uRoomID, true);
+	//////////////////////////////////建立与网关的连接////////////////////////////////////////
+	ret = m_pGServerConnect->Start(&m_DataLine, m_InitData.uRoomID, SERVICE_TYPE_LOADER, true);
 	if (!ret)
 	{
 		throw new CException("CBaseMainManage::m_pGServerConnect.Start 连接模块启动失败", 0x433);

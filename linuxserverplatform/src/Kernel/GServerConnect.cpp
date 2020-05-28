@@ -70,14 +70,16 @@ bool CGServerClient::Connect()
 
 		//发送认证消息
 		PlatformLogonServerVerify msg;
-		msg.roomID = m_pCGServerConnect->GetRoomID();
+		msg.serverID = m_pCGServerConnect->GetServerID();
+		msg.serverType = m_pCGServerConnect->GetServerType();
 		memcpy(msg.passwd, ConfigManage()->m_loaderServerConfig.logonserverPasswd, sizeof(msg.passwd));
 		m_pCGServerConnect->SendData(m_index, &msg, sizeof(msg), COMMON_VERIFY_MESSAGE, 0, 0, 0);
 
 		return true;
 	}
 
-	ERROR_LOG("连接登陆服务器失败，稍后会重连。roomID=%d,ip=%s,port=%d", m_pCGServerConnect->GetRoomID(), m_ip, m_port);
+	ERROR_LOG("连接网关服务器(ip=%s,port=%d)失败，稍后会重连。serverID=%d,serverType=%d",
+		m_ip, m_port, m_pCGServerConnect->GetServerID(), m_pCGServerConnect->GetServerType());
 
 	return false;
 }
@@ -296,7 +298,8 @@ CGServerConnect::CGServerConnect()
 {
 	m_pRecvDataLine = NULL;
 	m_pSendDataLine = NULL;
-	m_roomID = 0;
+	m_serverID = 0;
+	m_serverType = 0;
 	m_running = false;
 	m_socketVec.clear();
 	m_hThreadCheckConnect = 0;
@@ -308,11 +311,11 @@ CGServerConnect::~CGServerConnect()
 
 }
 
-bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThread)
+bool CGServerConnect::Start(CDataLine* pDataLine, int serverID, int serverType, bool bStartSendThread)
 {
 	INFO_LOG("service CGServerConnect start begin...");
 
-	if (pDataLine == NULL || roomID <= 0)
+	if (pDataLine == NULL || serverID <= 0 || serverType <= 0)
 	{
 		ERROR_LOG("pDataLine == NULL || roomID <= 0");
 		return false;
@@ -326,7 +329,8 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThr
 
 	m_running = true;
 	m_pRecvDataLine = pDataLine;
-	m_roomID = roomID;
+	m_serverID = serverID;
+	m_serverType = serverType;
 
 	// 分配内存
 	m_socketVec.clear();
@@ -362,7 +366,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThr
 	}
 
 	m_hThreadCheckConnect = connectThreadID;
-	GameLogManage()->AddLogFile(connectThreadID, THREAD_TYPE_ACCEPT, roomID);
+	GameLogManage()->AddLogFile(connectThreadID, THREAD_TYPE_ACCEPT, serverID);
 
 	// 建立发送线程
 	if (bStartSendThread)
@@ -376,7 +380,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThr
 			SYS_ERROR_LOG("ThreadSendMsg failed");
 			return false;
 		}
-		GameLogManage()->AddLogFile(m_hThreadSendMsg, THREAD_TYPE_SEND, roomID);
+		GameLogManage()->AddLogFile(m_hThreadSendMsg, THREAD_TYPE_SEND, serverID);
 	}
 
 	// 建立接收数据线程
@@ -392,7 +396,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int roomID, bool bStartSendThr
 		}
 
 		m_threadIDToIndexMap.insert(std::make_pair(threadID, i));
-		GameLogManage()->AddLogFile(threadID, THREAD_TYPE_RECV, roomID);
+		GameLogManage()->AddLogFile(threadID, THREAD_TYPE_RECV, serverID);
 	}
 
 	INFO_LOG("service CGServerConnect start end");
@@ -519,9 +523,14 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 	return true;
 }
 
-int CGServerConnect::GetRoomID()
+int CGServerConnect::GetServerID()
 {
-	return m_roomID;
+	return m_serverID;
+}
+
+int CGServerConnect::GetServerType()
+{
+	return m_serverType;
 }
 
 const std::vector<CGServerClient*>& CGServerConnect::GetSocketVec()

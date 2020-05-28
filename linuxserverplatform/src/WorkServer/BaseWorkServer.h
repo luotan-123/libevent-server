@@ -4,9 +4,8 @@
 #include "RedisPHP.h"
 #include "RedisLogon.h"
 #include "ServerTimer.h"
-#include "TCPSocket.h"
-#include "WebSocket.h"
 #include "TcpConnect.h"
+#include "GServerConnect.h"
 #include "INIFile.h"
 #include "Exception.h"
 #include "PlatformMessage.h"
@@ -14,7 +13,7 @@
 
 
 //基础数据管理类
-class CBaseLogonServer : public IServerSocketService, public IAsynThreadResultService
+class CBaseWorkServer : public IServerSocketService, public IAsynThreadResultService
 {
 protected:
 	bool			m_bRun;					//运行标志
@@ -27,17 +26,16 @@ public:
 	ManageInfoStruct						m_InitData;					//初始化数据
 	KernelInfoStruct						m_KernelData;				//内核数据
 	ServerDllInfoStruct						m_DllInfo;					//DLL信息
-	CTCPSocketManage						m_TCPSocket;				//TCP网络模块
-	CWebSocketManage						m_WebSocket;				//websocket网络模块
 	CDataBaseManage							m_SQLDataManage;			//数据库模块
 	CRedisLogon* m_pRedis;					//redis
 	CRedisPHP* m_pRedisPHP;					//连接php的redis server
 	CTcpConnect* m_pTcpConnect;				//与中心服务器的连接
+	CGServerConnect* m_pGServerConnect;		//与网关服务器的连接
 	CServerTimer* m_pServerTimer;			//服务器定时器
 
 public:
-	CBaseLogonServer();
-	virtual ~CBaseLogonServer();
+	CBaseWorkServer();
+	virtual ~CBaseWorkServer();
 
 	//公共使用功能函数 （本处理线程调用）
 public:

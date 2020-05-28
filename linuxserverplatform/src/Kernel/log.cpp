@@ -1,6 +1,5 @@
 #include "CommonHead.h"
 #include "log.h"
-#include "configManage.h"
 #include <stdarg.h>
 
 std::unordered_map<std::string, AutoCostInfo> CAutoLogCost::g_costMap;

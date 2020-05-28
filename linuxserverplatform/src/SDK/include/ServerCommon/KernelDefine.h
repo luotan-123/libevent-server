@@ -81,6 +81,8 @@ enum ServiceType
 	SERVICE_TYPE_LOADER,	// 游戏
 	SERVICE_TYPE_CENTER,	// 中心服
 	SERVICE_TYPE_PHP,		// PHP服务器
+	SERVICE_TYPE_HTTP,		// http服务器
+	SERVICE_TYPE_WORK,		// work服务器
 	SERVICE_TYPE_END,
 };
 

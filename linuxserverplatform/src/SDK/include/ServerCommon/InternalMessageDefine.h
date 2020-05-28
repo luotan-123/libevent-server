@@ -140,7 +140,8 @@ struct PlatformCenterServerVerify
 // 登陆服认证
 struct PlatformLogonServerVerify
 {
-	int roomID;
+	int serverID;
+	int serverType;
 	char passwd[128];
 
 	PlatformLogonServerVerify()

@@ -1,20 +1,20 @@
 #include "CommonHead.h"
-#include "GameLogonModule.h"
+#include "GameWorkModule.h"
 
 
-CGameLogonModule::CGameLogonModule()
+CGameWorkModule::CGameWorkModule()
 {
 
 }
 
-CGameLogonModule::~CGameLogonModule()
+CGameWorkModule::~CGameWorkModule()
 {
 
 }
 
-bool CGameLogonModule::InitService(ManageInfoStruct * pInitData)
+bool CGameWorkModule::InitService(ManageInfoStruct * pInitData)
 {
-	INFO_LOG("GameLogonModule InitService begin ...");
+	INFO_LOG("GameWorkModule InitService begin ...");
 	if (!pInitData)
 	{
 		ERROR_LOG("invalid param input");
@@ -23,23 +23,23 @@ bool CGameLogonModule::InitService(ManageInfoStruct * pInitData)
 
 	bool ret = false;
 
-	ret = m_LogonManage.Init(pInitData, &m_DataBaseHandle);
+	ret = m_WorkManage.Init(pInitData, &m_DataBaseHandle);
 	if (!ret)
 	{
-		ERROR_LOG("LogonManage Init failed");
+		ERROR_LOG("WorkManage Init failed");
 		return false;
 	}
 
-	INFO_LOG("GameLogonModule InitService end.");
+	INFO_LOG("GameWorkModule InitService end.");
 
 	return true;
 }
 
-bool CGameLogonModule::UnInitService()
+bool CGameWorkModule::UnInitService()
 {
 	try
 	{
-		return m_LogonManage.UnInit();
+		return m_WorkManage.UnInit();
 	}
 	catch (CException * pException) 
 	{
@@ -54,39 +54,39 @@ bool CGameLogonModule::UnInitService()
 	return false;
 }
 
-bool CGameLogonModule::StartService(UINT &errCode)
+bool CGameWorkModule::StartService(UINT &errCode)
 {
-	INFO_LOG("GameLogonModule StartService begin...");
+	INFO_LOG("GameWorkModule StartService begin...");
 	
 	errCode = 0;
 
-	if (!m_LogonManage.Start())
+	if (!m_WorkManage.Start())
 	{
 		return false;
 	}
 
-	INFO_LOG("GameLogonModule StartService end");
+	INFO_LOG("GameWorkModule StartService end");
 
 	return true;
 }
 
-bool CGameLogonModule::StoptService()
+bool CGameWorkModule::StoptService()
 {
-	INFO_LOG("GameLogonModule StoptService begin...");
+	INFO_LOG("GameWorkModule StoptService begin...");
 
-	bool ret = m_LogonManage.Stop();
+	bool ret = m_WorkManage.Stop();
 	if (!ret)
 	{
-		ERROR_LOG("LogonManage Stop failed");
+		ERROR_LOG("WorkManage Stop failed");
 		return false;
 	}
 
-	INFO_LOG("GameLogonModule StoptService end");
+	INFO_LOG("GameWorkModule StoptService end");
 
 	return true;
 }
 
-bool CGameLogonModule::DeleteService()
+bool CGameWorkModule::DeleteService()
 {
 	try
 	{
@@ -100,7 +100,7 @@ bool CGameLogonModule::DeleteService()
 	return true;
 }
 
-bool CGameLogonModule::UpdateService()
+bool CGameWorkModule::UpdateService()
 {
 	return true;
 }

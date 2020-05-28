@@ -24,9 +24,7 @@ CGameLogManage* CGameLogManage::Instance()
 
 void CGameLogManage::Release()
 {
-	m_centerLogFilesMap.clear();
-	m_logonLogFilesMap.clear();
-	m_loaderLogFilesMap.clear();
+	m_LogFilesMap.clear();
 
 	for (auto iter = m_filesFpMap.begin(); iter != m_filesFpMap.end(); ++iter)
 	{
@@ -41,224 +39,6 @@ void CGameLogManage::Release()
 	m_filesFpMap.clear();
 }
 
-void CGameLogManage::AddCenterLogFile(pthread_t threadID, int threadType)
-{
-	if (threadID <= 0)
-	{
-		return;
-	}
-
-	auto iter = m_centerLogFilesMap.find(threadID);
-	if (iter != m_centerLogFilesMap.end())
-	{
-		return;
-	}
-
-	std::string errfileName = m_logPath;
-	std::string costFileName = m_logPath;
-
-	if (threadType == THREAD_TYPE_MAIN)		// 主线程
-	{
-		errfileName += "centerserver_sys";
-		costFileName += "centerserver_sys_cost";
-	}
-	else if (threadType == THREAD_TYPE_LOGIC)
-	{
-		errfileName += "centerserver_err";
-		costFileName += "centerserver_cost";
-	}
-	else if (threadType == THREAD_TYPE_ASYNC)
-	{
-		errfileName += "centerserver_async_err";
-		costFileName += "centerserver_async_cost";
-	}
-	else if (threadType == THREAD_TYPE_ACCEPT)
-	{
-		errfileName += "centerserver_accept_err";
-		costFileName += "centerserver_accept_cost";
-	}
-	else if (threadType == THREAD_TYPE_RECV)
-	{
-		errfileName += "centerserver_recv_err";
-		costFileName += "centerserver_recv_cost";
-	}
-	else if (threadType == THREAD_TYPE_SEND)
-	{
-		errfileName += "centerserver_send_err";
-		costFileName += "centerserver_send_cost";
-	}
-	else
-	{
-		return;
-	}
-
-	ThreadLogFiles logs;
-	logs.errorLog = errfileName;
-	logs.costLog = costFileName;
-
-	m_centerLogFilesMap.emplace(threadID, logs);
-}
-
-void CGameLogManage::AddLogonLogFile(pthread_t threadID, int threadType)
-{
-	if (threadID <= 0)
-	{
-		return;
-	}
-
-	auto iter = m_logonLogFilesMap.find(threadID);
-	if (iter != m_logonLogFilesMap.end())
-	{
-		return;
-	}
-
-	std::string errfileName = m_logPath;
-	std::string costFileName = m_logPath;
-
-	if (threadType == THREAD_TYPE_MAIN)		// 主线程
-	{
-		errfileName += "logonserver_sys";
-		costFileName += "logonserver_sys_cost";
-	}
-	else if (threadType == THREAD_TYPE_LOGIC)
-	{
-		errfileName += "logonserver_err";
-		costFileName += "logonserver_cost";
-	}
-	else if (threadType == THREAD_TYPE_ASYNC)
-	{
-		errfileName += "logonserver_async_err";
-		costFileName += "logonserver_async_cost";
-	}
-	else if (threadType == THREAD_TYPE_ACCEPT)
-	{
-		errfileName += "logonserver_accept_err";
-		costFileName += "logonserver_accept_cost";
-	}
-	else if (threadType == THREAD_TYPE_RECV)
-	{
-		errfileName += "logonserver_recv_err";
-		costFileName += "logonserver_recv_cost";
-	}
-	else if (threadType == THREAD_TYPE_SEND)
-	{
-		errfileName += "logonserver_send_err";
-		costFileName += "logonserver_send_cost";
-	}
-	else
-	{
-		return;
-	}
-
-	ThreadLogFiles logs;
-	logs.errorLog = errfileName;
-	logs.costLog = costFileName;
-
-	m_logonLogFilesMap.emplace(threadID, logs);
-}
-
-void CGameLogManage::AddLoaderLogFile(pthread_t threadID, int threadType, int roomID)
-{
-	if (threadID <= 0)
-	{
-		return;
-	}
-
-	if (threadType == THREAD_TYPE_LOGIC && roomID <= 0)
-	{
-		return;
-	}
-
-	std::string errfileName = m_logPath;
-	std::string costFileName = m_logPath;
-
-	if (threadType == THREAD_TYPE_MAIN)		// 主线程
-	{
-		errfileName += "loaderserver_sys";
-		costFileName += "loaderserver_sys_cost";
-	}
-	else if (threadType == THREAD_TYPE_LOGIC)	// 逻辑线程(每个游戏都是单独的)
-	{
-		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
-		if (!pRoomBaseInfo)
-		{
-			return;
-		}
-
-		errfileName += pRoomBaseInfo->name;
-		errfileName += "_err";
-
-		costFileName += pRoomBaseInfo->name;
-		costFileName += "_cost";
-	}
-	else if (threadType == THREAD_TYPE_ASYNC)
-	{
-		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
-		if (!pRoomBaseInfo)
-		{
-			return;
-		}
-
-		errfileName += pRoomBaseInfo->name;
-		errfileName += "_async_err";
-
-		costFileName += pRoomBaseInfo->name;
-		costFileName += "_async_cost";
-	}
-	else if (threadType == THREAD_TYPE_ACCEPT)
-	{
-		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
-		if (!pRoomBaseInfo)
-		{
-			return;
-		}
-
-		errfileName += pRoomBaseInfo->name;
-		errfileName += "_accept_err";
-
-		costFileName += pRoomBaseInfo->name;
-		costFileName += "_accept_cost";
-	}
-	else if (threadType == THREAD_TYPE_RECV)
-	{
-		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
-		if (!pRoomBaseInfo)
-		{
-			return;
-		}
-
-		errfileName += pRoomBaseInfo->name;
-		errfileName += "_recv_err";
-
-		costFileName += pRoomBaseInfo->name;
-		costFileName += "_recv_cost";
-	}
-	else if (threadType == THREAD_TYPE_SEND)
-	{
-		RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
-		if (!pRoomBaseInfo)
-		{
-			return;
-		}
-
-		errfileName += pRoomBaseInfo->name;
-		errfileName += "_send_err";
-
-		costFileName += pRoomBaseInfo->name;
-		costFileName += "_send_cost";
-	}
-	else
-	{
-		return;
-	}
-
-	ThreadLogFiles logs;
-	logs.errorLog = errfileName;
-	logs.costLog = costFileName;
-
-	m_loaderLogFilesMap.emplace(threadID, logs);
-}
-
 void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/* = 0*/)
 {
 	CSignedLockObject LockObject(&m_csLock, true);
@@ -269,17 +49,162 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 		return;
 	}
 
-	if (serviceType == SERVICE_TYPE_LOGON)
+	LogFileElem elem;
+	elem.threadID = threadID;
+	elem.serverType = serviceType;
+	std::string servername = ConfigManage()->GetServerNameByType(serviceType);
+
+	if (serviceType == SERVICE_TYPE_LOADER)
 	{
-		AddLogonLogFile(threadID, threadType);
+		if (threadID <= 0)
+		{
+			return;
+		}
+
+		if (threadType == THREAD_TYPE_LOGIC && roomID <= 0)
+		{
+			return;
+		}
+
+		std::string errfileName = m_logPath;
+		std::string costFileName = m_logPath;
+
+		if (threadType == THREAD_TYPE_MAIN)		// 主线程
+		{
+			errfileName += servername + "_sys";
+			costFileName += servername + "_sys_cost";
+		}
+		else if (threadType == THREAD_TYPE_LOGIC)	// 逻辑线程(每个游戏都是单独的)
+		{
+			RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
+			if (!pRoomBaseInfo)
+			{
+				return;
+			}
+
+			errfileName += pRoomBaseInfo->name;
+			errfileName += "_err";
+
+			costFileName += pRoomBaseInfo->name;
+			costFileName += "_cost";
+		}
+		else if (threadType == THREAD_TYPE_ASYNC)
+		{
+			RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
+			if (!pRoomBaseInfo)
+			{
+				return;
+			}
+
+			errfileName += pRoomBaseInfo->name;
+			errfileName += "_async_err";
+
+			costFileName += pRoomBaseInfo->name;
+			costFileName += "_async_cost";
+		}
+		else if (threadType == THREAD_TYPE_ACCEPT)
+		{
+			RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
+			if (!pRoomBaseInfo)
+			{
+				return;
+			}
+
+			errfileName += pRoomBaseInfo->name;
+			errfileName += "_accept_err";
+
+			costFileName += pRoomBaseInfo->name;
+			costFileName += "_accept_cost";
+		}
+		else if (threadType == THREAD_TYPE_RECV)
+		{
+			RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
+			if (!pRoomBaseInfo)
+			{
+				return;
+			}
+
+			errfileName += pRoomBaseInfo->name;
+			errfileName += "_recv_err";
+
+			costFileName += pRoomBaseInfo->name;
+			costFileName += "_recv_cost";
+		}
+		else if (threadType == THREAD_TYPE_SEND)
+		{
+			RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(roomID);
+			if (!pRoomBaseInfo)
+			{
+				return;
+			}
+
+			errfileName += pRoomBaseInfo->name;
+			errfileName += "_send_err";
+
+			costFileName += pRoomBaseInfo->name;
+			costFileName += "_send_cost";
+		}
+		else
+		{
+			return;
+		}
+
+		ThreadLogFiles logs;
+		logs.errorLog = errfileName;
+		logs.costLog = costFileName;
+
+		m_LogFilesMap.emplace(elem, logs);
 	}
-	else if (serviceType == SERVICE_TYPE_LOADER)
+	else
 	{
-		AddLoaderLogFile(threadID, threadType, roomID);
-	}
-	else if (serviceType == SERVICE_TYPE_CENTER)
-	{
-		AddCenterLogFile(threadID, threadType);
+		if (threadID <= 0)
+		{
+			return;
+		}
+
+		std::string errfileName = m_logPath;
+		std::string costFileName = m_logPath;
+
+		if (threadType == THREAD_TYPE_MAIN)		// 主线程
+		{
+			errfileName += servername + "_sys";
+			costFileName += servername + "_sys_cost";
+		}
+		else if (threadType == THREAD_TYPE_LOGIC)
+		{
+			errfileName += servername + "_err";
+			costFileName += servername + "_cost";
+		}
+		else if (threadType == THREAD_TYPE_ASYNC)
+		{
+			errfileName += servername + "_async_err";
+			costFileName += servername + "_async_cost";
+		}
+		else if (threadType == THREAD_TYPE_ACCEPT)
+		{
+			errfileName += servername + "_accept_err";
+			costFileName += servername + "_accept_cost";
+		}
+		else if (threadType == THREAD_TYPE_RECV)
+		{
+			errfileName += servername + "_recv_err";
+			costFileName += servername + "_recv_cost";
+		}
+		else if (threadType == THREAD_TYPE_SEND)
+		{
+			errfileName += servername + "_send_err";
+			costFileName += servername + "_send_cost";
+		}
+		else
+		{
+			return;
+		}
+
+		ThreadLogFiles logs;
+		logs.errorLog = errfileName;
+		logs.costLog = costFileName;
+
+		m_LogFilesMap.emplace(elem, logs);
 	}
 }
 
@@ -292,35 +217,17 @@ std::string CGameLogManage::GetErrorLog(pthread_t threadID)
 	}
 
 	std::string str = "";
-	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
+	LogFileElem elem;
+	elem.threadID = threadID;
+	elem.serverType = serviceType;
 
-	if (serviceType == SERVICE_TYPE_LOGON)
+	auto iter = m_LogFilesMap.find(elem);
+	if (iter != m_LogFilesMap.end())
 	{
-		iter = m_logonLogFilesMap.find(threadID);
-		if (iter != m_logonLogFilesMap.end())
-		{
-			const ThreadLogFiles& logs = iter->second;
-			str = logs.errorLog;
-		}
+		const ThreadLogFiles& logs = iter->second;
+		str = logs.errorLog;
 	}
-	else if (serviceType == SERVICE_TYPE_LOADER)
-	{
-		iter = m_loaderLogFilesMap.find(threadID);
-		if (iter != m_loaderLogFilesMap.end())
-		{
-			const ThreadLogFiles& logs = iter->second;
-			str = logs.errorLog;
-		}
-	}
-	else if (serviceType == SERVICE_TYPE_CENTER)
-	{
-		iter = m_centerLogFilesMap.find(threadID);
-		if (iter != m_centerLogFilesMap.end())
-		{
-			const ThreadLogFiles& logs = iter->second;
-			str = logs.errorLog;
-		}
-	}
+
 
 	// 根据日期生成最终的文件
 	SYSTEMTIME sysTime;
@@ -357,34 +264,15 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	}
 
 	std::string str = "";
-	std::unordered_map<pthread_t /*threadID*/, ThreadLogFiles /*logFileName*/>::iterator iter;
+	LogFileElem elem;
+	elem.threadID = threadID;
+	elem.serverType = serviceType;
 
-	if (serviceType == SERVICE_TYPE_LOGON)
+	auto iter = m_LogFilesMap.find(elem);
+	if (iter != m_LogFilesMap.end())
 	{
-		iter = m_logonLogFilesMap.find(threadID);
-		if (iter != m_logonLogFilesMap.end())
-		{
-			const ThreadLogFiles& logs = iter->second;
-			str = logs.costLog;
-		}
-	}
-	else if (serviceType == SERVICE_TYPE_LOADER)
-	{
-		iter = m_loaderLogFilesMap.find(threadID);
-		if (iter != m_loaderLogFilesMap.end())
-		{
-			const ThreadLogFiles& logs = iter->second;
-			str = logs.costLog;
-		}
-	}
-	else if (serviceType == SERVICE_TYPE_CENTER)
-	{
-		iter = m_centerLogFilesMap.find(threadID);
-		if (iter != m_centerLogFilesMap.end())
-		{
-			const ThreadLogFiles& logs = iter->second;
-			str = logs.costLog;
-		}
+		const ThreadLogFiles& logs = iter->second;
+		str = logs.errorLog;
 	}
 
 	if (str == "")

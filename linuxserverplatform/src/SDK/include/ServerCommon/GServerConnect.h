@@ -67,7 +67,7 @@ public:
 	~CGServerConnect();
 
 public:
-	bool Start(CDataLine* pDataLine, int roomID, bool bStartSendThread = false);
+	bool Start(CDataLine* pDataLine, int serverID, int serverType, bool bStartSendThread = false);
 	bool Stop();
 
 public:
@@ -76,7 +76,8 @@ public:
 
 	// 接口
 public:
-	int GetRoomID();
+	int GetServerID();
+	int GetServerType();
 	const std::vector<CGServerClient*>& GetSocketVec();
 	void GetIndexByThreadID(pthread_t uThreadID, size_t& uMin, size_t& uMax);
 
@@ -94,7 +95,8 @@ private:
 	std::map<pthread_t, int> m_threadIDToIndexMap;
 	CDataLine* m_pRecvDataLine;
 	CDataLine* m_pSendDataLine;
-	int m_roomID;
+	int m_serverID;
+	int m_serverType;
 	volatile bool m_running;
 	pthread_t	m_hThreadCheckConnect;
 	pthread_t	m_hThreadSendMsg;

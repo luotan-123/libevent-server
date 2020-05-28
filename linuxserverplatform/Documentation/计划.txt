@@ -1,4 +1,13 @@
-﻿1、支持websocket协议（已经完成）
+﻿弱点：
+1、linux模块知识
+2、网络薄弱
+3、mysql知识点薄弱
+
+
+
+
+旧计划 2019/10/01
+1、支持websocket协议（已经完成）
 方法：参考CTCPSocketManage写websocket类。完成一次http握手。先解析websocket头部，然后再解析自己头部。
 2、支持http协议。（已经初步完成）
 方法：不必重复造轮子，直接网上查
@@ -17,7 +26,7 @@
 方法：也可也使用rocketMQ
 
 
-新计划：
+新计划 2020/05/01：
 1、封装属于自己的c++和lua框架，新增workserver
 2、通过头条搜索，精通myql操作，以及原理
 3、通过头条了解redis原理
