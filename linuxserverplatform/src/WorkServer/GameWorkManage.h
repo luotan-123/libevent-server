@@ -6,19 +6,14 @@
 enum WorkServerTimerID
 {
 	LOGON_TIMER_BEGIN = 0,
-	LOGON_TIMER_CHECK_HEARTBEAT,				// 心跳定时器
 	LOGON_TIMER_CHECK_REDIS_CONNECTION,			// redis连接性
-	LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET,	// 定期检查没有绑定玩家ID的无效连接
 	LOGON_TIMER_ROUTINE_SAVE_REDIS,				// 定期存储redis数据
-	LOGON_TIMER_SAVE_SOCKET_COUNT,				// 定期保存网关socket数量
 	LOGON_TIMER_NORMAL,							// 通用定时器(s)
 	LOGON_TIMER_END,
 };
 
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
-const int ROUTINE_CHECK_UNBINDID_SOCKET = 67;		// 定期检查未登录的连接(s)
-const int CHECK_SAVE_SOCKET_COUNT = 17;				// 定期保存网关socket数量(s)
 const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
 
 
@@ -114,12 +109,8 @@ private:
 	void InitRounteCheckEvent();
 	// 检查redis连接性
 	void CheckRedisConnection();
-	// 检查心跳
-	void CheckHeartBeat();
 	// 定时存储redis数据到DB updateAll=是否全部更新
 	void RountineSaveRedisDataToDB(bool updateAll);
-	// 定期检查没有绑定玩家ID的链接
-	void RoutineCheckUnbindIDSocket();
 	// 通用定时器
 	void OnNormalTimer();
 	// 跨天

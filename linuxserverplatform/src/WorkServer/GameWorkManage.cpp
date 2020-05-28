@@ -9,7 +9,6 @@ using namespace AsyncEventMsg;
 
 // 预编译选项
 #define FRIENDSGROUP_CRATE_ROOM_MODE	// 俱乐部创建房间，房主消耗钻石
-#define HAOTIAN							// 皓天游戏，没有定义就是皓玩游戏
 
 
 //////////////////////////////////////////////////////////////////////
@@ -110,24 +109,9 @@ bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 		RountineSaveRedisDataToDB(false);
 		return true;
 	}
-	case LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET:
-	{
-		RoutineCheckUnbindIDSocket();
-		return true;
-	}
-	case LOGON_TIMER_SAVE_SOCKET_COUNT:
-	{
-		
-		return true;
-	}
 	case LOGON_TIMER_NORMAL:
 	{
 		OnNormalTimer();
-		return true;
-	}
-	case LOGON_TIMER_CHECK_HEARTBEAT:
-	{
-		CheckHeartBeat();
 		return true;
 	}
 	default:
@@ -1263,20 +1247,11 @@ bool CGameWorkManage::SendMessageToCenterServer(UINT msgID, void* pData, UINT si
 
 void CGameWorkManage::InitRounteCheckEvent()
 {
-	// 设置心跳定时器
-	SetTimer(LOGON_TIMER_CHECK_HEARTBEAT, CHECK_HEAETBEAT_SECS * 1000);
-
 	// 设置检查redis连接定时器
 	SetTimer(LOGON_TIMER_CHECK_REDIS_CONNECTION, CHECK_REDIS_CONNECTION_SECS * 1000);
 
 	// 设置存储redis数据到DB定时器
 	SetTimer(LOGON_TIMER_ROUTINE_SAVE_REDIS, CHECK_REDIS_SAVE_DB * 1000);
-
-	// 设置定期清理未登录的连接
-	//SetTimer(LOGON_TIMER_ROUTINE_CHECK_UNBINDID_SOCKET, ROUTINE_CHECK_UNBINDID_SOCKET * 1000);
-
-	// 设置存储网关socket定时器
-	SetTimer(LOGON_TIMER_SAVE_SOCKET_COUNT, CHECK_SAVE_SOCKET_COUNT * 1000);
 
 	// 设置通用定时器
 	SetTimer(LOGON_TIMER_NORMAL, NORMAL_TIMER_SECS * 1000);
@@ -1305,25 +1280,12 @@ void CGameWorkManage::CheckRedisConnection()
 	m_pRedisPHP->CheckConnection(redisPHPConfig);
 }
 
-void CGameWorkManage::CheckHeartBeat()
-{
-	// 广播心跳
-	SendDataBatch(NULL, 0, MSG_MAIN_TEST, MSG_ASS_TEST, 0, true);
-}
-
 void CGameWorkManage::RountineSaveRedisDataToDB(bool updateAll)
 {
 	if (m_pRedis)
 	{
 		m_pRedis->RountineSaveRedisDataToDB(updateAll);
 	}
-}
-
-void CGameWorkManage::RoutineCheckUnbindIDSocket()
-{
-	time_t currTime = time(NULL);
-
-	
 }
 
 void CGameWorkManage::OnNormalTimer()
