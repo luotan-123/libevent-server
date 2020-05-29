@@ -55,13 +55,14 @@ public:
 	UINT						m_uMaxWebPeople;		//支持最大人数 websocket
 
 private:
-	CLogonUserManage*			m_pUserManage;			// 玩家管理器
-	CLogonGServerManage*		m_pGServerManage;		// 游戏服管理器
+	CLogonUserManage* m_pUserManage;			// 玩家管理器
+	CLogonGServerManage* m_pGServerManage;		// 游戏服管理器
 	std::vector<LogonServerSocket> m_socketInfoMap;		// socket索引和identityID的映射表 TCP
 	std::vector<LogonServerSocket> m_webSocketInfoMap;	// socket索引和userID的映射表 websocket
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
 	std::vector<UINT>			m_socketIndexVec;		// socket索引，遍历在线tcpsocket需要
+	std::vector<UINT>			m_workServerFDVec;		// 连接在线的逻辑服务器
 
 private:
 	std::set<UINT>				m_socketMatch;			// 在比赛场相关页面的玩家
@@ -79,19 +80,19 @@ public:
 	//服务扩展接口函数
 private:
 	//获取信息函数
-	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData);
+	virtual bool PreInitParameter(ManageInfoStruct* pInitData, KernelInfoStruct* pKernelData);
 	//SOCKET 数据读取
-	virtual bool OnSocketRead(NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
+	virtual bool OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
 	//SOCKET 关闭
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime, BYTE socketType);
 	//异步线程处理结果
-	virtual bool OnAsynThreadResult(AsynThreadResultLine * pResultData, void * pData, UINT uSize);
+	virtual bool OnAsynThreadResult(AsynThreadResultLine* pResultData, void* pData, UINT uSize);
 	//定时器消息
 	virtual bool OnTimerMessage(UINT uTimerID);
 
 	// 登陆通知
 private:
-	void NotifyUserInfo(const UserData &userData);
+	void NotifyUserInfo(const UserData& userData);
 private:
 	// 玩家注册相关
 	bool OnHandleUserRegister(unsigned int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent);
@@ -125,9 +126,9 @@ private:
 	// 认证
 	bool OnHandleGServerVerifyMessage(void* pData, int size, unsigned int socketIdx, void* pBufferevent);
 	// 前端 ----> 游戏服
-	bool OnHandleGServerToGameMessage(int userID, NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
+	bool OnHandleGServerToGameMessage(int userID, NetMessageHead* pNetHead, void* pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
 	// 游戏服 ----> 前端
-	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead * pNetHead, void * pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
+	bool OnHandleGServerToUserMessage(int roomID, NetMessageHead* pNetHead, void* pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent);
 
 public:
 	// 通过socketIdx获取socket信息
@@ -146,7 +147,8 @@ public:
 public:
 	// 向中心服务器发送消息
 	bool SendMessageToCenterServer(UINT msgID, void* pData, UINT size, int userID = 0, UINT mainID = 0, UINT assistID = 0, UINT handleCode = 0);
-
+	// 向逻辑服务器发送消息
+	bool SendMessageToWorkServer(int userID, NetMessageHead* pNetHead, void* pData, int size, BYTE socketType, UINT uIndex);
 public:
 	// 判断roomID的服务器是否存在
 	bool IsRoomIDServerExists(int roomID);
@@ -155,9 +157,9 @@ public:
 	// 玩家是否在线
 	bool IsUserOnline(int userID);
 	// 自动开房
-	bool AutoCreateRoom(const SaveRedisFriendsGroupDesk &deskInfo);
+	bool AutoCreateRoom(const SaveRedisFriendsGroupDesk& deskInfo);
 	// 判断此ip是否可以注册
-	bool IsIpRegister(const OtherConfig &otherConfig, const char * ip);
+	bool IsIpRegister(const OtherConfig& otherConfig, const char* ip);
 	// 判断某个玩家是否是游客
 	bool IsVisitorUser(int userID);
 	// 获取随机头像
@@ -186,11 +188,11 @@ private:
 	// 清理金币钻石排行榜
 	void CleanAllUserMoneyJewelsRank();
 	// 处理玩家登录
-	void OnUserLogon(const UserData &userData);
+	void OnUserLogon(const UserData& userData);
 	// 处理玩家登出
 	void OnUserLogout(int userID);
 	// 处理玩家注册
-	void OnUserRegister(const UserData &userData);
+	void OnUserRegister(const UserData& userData);
 	// 玩家跨天
 	void OnUserCrossDay(int userID, int time);
 	// 清理数据库过期数据
@@ -201,7 +203,7 @@ private:
 	// 中心服消息相关
 private:
 	// 处理中心服务器的消息
-	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID);
+	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID);
 	// 服务器id重复处理
 	bool OnCenterRepeatIDMessage(void* pData, int size);
 	// 分布式系统信息
@@ -221,7 +223,7 @@ private:
 	// 玩家发送喇叭
 	bool OnCenterSendHornMessage(void* pData, UINT size);
 	// 向某个玩家推送消息
-	bool OnCenterNotifyUserMessage(NetMessageHead * pNetHead, void* pData, int size, int userID);
+	bool OnCenterNotifyUserMessage(NetMessageHead* pNetHead, void* pData, int size, int userID);
 	// 中心服自动开房
 	bool OnCenterAutoCreateRoomMessage(void* pData, UINT size);
 	// 手机注册
@@ -238,7 +240,7 @@ private:
 	//向PHP请求接口相关
 private:
 	// 给php发送消息接口
-	void SendHTTPMessage(int userID, const std::string &url, BYTE postType);
+	void SendHTTPMessage(int userID, const std::string& url, BYTE postType);
 	// 玩家注册发送http请求
 	bool SendHTTPUserRegisterMessage(int userID);
 	// 玩家登陆和登出通知 type类型：0登陆，1登出

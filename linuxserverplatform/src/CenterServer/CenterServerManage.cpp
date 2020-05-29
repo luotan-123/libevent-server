@@ -16,6 +16,7 @@ CCenterServerManage::~CCenterServerManage()
 {
 	m_serverToSocketMap.clear();
 	m_logonGroupSocket.clear();
+	m_workGroupSocket.clear();
 	m_centerUserInfoMap.clear();
 	m_timeMatchInfoMap.clear();
 }
@@ -193,7 +194,7 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		}
 		if (itrVecLogonGroup == m_logonGroupSocket.end())
 		{
-			ERROR_LOG("登录服socket索引不存在 socketIdx=%d", socketIdx);
+			ERROR_LOG("网关服socket索引不存在 socketIdx=%d", socketIdx);
 			return false;
 		}
 
@@ -222,6 +223,26 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 	else if (serverInfo.serverType == SERVICE_TYPE_LOADER) //游戏服退出集群
 	{
 		m_pRedis->SetRoomServerStatus(serverInfo.serverID, 0);
+	}
+	else if (serverInfo.serverType == SERVICE_TYPE_LOADER)//逻辑服
+	{
+		auto itr = m_workGroupSocket.begin();
+		for (; itr != m_workGroupSocket.end(); itr++)
+		{
+			if (itr->socketIdx == socketIdx)
+			{
+				break;
+			}
+		}
+		if (itr == m_workGroupSocket.end())
+		{
+			ERROR_LOG("逻辑服socket索引不存在 socketIdx=%d", socketIdx);
+			return false;
+		}
+
+		// 删除索引
+		m_workGroupSocket.erase(itr);
+
 	}
 
 	INFO_LOG("====== serverType:%d,serverID:%d退出集群 登录服集群数量:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
@@ -1362,7 +1383,7 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 
 	if (m_serverToSocketMap.find(serverInfo) != m_serverToSocketMap.end())
 	{
-		ERROR_LOG("####登录服ID重复,pMessage->serverID = %d####", pMessage->serverID);
+		ERROR_LOG("####子服务器ID重复,pMessage->serverID = %d####", pMessage->serverID);
 		SendData(uIndex, CENTER_MESSAGE_COMMON_REPEAT_ID, NULL, 0, 0, pBufferevent);
 		return false;
 	}
@@ -1385,6 +1406,10 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 	else if (pMessage->serverType == SERVICE_TYPE_LOADER)//游戏服
 	{
 		m_pRedis->SetRoomServerStatus(pMessage->serverID, 1);
+	}
+	else if (pMessage->serverType == SERVICE_TYPE_WORK)//逻辑服
+	{
+		m_workGroupSocket.emplace_back(uIndex, pBufferevent);
 	}
 
 	INFO_LOG("====== serverType:%d,serverID:%d 加入集群系统 登录服集群数量:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());

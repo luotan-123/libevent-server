@@ -473,10 +473,11 @@ void* CBaseWorkServer::LineDataHandleThread(void* pThreadData)
 					pBuffer = (void*)(pSocketRead + 1);			// 移动一个SocketReadLine
 				}
 
-				if (!pThis->OnSocketRead(&pSocketRead->netMessageHead, pBuffer, size, pSocketRead->socketType, pSocketRead->uIndex, pSocketRead->pBufferevent))
+				if (!pThis->OnSocketRead(&pSocketRead->netMessageHead, pBuffer, size, pSocketRead->uIndex))
 				{
 					ERROR_LOG("OnSocketRead failed mainID=%d assistID=%d", pSocketRead->netMessageHead.uMainID, pSocketRead->netMessageHead.uAssistantID);
 				}
+
 				break;
 			}
 			case HD_SOCKET_CLOSE:		// socket 关闭

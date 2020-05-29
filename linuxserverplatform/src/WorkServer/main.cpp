@@ -72,8 +72,8 @@ int main()
 		return -1;
 	}
 
-	/*int logonID = ConfigManage()->GetWorkServerConfig().logonID;
-	WorkBaseInfo* pWorkBaseInfo = ConfigManage()->GetWorkBaseInfo(logonID);
+	int workID = ConfigManage()->GetWorkServerConfig().workID;
+	/*WorkBaseInfo* pWorkBaseInfo = ConfigManage()->GetWorkBaseInfo(logonID);
 	if (pWorkBaseInfo)
 	{
 		char szBuf[256] = "";
@@ -82,7 +82,7 @@ int main()
 			pWorkBaseInfo->webSocketPort, pWorkBaseInfo->maxWebSocketPeople);
 		std::cout << szBuf << std::endl;
 	}*/
-	std::cout << "WorkServer 启动成功" << std::endl;
+	printf("WorkServer 启动成功 workID:%d\n", workID);
 
 	// 标题（显示版本信息和进程id）
 	printf("v%d.%d.%d %s  processID:%d\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME, getpid());

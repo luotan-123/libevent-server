@@ -1428,3 +1428,29 @@ bool CRedisLogon::ClearAllUserRanking(const char* ranking)
 
 	return true;
 }
+
+bool CRedisLogon::GetRoomServerStatus(int roomID)
+{
+	if (roomID <= 0)
+	{
+		return false;
+	}
+
+	std::string key = MakeKey(TBL_BASE_ROOM, roomID);
+
+	char redisCmd[MAX_REDIS_COMMAND_SIZE] = "";
+	sprintf(redisCmd, "HGET %s status", key.c_str());
+
+	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
+	REDIS_CHECKF(pReply, redisCmd);
+
+	bool ret = true;
+	if (pReply->type == REDIS_REPLY_STRING)
+	{
+		ret = atoi(pReply->str) == 1 ? true : false;
+	}
+
+	freeReplyObject(pReply);
+
+	return ret;
+}

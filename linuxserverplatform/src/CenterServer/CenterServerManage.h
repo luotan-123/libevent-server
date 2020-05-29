@@ -73,7 +73,8 @@ public:
 private:
 	std::unordered_map<UINT, ServerBaseInfo>		m_socketToServerMap;	// socketIdx到服务器ID的映射(key=socketIdx,value=ServerBaseInfo)
 	std::map<ServerBaseInfo, SocketSimpleInfo>		m_serverToSocketMap;	// 服务器到socketIdx的映射  (key=ServerBaseInfo,value=socketIdx)
-	std::vector<SocketSimpleInfo>					m_logonGroupSocket;		// 登陆服集群(value=socketIdx)
+	std::vector<SocketSimpleInfo>					m_logonGroupSocket;		// 网关服集群(value=socketIdx)
+	std::vector<SocketSimpleInfo>					m_workGroupSocket;		// 逻辑服集群(value=socketIdx)
 	std::unordered_map<int, CenterUserInfo>			m_centerUserInfoMap;	// 集群系统在线玩家(只统计登录服的)
 	std::vector<int>								m_memberUserIDVec;		// 临时保存的俱乐部成员
 	time_t											m_lastNormalTimerTime;

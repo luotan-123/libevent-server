@@ -33,7 +33,7 @@ public:
 	void AddUserBuyDeskSet(int userID, const std::string& passwd);
 	std::string GetRandUnRepeatedDeskPasswd();
 	bool ClearAllUserRanking(const char* ranking);
-
+	bool GetRoomServerStatus(int roomID);
 
 	//奖池操作
 	bool ClearOneDayWinMoney();

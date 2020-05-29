@@ -65,7 +65,7 @@ private:
 	//服务扩展接口函数 （本处理线程调用）
 private:
 	//SOCKET 数据读取 （必须重载）
-	virtual bool OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent) = 0;
+	virtual bool OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex) = 0;
 	//SOCKET 关闭 （必须重载）
 	virtual bool OnSocketClose(ULONG uAccessIP, UINT uSocketIndex, UINT uConnectTime, BYTE socketType) = 0;
 	//异步线程处理结果 （必须重载）

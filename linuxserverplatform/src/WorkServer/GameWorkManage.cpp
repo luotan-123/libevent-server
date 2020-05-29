@@ -21,11 +21,10 @@ CGameWorkManage::CGameWorkManage() : CBaseWorkServer()
 CGameWorkManage::~CGameWorkManage()
 {
 	m_buyRoomVec.clear();
-	m_socketMatch.clear();
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameWorkManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, BYTE socketType, UINT uIndex, void* pBufferevent)
+bool CGameWorkManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT uSize, UINT uIndex)
 {
 	if (!pNetHead)
 	{
@@ -36,11 +35,11 @@ bool CGameWorkManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT u
 	{
 	case MSG_ASS_LOGON_DESK:
 	{
-		return OnHandleGameDeskMessage(pNetHead->uAssistantID, pData, uSize, socketType, uIndex, pBufferevent);
+		return OnHandleGameDeskMessage(pNetHead->uAssistantID, pData, uSize, uIndex, pNetHead->uIdentification);
 	}
 	case MSG_MAIN_LOGON_OTHER:
 	{
-		return OnHandleOtherMessage(pNetHead->uAssistantID, pData, uSize, socketType, uIndex, pBufferevent);
+		return OnHandleOtherMessage(pNetHead->uAssistantID, pData, uSize, uIndex, pNetHead->uIdentification);
 	}
 	default:
 	{
@@ -121,64 +120,6 @@ bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 	return false;
 }
 
-void CGameWorkManage::NotifyUserInfo(const UserData& userData)
-{
-	int userID = userData.userID;
-
-	UserRedSpot userRedspot;
-	if (!m_pRedis->GetUserRedSpot(userID, userRedspot))
-	{
-		return;
-	}
-
-	// 通知小红点
-	bool bHaveRedSpot = false;
-
-	if (userRedspot.friendList > 0 || userRedspot.friendNotifyList > 0)
-	{
-		// 通知好友小红点
-		LogonNotifyFriendRedSpot msgFriend;
-
-		msgFriend.friendListRedSpotCount = userRedspot.friendList;
-		msgFriend.notifyListRedSpotCount = userRedspot.friendNotifyList;
-
-		SendData(userID, &msgFriend, sizeof(msgFriend), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_FRIEND_REDSPOT, 0);
-
-		bHaveRedSpot = true;
-	}
-
-	if (userRedspot.FGNotifyList > 0)
-	{
-		// 通知俱乐部小红点
-		LogonFriendsGroupPushRedSpot msgFG;
-
-		msgFG.notifyListRedSpotCount = userRedspot.FGNotifyList;
-
-		int iSendSize = 8 + sizeof(LogonFriendsGroupPushRedSpot::MsgRedSpot) * msgFG.friendsGroupCount;
-		SendData(userID, &msgFG, iSendSize, MSG_MAIN_FRIENDSGROUP_NOTIFY, MSG_NTF_LOGON_FRIENDSGROUP_REDSPOT, 0);
-
-		bHaveRedSpot = true;
-	}
-
-	if (userRedspot.notEMRead > 0 || userRedspot.notEMReceived > 0)
-	{
-		// 通知邮件小红点
-		LogonNotifyEmailRedSpot msgEmail;
-
-		msgEmail.notReadCount = userRedspot.notEMRead;
-		msgEmail.notReceivedCount = userRedspot.notEMReceived;
-
-		SendData(userID, &msgEmail, sizeof(msgEmail), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_EMAIL_REDSPOT, 0);
-
-		bHaveRedSpot = true;
-	}
-
-	// 没有小红点删除redis键值
-	if (!bHaveRedSpot)
-	{
-		m_pRedis->DelKey(CRedisLogon::MakeKey(TBL_USER_REDSPOT, userID).c_str());
-	}
-}
 
 //////////////////////////////////////////////////////////////////////
 bool CGameWorkManage::OnAsynThreadResult(AsynThreadResultLine* pResultData, void* pData, UINT uSize)
@@ -233,7 +174,7 @@ bool CGameWorkManage::OnAsynThreadResult(AsynThreadResultLine* pResultData, void
 //////////////////////////////////////////////////////////////////////
 bool CGameWorkManage::OnStop()
 {
-	
+
 	return true;
 }
 
@@ -246,26 +187,24 @@ bool CGameWorkManage::PreInitParameter(ManageInfoStruct* pInitData, KernelInfoSt
 	}
 
 	int workID = ConfigManage()->GetWorkServerConfig().workID;
-	
 
-	
+
+
 
 	return true;
 }
 
 //////////////////////////////////////////////////////////////////////
-// 走到这里的一般是底层通知业务层关闭(比如客户端断线，或者主动关闭socket之类)
 bool CGameWorkManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConnectTime, BYTE socketType)
 {
 	return true;
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameWorkManage::OnHandleGameDeskMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent)
+bool CGameWorkManage::OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned int socketIdx, int userID)
 {
 	AUTOCOST("GameDesk message cost assistID: %d", assistID);
 
-	int userID = 0;
 	if (userID <= 0)
 	{
 		ERROR_LOG("没有绑定玩家id的异常 socketIdx:%d", socketIdx);
@@ -276,11 +215,11 @@ bool CGameWorkManage::OnHandleGameDeskMessage(int assistID, void* pData, int siz
 	{
 	case MSG_ASS_LOGON_BUY_DESK:
 	{
-		return OnHandleUserBuyDesk(userID, pData, size);
+		return OnHandleUserBuyDesk(userID, pData, size, socketIdx);
 	}
 	case MSG_ASS_LOGON_ENTER_DESK:
 	{
-		return OnHandleUserEnterDesk(userID, pData, size);
+		return OnHandleUserEnterDesk(userID, pData, size, socketIdx);
 	}
 	default:
 		break;
@@ -290,7 +229,7 @@ bool CGameWorkManage::OnHandleGameDeskMessage(int assistID, void* pData, int siz
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
+bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size, unsigned int socketIdx)
 {
 	SAFECHECK_MESSAGE(pMessage, LogonRequestBuyDesk, pData, size);
 
@@ -305,7 +244,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	if ((userData.matchType == MATCH_TYPE_TIME && userData.matchStatus == USER_MATCH_STATUS_AFTER_BEGIN
 		|| userData.matchType == MATCH_TYPE_PEOPLE && userData.matchStatus != USER_MATCH_STATUS_NORMAL) && pMessage->masterNotPlay == 0)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_MATCH_PLAYING);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_MATCH_PLAYING, userID);
 		return true;
 	}
 
@@ -314,7 +253,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	{
 		LogonResponseBuyDesk msg;
 		msg.roomID = userData.roomID;
-		SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CANNOT_BUYDESK_INROOM);
+		SendData(socketIdx, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CANNOT_BUYDESK_INROOM, userID);
 
 		//告诉正确的位置
 		RoomBaseInfo* pUserRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(userData.roomID);
@@ -343,14 +282,14 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(pMessage->gameID);
 	if (!pGameBaseInfo)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG, userID);
 		return true;
 	}
 
 	ConfigManage()->GetBuyRoomInfo(pMessage->gameID, pMessage->roomType, m_buyRoomVec);
 	if (m_buyRoomVec.size() <= 0)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG, userID);
 		return true;
 	}
 	int iBuyRoomID = m_buyRoomVec[CUtil::GetRandNum() % m_buyRoomVec.size()];
@@ -358,14 +297,14 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	RoomBaseInfo* pRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(iBuyRoomID);
 	if (!pRoomBaseInfo)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG, userID);
 		ERROR_LOG("购买桌子失败roomID=%d", iBuyRoomID);
 		return true;
 	}
 
 	if (!IsRoomIDServerExists(iBuyRoomID))
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_GAME_NO_START);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_GAME_NO_START, userID);
 		return true;
 	}
 
@@ -381,14 +320,14 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	}
 	if (friendsGroupID == 0 && userData.buyingDeskCount >= otherConfig.buyingDeskCount)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_BUY_DESK_TOPLIMIT);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_BUY_DESK_TOPLIMIT, userID);
 		return true;
 	}
 
 	// 俱乐部vip房间只能俱乐部创建
 	if (friendsGroupID > 0 && friendsGroupDeskNumber > MAX_FRIENDSGROUP_DESK_LIST_COUNT&& pRoomBaseInfo->type != ROOM_TYPE_FG_VIP)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM, userID);
 		return true;
 	}
 
@@ -406,7 +345,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	}
 	if (!pBuyGameDeskInfo)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_BUY_DESK_CONFIG, userID);
 		return false;
 	}
 
@@ -422,7 +361,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	int cqFriendsGroupID = 0;
 	if (strlen(pMessage->gameRules) >= MAX_BUY_DESK_JSON_LEN)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ILLEGAL_OPER);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ILLEGAL_OPER, userID);
 		return false;
 	}
 	if (pMessage->gameRules[0] != '\0')
@@ -454,7 +393,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		// 判断俱乐部是否存在
 		if (!m_pRedisPHP->IsCanJoinFriendsGroupRoom(userID, friendsGroupID))
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_NOT_EXISTS);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_NOT_EXISTS, userID);
 			return true;
 		}
 
@@ -467,12 +406,12 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		int ret = m_pRedis->IsCanCreateFriendsGroupRoom(userID, friendsGroupID, userPower, friendsGroupDeskNumber);
 		if (ret == 1)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_MANAGER);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_MANAGER, userID);
 			return true;
 		}
 		else if (ret == 2)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ERR_CREATE_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ERR_CREATE_ROOM, userID);
 			return true;
 		}
 	}
@@ -483,7 +422,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		long long carryFireCoin = 0;
 		if (!m_pRedisPHP->GetUserFriendsGroupMoney(cqFriendsGroupID, userID, carryFireCoin))
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_MANAGER);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_MANAGER, userID);
 			return true;
 		}
 	}
@@ -495,7 +434,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		if (!m_pRedis->GetUserData(masterID, masterData))
 		{
 			ERROR_LOG("创建俱乐部房间，但是群主不存在,masterID = %d", masterID);
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ERR_CREATE_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_FRIENDSGROUP_ERR_CREATE_ROOM, userID);
 			return true;
 		}
 	}
@@ -539,7 +478,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			if (buyUserData.money < needCostNums) //消耗俱乐部群主的
 			{
 				UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_MONEY : ERROR_NOT_ENOUGH_MONEY;
-				SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
+				SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode, userID);
 				return true;
 			}
 		}
@@ -548,7 +487,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 			if (buyUserData.jewels < needCostNums)
 			{
 				UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_JEWELS : ERROR_NOT_ENOUGH_JEWELS;
-				SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
+				SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode, userID);
 				return true;
 			}
 		}
@@ -563,7 +502,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	{
 		if (minPoint < kickPoint || minPoint < basePoint)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM, userID);
 			return true;
 		}
 
@@ -577,7 +516,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 				if (buyUserData.money < needCostNums) //消耗俱乐部群主的
 				{
 					UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_MONEY : ERROR_NOT_ENOUGH_MONEY;
-					SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
+					SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode, userID);
 					return true;
 				}
 			}
@@ -586,7 +525,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 				if (buyUserData.jewels < needCostNums)
 				{
 					UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_JEWELS : ERROR_NOT_ENOUGH_JEWELS;
-					SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
+					SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode, userID);
 					return true;
 				}
 			}
@@ -596,7 +535,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		if (pMessage->masterNotPlay == 0 && pBuyGameDeskInfo->costResType == RESOURCE_TYPE_MONEY
 			&& userData.money < (minPoint + needCostNums))
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_ROOM_NO_MONEYREQUIRE);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_ROOM_NO_MONEYREQUIRE, userID);
 			return true;
 		}
 
@@ -604,7 +543,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		if (pMessage->masterNotPlay == 0 && pBuyGameDeskInfo->costResType == RESOURCE_TYPE_JEWEL
 			&& userData.money < minPoint)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_ROOM_NO_MONEYREQUIRE);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_ROOM_NO_MONEYREQUIRE, userID);
 			return true;
 		}
 	}
@@ -612,13 +551,13 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	{
 		if (minPoint < kickPoint || minPoint < basePoint)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM, userID);
 			return true;
 		}
 
 		if (friendsGroupID <= 0) //vip房只有俱乐部可以创建
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM, userID);
 			return true;
 		}
 
@@ -632,7 +571,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 				if (buyUserData.money < needCostNums) //消耗俱乐部群主的
 				{
 					UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_MONEY : ERROR_NOT_ENOUGH_MONEY;
-					SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
+					SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode, userID);
 					return true;
 				}
 			}
@@ -641,7 +580,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 				if (buyUserData.jewels < needCostNums)
 				{
 					UINT uErrorCode = friendsGroupID > 0 ? ERROR_FRIENDSGROUP_NOT_JEWELS : ERROR_NOT_ENOUGH_JEWELS;
-					SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode);
+					SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, uErrorCode, userID);
 					return true;
 				}
 			}
@@ -649,7 +588,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	}
 	else
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_CREATE_ROOM, userID);
 		return false;
 	}
 
@@ -660,7 +599,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 		maxUserCount = iJsonRS;
 		if (maxUserCount <= 0)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_SET_PEOPLE);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NO_SET_PEOPLE, userID);
 			return true;
 		}
 	}
@@ -673,7 +612,7 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	if (deskPasswd == "")
 	{
 		ERROR_LOG("CreatePrivateDeskRecord failed userID: %d, deskCount: %d", userID, pRoomBaseInfo->deskCount);
-		SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NOVAILD_DESK);
+		SendData(socketIdx, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, ERROR_NOVAILD_DESK, userID);
 		return true;
 	}
 
@@ -762,13 +701,13 @@ bool CGameWorkManage::OnHandleUserBuyDesk(int userID, void* pData, int size)
 	msg.passwdLen = deskPasswd.size();
 	msg.roomID = pRoomBaseInfo->roomID;
 
-	SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, 0);
+	SendData(socketIdx, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_BUY_DESK, 0, userID);
 
 	return true;
 }
 
 //////////////////////////////////////////////////////////////////////
-bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
+bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size, unsigned int socketIdx)
 {
 	SAFECHECK_MESSAGE(pMessage, LogonRequestEnterDesk, pData, size);
 
@@ -783,7 +722,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	if (userData.matchType == MATCH_TYPE_TIME && userData.matchStatus == USER_MATCH_STATUS_AFTER_BEGIN
 		|| userData.matchType == MATCH_TYPE_PEOPLE && userData.matchStatus != USER_MATCH_STATUS_NORMAL)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_MATCH_PLAYING);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_MATCH_PLAYING, userID);
 		return true;
 	}
 
@@ -794,7 +733,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		msg.userID = userID;
 		msg.roomID = userData.roomID;
 		msg.deskIdx = userData.deskIdx;
-		SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_CANNOT_ENTERDESK_INROOM);
+		SendData(socketIdx, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_CANNOT_ENTERDESK_INROOM, userID);
 
 		//告诉正确的位置
 		RoomBaseInfo* pUserRoomBaseInfo = ConfigManage()->GetRoomBaseInfo(userData.roomID);
@@ -824,7 +763,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	int deskMixID = m_pRedis->GetDeskMixIDByPasswd(pMessage->passwd);
 	if (deskMixID <= 0)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NO_THIS_ROOM);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NO_THIS_ROOM, userID);
 		return true;
 	}
 
@@ -848,7 +787,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 
 	if (!IsRoomIDServerExists(roomID))
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_GAME_NO_START);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_GAME_NO_START, userID);
 		return true;
 	}
 
@@ -856,7 +795,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	int	friendsGroupID = privateDeskInfo.friendsGroupID;
 	if (friendsGroupID != 0 && !m_pRedisPHP->IsCanJoinFriendsGroupRoom(userID, friendsGroupID))
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_FRIENDSGROUP_ERR_JOIN_ROOM);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_FRIENDSGROUP_ERR_JOIN_ROOM, userID);
 		return true;
 	}
 
@@ -884,7 +823,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	}
 	if (iStopJoin && privateDeskInfo.curGameCount > 0)
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_STOP_JOIN);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_STOP_JOIN, userID);
 		return true;
 	}
 
@@ -894,7 +833,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		long long carryFireCoin = 0;
 		if (!m_pRedisPHP->GetUserFriendsGroupMoney(cqFriendsGroupID, userID, carryFireCoin))
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_FRIENDSGROUP_ERR_JOIN_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_FRIENDSGROUP_ERR_JOIN_ROOM, userID);
 			return true;
 		}
 	}
@@ -908,7 +847,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		// 私人房检查玩家的金币数量
 		if (minPoint > 0 && userData.money < minPoint)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_ROOM_NO_MONEYREQUIRE);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_ROOM_NO_MONEYREQUIRE, userID);
 			return true;
 		}
 	}
@@ -916,7 +855,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	{
 		if (friendsGroupID <= 0)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NO_THIS_ROOM);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NO_THIS_ROOM, userID);
 			return true;
 		}
 
@@ -929,13 +868,13 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 
 		if ((int)carryFireCoin < minPoint)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_FRIENDSGROUP_FIRECOIN_LIMIT);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_FRIENDSGROUP_FIRECOIN_LIMIT, userID);
 			return true;
 		}
 	}
 	else
 	{
-		SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NO_THIS_ROOM);
+		SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NO_THIS_ROOM, userID);
 		return false;
 	}
 
@@ -963,7 +902,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		{
 			if (userData.jewels < pBuyGameDeskInfo->AAcostNums)
 			{
-				SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NOT_ENOUGH_JEWELS);
+				SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NOT_ENOUGH_JEWELS, userID);
 				return true;
 			}
 		}
@@ -971,7 +910,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		{
 			if (userData.money < pBuyGameDeskInfo->AAcostNums)
 			{
-				SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NOT_ENOUGH_MONEY);
+				SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_NOT_ENOUGH_MONEY, userID);
 				return true;
 			}
 		}
@@ -984,7 +923,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 		// 旁观者人数是否已满
 		if (privateDeskInfo.currWatchUserCount >= privateDeskInfo.maxWatchUserCount)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_DESK_FULL);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_DESK_FULL, userID);
 			return true;
 		}
 	}
@@ -992,7 +931,7 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	{
 		if (privateDeskInfo.currDeskUserCount >= privateDeskInfo.maxDeskUserCount)
 		{
-			SendData(userID, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_DESK_FULL);
+			SendData(socketIdx, NULL, 0, MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, ERROR_DESK_FULL, userID);
 			return true;
 		}
 	}
@@ -1005,16 +944,15 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size)
 	msg.roomID = roomID;
 	msg.deskIdx = deskIdx;
 
-	SendData(userID, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, 0);
+	SendData(socketIdx, &msg, sizeof(msg), MSG_ASS_LOGON_DESK, MSG_ASS_LOGON_ENTER_DESK, 0, userID);
 
 	return true;
 }
 
-bool CGameWorkManage::OnHandleOtherMessage(int assistID, void* pData, int size, BYTE socketType, unsigned int socketIdx, void* pBufferevent)
+bool CGameWorkManage::OnHandleOtherMessage(int assistID, void* pData, int size, unsigned int socketIdx, int userID)
 {
 	AUTOCOST("other message cost assistID: %d", assistID);
 
-	int userID = 0;
 	if (userID <= 0)
 	{
 		ERROR_LOG("没有绑定玩家id的异常 socketIdx:%d", socketIdx);
@@ -1025,23 +963,15 @@ bool CGameWorkManage::OnHandleOtherMessage(int assistID, void* pData, int size, 
 	{
 	case MSG_ASS_LOGON_OTHER_USERINFO_FLUSH:
 	{
-		return OnHandleUserInfoFlush(userID, pData, size);
+		return OnHandleUserInfoFlush(userID, pData, size, socketIdx);
 	}
 	case MSG_ASS_LOGON_OTHER_ROBOT_TAKEMONEY:
 	{
-		return OnHandleRobotTakeMoney(userID, pData, size);
+		return OnHandleRobotTakeMoney(userID, pData, size, socketIdx);
 	}
 	case MSG_ASS_LOGON_OTHER_REQ_USERINFO:
 	{
-		return OnHandleReqUserInfo(userID, pData, size);
-	}
-	case MSG_ASS_LOGON_OTHER_JOIN_MATCH_SCENE:
-	{
-		return OnHandleJoinMatchScene(userID);
-	}
-	case MSG_ASS_LOGON_OTHER_EXIT_MATCH_SCENE:
-	{
-		return OnHandleExitMatchScene(userID);
+		return OnHandleReqUserInfo(userID, pData, size, socketIdx);
 	}
 	default:
 		break;
@@ -1050,7 +980,7 @@ bool CGameWorkManage::OnHandleOtherMessage(int assistID, void* pData, int size, 
 	return false;
 }
 
-bool CGameWorkManage::OnHandleUserInfoFlush(int userID, void* pData, int size)
+bool CGameWorkManage::OnHandleUserInfoFlush(int userID, void* pData, int size, unsigned int socketIdx)
 {
 	UserData userData;
 	if (!m_pRedis->GetUserData(userID, userData))
@@ -1064,12 +994,12 @@ bool CGameWorkManage::OnHandleUserInfoFlush(int userID, void* pData, int size)
 	msg.iJewels = userData.jewels;
 	msg.money = userData.money;
 
-	SendData(userID, &msg, sizeof(msg), MSG_MAIN_LOGON_OTHER, MSG_ASS_LOGON_OTHER_USERINFO_FLUSH, 0);
+	SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_OTHER, MSG_ASS_LOGON_OTHER_USERINFO_FLUSH, 0, userID);
 
 	return true;
 }
 
-bool CGameWorkManage::OnHandleRobotTakeMoney(int userID, void* pData, int size)
+bool CGameWorkManage::OnHandleRobotTakeMoney(int userID, void* pData, int size, unsigned int socketIdx)
 {
 	if (size != sizeof(_LogonResponseRobotTakeMoney))
 	{
@@ -1105,12 +1035,12 @@ bool CGameWorkManage::OnHandleRobotTakeMoney(int userID, void* pData, int size)
 
 	_res.iMoney = (int)userData.money;
 
-	SendData(userID, &_res, sizeof(_res), MSG_MAIN_LOGON_OTHER, MSG_ASS_LOGON_OTHER_ROBOT_TAKEMONEY, 0);
+	SendData(socketIdx, &_res, sizeof(_res), MSG_MAIN_LOGON_OTHER, MSG_ASS_LOGON_OTHER_ROBOT_TAKEMONEY, 0, userID);
 
 	return true;
 }
 
-bool CGameWorkManage::OnHandleReqUserInfo(int userID, void* pData, int size)
+bool CGameWorkManage::OnHandleReqUserInfo(int userID, void* pData, int size, unsigned int socketIdx)
 {
 	if (size != sizeof(LogonRequestUserInfo))
 	{
@@ -1152,72 +1082,34 @@ bool CGameWorkManage::OnHandleReqUserInfo(int userID, void* pData, int size)
 	memcpy(msg.ip, userData.logonIP, sizeof(msg.ip));
 	memcpy(msg.motto, userData.motto, sizeof(msg.motto));
 
-	SendData(userID, &msg, sizeof(msg), MSG_MAIN_LOGON_OTHER, MSG_ASS_LOGON_OTHER_REQ_USERINFO, 0);
+	SendData(socketIdx, &msg, sizeof(msg), MSG_MAIN_LOGON_OTHER, MSG_ASS_LOGON_OTHER_REQ_USERINFO, 0, userID);
 
 	return true;
 }
 
-// 请求进入比赛场页面
-bool CGameWorkManage::OnHandleJoinMatchScene(UINT index)
+bool CGameWorkManage::SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification)
 {
-	m_socketMatch.insert(index);
-
-	return true;
-}
-
-// 请求退出比赛场页面
-bool CGameWorkManage::OnHandleExitMatchScene(UINT index)
-{
-	m_socketMatch.erase(index);
-
-	return true;
-}
-
-
-
-bool CGameWorkManage::SendData(int userID, void* pData, int size, unsigned int mainID, unsigned int assistID, unsigned int handleCode, unsigned int uIdentification/* = 0*/)
-{
-	//LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
-	//if (!pUser)
-	//{
-	//	if (uIdentification > 0) // 转发游戏消息
-	//	{
-	//		//ERROR_LOG("转发游戏消息失败：userID=%d,mainID=%d,assistID=%d,uIdentification=%d", userID, mainID, assistID, uIdentification);
-
-	//		// 可以将消息发送给中心服，进一步转发保证数据成功。
-	//		// todo:
-
-	//	}
-	//	return false;
-	//}
-
-	//if (pUser->socketType == SOCKET_TYPE_WEBSOCKET)
-	//{
-	//	return m_WebSocket.SendData(pUser->socketIdx, pData, size, mainID, assistID, handleCode, 0, pUser->pBufferevent, uIdentification);
-	//}
-
-	//return m_TCPSocket.SendData(pUser->socketIdx, pData, size, mainID, assistID, handleCode, 0, pUser->pBufferevent, uIdentification);
-
-	return true;
-}
-
-bool CGameWorkManage::SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, BYTE socketType, unsigned int uIdentification/* = 0*/)
-{
-	/*if (socketType == SOCKET_TYPE_WEBSOCKET)
+	if (m_pGServerConnect)
 	{
-		return m_WebSocket.SendData(index, pData, size, mainID, assistID, handleCode, encrypted, nullptr, uIdentification);
+		return m_pGServerConnect->SendData(index, pData, size, mainID, assistID, handleCode, uIdentification);
 	}
 
-	return m_TCPSocket.SendData(index, pData, size, mainID, assistID, handleCode, encrypted, nullptr, uIdentification);*/
 	return true;
 }
 
-bool CGameWorkManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT bAssistantID, UINT uHandleCode, bool toGServer)
+void CGameWorkManage::NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue)
 {
-	const int SOCKET_MULTIPLE = 32;
+	if (m_pRedis && m_pRedis->IsUserOnline(userID))
+	{
+		PlatformResourceChange msgToLoader;
 
-	
-	return true;
+		msgToLoader.resourceType = resourceType;
+		msgToLoader.value = value;
+		msgToLoader.reason = reason;
+		msgToLoader.changeValue = changeValue;
+
+		SendMessageToCenterServer(CENTER_MESSAGE_LOGON_RESOURCE_CHANGE, &msgToLoader, sizeof(msgToLoader), userID);
+	}
 }
 
 // 向中心服务器发送消息
@@ -1326,34 +1218,7 @@ void CGameWorkManage::OnNormalTimer()
 /***********************************************************************************************************/
 bool CGameWorkManage::IsUserOnline(int userID)
 {
-	
-	return false;
-}
-
-void CGameWorkManage::NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue)
-{
-	if (IsUserOnline(userID))
-	{
-		LogonNotifyResourceChange msg;
-
-		msg.resourceType = resourceType;
-		msg.value = value;
-		msg.reason = reason;
-		msg.changeValue = changeValue;
-
-		SendData(userID, &msg, sizeof(LogonNotifyResourceChange), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_RESOURCE_CHANGE, 0);
-	}
-	else if (m_pRedis && m_pRedis->IsUserOnline(userID))
-	{
-		PlatformResourceChange msgToLoader;
-
-		msgToLoader.resourceType = resourceType;
-		msgToLoader.value = value;
-		msgToLoader.reason = reason;
-		msgToLoader.changeValue = changeValue;
-
-		SendMessageToCenterServer(CENTER_MESSAGE_LOGON_RESOURCE_CHANGE, &msgToLoader, sizeof(msgToLoader), userID);
-	}
+	return m_pRedis->IsUserOnline(userID);
 }
 
 void CGameWorkManage::OnServerCrossDay()
@@ -1445,76 +1310,6 @@ void CGameWorkManage::CleanAllUserMoneyJewelsRank()
 	m_pRedis->ClearAllUserRanking(TBL_RANKING_MONEY);
 
 	m_pRedis->ClearAllUserRanking(TBL_RANKING_JEWELS);
-}
-
-void CGameWorkManage::OnUserLogon(const UserData& userData)
-{
-	if (userData.isVirtual)
-	{
-		return;
-	}
-
-	//发送相关通知 
-	NotifyUserInfo(userData);
-
-	// 统计登陆次数
-	if (m_pRedisPHP)
-	{
-		m_pRedisPHP->AddUserResNums(userData.userID, "loginLobbyCount", 1);
-	}
-}
-
-void CGameWorkManage::OnUserLogout(int userID)
-{
-
-}
-
-void CGameWorkManage::OnUserRegister(const UserData& userData)
-{
-	// 往数据库中立马插入一个玩家
-	char key[48] = "";
-	sprintf(key, "%s|%d", TBL_USER, userData.userID);
-	if (!m_pRedis->SaveRedisDataToDB(key, TBL_USER, userData.userID, REDIS_EXTEND_MODE_INSERT))
-	{
-		ERROR_LOG("注册插入用户失败：userID=%d", userData.userID);
-	}
-
-	// 往任务表里插入一个玩家
-	char skey[48] = "";
-	sprintf(skey, "%s|%d", TBL_USER_BAG, userData.userID);
-	if (!m_pRedis->SaveRedisDataToDB(skey, TBL_USER_BAG, userData.userID, REDIS_EXTEND_MODE_INSERT))
-	{
-		ERROR_LOG("注册背包插入用户失败：userID=%d", userData.userID);
-	}
-
-	if (userData.money > 0)
-	{
-		char tableName[128] = "";
-		ConfigManage()->GetTableNameByDate(TBL_STATI_USER_MONEY_CHANGE, tableName, sizeof(tableName));
-
-		// 金币变化
-		BillManage()->WriteBill(&m_SQLDataManage, "INSERT INTO %s (userID,time,money,changeMoney,reason,roomID,friendsGroupID,rateMoney) VALUES(%d,%d,%lld,%lld,%d,%d,%d,%d)",
-			tableName, userData.userID, (int)time(NULL), userData.money, userData.money, RESOURCE_CHANGE_REASON_REGISTER, 0, 0, 0);
-
-		// 金币排行榜
-		m_pRedis->AddKeyToZSet(TBL_RANKING_MONEY, userData.money, userData.userID);
-	}
-
-	if (userData.jewels > 0)
-	{
-		char tableName[128] = "";
-		ConfigManage()->GetTableNameByDate(TBL_STATI_USER_JEWELS_CHANGE, tableName, sizeof(tableName));
-
-		// 钻石变化
-		BillManage()->WriteBill(&m_SQLDataManage, "INSERT INTO %s (userID,time,jewels,changeJewels,reason,roomID,friendsGroupID) VALUES(%d,%d,%d,%d,%d,%d,%d)",
-			tableName, userData.userID, (int)time(NULL), userData.jewels, userData.jewels, RESOURCE_CHANGE_REASON_REGISTER, 0, 0);
-
-		// 钻石排行榜
-		m_pRedis->AddKeyToZSet(TBL_RANKING_JEWELS, userData.jewels, userData.userID);
-	}
-
-	// post给php，发送邮件通知
-	SendHTTPUserRegisterMessage(userData.userID);
 }
 
 void CGameWorkManage::OnUserCrossDay(int userID, int time)
@@ -1679,12 +1474,7 @@ void CGameWorkManage::AutoCreateNewTable(bool start)
 // 判断roomID的服务器是否存在
 bool CGameWorkManage::IsRoomIDServerExists(int roomID)
 {
-	/*if (m_pGServerManage->GetGServer(roomID) != NULL)
-	{
-		return true;
-	}*/
-
-	return false;
+	return m_pRedis->GetRoomServerStatus(roomID);
 }
 
 // 自动开房
@@ -1966,49 +1756,6 @@ bool CGameWorkManage::AutoCreateRoom(const SaveRedisFriendsGroupDesk& deskInfo)
 	return  bRet;
 }
 
-// 判断此ip是否可以注册
-bool CGameWorkManage::IsIpRegister(const OtherConfig& otherConfig, const char* ip)
-{
-	if (!ip)
-	{
-		return true;
-	}
-
-	if (!otherConfig.byIsIPRegisterLimit)
-	{
-		return true;
-	}
-
-	char sql[128] = "";
-	sprintf(sql, "SELECT count(*) as ipcount from userinfo where registerIP='%s'", ip);
-
-	CMysqlHelper::MysqlData dataSet;
-	try
-	{
-		m_SQLDataManage.m_pMysqlHelper->queryRecord(sql, dataSet);
-	}
-	catch (MysqlHelper_Exception & excep)
-	{
-		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
-		return true;
-	}
-
-	if (dataSet.size() != 1)
-	{
-		return true;
-	}
-
-	int ipcount = 0;
-	CConfigManage::sqlGetValue(dataSet[0], "ipcount", ipcount);
-
-	if (ipcount >= otherConfig.IPRegisterLimitCount)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 // 删除程序生成的无效文件
 void CGameWorkManage::DeleteExpireFile()
 {
@@ -2016,18 +1763,6 @@ void CGameWorkManage::DeleteExpireFile()
 
 	sprintf(delJsonPath, "%s%s", SAVE_JSON_PATH, "deletejson.sh");
 	system(delJsonPath);
-}
-
-// 判断某个玩家是否是游客
-bool CGameWorkManage::IsVisitorUser(int userID)
-{
-	UserData userData;
-	if (m_pRedis->GetUserData(userID, userData) && userData.registerType == LOGON_VISITOR)
-	{
-		return true;
-	}
-
-	return false;
 }
 
 std::string CGameWorkManage::GetRandHeadURLBySex(BYTE sex)
@@ -2069,22 +1804,6 @@ bool CGameWorkManage::OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead
 	{
 		return OnCenterDistributedSystemInfoMessage(pData, size);
 	}
-	case CENTER_MESSAGE_LOGON_REPEAT_USER_LOGON:
-	{
-		return OnCenterKickOldUserMessage(pData, size);
-	}
-	case PLATFORM_MESSAGE_IDENTUSER:
-	{
-		return OnCenterKickUserMessage(pData, size, userID);
-	}
-	case PLATFORM_MESSAGE_NOTICE:
-	{
-		return OnCenterNoticeMessage(pData, size);
-	}
-	case PLATFORM_MESSAGE_REQ_ALL_USER_MAIL:
-	{
-		return OnCenterAllUserMailMessage(pData, size);
-	}
 	case PLATFORM_MESSAGE_CLOSE_SERVER:
 	{
 		return OnCenterCloseServerMessage(pData, size);
@@ -2093,37 +1812,9 @@ bool CGameWorkManage::OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead
 	{
 		return OnCenterOpenServerMessage(pData, size);
 	}
-	case PLATFORM_MESSAGE_SEND_HORN:
-	{
-		return OnCenterSendHornMessage(pData, size);
-	}
-	case PLATFORM_MESSAGE_NOTIFY_USERID:
-	{
-		return OnCenterNotifyUserMessage(pNetHead, pData, size, userID);
-	}
 	case CENTER_MESSAGE_COMMON_AUTO_CREATEROOM:
 	{
 		return OnCenterAutoCreateRoomMessage(pData, size);
-	}
-	case PLATFORM_MESSAGE_PHONE_INFO:
-	{
-		return OnCenterPhoneInfoMessage(pData, size);
-	}
-	case CENTER_MESSAGE_LOADER_REWARD_ACTIVITY:
-	{
-		return OnCenterActivityRewardsMessage(pData, size);
-	}
-	case PLATFORM_MESSAGE_SIGN_UP_MATCH_PEOPLE:
-	{
-		return OnCenterSignUpMatchMessage(pData, size);
-	}
-	case CENTER_MESSAGE_LOADER_NOTIFY_START_MATCH:
-	{
-		return OnCenterLoaderStartMatchMessage(pData, size);
-	}
-	case PLATFORM_MESSAGE_SIGN_UP_MATCH_TIME:
-	{
-		return OnCenterTimeMatchPeopleChangeMessage(pData, size);
 	}
 	default:
 		break;
@@ -2139,7 +1830,7 @@ bool CGameWorkManage::OnCenterRepeatIDMessage(void* pData, int size)
 		return false;
 	}
 
-	ERROR_LOG("################ 服务器唯一的logonID重复(logonID = %d)，启动失败，请重新配置logonID ！！！ ####################", ConfigManage()->GetLogonServerConfig().logonID);
+	ERROR_LOG("################ 服务器唯一的workID重复(workID = %d)，启动失败，请重新配置workID ！！！ ####################", ConfigManage()->GetWorkServerConfig().workID);
 
 	exit(0);
 
@@ -2190,137 +1881,6 @@ bool CGameWorkManage::OnCenterDistributedSystemInfoMessage(void* pData, int size
 	return true;
 }
 
-// 踢掉本服旧玩家（不同设备同时登陆使用）
-bool CGameWorkManage::OnCenterKickOldUserMessage(void* pData, UINT size)
-{
-	if (size != sizeof(PlatformRepeatUserLogon))
-	{
-		return false;
-	}
-
-	PlatformRepeatUserLogon* pMessage = (PlatformRepeatUserLogon*)pData;
-	if (!pMessage)
-	{
-		return false;
-	}
-
-	//if (!m_pUserManage)
-	//{
-	//	return false;
-	//}
-
-	//// 玩家是否登录了
-	//LogonUserInfo* pUser = m_pUserManage->GetUser(pMessage->userID);
-	//if (pUser)
-	//{
-	//	int oldSocketIdx = pUser->socketIdx;
-
-	//	// 不同设备
-	//	SendData(oldSocketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_USER_SQUEEZE, 0, 0, pUser->socketType);
-	//	if (pUser->socketType == SOCKET_TYPE_WEBSOCKET)
-	//	{
-	//		//m_WebSocket.CloseSocket(oldSocketIdx);
-	//	}
-	//	else
-	//	{
-	//		//m_TCPSocket.CloseSocket(oldSocketIdx);
-	//	}
-	//	
-
-	//	// 清理玩家内存
-	//	m_pUserManage->DelUser(pMessage->userID);
-	//	DelSocketIdx(oldSocketIdx, pUser->socketType);
-	//}
-	//else
-	//{
-	//	ERROR_LOG("旧服务器不存在玩家:userID=%d", pMessage->userID);
-	//	return false;
-	//}
-
-	return true;
-}
-
-// 踢人掉线消息(封号使用)
-bool CGameWorkManage::OnCenterKickUserMessage(void* pData, int size, int userID)
-{
-	//if (size != 0)
-	//{
-	//	return false;
-	//}
-
-	//// 玩家是否登录了
-	//LogonUserInfo* pUser = m_pUserManage->GetUser(userID);
-	//if (pUser)
-	//{
-	//	INFO_LOG("收到中心服踢人消息,userID=%d", userID);
-	//	return pUser->socketType == SOCKET_TYPE_WEBSOCKET ? m_WebSocket.CloseSocket(pUser->socketIdx) : m_TCPSocket.CloseSocket(pUser->socketIdx);
-	//}
-
-	return true;
-}
-
-// 发布公告
-bool CGameWorkManage::OnCenterNoticeMessage(void* pData, int size)
-{
-	if (size != sizeof(PlatformNoticeMessage))
-	{
-		return false;
-	}
-
-	PlatformNoticeMessage* pMessage = (PlatformNoticeMessage*)pData;
-	if (!pMessage)
-	{
-		return false;
-	}
-
-	LogonNotifyNotice msg;
-
-	memcpy(msg.tile, pMessage->tile, sizeof(msg.tile));
-	memcpy(msg.content, pMessage->content, sizeof(msg.content));
-	msg.interval = pMessage->interval;
-	msg.times = pMessage->times;		// 告诉前端的都只有一次
-	msg.type = pMessage->type;
-
-	// 计算发送字节数量
-	msg.sizeCount = Min_(strlen(msg.content) + 1, sizeof(msg.content));
-	int iSendSize = 40 + msg.sizeCount;
-
-	// 全服在线玩家发送公告
-	SendDataBatch(&msg, iSendSize, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_NOTICE, 0, false);
-
-	return true;
-}
-
-// 全服邮件通知
-bool CGameWorkManage::OnCenterAllUserMailMessage(void* pData, int size)
-{
-	if (size != 0)
-	{
-		return false;
-	}
-
-	/*const auto& onlineUserMap = m_pUserManage->GetLogonUserInfoMap();
-	for (auto iter = onlineUserMap.begin(); iter != onlineUserMap.end(); ++iter)
-	{
-		int userID = iter->first;
-
-		UserRedSpot userRedspot;
-		if (!m_pRedis->GetUserRedSpot(userID, userRedspot))
-		{
-			continue;
-		}
-
-		LogonNotifyEmailRedSpot msg;
-
-		msg.notReadCount = userRedspot.notEMRead;
-		msg.notReceivedCount = userRedspot.notEMReceived;
-
-		SendData(userID, &msg, sizeof(msg), MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_EMAIL_REDSPOT, 0);
-	}*/
-
-	return true;
-}
-
 // 关服处理
 bool CGameWorkManage::OnCenterCloseServerMessage(void* pData, int size)
 {
@@ -2347,7 +1907,7 @@ bool CGameWorkManage::OnCenterCloseServerMessage(void* pData, int size)
 	//		m_pRedis->SetUserInfo(userID, " IsOnline 0 ");
 
 	//		//发送消息通知下线
-	//		SendData(userID, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_CLOSE_SERVER, 0);
+	//		SendData(socketIdx, NULL, 0, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_CLOSE_SERVER, 0);
 	//	}
 	//}
 
@@ -2394,45 +1954,6 @@ bool CGameWorkManage::OnCenterOpenServerMessage(void* pData, int size)
 	return true;
 }
 
-// 玩家发送喇叭
-bool CGameWorkManage::OnCenterSendHornMessage(void* pData, UINT size)
-{
-	if (size != sizeof(PlatformHorn))
-	{
-		return false;
-	}
-
-	PlatformHorn* pMessage = (PlatformHorn*)pData;
-	if (!pMessage)
-	{
-		return false;
-	}
-
-	LogonNotifyHorn msg;
-
-	memcpy(msg.content, pMessage->content, sizeof(msg.content));
-	memcpy(msg.userName, pMessage->userName, sizeof(msg.userName));
-	msg.userID = pMessage->userID;
-
-	// 计算发送字节数量
-	msg.sizeCount = Min_(strlen(msg.content) + 1, sizeof(msg.content));
-	int iSendSize = 72 + msg.sizeCount;
-
-	// 广播这个公告
-	SendDataBatch(&msg, iSendSize, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_HORN, 0, false);
-
-	return true;
-}
-
-// 向某个玩家推送消息
-bool CGameWorkManage::OnCenterNotifyUserMessage(NetMessageHead* pNetHead, void* pData, int size, int userID)
-{
-	// 直接发送数据给用户
-	SendData(userID, pData, size, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode);
-
-	return true;
-}
-
 // 中心服自动开房
 bool CGameWorkManage::OnCenterAutoCreateRoomMessage(void* pData, UINT size)
 {
@@ -2473,127 +1994,6 @@ bool CGameWorkManage::OnCenterAutoCreateRoomMessage(void* pData, UINT size)
 	return true;
 }
 
-bool CGameWorkManage::OnCenterPhoneInfoMessage(void* pData, int size)
-{
-	if (size != sizeof(UserData))
-	{
-		return false;
-	}
-
-	UserData* pMessage = (UserData*)pData;
-	if (!pMessage)
-	{
-		return false;
-	}
-
-	if (CUtil::IsContainDirtyWord(pMessage->name))
-	{
-		ERROR_LOG("name包含非法词：%s", pMessage->name);
-		return false;
-	}
-
-	if (m_pRedis->GetUserIDByPhone(pMessage->phone) > 0)
-	{
-		ERROR_LOG("账号已经存在,phone=%s", pMessage->phone);
-		return false;
-	}
-
-	UserData userData = *pMessage;
-
-	// 保存到redis
-	int ret = m_pRedis->Register(userData, LOGON_TEL_PHONE);
-	if (ret < 0)
-	{
-		ERROR_LOG("注册账号失败:phone=%s,userID=%d,name=%s", userData.phone, userData.userID, userData.name);
-		return false;
-	}
-
-	userData.userID = ret;
-
-	OnUserRegister(userData);
-
-	return true;
-}
-
-bool CGameWorkManage::OnCenterActivityRewardsMessage(void* pData, int size)
-{
-	SAFECHECK_MESSAGE(pMessage, LogonNotifyActivity, pData, size);
-
-	// 全服推送
-	LogonNotifyActivity msg;
-
-	memcpy(msg.content, pMessage->content, sizeof(msg.content));
-	msg.sizeCount = pMessage->sizeCount;
-
-	// 计算发送字节数量
-	int iSendSize = 4 + msg.sizeCount;
-
-	// 广播这个公告
-	SendDataBatch(&msg, iSendSize, MSG_MAIN_LOGON_NOTIFY, MSG_NTF_LOGON_REWARD_ACTIVITY, 0, false);
-
-	return true;
-}
-
-// 有人报名或者退出比赛（实时赛）
-bool CGameWorkManage::OnCenterSignUpMatchMessage(void* pData, UINT size)
-{
-	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchPeople, pData, size);
-
-	LogonPeopleMatchSignUpPeopleChange msg;
-
-	msg.gameID = pMessage->gameID;
-	msg.matchID = pMessage->matchID;
-	msg.curSignUpCount = pMessage->curSignUpCount;
-	msg.peopleCount = pMessage->peopleCount;
-	msg.allSignUpCount = pMessage->allSignUpCount;
-
-	for (auto itr = m_socketMatch.begin(); itr != m_socketMatch.end(); itr++)
-	{
-		SendData(*itr, &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_PEOPLE, 0);
-	}
-
-	return true;
-}
-
-// 比赛场通知玩家进入比赛
-bool CGameWorkManage::OnCenterLoaderStartMatchMessage(void* pData, UINT size)
-{
-	SAFECHECK_MESSAGE(pMessage, PlatformLoaderNotifyStartMatch, pData, size);
-
-	LogonMatchJoinRoom msg;
-	msg.gameID = pMessage->gameID;
-	msg.matchType = pMessage->matchType;
-	msg.matchID = pMessage->matchID;
-	msg.roomID = pMessage->roomID;
-
-	for (int i = 0; i < pMessage->peopleCount; i++)
-	{
-		if (IsUserOnline(pMessage->userID[i]))
-		{
-			SendData(pMessage->userID[i], &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_START_MATCH, 0);
-		}
-	}
-
-	return true;
-}
-
-bool CGameWorkManage::OnCenterTimeMatchPeopleChangeMessage(void* pData, UINT size)
-{
-	SAFECHECK_MESSAGE(pMessage, PlatformPHPSignUpMatchTime, pData, size);
-
-	LogonTimeMatchSignUpPeopleChange msg;
-
-	msg.matchID = pMessage->matchID;
-	msg.curSignUpCount = pMessage->curSignUpCount;
-
-	for (auto itr = m_socketMatch.begin(); itr != m_socketMatch.end(); itr++)
-	{
-		SendData(*itr, &msg, sizeof(msg), MSG_MAIN_MATCH_NOTIFY, MSG_NTF_LOGON_MATCH_NOTIFY_SIGNUP_CHANGE_TIME, 0);
-	}
-
-	return true;
-}
-
 
 //////////////////////////////////////////////////////////////////////////
 void CGameWorkManage::SendHTTPMessage(int userID, const std::string& url, BYTE postType)
@@ -2603,59 +2003,4 @@ void CGameWorkManage::SendHTTPMessage(int userID, const std::string& url, BYTE p
 	strcpy(asyncEvent.url, url.c_str());
 
 	m_SQLDataManage.PushLine(&asyncEvent.dataLineHead, sizeof(AsyncEventMsgHTTP), ASYNC_EVENT_HTTP, userID, postType);
-}
-
-bool CGameWorkManage::SendHTTPUserRegisterMessage(int userID)
-{
-	if (userID <= 0)
-	{
-		return false;
-	}
-
-	OtherConfig otherConfig;
-	if (!m_pRedis->GetOtherConfig(otherConfig))
-	{
-		otherConfig = ConfigManage()->GetOtherConfig();
-	}
-
-	char bufUserID[20] = "";
-	sprintf(bufUserID, "%d", userID);
-
-	//组合生成URL
-	std::string url = "http://";
-	url += otherConfig.http;
-	url += "/hm_ucenter/web/index.php?api=c&action=userRegister&userID=";
-	url += bufUserID;
-
-	SendHTTPMessage(userID, url, HTTP_POST_TYPE_REGISTER);
-
-	return true;
-}
-
-bool CGameWorkManage::SendHTTPUserLogonLogout(int userID, BYTE type)
-{
-	if (userID <= 0)
-	{
-		return false;
-	}
-
-	char bufUserID[20] = "";
-	sprintf(bufUserID, "%d", userID);
-
-	//组合生成URL
-	std::string url = "http://";
-	url += ConfigManage()->GetOtherConfig().http;
-	if (type == 0)  // 登陆
-	{
-		url += "/hm_ucenter/web/index.php?api=c&action=userLogin&userID=";
-	}
-	else // 登出
-	{
-		url += "/hm_ucenter/web/index.php?api=c&action=userLogout&userID=";
-	}
-	url += bufUserID;
-
-	SendHTTPMessage(userID, url, type == 0 ? HTTP_POST_TYPE_LOGON : HTTP_POST_TYPE_LOGOUT);
-
-	return true;
 }

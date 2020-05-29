@@ -272,7 +272,7 @@ std::string CGameLogManage::GetCostLog(pthread_t threadID)
 	if (iter != m_LogFilesMap.end())
 	{
 		const ThreadLogFiles& logs = iter->second;
-		str = logs.errorLog;
+		str = logs.costLog;
 	}
 
 	if (str == "")

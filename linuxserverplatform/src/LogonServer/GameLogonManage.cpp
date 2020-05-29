@@ -51,13 +51,37 @@ bool CGameLogonManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT 
 		return OnHandleUserLogonMessage(pNetHead->uAssistantID, pData, uSize, socketType, uIndex, pBufferevent);
 	}
 	case MSG_ASS_LOGON_DESK:
+	case MSG_MAIN_LOGON_OTHER:
+	{
+		const LogonServerSocket&& socketInfo = GetIdentityIDBySocketIdx(uIndex, socketType);
+		if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER)
+		{
+			if (pNetHead->uAssistantID == MSG_ASS_LOGON_OTHER_JOIN_MATCH_SCENE)
+			{
+				return OnHandleJoinMatchScene(socketInfo.identityID);
+			}
+			else if (pNetHead->uAssistantID == MSG_ASS_LOGON_OTHER_EXIT_MATCH_SCENE)
+			{
+				return OnHandleExitMatchScene(socketInfo.identityID);
+			}
+
+			return SendMessageToWorkServer(socketInfo.identityID, pNetHead, pData, uSize, socketType, uIndex);
+		}
+		else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER)
+		{
+			return SendData(pNetHead->uIdentification, pData, uSize, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode, 0);
+		}
+
+		return false;
+	}
+	/*case MSG_ASS_LOGON_DESK:
 	{
 		return OnHandleGameDeskMessage(pNetHead->uAssistantID, pData, uSize, socketType, uIndex, pBufferevent);
 	}
 	case MSG_MAIN_LOGON_OTHER:
 	{
 		return OnHandleOtherMessage(pNetHead->uAssistantID, pData, uSize, socketType, uIndex, pBufferevent);
-	}
+	}*/
 	case COMMON_VERIFY_MESSAGE:
 	{
 		return OnHandleGServerVerifyMessage(pData, uSize, uIndex, pBufferevent);
@@ -97,6 +121,7 @@ bool CGameLogonManage::OnStart()
 	m_socketInfoMap.resize(2 * m_uMaxPeople);
 	m_webSocketInfoMap.resize(2 * m_uMaxWebPeople);
 	m_socketIndexVec.resize(Max_(m_uMaxPeople, m_uMaxWebPeople));
+	m_workServerFDVec.clear();
 
 	if (m_pRedis)
 	{
@@ -336,6 +361,7 @@ bool CGameLogonManage::OnStop()
 
 	m_socketInfoMap.clear();
 	m_webSocketInfoMap.clear();
+	m_workServerFDVec.clear();
 
 	return true;
 }
@@ -396,6 +422,24 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 	else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER)
 	{
 		INFO_LOG("逻辑服务器掉线：serverID=%d", socketInfo.identityID);
+		auto itr = m_workServerFDVec.begin();
+		for (; itr != m_workServerFDVec.end(); itr++)
+		{
+			if (*itr == socketIdx)
+			{
+				break;
+			}
+		}
+		if (itr == m_workServerFDVec.end())
+		{
+			ERROR_LOG("逻辑服socket索引不存在 socketIdx=%d", socketIdx);
+		}
+		else
+		{
+			// 删除索引
+			m_workServerFDVec.erase(itr);
+		}
+
 	}
 	else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER)
 	{
@@ -2058,9 +2102,10 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	{
 		// socketIdx和gserver关联
 		m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_WORK_SERVER, pMessage->serverID);
+		m_workServerFDVec.push_back(socketIdx);
 	}
 
-	
+
 	INFO_LOG("【serverID=%d, serverType=%d】游戏服连接本服", pMessage->serverID, pMessage->serverType);
 
 	return true;
@@ -2120,7 +2165,7 @@ LogonServerSocket CGameLogonManage::GetIdentityIDBySocketIdx(int socketIdx, BYTE
 			return LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_NO, 0);
 		}
 
-		return m_webSocketInfoMap[socketIdx]; 
+		return m_webSocketInfoMap[socketIdx];
 	}
 
 	if (socketIdx < 0 || socketIdx >= m_socketInfoMap.size())
@@ -2200,7 +2245,7 @@ bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT
 		for (int i = 0; i < m_socketIndexVec.size(); i++)
 		{
 			const LogonServerSocket&& socketInfo = GetIdentityIDBySocketIdx(m_socketIndexVec[i], SOCKET_TYPE_TCP);
-			if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER 
+			if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER
 				|| toGServer && (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER
 					|| socketInfo.type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER))
 			{
@@ -2212,7 +2257,7 @@ bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT
 	{
 		for (int i = 0; i < m_socketInfoMap.size(); i++)
 		{
-			if (m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_USER || 
+			if (m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_USER ||
 				toGServer && (m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_GAME_SERVER
 					|| m_socketInfoMap[i].type == LOGON_SERVER_SOCKET_TYPE_WORK_SERVER))
 			{
@@ -2246,7 +2291,7 @@ bool CGameLogonManage::SendDataBatch(void* pData, UINT uSize, UINT uMainID, UINT
 			}
 		}
 	}
-	
+
 	return true;
 }
 
@@ -2273,6 +2318,28 @@ bool CGameLogonManage::SendMessageToCenterServer(UINT msgID, void* pData, UINT s
 	}
 
 	return false;
+}
+
+bool CGameLogonManage::SendMessageToWorkServer(int userID, NetMessageHead* pNetHead, void* pData, int size, BYTE socketType, UINT uIndex)
+{
+	if (m_workServerFDVec.size() <= 0)
+	{
+		SendData(uIndex, NULL, 0, pNetHead->uMainID, pNetHead->uAssistantID, ERROR_GAME_NO_START, 0, socketType, 0);
+		return true;
+	}
+
+	// memcached中线程负载均衡算法
+	static int lastWorkServer = 0;
+	lastWorkServer = lastWorkServer % m_workServerFDVec.size();
+
+	if (!m_TCPSocket.SendData(m_workServerFDVec[lastWorkServer], pData, size, pNetHead->uMainID, pNetHead->uAssistantID, pNetHead->uHandleCode, 0, NULL, userID))
+	{
+		ERROR_LOG("转发逻辑服务器失败:%d", m_workServerFDVec[lastWorkServer]);
+	}
+
+	lastWorkServer++;
+
+	return true;
 }
 
 void CGameLogonManage::InitRounteCheckEvent()
@@ -2352,7 +2419,7 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 		time_t llAcceptMsgTime = pTCPSocketInfo->acceptMsgTime;
 
 		// 没有绑定userID的socket
-		if (currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME && GetIdentityIDBySocketIdx(index, SOCKET_TYPE_TCP).type <= 0)
+		if (currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME&& GetIdentityIDBySocketIdx(index, SOCKET_TYPE_TCP).type <= 0)
 		{
 			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, pTCPSocketInfo->ip);
 			m_TCPSocket.CloseSocket(index);
@@ -2371,7 +2438,7 @@ void CGameLogonManage::RoutineCheckUnbindIDSocket()
 		time_t llAcceptMsgTime = vec[i].acceptMsgTime;
 
 		// 没有绑定userID的socket
-		if (vec[i].isConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME && GetIdentityIDBySocketIdx(i, SOCKET_TYPE_WEBSOCKET).type <= 0)
+		if (vec[i].isConnect && currTime - llAcceptMsgTime > BINDID_SOCKET_USERID_TIME&& GetIdentityIDBySocketIdx(i, SOCKET_TYPE_WEBSOCKET).type <= 0)
 		{
 			INFO_LOG("清理没有绑定的连接【connect-time=%lld,ip=%s】", currTime - llAcceptMsgTime, vec[i].ip);
 			m_WebSocket.CloseSocket(i);
@@ -3321,7 +3388,7 @@ bool CGameLogonManage::OnCenterKickOldUserMessage(void* pData, UINT size)
 		{
 			//m_TCPSocket.CloseSocket(oldSocketIdx);
 		}
-		
+
 
 		// 清理玩家内存
 		m_pUserManage->DelUser(pMessage->userID);
