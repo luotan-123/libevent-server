@@ -71,11 +71,13 @@ int AlreadyRunning(const char* filename)
 
 int main()
 {
-	if (AlreadyRunning(LOCKFILE))
+	// 判断一个程序是否已经运行
+	// 根据需要调用下面函数
+	/*if (AlreadyRunning(LOCKFILE))
 	{
 		CON_ERROR_LOG("centerserver already exists");
 		return -1;
-	}
+	}*/
 
 	// 设置程序路径 , 创建日志目录
 	CINIFile file(CINIFile::GetAppPath() + "config.ini");
