@@ -17,6 +17,7 @@
 #define TBL_BASE_OTHER_CONFIG	"otherConfig"
 #define TBL_BASE_REDIS_CONFIG	"redisBaseInfo"
 #define TBL_BASE_LOGON			"logonBaseInfo"
+#define TBL_BASE_WORK			"workBaseInfo"
 
 /////////////////////////////////////////////////////////
 // 自动生成sql语句，将redis数据保存到数据库
@@ -203,6 +204,8 @@ struct LogonServerConfig
 struct WorkServerConfig
 {
 	int workID;
+	int status;
+	int gateconnected;
 
 	WorkServerConfig()
 	{
@@ -553,6 +556,8 @@ private:
 	bool LoadTablesPrimaryKey();
 	// 大厅服基本配置
 	bool LoadLogonBaseConfig();
+	// 加载逻辑服务器配置
+	bool LoadWorkBaseConfig();
 	// 加载redis基本配置
 	bool LoadRedisConfig();
 public:
@@ -652,8 +657,10 @@ public:
 	std::map<BuyRoomInfoKey, std::vector<int> > m_buyRoomInfoMap;
 	// redis数据分区
 	std::map<int, RedisConfig> m_redisConfigMap;
-	// 大厅服配置
+	// 网关服配置
 	std::map<int, LogonBaseInfo> m_logonBaseInfoMap;
+	// 逻辑服配置
+	std::map<int, WorkServerConfig> m_workBaseInfoMap;
 	// 数据表字段相关信息(基础配置表不需要)
 	std::unordered_map<std::string, std::vector<FieldDescriptor> > m_tableFieldDescMap;
 

@@ -31,6 +31,7 @@ void CConfigManage::Release()
 	m_buyGameDeskInfoMap.clear();
 	m_buyRoomInfoMap.clear();
 	m_logonBaseInfoMap.clear();
+	m_workBaseInfoMap.clear();
 
 	curl_global_cleanup();
 
@@ -389,6 +390,13 @@ bool CConfigManage::LoadBaseConfig()
 	if (!ret)
 	{
 		ERROR_LOG("LoadLogonBaseConfig failed");
+		return false;
+	}
+
+	ret = LoadWorkBaseConfig();
+	if (!ret)
+	{
+		ERROR_LOG("LoadWorkBaseConfig failed");
 		return false;
 	}
 
@@ -1347,6 +1355,46 @@ bool CConfigManage::LoadLogonBaseConfig()
 	if (m_logonBaseInfoMap.size() == 0)
 	{
 		ERROR_LOG("没有配置登陆服。【%lu/%d】", m_logonBaseInfoMap.size(), MAX_LOGON_SERVER_COUNT);
+		return false;
+	}
+
+	return true;
+}
+
+bool CConfigManage::LoadWorkBaseConfig()
+{
+	char sql[128] = "";
+	sprintf(sql, "select * from %s", TBL_BASE_WORK);
+
+	CMysqlHelper::MysqlData dataSet;
+	try
+	{
+		m_pMysqlHelper->queryRecord(sql, dataSet);
+	}
+	catch (MysqlHelper_Exception & excep)
+	{
+		ERROR_LOG("执行sql语句失败:%s", excep.errorInfo.c_str());
+		return false;
+	}
+
+	for (size_t i = 0; i < dataSet.size(); i++)
+	{
+		WorkServerConfig info;
+
+		sqlGetValue(dataSet[i], "workID", info.workID);
+		sqlGetValue(dataSet[i], "gateconnected", info.gateconnected);
+
+		m_workBaseInfoMap.emplace(info.workID, info);
+
+		if (m_workServerConfig.workID == info.workID)
+		{
+			m_workServerConfig.gateconnected = info.gateconnected;
+		}
+	}
+
+	if (m_workBaseInfoMap.size() == 0)
+	{
+		CON_ERROR_LOG("没有配置逻辑服。");
 		return false;
 	}
 
