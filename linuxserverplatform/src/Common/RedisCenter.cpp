@@ -632,6 +632,7 @@ bool CRedisCenter::LoadAllConfig()		//加载所有配置
 		umap["currPeopleCount"] = "0";
 		umap["level"] = std::to_string(itr->second.level);
 		umap["configInfo"] = itr->second.configInfo;
+		umap["status"] = "0";
 
 		hmset(TBL_BASE_ROOM, itr->first, umap);
 	}

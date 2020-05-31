@@ -1444,7 +1444,7 @@ bool CRedisLogon::GetRoomServerStatus(int roomID)
 	redisReply* pReply = (redisReply*)redisCommand(m_pContext, redisCmd);
 	REDIS_CHECKF(pReply, redisCmd);
 
-	bool ret = true;
+	bool ret = false;
 	if (pReply->type == REDIS_REPLY_STRING)
 	{
 		ret = atoi(pReply->str) == 1 ? true : false;

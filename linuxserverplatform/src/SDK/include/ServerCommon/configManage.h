@@ -595,6 +595,8 @@ public:
 	const FriendsGroupConfig& GetFriendsGroupConfig();
 	// 获取大厅基本配置
 	LogonBaseInfo* GetLogonBaseInfo(int logonID);
+	// 获取大厅基本配置
+	WorkServerConfig* GetWorkBaseInfo(int workID);
 	// 获取redis配置
 	const RedisConfig& GetRedisConfig(int redisTypeID);
 	// 获取购买roomID信息

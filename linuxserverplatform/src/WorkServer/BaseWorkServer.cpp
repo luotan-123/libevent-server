@@ -135,7 +135,7 @@ bool CBaseWorkServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 		throw new CException("CBaseWorkServer::Init new CTcpConnect failed", 0x43A);
 	}
 
-	// 连接网关
+	// 开辟内存
 	m_pGServerConnect = new CGServerConnect;
 	if (!m_pGServerConnect)
 	{
@@ -244,10 +244,13 @@ bool CBaseWorkServer::Start()
 	GameLogManage()->AddLogFile(m_connectCServerHandle, THREAD_TYPE_RECV, ConfigManage()->GetWorkServerConfig().workID);
 
 	//////////////////////////////////建立与网关的连接////////////////////////////////////////
-	ret = m_pGServerConnect->Start(&m_DataLine, ConfigManage()->GetWorkServerConfig().workID, SERVICE_TYPE_WORK, true);
-	if (!ret)
+	if (ConfigManage()->GetWorkServerConfig().gateconnected)
 	{
-		throw new CException("CBaseWorkServer::m_pGServerConnect.Start 连接模块启动失败", 0x433);
+		ret = m_pGServerConnect->Start(&m_DataLine, ConfigManage()->GetWorkServerConfig().workID, SERVICE_TYPE_WORK, true);
+		if (!ret)
+		{
+			throw new CException("CBaseWorkServer::m_pGServerConnect.Start 连接模块启动失败", 0x433);
+		}
 	}
 
 	// 启动定时器
@@ -307,7 +310,7 @@ bool CBaseWorkServer::Stop()
 	//关闭与中心服务器的连接
 	m_pTcpConnect->Stop();
 
-	if (m_pGServerConnect)
+	if (m_pGServerConnect && ConfigManage()->GetWorkServerConfig().gateconnected)
 	{
 		m_pGServerConnect->Stop();
 	}

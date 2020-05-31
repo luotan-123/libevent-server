@@ -41,7 +41,7 @@ int main()
 	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
 
 	std::cout << std::endl;
-	
+
 	CON_INFO_LOG("======================%s begin========================================", APP_TITLE);
 
 	bool ret = false;
@@ -73,16 +73,8 @@ int main()
 	}
 
 	int workID = ConfigManage()->GetWorkServerConfig().workID;
-	/*WorkBaseInfo* pWorkBaseInfo = ConfigManage()->GetWorkBaseInfo(logonID);
-	if (pWorkBaseInfo)
-	{
-		char szBuf[256] = "";
-		sprintf(szBuf, "WorkServer启动成功 [WorkID:%d] [tcpPort:%d] [tcpMaxPeople:%d] [wbPort:%d] [wbMaxPeople:%d]",
-			ConfigManage()->m_logonServerConfig.logonID, pWorkBaseInfo->port, pWorkBaseInfo->maxPeople,
-			pWorkBaseInfo->webSocketPort, pWorkBaseInfo->maxWebSocketPeople);
-		std::cout << szBuf << std::endl;
-	}*/
-	printf("WorkServer 启动成功 workID:%d\n", workID);
+	std::string strconnectgate = ConfigManage()->GetWorkServerConfig().gateconnected ? "连接网关" : "不连接网关";
+	printf("WorkServer 启动成功 [workID:%d] [%s]\n", workID, strconnectgate.c_str());
 
 	// 标题（显示版本信息和进程id）
 	printf("v%d.%d.%d %s  processID:%d\n", VER_MAIN, VER_MIDDLE, VER_RESVERSE, VER_BUILDTIME, getpid());

@@ -1418,6 +1418,22 @@ LogonBaseInfo* CConfigManage::GetLogonBaseInfo(int logonID)
 	return NULL;
 }
 
+WorkServerConfig* CConfigManage::GetWorkBaseInfo(int workID)
+{
+	if (workID <= 0)
+	{
+		return NULL;
+	}
+
+	auto iter = m_workBaseInfoMap.find(workID);
+	if (iter != m_workBaseInfoMap.end())
+	{
+		return &iter->second;
+	}
+
+	return NULL;
+}
+
 // 获取购买roomID信息
 void CConfigManage::GetBuyRoomInfo(int gameID, int roomType, std::vector<int>& roomIDVec)
 {
