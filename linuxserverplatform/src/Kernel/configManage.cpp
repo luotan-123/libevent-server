@@ -261,9 +261,6 @@ bool CConfigManage::LoadLoaderServerConfig()
 	ret = file.GetKeyVal(key, "logonserverPasswd", "e10adc3949ba59abbe56e057f20f883e");
 	strncpy(m_loaderServerConfig.logonserverPasswd, ret.c_str(), sizeof(m_loaderServerConfig.logonserverPasswd) - 1);
 
-	ret = file.GetKeyVal(key, "recvThreadNumber", "4");
-	m_loaderServerConfig.recvThreadNumber = atoi(ret.c_str());
-
 	return true;
 }
 
@@ -277,6 +274,7 @@ bool CConfigManage::LoadCommonConfig()
 	m_commonConfig.logPath = file.GetKeyVal(pKey, "logPath", "./log/");
 	m_commonConfig.WorkThreadNumber = file.GetKeyVal(pKey, "WorkThreadNumber", 4);
 	m_commonConfig.TimerThreadNumber = file.GetKeyVal(pKey, "TimerThreadNumber", 4);
+	m_commonConfig.recvThreadNumber = file.GetKeyVal(pKey, "recvThreadNumber", 4);
 
 	return true;
 }

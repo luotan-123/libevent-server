@@ -218,7 +218,6 @@ struct LoaderServerConfig
 {
 	char serviceName[64];
 	char logonserverPasswd[128];
-	int  recvThreadNumber;
 
 	LoaderServerConfig()
 	{
@@ -231,12 +230,14 @@ struct CommonConfig
 {
 	std::string logPath;
 	int WorkThreadNumber;
+	int recvThreadNumber;
 	int TimerThreadNumber;
 
 	CommonConfig()
 	{
 		WorkThreadNumber = 4;
 		TimerThreadNumber = 1;
+		recvThreadNumber = 4;
 	}
 };
 

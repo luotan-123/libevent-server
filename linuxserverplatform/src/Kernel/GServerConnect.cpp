@@ -349,7 +349,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int serverID, int serverType, 
 	}
 
 	// 获取线程数量参数
-	int recvThreadNumber = ConfigManage()->m_loaderServerConfig.recvThreadNumber;
+	int recvThreadNumber = ConfigManage()->m_commonConfig.recvThreadNumber;
 	if (recvThreadNumber < 1)
 	{
 		recvThreadNumber = 4;
