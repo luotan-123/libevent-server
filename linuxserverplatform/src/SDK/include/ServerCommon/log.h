@@ -22,6 +22,9 @@ public:
 	// 把buf中的内容写入logFile
 	static void Write(const char* pLogFile, const char* buf);
 
+	// 把buf中的内容写入logFile，文件名字用户自己定义
+	static void Write(const char* pLogFile, const char* pFile, int line, const char* pFuncName, const char* pBuf, ...);
+
 	static void WriteSysErr(const char* pLogFile, int level, const char* pFile, int line, const char* pFuncName, const char* err, const char* pFormat, ...);
 };
 
@@ -96,3 +99,6 @@ private:
 
 // 输出系统错误信息，strerror(errno)函数全局的，调用SYS_ERROR_LOG之前，不能调用其它系统函数
 #define SYS_ERROR_LOG(...)	{ CLog::WriteSysErr(GameLogManage()->GetErrorLog(GetCurrentThreadId()).c_str(), LOG_LEVEL_ERROR_SYS, __FILE__, __LINE__, __FUNCTION__,strerror(errno), __VA_ARGS__); }
+
+// 普通日志输出，文件名用户自定义
+#define FILE_LOG(filename, ...)	{ CLog::Write(filename, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__); }

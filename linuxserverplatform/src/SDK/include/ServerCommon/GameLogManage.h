@@ -69,7 +69,9 @@ public:
 	FILE* GetLogFileFp(std::string&& strFile);
 
 	// 设置进程日志目录
-	void SetLogPath(const std::string &path);
+	void SetLogPath(const std::string& path);
+	// 获取进程日志目录
+	std::string GetLogPath();
 
 private:
 	// 日志文件map

@@ -345,3 +345,9 @@ void CGameLogManage::SetLogPath(const std::string& path)
 {
 	m_logPath = path;
 }
+
+// 获取进程日志目录
+std::string CGameLogManage::GetLogPath()
+{
+	return m_logPath;
+}

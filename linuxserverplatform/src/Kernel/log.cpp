@@ -150,6 +150,54 @@ void CLog::Write(const char* pLogFile, const char* buf)
 	fflush(fp);
 }
 
+void CLog::Write(const char* pLogFile, const char* pFile, int line, const char* pFuncName, const char* pBuf, ...)
+{
+	if (!pLogFile || !pFile || !pFuncName || !pBuf)
+	{
+		return;
+	}
+
+	char buf[MAX_LOG_BUF_SIZE] = "";
+
+	// 线程ID
+	pthread_t threadID = GetCurrentSysThreadId();
+	sprintf(buf, "%lu ", threadID);
+
+	// 时间
+	SYSTEMTIME sysTime;
+	GetLocalTime(&sysTime);
+
+	int millisecs = sysTime.wSecond * 1000 + sysTime.wMilliseconds;
+
+	sprintf(buf + strlen(buf), "%04d-%02d-%02d %02d:%02d:%05d ", sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, millisecs);
+
+	// 参数
+	va_list args;
+	va_start(args, pBuf);
+
+	vsprintf(buf + strlen(buf), pBuf, args);
+	va_end(args);
+
+	sprintf(buf + strlen(buf), "\n");
+	//sprintf(buf + strlen(buf), "{%s %s %d}\n", pFile, pFuncName, line);
+
+	std::string strFile = GameLogManage()->GetLogPath() + pLogFile;
+	strFile += ".log";
+	FILE* fp = GameLogManage()->GetLogFileFp(std::move(strFile));
+	if (!fp)
+	{
+		fp = fopen(strFile.c_str(), "a+");
+		if (!fp)
+		{
+			return;
+		}
+		GameLogManage()->AddLogFileFp(strFile.c_str(), fp);
+	}
+
+	fputs(buf, fp);
+	fflush(fp);
+}
+
 void CLog::WriteSysErr(const char* pLogfile, int level, const char* pFile, int line, const char* pFuncName, const char* err, const char* pBuf, ...)
 {
 	if (!pLogfile || !pFile || !pFuncName || !pBuf)
