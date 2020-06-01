@@ -3522,7 +3522,7 @@ void CServerGameDesk::GetSpecialRule()
 			}
 		}
 		
-		INFO_LOG("规则：%s\n====[大胡%d] [报听%d] [风牌%d] [只能自摸胡%d] [自摸分数%d]===",
+		FILE_LOG("麻将日志", "规则：%s\n====[大胡%d] [报听%d] [风牌%d] [只能自摸胡%d] [自摸分数%d]===",
 			m_szGameRules, m_GameData.m_tGameRuler.bDaHu, m_GameData.m_tGameRuler.bBaoTing,
 			m_GameData.m_tGameRuler.bFenPai, m_GameData.m_tGameRuler.bZhiZiMo, m_GameData.m_tGameRuler.iZiMoScore);
 
