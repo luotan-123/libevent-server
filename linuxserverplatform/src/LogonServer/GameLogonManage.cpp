@@ -2106,7 +2106,7 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	}
 
 
-	INFO_LOG("【serverID=%d, serverType=%d】游戏服连接本服", pMessage->serverID, pMessage->serverType);
+	INFO_LOG("【serverID=%d, serverType=%d】已经连接", pMessage->serverID, pMessage->serverType);
 
 	return true;
 }

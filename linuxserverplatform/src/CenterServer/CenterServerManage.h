@@ -114,7 +114,7 @@ public:///////////////////////////////////发送数据相关////////////////////
 	// 通知资源变化
 	void NotifyResourceChange(int userID, int resourceType, long long value, long long changeValue, int reason, int reserveData = 0, BYTE isNotifyRoom = 0);
 	// 给登录服服务器集群发送当前集群信息
-	void SendDistributedSystemInfo();
+	void SendDistributedSystemInfo(ServiceType type);
 	// 比赛即将开始，给所有报名玩家发送消息通知
 	void SendNotifyMatchStart(const MatchInfo &matchInfo);
 private: /////////////////////////内部系统////////////////////////

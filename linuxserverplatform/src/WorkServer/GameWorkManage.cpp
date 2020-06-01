@@ -15,6 +15,9 @@ using namespace AsyncEventMsg;
 CGameWorkManage::CGameWorkManage() : CBaseWorkServer()
 {
 	m_lastNormalTimerTime = 0;
+	m_uGroupIndex = 0;
+	m_uGroupCount = 1;
+	m_uMainGroupIndex = 0;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1238,7 +1241,7 @@ void CGameWorkManage::OnServerCrossDay()
 	m_pRedis->ClearOneDayWinMoney();
 
 	//清理过期数据
-	if (m_pRedis->IsMainDistributedSystem())
+	if (IsMainDistributedSystem())
 	{
 		m_pRedisPHP->ClearAllEmailInfo();
 
@@ -1250,7 +1253,7 @@ void CGameWorkManage::OnServerCrossDay()
 	}
 
 	//生成新表，记录账单数据
-	if (m_pRedis->IsMainDistributedSystem())
+	if (IsMainDistributedSystem())
 	{
 		AutoCreateNewTable(false);
 	}
@@ -1286,7 +1289,7 @@ void CGameWorkManage::OnServerCrossWeek()
 	INFO_LOG("OnServerCrossWeek");
 
 	//分布式处理
-	if (m_pRedis->IsMainDistributedSystem())
+	if (IsMainDistributedSystem())
 	{
 		//清理胜局数
 		CleanAllUserWinCount();
@@ -1791,6 +1794,32 @@ std::string CGameWorkManage::GetRandHeadURLBySex(BYTE sex)
 	return str;
 }
 
+bool CGameWorkManage::IsMainDistributedSystem()
+{
+	if (m_uGroupIndex == m_uMainGroupIndex)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool CGameWorkManage::IsDistributedSystemCalculate(long long calcID)
+{
+	if (m_uGroupCount <= 0)
+	{
+		ERROR_LOG("########### 重大错误m_uGroupCount=%d##############", m_uGroupCount);
+		return false;
+	}
+
+	if (calcID % m_uGroupCount == m_uGroupIndex)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 ////////////////////////////////处理中心服消息//////////////////////////////////////////
 bool CGameWorkManage::OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID)
 {
@@ -1851,11 +1880,6 @@ bool CGameWorkManage::OnCenterDistributedSystemInfoMessage(void* pData, int size
 		return false;
 	}
 
-	if (!m_pRedis)
-	{
-		return false;
-	}
-
 	if (pMessage->logonGroupCount <= 0)
 	{
 		ERROR_LOG("中心服发送数据错误 pMessage->logonGroupCount%d", pMessage->logonGroupCount);
@@ -1863,16 +1887,15 @@ bool CGameWorkManage::OnCenterDistributedSystemInfoMessage(void* pData, int size
 	}
 
 	// 设置本系统在集群的位置信息
-	m_pRedis->m_uLogonGroupCount = pMessage->logonGroupCount;
-	m_pRedis->m_uLogonGroupIndex = pMessage->logonGroupIndex;
-	m_pRedis->m_uMainLogonGroupIndex = pMessage->mainLogonGroupIndex;
+	m_uGroupCount = pMessage->logonGroupCount;
+	m_uGroupIndex = pMessage->logonGroupIndex;
+	m_uMainGroupIndex = pMessage->mainLogonGroupIndex;
 
-	INFO_LOG("集群信息：m_uLogonGroupCount = %d , m_uLogonGroupIndex = %d , m_uMainLogonGroupIndex = %d",
-		m_pRedis->m_uLogonGroupCount, m_pRedis->m_uLogonGroupIndex, m_pRedis->m_uMainLogonGroupIndex);
+	INFO_LOG("集群信息：Count = %d , Index = %d , MainIndex = %d", m_uGroupCount, m_uGroupIndex, m_uMainGroupIndex);
 
 	static bool bStart = false;
 	// 启动生成分表
-	if (m_pRedis->m_uLogonGroupIndex == 0 && !bStart)
+	if (m_uGroupIndex == 0 && !bStart)
 	{
 		bStart = true;
 		AutoCreateNewTable(true);

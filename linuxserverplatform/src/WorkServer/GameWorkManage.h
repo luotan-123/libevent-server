@@ -19,6 +19,12 @@ const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
 
 class CGameWorkManage : public CBaseWorkServer
 {
+public:
+	//分布式处理相关
+	UINT m_uGroupIndex;		//逻辑服集群索引
+	UINT m_uGroupCount;		//逻辑服集群数量
+	UINT m_uMainGroupIndex;	//当前主要逻辑服集群索引（相比其它服务器集群处理更多数据）
+
 private:
 	std::vector<int>			m_buyRoomVec;
 	time_t						m_lastNormalTimerTime;
@@ -86,6 +92,9 @@ public:
 	bool AutoCreateRoom(const SaveRedisFriendsGroupDesk& deskInfo);
 	// 获取随机头像
 	std::string GetRandHeadURLBySex(BYTE sex);
+	//分布式
+	bool IsMainDistributedSystem(); //判断是否是当前主要集群系统
+	bool IsDistributedSystemCalculate(long long calcID); //这个id是否当前系统计算
 private:
 	// 初始化需要定期检查的事件
 	void InitRounteCheckEvent();

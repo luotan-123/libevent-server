@@ -202,7 +202,7 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		m_logonGroupSocket.erase(itrVecLogonGroup);
 
 		//重新发送集群信息
-		SendDistributedSystemInfo();
+		SendDistributedSystemInfo(SERVICE_TYPE_LOGON);
 
 		//将此登录服在线玩家玩家移除
 		for (auto iter = m_centerUserInfoMap.begin(); iter != m_centerUserInfoMap.end(); )
@@ -243,6 +243,8 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		// 删除索引
 		m_workGroupSocket.erase(itr);
 
+		//重新发送集群信息
+		SendDistributedSystemInfo(SERVICE_TYPE_LOGON);
 	}
 
 	INFO_LOG("====== serverType:%d,serverID:%d退出集群 登录服集群数量:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
@@ -359,24 +361,47 @@ void CCenterServerManage::NotifyResourceChange(int userID, int resourceType, lon
 }
 
 // 给登录服服务器集群发送当前集群信息
-void CCenterServerManage::SendDistributedSystemInfo()
+void CCenterServerManage::SendDistributedSystemInfo(ServiceType type)
 {
-	size_t iLogonGroupSocketSize = m_logonGroupSocket.size();
-	if (iLogonGroupSocketSize <= 0)
+	if (type == SERVICE_TYPE_LOGON)
 	{
-		return;
+		size_t iLogonGroupSocketSize = m_logonGroupSocket.size();
+		if (iLogonGroupSocketSize <= 0)
+		{
+			return;
+		}
+
+		int iMainLogonServer = CUtil::GetRandNum() % iLogonGroupSocketSize;
+		for (size_t i = 0; i < iLogonGroupSocketSize; i++)
+		{
+			PlatformDistributedSystemInfo msg;
+			msg.logonGroupCount = iLogonGroupSocketSize;
+			msg.logonGroupIndex = i;
+			msg.mainLogonGroupIndex = iMainLogonServer;
+
+			SendData(m_logonGroupSocket[i].socketIdx, CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO, &msg, sizeof(msg), 0, m_logonGroupSocket[i].pBufferevent);
+		}
+	}
+	else if (type == SERVICE_TYPE_WORK)
+	{
+		size_t iWorkGroupSocketSize = m_workGroupSocket.size();
+		if (iWorkGroupSocketSize <= 0)
+		{
+			return;
+		}
+
+		int iMainWorkServer = CUtil::GetRandNum() % iWorkGroupSocketSize;
+		for (size_t i = 0; i < iWorkGroupSocketSize; i++)
+		{
+			PlatformDistributedSystemInfo msg;
+			msg.logonGroupCount = iWorkGroupSocketSize;
+			msg.logonGroupIndex = i;
+			msg.mainLogonGroupIndex = iMainWorkServer;
+
+			SendData(m_workGroupSocket[i].socketIdx, CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO, &msg, sizeof(msg), 0, m_workGroupSocket[i].pBufferevent);
+		}
 	}
 
-	int iMainLogonServer = CUtil::GetRandNum() % iLogonGroupSocketSize;
-	for (size_t i = 0; i < iLogonGroupSocketSize; i++)
-	{
-		PlatformDistributedSystemInfo msg;
-		msg.logonGroupCount = iLogonGroupSocketSize;
-		msg.logonGroupIndex = i;
-		msg.mainLogonGroupIndex = iMainLogonServer;
-
-		SendData(m_logonGroupSocket[i].socketIdx, CENTER_MESSAGE_COMMON_LOGON_GROUP_INFO, &msg, sizeof(msg), 0, m_logonGroupSocket[i].pBufferevent);
-	}
 }
 
 // 比赛即将开始，给所有报名玩家发送消息通知
@@ -493,7 +518,8 @@ void CCenterServerManage::OnServerCrossDay()
 	INFO_LOG("OnServerCrossDay");
 
 	// 每天发送一次集群信息
-	SendDistributedSystemInfo();
+	SendDistributedSystemInfo(SERVICE_TYPE_LOGON);
+	SendDistributedSystemInfo(SERVICE_TYPE_WORK);
 
 	// 生成内存分析
 #ifdef JEMALLOC_PROFILE_MEMORY
@@ -1401,7 +1427,7 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 
 		m_logonGroupSocket.emplace_back(uIndex, pBufferevent);
 
-		SendDistributedSystemInfo();
+		SendDistributedSystemInfo(SERVICE_TYPE_LOGON);
 	}
 	else if (pMessage->serverType == SERVICE_TYPE_LOADER)//游戏服
 	{
@@ -1410,9 +1436,12 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 	else if (pMessage->serverType == SERVICE_TYPE_WORK)//逻辑服
 	{
 		m_workGroupSocket.emplace_back(uIndex, pBufferevent);
+
+		SendDistributedSystemInfo(SERVICE_TYPE_WORK);
 	}
 
-	INFO_LOG("====== serverType:%d,serverID:%d 加入集群系统 登录服集群数量:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
+	INFO_LOG("====== serverType:%d,serverID:%d 加入集群系统 网关数量:%d 逻辑服数量:%d=========",
+		serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size(), m_workGroupSocket.size());
 
 	return true;
 }
