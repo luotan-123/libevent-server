@@ -58,14 +58,7 @@ const int MAX_COST_BUF_SIZE = 256;						// 缓冲区长度
 #define ALL_STATISTICS_FUNC_COST_TIME			1000000 // 调用接口的总耗时，超过这个时间就输出日志(us) 1000000
 #define MIN_STATISTICS_FUNC_COST_TIME			200000	// 调用接口的总耗时，超过这个时间就输出日志(us)，针对只调用一次的函数
 
-/////////////////////////////////////////////////////////
-// 线程处理时间间隔 单位毫秒
-#define THREAD_ONCE_DATABASE					100		// 异步数据处理线程间隔（服务器内部，http请求，sql语句，ftp传输，，，）
-#define THREAD_ONCE_HANDLE_MSG					25		// 网络消息处理线程间隔（客户端发送，tcp消息、websocket消息、http消息）
-#define THREAD_ONCE_SEND_MSG					25		// 发送网络消息线程间隔（服务器发送，tcp消息、websocket消息、http消息）
-
 /////////////////////////////////枚举模块/////////////////////////////////////////
-
 // 玩家性别
 enum UserSex
 {

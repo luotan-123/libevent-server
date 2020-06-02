@@ -8,7 +8,7 @@ namespace DTProto
 
 	// 游戏名称信息
 #define GAMENAME						"龙虎斗"									// 游戏名称
-#define GAME_DLL_AUTHOR                 "深圳网科技有限公司"						 //
+#define GAME_DLL_AUTHOR                 "深圳火妹网络科技"						 //
 #define GAME_DLL_NOTE                   "百人类 -- 游戏组件"
 
 #define NAME_ID							40000100								 // 名字 ID

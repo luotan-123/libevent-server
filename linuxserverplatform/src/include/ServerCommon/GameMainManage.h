@@ -327,12 +327,7 @@ private:
 	virtual bool PreInitParameter(ManageInfoStruct * pInitData, KernelInfoStruct * pKernelData)
 	{
 		//设置使用网络
-		pKernelData->bStartTCPSocket = true;
-
-		//设置数据库信息
-		pKernelData->bLogonDataBase = true;
-		pKernelData->bNativeDataBase = true;
-		pKernelData->bStartSQLDataBase = true;
+		pKernelData->bStartTCPSocket = false;
 
 		//设置游戏信息
 		pKernelData->uNameID = pInitData->uNameID;

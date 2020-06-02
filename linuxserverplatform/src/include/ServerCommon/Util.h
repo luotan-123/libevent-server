@@ -89,8 +89,6 @@ public:
 	static void TransString(char * pStr, int iCount, int iMaxSignCount, bool bUTF = false);
 	// 字符串哈希函数
 	static unsigned int BKDRHash(const char *str);
-	static unsigned int APHash(const char *str);
-	static unsigned int DJBHash(const char *str);
 	static bool GetScoreFromUserInfoList(int userID, char* userInfoList, long long &llScore);
 	// 校验头部
 	static bool CheckCode(UINT uReserve);

@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+// 对称加密
 class Xor
 {
 public:

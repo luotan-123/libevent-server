@@ -25,23 +25,8 @@ struct ManageInfoStruct
 	bool						bPrivate;							//是否私有房
 	char						szGameTable[31];					///信息表名字
 	char						szGameRoomName[61];					///服务器名字
-	///中心数据库信息
-	char						szSQLIP[16];						///中心数据库地址
-	char						szSQLName[61];						///中心数据库用户名字
-	char						szSQLPass[61];						///中心数据库密码
-	///登陆数据库信息
-	char						szLogonSQLIP[16];					///登陆数据库地址
-	///本地数据库信息
-	char						szNativeSQLIP[61];					///本地数据库地址
-	///混战场房间信息表
-	char						szBattleGameTable[31];
-	char						szLockTable[31];					///锁定表名字
-	char						szIPRuleTable[31];					///IP 限制表名字
-	char						szNameRuleTable[31];				///UserName限制表名字
 	///游戏信息
 	UINT						uNameID;							///游戏名字 ID
-	UINT						dwRoomRule;							///游戏设置规则
-	UINT						dwUserPower;						///游戏附加权限
 	///设置信息
 	UINT						uComType;							///游戏类型
 	UINT						uDeskType;							///游戏桌类型，主要为添加百家乐桌
@@ -60,7 +45,6 @@ struct ManageInfoStruct
 	int							iRoomSort;							///房间分类
 	int							iRoomLevel;							///房间等级
 	UINT						uDeskCount;							///游戏桌数目
-	UINT						uStopLogon;							///停止登陆房间
 	char						bCanCombineDesk;					///是否可以组桌
 
 	ManageInfoStruct()
@@ -76,9 +60,6 @@ struct KernelInfoStruct
 	UINT						uDeskPeople;						//游戏人数
 	BYTE						bMaxVer;							//软件最高版本
 	BYTE						bLessVer;							//软件最低版本
-	BYTE						bStartSQLDataBase;					//使用数据库连接
-	BYTE						bNativeDataBase;					//使用本地数据库
-	BYTE						bLogonDataBase;						//使用登陆数据库
 	BYTE						bStartTCPSocket;					//是否启动网络
 	UINT						uTimerCount;						//定时器数量
 
