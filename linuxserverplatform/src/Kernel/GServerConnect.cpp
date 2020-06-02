@@ -607,7 +607,7 @@ void* CGServerConnect::ThreadCheckConnect(void* pThreadData)
 		}
 
 		// 过一段时间执行一次
-		sleep(10);
+		sleep(15);
 	}
 
 	INFO_LOG("ThreadCheckConnect thread exit.");

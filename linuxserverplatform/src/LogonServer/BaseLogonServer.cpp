@@ -114,7 +114,7 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 	LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(logonID);
 	if (pLogonBaseInfo == nullptr)
 	{
-		ERROR_LOG("logonID 不存在");
+		ERROR_LOG("logonID 不存在，需要在数据库中配置该id");
 		return false;
 	}
 

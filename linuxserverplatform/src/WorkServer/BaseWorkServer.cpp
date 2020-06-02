@@ -104,14 +104,14 @@ bool CBaseWorkServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	}
 
 
-	//// 判断id是否配置
-	//int workID = ConfigManage()->GetWorkServerConfig().workID;
-	//LogonBaseInfo* pLogonBaseInfo = ConfigManage()->GetLogonBaseInfo(workID);
-	//if (pLogonBaseInfo == nullptr)
-	//{
-	//	ERROR_LOG("workID 不存在");
-	//	return false;
-	//}
+	// 判断id是否配置
+	int workID = ConfigManage()->GetWorkServerConfig().workID;
+	WorkServerConfig* pWorkInfo = ConfigManage()->GetWorkBaseInfo(workID);
+	if (pWorkInfo == nullptr)
+	{
+		ERROR_LOG("workID 不存在，需要在数据库中配置该id");
+		return false;
+	}
 	
 	// DB相关
 	ret = pDataHandleService->SetParameter(this, &m_SQLDataManage, &m_InitData, &m_KernelData);
