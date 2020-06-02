@@ -1,6 +1,9 @@
+# 说明
+编译环境：win10 + vs2019 + ssh + centos7，通过vs2019远程连接linux
+Documentation里面有linux开发环境安装
+
 # projects
 c++ 项目
-
 基于libevent、jemalloc的棋牌游戏服务器框架
 包含4种游戏，扑鱼、斗地主、麻将
 
