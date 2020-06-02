@@ -138,7 +138,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -160,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -171,7 +171,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -182,7 +182,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -193,7 +193,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -204,7 +204,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -215,7 +215,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/SDK/include/curl;$(RemoteRootDir)/src/SDK/include/ServerCommon;$(RemoteRootDir)/src/SDK/include/DataBase;$(RemoteRootDir)/src/SDK/include;$(RemoteRootDir)/src/SDK/include/libevent;$(RemoteRootDir)/src/SDK/include/redis;$(RemoteRootDir)/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteRootDir)/GameManage/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>

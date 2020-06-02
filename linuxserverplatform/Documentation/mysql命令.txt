@@ -2,6 +2,10 @@
 1、修改密码强度
 set global validate_password_policy=0;
 set global validate_password_length=1;
+下面是mysql8
+set global validate_password.policy=0;
+set global validate_password.length=1;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
 2、关闭自动更新
 yum -y remove mysql57-community-release-el7-10.noarch
 3、设置权限

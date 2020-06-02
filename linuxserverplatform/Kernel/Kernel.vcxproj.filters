@@ -36,77 +36,77 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\CommonHead.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Lock.h">
-      <Filter>线程锁和条件变量</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\MysqlHelper.h">
-      <Filter>数据库模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Exception.h">
-      <Filter>异常处理</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\KernelDefine.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Function.h">
-      <Filter>工具和接口</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Interface.h">
-      <Filter>工具和接口</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\basemessage.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\comstruct.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\InternalMessageDefine.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\INIFile.h">
-      <Filter>工具和接口</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\GameLogManage.h">
-      <Filter>日志与性能检测</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\log.h">
-      <Filter>日志与性能检测</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\configManage.h">
-      <Filter>系统配置</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\DataLine.h">
-      <Filter>消息队列</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\DataBase.h">
-      <Filter>数据库模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\TcpConnect.h">
-      <Filter>网络模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\GServerConnect.h">
-      <Filter>网络模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Xor.h">
-      <Filter>数据加密</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\ServerTimer.h">
+    <ClInclude Include="..\src\include\ServerCommon\ServerTimer.h">
       <Filter>定时器</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\TCPSocket.h">
-      <Filter>网络模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\WebSocket.h">
-      <Filter>网络模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\sha1.h">
+    <ClInclude Include="..\src\include\ServerCommon\base64.h">
       <Filter>工具和接口</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\base64.h">
+    <ClInclude Include="..\src\include\ServerCommon\Function.h">
       <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\INIFile.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\Interface.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\sha1.h">
+      <Filter>工具和接口</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\basemessage.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\CommonHead.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\comstruct.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\InternalMessageDefine.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\KernelDefine.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\GameLogManage.h">
+      <Filter>日志与性能检测</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\log.h">
+      <Filter>日志与性能检测</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\Xor.h">
+      <Filter>数据加密</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\DataBase.h">
+      <Filter>数据库模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\MysqlHelper.h">
+      <Filter>数据库模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\GServerConnect.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\TcpConnect.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\TCPSocket.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\WebSocket.h">
+      <Filter>网络模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\configManage.h">
+      <Filter>系统配置</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\Lock.h">
+      <Filter>线程锁和条件变量</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\DataLine.h">
+      <Filter>消息队列</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\Exception.h">
+      <Filter>异常处理</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

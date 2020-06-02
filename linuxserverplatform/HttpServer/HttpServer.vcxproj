@@ -125,7 +125,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -134,7 +134,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -143,7 +143,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -152,7 +152,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -161,7 +161,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,7 +170,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -179,7 +179,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -188,7 +188,7 @@
       <LibraryDependencies>pthread;event</LibraryDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RemoteRootDir)/src/httpserver/common;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RemoteProjectDir)/src/httpserver/common/;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

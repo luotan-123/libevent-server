@@ -68,59 +68,59 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Util.h">
-      <Filter>工具类</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\Define.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\ErrorCode.h">
-      <Filter>公共定义</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\MyCurl.h">
-      <Filter>HttpClient</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\NewMessageDefine.h">
-      <Filter>协议模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\PlatformMessage.h">
-      <Filter>协议模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\BillManage.h">
-      <Filter>数据流水</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisBase.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisCenter.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisCommon.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLoader.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisLogon.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\RedisPHP.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\MD5.h">
-      <Filter>加密工具</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\tableDefine.h">
-      <Filter>Redis模块</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\AsyncEventMsg.h">
-      <Filter>协议模块</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h">
       <Filter>协议模块</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SDK\include\ServerCommon\HttpServer.h">
+    <ClInclude Include="..\src\include\ServerCommon\MyCurl.h">
+      <Filter>HttpClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\HttpServer.h">
       <Filter>HttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RedisCenter.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RedisCommon.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RedisLoader.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RedisLogon.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RedisPHP.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RedisBase.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\tableDefine.h">
+      <Filter>Redis模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\Util.h">
+      <Filter>工具类</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\Define.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\ErrorCode.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\MD5.h">
+      <Filter>加密工具</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\BillManage.h">
+      <Filter>数据流水</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\AsyncEventMsg.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\NewMessageDefine.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\PlatformMessage.h">
+      <Filter>协议模块</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
