@@ -1,6 +1,9 @@
 # 说明
-编译环境：win10 + vs2019 + ssh + centos7，通过vs2019远程连接linux
-Documentation里面有linux开发环境安装
+编译环境：win10 + vs2019 + ssh + centos7
+
+vs2019必须远程连接linux
+
+Documentation里面，有linux开发环境安装相关文档
 
 # projects
 c++ 项目
