@@ -10,7 +10,7 @@
 #include "Exception.h"
 #include "PlatformMessage.h"
 #include "NewMessageDefine.h"
-
+#include "lua.hpp"
 
 //基础数据管理类
 class CBaseWorkServer : public IServerSocketService, public IAsynThreadResultService
@@ -32,6 +32,7 @@ public:
 	CTcpConnect* m_pTcpConnect;				//与中心服务器的连接
 	CGServerConnect* m_pGServerConnect;		//与网关服务器的连接
 	CServerTimer* m_pServerTimer;			//服务器定时器
+	lua_State* m_pLuaState;					//lua堆栈
 
 public:
 	CBaseWorkServer();
@@ -94,4 +95,12 @@ private:
 private:
 	//处理中心服消息
 	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID) = 0;
+
+
+	//lua相关接口
+public:
+	//初始化
+	bool InitLua();
+	//加载lua文件
+	bool LoadAllLuaFile();
 };

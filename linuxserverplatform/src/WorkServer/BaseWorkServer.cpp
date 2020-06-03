@@ -26,6 +26,7 @@ CBaseWorkServer::CBaseWorkServer()
 	m_pTcpConnect = NULL;
 	m_pServerTimer = NULL;
 	m_pGServerConnect = NULL;
+	m_pLuaState = nullptr;
 }
 
 CBaseWorkServer::~CBaseWorkServer()
@@ -35,6 +36,7 @@ CBaseWorkServer::~CBaseWorkServer()
 	SAFE_DELETE(m_pTcpConnect);
 	SafeDeleteArray(m_pServerTimer);
 	SAFE_DELETE(m_pGServerConnect);
+	SAFE_DELETE(m_pLuaState);
 }
 
 //初始化函数 
@@ -70,6 +72,20 @@ bool CBaseWorkServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	if (!ret)
 	{
 		ERROR_LOG("PreInitParameter failed");
+		return false;
+	}
+
+	// 初始化lua相关
+	ret = InitLua();
+	if (!ret)
+	{
+		CON_ERROR_LOG("InitLua failed");
+		return false;
+	}
+	ret = LoadAllLuaFile();
+	if (!ret)
+	{
+		CON_ERROR_LOG("LoadAllLuaFile failed");
 		return false;
 	}
 
@@ -194,6 +210,9 @@ bool CBaseWorkServer::UnInit()
 	SafeDeleteArray(m_pServerTimer);
 	SAFE_DELETE(m_pGServerConnect);
 	SAFE_DELETE(m_pTcpConnect);
+
+	//删除lua堆栈
+	SAFE_DELETE(m_pLuaState);
 
 	//调用接口
 	OnUnInit();
@@ -585,4 +604,38 @@ void* CBaseWorkServer::TcpConnectThread(void* pThreadData)
 	}
 
 	pthread_exit(NULL);
+}
+
+//////////////////////////////////lua相关////////////////////////////////////////
+bool CBaseWorkServer::InitLua()
+{
+	m_pLuaState = luaL_newstate();
+	if (!m_pLuaState) 
+	{
+		CON_ERROR_LOG("luaL_newstate failed!\n");
+		return false;
+	}
+
+	luaL_openlibs(m_pLuaState);
+
+	return true;
+}
+
+bool CBaseWorkServer::LoadAllLuaFile()
+{
+	if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
+	{
+		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+		return false;
+	}
+
+	/*if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
+	{
+		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+		return false;
+	}*/
+
+	INFO_LOG("load all lua file success.");
+
+	return true;
 }

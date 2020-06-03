@@ -34,6 +34,13 @@ bool CGameWorkManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT u
 		return false;
 	}
 
+	// 测试调用lua
+
+
+
+
+
+
 	switch (pNetHead->uMainID)
 	{
 	case MSG_ASS_LOGON_DESK:
