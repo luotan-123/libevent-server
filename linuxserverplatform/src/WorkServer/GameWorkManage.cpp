@@ -34,6 +34,9 @@ bool CGameWorkManage::OnSocketRead(NetMessageHead* pNetHead, void* pData, UINT u
 		return false;
 	}
 
+	// 性能统计
+	AUTOCOST("message cost assistID: Mainid=%d AssistantID=%d", pNetHead->uMainID, pNetHead->uAssistantID);
+
 	// 测试调用lua
 
 
