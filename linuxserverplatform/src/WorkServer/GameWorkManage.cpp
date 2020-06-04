@@ -108,6 +108,52 @@ bool CGameWorkManage::OnStart()
 bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 {
 	AUTOCOST("timerID=%d", uTimerID);
+	lua_pop(m_pLuaState, -1);
+
+
+	lua_getglobal(m_pLuaState, "g_isdubug");
+	printf("g_isdubug=%s\n", lua_tostring(m_pLuaState, -1));
+	lua_pop(m_pLuaState, 1);
+
+
+	// 是否 从新加载文件
+	static int df = 0;
+	printf("计数：%d\n", df);
+	if (df % 8 == 7)
+	{
+		printf("加载文件\n");
+		if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
+		{
+			CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+			return false;
+		}
+	}
+	df++;
+
+	// 测试调用lua
+	lua_getglobal(m_pLuaState, "testload");
+	lua_pushinteger(m_pLuaState, 123);
+	if (lua_pcall(m_pLuaState, 1, 0, 0))
+	{
+		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
+		lua_pop(m_pLuaState, 1);
+	}
+	//printf("%d\n", lua_tointeger(m_pLuaState, -1));
+
+
+	printf("栈顶：%d\n", lua_gettop(m_pLuaState));
+
+	lua_getglobal(m_pLuaState, "testreturn");
+	if (lua_pcall(m_pLuaState, 0, 4, 0))
+	{
+		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
+		lua_pop(m_pLuaState, 1);
+	}
+	printf("%s\n", lua_tostring(m_pLuaState, 1));
+	printf("%s\n", lua_tostring(m_pLuaState, 2));
+	printf("%s\n", lua_tostring(m_pLuaState, 3));
+	printf("%s\n", lua_tostring(m_pLuaState, 4));
+	lua_pop(m_pLuaState, 4);
 
 	switch (uTimerID)
 	{
@@ -216,8 +262,6 @@ bool CGameWorkManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConne
 //////////////////////////////////////////////////////////////////////
 bool CGameWorkManage::OnHandleGameDeskMessage(int assistID, void* pData, int size, unsigned int socketIdx, int userID)
 {
-	AUTOCOST("GameDesk message cost assistID: %d", assistID);
-
 	if (userID <= 0)
 	{
 		ERROR_LOG("没有绑定玩家id的异常 socketIdx:%d", socketIdx);
@@ -964,8 +1008,6 @@ bool CGameWorkManage::OnHandleUserEnterDesk(int userID, void* pData, int size, u
 
 bool CGameWorkManage::OnHandleOtherMessage(int assistID, void* pData, int size, unsigned int socketIdx, int userID)
 {
-	AUTOCOST("other message cost assistID: %d", assistID);
-
 	if (userID <= 0)
 	{
 		ERROR_LOG("没有绑定玩家id的异常 socketIdx:%d", socketIdx);
@@ -1833,6 +1875,9 @@ bool CGameWorkManage::IsDistributedSystemCalculate(long long calcID)
 ////////////////////////////////处理中心服消息//////////////////////////////////////////
 bool CGameWorkManage::OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID)
 {
+	// 性能统计
+	AUTOCOST("OnCenterServerMessage cost assistID: msgID=%u", msgID);
+
 	switch (msgID)
 	{
 	case CENTER_MESSAGE_COMMON_REPEAT_ID:

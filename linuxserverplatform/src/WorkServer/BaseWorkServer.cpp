@@ -621,6 +621,17 @@ bool CBaseWorkServer::InitLua()
 	return true;
 }
 
+static int l_redis(lua_State* l)
+{
+	const char* cmd = lua_tostring(l, -1);
+	char buf[10] = "luotan";
+
+
+	lua_pushstring(l, buf);
+
+	return 1;
+}
+
 bool CBaseWorkServer::LoadAllLuaFile()
 {
 	if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
@@ -634,6 +645,34 @@ bool CBaseWorkServer::LoadAllLuaFile()
 		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
 		return false;
 	}*/
+
+	lua_register(m_pLuaState, "c_rediscmd", l_redis);
+
+	///////////////////////////////
+	lua_getglobal(m_pLuaState, "add");
+	lua_pushinteger(m_pLuaState, 102);
+	lua_pushinteger(m_pLuaState, 100);
+
+	int val = lua_pcall(m_pLuaState, 2, 1, 0);
+	if (val)
+	{
+		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
+		lua_pop(m_pLuaState, 1);
+	}
+
+	//printf("%s\n", lua_tostring(m_pLuaState, -1));
+
+
+	/////////////////////////////////////////////////
+	lua_getglobal(m_pLuaState, "luotan");
+	lua_pushinteger(m_pLuaState, 123456);
+	if (lua_pcall(m_pLuaState, 1, 1, 0))
+	{
+		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
+		lua_pop(m_pLuaState, 1);
+	}
+
+	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
 
 	INFO_LOG("load all lua file success.");
 
