@@ -29,7 +29,8 @@ public:
 	ServerDllInfoStruct						m_DllInfo;					//DLL信息
 	CTCPSocketManage						m_TCPSocket;				//TCP网络模块
 	CWebSocketManage						m_WebSocket;				//websocket网络模块
-	CDataBaseManage							m_SQLDataManage;			//数据库模块
+	CDataBaseManage							m_SQLDataManage;			//数据库模块（异步）
+	CMysqlHelper*							m_pMysqlHelper;				//数据库模块（同步）
 	CRedisLogon* m_pRedis;					//redis
 	CRedisPHP* m_pRedisPHP;					//连接php的redis server
 	CTcpConnect* m_pTcpConnect;				//与中心服务器的连接

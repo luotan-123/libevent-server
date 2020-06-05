@@ -713,6 +713,60 @@ void CRedisBase::SetDBManage(CDataBaseManage* pDBManage)
 	}
 }
 
+redisContext* CRedisBase::GetContext()
+{
+	return m_pContext;
+}
+
+bool CRedisBase::PushSqlToSecondList(const char* sql, ...)
+{
+	if (sql == nullptr)
+	{
+		return false;
+	}
+
+	char buf[MAX_LOG_BUF_SIZE] = "";
+
+	// 参数
+	va_list args;
+	va_start(args, sql);
+
+	vsprintf(buf + strlen(buf), sql, args);
+	va_end(args);
+
+
+	const char* argv[8] = { NULL };
+	size_t lens[8] = { 0 };
+	int count = 0;
+
+	argv[count++] = "RPUSH";
+	argv[count++] = TBL_SAVE_DATA_SECOND;
+	argv[count++] = buf;
+
+	for (int i = 0; i < count; i++)
+	{
+		lens[i] = strlen(argv[i]);
+	}
+
+	redisReply* pReply = (redisReply*)redisCommandArgv(m_pContext, count, argv, lens);
+	if (!pReply)
+	{
+		ERROR_LOG("redisCommandArgv failed");
+		return false;
+	}
+
+	if (pReply->type == REDIS_REPLY_ERROR)
+	{
+		ERROR_LOG("redisCommandArgv failed errstr=%s", pReply->str);
+		freeReplyObject(pReply);
+		return false;
+	}
+
+	freeReplyObject(pReply);
+
+	return true;
+}
+
 //////////////////////////////////////////redis lock///////////////////////////////////////////////////////////////////
 CRedisLock::CRedisLock(redisContext* pContext, const char* key, int sleepTime /*= 0*/, bool bAutoLock/* = true*/)
 {

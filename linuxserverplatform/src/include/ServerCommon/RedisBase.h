@@ -41,7 +41,7 @@ public:
 	// 初始化
 	virtual bool Init() = 0;
 	virtual bool Stop() = 0;
-
+	
 public:
 	static std::string MakeKey(const char* tableName, long long id);
 	// 合成redis中的key"tableName|id"形式
@@ -88,6 +88,8 @@ public:
 	long long GetIncrKeyIndex(const char* key);
 	// 数据库
 	void SetDBManage(CDataBaseManage* pDBManage);
+	// 获取redis连接信息
+	redisContext* GetContext();
 protected:
 	// 获取字段扩展模式
 	int  GetExtendMode(const char* key);
@@ -102,6 +104,9 @@ public:
 	bool hmset(const char* table, int id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
 	bool hmset(const char* table, long long id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
 	bool hmset(const char* table, const char* id, std::unordered_map<std::string, std::string>& fieldInfoUMap, int mode = REDIS_EXTEND_MODE_DEFAULT, const char* updateSet = NULL);
+
+	// 投递一个sql语句到队列
+	bool PushSqlToSecondList(const char * sql, ...);
 public:
 	int m_sleepTime;
 protected:

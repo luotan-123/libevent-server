@@ -83,6 +83,11 @@ bool CCenterServerManage::OnStart()
 
 	InitRounteCheckEvent();
 
+	// 清理数据相关数据
+	m_pRedis->PushSqlToSecondList("UPDATE roombaseinfo set status=0");
+	m_pRedis->PushSqlToSecondList("UPDATE logonbaseinfo set status=0");
+	m_pRedis->PushSqlToSecondList("UPDATE workbaseinfo set status=0");
+
 	INFO_LOG("CenterServerManage OnStart end.");
 
 	return true;
@@ -219,10 +224,16 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		}
 
 		m_pRedis->SetLogonServerStatus(serverInfo.serverID, 0);
+
+		// 修改数据库状态
+		m_pRedis->PushSqlToSecondList("UPDATE logonbaseinfo set status=0 where logonID=%d", serverInfo.serverID);
 	}
 	else if (serverInfo.serverType == SERVICE_TYPE_LOADER) //游戏服退出集群
 	{
 		m_pRedis->SetRoomServerStatus(serverInfo.serverID, 0);
+
+		// 修改数据库状态
+		m_pRedis->PushSqlToSecondList("UPDATE roombaseinfo set status=0 where roomID=%d", serverInfo.serverID);
 	}
 	else if (serverInfo.serverType == SERVICE_TYPE_WORK)//逻辑服
 	{
@@ -245,6 +256,9 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 
 		//重新发送集群信息
 		SendDistributedSystemInfo(SERVICE_TYPE_WORK);
+
+		// 修改数据库状态
+		m_pRedis->PushSqlToSecondList("UPDATE workbaseinfo set status=0 where workID=%d", serverInfo.serverID);
 	}
 
 	INFO_LOG("====== serverType:%d,serverID:%d 退出集群系统 网关数量:%d 逻辑服数量:%d=========",
@@ -1429,16 +1443,22 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 		m_logonGroupSocket.emplace_back(uIndex, pBufferevent);
 
 		SendDistributedSystemInfo(SERVICE_TYPE_LOGON);
+
+		m_pRedis->PushSqlToSecondList("UPDATE logonbaseinfo set status=1 where logonID=%d", pMessage->serverID);
 	}
 	else if (pMessage->serverType == SERVICE_TYPE_LOADER)//游戏服
 	{
 		m_pRedis->SetRoomServerStatus(pMessage->serverID, 1);
+
+		m_pRedis->PushSqlToSecondList("UPDATE roombaseinfo set status=1 where roomID=%d", pMessage->serverID);
 	}
 	else if (pMessage->serverType == SERVICE_TYPE_WORK)//逻辑服
 	{
 		m_workGroupSocket.emplace_back(uIndex, pBufferevent);
 
 		SendDistributedSystemInfo(SERVICE_TYPE_WORK);
+
+		m_pRedis->PushSqlToSecondList("UPDATE workbaseinfo set status=1 where workID=%d", pMessage->serverID);
 	}
 
 	INFO_LOG("====== serverType:%d,serverID:%d 加入集群系统 网关数量:%d 逻辑服数量:%d=========",

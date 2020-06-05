@@ -86,6 +86,9 @@
 #define TBL_SIGN_UP_MATCH_PEOPLE		"curSignUpMatchPeople"		// （实时赛）当前报名人数	curSignUpMatchPeople|gameID,id	【zSet】  按照报名时间排序
 #define TBL_SIGN_UP_TIME_MATCH_PEOPLE	"curSignUpTimeMatchPeople"	// （定时赛）当前报名人数	curSignUpTimeMatchPeople|id		【zSet】  按照报名时间排序
 
+// 其它
+#define TBL_SAVE_DATA_SECOND 	"save_data_second"			// 里面保存的是sql语句 list
+
 ////////////////////////////常量定义//////////////////////////////////////////
 #define REDIS_STR_DEFAULT		"aa"	// redis中字符串默认值
 #define	USER_IDENTITY_TYPE_SUPER	1	// 超端

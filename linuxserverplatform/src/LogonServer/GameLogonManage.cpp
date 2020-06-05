@@ -504,6 +504,11 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 		m_socketMatch.erase(userID);
 	}
 
+	// 修改数据库相关数据
+	m_pRedis->PushSqlToSecondList("UPDATE logonbaseinfo set curPeople=%d,curWebSocketPeople=%d,socketCount=%d,webSocketCount=%d where logonID=%d",
+		m_pUserManage->GetTcpSocketUserCount(), m_pUserManage->GetWebSocketUserCount(), m_TCPSocket.GetCurSocketSize(),
+		m_WebSocket.GetCurSocketSize(), ConfigManage()->GetLogonServerConfig().logonID);
+
 	return true;
 }
 
@@ -2120,6 +2125,10 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 		m_workServerFDVec.push_back(socketIdx);
 	}
 
+	// 修改数据库相关数据
+	m_pRedis->PushSqlToSecondList("UPDATE logonbaseinfo set curPeople=%d,curWebSocketPeople=%d,socketCount=%d,webSocketCount=%d where logonID=%d",
+		m_pUserManage->GetTcpSocketUserCount(), m_pUserManage->GetWebSocketUserCount(), m_TCPSocket.GetCurSocketSize(),
+		m_WebSocket.GetCurSocketSize(), ConfigManage()->GetLogonServerConfig().logonID);
 
 	INFO_LOG("【serverID=%d, serverType=%d】已经连接", pMessage->serverID, pMessage->serverType);
 
@@ -2640,6 +2649,11 @@ void CGameLogonManage::OnUserLogon(const UserData& userData)
 	{
 		m_pRedisPHP->AddUserResNums(userData.userID, "loginLobbyCount", 1);
 	}
+
+	// 修改数据库相关数据
+	m_pRedis->PushSqlToSecondList("UPDATE logonbaseinfo set curPeople=%d,curWebSocketPeople=%d,socketCount=%d,webSocketCount=%d where logonID=%d",
+		m_pUserManage->GetTcpSocketUserCount(), m_pUserManage->GetWebSocketUserCount(), m_TCPSocket.GetCurSocketSize(), 
+		m_WebSocket.GetCurSocketSize(), ConfigManage()->GetLogonServerConfig().logonID);
 }
 
 void CGameLogonManage::OnUserLogout(int userID)
@@ -3163,7 +3177,7 @@ bool CGameLogonManage::IsIpRegister(const OtherConfig& otherConfig, const char* 
 	CMysqlHelper::MysqlData dataSet;
 	try
 	{
-		m_SQLDataManage.m_pMysqlHelper->queryRecord(sql, dataSet);
+		m_pMysqlHelper->queryRecord(sql, dataSet);
 	}
 	catch (MysqlHelper_Exception & excep)
 	{

@@ -1244,6 +1244,8 @@ void CGameWorkManage::OnNormalTimer()
 		return;
 	}
 
+	ExecuteSqlSecond();
+
 	// 检查是否跨天
 	time_t currTime = time(NULL);
 	int currHour = CUtil::GetHourTimeStamp(currTime);
@@ -2082,4 +2084,59 @@ void CGameWorkManage::SendHTTPMessage(int userID, const std::string& url, BYTE p
 	strcpy(asyncEvent.url, url.c_str());
 
 	m_SQLDataManage.PushLine(&asyncEvent.dataLineHead, sizeof(AsyncEventMsgHTTP), ASYNC_EVENT_HTTP, userID, postType);
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CGameWorkManage::ExecuteSqlSecond()
+{
+	// 每秒执行一次，每次取MAX_SAVE_DATA_COUNT这么多数据去保存
+	const int MAX_SAVE_DATA_COUNT = 64;
+	int iSaveCount = 0;
+	AsyncEventMsgSqlStatement msg;
+
+	while (true)
+	{
+		redisReply* pReply = (redisReply*)redisCommand(m_pRedis->GetContext(), "LPOP %s", TBL_SAVE_DATA_SECOND);
+		if (pReply == NULL)
+		{
+			break;
+		}
+
+		if (pReply->type == REDIS_REPLY_NIL)
+		{
+			freeReplyObject(pReply);
+			break;
+		}
+
+		const char* sql = pReply->str;
+		if (!sql)
+		{
+			freeReplyObject(pReply);
+			continue;
+		}
+
+		size_t len = strlen(sql);
+		if (len >= MAX_SQL_STATEMENT_SIZE)
+		{
+			ERROR_LOG("sql太长：%s", sql);
+			freeReplyObject(pReply);
+			continue;
+		}
+
+		strcpy(msg.sql, sql);
+
+		if (!m_SQLDataManage.PushLine(&msg.dataLineHead, sizeof(msg) - sizeof(msg.sql) + len, ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_LOG, 0))
+		{
+			ERROR_LOG("投递队列失败：%s", sql);
+		}
+
+		iSaveCount++;
+
+		freeReplyObject(pReply);
+
+		if (iSaveCount >= MAX_SAVE_DATA_COUNT) //每次最多处理数据量
+		{
+			break;
+		}
+	}
 }

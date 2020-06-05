@@ -14,7 +14,7 @@ enum WorkServerTimerID
 
 const int CHECK_REDIS_SAVE_DB = 61;					// 定期存储redis数据(s)
 const int CHECK_REDIS_CONNECTION_SECS = 307;		// 定期检查redis连接(s)
-const int NORMAL_TIMER_SECS = 3;					// 通用定时器(s)
+const int NORMAL_TIMER_SECS = 1;					// 通用定时器(s)
 
 
 class CGameWorkManage : public CBaseWorkServer
@@ -120,6 +120,8 @@ private:
 	void ClearDataBase();
 	// 生成新表记录账单数据
 	void AutoCreateNewTable(bool start);
+	// 异步执行sql语句
+	void ExecuteSqlSecond();
 
 	// 中心服消息相关
 private:

@@ -25,6 +25,7 @@ CBaseLogonServer::CBaseLogonServer()
 	m_pRedisPHP = NULL;
 	m_pTcpConnect = NULL;
 	m_pServerTimer = NULL;
+	m_pMysqlHelper = nullptr;
 }
 
 CBaseLogonServer::~CBaseLogonServer()
@@ -144,6 +145,13 @@ bool CBaseLogonServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService*
 		return false;
 	}
 
+	m_pMysqlHelper = new CMysqlHelper;
+	if (!m_pMysqlHelper)
+	{
+		ERROR_LOG("create m_pMysqlHelper object failed");
+		return false;
+	}
+
 	// 中心服务器连接
 	m_pTcpConnect = new CTcpConnect;
 	if (!m_pTcpConnect)
@@ -211,6 +219,7 @@ bool CBaseLogonServer::UnInit()
 	OnUnInit();
 
 	SAFE_DELETE(m_pTcpConnect);
+	SafeDelete(m_pMysqlHelper);
 
 	return true;
 }
@@ -237,6 +246,19 @@ bool CBaseLogonServer::Start()
 	if (!ret)
 	{
 		ERROR_LOG("SQLDataManage start failed");
+		return false;
+	}
+
+	// 同步读写数据库模块
+	m_pMysqlHelper->init(ConfigManage()->GetDBConfig(DB_TYPE_COMMON).ip, ConfigManage()->GetDBConfig(DB_TYPE_COMMON).user,
+		ConfigManage()->GetDBConfig(DB_TYPE_COMMON).passwd, ConfigManage()->GetDBConfig(DB_TYPE_COMMON).dbName, "", ConfigManage()->GetDBConfig(DB_TYPE_COMMON).port);
+	try
+	{
+		m_pMysqlHelper->connect();
+	}
+	catch (MysqlHelper_Exception & excep)
+	{
+		ERROR_LOG("连接主数据库失败:%s", excep.errorInfo.c_str());
 		return false;
 	}
 
