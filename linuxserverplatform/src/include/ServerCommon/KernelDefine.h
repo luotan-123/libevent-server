@@ -83,7 +83,7 @@ enum ServiceType
 enum ThreadType
 {
 	THREAD_TYPE_MAIN = 1,	// 主线程
-	THREAD_TYPE_LOGIC = 2,	// 逻辑线程
+	THREAD_TYPE_LOGIC = 2,	// 业务逻辑线程
 	THREAD_TYPE_ASYNC = 3,	// 异步线程
 	THREAD_TYPE_ACCEPT = 4,	// 连接线程
 	THREAD_TYPE_RECV = 5,	// 接收线程

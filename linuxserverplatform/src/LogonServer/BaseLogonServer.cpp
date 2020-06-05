@@ -495,7 +495,7 @@ void* CBaseLogonServer::LineDataHandleThread(void* pThreadData)
 
 	sleep(1);
 
-	INFO_LOG("LineDataHandleThread start...");
+	INFO_LOG("业务逻辑线程启动成功...");
 
 	//数据缓存
 	DataLineHead* pDataLineHead = NULL;

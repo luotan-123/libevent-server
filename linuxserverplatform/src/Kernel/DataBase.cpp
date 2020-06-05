@@ -123,7 +123,7 @@ void* CDataBaseManage::DataServiceThread(void* pThreadData)
 
 	sleep(1);
 
-	INFO_LOG("DataServiceThread starting...");
+	//INFO_LOG("DataServiceThread starting...");
 
 	while (pDataManage->m_bRun == true)
 	{
