@@ -55,7 +55,7 @@ int main()
 	ret = ConfigManage()->Init();
 	if (!ret)
 	{
-		CON_ERROR_LOG("ConfigManage::Init error! view log file !!!");
+		CON_ERROR_LOG("ConfigManage::Init error! 请查看启动日志 !!!");
 		return -1;
 	}
 

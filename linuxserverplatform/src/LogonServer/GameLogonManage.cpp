@@ -122,6 +122,7 @@ bool CGameLogonManage::OnStart()
 	m_webSocketInfoMap.resize(2 * m_uMaxWebPeople);
 	m_socketIndexVec.resize(Max_(m_uMaxPeople, m_uMaxWebPeople));
 	m_workServerFDVec.clear();
+	m_workServerIDSet.clear();
 
 	if (m_pRedis)
 	{
@@ -362,6 +363,7 @@ bool CGameLogonManage::OnStop()
 	m_socketInfoMap.clear();
 	m_webSocketInfoMap.clear();
 	m_workServerFDVec.clear();
+	m_workServerIDSet.clear();
 
 	return true;
 }
@@ -440,6 +442,8 @@ bool CGameLogonManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uConn
 			m_workServerFDVec.erase(itr);
 		}
 
+		// 删除id
+		m_workServerIDSet.erase(socketInfo.identityID);
 	}
 	else if (socketInfo.type == LOGON_SERVER_SOCKET_TYPE_USER)
 	{
@@ -2100,6 +2104,17 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 	}
 	else if (pMessage->serverType == SERVICE_TYPE_WORK)
 	{
+		if (m_workServerIDSet.count(pMessage->serverID) > 0)
+		{
+			ERROR_LOG("逻辑服（%d）已经登录过了", pMessage->serverID);
+
+			// 返回true不断socket
+			return false;
+		}
+
+		// 添加id
+		m_workServerIDSet.insert(pMessage->serverID);
+
 		// socketIdx和gserver关联
 		m_socketInfoMap[socketIdx] = LogonServerSocket(LOGON_SERVER_SOCKET_TYPE_WORK_SERVER, pMessage->serverID);
 		m_workServerFDVec.push_back(socketIdx);
@@ -3302,7 +3317,7 @@ bool CGameLogonManage::OnCenterRepeatIDMessage(void* pData, int size)
 		return false;
 	}
 
-	ERROR_LOG("################ 服务器唯一的logonID重复(logonID = %d)，启动失败，请重新配置logonID ！！！ ####################", ConfigManage()->GetLogonServerConfig().logonID);
+	CON_ERROR_LOG("################ 服务器唯一的logonID重复(logonID = %d)，启动失败，请重新配置logonID ！！！ ####################", ConfigManage()->GetLogonServerConfig().logonID);
 
 	exit(0);
 

@@ -163,6 +163,8 @@ public: //中心服发送消息
 
 	//中心服消息
 	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHead, void* pData, UINT size, int userID);
+	// 服务器id重复处理
+	bool OnCenterRepeatIDMessage(void* pData, int size);
 	// 资源变化
 	bool OnCenterMessageResourceChange(void* pData, int size, int userID);
 	// 管理员解散牌桌

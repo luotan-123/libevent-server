@@ -2706,6 +2706,11 @@ bool CGameMainManage::OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHea
 
 	switch (msgID)
 	{
+	case CENTER_MESSAGE_COMMON_REPEAT_ID:
+	{
+		OnCenterRepeatIDMessage(pData, size);
+		return true;
+	}
 	case CENTER_MESSAGE_COMMON_RESOURCE_CHANGE:
 	{
 		OnCenterMessageResourceChange(pData, size, userID);
@@ -2744,6 +2749,20 @@ bool CGameMainManage::OnCenterServerMessage(UINT msgID, NetMessageHead * pNetHea
 	default:
 		break;
 	}
+	return true;
+}
+
+bool CGameMainManage::OnCenterRepeatIDMessage(void* pData, int size)
+{
+	if (size != 0)
+	{
+		return false;
+	}
+
+	CON_ERROR_LOG("################ roomID=%d已经启动，导致启动失败 ！！！ ####################", GetRoomID());
+
+	exit(0);
+
 	return true;
 }
 

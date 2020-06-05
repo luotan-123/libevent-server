@@ -41,7 +41,7 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 
 	if (m_DataListSize > MAX_DATALINE_LEN)
 	{
-		ERROR_LOG("队列已满(%d)\n", MAX_DATALINE_LEN);
+		ERROR_LOG("队列已满,maxsize=%d", MAX_DATALINE_LEN);
 		return 0;
 	}
 

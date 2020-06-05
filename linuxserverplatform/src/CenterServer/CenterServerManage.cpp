@@ -224,7 +224,7 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 	{
 		m_pRedis->SetRoomServerStatus(serverInfo.serverID, 0);
 	}
-	else if (serverInfo.serverType == SERVICE_TYPE_LOADER)//逻辑服
+	else if (serverInfo.serverType == SERVICE_TYPE_WORK)//逻辑服
 	{
 		auto itr = m_workGroupSocket.begin();
 		for (; itr != m_workGroupSocket.end(); itr++)
@@ -244,10 +244,11 @@ bool CCenterServerManage::OnSocketClose(ULONG uAccessIP, UINT socketIdx, UINT uC
 		m_workGroupSocket.erase(itr);
 
 		//重新发送集群信息
-		SendDistributedSystemInfo(SERVICE_TYPE_LOGON);
+		SendDistributedSystemInfo(SERVICE_TYPE_WORK);
 	}
 
-	INFO_LOG("====== serverType:%d,serverID:%d退出集群 登录服集群数量:%d=========", serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size());
+	INFO_LOG("====== serverType:%d,serverID:%d 退出集群系统 网关数量:%d 逻辑服数量:%d=========",
+		serverInfo.serverType, serverInfo.serverID, m_logonGroupSocket.size(), m_workGroupSocket.size());
 
 	return true;
 }
@@ -1409,7 +1410,7 @@ bool CCenterServerManage::OnHandleCommonServerVerifyMessage(void* pData, UINT si
 
 	if (m_serverToSocketMap.find(serverInfo) != m_serverToSocketMap.end())
 	{
-		ERROR_LOG("####子服务器ID重复,pMessage->serverID = %d####", pMessage->serverID);
+		ERROR_LOG("子服务器ID重复,serverType=%d,serverID=%d", pMessage->serverType, pMessage->serverID);
 		SendData(uIndex, CENTER_MESSAGE_COMMON_REPEAT_ID, NULL, 0, 0, pBufferevent);
 		return false;
 	}

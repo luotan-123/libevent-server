@@ -108,20 +108,20 @@ bool CGameWorkManage::OnStart()
 bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 {
 	AUTOCOST("timerID=%d", uTimerID);
+
 	lua_pop(m_pLuaState, -1);
 
 
 	lua_getglobal(m_pLuaState, "g_isdubug");
-	printf("g_isdubug=%s\n", lua_tostring(m_pLuaState, -1));
+	//printf("g_isdubug=%s\n", lua_tostring(m_pLuaState, -1));
 	lua_pop(m_pLuaState, 1);
-
 
 	// 是否 从新加载文件
 	static int df = 0;
-	printf("计数：%d\n", df);
+	//printf("计数：%d\n", df);
 	if (df % 8 == 7)
 	{
-		printf("加载文件\n");
+		//printf("加载文件\n");
 		if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
 		{
 			CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
@@ -140,8 +140,7 @@ bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 	}
 	//printf("%d\n", lua_tointeger(m_pLuaState, -1));
 
-
-	printf("栈顶：%d\n", lua_gettop(m_pLuaState));
+	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
 
 	lua_getglobal(m_pLuaState, "testreturn");
 	if (lua_pcall(m_pLuaState, 0, 4, 0))
@@ -149,11 +148,13 @@ bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
 		lua_pop(m_pLuaState, 1);
 	}
-	printf("%s\n", lua_tostring(m_pLuaState, 1));
+	/*printf("%s\n", lua_tostring(m_pLuaState, 1));
 	printf("%s\n", lua_tostring(m_pLuaState, 2));
 	printf("%s\n", lua_tostring(m_pLuaState, 3));
-	printf("%s\n", lua_tostring(m_pLuaState, 4));
+	printf("%s\n", lua_tostring(m_pLuaState, 4));*/
 	lua_pop(m_pLuaState, 4);
+
+
 
 	switch (uTimerID)
 	{
@@ -1914,7 +1915,7 @@ bool CGameWorkManage::OnCenterRepeatIDMessage(void* pData, int size)
 		return false;
 	}
 
-	ERROR_LOG("################ 服务器唯一的workID重复(workID = %d)，启动失败，请重新配置workID ！！！ ####################", ConfigManage()->GetWorkServerConfig().workID);
+	CON_ERROR_LOG("################ 服务器唯一的workID重复(workID = %d)，启动失败，请重新配置workID ！！！ ####################", ConfigManage()->GetWorkServerConfig().workID);
 
 	exit(0);
 

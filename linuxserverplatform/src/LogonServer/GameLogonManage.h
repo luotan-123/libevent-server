@@ -63,6 +63,7 @@ private:
 	time_t						m_lastNormalTimerTime;
 	std::vector<UINT>			m_socketIndexVec;		// socket索引，遍历在线tcpsocket需要
 	std::vector<UINT>			m_workServerFDVec;		// 连接在线的逻辑服务器
+	std::unordered_set<int>		m_workServerIDSet;		// 连接网关的逻辑服务器的id集合，为了方便查找重复
 
 private:
 	std::set<UINT>				m_socketMatch;			// 在比赛场相关页面的玩家

@@ -324,7 +324,7 @@ public:
 	bool OnUserRequsetGameBegin(int userID);
 
 	// 玩家数据相关
-protected:
+public:
 	// 通过座位号获取玩家ID
 	int GetUserIDByDeskStation(BYTE deskStation);
 	// 通过玩家ID获取座位号

@@ -107,7 +107,7 @@ int main()
 	ret = ConfigManage()->Init();
 	if (!ret)
 	{
-		CON_ERROR_LOG("ConfigManage::Init error! view log file !!!");
+		CON_ERROR_LOG("ConfigManage::Init error! 请查看启动日志 !!!");
 		return -1;
 	}
 
@@ -117,7 +117,7 @@ int main()
 	// 初始化服务
 	if (!g_CenterServerModule.InitService(&Init))
 	{
-		CON_ERROR_LOG("InitService Error ! view log file !!! ");
+		CON_ERROR_LOG("InitService Error ! 请查看启动日志 !!! ");
 		return -1;
 	}
 
@@ -125,7 +125,7 @@ int main()
 	UINT errCode = 0;
 	if (!g_CenterServerModule.StartService(errCode))
 	{
-		CON_ERROR_LOG("Start Service Failed ,Error Code:%X . view log file !!!\n", errCode);
+		CON_ERROR_LOG("Start Service Failed ,Error Code:%X . 请查看启动日志 !!!\n", errCode);
 		return -1;
 	}
 
