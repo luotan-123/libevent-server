@@ -71,8 +71,8 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 
 		if (threadType == THREAD_TYPE_MAIN)		// 主线程
 		{
-			errfileName += servername + "_sys";
-			costFileName += servername + "_sys_cost";
+			errfileName += servername + "_main";
+			costFileName += servername + "_main_cost";
 		}
 		else if (threadType == THREAD_TYPE_LOGIC)	// 逻辑线程(每个游戏都是单独的)
 		{
@@ -83,10 +83,10 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 			}
 
 			errfileName += pRoomBaseInfo->name;
-			errfileName += "_err";
+			errfileName += "_logic";
 
 			costFileName += pRoomBaseInfo->name;
-			costFileName += "_cost";
+			costFileName += "_logic_cost";
 		}
 		else if (threadType == THREAD_TYPE_ASYNC)
 		{
@@ -97,7 +97,7 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 			}
 
 			errfileName += pRoomBaseInfo->name;
-			errfileName += "_async_err";
+			errfileName += "_async";
 
 			costFileName += pRoomBaseInfo->name;
 			costFileName += "_async_cost";
@@ -111,7 +111,7 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 			}
 
 			errfileName += pRoomBaseInfo->name;
-			errfileName += "_accept_err";
+			errfileName += "_accept";
 
 			costFileName += pRoomBaseInfo->name;
 			costFileName += "_accept_cost";
@@ -125,7 +125,7 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 			}
 
 			errfileName += pRoomBaseInfo->name;
-			errfileName += "_recv_err";
+			errfileName += "_recv";
 
 			costFileName += pRoomBaseInfo->name;
 			costFileName += "_recv_cost";
@@ -139,7 +139,7 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 			}
 
 			errfileName += pRoomBaseInfo->name;
-			errfileName += "_send_err";
+			errfileName += "_send";
 
 			costFileName += pRoomBaseInfo->name;
 			costFileName += "_send_cost";
@@ -167,32 +167,32 @@ void CGameLogManage::AddLogFile(pthread_t threadID, int threadType, int roomID/*
 
 		if (threadType == THREAD_TYPE_MAIN)		// 主线程
 		{
-			errfileName += servername + "_sys";
-			costFileName += servername + "_sys_cost";
+			errfileName += servername + "_main";
+			costFileName += servername + "_main_cost";
 		}
 		else if (threadType == THREAD_TYPE_LOGIC)
 		{
-			errfileName += servername + "_err";
-			costFileName += servername + "_cost";
+			errfileName += servername + "_logic";
+			costFileName += servername + "_logic_cost";
 		}
 		else if (threadType == THREAD_TYPE_ASYNC)
 		{
-			errfileName += servername + "_async_err";
+			errfileName += servername + "_async";
 			costFileName += servername + "_async_cost";
 		}
 		else if (threadType == THREAD_TYPE_ACCEPT)
 		{
-			errfileName += servername + "_accept_err";
+			errfileName += servername + "_accept";
 			costFileName += servername + "_accept_cost";
 		}
 		else if (threadType == THREAD_TYPE_RECV)
 		{
-			errfileName += servername + "_recv_err";
+			errfileName += servername + "_recv";
 			costFileName += servername + "_recv_cost";
 		}
 		else if (threadType == THREAD_TYPE_SEND)
 		{
-			errfileName += servername + "_send_err";
+			errfileName += servername + "_send";
 			costFileName += servername + "_send_cost";
 		}
 		else
