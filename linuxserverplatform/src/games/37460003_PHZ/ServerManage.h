@@ -21,10 +21,6 @@
 #define TIME_OPER_OUTTIMER					39				//操作超时(定时器范围 [39,39+PLAY_COUNT))
 #define TIME_WEI_TI_DELAY_HU				43				//偎或提后可胡,延迟发胡(定时器范围 [43,43+PLAY_COUNT)
 
-//游戏结束标志定义
-#define GF_NORMAL					10				//游戏正常结束
-#define GF_SALE						11				//游戏安全结束
-
 const BYTE INVALID_TABLE = 255;
 const BYTE INVALID_CHAIR = 255;
 

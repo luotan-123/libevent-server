@@ -616,6 +616,9 @@ bool CBaseWorkServer::InitLua()
 		return false;
 	}
 
+	// 初始化相关
+	luaopen_base(m_pLuaState);
+	luaopen_pb(m_pLuaState);
 	luaL_openlibs(m_pLuaState);
 
 	return true;
@@ -640,12 +643,18 @@ bool CBaseWorkServer::LoadAllLuaFile()
 		return false;
 	}
 
+	if (luaL_dofile(m_pLuaState, "./ProtobufTest.lua") != 0)
+	{
+		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+		return false;
+	}
+
 	/*if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
 	{
 		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
 		return false;
 	}*/
-
+	
 	lua_register(m_pLuaState, "c_rediscmd", l_redis);
 
 	///////////////////////////////
@@ -673,6 +682,8 @@ bool CBaseWorkServer::LoadAllLuaFile()
 	}
 
 	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
+
+	lua_settop(m_pLuaState, 0);
 
 	INFO_LOG("load all lua file success.");
 

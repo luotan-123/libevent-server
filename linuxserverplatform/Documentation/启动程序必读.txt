@@ -18,5 +18,4 @@ echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/cor
 6、redis（hiredis 已经编译成静态库，不需要安装。redis-server、redis-cli、redis-sentinel自己部署）
 7、libunwind（内存分析工具，选择安装）
 8、libmysqlclient（centos下已经编译好库，不需要安装）
-9、lua  (需要下载安装)
-10、lua使用protobuf  （需要安装） 详情： https://blog.csdn.net/boshuzhang/article/details/74586991
+9、lua  (需要下载安装，包括一些其它杂项，参考lua安装相关文档)
