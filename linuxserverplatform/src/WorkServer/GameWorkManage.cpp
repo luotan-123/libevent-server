@@ -109,8 +109,6 @@ bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 {
 	AUTOCOST("timerID=%d", uTimerID);
 
-	lua_pop(m_pLuaState, -1);
-
 
 	lua_getglobal(m_pLuaState, "g_isdubug");
 	//printf("g_isdubug=%s\n", lua_tostring(m_pLuaState, -1));

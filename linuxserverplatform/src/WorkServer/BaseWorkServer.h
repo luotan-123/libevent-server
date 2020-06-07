@@ -10,13 +10,8 @@
 #include "Exception.h"
 #include "PlatformMessage.h"
 #include "NewMessageDefine.h"
-#include "lua.hpp"
+#include "LuaMoudleInit.h"
 
-// lua相关函数声明
-extern "C"
-{
-	int luaopen_pb(lua_State* L);
-}
 
 //基础数据管理类
 class CBaseWorkServer : public IServerSocketService, public IAsynThreadResultService

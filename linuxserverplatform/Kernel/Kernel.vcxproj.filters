@@ -108,6 +108,9 @@
     <ClInclude Include="..\src\include\ServerCommon\Exception.h">
       <Filter>异常处理</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\LuaMoudleInit.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
