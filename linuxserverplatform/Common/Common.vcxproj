@@ -135,6 +135,7 @@
     <ClInclude Include="..\src\include\ServerCommon\Define.h" />
     <ClInclude Include="..\src\include\ServerCommon\ErrorCode.h" />
     <ClInclude Include="..\src\include\ServerCommon\HttpServer.h" />
+    <ClInclude Include="..\src\include\ServerCommon\LuaModuleInit.h" />
     <ClInclude Include="..\src\include\ServerCommon\MD5.h" />
     <ClInclude Include="..\src\include\ServerCommon\MyCurl.h" />
     <ClInclude Include="..\src\include\ServerCommon\NewMessageDefine.h" />
@@ -149,12 +150,9 @@
     <ClInclude Include="..\src\include\ServerCommon\Util.h" />
     <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\src\protobuf\AsyncEventMsg.proto" />
-  </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -179,7 +177,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -204,7 +202,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -229,7 +227,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -254,7 +252,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -279,7 +277,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -304,7 +302,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
@@ -329,7 +327,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/redis;$(RemoteProjectDir)/src/protobuf;$(RemoteRootDir)/Kernel/src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>

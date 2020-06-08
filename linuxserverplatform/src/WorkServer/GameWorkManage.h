@@ -156,7 +156,7 @@ public:
 	//加载lua文件
 	bool LoadAllLuaFile();
 
-	//lua全局 静态函数
+	//全局静态函数，提供给lua调用
 public:
-	static int l_redis(lua_State* l);
+	static int l_redis(lua_State* L);
 };

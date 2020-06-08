@@ -2253,16 +2253,16 @@ bool CGameWorkManage::LoadAllLuaFile()
 
 
 //////////////////////////////////lua全局静态函数////////////////////////////////////////
-int CGameWorkManage::l_redis(lua_State* l)
+int CGameWorkManage::l_redis(lua_State* L)
 {
 	RoomBaseInfo room;
 	WorkManageModule()->m_pRedis->GetRoomBaseInfo(1, room);
 
-	const char* cmd = lua_tostring(l, -1);
+	const char* cmd = lua_tostring(L, -1);
 	char buf[10] = "luotan";
 
 
-	lua_pushstring(l, buf);
+	lua_pushstring(L, buf);
 
 	return 1;
 }

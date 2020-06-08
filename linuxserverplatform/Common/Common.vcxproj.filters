@@ -57,20 +57,17 @@
     <ClCompile Include="..\src\Common\MD5.cpp">
       <Filter>加密工具</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\protobuf\AsyncEventMsg.pb.cc">
-      <Filter>协议模块</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp">
       <Filter>公共定义</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Common\HttpServer.cpp">
       <Filter>HttpServer</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\protobuf\AsyncEventMsg.pb.cc">
+      <Filter>协议模块</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h">
-      <Filter>协议模块</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\include\ServerCommon\MyCurl.h">
       <Filter>HttpClient</Filter>
     </ClInclude>
@@ -113,19 +110,20 @@
     <ClInclude Include="..\src\include\ServerCommon\BillManage.h">
       <Filter>数据流水</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\include\ServerCommon\AsyncEventMsg.h">
-      <Filter>协议模块</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\include\ServerCommon\NewMessageDefine.h">
       <Filter>协议模块</Filter>
     </ClInclude>
     <ClInclude Include="..\src\include\ServerCommon\PlatformMessage.h">
       <Filter>协议模块</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\src\protobuf\AsyncEventMsg.proto">
+    <ClInclude Include="..\src\include\ServerCommon\LuaModuleInit.h">
+      <Filter>公共定义</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\AsyncEventMsg.h">
       <Filter>协议模块</Filter>
-    </None>
+    </ClInclude>
+    <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h">
+      <Filter>协议模块</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

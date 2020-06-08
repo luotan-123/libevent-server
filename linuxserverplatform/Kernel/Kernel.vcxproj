@@ -153,7 +153,6 @@
     <ClInclude Include="..\src\include\ServerCommon\KernelDefine.h" />
     <ClInclude Include="..\src\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\src\include\ServerCommon\log.h" />
-    <ClInclude Include="..\src\include\ServerCommon\LuaModuleInit.h" />
     <ClInclude Include="..\src\include\ServerCommon\MysqlHelper.h" />
     <ClInclude Include="..\src\include\ServerCommon\ServerTimer.h" />
     <ClInclude Include="..\src\include\ServerCommon\sha1.h" />
@@ -164,7 +163,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -185,7 +184,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -206,7 +205,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -227,7 +226,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -248,7 +247,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -269,7 +268,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -290,7 +289,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
@@ -311,7 +310,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;$(RemoteProjectDir)/src/include/ServerCommon;/usr/local/include/DataBase;/usr/local/include/libevent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include;$(RemoteProjectDir)/src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SharedLibrarySearchPath>
