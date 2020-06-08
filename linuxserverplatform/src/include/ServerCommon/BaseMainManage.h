@@ -7,7 +7,6 @@
 #include "ServerTimer.h"
 #include "GServerConnect.h"
 #include "INIFile.h"
-#include "LuaModuleInit.h"
 
 //基础数据管理类
 class CBaseMainManage : public IAsynThreadResultService

@@ -32,14 +32,14 @@ typedef bool BOOL;
 typedef long long __int64;
 
 // 版本定义
-#define VER_MAIN 2
-#define VER_MIDDLE 0
-#define VER_RESVERSE 0
-#define VER_BUILDTIME "2019"
+#define VER_MAIN 3
+#define VER_MIDDLE 1
+#define VER_RESVERSE 1
+#define VER_BUILDTIME "2020"
 
 // 基础常量定义
 #define TRUE true
 #define FALSE false
 
-// 条件编译
+// 条件编译，生成jemalloc内存泄露分析文件
 #define JEMALLOC_PROFILE_MEMORY

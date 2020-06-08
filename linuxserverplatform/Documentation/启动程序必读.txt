@@ -15,7 +15,9 @@ echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/cor
 3、libevent（centos下已经编译好库，不需要安装）
 4、libjson （centos下已经编译好库，不需要安装）
 5、protobuf（必须安装）
-6、redis（hiredis 已经编译成静态库，不需要安装。redis-server、redis-cli、redis-sentinel自己部署）
+6、redis （选择安装）
+hiredis 已经编译成静态库。redis-server、redis-cli、redis-sentinel自己部署。
+如果安装，由于redis依赖库hiredis、jemalloc、lua本服务器也用到。lua尽量用最新版安装，不要用redis自带的。hiredis最好安装。jemalloc可以选择redis自带或者最新版。
 7、libunwind（内存分析工具，选择安装）
 8、libmysqlclient（centos下已经编译好库，不需要安装）
 9、lua  (需要下载安装，包括一些其它杂项，参考lua安装相关文档)

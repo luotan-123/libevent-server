@@ -129,7 +129,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -142,7 +142,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -155,7 +155,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -168,7 +168,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -181,7 +181,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -194,7 +194,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -207,7 +207,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>
@@ -220,7 +220,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <SharedLibrarySearchPath />
-      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;Common;event;json;curl;protobuf;jemalloc;lua;dl;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
     </Link>

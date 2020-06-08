@@ -28,3 +28,4 @@ public:
 };
 
 #define WorkServerModule()		CGameWorkModule::Instance()
+#define WorkManageModule()		CGameWorkModule::Instance()->m_pWorkManage

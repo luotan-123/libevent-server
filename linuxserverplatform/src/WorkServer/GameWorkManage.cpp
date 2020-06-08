@@ -2256,7 +2256,7 @@ bool CGameWorkManage::LoadAllLuaFile()
 int CGameWorkManage::l_redis(lua_State* l)
 {
 	RoomBaseInfo room;
-	WorkServerModule()->m_pWorkManage->m_pRedis->GetRoomBaseInfo(1, room);
+	WorkManageModule()->m_pRedis->GetRoomBaseInfo(1, room);
 
 	const char* cmd = lua_tostring(l, -1);
 	char buf[10] = "luotan";
