@@ -36,7 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
-    <ClCompile Include="..\src\protobuf\pb.c" />
+    <ClCompile Include="..\src\lua\pb.c" />
     <ClCompile Include="..\src\WorkServer\BaseWorkServer.cpp" />
     <ClCompile Include="..\src\WorkServer\GameWorkDataBase.cpp" />
     <ClCompile Include="..\src\WorkServer\GameWorkManage.cpp" />

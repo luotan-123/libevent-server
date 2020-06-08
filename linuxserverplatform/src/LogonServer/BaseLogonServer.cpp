@@ -309,6 +309,14 @@ bool CBaseLogonServer::Start()
 		}
 	}
 
+	//调用接口
+	ret = OnStart();
+	if (!ret)
+	{
+		ERROR_LOG("OnStart failed");
+		return false;
+	}
+
 	//启动处理线程
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
@@ -322,14 +330,6 @@ bool CBaseLogonServer::Start()
 
 	// 关联大厅业务逻辑线程与对应日志文件
 	GameLogManage()->AddLogFile(m_hHandleThread, THREAD_TYPE_LOGIC);
-
-	//调用接口
-	ret = OnStart();
-	if (!ret)
-	{
-		ERROR_LOG("OnStart failed");
-		return false;
-	}
 
 	// 等待子线程读取线程参数
 	fifo.WaitForEvent();

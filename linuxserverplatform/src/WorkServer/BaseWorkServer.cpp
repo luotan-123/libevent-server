@@ -36,7 +36,6 @@ CBaseWorkServer::~CBaseWorkServer()
 	SAFE_DELETE(m_pTcpConnect);
 	SafeDeleteArray(m_pServerTimer);
 	SAFE_DELETE(m_pGServerConnect);
-	SAFE_DELETE(m_pLuaState);
 }
 
 //初始化函数 
@@ -72,20 +71,6 @@ bool CBaseWorkServer::Init(ManageInfoStruct* pInitData, IDataBaseHandleService* 
 	if (!ret)
 	{
 		ERROR_LOG("PreInitParameter failed");
-		return false;
-	}
-
-	// 初始化lua相关
-	ret = InitLua();
-	if (!ret)
-	{
-		CON_ERROR_LOG("InitLua failed");
-		return false;
-	}
-	ret = LoadAllLuaFile();
-	if (!ret)
-	{
-		CON_ERROR_LOG("LoadAllLuaFile failed");
 		return false;
 	}
 
@@ -211,9 +196,6 @@ bool CBaseWorkServer::UnInit()
 	SAFE_DELETE(m_pGServerConnect);
 	SAFE_DELETE(m_pTcpConnect);
 
-	//删除lua堆栈
-	SAFE_DELETE(m_pLuaState);
-
 	//调用接口
 	OnUnInit();
 
@@ -283,7 +265,15 @@ bool CBaseWorkServer::Start()
 		}
 	}
 
-	//启动处理线程
+	//调用接口
+	ret = OnStart();
+	if (!ret)
+	{
+		ERROR_LOG("OnStart failed");
+		return false;
+	}
+
+	//启动处理线程，处理线程的启动要在OnStart之后，避免一些初始化问题
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
 	ThreadStartData.pFIFO = &fifo;
@@ -296,14 +286,6 @@ bool CBaseWorkServer::Start()
 
 	// 关联大厅业务逻辑线程与对应日志文件
 	GameLogManage()->AddLogFile(m_hHandleThread, THREAD_TYPE_LOGIC);
-
-	//调用接口
-	ret = OnStart();
-	if (!ret)
-	{
-		ERROR_LOG("OnStart failed");
-		return false;
-	}
 
 	// 等待子线程读取线程参数
 	fifo.WaitForEvent();
@@ -604,88 +586,4 @@ void* CBaseWorkServer::TcpConnectThread(void* pThreadData)
 	}
 
 	pthread_exit(NULL);
-}
-
-//////////////////////////////////lua相关////////////////////////////////////////
-bool CBaseWorkServer::InitLua()
-{
-	m_pLuaState = luaL_newstate();
-	if (!m_pLuaState) 
-	{
-		CON_ERROR_LOG("luaL_newstate failed!\n");
-		return false;
-	}
-
-	// 初始化相关
-	luaopen_base(m_pLuaState);
-	luaopen_pb(m_pLuaState);
-	luaL_openlibs(m_pLuaState);
-
-	return true;
-}
-
-static int l_redis(lua_State* l)
-{
-	const char* cmd = lua_tostring(l, -1);
-	char buf[10] = "luotan";
-
-
-	lua_pushstring(l, buf);
-
-	return 1;
-}
-
-bool CBaseWorkServer::LoadAllLuaFile()
-{
-	if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
-	{
-		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
-		return false;
-	}
-
-	if (luaL_dofile(m_pLuaState, "./ProtobufTest.lua") != 0)
-	{
-		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
-		return false;
-	}
-
-	/*if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
-	{
-		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
-		return false;
-	}*/
-	
-	lua_register(m_pLuaState, "c_rediscmd", l_redis);
-
-	///////////////////////////////
-	lua_getglobal(m_pLuaState, "add");
-	lua_pushinteger(m_pLuaState, 102);
-	lua_pushinteger(m_pLuaState, 100);
-
-	int val = lua_pcall(m_pLuaState, 2, 1, 0);
-	if (val)
-	{
-		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
-		lua_pop(m_pLuaState, 1);
-	}
-
-	//printf("%s\n", lua_tostring(m_pLuaState, -1));
-
-
-	/////////////////////////////////////////////////
-	lua_getglobal(m_pLuaState, "luotan");
-	lua_pushinteger(m_pLuaState, 123456);
-	if (lua_pcall(m_pLuaState, 1, 1, 0))
-	{
-		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
-		lua_pop(m_pLuaState, 1);
-	}
-
-	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
-
-	lua_settop(m_pLuaState, 0);
-
-	INFO_LOG("load all lua file success.");
-
-	return true;
 }

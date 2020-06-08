@@ -28,6 +28,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "games", "games", "{79241E4F-3706-47A9-A401-F9C3543358A6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "36610103_DDZ", "games\36610103_DDZ\36610103_DDZ.vcxproj", "{51E3932E-C3A7-44E4-8F5F-A4BA0D076960}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9903BD27-B322-4B9A-99D2-760A8659DDB0} = {9903BD27-B322-4B9A-99D2-760A8659DDB0}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{D1744E59-A76F-4E1A-B574-DD1BBB73AAFD}"
 EndProject
@@ -44,10 +47,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CenterServer", "CenterServe
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "23510004_SXTDH", "games\23510004_SXTDH\23510004_SXTDH.vcxproj", "{AF7350CD-5579-4596-899C-CA655471C2B2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9903BD27-B322-4B9A-99D2-760A8659DDB0} = {9903BD27-B322-4B9A-99D2-760A8659DDB0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "40000100_LHD", "games\40000100_LHD\40000100_LHD.vcxproj", "{2E4AB206-9E1F-453B-A01F-04F25BF8C97B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9903BD27-B322-4B9A-99D2-760A8659DDB0} = {9903BD27-B322-4B9A-99D2-760A8659DDB0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "50000001_BOOS", "games\50000001_BOOS\50000001_BOOS.vcxproj", "{D39BBFC9-C3AA-402A-A370-009C9E3ACC4A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9903BD27-B322-4B9A-99D2-760A8659DDB0} = {9903BD27-B322-4B9A-99D2-760A8659DDB0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HttpServer", "HttpServer\HttpServer.vcxproj", "{CA1018E0-A897-4A01-873B-1468C8477E6A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -62,6 +74,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WorkServer", "WorkServer\Wo
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "37460003_PHZ", "games\37460003_PHZ\37460003_PHZ.vcxproj", "{DF31B551-FBF9-461A-8FCB-0B9E0A5C2A83}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9903BD27-B322-4B9A-99D2-760A8659DDB0} = {9903BD27-B322-4B9A-99D2-760A8659DDB0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,17 +1,12 @@
 #include "CommonHead.h"
 #include "GameWorkManage.h"
+#include "GameWorkDataBase.h"
 #include "GameWorkModule.h"
 
 #define APP_TITLE "WorkServer"
 
 // 命令模式
 //#define COMMAND_MODE
-
-// 主进程退出开关
-bool g_mainProcess = true;
-
-// 登陆服务器（网关服务器）模块
-CGameWorkModule	g_WorkServerModule;
 
 // 处理命令
 void _HandleCommand(const std::string& command)
@@ -58,7 +53,7 @@ int main()
 	memset(&Init, 0, sizeof(Init));
 
 	// 初始化服务
-	if (!g_WorkServerModule.InitService(&Init))
+	if (!WorkServerModule()->InitService(&Init))
 	{
 		CON_ERROR_LOG("InitService Error ! 请查看启动日志 !!! ");
 		return -1;
@@ -66,7 +61,7 @@ int main()
 
 	// 启动服务
 	UINT errCode = 0;
-	if (!g_WorkServerModule.StartService(errCode))
+	if (!WorkServerModule()->StartService(errCode))
 	{
 		CON_ERROR_LOG("Start Service Failed ,Error Code:%X . 请查看启动日志 !!!\n", errCode);
 		return -1;
@@ -101,14 +96,10 @@ int main()
 	CON_INFO_LOG("======================%s 启动成功========================================", APP_TITLE);
 
 	select(0, 0, 0, 0, 0);
-	/*while (g_mainProcess)
-	{
-		sleep(60);
-	}*/
 
 #endif
 
-	g_WorkServerModule.StoptService();
+	WorkServerModule()->StoptService();
 
 	CON_INFO_LOG("==========================Workserver end================================");
 

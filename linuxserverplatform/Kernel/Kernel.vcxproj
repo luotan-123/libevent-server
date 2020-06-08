@@ -153,7 +153,7 @@
     <ClInclude Include="..\src\include\ServerCommon\KernelDefine.h" />
     <ClInclude Include="..\src\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\src\include\ServerCommon\log.h" />
-    <ClInclude Include="..\src\include\ServerCommon\LuaMoudleInit.h" />
+    <ClInclude Include="..\src\include\ServerCommon\LuaModuleInit.h" />
     <ClInclude Include="..\src\include\ServerCommon\MysqlHelper.h" />
     <ClInclude Include="..\src\include\ServerCommon\ServerTimer.h" />
     <ClInclude Include="..\src\include\ServerCommon\sha1.h" />

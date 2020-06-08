@@ -3,6 +3,7 @@
 #include "json/json.h"
 #include "AsyncEventMsg.pb.h"
 #include "GameWorkManage.h"
+#include "GameWorkModule.h"
 
 // protobuf 相关命名空间
 using namespace AsyncEventMsg;
@@ -68,6 +69,23 @@ bool CGameWorkManage::OnStart()
 {
 	INFO_LOG("GameWorkManage OnStart begin...");
 
+	// 初始化lua相关
+	if (!InitLua())
+	{
+		CON_ERROR_LOG("InitLua failed");
+		return false;
+	}
+
+	// 注册lua调用c/c++函数
+	CFuncRegister();
+
+	// 加载lua文件
+	if (!LoadAllLuaFile())
+	{
+		CON_ERROR_LOG("LoadAllLuaFile failed");
+		return false;
+	}
+
 	m_socketIndexVec.clear();
 
 	if (m_pRedis)
@@ -100,6 +118,14 @@ bool CGameWorkManage::OnStart()
 	//m_SQLDataManage.PushLine(&msg.dataLineHead, sizeof(msg) - sizeof(msg.sql) + strlen(msg.sql), ASYNC_EVENT_SQL_STATEMENT, DB_TYPE_COMMON, ASYNC_MESSAGE_DATABASE_TEST);
 
 	INFO_LOG("GameWorkManage OnStart end.");
+
+	return true;
+}
+
+//////////////////////////////////////////////////////////////////////
+bool CGameWorkManage::OnStop()
+{
+	lua_close(m_pLuaState);
 
 	return true;
 }
@@ -225,13 +251,6 @@ bool CGameWorkManage::OnAsynThreadResult(AsynThreadResultLine* pResultData, void
 	{
 
 	}
-
-	return true;
-}
-
-//////////////////////////////////////////////////////////////////////
-bool CGameWorkManage::OnStop()
-{
 
 	return true;
 }
@@ -1149,6 +1168,11 @@ bool CGameWorkManage::SendData(int index, void* pData, int size, int mainID, int
 	}
 
 	return true;
+}
+
+bool CGameWorkManage::SendData(int userID, void* pData, int size, int mainID, int assistID, int handleCode)
+{
+	return SendMessageToCenterServer(CENTER_MESSAGE_LOGON_RELAY_USER_MSG, pData, size, userID, mainID, assistID, handleCode);
 }
 
 void CGameWorkManage::NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue)
@@ -2137,4 +2161,108 @@ void CGameWorkManage::ExecuteSqlSecond()
 			break;
 		}
 	}
+}
+
+//////////////////////////////////lua相关////////////////////////////////////////
+bool CGameWorkManage::InitLua()
+{
+	m_pLuaState = luaL_newstate();
+	if (!m_pLuaState)
+	{
+		CON_ERROR_LOG("luaL_newstate failed!\n");
+		return false;
+	}
+
+	luaopen_base(m_pLuaState);
+
+	// 打开使用pb库
+	luaopen_pb(m_pLuaState);
+
+	//// 打开lua使用mysql的库
+	//luaopen_luasql_mysql(m_pLuaState);
+
+	//// 打开lua使用redis的库
+	//luaopen_socket_core(m_pLuaState);
+
+	// 初始化lua内置所有库
+	luaL_openlibs(m_pLuaState);
+
+	return true;
+}
+
+void CGameWorkManage::CFuncRegister()
+{
+	lua_register(m_pLuaState, "c_rediscmd", l_redis);
+
+
+
+}
+
+bool CGameWorkManage::LoadAllLuaFile()
+{
+	if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
+	{
+		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+		return false;
+	}
+
+	if (luaL_dofile(m_pLuaState, "./ProtobufTest.lua") != 0)
+	{
+		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+		return false;
+	}
+
+	/*if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
+	{
+		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
+		return false;
+	}*/
+
+	///////////////////////////////
+	lua_getglobal(m_pLuaState, "add");
+	lua_pushinteger(m_pLuaState, 102);
+	lua_pushinteger(m_pLuaState, 100);
+
+	int val = lua_pcall(m_pLuaState, 2, 1, 0);
+	if (val)
+	{
+		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
+		lua_pop(m_pLuaState, 1);
+	}
+
+	//printf("%s\n", lua_tostring(m_pLuaState, -1));
+
+
+	/////////////////////////////////////////////////
+	lua_getglobal(m_pLuaState, "luotan");
+	lua_pushinteger(m_pLuaState, 123456);
+	if (lua_pcall(m_pLuaState, 1, 1, 0))
+	{
+		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
+		lua_pop(m_pLuaState, 1);
+	}
+
+	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
+
+	lua_settop(m_pLuaState, 0);
+
+	INFO_LOG("load all lua file success.");
+
+	return true;
+}
+
+
+//////////////////////////////////lua全局静态函数////////////////////////////////////////
+int CGameWorkManage::l_redis(lua_State* l)
+{
+	RoomBaseInfo room;
+	WorkServerModule()->m_pWorkManage->m_pRedis->GetRoomBaseInfo(1, room);
+
+	const char* cmd = lua_tostring(l, -1);
+	char buf[10] = "luotan";
+
+
+	lua_pushstring(l, buf);
+
+	return 1;
 }

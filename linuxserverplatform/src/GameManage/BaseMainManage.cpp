@@ -234,6 +234,14 @@ bool CBaseMainManage::Start()
 
 	//////////////////////////////////////////////////////////////////////////
 
+	g_jemallocProfileRoom = m_InitData.uRoomID;
+
+	ret = OnStart();
+	if (!ret)
+	{
+		throw new CException("CBaseMainManage::Start OnStart 函数错误", 0x422);
+	}
+
 	//启动处理线程
 	HandleThreadStartStruct	ThreadStartData;
 	ThreadStartData.pMainManage = this;
@@ -247,14 +255,6 @@ bool CBaseMainManage::Start()
 
 	// 关联游戏业务逻辑线程与对应日志文件
 	GameLogManage()->AddLogFile(m_hHandleThread, THREAD_TYPE_LOGIC, m_InitData.uRoomID);
-
-	g_jemallocProfileRoom = m_InitData.uRoomID;
-
-	ret = OnStart();
-	if (!ret)
-	{
-		throw new CException("CBaseMainManage::Start OnStart 函数错误", 0x422);
-	}
 
 	// 等待子线程读取线程参数
 	fifo.WaitForEvent();

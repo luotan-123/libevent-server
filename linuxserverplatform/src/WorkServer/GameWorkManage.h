@@ -74,6 +74,8 @@ private:
 public:
 	// 通过索引发送数据
 	bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification);
+	// 给玩家发送消息，实际上是发给中心服务器，让中心服务器转发
+	bool SendData(int userID, void* pData, int size, int mainID, int assistID, int handleCode);
 	// 通知资源变化, value为总值，不是变化值
 	void NotifyResourceChange(int userID, int resourceType, long long value, int reason, long long changeValue);
 
@@ -142,4 +144,19 @@ private:
 private:
 	// 给php发送消息接口
 	void SendHTTPMessage(int userID, const std::string& url, BYTE postType);
+
+
+
+	////////////////////////////////////lua相关接口
+public:
+	//初始化
+	bool InitLua();
+	//注册c/c++函数，提供给lua调用
+	void CFuncRegister();
+	//加载lua文件
+	bool LoadAllLuaFile();
+
+	//lua全局 静态函数
+public:
+	static int l_redis(lua_State* l);
 };

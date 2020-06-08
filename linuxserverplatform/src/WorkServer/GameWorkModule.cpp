@@ -1,15 +1,32 @@
 #include "CommonHead.h"
+#include "GameWorkManage.h"
+#include "GameWorkDataBase.h"
 #include "GameWorkModule.h"
 
+CGameWorkModule* CGameWorkModule::g_pGameWorkModule = nullptr;
 
 CGameWorkModule::CGameWorkModule()
 {
+	m_pWorkManage = new CGameWorkManage();
+	m_pDataBaseHandle = new CServiceDataBaseHandle();
+}
 
+CGameWorkModule* CGameWorkModule::Instance()
+{
+	if (g_pGameWorkModule)
+	{
+		return g_pGameWorkModule;
+	}
+
+	g_pGameWorkModule = new CGameWorkModule();
+
+	return g_pGameWorkModule;
 }
 
 CGameWorkModule::~CGameWorkModule()
 {
-
+	SafeDelete(m_pWorkManage);
+	SafeDelete(m_pDataBaseHandle);
 }
 
 bool CGameWorkModule::InitService(ManageInfoStruct * pInitData)
@@ -23,7 +40,7 @@ bool CGameWorkModule::InitService(ManageInfoStruct * pInitData)
 
 	bool ret = false;
 
-	ret = m_WorkManage.Init(pInitData, &m_DataBaseHandle);
+	ret = m_pWorkManage->Init(pInitData, m_pDataBaseHandle);
 	if (!ret)
 	{
 		ERROR_LOG("WorkManage Init failed");
@@ -39,7 +56,7 @@ bool CGameWorkModule::UnInitService()
 {
 	try
 	{
-		return m_WorkManage.UnInit();
+		return m_pWorkManage->UnInit();
 	}
 	catch (CException * pException) 
 	{
@@ -60,7 +77,7 @@ bool CGameWorkModule::StartService(UINT &errCode)
 	
 	errCode = 0;
 
-	if (!m_WorkManage.Start())
+	if (!m_pWorkManage->Start())
 	{
 		return false;
 	}
@@ -74,7 +91,7 @@ bool CGameWorkModule::StoptService()
 {
 	INFO_LOG("GameWorkModule StoptService begin...");
 
-	bool ret = m_WorkManage.Stop();
+	bool ret = m_pWorkManage->Stop();
 	if (!ret)
 	{
 		ERROR_LOG("WorkManage Stop failed");

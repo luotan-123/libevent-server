@@ -352,7 +352,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int serverID, int serverType, 
 	int recvThreadNumber = ConfigManage()->m_commonConfig.recvThreadNumber;
 	if (recvThreadNumber < 1)
 	{
-		recvThreadNumber = 4;
+		recvThreadNumber = get_nprocs();
 	}
 	recvThreadNumber = Min_(recvThreadNumber, (int)m_socketVec.size());
 

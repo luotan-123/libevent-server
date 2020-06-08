@@ -108,7 +108,7 @@
     <ClInclude Include="..\src\include\ServerCommon\Exception.h">
       <Filter>异常处理</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\include\ServerCommon\LuaMoudleInit.h">
+    <ClInclude Include="..\src\include\ServerCommon\LuaModuleInit.h">
       <Filter>公共定义</Filter>
     </ClInclude>
   </ItemGroup>

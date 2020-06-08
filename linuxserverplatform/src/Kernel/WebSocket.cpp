@@ -929,9 +929,9 @@ void* CWebSocketManage::ThreadAccept(void* pThreadData)
 	// 获取接收线程池数量
 	const CommonConfig& commonConfig = ConfigManage()->GetCommonConfig();
 	int workBaseCount = commonConfig.WorkThreadNumber;
-	if (workBaseCount <= 1)
+	if (workBaseCount < 1)
 	{
-		workBaseCount = 4;
+		workBaseCount = get_nprocs();
 	}
 
 	// 初始工作线程信息

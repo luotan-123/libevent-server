@@ -10,7 +10,7 @@
 #include "Exception.h"
 #include "PlatformMessage.h"
 #include "NewMessageDefine.h"
-#include "LuaMoudleInit.h"
+#include "LuaModuleInit.h"
 
 
 //基础数据管理类
@@ -96,12 +96,4 @@ private:
 private:
 	//处理中心服消息
 	virtual bool OnCenterServerMessage(UINT msgID, NetMessageHead* pNetHead, void* pData, UINT size, int userID) = 0;
-
-
-	//lua相关接口
-public:
-	//初始化
-	bool InitLua();
-	//加载lua文件
-	bool LoadAllLuaFile();
 };
