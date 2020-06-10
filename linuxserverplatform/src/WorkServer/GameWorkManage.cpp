@@ -135,51 +135,6 @@ bool CGameWorkManage::OnTimerMessage(UINT uTimerID)
 {
 	AUTOCOST("timerID=%d", uTimerID);
 
-
-	lua_getglobal(m_pLuaState, "g_isdubug");
-	//printf("g_isdubug=%s\n", lua_tostring(m_pLuaState, -1));
-	lua_pop(m_pLuaState, 1);
-
-	// 是否 从新加载文件
-	static int df = 0;
-	//printf("计数：%d\n", df);
-	if (df % 8 == 7)
-	{
-		//printf("加载文件\n");
-		if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
-		{
-			CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
-			return false;
-		}
-	}
-	df++;
-
-	// 测试调用lua
-	lua_getglobal(m_pLuaState, "testload");
-	lua_pushinteger(m_pLuaState, 123);
-	if (lua_pcall(m_pLuaState, 1, 0, 0))
-	{
-		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
-		lua_pop(m_pLuaState, 1);
-	}
-	//printf("%d\n", lua_tointeger(m_pLuaState, -1));
-
-	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
-
-	lua_getglobal(m_pLuaState, "testreturn");
-	if (lua_pcall(m_pLuaState, 0, 4, 0))
-	{
-		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
-		lua_pop(m_pLuaState, 1);
-	}
-	/*printf("%s\n", lua_tostring(m_pLuaState, 1));
-	printf("%s\n", lua_tostring(m_pLuaState, 2));
-	printf("%s\n", lua_tostring(m_pLuaState, 3));
-	printf("%s\n", lua_tostring(m_pLuaState, 4));*/
-	lua_pop(m_pLuaState, 4);
-
-
-
 	switch (uTimerID)
 	{
 	case LOGON_TIMER_CHECK_REDIS_CONNECTION:
@@ -2192,7 +2147,6 @@ bool CGameWorkManage::InitLua()
 
 void CGameWorkManage::CFuncRegister()
 {
-	lua_register(m_pLuaState, "c_rediscmd", l_redis);
 	lua_register(m_pLuaState, "c_clog", c_clog);
 	lua_register(m_pLuaState, "c_platfrom", c_platfrom);
 	lua_register(m_pLuaState, "c_dispatchGameJob", c_dispatchGameJob);
@@ -2201,53 +2155,13 @@ void CGameWorkManage::CFuncRegister()
 
 bool CGameWorkManage::LoadAllLuaFile()
 {
-	if (luaL_dofile(m_pLuaState, "./WorkServerTest.lua") != 0)
-	{
-		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
-		return false;
-	}
-
-	if (luaL_dofile(m_pLuaState, "./ProtobufTest.lua") != 0)
-	{
-		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
-		return false;
-	}
-
 	if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
 	{
 		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
 		return false;
 	}
 
-	///////////////////////////////
-	lua_getglobal(m_pLuaState, "add");
-	lua_pushinteger(m_pLuaState, 102);
-	lua_pushinteger(m_pLuaState, 100);
-
-	int val = lua_pcall(m_pLuaState, 2, 1, 0);
-	if (val)
-	{
-		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
-		lua_pop(m_pLuaState, 1);
-	}
-
-	//printf("%s\n", lua_tostring(m_pLuaState, -1));
-
-
-	/////////////////////////////////////////////////
-	lua_getglobal(m_pLuaState, "luotan");
-	lua_pushinteger(m_pLuaState, 123456);
-	if (lua_pcall(m_pLuaState, 1, 1, 0))
-	{
-		std::cout << "LUA_ERROR " << lua_tostring(m_pLuaState, -1) << std::endl;
-		lua_pop(m_pLuaState, 1);
-	}
-
-	//printf("栈顶：%d\n", lua_gettop(m_pLuaState));
-
-	lua_settop(m_pLuaState, 0);
-
-	INFO_LOG("load all lua file success.");
+	INFO_LOG("load lua file success.");
 
 	return true;
 }
@@ -2285,20 +2199,6 @@ int CGameWorkManage::LuaDispatchTimer()
 }
 
 //////////////////////////////////提供给lua调用的函数//////////////////////////////////////
-int CGameWorkManage::l_redis(lua_State* L)
-{
-	RoomBaseInfo room;
-	WorkManageModule()->m_pRedis->GetRoomBaseInfo(1, room);
-
-	const char* cmd = lua_tostring(L, -1);
-	char buf[10] = "luotan";
-
-
-	lua_pushstring(L, buf);
-
-	return 1;
-}
-
 int CGameWorkManage::c_clog(lua_State* L)
 {
 	const char* fileName = lua_tostring(L, 1);

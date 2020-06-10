@@ -162,7 +162,6 @@ public:
 
 	//全局静态函数，提供给lua调用
 public:
-	static int l_redis(lua_State* L);
 	static int c_clog(lua_State* L);
 	static int c_platfrom(lua_State* L);
 	static int c_dispatchGameJob(lua_State* L);
