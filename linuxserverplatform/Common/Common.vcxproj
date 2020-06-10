@@ -127,6 +127,23 @@
     <ClCompile Include="..\src\Common\RedisPHP.cpp" />
     <ClCompile Include="..\src\Common\Util.cpp" />
     <ClCompile Include="..\src\jemalloc\jemalloc_cpp.cpp" />
+    <ClCompile Include="..\src\lua\auxiliar.c" />
+    <ClCompile Include="..\src\lua\buffer.c" />
+    <ClCompile Include="..\src\lua\except.c" />
+    <ClCompile Include="..\src\lua\inet.c" />
+    <ClCompile Include="..\src\lua\io.c" />
+    <ClCompile Include="..\src\lua\ls_mysql.c" />
+    <ClCompile Include="..\src\lua\luasocket.c" />
+    <ClCompile Include="..\src\lua\luasql.c" />
+    <ClCompile Include="..\src\lua\mime.c" />
+    <ClCompile Include="..\src\lua\options.c" />
+    <ClCompile Include="..\src\lua\pb.c" />
+    <ClCompile Include="..\src\lua\select.c" />
+    <ClCompile Include="..\src\lua\tcp.c" />
+    <ClCompile Include="..\src\lua\timeout.c" />
+    <ClCompile Include="..\src\lua\udp.c" />
+    <ClCompile Include="..\src\lua\unix.c" />
+    <ClCompile Include="..\src\lua\usocket.c" />
     <ClCompile Include="..\src\protobuf\AsyncEventMsg.pb.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -148,15 +165,32 @@
     <ClInclude Include="..\src\include\ServerCommon\RedisPHP.h" />
     <ClInclude Include="..\src\include\ServerCommon\tableDefine.h" />
     <ClInclude Include="..\src\include\ServerCommon\Util.h" />
+    <ClInclude Include="..\src\lua\auxiliar.h" />
+    <ClInclude Include="..\src\lua\buffer.h" />
+    <ClInclude Include="..\src\lua\except.h" />
+    <ClInclude Include="..\src\lua\inet.h" />
+    <ClInclude Include="..\src\lua\io.h" />
+    <ClInclude Include="..\src\lua\luasocket.h" />
+    <ClInclude Include="..\src\lua\luasql.h" />
+    <ClInclude Include="..\src\lua\mime.h" />
+    <ClInclude Include="..\src\lua\options.h" />
+    <ClInclude Include="..\src\lua\select.h" />
+    <ClInclude Include="..\src\lua\socket.h" />
+    <ClInclude Include="..\src\lua\tcp.h" />
+    <ClInclude Include="..\src\lua\timeout.h" />
+    <ClInclude Include="..\src\lua\udp.h" />
+    <ClInclude Include="..\src\lua\unix.h" />
+    <ClInclude Include="..\src\lua\usocket.h" />
     <ClInclude Include="..\src\protobuf\AsyncEventMsg.pb.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -177,11 +211,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -202,11 +237,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -227,11 +263,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -252,11 +289,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -277,11 +315,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -302,11 +341,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
@@ -327,11 +367,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
-      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;</LibraryDependencies>
+      <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>

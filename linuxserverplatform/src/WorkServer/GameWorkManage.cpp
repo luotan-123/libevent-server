@@ -1293,6 +1293,8 @@ void CGameWorkManage::OnNormalTimer()
 	}
 
 	m_lastNormalTimerTime = currTime;
+
+	LuaDispatchTimer();
 }
 
 /***********************************************************************************************************/
@@ -2173,19 +2175,17 @@ bool CGameWorkManage::InitLua()
 		return false;
 	}
 
-	luaopen_base(m_pLuaState);
+	// 初始化lua内置所有库
+	luaL_openlibs(m_pLuaState);
 
 	// 打开使用pb库
 	luaopen_pb(m_pLuaState);
 
-	//// 打开lua使用mysql的库
-	//luaopen_luasql_mysql(m_pLuaState);
+	// 打开lua使用mysql的库
+	luaopen_luasql_mysql(m_pLuaState);
 
-	//// 打开lua使用redis的库
-	//luaopen_socket_core(m_pLuaState);
-
-	// 初始化lua内置所有库
-	luaL_openlibs(m_pLuaState);
+	// 打开lua使用redis的库
+	luaopen_socket_core(m_pLuaState);
 
 	return true;
 }
@@ -2193,8 +2193,9 @@ bool CGameWorkManage::InitLua()
 void CGameWorkManage::CFuncRegister()
 {
 	lua_register(m_pLuaState, "c_rediscmd", l_redis);
-
-
+	lua_register(m_pLuaState, "c_clog", c_clog);
+	lua_register(m_pLuaState, "c_platfrom", c_platfrom);
+	lua_register(m_pLuaState, "c_dispatchGameJob", c_dispatchGameJob);
 
 }
 
@@ -2212,11 +2213,11 @@ bool CGameWorkManage::LoadAllLuaFile()
 		return false;
 	}
 
-	/*if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
+	if (luaL_dofile(m_pLuaState, "./executor.lua") != 0)
 	{
 		CON_ERROR_LOG("%s\n", lua_tostring(m_pLuaState, -1));
 		return false;
-	}*/
+	}
 
 	///////////////////////////////
 	lua_getglobal(m_pLuaState, "add");
@@ -2250,9 +2251,40 @@ bool CGameWorkManage::LoadAllLuaFile()
 
 	return true;
 }
+//////////////////////////////////主动调用lua的函数////////////////////////////////////////
+int CGameWorkManage::LuaDispatchTimer()
+{
+	int traceback = 0;
+	int top = lua_gettop(m_pLuaState);
 
+	string m_timeType = "gametimer";
+	string m_data = "1591783083";
 
-//////////////////////////////////lua全局静态函数////////////////////////////////////////
+	lua_getglobal(m_pLuaState, "dispatchTimer");
+	lua_pushstring(m_pLuaState, m_data.c_str());
+	lua_pushstring(m_pLuaState, m_timeType.c_str());
+
+	int error = lua_pcall(m_pLuaState, 2, 0, traceback);
+
+	if (error)
+	{
+		if (traceback == 0)
+		{
+			ERROR_LOG("timer execute error1:%s,timer=%s", lua_tostring(m_pLuaState, -1), m_timeType.c_str());
+			lua_pop(m_pLuaState, 1);
+		}
+		else
+		{
+			ERROR_LOG("timer execute error2:%s,timer=%s", lua_tostring(m_pLuaState, -1), m_timeType.c_str());
+			lua_pop(m_pLuaState, 2);
+		}
+		lua_settop(m_pLuaState, top);
+	}
+
+	return 0;
+}
+
+//////////////////////////////////提供给lua调用的函数//////////////////////////////////////
 int CGameWorkManage::l_redis(lua_State* L)
 {
 	RoomBaseInfo room;
@@ -2265,4 +2297,30 @@ int CGameWorkManage::l_redis(lua_State* L)
 	lua_pushstring(L, buf);
 
 	return 1;
+}
+
+int CGameWorkManage::c_clog(lua_State* L)
+{
+	const char* fileName = lua_tostring(L, 1);
+	const char* content = lua_tostring(L, 2);
+
+	FILE_LOG(fileName, content);
+
+	return 0;
+}
+
+int CGameWorkManage::c_platfrom(lua_State* L)
+{
+	lua_pushstring(L, "linux");
+	return 1;
+}
+
+int CGameWorkManage::c_dispatchGameJob(lua_State* L)
+{
+	string data = lua_tostring(L, -1);
+	string gameType = lua_tostring(L, -2);
+
+	lua_pop(L, 2);
+
+	return 0;
 }
