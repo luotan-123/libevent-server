@@ -1,5 +1,6 @@
 # 编译环境
 windows版：vs2019 + win10
+
 linux版：vs2019 + win10 + g++/gcc + vmware + centos7 + ssh + 各种第三方库
 
 # 技术
