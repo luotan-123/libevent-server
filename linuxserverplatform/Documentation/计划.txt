@@ -1,6 +1,6 @@
 ﻿新计划 2020/06/01：
-1、linux模块知识
-2、计算机网络
+1、linux模块知识 makefile cmake
+2、计算机网络（滑动窗口，拥塞控制）
 3、mysql知识点
 4、redis
 
