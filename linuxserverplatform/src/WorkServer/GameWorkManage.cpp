@@ -2222,5 +2222,8 @@ int CGameWorkManage::c_dispatchGameJob(lua_State* L)
 
 	lua_pop(L, 2);
 
+	UserData user;
+	WorkManageModule()->m_pRedis->GetUserData(118001, user);
+
 	return 0;
 }
