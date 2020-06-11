@@ -1,1 +1,0 @@
-start %~dp0\redis-server.exe redis.conf
