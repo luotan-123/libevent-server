@@ -1,5 +1,5 @@
 ﻿新计划 2020/06/01：
-1、linux模块知识 makefile cmake
+1、linux模块知识 （从面试题中学习）
 2、计算机网络（滑动窗口，拥塞控制，linux tcp/ip参数优化）
 3、mysql知识点
 4、redis
@@ -16,8 +16,8 @@ lua可以访问redis，数据库，可以使用pb
 5、go语言学习开发（未完成）
 6、python简单入门，给linux框架做抗压力测试（未完成）
 使用python开发压力测试工具
-7、linux项目makefile的编写（使用cmake最好）
-不写makefile，使用eclipse ide 做c++开发或者用cmake
+7、linux项目makefile的编写（进行中）
+写makefile其实也还行
 8、部署服务器shell，开启关闭服务器进程的shell（未完成）
 9、对gserver和gate-logon-server做QBS统计（已经完成）
 完成了处理数据的qbs
