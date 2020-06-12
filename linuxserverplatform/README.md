@@ -11,6 +11,10 @@ c++ 项目
 包含4种游戏，扑鱼、斗地主、麻将
 
 # 用到的轮子：
+如果之前已经安装过以下第三方库，就没必要安装
+
+用到的轮子：
+
 1、curl （centos下已经编译好库，不需要安装）
 
 2、jemalloc （必须安装）
@@ -21,8 +25,11 @@ c++ 项目
 
 5、protobuf（必须安装）
 
-6、redis（hiredis 已经编译成静态库，不需要安装。redis-server、redis-cli、redis-sentinel自己部署）
+6、redis （选择安装）
 
-7、libunwind（内存分析工具，选择安装）
+hiredis 已经编译成静态库。redis-server、redis-cli、redis-sentinel自己部署。
+如果安装，由于redis依赖库hiredis、jemalloc、lua本服务器也用到。lua尽量用最新版安装，不要用redis自带的。hiredis最好安装。jemalloc可以选择redis自带或者最新版。
 
-8、libmysqlclient（centos下已经编译好库，不需要安装）
+7、libmysqlclient（centos下已经编译好库，不需要安装）
+
+8、lua  (需要下载安装，包括一些其它杂项，参考lua安装相关文档)
