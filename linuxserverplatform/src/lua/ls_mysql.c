@@ -121,7 +121,7 @@ static void pushvalue (lua_State *L, void *row, long int len) {
 	if (row == NULL)
 		lua_pushnil (L);
 	else
-		lua_pushlstring (L, row, len);
+		lua_pushlstring (L, (const char *)row, len);
 }
 
 
