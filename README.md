@@ -1,5 +1,6 @@
 # 编译环境
-g++/gcc + vmware + centos7 + ssh + 各种第三方库 + vs2019 + win10
+1、windows下编译：g++/gcc + vmware + centos7 + ssh + 各种第三方库 + vs2019 + win10 
+2、linux下编译：cd src && make && make install
 
 # 技术
 c++棋牌游戏服务器框架。支持TCP、websocket、http协议、支持分布式、mysql、redis、lua
