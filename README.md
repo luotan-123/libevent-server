@@ -1,7 +1,7 @@
 # 编译环境
 1、windows下编译：g++/gcc + vmware + centos7 + ssh + 各种第三方库 + vs2019 + win10
 
-2、linux下编译：cd src && make && make install
+2、linux下编译(根据文档安装第三方库)：cd src && make && make install
 
 
 # 技术
