@@ -51,4 +51,6 @@ chmod +x /etc/rc.d/rc.local
 vim 相关文件，执行下面指令
 set fileformat=unix
 
+12、根据进程名字杀死进程
+pkill -ce "Server"
 
