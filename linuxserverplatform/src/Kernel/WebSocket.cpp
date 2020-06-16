@@ -580,6 +580,9 @@ void CWebSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 	// 如果没有设置BEV_OPT_CLOSE_ON_FREE 选项，则关闭socket
 	close(tcpInfo.acceptFd);
 
+	//// 释放锁的内存
+	//SAFE_DELETE(tcpInfo.lock);
+
 	// 回调业务层
 	if (m_pService)
 	{

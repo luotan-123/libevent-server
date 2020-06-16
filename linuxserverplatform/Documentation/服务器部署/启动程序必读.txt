@@ -6,6 +6,7 @@ vim /etc/ld.so.conf
 2、生产core文件
 启动coredumpshell.sh，重启系统生效。重启后，还需要以root执行以下命令。不执行core会生成在当前目录。
 echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern
+sysctl -p立即生效
 
 3、安装环境
 如果之前已经安装过以下第三方库，就没必要安装

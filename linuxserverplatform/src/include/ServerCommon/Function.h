@@ -19,16 +19,16 @@ typedef struct _SYSTEMTIME {
 ////////////////////////////////////系统函数实现/////////////////////////////////////////////
 
 //计算数组维数
-#define CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
+#define  CountArray(Array) (sizeof(Array)/sizeof(Array[0]))
 
 //安全删除指针
-#define  SafeDelete(pData)	{ try { delete pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL; } 
+#define  SafeDelete(pData) { try { delete pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL; } 
 
 //安全删除指针
 #define  SafeDeleteArray(pData)	{ if(pData){ try { delete [] pData; } catch (...) { ERROR_LOG("CATCH:%s with %s\n",__FILE__,__FUNCTION__);} pData = NULL;} } 
 
 //安全删除指针
-#define SAFE_DELETE(ptr) { if(ptr){	try{ delete ptr; }catch(...){ ERROR_LOG("CATCH: *** SAFE_DELETE(%s) crash! *** %s %d\n",#ptr,__FILE__, __LINE__); } ptr = 0; } }
+#define  SAFE_DELETE(pData) { if(pData){ try{ delete pData; } catch(...){ ERROR_LOG("CATCH: *** SAFE_DELETE(%s) crash! *** %s %d\n",#pData,__FILE__, __LINE__); } pData = nullptr; } }
 
 //获取动态数组指针大小，使用jemalloc，只有非标准类型才能使用
 extern int GetNewArraySize(void* pArray);
