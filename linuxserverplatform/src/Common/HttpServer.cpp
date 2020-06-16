@@ -499,7 +499,7 @@ int HttpMain(int argc, char** argv)
 		strcpy(addr.sun_path, o.unixsock);
 
 		lev = evconnlistener_new_bind(base, NULL, NULL,
-			LEV_OPT_CLOSE_ON_FREE, -1,
+			LEV_OPT_CLOSE_ON_FREE, TCP_ACCEPT_LIST_COUNT,
 			(struct sockaddr*) & addr, sizeof(addr));
 		if (!lev) {
 			perror("Cannot create listener");

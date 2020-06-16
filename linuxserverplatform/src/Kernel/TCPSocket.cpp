@@ -724,7 +724,7 @@ void* CTCPSocketManage::ThreadAccept(void* pThreadData)
 	sin.sin_addr.s_addr = strlen(pThis->m_bindIP) == 0 ? INADDR_ANY : inet_addr(pThis->m_bindIP);
 
 	listener = evconnlistener_new_bind(pThis->m_listenerBase, ListenerCB, (void*)pThis,
-		LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE | LEV_OPT_THREADSAFE, -1,
+		LEV_OPT_REUSEABLE | LEV_OPT_CLOSE_ON_FREE | LEV_OPT_THREADSAFE, TCP_ACCEPT_LIST_COUNT,
 		(struct sockaddr*) & sin,
 		sizeof(sin));
 

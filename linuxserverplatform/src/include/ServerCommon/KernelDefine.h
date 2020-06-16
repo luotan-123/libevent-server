@@ -51,6 +51,7 @@ const int MAX_WOMAN_HEADURL_ID = 1003803;
 #define MAX_LOGON_SERVER_COUNT					128		// 最多登陆服数量
 #define INVALID_SOCKET							(-1)	// 无效的socket值
 #define SOCKET_ERROR							(-1)	// 网络接口出错返回值
+#define TCP_ACCEPT_LIST_COUNT					1024	// tcp全连接队列长度
 
 /////////////////////////////////////////////////////////
 // 性能测试
