@@ -78,6 +78,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="STL迭代器.cpp" />
     <ClCompile Include="智能指针.cpp" />
+    <ClCompile Include="消息队列和共享内存.cpp" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
