@@ -466,7 +466,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, tcpInfo.bev);
 }
 
-void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/* = false*/)
+void CTCPSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
 {
 	if (index < 0 || index >= m_socketInfoVec.size())
 	{
@@ -540,8 +540,9 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, bool isClientAutoClose/*
 		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime, m_socketType);
 	}
 
-	CON_INFO_LOG("TCP close [ip=%s port=%d index=%d fd=%d isClientAutoClose:%d acceptTime=%lld]",
-		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, isClientAutoClose, tcpInfo.acceptMsgTime);
+	//closetype 0:server主动close 1:client主动close 2:心跳超时
+	CON_INFO_LOG("TCP close [ip=%s port=%d index=%d fd=%d closetype:%d acceptTime=%lld]",
+		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, closetype, tcpInfo.acceptMsgTime);
 }
 
 bool CTCPSocketManage::DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size)
@@ -967,6 +968,7 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	RecvThreadParam* param = (RecvThreadParam*)data;
 	CTCPSocketManage* pThis = param->pThis;
 	int index = param->index;
+	int closetype = 1;
 
 	if (events & BEV_EVENT_EOF)
 	{
@@ -979,13 +981,14 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	else if (events & BEV_EVENT_TIMEOUT) // 长时间没有收到，客户端发过来的数据，读取数据超时
 	{
 		INFO_LOG("心跳踢人 index=%d fd=%d", index, pThis->m_socketInfoVec[index].acceptFd);
+		closetype = 2;
 	}
 	else
 	{
 		SYS_ERROR_LOG("Got an error on the connection,events=%d", events);
 	}
 
-	pThis->RemoveTCPSocketStatus(index, true);
+	pThis->RemoveTCPSocketStatus(index, closetype);
 }
 
 void CTCPSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)
