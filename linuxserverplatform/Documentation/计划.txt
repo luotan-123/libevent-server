@@ -1,10 +1,11 @@
 ﻿新计划 2020/06/17：
 编程任务：
+3、调试底层websocket，解决断开bug
 4、http和https的区别
 5、游戏部分如何lua编写，而不损失性能
 
 理论知识
-1、学习mysql
+1、学习mysql、MongoDB
 2、redis集群部署方案
 3、linux模块知识 （持续积累）
 4、计算机网络（滑动窗口，拥塞控制，udp）
