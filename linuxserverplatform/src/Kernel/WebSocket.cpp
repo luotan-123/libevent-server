@@ -270,7 +270,7 @@ bool CWebSocketManage::SendData(int index, void* pData, int size, int mainID, in
 
 bool CWebSocketManage::CloseSocket(int index)
 {
-	RemoveTCPSocketStatus(index);
+	RemoveTCPSocketInfo(index);
 
 	return true;
 }
@@ -455,7 +455,7 @@ void CWebSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, tcpInfo.bev);
 }
 
-void CWebSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
+void CWebSocketManage::RemoveTCPSocketInfo(int index, int closetype/* = 0*/)
 {
 	if (index < 0 || index >= m_socketInfoVec.size())
 	{
@@ -530,8 +530,7 @@ void CWebSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
 		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime, m_socketType);
 	}
 
-	//closetype 0:server主动close 1:client主动close 2:心跳超时
-	CON_INFO_LOG("WEBSOCKET close [ip=%s port=%d index=%d fd=%d closetype:%d acceptTime=%lld]",
+	CON_INFO_LOG("WEBSOCKET close [ip=%s port=%d index=%d fd=%d closetype=%d acceptTime=%lld]",
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, closetype, tcpInfo.acceptMsgTime);
 }
 
@@ -593,6 +592,10 @@ bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 	struct evbuffer* input = bufferevent_get_input(bev);
 
 	size_t maxSingleRead = Min_(evbuffer_get_length(input), SOCKET_RECV_BUF_SIZE);
+	if (maxSingleRead < APP_PACK_HEAD_SIZE)
+	{
+		maxSingleRead = APP_PACK_HEAD_SIZE;
+	}
 
 	char buf[maxSingleRead];
 
@@ -606,7 +609,7 @@ bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 	size_t handleRemainSize = realAllSize;
 
 	// 不够一个包头
-	if (handleRemainSize < MIN_WEBSOCKET_HEAD_SIZE + sizeof(NetMessageHead))
+	if (handleRemainSize < MIN_WEBSOCKET_HEAD_SIZE)
 	{
 		return true;
 	}
@@ -618,7 +621,7 @@ bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 	while (true)
 	{
 		// 不够一个包头
-		if (handleRemainSize < MIN_WEBSOCKET_HEAD_SIZE + sizeof(NetMessageHead))
+		if (handleRemainSize < MIN_WEBSOCKET_HEAD_SIZE)
 		{
 			break;
 		}
@@ -636,7 +639,7 @@ bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 		{
 			// 消息格式不正确
 			CloseSocket(index);
-			ERROR_LOG("消息格式不正确,index=%d,maxsize=%u,wbmsg.dataLength=%u",
+			ERROR_LOG("数据包超过缓冲区最大限制,index=%d,maxsize=%u,wbmsg.dataLength=%u",
 				index, SOCKET_RECV_BUF_SIZE, wbmsg.dataLength);
 			return false;
 		}
@@ -649,6 +652,30 @@ bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 
 		FetchPayload(pBuffer, pos, wbmsg);
 		FetchPrint(wbmsg);
+
+		// 处理websocket协议
+		int optype = HandWBMsg(bev, index, wbmsg);
+		if (optype == 1) // 普通处理
+		{
+			handleRemainSize -= pos;
+			pBuffer = pBuffer + pos;
+
+			continue;
+		}
+		else if (optype == 2) // 断开连接
+		{
+			RemoveTCPSocketInfo(index, SOCKET_CLOSE_TYPE_C_TO_S);
+			return true;
+		}
+
+		// 不够应用层包头
+		if (wbmsg.payloadLength < sizeof(NetMessageHead))
+		{
+			// 消息格式不正确
+			CloseSocket(index);
+			ERROR_LOG("不够应用层包头,index=%d,wbmsg.payloadLength=%u", index, wbmsg.payloadLength);
+			return false;
+		}
 
 		// 解析应用层包头
 		NetMessageHead* pNetHead = (NetMessageHead*)wbmsg.payload;
@@ -668,7 +695,7 @@ bool CWebSocketManage::RecvData(bufferevent* bev, int index)
 		{
 			// 消息格式不正确
 			CloseSocket(index);
-			ERROR_LOG("消息格式不正确,index=%d,messageSize=%u", index, messageSize);
+			ERROR_LOG("超过单包数据最大值,index=%d,messageSize=%u", index, messageSize);
 			return false;
 		}
 
@@ -793,6 +820,24 @@ bool CWebSocketManage::HandShark(bufferevent* bev, int index)
 	}
 
 	return true;
+}
+
+int CWebSocketManage::HandWBMsg(bufferevent* bev, int index, const WebSocketMsg& wbmsg)
+{
+	// 客户端想服务器断开连接
+	if (wbmsg.opcode == 8)
+	{
+		return 2;
+	}
+
+
+	// 数据部分长度为0，直接交给websocket处理
+	if (wbmsg.payloadLength <= 0)
+	{
+		return 1;
+	}
+
+	return 0;
 }
 
 void CWebSocketManage::SetTcpRcvSndBUF(int fd, int rcvBufSize, int sndBufSize)
@@ -1100,7 +1145,7 @@ void CWebSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	RecvThreadParam* param = (RecvThreadParam*)data;
 	CWebSocketManage* pThis = param->pThis;
 	int index = param->index;
-	int closetype = 1;
+	int closetype = SOCKET_CLOSE_TYPE_CLIENT;
 
 	if (events & BEV_EVENT_EOF)
 	{
@@ -1113,14 +1158,14 @@ void CWebSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	else if (events & BEV_EVENT_TIMEOUT) // 长时间没有收到，客户端发过来的数据，读取数据超时
 	{
 		INFO_LOG("心跳踢人 index=%d fd=%d", index, pThis->m_socketInfoVec[index].acceptFd);
-		closetype = 2;
+		closetype = SOCKET_CLOSE_TYPE_HEART;
 	}
 	else
 	{
 		SYS_ERROR_LOG("Got an error on the connection,events=%d", events);
 	}
 
-	pThis->RemoveTCPSocketStatus(index, closetype);
+	pThis->RemoveTCPSocketInfo(index, closetype);
 }
 
 void CWebSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)
@@ -1187,6 +1232,9 @@ int CWebSocketManage::FetchMaskingKey(char* msg, int& pos, WebSocketMsg& wbmsg)
 	for (int i = 0; i < 4; i++)
 		wbmsg.maskingKey[i] = msg[pos + i];
 	pos += 4;
+
+	wbmsg.dataLength = pos + wbmsg.payloadLength;
+
 	return 0;
 }
 

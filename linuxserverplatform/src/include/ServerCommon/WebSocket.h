@@ -6,6 +6,7 @@
 #define	MAX_WEBSOCKET_HEAD_SIZE			10	//websocket数据包最小包头，实际包头大小2-10
 #define MAGIC_KEY "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" // websocket key
 #define WS_FRAGMENT_FIN (1 << 7)
+#define APP_PACK_HEAD_SIZE				(MAX_WEBSOCKET_HEAD_SIZE + sizeof(NetMessageHead))
 
 enum WEBSOCKET_STATUS {
 	WEBSOCKET_UNCONNECT = 0,
@@ -69,13 +70,15 @@ protected:
 	// 添加TCPSocketInfo
 	void AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo);
 	// 设置tcp为未连接状态
-	void RemoveTCPSocketStatus(int index, int closetype = 0);
+	void RemoveTCPSocketInfo(int index, int closetype = 0);
 	// 派发数据包
 	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
 	// 最底层处理收到的数据函数
 	virtual bool RecvData(bufferevent* bev, int index);
-	//websocket的第一次握手
+	// websocket的第一次握手
 	bool HandShark(bufferevent* bev, int index);
+	// websocket协议处理
+	int HandWBMsg(bufferevent* bev, int index, const WebSocketMsg& wbmsg);
 
 public: // 设置tcp属性
 	// 设置tcp收发缓冲区

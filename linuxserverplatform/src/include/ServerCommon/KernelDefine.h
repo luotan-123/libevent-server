@@ -119,4 +119,13 @@ enum SocketType
 	SOCKET_TYPE_WEBSOCKET = 1,			//websocket
 };
 
+// socket close类型
+enum SocketCloseType
+{
+	SOCKET_CLOSE_TYPE_SERVER = 0,		//服务器主动close
+	SOCKET_CLOSE_TYPE_CLIENT = 1,		//客户端主动close
+	SOCKET_CLOSE_TYPE_HEART = 2,		//心跳超时
+	SOCKET_CLOSE_TYPE_C_TO_S = 3,		//客户端远程调用，让服务器主动close
+};
+
 //////////////////////////////////////////////////////////////////////////

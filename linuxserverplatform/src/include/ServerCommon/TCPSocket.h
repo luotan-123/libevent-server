@@ -129,7 +129,7 @@ protected:
 	// 添加TCPSocketInfo
 	void AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo);
 	// 设置tcp为未连接状态
-	void RemoveTCPSocketStatus(int index, int closetype = 0);
+	void RemoveTCPSocketInfo(int index, int closetype = 0);
 	// 派发数据包
 	bool DispatchPacket(void* pBufferevent, int index, NetMessageHead* pHead, void* pData, int size);
 	// 最底层处理收到的数据函数

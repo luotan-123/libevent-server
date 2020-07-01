@@ -271,7 +271,7 @@ bool CTCPSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, 
 
 bool CTCPSocketManage::CloseSocket(int index)
 {
-	RemoveTCPSocketStatus(index);
+	RemoveTCPSocketInfo(index);
 
 	return true;
 }
@@ -465,7 +465,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, tcpInfo.bev);
 }
 
-void CTCPSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
+void CTCPSocketManage::RemoveTCPSocketInfo(int index, int closetype/* = 0*/)
 {
 	if (index < 0 || index >= m_socketInfoVec.size())
 	{
@@ -539,8 +539,7 @@ void CTCPSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
 		m_pService->OnSocketCloseEvent(uAccessIP, index, (UINT)tcpInfo.acceptMsgTime, m_socketType);
 	}
 
-	//closetype 0:server主动close 1:client主动close 2:心跳超时
-	CON_INFO_LOG("TCP close [ip=%s port=%d index=%d fd=%d closetype:%d acceptTime=%lld]",
+	CON_INFO_LOG("TCP close [ip=%s port=%d index=%d fd=%d closetype=%d acceptTime=%lld]",
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, closetype, tcpInfo.acceptMsgTime);
 }
 
@@ -617,7 +616,7 @@ bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 	{
 		// 消息格式不正确
 		CloseSocket(index);
-		ERROR_LOG("消息格式不正确,index=%d", index);
+		ERROR_LOG("数据包超过缓冲区最大限制,index=%d", index);
 		return false;
 	}
 
@@ -629,7 +628,7 @@ bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 		{
 			// 消息格式不正确
 			CloseSocket(index);
-			ERROR_LOG("消息格式不正确");
+			ERROR_LOG("超过单包数据最大值,index=%d,messageSize=%u", index, messageSize);
 			return false;
 		}
 
@@ -967,7 +966,7 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	RecvThreadParam* param = (RecvThreadParam*)data;
 	CTCPSocketManage* pThis = param->pThis;
 	int index = param->index;
-	int closetype = 1;
+	int closetype = SOCKET_CLOSE_TYPE_CLIENT;
 
 	if (events & BEV_EVENT_EOF)
 	{
@@ -980,14 +979,14 @@ void CTCPSocketManage::EventCB(bufferevent* bev, short events, void* data)
 	else if (events & BEV_EVENT_TIMEOUT) // 长时间没有收到，客户端发过来的数据，读取数据超时
 	{
 		INFO_LOG("心跳踢人 index=%d fd=%d", index, pThis->m_socketInfoVec[index].acceptFd);
-		closetype = 2;
+		closetype = SOCKET_CLOSE_TYPE_HEART;
 	}
 	else
 	{
 		SYS_ERROR_LOG("Got an error on the connection,events=%d", events);
 	}
 
-	pThis->RemoveTCPSocketStatus(index, closetype);
+	pThis->RemoveTCPSocketInfo(index, closetype);
 }
 
 void CTCPSocketManage::AcceptErrorCB(evconnlistener* listener, void* data)
