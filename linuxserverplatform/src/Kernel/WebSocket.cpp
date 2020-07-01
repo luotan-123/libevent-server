@@ -268,56 +268,6 @@ bool CWebSocketManage::SendData(int index, void* pData, int size, int mainID, in
 	return true;
 }
 
-bool CWebSocketManage::CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent)
-{
-	if (!IsConnected(index))
-	{
-		ERROR_LOG("socketIdx close, index=%d, mainID=%d assistID=%d", index, mainID, assistID);
-		return false;
-	}
-
-	if (size < 0 || size > MAX_TEMP_SENDBUF_SIZE - sizeof(PlatformMessageHead))
-	{
-		ERROR_LOG("invalid message size size=%d", size);
-		return false;
-	}
-
-	// 整合一下数据
-	char buf[sizeof(PlatformMessageHead) + size];
-
-	// 拼接包头
-	PlatformMessageHead* pHead = (PlatformMessageHead*)buf;
-	pHead->MainHead.uMainID = mainID;
-	pHead->MainHead.uAssistantID = assistID;
-	pHead->MainHead.uMessageSize = sizeof(PlatformMessageHead) + size;
-	pHead->MainHead.uHandleCode = handleCode;
-	pHead->AssHead.msgID = msgID;
-	pHead->AssHead.userID = userID;
-
-	// 包体
-	if (pData && size > 0)
-	{
-		memcpy(buf + sizeof(PlatformMessageHead), pData, size);
-	}
-
-	// 投递到发送队列
-	if (m_pSendDataLine)
-	{
-		SendDataLineHead lineHead;
-		lineHead.socketIndex = index;
-		lineHead.pBufferevent = pBufferevent;
-		unsigned int addBytes = m_pSendDataLine->AddData(&lineHead.dataLineHead, sizeof(lineHead), 0, buf, pHead->MainHead.uMessageSize);
-
-		if (addBytes == 0)
-		{
-			ERROR_LOG("投递消息失败,mainID=%d,assistID=%d", mainID, assistID);
-			return false;
-		}
-	}
-
-	return true;
-}
-
 bool CWebSocketManage::CloseSocket(int index)
 {
 	RemoveTCPSocketStatus(index);
@@ -352,7 +302,7 @@ bool CWebSocketManage::IsConnected(int index)
 		return false;
 	}
 
-	return m_socketInfoVec[index].isConnect;
+	return m_socketInfoVec[index].isConnect && m_socketInfoVec[index].bHandleAccptMsg;
 }
 
 void CWebSocketManage::GetSocketSet(std::vector<UINT>& vec)
@@ -501,16 +451,6 @@ void CWebSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 
 	LockObject.UnLock();
 
-	// 发送连接成功消息
-	if (m_iServiceType == SERVICE_TYPE_CENTER)
-	{
-		CenterServerSendData(index, 0, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, tcpInfo.bev);
-	}
-	else
-	{
-		SendData(index, NULL, 0, MDM_CONNECT, ASS_CONNECT_SUCCESS, 0, 0, tcpInfo.bev);
-	}
-
 	CON_INFO_LOG("WEBSOCKET connect [ip=%s port=%d index=%d fd=%d bufferevent=%p]",
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, tcpInfo.bev);
 }
@@ -567,6 +507,7 @@ void CWebSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
 
 	LockSendMsgObject.Lock();
 
+	tcpInfo.bHandleAccptMsg = false;
 	tcpInfo.isConnect = false;
 	bufferevent_free(tcpInfo.bev);
 	tcpInfo.bev = nullptr;
@@ -590,7 +531,7 @@ void CWebSocketManage::RemoveTCPSocketStatus(int index, int closetype/* = 0*/)
 	}
 
 	//closetype 0:server主动close 1:client主动close 2:心跳超时
-	CON_INFO_LOG("TCP close [ip=%s port=%d index=%d fd=%d closetype:%d acceptTime=%lld]",
+	CON_INFO_LOG("WEBSOCKET close [ip=%s port=%d index=%d fd=%d closetype:%d acceptTime=%lld]",
 		tcpInfo.ip, tcpInfo.port, index, tcpInfo.acceptFd, closetype, tcpInfo.acceptMsgTime);
 }
 
@@ -1068,7 +1009,7 @@ void* CWebSocketManage::ThreadSendMsg(void* pThreadData)
 				CSignedLockObject LockSendMsgObject(tcpInfo.lock, false);
 				LockSendMsgObject.Lock();
 
-				if (tcpInfo.isConnect && tcpInfo.bev)
+				if (tcpInfo.isConnect && tcpInfo.bHandleAccptMsg && tcpInfo.bev)
 				{
 					if (bufferevent_write(tcpInfo.bev, pBuffer, size - sizeof(SendDataLineHead)) < 0)
 					{

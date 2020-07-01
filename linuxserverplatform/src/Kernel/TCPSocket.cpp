@@ -431,7 +431,6 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 	{
 		tcpInfo.lock = new CSignedLock;
 	}
-	tcpInfo.bHandleAccptMsg = false;
 
 	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
 	LockObject.Lock();

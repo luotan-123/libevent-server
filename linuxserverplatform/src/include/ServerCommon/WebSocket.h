@@ -44,8 +44,6 @@ public:
 public:
 	// 发送数据函数
 	virtual bool SendData(int index, void* pData, int size, int mainID, int assistID, int handleCode, int encrypted, void* pBufferevent, unsigned int uIdentification = 0);
-	// 中心服务器发送数据
-	bool CenterServerSendData(int index, UINT msgID, void* pData, int size, int mainID, int assistID, int handleCode, int userID, void* pBufferevent);
 	// 关闭连接(业务逻辑线程调用)
 	bool CloseSocket(int index);
 	// 获取接收dataline
