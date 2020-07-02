@@ -6,6 +6,7 @@ vim /etc/ld.so.conf
 2、生产core文件
 启动coredumpshell.sh，重启系统生效。重启后，还需要以root执行以下命令。不执行core会生成在当前目录。
 echo -e "/tmp/linuxserverplatform-corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern
+vim /etc/sysctl.conf  配置  net.ipv4.tcp_tw_recycle=1 让TIME-WAIT状态快速回收
 sysctl -p立即生效
 
 3、安装环境
