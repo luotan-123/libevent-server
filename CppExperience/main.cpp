@@ -15,7 +15,7 @@ extern void TestLinuxShm();
 
 int main()
 {
-    printf("测试utf-8\n");
+    //printf("测试utf-8\n");
 
     //TestLinuxList();
     TestLinuxShm();

@@ -5,8 +5,8 @@
 3、lua版简易http服务器
 
 理论知识
-1、学习mysql、MongoDB
-2、redis集群部署方案
+1、redis集群部署方案
+2、学习mysql、MongoDB
 3、linux模块知识 （持续积累）
 4、计算机网络（滑动窗口，拥塞控制，udp）
 
