@@ -1,3 +1,9 @@
+# 开发环境
+本框架开发环境可以是windows，编辑、调试、编译都可以在windows下进行，大大提高开发效率。windows需要安装以下软件：
+1、VS2019
+2、vmware + centos7
+3、xshell
+
 # 编译环境
 1、windows下编译：g++/gcc + vmware + centos7 + ssh + 各种第三方库 + vs2019 + win10
 
