@@ -54,3 +54,6 @@ set fileformat=unix
 12、根据进程名字杀死进程
 pkill -ce "Server"
 
+13、查找并删除
+find ./ -name "core.*" | xargs rm -rf
+
