@@ -18,10 +18,10 @@ int main()
     //printf("测试utf-8\n");
 
     //TestLinuxList();
-    TestLinuxShm();
+    //TestLinuxShm();
 
     //IntelligentPointer();
-    //Iterator();
+    Iterator();
 
 
     printf("-----------程序结束------------\n");
