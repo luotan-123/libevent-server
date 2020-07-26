@@ -74,7 +74,7 @@ UINT CDataLine::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, 
 
 	m_DataList.push_back(pListItem);								//加到队列尾部
 
-	m_DataListSize++;
+	m_DataListSize += pListItem->stDataHead.uSize + 1;
 
 	LockObject.UnLock();
 
@@ -101,13 +101,13 @@ UINT CDataLine::GetData(DataLineHead** pDataBuffer)
 	LockObject.Lock();
 
 	//进入挂起状态
-	if (m_DataListSize <= 0)
+	if (m_DataList.size() <= 0)
 	{
 		m_csLock.Wait();
 	}
 
 	//如果队列是空的，直接返回
-	if (m_DataListSize <= 0)
+	if (m_DataList.size() <= 0)
 	{
 		return 0;
 	}
@@ -116,7 +116,7 @@ UINT CDataLine::GetData(DataLineHead** pDataBuffer)
 	ListItemData* pListItem = m_DataList.front();
 	m_DataList.pop_front();
 
-	m_DataListSize--;
+	m_DataListSize -= pListItem->stDataHead.uSize + 1;
 
 	LockObject.UnLock();
 
@@ -153,5 +153,5 @@ bool CDataLine::CleanLineData()
 // 获取队列数据数量
 size_t CDataLine::GetDataCount()
 {
-	return m_DataListSize;
+	return m_DataList.size();
 }

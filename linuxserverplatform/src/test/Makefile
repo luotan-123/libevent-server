@@ -8,7 +8,7 @@ LIBS = -lKernel -lCommon -lprotobuf -ljson -lpthread -levent -ljemalloc
 
 BINDIR := ../bin/
 BIN := test
-OBJ := jemalloc_cpp.o test.pb.o  main.o
+OBJ := jemalloc_cpp.o test.pb.o main.o Shm.o
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)

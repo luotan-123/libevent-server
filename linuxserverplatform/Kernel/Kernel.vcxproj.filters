@@ -34,6 +34,12 @@
     <Filter Include="线程锁和条件变量">
       <UniqueIdentifier>{82a5bb52-2846-4b6f-b921-9803fbb1eeb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="无锁环形缓冲区">
+      <UniqueIdentifier>{c57b9d39-c8e1-4245-ae3d-f42917926b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="共享内存">
+      <UniqueIdentifier>{581ab7b9-3d67-4063-b25a-f5607f549283}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\include\ServerCommon\ServerTimer.h">
@@ -108,6 +114,12 @@
     <ClInclude Include="..\src\include\ServerCommon\Exception.h">
       <Filter>异常处理</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\shm_obj_pool.h">
+      <Filter>共享内存</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\shmem.h">
+      <Filter>共享内存</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -166,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\base64.cpp">
       <Filter>工具和接口</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\shmem.cpp">
+      <Filter>共享内存</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

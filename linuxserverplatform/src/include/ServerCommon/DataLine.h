@@ -3,8 +3,8 @@
 #include "Lock.h"
 #include "InternalMessageDefine.h"
 
-// 消息队列最大长度
-#define MAX_DATALINE_LEN		320000
+// 消息队列最大字节数量
+const unsigned int MAX_DATALINE_LEN = 10 * 1024 * 1024;
 
 /*
 Struct		:ListItemData
@@ -23,7 +23,7 @@ struct ListItemData
 class CDataLine
 {
 private:
-	volatile size_t m_DataListSize;
+	unsigned int m_DataListSize;
 	std::list <ListItemData*> m_DataList;
 	CSignedLock	m_csLock;
 

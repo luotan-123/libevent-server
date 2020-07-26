@@ -185,7 +185,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -211,7 +211,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -237,7 +237,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -263,7 +263,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -289,7 +289,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -315,7 +315,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -341,7 +341,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -367,7 +367,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
-      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;$(RemoteRootDir)/Common/src/lua;../src/include/ServerCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

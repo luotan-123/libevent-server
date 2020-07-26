@@ -169,8 +169,40 @@ public:
 		printf("A\n");
 	}
 };
+
+extern int TestShm();
+
 int main(int argc, char** argv)
 {
+	// 设置程序路径 , 创建日志目录
+	CINIFile file(CINIFile::GetAppPath() + "config.ini");
+	string logPath = file.GetKeyVal("COMMON", "logPath", "./log/");
+	if (!CUtil::MkdirIfNotExists(logPath.c_str()))
+	{
+		printf("创建日志目录失败！！！ err=%s", strerror(errno));
+		return -1;
+	}
+	GameLogManage()->SetLogPath(logPath);
+
+	// 设置服务器类型
+	ConfigManage()->SetServiceType(SERVICE_TYPE_LOADER);
+
+	// 关联大厅主线程的log文件
+	GameLogManage()->AddLogFile(GetCurrentThreadId(), THREAD_TYPE_MAIN);
+
+	bool ret = false;
+
+	// 加载基础配置
+	ret = ConfigManage()->Init();
+	if (!ret)
+	{
+		CON_ERROR_LOG("ConfigManage::Init error! 请查看启动日志 !!!");
+		return -1;
+	}
+
+	TestShm();
+
+
 	// 测试http服务器
 	CHttpServer httpserver;
 	httpserver.Start();
