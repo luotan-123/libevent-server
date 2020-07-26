@@ -40,7 +40,8 @@ CTCPSocketManage::CTCPSocketManage()
 	m_iServiceType = 0;
 	memset(m_bindIP, 0, sizeof(m_bindIP));
 	m_port = 0;
-	m_uCurSocketIndex = 0;
+	m_iFreeHead = 0;
+	m_iFreeTail = 0;
 	m_socketType = SOCKET_TYPE_TCP;
 }
 
@@ -72,7 +73,16 @@ bool CTCPSocketManage::Init(IServerSocketService* pService, int maxCount, int po
 	m_heartBeatSocketSet.clear();
 
 	// 初始化分配内存
-	m_socketInfoVec.resize(m_uMaxSocketSize * 2);
+	m_socketInfoVec.resize(m_uMaxSocketSize + 1);
+	m_socketIndexVec.resize(m_uMaxSocketSize + 1);
+
+	// 初始化空闲队列
+	m_iFreeHead = 0;
+	m_iFreeTail = 0;
+	for (int i = 0; i < (int)m_socketIndexVec.size(); i++)
+	{
+		m_socketIndexVec[i] = i;
+	}
 
 	INFO_LOG("service TCPSocketManage init end.");
 
@@ -99,7 +109,6 @@ bool CTCPSocketManage::Start(int serverType)
 	m_running = true;
 	m_iServiceType = serverType;
 	m_uCurSocketSize = 0;
-	m_uCurSocketIndex = 0;
 
 	// 创建发送队列
 	if (m_pSendDataLine == NULL)
@@ -143,7 +152,9 @@ bool CTCPSocketManage::Stop()
 
 	m_running = false;
 	m_uCurSocketSize = 0;
-	m_uCurSocketIndex = 0;
+	m_iFreeHead = 0;
+	m_iFreeTail = 0;
+	m_socketIndexVec.clear();
 
 	event_base_loopbreak(m_listenerBase);
 	for (size_t i = 0; i < m_workBaseVec.size(); i++)
@@ -343,29 +354,46 @@ const TCPSocketInfo* CTCPSocketManage::GetTCPSocketInfo(int index)
 	return &m_socketInfoVec[index];
 }
 
-int CTCPSocketManage::GetSocketIndex()
+int CTCPSocketManage::GetFreeSocketIndex()
 {
 	CSignedLockObject LockObject(&m_csSocketInfoLock, true);
 
-	m_uCurSocketIndex = m_uCurSocketIndex % m_socketInfoVec.size();
-	int index = -1;
-
-	for (int iCount = 0; iCount < m_uMaxSocketSize * 2; iCount++)
-	{
-		if (!m_socketInfoVec[m_uCurSocketIndex].isConnect)
-		{
-			index = m_uCurSocketIndex;
-			m_uCurSocketIndex++;
-			break;
-		}
-	}
-
-	if (index >= m_socketInfoVec.size())
+	//<	获取空闲对象空间。
+	int	iFreeHead = (m_iFreeHead + 1) % m_socketIndexVec.size();
+	if (iFreeHead == m_iFreeTail)
 	{
 		return -1;
 	}
 
-	return index;
+	m_iFreeHead = iFreeHead;
+
+	return m_socketIndexVec[iFreeHead];
+}
+
+int CTCPSocketManage::FreeSocketIndex(int index, bool islock /*= true*/)
+{
+	if (index < 0 || index >= m_socketIndexVec.size())
+	{
+		return -1;
+	}
+
+	CSignedLockObject LockObject(&m_csSocketInfoLock, false);
+
+	if (islock)
+	{
+		LockObject.Lock();
+	}
+
+	///	回收对象空间。
+	if (m_iFreeHead == m_iFreeTail)
+	{
+		return -2;
+	}
+
+	m_socketIndexVec[m_iFreeTail] = index;
+	m_iFreeTail = (m_iFreeTail + 1) % m_socketIndexVec.size();
+
+	return 0;
 }
 
 void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo)
@@ -375,7 +403,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 	int fd = pTCPSocketInfo->acceptFd;
 
 	// 分配索引算法
-	int index = GetSocketIndex();
+	int index = GetFreeSocketIndex();
 	if (index < 0)
 	{
 		ERROR_LOG("分配索引失败！！！fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
@@ -388,6 +416,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 	{
 		ERROR_LOG("Error constructing bufferevent!,fd=%d,ip=%s", fd, pTCPSocketInfo->ip);
 		close(fd);
+		FreeSocketIndex(index);
 		return;
 	}
 
@@ -407,6 +436,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		close(fd);
 		bufferevent_free(bev);
 		SafeDelete(pRecvThreadParam);
+		FreeSocketIndex(index);
 		return;
 	}
 
@@ -441,6 +471,7 @@ void CTCPSocketManage::AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTC
 		close(fd);
 		bufferevent_free(bev);
 		SafeDelete(pRecvThreadParam);
+		FreeSocketIndex(index, false);
 		return;
 	}
 
@@ -493,6 +524,9 @@ void CTCPSocketManage::RemoveTCPSocketInfo(int index, int closetype/* = 0*/)
 	{
 		tcpInfo.lock = new CSignedLock;
 	}
+
+	// 回收索引
+	FreeSocketIndex(index, false);
 
 	uAccessIP = inet_addr(tcpInfo.ip);
 	m_uCurSocketSize--;
@@ -616,7 +650,7 @@ bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 	{
 		// 消息格式不正确
 		CloseSocket(index);
-		ERROR_LOG("数据包超过缓冲区最大限制,index=%d", index);
+		ERROR_LOG("close socket 数据包超过缓冲区最大限制,index=%d", index);
 		return false;
 	}
 
@@ -628,7 +662,7 @@ bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 		{
 			// 消息格式不正确
 			CloseSocket(index);
-			ERROR_LOG("超过单包数据最大值,index=%d,messageSize=%u", index, messageSize);
+			ERROR_LOG("close socket 超过单包数据最大值,index=%d,messageSize=%u", index, messageSize);
 			return false;
 		}
 
@@ -637,7 +671,7 @@ bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 		{
 			// 数据包不够包头
 			CloseSocket(index);
-			ERROR_LOG("数据包不够包头");
+			ERROR_LOG("close socket 数据包不够包头");
 			return false;
 		}
 

@@ -124,8 +124,10 @@ public:
 	const TCPSocketInfo* GetTCPSocketInfo(int index);
 	
 protected:
-	// 分配socketIndex算法
-	int GetSocketIndex();
+	// 分配空闲socketIndex
+	int GetFreeSocketIndex();
+	// 释放空闲索引
+	int FreeSocketIndex(int index, bool islock = true);
 	// 添加TCPSocketInfo
 	void AddTCPSocketInfo(int threadIndex, PlatformSocketInfo* pTCPSocketInfo);
 	// 设置tcp为未连接状态
@@ -178,8 +180,12 @@ protected:
 	// 内核管理socket模块
 	CSignedLock					m_csSocketInfoLock;
 	std::vector<TCPSocketInfo>	m_socketInfoVec;
-	volatile UINT				m_uCurSocketIndex;
 	std::set<UINT>				m_heartBeatSocketSet;
+
+	// 分配索引
+	int							m_iFreeHead;	//<	空闲头。head=tail表示空。
+	int							m_iFreeTail;	//<	空闲尾。
+	std::vector<int>			m_socketIndexVec;// 空闲队列
 
 public:
 	unsigned int	m_iServiceType;

@@ -118,8 +118,8 @@ bool CGameLogonManage::OnStart()
 	m_socketInfoMap.clear();
 	m_webSocketInfoMap.clear();
 	m_socketIndexVec.clear();
-	m_socketInfoMap.resize(2 * m_uMaxPeople);
-	m_webSocketInfoMap.resize(2 * m_uMaxWebPeople);
+	m_socketInfoMap.resize(m_uMaxPeople + 1);
+	m_webSocketInfoMap.resize(m_uMaxWebPeople + 1);
 	m_socketIndexVec.resize(Max_(m_uMaxPeople, m_uMaxWebPeople));
 	m_workServerFDVec.clear();
 	m_workServerIDSet.clear();

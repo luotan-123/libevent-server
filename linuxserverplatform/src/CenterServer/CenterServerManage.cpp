@@ -75,7 +75,7 @@ bool CCenterServerManage::OnStart()
 
 	m_lastNormalTimerTime = time(NULL);
 
-	m_socketIndexVec.resize(2 * m_uMaxPeople);
+	m_socketIndexVec.resize(m_uMaxPeople + 1);
 
 	//// 测试redis读写速度
 	//m_pRedis->TestRedis("CenterServer-GameRedis-Speed");
