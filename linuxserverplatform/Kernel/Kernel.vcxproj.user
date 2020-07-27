@@ -3,41 +3,41 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <RemoteDebuggerWorkingDirectory>$(RemoteOutDir)</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>$(RemoteTargetPath)</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
   </PropertyGroup>
 </Project>
