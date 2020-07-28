@@ -1,9 +1,3 @@
-/**
-*	@file	shm_stl.h
-*
-* 	@author	huanghaoyang
-* 	@date	2020-04-07
-*/
 #ifndef _SHM_STL_H_
 #define _SHM_STL_H_
 
@@ -20,17 +14,17 @@ public:
 	ShmNode();
 	virtual ~ShmNode();
 	/**
-	*	@brief ·ÖÅä¶ÔÏó¿Õ¼äÊ±µ÷ÓÃ£¬½øĞĞ³õÊ¼»¯¹¤×÷¡£
+	*	@brief åˆ†é…å¯¹è±¡ç©ºé—´æ—¶è°ƒç”¨ï¼Œè¿›è¡Œåˆå§‹åŒ–å·¥ä½œã€‚
 	*/
 	virtual void Init() {}
 
 	/**
-	*	@brief  ²»Çå³ı¹²ÏíÄÚ´æÆô¶¯Ê±µ÷ÓÃ£¬¸ºÔğ»Ö¸´¹¤×÷£¬ÈçÖ¸ÕëÖØÖÃµÈ
+	*	@brief  ä¸æ¸…é™¤å…±äº«å†…å­˜å¯åŠ¨æ—¶è°ƒç”¨ï¼Œè´Ÿè´£æ¢å¤å·¥ä½œï¼Œå¦‚æŒ‡é’ˆé‡ç½®ç­‰
 	*/
 	virtual void Resume() {}
 
 	/**
-	*	@brief  ¶ÔÏó¿Õ¼ä±»»ØÊÕÊ±µ÷ÓÃ£¬½øĞĞÇå³ş¹¤×÷¡£
+	*	@brief  å¯¹è±¡ç©ºé—´è¢«å›æ”¶æ—¶è°ƒç”¨ï¼Œè¿›è¡Œæ¸…æ¥šå·¥ä½œã€‚
 	*/
 	virtual void Reclaim() {}
 
@@ -66,13 +60,13 @@ public:
 
 public:
 	/**
-	*  @brief    ³õÊ¼»¯º¯Êı
+	*  @brief    åˆå§‹åŒ–å‡½æ•°
 	*  @note
 	*/
 	int Init(const int aiKey, int aiNum, int aiType);
 
 	/**
-	* 	@brief	·µ»ØÒÑÊ¹ÓÃµÄobjÊıÁ¿
+	* 	@brief	è¿”å›å·²ä½¿ç”¨çš„objæ•°é‡
 	*/
 	int GetUseNum()
 	{
@@ -80,7 +74,7 @@ public:
 	}
 
 	/**
-	* 	@brief	·µ»Ø¿ÕÏĞµÄobjÊıÁ¿
+	* 	@brief	è¿”å›ç©ºé—²çš„objæ•°é‡
 	*/
 	int GetFreeNum()
 	{
@@ -88,67 +82,67 @@ public:
 	}
 
 	/**
-	* 	@brief	·µ»ØÍ·²¿µÄ¶ÔÏóÖ¸Õë
+	* 	@brief	è¿”å›å¤´éƒ¨çš„å¯¹è±¡æŒ‡é’ˆ
 	*/
 	CData* Front();
 
 	/**
-	* 	@brief	É¾³ıÍ·²¿µÄ¶ÔÏó
+	* 	@brief	åˆ é™¤å¤´éƒ¨çš„å¯¹è±¡
 	*/
 	void PopFront();
 
 	/**
-	* 	@brief	·µ»ØÎ²²¿µÄ¶ÔÏóÖ¸Õë
+	* 	@brief	è¿”å›å°¾éƒ¨çš„å¯¹è±¡æŒ‡é’ˆ
 	*/
 	CData* Back();
 
 	/**
-	* 	@brief	´ÓÎ²²¿Ôö¼ÓÒ»¸ö¶ÔÏó
+	* 	@brief	ä»å°¾éƒ¨å¢åŠ ä¸€ä¸ªå¯¹è±¡
 	*/
 	int PushBack(CData& Node);
 
 	/**
-	* 	@brief	´ÓÖ¸¶¨Î»ÖÃ²åÈëÒ»¸ö¶ÔÏó
+	* 	@brief	ä»æŒ‡å®šä½ç½®æ’å…¥ä¸€ä¸ªå¯¹è±¡
 	*/
 	int Insert(int iPos, CData& Node);
 
 	/**
-	* 	@brief	É¾³ıÎ²²¿µÄ¶ÔÏó
+	* 	@brief	åˆ é™¤å°¾éƒ¨çš„å¯¹è±¡
 	*/
 	void PopBack();
 
 	/**
-	* 	@brief	É¾³ıÖ¸¶¨Î»ÖÃÏÂ±êµÄ¶ÔÏó
+	* 	@brief	åˆ é™¤æŒ‡å®šä½ç½®ä¸‹æ ‡çš„å¯¹è±¡
 	*/
 	int Delete(int iPos);
 	int Delete(int iBeginPos, int EndPos);
 
 	/**
-	* 	@brief	É¾³ıËùÓĞµÄÊı×é¶ÔÏó
+	* 	@brief	åˆ é™¤æ‰€æœ‰çš„æ•°ç»„å¯¹è±¡
 	*/
 	void Clear();
 
 	/**
-	* 	@brief	·µ»ØÒÑ¾­Ê¹ÓÃµÄÊı×é´óĞ¡
+	* 	@brief	è¿”å›å·²ç»ä½¿ç”¨çš„æ•°ç»„å¤§å°
 	*/
 	int Size();
 
 	/**
-	* 	@brief	»ñÈ¡Ö¸¶¨Î»ÖÃÏÂ±êµÄ¶ÔÏó
+	* 	@brief	è·å–æŒ‡å®šä½ç½®ä¸‹æ ‡çš„å¯¹è±¡
 	*/
 	CData* GetObj(int iPos);
 
 	/**
-	* 	@brief	»ñÈ¡ËùÓĞ¶ÔÏóµÄÖ¸ÕëÊı×é
+	* 	@brief	è·å–æ‰€æœ‰å¯¹è±¡çš„æŒ‡é’ˆæ•°ç»„
 	*/
 	void GetAllObj(std::vector<CData*>& vecDatas);
 
 	/**
-	* 	@brief	ÖØÔØ[]²Ù×÷·û²Ù×÷
+	* 	@brief	é‡è½½[]æ“ä½œç¬¦æ“ä½œ
 	*/
 	CData& operator[](int i)
 	{
-		// Èç¹ûÏÂ±ê³¬³ö·¶Î§¾ÍÖ±½Ó¹Ò°É
+		// å¦‚æœä¸‹æ ‡è¶…å‡ºèŒƒå›´å°±ç›´æ¥æŒ‚å§
 		if (i < 0 || i >(int)m_keyVec.size())
 		{
 			CData* pData = (CData*)NULL;
@@ -159,13 +153,13 @@ public:
 	}
 
 	/**
-	* 	@brief ´Ó¹²ÏíÄÚ´æÖØ½¨Êı×éË÷ÒıºÍË³ĞòÊ±µÄÅÅĞò±È½Ï
+	* 	@brief ä»å…±äº«å†…å­˜é‡å»ºæ•°ç»„ç´¢å¼•å’Œé¡ºåºæ—¶çš„æ’åºæ¯”è¾ƒ
 	*/
 	static bool IDCompare(const ShmVectorKey& a, const ShmVectorKey& b);
 
 protected:
 	/**
-	*  @brief    ´Ó¹²ÏíÄÚ´æÖĞ»Ö¸´º¯Êı
+	*  @brief    ä»å…±äº«å†…å­˜ä¸­æ¢å¤å‡½æ•°
 	*  @note
 	*/
 	virtual void Resume();
@@ -188,13 +182,13 @@ public:
 
 public:
 	/**
-	*  @brief    ³õÊ¼»¯º¯Êı
+	*  @brief    åˆå§‹åŒ–å‡½æ•°
 	*  @note
 	*/
 	int Init(const int aiKey, int aiNum, int aiType);
 
 	/**
-	* 	@brief	·µ»ØÒÑÊ¹ÓÃµÄobjÊıÁ¿
+	* 	@brief	è¿”å›å·²ä½¿ç”¨çš„objæ•°é‡
 	*/
 	int GetUseNum()
 	{
@@ -202,7 +196,7 @@ public:
 	}
 
 	/**
-	* 	@brief	·µ»Ø¿ÕÏĞµÄobjÊıÁ¿
+	* 	@brief	è¿”å›ç©ºé—²çš„objæ•°é‡
 	*/
 	int GetFreeNum()
 	{
@@ -210,41 +204,41 @@ public:
 	}
 
 	/**
-	* 	@brief	¸ù¾İÖ¸¶¨µÄkey²éÕÒÔªËØ¶ÔÏó
+	* 	@brief	æ ¹æ®æŒ‡å®šçš„keyæŸ¥æ‰¾å…ƒç´ å¯¹è±¡
 	*/
 	CData* Get(const CKey oKey);
 
 	/**
-	* 	@brief	²åÈëÒ»¸öÔªËØ¶ÔÏó
+	* 	@brief	æ’å…¥ä¸€ä¸ªå…ƒç´ å¯¹è±¡
 	*/
 	int Insert(const CKey& oKey, const CData& Node);
 
 	/**
-	* 	@brief	É¾³ıÖ¸¶¨keyµÄÔªËØ¶ÔÏó
+	* 	@brief	åˆ é™¤æŒ‡å®škeyçš„å…ƒç´ å¯¹è±¡
 	*/
 	int Delete(const CKey& oKey);
 
 	/**
-	* 	@brief	É¾³ıËùÓĞµÄÊı×é¶ÔÏó
+	* 	@brief	åˆ é™¤æ‰€æœ‰çš„æ•°ç»„å¯¹è±¡
 	*/
 	void Clear();
 
 	/**
-	* 	@brief	·µ»ØÒÑ¾­Ê¹ÓÃµÄÊı×é´óĞ¡
+	* 	@brief	è¿”å›å·²ç»ä½¿ç”¨çš„æ•°ç»„å¤§å°
 	*/
 	int Size();
 
 	/**
-	* 	@brief	»ñÈ¡ËùÓĞ¶ÔÏóµÄmapÁĞ±í
+	* 	@brief	è·å–æ‰€æœ‰å¯¹è±¡çš„mapåˆ—è¡¨
 	*/
 	void GetAllObj(std::vector<std::pair<CKey, CData*> >& allObjs);
 
 	/**
-	* 	@brief	ÖØÔØ[]²Ù×÷·û²Ù×÷
+	* 	@brief	é‡è½½[]æ“ä½œç¬¦æ“ä½œ
 	*/
 	CData& operator[](const CKey& oKey)
 	{
-		// Ä£·ÂmapµÄÃ»ÓĞ¾Í²åÈëÒ»¸ö¿ÕÔªËØ
+		// æ¨¡ä»¿mapçš„æ²¡æœ‰å°±æ’å…¥ä¸€ä¸ªç©ºå…ƒç´ 
 		CData* pData = Get(oKey);
 		if (pData == NULL)
 		{
@@ -257,7 +251,7 @@ public:
 
 protected:
 	/**
-	*  @brief    ´Ó¹²ÏíÄÚ´æÖĞ»Ö¸´º¯Êı
+	*  @brief    ä»å…±äº«å†…å­˜ä¸­æ¢å¤å‡½æ•°
 	*  @note
 	*/
 	virtual void Resume();
@@ -276,7 +270,7 @@ class ShmData
 {
 public:
 	/**
-	*  @brief    ³õÊ¼»¯º¯Êı
+	*  @brief    åˆå§‹åŒ–å‡½æ•°
 	*  @note
 	*/
 	int Init(const int aiKey, int aiType)
@@ -288,7 +282,7 @@ public:
 		int iRet = m_dataPool.CreateObjPool(aiKey, ullNeedSize, aiUint, aiNum, aiType, __FILE__, __LINE__);
 		if (iRet < 0)
 		{
-			LOG_ERR("%s:Create Shared-Mem Failed,iRet[%d]\n", __PRETTY_FUNCTION__, iRet);
+			printf("%s:Create Shared-Mem Failed,iRet[%d] %m\n", __PRETTY_FUNCTION__, iRet);
 			return iRet;
 		}
 		if (ESSM_Resume == m_dataPool.GetStartFlag())
@@ -300,7 +294,7 @@ public:
 	}
 
 	/**
-	* 	@brief	»ñÈ¡Êı¾İÇø½á¹¹ÌåÖ¸Õë
+	* 	@brief	è·å–æ•°æ®åŒºç»“æ„ä½“æŒ‡é’ˆ
 	*/
 	CData* GetDataPtr()
 	{
@@ -309,7 +303,7 @@ public:
 	}
 
 	/**
-	* 	@brief	ÖØÔØ->²Ù×÷·û²Ù×÷
+	* 	@brief	é‡è½½->æ“ä½œç¬¦æ“ä½œ
 	*/
 	CData* operator->()
 	{
@@ -318,7 +312,7 @@ public:
 	}
 
 	/**
-	* 	@brief	Êı¾İÇøÇå0ÖØÖÃ
+	* 	@brief	æ•°æ®åŒºæ¸…0é‡ç½®
 	*/
 	void Reset()
 	{
@@ -333,7 +327,7 @@ protected:
 
 /////////////////////////////////ShmVector/////////////////////////////////////////
 /**
-*  @brief    ³õÊ¼»¯º¯Êı
+*  @brief    åˆå§‹åŒ–å‡½æ•°
 *  @note
 */
 template <class CData>
@@ -341,14 +335,14 @@ int ShmVector<CData>::Init(const int aiKey, int aiNum, int aiType)
 {
 	m_ullGID = 0;
 	m_aiType = aiType;
-	// ¶à¼ÓÒ»¸ö½Úµãµ±Î²½áµã
+	// å¤šåŠ ä¸€ä¸ªèŠ‚ç‚¹å½“å°¾ç»“ç‚¹
 	aiNum += 1;
 	int aiUint = sizeof(ShmVectorNode);
 	uint64_t ullNeedSize = sizeof(OBJPOOLHEAD) + sizeof(int) * aiNum + sizeof(char) * aiNum + aiUint * aiNum + 32;
 	int iRet = m_dataPool.CreateObjPool(aiKey, ullNeedSize, aiUint, aiNum, aiType, __FILE__, __LINE__);
 	if (iRet < 0)
 	{
-		LOG_ERR("%s:Create Shared-Mem Failed,iRet[%d]\n", __PRETTY_FUNCTION__, iRet);
+		printf("%s:Create Shared-Mem Failed,iRet[%d] %m\n", __PRETTY_FUNCTION__, iRet);
 		return iRet;
 	}
 	if (ESSM_Resume == m_dataPool.GetStartFlag())
@@ -380,7 +374,7 @@ bool ShmVector<CData>::IDCompare(const ShmVectorKey& a, const ShmVectorKey& b)
 }
 
 /**
-*  @brief    ´Ó¹²ÏíÄÚ´æÖĞ»Ö¸´º¯Êı
+*  @brief    ä»å…±äº«å†…å­˜ä¸­æ¢å¤å‡½æ•°
 *  @note
 */
 template <class CData>
@@ -392,7 +386,7 @@ void ShmVector<CData>::Resume()
 }
 
 /**
-* 	@brief	·µ»ØÍ·²¿µÄ¶ÔÏóÖ¸Õë
+* 	@brief	è¿”å›å¤´éƒ¨çš„å¯¹è±¡æŒ‡é’ˆ
 */
 template <class CData>
 CData* ShmVector<CData>::Front()
@@ -405,7 +399,7 @@ CData* ShmVector<CData>::Front()
 }
 
 /**
-* 	@brief	É¾³ıÍ·²¿µÄ¶ÔÏó
+* 	@brief	åˆ é™¤å¤´éƒ¨çš„å¯¹è±¡
 */
 template <class CData>
 void ShmVector<CData>::PopFront()
@@ -418,7 +412,7 @@ void ShmVector<CData>::PopFront()
 }
 
 /**
-* 	@brief	·µ»ØÎ²²¿µÄ¶ÔÏóÖ¸Õë
+* 	@brief	è¿”å›å°¾éƒ¨çš„å¯¹è±¡æŒ‡é’ˆ
 */
 template <class CData>
 CData* ShmVector<CData>::Back()
@@ -431,7 +425,7 @@ CData* ShmVector<CData>::Back()
 }
 
 /**
-* 	@brief	´ÓÎ²²¿Ôö¼ÓÒ»¸ö¶ÔÏó
+* 	@brief	ä»å°¾éƒ¨å¢åŠ ä¸€ä¸ªå¯¹è±¡
 */
 template <class CData>
 int ShmVector<CData>::PushBack(CData& Node)
@@ -440,7 +434,7 @@ int ShmVector<CData>::PushBack(CData& Node)
 }
 
 /**
-* 	@brief	´ÓÖ¸¶¨Î»ÖÃ²åÈëÒ»¸ö¶ÔÏó
+* 	@brief	ä»æŒ‡å®šä½ç½®æ’å…¥ä¸€ä¸ªå¯¹è±¡
 */
 template <class CData>
 int ShmVector<CData>::Insert(int iPos, CData& Node)
@@ -463,7 +457,7 @@ int ShmVector<CData>::Insert(int iPos, CData& Node)
 }
 
 /**
-* 	@brief	É¾³ıÎ²²¿µÄ¶ÔÏó
+* 	@brief	åˆ é™¤å°¾éƒ¨çš„å¯¹è±¡
 */
 template <class CData>
 void ShmVector<CData>::PopBack()
@@ -476,7 +470,7 @@ void ShmVector<CData>::PopBack()
 }
 
 /**
-* 	@brief	É¾³ıÖ¸¶¨Î»ÖÃÏÂ±êµÄ¶ÔÏó
+* 	@brief	åˆ é™¤æŒ‡å®šä½ç½®ä¸‹æ ‡çš„å¯¹è±¡
 */
 template <class CData>
 int ShmVector<CData>::Delete(int iPos)
@@ -508,7 +502,7 @@ int ShmVector<CData>::Delete(int iBeginPos, int iEndPos)
 
 
 /**
-* 	@brief	É¾³ıËùÓĞµÄÊı×é¶ÔÏó
+* 	@brief	åˆ é™¤æ‰€æœ‰çš„æ•°ç»„å¯¹è±¡
 */
 template <class CData>
 void ShmVector<CData>::Clear()
@@ -522,7 +516,7 @@ void ShmVector<CData>::Clear()
 }
 
 /**
-* 	@brief	·µ»ØÒÑ¾­Ê¹ÓÃµÄÊı×é´óĞ¡
+* 	@brief	è¿”å›å·²ç»ä½¿ç”¨çš„æ•°ç»„å¤§å°
 */
 template <class CData>
 int ShmVector<CData>::Size()
@@ -531,12 +525,12 @@ int ShmVector<CData>::Size()
 }
 
 /**
-* 	@brief	»ñÈ¡Ö¸¶¨Î»ÖÃÏÂ±êµÄ¶ÔÏó
+* 	@brief	è·å–æŒ‡å®šä½ç½®ä¸‹æ ‡çš„å¯¹è±¡
 */
 template <class CData>
 CData* ShmVector<CData>::GetObj(int iPos)
 {
-	// Èç¹ûÏÂ±ê³¬³ö·¶Î§¾ÍÖ±½Ó¹Ò°É
+	// å¦‚æœä¸‹æ ‡è¶…å‡ºèŒƒå›´å°±ç›´æ¥æŒ‚å§
 	if (iPos < 0 || iPos >(int)m_keyVec.size())
 	{
 		CData* pData = (CData*)NULL;
@@ -547,7 +541,7 @@ CData* ShmVector<CData>::GetObj(int iPos)
 }
 
 /**
-* 	@brief	»ñÈ¡ËùÓĞ¶ÔÏóµÄÖ¸ÕëÊı×é
+* 	@brief	è·å–æ‰€æœ‰å¯¹è±¡çš„æŒ‡é’ˆæ•°ç»„
 */
 template <class CData>
 void ShmVector<CData>::GetAllObj(std::vector<CData*>& vecDatas)
@@ -562,21 +556,21 @@ void ShmVector<CData>::GetAllObj(std::vector<CData*>& vecDatas)
 
 /////////////////////////////////ShmMap/////////////////////////////////////////
 /**
-*  @brief    ³õÊ¼»¯º¯Êı
+*  @brief    åˆå§‹åŒ–å‡½æ•°
 *  @note
 */
 template <class CKey, class CData>
 int ShmMap<CKey, CData>::Init(const int aiKey, int aiNum, int aiType)
 {
 	m_aiType = aiType;
-	// ¶à¼ÓÒ»¸ö½Úµãµ±Î²½áµã
+	// å¤šåŠ ä¸€ä¸ªèŠ‚ç‚¹å½“å°¾ç»“ç‚¹
 	aiNum += 1;
 	int aiUint = sizeof(ShmMapNode);
 	uint64_t ullNeedSize = sizeof(OBJPOOLHEAD) + sizeof(int) * aiNum + sizeof(char) * aiNum + aiUint * aiNum + 32;
 	int iRet = m_dataPool.CreateObjPool(aiKey, ullNeedSize, aiUint, aiNum, aiType, __FILE__, __LINE__);
 	if (iRet < 0)
 	{
-		LOG_ERR("%s:Create Shared-Mem Failed,iRet[%d]\n", __PRETTY_FUNCTION__, iRet);
+		printf("%s:Create Shared-Mem Failed,iRet[%d] %m\n", __PRETTY_FUNCTION__, iRet);
 		return iRet;
 	}
 	if (ESSM_Resume == m_dataPool.GetStartFlag())
@@ -588,7 +582,7 @@ int ShmMap<CKey, CData>::Init(const int aiKey, int aiNum, int aiType)
 }
 
 /**
-* 	@brief	¸ù¾İÖ¸¶¨µÄkey²éÕÒÔªËØ¶ÔÏó
+* 	@brief	æ ¹æ®æŒ‡å®šçš„keyæŸ¥æ‰¾å…ƒç´ å¯¹è±¡
 */
 template <class CKey, class CData>
 CData* ShmMap<CKey, CData>::Get(CKey oKey)
@@ -600,12 +594,12 @@ CData* ShmMap<CKey, CData>::Get(CKey oKey)
 }
 
 /**
-* 	@brief	²åÈëÒ»¸öÔªËØ¶ÔÏó
+* 	@brief	æ’å…¥ä¸€ä¸ªå…ƒç´ å¯¹è±¡
 */
 template <class CKey, class CData>
 int ShmMap<CKey, CData>::Insert(const CKey& oKey, const CData& Node)
 {
-	// ÒÑ¾­´æÔÚµÄÖØĞÂ¸³Öµ
+	// å·²ç»å­˜åœ¨çš„é‡æ–°èµ‹å€¼
 	CData* pData = Get(oKey);
 	if (pData != NULL)
 	{
@@ -628,7 +622,7 @@ int ShmMap<CKey, CData>::Insert(const CKey& oKey, const CData& Node)
 }
 
 /**
-* 	@brief	É¾³ıÖ¸¶¨keyµÄÔªËØ¶ÔÏó
+* 	@brief	åˆ é™¤æŒ‡å®škeyçš„å…ƒç´ å¯¹è±¡
 */
 template <class CKey, class CData>
 int ShmMap<CKey, CData>::Delete(const CKey& oKey)
@@ -643,14 +637,14 @@ int ShmMap<CKey, CData>::Delete(const CKey& oKey)
 }
 
 /**
-* 	@brief	É¾³ıËùÓĞµÄÊı×é¶ÔÏó
+* 	@brief	åˆ é™¤æ‰€æœ‰çš„æ•°ç»„å¯¹è±¡
 */
 template <class CKey, class CData>
 void ShmMap<CKey, CData>::Clear()
 {
-	// forÑ­»·±éÀúm_keyMap±àÒë²»¹ı£¬Ö»ÄÜÏÂÃæµÄ·½Ê½À´ÊµÏÖ
+	// forå¾ªç¯éå†m_keyMapç¼–è¯‘ä¸è¿‡ï¼Œåªèƒ½ä¸‹é¢çš„æ–¹å¼æ¥å®ç°
 	std::vector<int> vIdxList;
-	vIdxList.reserve(m_keyMap.size());    //Ô¤·ÖÅä¿Õ¼ä
+	vIdxList.reserve(m_keyMap.size());    //é¢„åˆ†é…ç©ºé—´
 	int iCount = 0;
 	int iSize = m_dataPool.GetFreeNum() + m_dataPool.GetUseNum();
 	for (int i = 1; i < iSize; ++i)
@@ -675,7 +669,7 @@ void ShmMap<CKey, CData>::Clear()
 }
 
 /**
-* 	@brief	·µ»ØÒÑ¾­Ê¹ÓÃµÄÊı×é´óĞ¡
+* 	@brief	è¿”å›å·²ç»ä½¿ç”¨çš„æ•°ç»„å¤§å°
 */
 template <class CKey, class CData>
 int ShmMap<CKey, CData>::Size()
@@ -684,15 +678,15 @@ int ShmMap<CKey, CData>::Size()
 }
 
 /**
-* 	@brief	»ñÈ¡ËùÓĞ¶ÔÏóµÄmapÁĞ±í
+* 	@brief	è·å–æ‰€æœ‰å¯¹è±¡çš„mapåˆ—è¡¨
 */
 template <class CKey, class CData>
 void ShmMap<CKey, CData>::GetAllObj(std::vector<std::pair<CKey, CData*> >& allObjs)
 {
 	allObjs.clear();
 
-	// forÑ­»·±éÀúm_keyMap±àÒë²»¹ı£¬Ö»ÄÜÏÂÃæµÄ·½Ê½À´ÊµÏÖ
-	allObjs.reserve(m_keyMap.size());    //Ô¤·ÖÅä¿Õ¼ä
+	// forå¾ªç¯éå†m_keyMapç¼–è¯‘ä¸è¿‡ï¼Œåªèƒ½ä¸‹é¢çš„æ–¹å¼æ¥å®ç°
+	allObjs.reserve(m_keyMap.size());    //é¢„åˆ†é…ç©ºé—´
 	int iCount = 0;
 	int iSize = m_dataPool.GetFreeNum() + m_dataPool.GetUseNum();
 	for (int i = 1; i < iSize; ++i)
@@ -710,7 +704,7 @@ void ShmMap<CKey, CData>::GetAllObj(std::vector<std::pair<CKey, CData*> >& allOb
 }
 
 /**
-*  @brief    ´Ó¹²ÏíÄÚ´æÖĞ»Ö¸´º¯Êı
+*  @brief    ä»å…±äº«å†…å­˜ä¸­æ¢å¤å‡½æ•°
 *  @note
 */
 template <class CKey, class CData>
@@ -729,7 +723,7 @@ int ShmMap<CKey, CData>::ResumeData(ShmNode<CKey, CData>* pData, void* pArgList,
 	ShmMap<CKey, CData>* pShmMap = (ShmMap<CKey, CData>*)pArgList;
 	if (pShmMap->Get(pData->m_oKey) != NULL)
 	{
-		LOG_ERR("%s:Create Shared-Mem Failed,iIndex[%d]\n", __PRETTY_FUNCTION__, pData->m_iShmIndex);
+		printf("%s:Create Shared-Mem Failed,iIndex[%d]\n", __PRETTY_FUNCTION__, pData->m_iShmIndex);
 		return -1;
 	}
 

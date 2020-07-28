@@ -1,7 +1,8 @@
 #include "CommonHead.h"
 #include "shm_obj_pool.h"
+#include "shm_stl.h"
 
-class A
+class A:public CXObj
 {
 public:
     A() {}
@@ -31,6 +32,41 @@ const int a_size = 4;
 
 int TestShm()
 {
+
+    ShmVector<A> shmvec;
+    ShmMap<int,A> shmvmap;
+
+    // 第二个参数是数量
+    if (ESSM_Resume == shmvec.Init(0x123456, 100, 0))
+    {
+        printf("恢复内存\n");
+    }
+    else
+    {
+        printf("第一次使用内存\n");
+    }
+    A a,b;
+    a.val = 11111;
+    b.val = 22222;
+    shmvec.PushBack(a);
+
+    int ret = shmvmap.Init(0x123457, 200, 0);
+    if (ESSM_Resume == ret)
+    {
+        printf("恢复内存\n");
+    }
+    else if(ESSM_Init == ret)
+    {
+        printf("第一次使用内存\n");
+    }
+    else
+    {
+        printf("出错\n");
+        return -1;
+    }
+    shmvmap[7] = a;
+    shmvmap[3] = b;
+
 
     int index = 0;
     A* p = NULL;

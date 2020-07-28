@@ -161,12 +161,12 @@ void do_something(size_t i)
 	// Leak some memory.
 	malloc(i * 100);
 }
-class A
+class ABBB
 {
 public:
-	A()
+	ABBB()
 	{
-		printf("A\n");
+		printf("ABBB\n");
 	}
 };
 
@@ -208,7 +208,7 @@ int main(int argc, char** argv)
 	httpserver.Start();
 
 
-	A* pa = new A[6];
+	ABBB* pa = new ABBB[6];
 	int i;
 	for (i = 0; i < 1000; i++)
 	{
