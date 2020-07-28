@@ -5,6 +5,7 @@
 #include "shm_obj_pool.h"
 #include <vector>
 #include <map>
+#include <assert.h>
 
 
 template <class CKey, class CData>
@@ -609,8 +610,9 @@ int ShmMap<CKey, CData>::Insert(const CKey& oKey, const CData& Node)
 	{
 		int aiIndex = 0;
 		ShmMapNode* pNode = m_dataPool.GetFreeObj(m_aiType, &aiIndex);
-		if (pNode == NULL)
-			return -1;
+		assert(pNode != NULL);
+		/*if (pNode == NULL)
+			return -1;*/
 
 		pNode->m_oData = Node;
 		pNode->m_iShmIndex = aiIndex;

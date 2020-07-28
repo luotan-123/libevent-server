@@ -7,7 +7,7 @@ class A:public CXObj
 public:
     A() {}
     ~A() {}
-    bool CheckMem() { return true; }
+    //bool CheckMem() { return true; }
     void Init() { /*printf("第一次使用对象内存\n");*/ }
     void Resume() { /*printf("恢复对象内存\n");*/ }
     static A* CreateObject(void* p)
@@ -28,16 +28,44 @@ public:
     int val;
 };
 
+class BB
+{
+public:
+    BB() {}
+    ~BB() {}
+    bool CheckMem() { return true; }
+    void Init() { /*printf("第一次使用对象内存\n");*/ }
+    void Resume() { /*printf("恢复对象内存\n");*/ }
+    static BB* CreateObject(void* p)
+    {
+        BB* pa = (BB*)p;
+
+
+        printf("val = %d\n", pa->val);
+
+
+        return pa;
+    }
+    void Reclaim()
+    {
+        val = 0;
+        printf("回收对象内存\n");
+    }
+    int val;
+    int x;
+};
+
 const int a_size = 4;
 
 int TestShm()
 {
+    srand((unsigned int)time(0));
 
     ShmVector<A> shmvec;
     ShmMap<int,A> shmvmap;
 
     // 第二个参数是数量
-    if (ESSM_Resume == shmvec.Init(0x123456, 100, 0))
+    if (ESSM_Resume == shmvec.Init(0x123456, 3, 0))
     {
         printf("恢复内存\n");
     }
@@ -50,7 +78,7 @@ int TestShm()
     b.val = 22222;
     shmvec.PushBack(a);
 
-    int ret = shmvmap.Init(0x123457, 200, 0);
+    int ret = shmvmap.Init(0x123457, 3, 0);
     if (ESSM_Resume == ret)
     {
         printf("恢复内存\n");
@@ -64,17 +92,21 @@ int TestShm()
         printf("出错\n");
         return -1;
     }
-    shmvmap[7] = a;
-    shmvmap[3] = b;
+    int randkey = rand();
+    a.val = rand();
+    shmvmap[randkey] = a;
+    randkey = rand();
+    shmvmap[randkey] = b;
+
+    
+    ////////////////////////普通共享内存数组/////////////////////////////////////
 
 
     int index = 0;
-    A* p = NULL;
-    CShmObjPool<A> myobj;
+    BB* p = NULL;
+    CShmObjPool<BB> myobj;
 
-    srand((unsigned int)time(0));
-
-    myobj.CreateObjPool(1234, 1234, sizeof(A), a_size, 0, __FILE__, __LINE__);
+    myobj.CreateObjPool(1234, 1234, sizeof(BB), a_size + 1, 0, __FILE__, __LINE__);
 
     ENMShmStartMode starttype = myobj.GetStartFlag();
     if (starttype == ESSM_Resume)
@@ -87,25 +119,6 @@ int TestShm()
     }
 
 
-   /* for (int i = 0; i < 4; i++)
-    {
-        myobj.FreeObj(0, i);
-    }
-
-    printf("剩余数量：%d\n", myobj.GetUseNum());
-    for (int i = 0; i < a_size; i++)
-    {
-        A* pa = myobj.GetObj(i, 0);
-        if (pa)
-        {
-            printf("%d\n", pa->val);
-        }
-        else
-        {
-            printf("0\n");
-        }
-
-    }*/
 
     int iCount = rand() % 2 + 2;
     for (int i = 0; i < iCount; i++)
@@ -123,9 +136,9 @@ int TestShm()
 
 
     printf("使用数量：%d\n", myobj.GetUseNum());
-    for (int i = 0; i < a_size; i++)
+    for (int i = 1; i <= a_size; i++)
     {
-        A* pa = myobj.GetObj(i, 0);
+        BB* pa = myobj.GetObj(i, 0);
         if (pa)
         {
             printf("%d\n", pa->val);

@@ -201,7 +201,7 @@ int main(int argc, char** argv)
 	}
 
 	TestShm();
-
+	return 0;
 
 	// 测试http服务器
 	CHttpServer httpserver;
