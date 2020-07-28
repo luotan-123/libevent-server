@@ -120,6 +120,12 @@
     <ClInclude Include="..\src\include\ServerCommon\shmem.h">
       <Filter>共享内存</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\CXObj.h">
+      <Filter>共享内存</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\shm_stl.h">
+      <Filter>共享内存</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -180,6 +186,9 @@
       <Filter>工具和接口</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Kernel\shmem.cpp">
+      <Filter>共享内存</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\CXObj.cpp">
       <Filter>共享内存</Filter>
     </ClCompile>
   </ItemGroup>

@@ -189,7 +189,7 @@
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -215,7 +215,7 @@
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -241,7 +241,7 @@
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -267,7 +267,7 @@
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -293,7 +293,7 @@
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -319,7 +319,7 @@
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -345,7 +345,7 @@
       <PreprocessorDefinitions>LUA_COMPAT_5_1;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
@@ -371,7 +371,7 @@
       <PreprocessorDefinitions>NDEBUG;LUA_COMPAT_5_1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;hiredis;curl;protobuf;jemalloc;event;event_pthreads;lua;mysqlclient;</LibraryDependencies>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>

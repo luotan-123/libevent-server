@@ -134,7 +134,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -145,7 +145,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -156,7 +156,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -167,7 +167,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -178,7 +178,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -189,7 +189,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -200,7 +200,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -211,7 +211,7 @@
       <AdditionalIncludeDirectories>/usr/local/include/curl;/usr/local/include/DataBase;/usr/local/include/libevent;/usr/local/include/hiredis;/usr/local/include;$(RemoteRootDir)/Kernel/src/include/ServerCommon;$(RemoteRootDir)/Common/src/include/ServerCommon;$(RemoteProjectDir)/src/include/ServerCommon;$(RemoteRootDir)/Common/src/protobuf;../src/include/ServerCommon</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>pthread;Kernel;Common;json;protobuf;jemalloc;hiredis;</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>

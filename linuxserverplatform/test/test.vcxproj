@@ -124,7 +124,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -137,7 +137,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -152,7 +152,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -165,7 +165,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -180,7 +180,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -193,7 +193,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -208,7 +208,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
@@ -221,7 +221,7 @@
     <Link>
       <SharedLibrarySearchPath>
       </SharedLibrarySearchPath>
-      <AdditionalLibraryDirectories>$(RemoteRootDir)/src/SDK/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>/usr/local/lib;$(RemoteRootDir)/bin;</AdditionalLibraryDirectories>
       <LibraryDependencies>Kernel;Common;protobuf;json;pthread;event;jemalloc</LibraryDependencies>
       <AdditionalOptions>-Wl,-rpath=$(RemoteRootDir)/bin %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(RemoteTargetPath)</OutputFile>
