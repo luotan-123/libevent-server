@@ -7,7 +7,7 @@ LIBS = -lpthread -lcurl -lmysqlclient -levent -levent_pthreads -ljemalloc
 
 BINDIR := ../bin/
 BIN := libKernel.so
-OBJ := jemalloc_cpp.o base64.o configManage.o DataBase.o DataLine.o Exception.o Function.o GameLogManage.o GServerConnect.o INIFile.o Lock.o log.o MysqlHelper.o ServerTimer.o sha1.o TcpConnect.o TCPSocket.o WebSocket.o Xor.o shmem.o CXObj.o
+OBJ := jemalloc_cpp.o base64.o configManage.o DataBase.o DataLine.o Exception.o Function.o GameLogManage.o GServerConnect.o INIFile.o Lock.o log.o MysqlHelper.o ServerTimer.o sha1.o TcpConnect.o TCPSocket.o WebSocket.o Xor.o shmem.o CXObj.o UnlockQueue.o RRlockQueue.o
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)

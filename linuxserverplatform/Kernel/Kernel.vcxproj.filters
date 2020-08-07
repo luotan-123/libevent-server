@@ -126,6 +126,12 @@
     <ClInclude Include="..\src\include\ServerCommon\shm_stl.h">
       <Filter>共享内存</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\RRlockQueue.h">
+      <Filter>无锁环形缓冲区</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\include\ServerCommon\UnlockQueue.h">
+      <Filter>无锁环形缓冲区</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Kernel\Lock.cpp">
@@ -190,6 +196,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Kernel\CXObj.cpp">
       <Filter>共享内存</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\RRlockQueue.cpp">
+      <Filter>无锁环形缓冲区</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Kernel\UnlockQueue.cpp">
+      <Filter>无锁环形缓冲区</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

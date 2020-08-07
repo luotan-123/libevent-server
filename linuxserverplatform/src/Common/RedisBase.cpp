@@ -800,6 +800,9 @@ void CRedisLock::Lock()
 	redisReply* pReply = NULL;
 	const int expireTime = 1000;		// 失效时间(ms)
 	int lockCount = 0;
+	struct timespec slptm;
+	slptm.tv_sec = 0;
+	slptm.tv_nsec = m_sleepTime * 1000 * 1000;      //1000 ns = 1 us
 
 	while (true)
 	{
@@ -831,9 +834,10 @@ void CRedisLock::Lock()
 
 		freeReplyObject(pReply);
 
-		if (m_sleepTime > 0 && m_sleepTime <= 100)
+		if (m_sleepTime > 0 && m_sleepTime < 1000)
 		{
-			usleep(m_sleepTime * 1000);
+			nanosleep(&slptm, NULL);
+			//usleep(m_sleepTime * 1000);
 		}
 	}
 

@@ -129,11 +129,13 @@
     <ClCompile Include="..\src\Kernel\Lock.cpp" />
     <ClCompile Include="..\src\Kernel\log.cpp" />
     <ClCompile Include="..\src\Kernel\MysqlHelper.cpp" />
+    <ClCompile Include="..\src\Kernel\RRlockQueue.cpp" />
     <ClCompile Include="..\src\Kernel\ServerTimer.cpp" />
     <ClCompile Include="..\src\Kernel\sha1.cpp" />
     <ClCompile Include="..\src\Kernel\shmem.cpp" />
     <ClCompile Include="..\src\Kernel\TcpConnect.cpp" />
     <ClCompile Include="..\src\Kernel\TCPSocket.cpp" />
+    <ClCompile Include="..\src\Kernel\UnlockQueue.cpp" />
     <ClCompile Include="..\src\Kernel\WebSocket.cpp" />
     <ClCompile Include="..\src\Kernel\Xor.cpp" />
   </ItemGroup>
@@ -157,6 +159,7 @@
     <ClInclude Include="..\src\include\ServerCommon\Lock.h" />
     <ClInclude Include="..\src\include\ServerCommon\log.h" />
     <ClInclude Include="..\src\include\ServerCommon\MysqlHelper.h" />
+    <ClInclude Include="..\src\include\ServerCommon\RRlockQueue.h" />
     <ClInclude Include="..\src\include\ServerCommon\ServerTimer.h" />
     <ClInclude Include="..\src\include\ServerCommon\sha1.h" />
     <ClInclude Include="..\src\include\ServerCommon\shmem.h" />
@@ -164,6 +167,7 @@
     <ClInclude Include="..\src\include\ServerCommon\shm_stl.h" />
     <ClInclude Include="..\src\include\ServerCommon\TcpConnect.h" />
     <ClInclude Include="..\src\include\ServerCommon\TCPSocket.h" />
+    <ClInclude Include="..\src\include\ServerCommon\UnlockQueue.h" />
     <ClInclude Include="..\src\include\ServerCommon\WebSocket.h" />
     <ClInclude Include="..\src\include\ServerCommon\Xor.h" />
   </ItemGroup>
