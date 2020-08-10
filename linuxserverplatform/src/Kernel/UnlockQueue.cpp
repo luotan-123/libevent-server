@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include "UnlockQueue.h"
 
-#define QUEUE_TIME_ONCE		40000000	// 单位：纳秒
+#define QUEUE_TIME_ONCE		2000000	// 单位：纳秒
 
 UnlockQueue::UnlockQueue(unsigned int nSize, QueueType qType)
 	: m_pBuffer(NULL)

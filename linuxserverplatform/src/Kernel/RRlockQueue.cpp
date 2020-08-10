@@ -5,131 +5,145 @@
 *  @date    2020-08-06
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <algorithm>
+#include "CommonHead.h"
+#include "log.h"
 #include "RRlockQueue.h"
+#include <assert.h>
 
-RRlockQueue::RRlockQueue(unsigned int nSize)
-	: m_pBuffer(NULL)
-	, m_nSize(nSize)
-	, m_nIn(0)
-	, m_nOut(0)
+
+RRlockQueue::RRlockQueue()
 {
-	//round up to the next power of 2
-	if (!is_power_of_2(nSize))
-	{
-		m_nSize = (unsigned int)roundup_power_of_two(nSize);
-	}
+	m_pUnLockQueue = nullptr;
+	m_pUnLockQueue = new UnlockQueue(MAX_UNLOCKQUEUE_LEN, QUEUE_TYPE_SLEEP);
+
+	assert(m_pUnLockQueue != nullptr);
+	assert(m_pUnLockQueue->Initialize());
 }
 
 RRlockQueue::~RRlockQueue()
 {
-	if (NULL != m_pBuffer)
-	{
-		delete[] m_pBuffer;
-		m_pBuffer = NULL;
-	}
+	SAFE_DELETE(m_pUnLockQueue);
 }
 
-bool RRlockQueue::Initialize()
+//加入消息队列
+/*
+Function		:AddData
+Memo			:将数据压入到队列当中
+Parameter		:
+[IN]		pDataInfo	:要压入队列的数据指针
+[IN]		uAddSize	:数据大小
+[IN]		uDataKind	:数据类型
+[IN]		pAppendData	:附加数据，可能是空的
+[IN]		pAppendAddSize	:附加数据大小，可以为0，此时实体数据为空
+Return			:指压入队列的大小
+*/
+UINT RRlockQueue::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, const void* pAppendData, UINT uAppendAddSize)
 {
-	m_pBuffer = new unsigned char[m_nSize];
-	if (!m_pBuffer)
+	if (!pDataInfo || uAddSize == 0)
 	{
-		return false;
+		return 0;
 	}
 
-	m_nIn = m_nOut = 0;
+	pDataInfo->uDataKind = uDataKind;
+	pDataInfo->uSize = uAddSize;
+
+	if (pAppendData)//如果有附加数据
+	{
+		pDataInfo->uSize += uAppendAddSize;
+	}
+
+	if (pDataInfo->uSize > MAX_SINGLE_UNLOCKQUEUE_SIZE)
+	{
+		ERROR_LOG("队列中加入数据失败，添加的数据太长 DataSize=%u", pDataInfo->uSize);
+		return 0;
+	}
+
+	// 加锁
+	CSignedLockObject LockObject(&m_csLock);
+
+	// 预判空间是否足够
+	if (pDataInfo->uSize > m_pUnLockQueue->GetRemainDataLen())
+	{
+		ERROR_LOG("队列中加入数据失败，队列空间不足 AllSize=%u DataLength=%u",
+			m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
+		return 0;
+	}
+
+	// 拷贝数据头部
+	if (m_pUnLockQueue->Put((const unsigned char*)pDataInfo, uAddSize) == 0)
+	{
+		ERROR_LOG("队列中加入队头失败，队列空间不足 AllSize=%u DataLength=%u",
+			m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
+		return 0;
+	}
+
+	// 拷贝数据部分
+	if (pAppendData != NULL)//如果有附加数据，复制在实体数据后面
+	{
+		if (m_pUnLockQueue->Put((const unsigned char*)pAppendData, uAppendAddSize) == 0)
+		{
+			ERROR_LOG("队列中加入数据部分失败，队列空间不足 AllSize=%u DataLength=%u",
+				m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
+			return 0;
+		}
+	}
+
+	//返回大小
+	return pDataInfo->uSize;
+}
+
+//提取消息数据
+/*
+Function		:GetData
+Memo			:从队列中取出数据
+Parameter		:
+[OUT]			pDataBuffer	:取出数据的缓存
+Return			:取出数据的实际大小
+*/
+UINT RRlockQueue::GetData(DataLineHead** pDataBuffer)
+{
+	UINT uDataSize = 0;
+
+	UINT uRealSize = m_pUnLockQueue->Get((unsigned char*)&uDataSize, sizeof(uDataSize));
+
+	if (uRealSize == sizeof(uDataSize))
+	{
+		if (uDataSize > MAX_SINGLE_UNLOCKQUEUE_SIZE)
+		{
+			ERROR_LOG("队列中获取的数据太长 uDataSize=%u", uDataSize);
+			return 0;
+		}
+
+		*((UINT*)(*pDataBuffer)) = uDataSize;
+		uRealSize = m_pUnLockQueue->Get((unsigned char*)(*pDataBuffer) + sizeof(uDataSize), uDataSize - sizeof(uDataSize));
+
+		if (uRealSize != uDataSize - sizeof(uDataSize))
+		{
+			ERROR_LOG("队列中获取数据失败 uRealSize=%u  NeedSize=%u", uRealSize, uDataSize - sizeof(uDataSize));
+			return 0;
+		}
+
+		return uDataSize;
+	}
+	else if (uRealSize > 0)
+	{
+		ERROR_LOG("队列中获取数据失败 uRealSize=%u  NeedSize=%u", uRealSize, sizeof(uDataSize));
+		return 0;
+	}
+
+	return uRealSize;
+}
+
+//清理所有数据
+bool RRlockQueue::CleanLineData()
+{
+	m_pUnLockQueue->Clean();
 
 	return true;
 }
 
-unsigned long RRlockQueue::roundup_power_of_two(unsigned long val)
+// 获取队列数据数量
+UINT RRlockQueue::GetDataCount()
 {
-	if ((val & (val - 1)) == 0)
-		return val;
-
-	unsigned long maxulong = (unsigned long)((unsigned long)~0);
-	unsigned long andv = ~(maxulong & (maxulong >> 1));
-	while ((andv & val) == 0)
-		andv = andv >> 1;
-
-	return andv << 1;
-}
-
-
-unsigned int RRlockQueue::Put(const unsigned char* buffer, unsigned int len)
-{
-	unsigned int l = 0;
-
-	// 超过剩余空间返回失败0
-	if (buffer == NULL || len == 0 || len > m_nSize - m_nIn + m_nOut)
-	{
-		return 0;
-	}
-	//len = std::min(len, m_nSize - m_nIn + m_nOut);
-
-	/*
-	* Ensure that we sample the m_nOut index -before- we
-	* start putting bytes into the RRlockQueue.
-   */
-	__sync_synchronize();
-
-	/* first put the data starting from fifo->in to buffer end */
-	l = std::min(len, m_nSize - (m_nIn & (m_nSize - 1)));
-	memcpy(m_pBuffer + (m_nIn & (m_nSize - 1)), buffer, l);
-
-	/* then put the rest (if any) at the beginning of the buffer */
-	memcpy(m_pBuffer, buffer + l, len - l);
-
-	/*
-	* Ensure that we add the bytes to the kfifo -before-
-	* we update the fifo->in index.
-	*/
-	__sync_synchronize();
-
-	m_nIn += len;
-
-	return len;
-}
-
-unsigned int RRlockQueue::Get(unsigned char* buffer, unsigned int len)
-{
-	unsigned int l = 0;
-
-	if (buffer == NULL || len == 0)
-	{
-		return 0;
-	}
-
-	len = std::min(len, m_nIn - m_nOut);
-
-	if (len <= 0)
-	{
-		return 0;
-	}
-
-	/*
-	* Ensure that we sample the fifo->in index -before- we
-	* start removing bytes from the kfifo.
-	*/
-	__sync_synchronize();
-
-	/* first get the data from fifo->out until the end of the buffer */
-	l = std::min(len, m_nSize - (m_nOut & (m_nSize - 1)));
-	memcpy(buffer, m_pBuffer + (m_nOut & (m_nSize - 1)), l);
-
-	/* then get the rest (if any) from the beginning of the buffer */
-	memcpy(buffer + l, m_pBuffer, len - l);
-
-	/*
-	* Ensure that we remove the bytes from the kfifo -before-
-	* we update the fifo->out index.
-	*/
-	__sync_synchronize();
-
-	m_nOut += len;
-
-	return len;
+	return m_pUnLockQueue->GetSize();
 }

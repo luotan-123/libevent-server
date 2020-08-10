@@ -30,6 +30,7 @@ public:
 	inline void Clean() { m_nIn = m_nOut = 0; }
 	inline unsigned int GetDataLen() const { return  m_nIn - m_nOut; }
 	inline unsigned int GetSize() { return m_nSize; }
+	inline unsigned int GetRemainDataLen() { return m_nSize - m_nIn + m_nOut; }
 
 private:
 	inline bool is_power_of_2(unsigned long n) { return (n != 0 && ((n & (n - 1)) == 0)); };

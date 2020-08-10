@@ -7,30 +7,33 @@
 
 #pragma once
 
+#include "Lock.h"
+#include "InternalMessageDefine.h"
+#include "UnlockQueue.h"
+
+// 消息队列最大字节数量
+#define MAX_UNLOCKQUEUE_LEN				(8 * 1024 * 1024)
+// 消息队列最大单包长度
+#define MAX_SINGLE_UNLOCKQUEUE_SIZE		(512 * 1024)
 
 class RRlockQueue
 {
+
 public:
-	RRlockQueue(unsigned int nSize);
+	RRlockQueue();
 	virtual ~RRlockQueue();
 
-	bool Initialize();
-
-	unsigned int Put(const unsigned char* pBuffer, unsigned int nLen);
-	unsigned int Get(unsigned char* pBuffer, unsigned int nLen);
-
-	inline void Clean() { m_nIn = m_nOut = 0; }
-	inline unsigned int GetDataLen() const { return  m_nIn - m_nOut; }
-	inline unsigned int GetSize() { return m_nSize; }
-
-private:
-	inline bool is_power_of_2(unsigned long n) { return (n != 0 && ((n & (n - 1)) == 0)); };
-	inline unsigned long roundup_power_of_two(unsigned long val);
+public:
+	//清理所有数据
+	bool CleanLineData();
+	//加入消息队列
+	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, const void* pAppendData = NULL, UINT uAppendAddSize = 0);
+	//提取消息数据
+	virtual UINT GetData(DataLineHead** pDataBuffer);
+	//获取队列大小
+	UINT GetDataCount();
 
 private:
-	unsigned char* m_pBuffer;    /* the buffer holding the data */
-	unsigned int   m_nSize;        /* the size of the allocated buffer */
-	unsigned int   m_nIn;        /* data is added at offset (in % size) */
-	unsigned int   m_nOut;        /* data is extracted from off. (out % size) */
-
+	CSignedLock	m_csLock;
+	UnlockQueue* m_pUnLockQueue;
 };
