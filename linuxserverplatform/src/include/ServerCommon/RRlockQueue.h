@@ -14,7 +14,7 @@
 // 消息队列最大字节数量
 #define MAX_UNLOCKQUEUE_LEN				(8 * 1024 * 1024)
 // 消息队列最大单包长度
-#define MAX_SINGLE_UNLOCKQUEUE_SIZE		(512 * 1024)
+#define MAX_SINGLE_UNLOCKQUEUE_SIZE		(128 * 1024)
 
 class RRlockQueue
 {
@@ -30,7 +30,7 @@ public:
 	virtual UINT AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind, const void* pAppendData = NULL, UINT uAppendAddSize = 0);
 	//提取消息数据
 	virtual UINT GetData(DataLineHead** pDataBuffer);
-	//获取队列大小
+	//获取队列已经存储的数据大小（字节数）
 	UINT GetDataCount();
 
 private:

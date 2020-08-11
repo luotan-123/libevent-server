@@ -61,31 +61,12 @@ UINT RRlockQueue::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind
 	// 加锁
 	CSignedLockObject LockObject(&m_csLock);
 
-	// 预判空间是否足够
-	if (pDataInfo->uSize > m_pUnLockQueue->GetRemainDataLen())
+	// 拷贝数据
+	if (m_pUnLockQueue->Put((const unsigned char*)pDataInfo, uAddSize, (const unsigned char*)pAppendData, uAppendAddSize) == 0)
 	{
 		ERROR_LOG("队列中加入数据失败，队列空间不足 AllSize=%u DataLength=%u",
 			m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
 		return 0;
-	}
-
-	// 拷贝数据头部
-	if (m_pUnLockQueue->Put((const unsigned char*)pDataInfo, uAddSize) == 0)
-	{
-		ERROR_LOG("队列中加入队头失败，队列空间不足 AllSize=%u DataLength=%u",
-			m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
-		return 0;
-	}
-
-	// 拷贝数据部分
-	if (pAppendData != NULL)//如果有附加数据，复制在实体数据后面
-	{
-		if (m_pUnLockQueue->Put((const unsigned char*)pAppendData, uAppendAddSize) == 0)
-		{
-			ERROR_LOG("队列中加入数据部分失败，队列空间不足 AllSize=%u DataLength=%u",
-				m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
-			return 0;
-		}
 	}
 
 	//返回大小
@@ -108,12 +89,6 @@ UINT RRlockQueue::GetData(DataLineHead** pDataBuffer)
 
 	if (uRealSize == sizeof(uDataSize))
 	{
-		if (uDataSize > MAX_SINGLE_UNLOCKQUEUE_SIZE)
-		{
-			ERROR_LOG("队列中获取的数据太长 uDataSize=%u", uDataSize);
-			return 0;
-		}
-
 		*((UINT*)(*pDataBuffer)) = uDataSize;
 		uRealSize = m_pUnLockQueue->Get((unsigned char*)(*pDataBuffer) + sizeof(uDataSize), uDataSize - sizeof(uDataSize));
 
@@ -145,5 +120,5 @@ bool RRlockQueue::CleanLineData()
 // 获取队列数据数量
 UINT RRlockQueue::GetDataCount()
 {
-	return m_pUnLockQueue->GetSize();
+	return m_pUnLockQueue->GetDataLen();
 }

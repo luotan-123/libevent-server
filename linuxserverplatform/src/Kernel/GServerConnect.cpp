@@ -517,7 +517,7 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 	else
 	{
 		// 交给具体的socket
-		pTcpSocket->Send(buf, pHead->uMessageSize);
+		return pTcpSocket->Send(buf, pHead->uMessageSize);
 	}
 
 	return true;
@@ -760,7 +760,10 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 				if (pTcpSocket)
 				{
 					// 交给具体的socket
-					pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead));
+					if (pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead)) == false)
+					{
+						ERROR_LOG("Send data error. socketIndex=%d", pSocketSend->socketIndex);
+					}
 				}
 			}
 
