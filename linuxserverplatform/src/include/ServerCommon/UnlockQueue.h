@@ -25,6 +25,7 @@ public:
 	bool Initialize();
 
 	unsigned int Put(const unsigned char* pBuffer, unsigned int nLen);
+	unsigned int Put(const unsigned char* pBufferHead, unsigned int nLenHead, const unsigned char* pBufferData, unsigned int nLenData);
 	unsigned int Get(unsigned char* pBuffer, unsigned int nLen);
 
 	inline void Clean() { m_nIn = m_nOut = 0; }

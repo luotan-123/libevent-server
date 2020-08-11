@@ -121,6 +121,66 @@ unsigned int UnlockQueue::Put(const unsigned char* buffer, unsigned int len)
 	return len;
 }
 
+unsigned int UnlockQueue::Put(const unsigned char* pBufferHead, unsigned int nLenHead, const unsigned char* pBufferData, unsigned int nLenData)
+{
+	unsigned int len = nLenHead + nLenData;
+
+	// 超过剩余空间返回失败0
+	if (pBufferHead == NULL || nLenHead == 0 || len > m_nSize - m_nIn + m_nOut)
+	{
+		return 0;
+	}
+
+	unsigned int nIn = m_nIn;
+	unsigned int l = 0;
+
+	/*
+	* Ensure that we sample the m_nOut index -before- we
+	* start putting bytes into the UnlockQueue.
+   */
+	__sync_synchronize();
+
+	/* first put the data starting from fifo->in to buffer end */
+	l = std::min(nLenHead, m_nSize - (nIn & (m_nSize - 1)));
+	memcpy(m_pBuffer + (nIn & (m_nSize - 1)), pBufferHead, l);
+
+	/* then put the rest (if any) at the beginning of the buffer */
+	memcpy(m_pBuffer, pBufferHead + l, nLenHead - l);
+
+	nIn += nLenHead;
+
+	// 有数据部分，拷贝数据部分
+	if (pBufferData)
+	{
+		/* second put the data starting from fifo->in to buffer end */
+		l = std::min(nLenData, m_nSize - (nIn & (m_nSize - 1)));
+		memcpy(m_pBuffer + (nIn & (m_nSize - 1)), pBufferData, l);
+
+		/* then put the rest (if any) at the beginning of the buffer */
+		memcpy(m_pBuffer, pBufferData + l, nLenData - l);
+
+		nIn += nLenData;
+	}
+
+
+	/*
+	* Ensure that we add the bytes to the kfifo -before-
+	* we update the fifo->in index.
+	*/
+	__sync_synchronize();
+
+	m_nIn = nIn;
+
+	// 通知条件变量，一般这个时候，读线程还不能够立马获取到值
+	// 不建议使用volatile，频繁地使用volatile很可能会增加代码尺寸和降低性能,因此要合理的使用volatile
+	if (m_qType == QUEUE_TYPE_COND)
+	{
+		pthread_cond_signal(&m_cond);
+	}
+
+	return len;
+}
+
 unsigned int UnlockQueue::Get(unsigned char* buffer, unsigned int len)
 {
 	unsigned int l = 0;
