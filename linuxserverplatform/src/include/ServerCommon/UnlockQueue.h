@@ -16,10 +16,12 @@ enum QueueType
 	QUEUE_TYPE_SLEEP = 2,   // 线程休眠			cpu使用率200%
 };
 
+#define QUEUE_TIME_ONCE		5000000	// 单位：纳秒
+
 class UnlockQueue
 {
 public:
-	UnlockQueue(unsigned int nSize, QueueType qType = QUEUE_TYPE_COND);
+	UnlockQueue(unsigned int nSize, QueueType qType = QUEUE_TYPE_COND, unsigned int nTimeOnce = QUEUE_TIME_ONCE);
 	virtual ~UnlockQueue();
 
 	bool Initialize();
@@ -45,6 +47,7 @@ private:
 	QueueType		m_qType;      /* 队列类型 */
 	pthread_cond_t	m_cond;		  /* 条件变量 */
 	pthread_mutex_t	m_csLock;     /* 互斥锁，配合条件变量使用 */
+	unsigned int	m_nTimeOnce;  /* 无消息的时候，休眠间隔，纳秒 */
 };
 
 #endif

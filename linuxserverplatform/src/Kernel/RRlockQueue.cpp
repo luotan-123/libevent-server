@@ -11,13 +11,15 @@
 #include <assert.h>
 
 
-RRlockQueue::RRlockQueue()
+RRlockQueue::RRlockQueue(bool bAutoLock, QueueType qType, unsigned int nTimeOnce)
 {
 	m_pUnLockQueue = nullptr;
-	m_pUnLockQueue = new UnlockQueue(MAX_UNLOCKQUEUE_LEN, QUEUE_TYPE_SLEEP);
+	m_pUnLockQueue = new UnlockQueue(MAX_UNLOCKQUEUE_LEN, qType, nTimeOnce);
 
 	assert(m_pUnLockQueue != nullptr);
 	assert(m_pUnLockQueue->Initialize());
+
+	m_bAutoLock = bAutoLock;
 }
 
 RRlockQueue::~RRlockQueue()
@@ -59,7 +61,10 @@ UINT RRlockQueue::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind
 	}
 
 	// 加锁
-	CSignedLockObject LockObject(&m_csLock);
+	if (m_bAutoLock)
+	{
+		CSignedLockObject LockObject(&m_csLock);
+	}
 
 	// 拷贝数据
 	if (m_pUnLockQueue->Put((const unsigned char*)pDataInfo, uAddSize, (const unsigned char*)pAppendData, uAppendAddSize) == 0)

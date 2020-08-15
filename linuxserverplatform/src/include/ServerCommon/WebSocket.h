@@ -26,6 +26,7 @@ enum WS_FrameType
 };
 
 struct WebSocketMsg;
+class RRlockQueue;
 class CWebSocketManage
 {
 public:
@@ -50,7 +51,7 @@ public:
 	// 获取接收dataline
 	CDataLine* GetRecvDataLine();
 	// 获取发送dataline
-	CDataLine* GetSendDataLine();
+	RRlockQueue* GetSendDataLine();
 	// 获取当前socket连接总数
 	UINT GetCurSocketSize();
 	// 判断socket是否连接
@@ -126,10 +127,10 @@ protected:
 	event_base* m_listenerBase;
 	std::vector<WorkThreadInfo> m_workBaseVec;
 	IServerSocketService* m_pService;
-	CDataLine* m_pSendDataLine;
-	volatile bool				m_running;
+	RRlockQueue* m_pSendDataLine;
+	bool						m_running;
 	UINT						m_uMaxSocketSize; // libevent 单线程默认的32000
-	volatile UINT				m_uCurSocketSize;
+	UINT						m_uCurSocketSize;
 	char						m_bindIP[48];
 	unsigned short				m_port;
 	BYTE						m_socketType;

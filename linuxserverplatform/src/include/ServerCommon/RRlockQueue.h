@@ -14,13 +14,13 @@
 // 消息队列最大字节数量
 #define MAX_UNLOCKQUEUE_LEN				(8 * 1024 * 1024)
 // 消息队列最大单包长度
-#define MAX_SINGLE_UNLOCKQUEUE_SIZE		(128 * 1024)
+#define MAX_SINGLE_UNLOCKQUEUE_SIZE		(256 * 1024)
 
 class RRlockQueue
 {
 
 public:
-	RRlockQueue();
+	RRlockQueue(bool bAutoLock = true, QueueType qType = QUEUE_TYPE_SLEEP, unsigned int nTimeOnce = QUEUE_TIME_ONCE);
 	virtual ~RRlockQueue();
 
 public:
@@ -36,4 +36,5 @@ public:
 private:
 	CSignedLock	m_csLock;
 	UnlockQueue* m_pUnLockQueue;
+	bool m_bAutoLock;
 };

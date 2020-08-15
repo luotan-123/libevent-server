@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "RRlockQueue.h"
 #include "GServerConnect.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -372,7 +373,7 @@ bool CGServerConnect::Start(CDataLine* pDataLine, int serverID, int serverType, 
 	if (bStartSendThread)
 	{
 		//创建发送队列
-		m_pSendDataLine = new CDataLine();
+		m_pSendDataLine = new RRlockQueue();
 
 		err = pthread_create(&m_hThreadSendMsg, NULL, ThreadSendMsg, (void*)this);
 		if (err != 0)
@@ -728,10 +729,11 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
-	CDataLine* pDataLine = pThis->m_pSendDataLine;
+	RRlockQueue* pDataLine = pThis->m_pSendDataLine;
 
 	//数据缓存
-	DataLineHead* pDataLineHead = NULL;
+	//DataLineHead* pDataLineHead = NULL;
+	DataLineHead* pDataLineHead = (DataLineHead*)malloc(MAX_SINGLE_UNLOCKQUEUE_SIZE);
 
 	sleep(3);
 
@@ -743,7 +745,7 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 		{
 			//获取数据
 			unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-			if (bytes == 0 || pDataLineHead == NULL)
+			if (bytes == 0)
 			{
 				continue;
 			}
@@ -767,11 +769,11 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 				}
 			}
 
-			// 释放内存
-			if (pDataLineHead)
-			{
-				free(pDataLineHead);
-			}
+			//// 释放内存
+			//if (pDataLineHead)
+			//{
+			//	free(pDataLineHead);
+			//}
 		}
 		catch (...)
 		{
@@ -780,6 +782,9 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 	}
 
 	INFO_LOG("CGServerConnect::ThreadSendMsg exit.");
+
+	// 释放内存
+	free(pDataLineHead);
 
 	pthread_exit(NULL);
 }

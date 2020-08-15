@@ -11,14 +11,14 @@
 #include <unistd.h>
 #include "UnlockQueue.h"
 
-#define QUEUE_TIME_ONCE		4000000	// 单位：纳秒
 
-UnlockQueue::UnlockQueue(unsigned int nSize, QueueType qType)
+UnlockQueue::UnlockQueue(unsigned int nSize, QueueType qType, unsigned int nTimeOnce)
 	: m_pBuffer(NULL)
 	, m_nSize(nSize)
 	, m_nIn(0)
 	, m_nOut(0)
 	, m_qType(qType)
+	, m_nTimeOnce(nTimeOnce)
 {
 	//round up to the next power of 2
 	if (!is_power_of_2(nSize))
@@ -33,6 +33,11 @@ UnlockQueue::UnlockQueue(unsigned int nSize, QueueType qType)
 
 		// 初始化条件变量
 		pthread_cond_init(&m_cond, NULL);
+	}
+
+	if (qType == QUEUE_TYPE_SLEEP && m_nTimeOnce >= 1000000000)
+	{
+		m_nTimeOnce = QUEUE_TIME_ONCE;
 	}
 }
 
@@ -202,7 +207,7 @@ unsigned int UnlockQueue::Get(unsigned char* buffer, unsigned int len)
 		{
 			struct timespec slptm;
 			slptm.tv_sec = 0;
-			slptm.tv_nsec = QUEUE_TIME_ONCE;      //1000 ns = 1 us
+			slptm.tv_nsec = m_nTimeOnce;
 			nanosleep(&slptm, NULL);
 		}
 		return 0;

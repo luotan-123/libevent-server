@@ -75,5 +75,5 @@ private:
 	CDataLine* m_pDataLine;
 	int m_connectServerID;
 	int m_connectServerType;
-	volatile bool m_bStart;
+	bool m_bStart;
 };

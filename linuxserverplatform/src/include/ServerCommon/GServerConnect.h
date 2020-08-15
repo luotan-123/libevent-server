@@ -5,6 +5,7 @@ const int GSERVER_SOCKET_RECV_BUF = 512 * 1024;		// 应用层接收缓冲区大�
 #define MAX_RECONNECT_COUNT			4				// 最多重连次数，0：无限重连
 
 class CDataLine;
+class RRlockQueue;
 class CGServerConnect;
 class CSignedLock;
 
@@ -43,7 +44,7 @@ public:
 private:
 	int m_socket;
 	volatile bool m_isConnected;
-	volatile int m_ReConnectCount;
+	int m_ReConnectCount;
 
 	char m_recvBuf[GSERVER_SOCKET_RECV_BUF];
 	int  m_remainRecvBytes;
@@ -94,10 +95,10 @@ private:
 	std::vector<CGServerClient*> m_socketVec;
 	std::map<pthread_t, int> m_threadIDToIndexMap;
 	CDataLine* m_pRecvDataLine;
-	CDataLine* m_pSendDataLine;
+	RRlockQueue* m_pSendDataLine;
 	int m_serverID;
 	int m_serverType;
-	volatile bool m_running;
+	bool m_running;
 	pthread_t	m_hThreadCheckConnect;
 	pthread_t	m_hThreadSendMsg;
 };

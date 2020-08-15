@@ -45,7 +45,7 @@ private:
 	static void* ThreadCheckTimer(void* pThreadData);
 
 private:
-	volatile bool m_bRun;
+	bool m_bRun;
 	std::unordered_map<unsigned int, ServerTimerInfo> m_timerMap;
 	CDataLine* m_pDataLine;	// 共享的dataline对象
 	CSignedLock* m_pLock; // 线程锁

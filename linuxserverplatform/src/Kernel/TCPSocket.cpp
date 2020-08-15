@@ -3,6 +3,7 @@
 #include "log.h"
 #include "configManage.h"
 #include "DataLine.h"
+#include "RRlockQueue.h"
 #include "Xor.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -113,7 +114,7 @@ bool CTCPSocketManage::Start(int serverType)
 	// 创建发送队列
 	if (m_pSendDataLine == NULL)
 	{
-		m_pSendDataLine = new CDataLine;
+		m_pSendDataLine = new RRlockQueue();
 	}
 
 	// 创建发送线程
@@ -155,6 +156,10 @@ bool CTCPSocketManage::Stop()
 	m_iFreeHead = 0;
 	m_iFreeTail = 0;
 	m_socketIndexVec.clear();
+
+	//释放内存
+	m_pSendDataLine->CleanLineData();
+	SAFE_DELETE(m_pSendDataLine);
 
 	event_base_loopbreak(m_listenerBase);
 	for (size_t i = 0; i < m_workBaseVec.size(); i++)
@@ -297,7 +302,7 @@ CDataLine* CTCPSocketManage::GetRecvDataLine()
 	return NULL;
 }
 
-CDataLine* CTCPSocketManage::GetSendDataLine()
+RRlockQueue* CTCPSocketManage::GetSendDataLine()
 {
 	return m_pSendDataLine;
 }
@@ -877,10 +882,11 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 		pthread_exit(NULL);
 	}
 
-	CDataLine* pDataLine = pThis->GetSendDataLine();
+	RRlockQueue* pDataLine = pThis->GetSendDataLine();
 
 	//数据缓存
-	DataLineHead* pDataLineHead = NULL;
+	//DataLineHead* pDataLineHead = NULL;
+	DataLineHead* pDataLineHead = (DataLineHead*)malloc(MAX_SINGLE_UNLOCKQUEUE_SIZE);
 
 	sleep(3);
 
@@ -890,7 +896,7 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 	{
 		//获取数据
 		unsigned int bytes = pDataLine->GetData(&pDataLineHead);
-		if (bytes == 0 || pDataLineHead == NULL)
+		if (bytes == 0)
 		{
 			continue;
 		}
@@ -926,14 +932,17 @@ void* CTCPSocketManage::ThreadSendMsg(void* pThreadData)
 			ERROR_LOG("发送数据失败，index=%d 超出范围", index);
 		}
 
-		// 释放内存
-		if (pDataLineHead)
-		{
-			free(pDataLineHead);
-		}
+		//// 释放内存
+		//if (pDataLineHead)
+		//{
+		//	free(pDataLineHead);
+		//}
 	}
 
 	INFO_LOG("CTCPSocketManage::ThreadSendMsg exit.");
+
+	// 释放内存
+	free(pDataLineHead);
 
 	pthread_exit(NULL);
 }
