@@ -11,7 +11,7 @@
 #include <assert.h>
 
 
-RRlockQueue::RRlockQueue(bool bAutoLock, QueueType qType, unsigned int nTimeOnce)
+RRlockQueue::RRlockQueue(QueueType qType, unsigned int nTimeOnce)
 {
 	m_pUnLockQueue = nullptr;
 	m_pUnLockQueue = new UnlockQueue(MAX_UNLOCKQUEUE_LEN, qType, nTimeOnce);
@@ -19,11 +19,14 @@ RRlockQueue::RRlockQueue(bool bAutoLock, QueueType qType, unsigned int nTimeOnce
 	assert(m_pUnLockQueue != nullptr);
 	assert(m_pUnLockQueue->Initialize());
 
-	m_bAutoLock = bAutoLock;
+	// 初始化锁
+	pthread_mutex_init(&m_csLock, NULL);
 }
 
 RRlockQueue::~RRlockQueue()
 {
+	pthread_mutex_destroy(&m_csLock);
+
 	SAFE_DELETE(m_pUnLockQueue);
 }
 
@@ -61,18 +64,22 @@ UINT RRlockQueue::AddData(DataLineHead* pDataInfo, UINT uAddSize, UINT uDataKind
 	}
 
 	// 加锁
-	if (m_bAutoLock)
-	{
-		CSignedLockObject LockObject(&m_csLock);
-	}
+	pthread_mutex_lock(&m_csLock);
 
 	// 拷贝数据
 	if (m_pUnLockQueue->Put((const unsigned char*)pDataInfo, uAddSize, (const unsigned char*)pAppendData, uAppendAddSize) == 0)
 	{
 		ERROR_LOG("队列中加入数据失败，队列空间不足 AllSize=%u DataLength=%u",
 			m_pUnLockQueue->GetSize(), m_pUnLockQueue->GetDataLen());
+
+		// 解锁
+		pthread_mutex_unlock(&m_csLock);
+
 		return 0;
 	}
+
+	// 解锁
+	pthread_mutex_unlock(&m_csLock);
 
 	//返回大小
 	return pDataInfo->uSize;

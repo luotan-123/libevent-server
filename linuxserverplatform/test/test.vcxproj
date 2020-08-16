@@ -111,6 +111,7 @@
     <ClCompile Include="..\src\protobuf\test.pb.cc" />
     <ClCompile Include="..\src\test\main.cpp" />
     <ClCompile Include="..\src\test\Shm.cpp" />
+    <ClCompile Include="..\src\test\TestUnLockQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\protobuf\test.pb.h" />

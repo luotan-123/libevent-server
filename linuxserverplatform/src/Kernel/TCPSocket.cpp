@@ -655,7 +655,7 @@ bool CTCPSocketManage::RecvData(bufferevent* bev, int index)
 	{
 		// 消息格式不正确
 		CloseSocket(index);
-		ERROR_LOG("close socket 数据包超过缓冲区最大限制,index=%d", index);
+		ERROR_LOG("close socket 数据包超过缓冲区最大限制,index=%d uMessageSize=%u", index, pNetHead->uMessageSize);
 		return false;
 	}
 

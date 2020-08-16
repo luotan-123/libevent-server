@@ -74,7 +74,7 @@ bool CGServerClient::Connect()
 		msg.serverID = m_pCGServerConnect->GetServerID();
 		msg.serverType = m_pCGServerConnect->GetServerType();
 		memcpy(msg.passwd, ConfigManage()->m_loaderServerConfig.logonserverPasswd, sizeof(msg.passwd));
-		m_pCGServerConnect->SendData(m_index, &msg, sizeof(msg), COMMON_VERIFY_MESSAGE, 0, 0, 0);
+		m_pCGServerConnect->SendData(m_index, &msg, sizeof(msg), COMMON_VERIFY_MESSAGE, 0, 0, 0, false);
 
 		return true;
 	}
@@ -155,7 +155,7 @@ bool CGServerClient::OnRead()
 		}
 		else // 回复心跳
 		{
-			m_pCGServerConnect->SendData(m_index, NULL, 0, pHead->uMainID, pHead->uAssistantID, pHead->uHandleCode, pHead->uIdentification);
+			m_pCGServerConnect->SendData(m_index, NULL, 0, pHead->uMainID, pHead->uAssistantID, pHead->uHandleCode, pHead->uIdentification, false);
 		}
 
 		// 有内存重叠的时候，不能用memcpy 只能用memmove
@@ -172,6 +172,7 @@ bool CGServerClient::Send(const void* pData, int size)
 
 	if (!pData || size <= 0)
 	{
+		ERROR_LOG("pData == NULL or size <= 0");
 		return false;
 	}
 
@@ -187,13 +188,13 @@ bool CGServerClient::Send(const void* pData, int size)
 		bytes = send(m_socket, m_sendBuf, m_remainSendBytes, 0);
 		if (bytes == 0)
 		{
-			ERROR_LOG("send data ret = 0");
+			ERROR_LOG("send data bytes = 0");
 			return false;
 		}
 
 		if (bytes < 0)
 		{
-			SYS_ERROR_LOG("send data failed");
+			SYS_ERROR_LOG("send data failed bytes < 0");
 			break;
 		}
 
@@ -465,7 +466,7 @@ bool CGServerConnect::Stop()
 
 }
 
-bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification)
+bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification, bool bStartSendThread/* = true*/)
 {
 	if (idx < 0 || idx >= (int)m_socketVec.size())
 	{
@@ -503,7 +504,7 @@ bool CGServerConnect::SendData(int idx, void* pData, int size, int mainID, int a
 		memcpy(buf + sizeof(NetMessageHead), pData, size);
 	}
 
-	if (m_hThreadSendMsg && m_pSendDataLine)
+	if (bStartSendThread && m_pSendDataLine)
 	{
 		SendDataLineHead lineHead;
 		lineHead.socketIndex = idx;
@@ -762,10 +763,7 @@ void* CGServerConnect::ThreadSendMsg(void* pThreadData)
 				if (pTcpSocket)
 				{
 					// 交给具体的socket
-					if (pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead)) == false)
-					{
-						ERROR_LOG("Send data error. socketIndex=%d", pSocketSend->socketIndex);
-					}
+					pTcpSocket->Send(pBuffer, size - sizeof(SendDataLineHead));
 				}
 			}
 

@@ -171,6 +171,7 @@ public:
 };
 
 extern int TestShm();
+extern int TestUnLockQueue();
 
 int main(int argc, char** argv)
 {
@@ -200,7 +201,8 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	TestShm();
+	TestUnLockQueue();
+	//TestShm();
 	return 0;
 
 	// 测试http服务器

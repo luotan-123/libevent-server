@@ -2130,7 +2130,7 @@ bool CGameLogonManage::OnHandleGServerVerifyMessage(void* pData, int size, unsig
 		m_pUserManage->GetTcpSocketUserCount(), m_pUserManage->GetWebSocketUserCount(), m_TCPSocket.GetCurSocketSize(),
 		m_WebSocket.GetCurSocketSize(), ConfigManage()->GetLogonServerConfig().logonID);
 
-	INFO_LOG("【serverID=%d, serverType=%d】已经连接", pMessage->serverID, pMessage->serverType);
+	INFO_LOG("【serverID=%d, serverType=%d, socketIdx=%u】已经连接", pMessage->serverID, pMessage->serverType, socketIdx);
 
 	return true;
 }

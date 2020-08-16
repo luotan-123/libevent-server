@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "Lock.h"
 #include "InternalMessageDefine.h"
 #include "UnlockQueue.h"
 
@@ -20,7 +19,7 @@ class RRlockQueue
 {
 
 public:
-	RRlockQueue(bool bAutoLock = true, QueueType qType = QUEUE_TYPE_SLEEP, unsigned int nTimeOnce = QUEUE_TIME_ONCE);
+	RRlockQueue(QueueType qType = QUEUE_TYPE_SLEEP, unsigned int nTimeOnce = QUEUE_TIME_ONCE);
 	virtual ~RRlockQueue();
 
 public:
@@ -34,7 +33,6 @@ public:
 	UINT GetDataCount();
 
 private:
-	CSignedLock	m_csLock;
+	pthread_mutex_t	m_csLock;     /* 互斥锁，控制写线程同步 */
 	UnlockQueue* m_pUnLockQueue;
-	bool m_bAutoLock;
 };

@@ -68,12 +68,12 @@ public:
 	~CGServerConnect();
 
 public:
-	bool Start(CDataLine* pDataLine, int serverID, int serverType, bool bStartSendThread = false);
+	bool Start(CDataLine* pDataLine, int serverID, int serverType, bool bStartSendThread = true);
 	bool Stop();
 
 public:
 	// 发送数据函数
-	bool SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification);
+	bool SendData(int idx, void* pData, int size, int mainID, int assistID, int handleCode, unsigned int uIdentification, bool bStartSendThread = true);
 
 	// 接口
 public:

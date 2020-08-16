@@ -3,7 +3,12 @@ CPP = g++
 CPPFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I ../include/hiredis -I ../lua -I ../protobuf -I /usr/local/include -DLUA_COMPAT_5_1 -g -Wall -O3 -fpic -std=c++11 
 CFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I ../include/hiredis -I ../lua -I ../protobuf -I /usr/local/include -DLUA_COMPAT_5_1 -g -Wall -O3 -fpic -std=c11
 
-LDFLAGS = -L ../bin -shared 
+# 设置默认加载库位置
+CURDIR := $(shell pwd)
+PARENT_CURDIR = $(shell dirname $(CURDIR))
+PARENT_BIN := $(PARENT_CURDIR)/bin/
+
+LDFLAGS = -L ../bin -shared -Wl,-rpath=$(PARENT_BIN)
 LIBS = -lpthread -lKernel -lCommon -ljson -lprotobuf -ljemalloc -lhiredis
 
 BINDIR := ../bin/
