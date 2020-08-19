@@ -1,5 +1,8 @@
 # Top level makefile
 
+build_ver=debug
+export build_ver
+
 default: all
 
 .DEFAULT:

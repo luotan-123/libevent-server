@@ -1,6 +1,17 @@
 # Kernel的Makefile文件
+
+# 编译版本，可选debug和release
+# build_ver=debug
+
+ifeq ($(build_ver),release)
+BUILD_OPT= -g1 -O3 
+else
+BUILD_OPT= -g2 -O0
+endif
+
+
 CPP = g++
-CPPFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I /usr/local/include -g -Wall -O3 -fpic -std=c++11 
+CPPFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I /usr/local/include $(BUILD_OPT) -Wall -fpic -std=c++11 
 
 LDFLAGS = -L ../bin -shared 
 LIBS = -lpthread -lcurl -lmysqlclient -levent -levent_pthreads -ljemalloc 

@@ -1,7 +1,18 @@
 # Common的Makefile文件
+
+# 编译版本，可选debug和release
+#build_ver=debug
+
+ifeq ($(build_ver),release)
+BUILD_OPT= -g1 -O2 
+else
+BUILD_OPT= -g2 -O0
+endif
+
+
 CPP = g++
-CPPFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I ../include/hiredis -I ../lua -I ../protobuf -I /usr/local/include -DLUA_COMPAT_5_1 -g -Wall -O3 -fpic -std=c++11 
-CFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I ../include/hiredis -I ../lua -I ../protobuf -I /usr/local/include -DLUA_COMPAT_5_1 -g -Wall -O3 -fpic -std=c11
+CPPFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I ../include/hiredis -I ../lua -I ../protobuf -I /usr/local/include -DLUA_COMPAT_5_1 $(BUILD_OPT) -Wall -fpic -std=c++11 
+CFLAGS = -I ../include -I ../include/ServerCommon -I ../include/curl -I ../include/DataBase -I ../include/libevent -I ../include/hiredis -I ../lua -I ../protobuf -I /usr/local/include -DLUA_COMPAT_5_1 $(BUILD_OPT) -Wall -fpic -std=c11
 
 # 设置默认加载库位置
 CURDIR := $(shell pwd)
