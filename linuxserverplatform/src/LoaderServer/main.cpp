@@ -60,8 +60,9 @@ int main()
 	}
 
 	// 启动游戏房间
-	int iStartCount = g_LoaderServerModule.StartAllRoom();
-	CON_INFO_LOG("启动房间数量：%d", iStartCount);
+	int iStartCount = 0, iFailCount = 0;
+	g_LoaderServerModule.StartAllRoom(iStartCount, iFailCount);
+	CON_INFO_LOG("启动成功房间数量：%d，失败数量：%d", iStartCount, iFailCount);
 	if (iStartCount == 0)
 	{
 		CON_ERROR_LOG("没有找到任何游戏房间，请检查 roombaseinfo.serviceName名字是否正确，或者动态库名字配置错误");

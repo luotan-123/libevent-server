@@ -15,11 +15,12 @@ CLoaderServerModule::~CLoaderServerModule()
 
 }
 
-int CLoaderServerModule::StartAllRoom()
+int CLoaderServerModule::StartAllRoom(int &iStartCount, int &iFailCount)
 {
 	std::cout << "StartAllRoom Begin...\n";
 
-	int iStartCount = 0;
+	iStartCount = 0;
+	iFailCount = 0;
 
 	auto iter = ConfigManage()->m_roomBaseInfoMap.begin();
 	for (; iter != ConfigManage()->m_roomBaseInfoMap.end(); iter++)
@@ -35,6 +36,7 @@ int CLoaderServerModule::StartAllRoom()
 		GameBaseInfo* pGameBaseInfo = ConfigManage()->GetGameBaseInfo(roomBaseInfo.gameID);
 		if (!pGameBaseInfo)
 		{
+			iFailCount++;
 			std::cout << "GameBaseInfo 表中没有 gameID:" << roomBaseInfo.gameID << endl;
 			continue;
 		}
@@ -56,12 +58,14 @@ int CLoaderServerModule::StartAllRoom()
 
 		if (!LoadServiceInfo(&info))
 		{
+			iFailCount++;
 			std::cout << "加载游戏房间失败 roomID:" << roomBaseInfo.roomID << endl;
 			continue;
 		}
 
 		if (!StartGameRoom(&info))
 		{
+			iFailCount++;
 			std::cout << "启动游戏房间失败 roomID:" << roomBaseInfo.roomID << endl;
 			continue;
 		}

@@ -35,7 +35,7 @@ public:
 	CLoaderServerModule();
 	~CLoaderServerModule();
 
-	int StartAllRoom();
+	int StartAllRoom(int& iStartCount, int& iFailCount);
 	void StopAllRoom();
 	void StartRoomByRoomID(int roomID);
 	void StopRoomByRoomID(int roomID);
