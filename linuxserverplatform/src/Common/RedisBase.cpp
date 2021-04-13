@@ -578,6 +578,13 @@ bool CRedisBase::hmset(const char* table, const char* id, std::unordered_map<std
 		return false;
 	}
 
+	if (pReply->str == NULL)
+	{
+		ERROR_LOG("pReply->str == NULL");
+		freeReplyObject(pReply);
+		return false;
+	}
+
 	if (pReply->type == REDIS_REPLY_ERROR)
 	{
 		ERROR_LOG("redisCommandArgv failed errstr=%s", pReply->str);

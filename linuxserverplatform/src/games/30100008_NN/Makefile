@@ -1,4 +1,4 @@
-# 12101105_ZJH的Makefile文件
+# 30100008_NN的Makefile文件
 
 # 编译版本，可选debug和release
 # build_ver=debug
@@ -17,7 +17,7 @@ LDFLAGS = -L ../../bin -shared
 LIBS = -lKernel -lCommon -lGameManage -ljson -lprotobuf -ljemalloc
 
 BINDIR := ../../bin/
-BIN := 12101105.so
+BIN := 30100008.so
 OBJ := ServerManage.o UpGradeDLL.o UpGradeLogic.o
 
 $(BINDIR)$(BIN):$(OBJ)
@@ -30,8 +30,8 @@ $(BINDIR)$(BIN):$(OBJ)
 #	$(CPP) -c $^ $(CPPFLAGS)
 
 install:
-	cp 12101105_s.ini ../../bin/
-	@echo "12101105_ZJH生成在../../bin/目录中"
+	cp 30100008_s.ini ../../bin/
+	@echo "30100008_NN生成在../../bin/目录中"
 
 clean:
 	rm -rf *.o
