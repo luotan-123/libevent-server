@@ -580,7 +580,7 @@ bool CRedisBase::hmset(const char* table, const char* id, std::unordered_map<std
 
 	if (pReply->str == NULL)
 	{
-		ERROR_LOG("pReply->str == NULL");
+		CON_ERROR_LOG("pReply->str == NULL，hiredis的版本可能过低。");
 		freeReplyObject(pReply);
 		return false;
 	}

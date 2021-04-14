@@ -19,15 +19,24 @@ LIBS = -lKernel -lCommon -lGameManage -ljson -lprotobuf -ljemalloc
 BINDIR := ../../bin/
 BIN := 50000001.so
 OBJ := GameLogic.o GameServer.o PolygonShape.o TableFrameSink.o
+DEP = $(OBJ:.o=.dep) 
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../protobuf/%.cc
-#	$(CPP) -c $^ $(CPPFLAGS)
+#	$(CPP) -c $< $(CPPFLAGS)
+
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+-include $(DEP)
+
 
 install:
 	cp 50000001_s.ini ../../bin/
@@ -35,5 +44,5 @@ install:
 	@echo "50000001_BOOS生成在../../bin/目录中"
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	

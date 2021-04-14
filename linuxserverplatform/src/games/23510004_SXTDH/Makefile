@@ -19,20 +19,29 @@ LIBS = -lKernel -lCommon -lGameManage -ljson -lprotobuf -ljemalloc
 BINDIR := ../../bin/
 BIN := 23510004.so
 OBJ := CheckCPGAction.o CheckCPGActionEx.o CheckHuPai.o CheckHuPaiEx.o GameData.o GameDataEx.o ServerManage.o SHSrvDLL.o
+DEP = $(OBJ:.o=.dep) 
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../protobuf/%.cc
-#	$(CPP) -c $^ $(CPPFLAGS)
+#	$(CPP) -c $< $(CPPFLAGS)
+
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+-include $(DEP)
+
 
 install:
 	cp 23510004_s.ini ../../bin/
 	@echo "23510004_SXTDH生成在../../bin/目录中"
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	

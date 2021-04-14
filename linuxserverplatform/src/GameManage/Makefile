@@ -25,25 +25,40 @@ LIBS = -lpthread -lKernel -lCommon -ljson -lprotobuf -ljemalloc -lhiredis
 BINDIR := ../bin/
 BIN := libGameManage.so
 OBJ := BaseMainManage.o GameDataBaseHandle.o GameDesk.o GameMainManage.o gameUserManage.o jemalloc_cpp.o
+DEP = $(OBJ:.o=.dep)
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 jemalloc_cpp.o:../jemalloc/jemalloc_cpp.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../protobuf/%.cc
-#	$(CPP) -c $^ $(CPPFLAGS)
+#	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../lua/%.c
-#	$(CPP) -c -x c $^ $(CFLAGS)
+#	$(CPP) -c -x c $< $(CFLAGS)
+
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+%.dep:../protobuf/%.cc
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+%.dep:../lua/%.c
+	$(CPP) -MM -x c $< $(CFLAGS) > $@
+	
+-include $(DEP)
+
 
 install:
 	cp $(BINDIR)$(BIN) /usr/local/lib
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	

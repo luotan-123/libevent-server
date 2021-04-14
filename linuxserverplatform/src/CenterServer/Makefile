@@ -25,25 +25,40 @@ LIBS = -lpthread -lKernel -lCommon -levent -ljemalloc
 BINDIR := ../bin/
 BIN := CenterServer
 OBJ := BaseCenterServer.o CenterServerManage.o CenterServerModule.o main.o jemalloc_cpp.o
+DEP = $(OBJ:.o=.dep)
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 jemalloc_cpp.o:../jemalloc/jemalloc_cpp.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../protobuf/%.cc
-#	$(CPP) -c $^ $(CPPFLAGS)
+#	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../lua/%.c
-#	$(CPP) -c -x c $^ $(CFLAGS)
+#	$(CPP) -c -x c $< $(CFLAGS)
+
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+%.dep:../protobuf/%.cc
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+%.dep:../lua/%.c
+	$(CPP) -MM -x c $< $(CFLAGS) > $@
+	
+-include $(DEP)
+
 
 install:
 	@echo "CenterServer生成在../bin/目录中"
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	

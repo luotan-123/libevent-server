@@ -25,25 +25,40 @@ LIBS = -lpthread -lKernel -lhiredis -lcurl -lprotobuf -ljemalloc -levent -levent
 BINDIR := ../bin/
 BIN := libCommon.so
 OBJ :=  BillManage.o HttpServer.o MD5.o MyCurl.o RedisBase.o RedisCenter.o RedisCommon.o RedisLoader.o RedisLogon.o RedisPHP.o Util.o jemalloc_cpp.o auxiliar.o buffer.o except.o inet.o io.o ls_mysql.o luasocket.o luasql.o mime.o options.o pb.o select.o tcp.o timeout.o udp.o unix.o usocket.o AsyncEventMsg.pb.o
+DEP = $(OBJ:.o=.dep)
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 jemalloc_cpp.o:../jemalloc/jemalloc_cpp.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 %.o:../protobuf/%.cc
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 %.o:../lua/%.c
-	$(CPP) -c -x c $^ $(CFLAGS)
+	$(CPP) -c -x c $< $(CFLAGS)
+
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+%.dep:../protobuf/%.cc
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+%.dep:../lua/%.c
+	$(CPP) -MM -x c $< $(CFLAGS) > $@
+	
+-include $(DEP)
+
 
 install:
 	cp $(BINDIR)$(BIN) /usr/local/lib
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	

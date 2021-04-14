@@ -19,20 +19,29 @@ LIBS = -lKernel -lCommon -lGameManage -ljson -lprotobuf -ljemalloc
 BINDIR := ../../bin/
 BIN := 30100008.so
 OBJ := ServerManage.o UpGradeDLL.o UpGradeLogic.o
+DEP = $(OBJ:.o=.dep) 
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../protobuf/%.cc
-#	$(CPP) -c $^ $(CPPFLAGS)
+#	$(CPP) -c $< $(CPPFLAGS)
+
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+-include $(DEP)
+
 
 install:
 	cp 30100008_s.ini ../../bin/
 	@echo "30100008_NN生成在../../bin/目录中"
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	

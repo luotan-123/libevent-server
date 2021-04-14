@@ -19,20 +19,29 @@ LIBS = -lKernel -lCommon -lGameManage -ljson -lprotobuf -ljemalloc
 BINDIR := ../../bin/
 BIN := 40000100.so
 OBJ := GameServer.o NewServerManage.o UpGradeLogic.o
+DEP = $(OBJ:.o=.dep) 
 
 $(BINDIR)$(BIN):$(OBJ)
 	$(CPP) -o $@  $(LDFLAGS) $^ $(LIBS)
 
 %.o:%.cpp
-	$(CPP) -c $^ $(CPPFLAGS)
+	$(CPP) -c $< $(CPPFLAGS)
 
 #%.o:../protobuf/%.cc
-#	$(CPP) -c $^ $(CPPFLAGS)
+#	$(CPP) -c $< $(CPPFLAGS)
 
 install:
 	cp 40000100_s.ini ../../bin/
 	@echo "40000100_LHD生成在../../bin/目录中"
 
+
+# 生成依赖项
+%.dep:%.cpp
+	$(CPP) -MM $< $(CPPFLAGS) > $@
+
+-include $(DEP)
+
+
 clean:
-	rm -rf *.o
+	rm -rf *.o *.dep
 	
