@@ -46,11 +46,11 @@ jemalloc_cpp.o:../jemalloc/jemalloc_cpp.cpp
 %.dep:%.cpp
 	$(CPP) -MM $< $(CPPFLAGS) > $@
 
-%.dep:../protobuf/%.cc
-	$(CPP) -MM $< $(CPPFLAGS) > $@
+#%.dep:../protobuf/%.cc
+#	$(CPP) -MM $< $(CPPFLAGS) > $@
 
-%.dep:../lua/%.c
-	$(CPP) -MM -x c $< $(CFLAGS) > $@
+#%.dep:../lua/%.c
+#	$(CPP) -MM -x c $< $(CFLAGS) > $@
 	
 -include $(DEP)
 
