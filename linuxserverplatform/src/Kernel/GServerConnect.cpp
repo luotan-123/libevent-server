@@ -443,7 +443,7 @@ bool CGServerConnect::Stop()
 	m_threadIDToIndexMap.clear();
 
 	// 关闭发送线程
-	if (m_hThreadSendMsg)
+	if (m_hThreadSendMsg && m_pSendDataLine)
 	{
 		pthread_cancel(m_hThreadSendMsg);
 		m_hThreadSendMsg = 0;

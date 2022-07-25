@@ -16,7 +16,7 @@ enum QueueType
 	QUEUE_TYPE_SLEEP = 2,   // 线程休眠			cpu使用率200%
 };
 
-#define QUEUE_TIME_ONCE		5000000	// 单位：纳秒
+#define QUEUE_TIME_ONCE		10000000	// 单位：纳秒
 
 class UnlockQueue
 {
