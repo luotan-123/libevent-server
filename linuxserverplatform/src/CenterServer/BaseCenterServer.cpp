@@ -177,7 +177,7 @@ bool CBaseCenterServer::Start()
 	bool ret = false;
 
 	// 创建管道
-	CFIFOEvent fifo("/tmp/CBaseCenterServer-Start-fifo");
+	CFIFOEvent fifo("./CBaseCenterServer-Start-fifo");
 
 	// 启动网络模块
 	ret = m_TCPSocket.Start(SERVICE_TYPE_CENTER);

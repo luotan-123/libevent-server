@@ -239,7 +239,7 @@ bool CBaseLogonServer::Start()
 	bool ret = false;
 
 	// 创建管道
-	CFIFOEvent fifo("/tmp/CBaseLogonServer-Start-fifo");
+	CFIFOEvent fifo("./CBaseLogonServer-Start-fifo");
 
 	// 启动DB模块
 	ret = m_SQLDataManage.Start();

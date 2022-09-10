@@ -140,7 +140,7 @@ bool CLoaderServerModule::LoadServiceInfo(GameRoomInitStruct* pGameRoomInfo)
 {
 	try
 	{
-		std::string soFileName = "./";
+		std::string soFileName = "./"; //CINIFile::GetAppPath();//
 		soFileName += pGameRoomInfo->ServiceInfo.szDLLFileName;
 
 		//判断文件

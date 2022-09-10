@@ -272,8 +272,8 @@ void func13()
 
 	sptrB->m_sptrA = sptrA;
 	printf("%ld\n", sptrB.use_count()); // 1
-	printf("%ld\n", sptrB->m_sptrA.use_count()); // 2
-	printf("%ld\n", sptrA.use_count()); // 2
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 1
+	printf("%ld\n", sptrA.use_count()); // 1
 	printf("%ld\n", sptrA->m_sptrB.use_count()); // 0
 	if (!sptrB->m_sptrA.expired())
 	{
@@ -281,10 +281,10 @@ void func13()
 	}
 
 	sptrA->m_sptrB = sptrB;
-	printf("%ld\n", sptrB.use_count()); // 2
-	printf("%ld\n", sptrB->m_sptrA.use_count()); // 2
-	printf("%ld\n", sptrA.use_count());// 2
-	printf("%ld\n", sptrA->m_sptrB.use_count()); // 2
+	printf("%ld\n", sptrB.use_count()); // 1
+	printf("%ld\n", sptrB->m_sptrA.use_count()); // 1
+	printf("%ld\n", sptrA.use_count());// 1
+	printf("%ld\n", sptrA->m_sptrB.use_count()); // 1
 	if (!sptrA->m_sptrB.expired())
 	{
 		cout << sptrA->m_sptrB.lock()->valBB << endl;
@@ -320,9 +320,9 @@ void IntelligentPointer()
 {
 	//func11();
 	//func12();
-	//func13();
+	func13();
 	//func14();
-	func15();
+	//func15();
 
 	printf("-----------智能指针测试结束------------\n");
 }

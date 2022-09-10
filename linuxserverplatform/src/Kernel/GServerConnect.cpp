@@ -188,14 +188,28 @@ bool CGServerClient::Send(const void* pData, int size)
 		bytes = send(m_socket, m_sendBuf, m_remainSendBytes, 0);
 		if (bytes == 0)
 		{
-			ERROR_LOG("send data bytes = 0");
+			SYS_ERROR_LOG("send data bytes = 0 [errno=%d]\n", errno);
 			return false;
 		}
 
 		if (bytes < 0)
 		{
-			SYS_ERROR_LOG("send data failed bytes < 0");
-			break;
+			SYS_ERROR_LOG("send data failed bytes < 0 [errno=%d]\n", errno);
+
+			// 当send收到信号时,可以继续写,但这里返回-1.
+			if (errno == EINTR)
+				return false;
+
+			// 当socket是非阻塞时,如返回此错误,表示写缓冲队列已满,
+			// 在这里做延时后再重试.
+			if (errno == EAGAIN)
+			{
+				usleep(1000);
+				continue;
+			}
+
+			OnClose();
+			return false;
 		}
 
 		memmove(m_sendBuf, m_sendBuf + bytes, m_remainSendBytes - bytes);

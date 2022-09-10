@@ -188,7 +188,7 @@ bool CBaseMainManage::Start()
 	m_bRun = true;
 
 	// 创建管道
-	CFIFOEvent fifo("/tmp/CBaseMainManage-Start-fifo");
+	CFIFOEvent fifo("./CBaseMainManage-Start-fifo");
 
 	bool ret = true;
 	ret = m_SQLDataManage.Start();

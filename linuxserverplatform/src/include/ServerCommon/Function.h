@@ -54,3 +54,6 @@ extern pthread_t GetCurrentSysThreadId();
 
 //根据进程名字获取进程id
 extern pid_t GetProcessPidByName(const char* procName);
+
+//设置守护进程
+void SetDaemon();

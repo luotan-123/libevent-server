@@ -4,40 +4,48 @@
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <RemoteDebuggerCommand>$(RemoteTargetPath) </RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin</RemoteDebuggerWorkingDirectory>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <DebugChildProcesses>true</DebugChildProcesses>
   </PropertyGroup>
 </Project>

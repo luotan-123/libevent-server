@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "HttpServer.h"
+#include "shmem.h"
 
 using namespace test;
 
@@ -175,6 +176,43 @@ extern int TestUnLockQueue();
 
 int main(int argc, char** argv)
 {
+	TestShm();
+	sleep(3);
+	return 0;
+
+	int param = 8;
+	for (int i = 0; i < 10000; i++)
+	{
+		if ((i % param) == (i & (param - 1)))
+		{
+			continue;
+		}
+		else
+		{
+			printf("sdfsdfsdf\n");
+			break;
+		}
+	}
+	
+
+
+	//测试基础版共享内存
+	CShmem testmem;
+	char* p1 = (char *)testmem.CreateShmem(0x930319, 4, 6325, __FILE__, __LINE__);
+	//*p1 = 'a';
+
+	while (1)
+	{
+		sleep(1);
+	}
+	
+
+	char* p2 = (char*)testmem.CreateShmem(12345678, 102400, 1236, __FILE__, __LINE__);
+	*p2 = 'b';
+
+	char* p3 = (char*)testmem.CreateShmem(12345676, 10240, 136, __FILE__, __LINE__);
+	*p3 = 'c';
+
 	// 设置程序路径 , 创建日志目录
 	CINIFile file(CINIFile::GetAppPath() + "config.ini");
 	string logPath = file.GetKeyVal("COMMON", "logPath", "./log/");

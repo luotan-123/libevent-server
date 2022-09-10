@@ -217,7 +217,7 @@ bool CBaseWorkServer::Start()
 	bool ret = false;
 
 	// 创建管道
-	CFIFOEvent fifo("/tmp/CBaseWorkServer-Start-fifo");
+	CFIFOEvent fifo("./CBaseWorkServer-Start-fifo");
 
 	// 启动DB模块
 	ret = m_SQLDataManage.Start();

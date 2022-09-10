@@ -3,6 +3,7 @@
 #include "CenterServerModule.h"
 #include <fcntl.h>
 #include <sys/stat.h>
+#include "Function.h"
 
 #define LOCKFILE "/var/run/LinuxCenterServer.pid"
 #define LOCKMODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
@@ -71,6 +72,9 @@ int AlreadyRunning(const char* filename)
 
 int main()
 {
+	// 设置Server为守护进程
+	SetDaemon();
+
 	// 判断一个程序是否已经运行
 	// 根据需要调用下面函数
 	/*if (AlreadyRunning(LOCKFILE))
